@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@import './sass/_colors'
+@import './sass/typography'
+@import './sass/table'
+@import './sass/buttons'
+@import './sass/animation'
+
+html, body
+  background-color: $prime
+  font-size: 10px
+  margin: 0
+  padding: 0
+
+//##############################################################################
+//##############################################################################
+
+// Page Layout
+
+app-root
+  display: grid
+  grid-template-rows: 100px auto 50px
+  min-height: 100vh
+
+main
+  margin-left: 110px
+  margin-right: 50px

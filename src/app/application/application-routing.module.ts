@@ -7,11 +7,11 @@ import { CampListPageComponent } from './camp-list-page/camp-list-page.component
 const routes: Routes = [
 
   {
-    path: '',
+    path: 'welcom',
     component: WelcomPageComponent
   },
   {
-    path: 'camps',
+    path: '',
     component: CampListPageComponent
   }
 

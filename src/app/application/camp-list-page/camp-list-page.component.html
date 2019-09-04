@@ -1,1 +1,21 @@
-<p>camp-list-page works!</p>
+<h2>Erstelle ein neues Lager.<br />
+  Oder bearbeite ein bereits Erstelltes.</h2>
+
+<p>Klicke auf eines deiner Lager, um es zu Bearbeiten.</p>
+
+<table class="sortable_table table">
+  <tr>
+    <th class="sortable sorted">Name</th>
+    <th>Beschreibung</th>
+    <th class="sortable">Jahr</th>
+    <th class="sortable">#TNs</th>
+  </tr>
+
+  <tr *ngFor="let camp of camps | async">
+    <td>{{camp.name}}</td>
+    <td>{{camp.description}}</td>
+    <td>{{camp.year}}</td>
+    <td>{{camp.participants}}</td>
+  </tr>
+
+</table>

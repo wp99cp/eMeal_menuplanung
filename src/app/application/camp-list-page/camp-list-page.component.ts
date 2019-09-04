@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DatabaseService } from '../_service/database.service';
+
 
 @Component({
   selector: 'app-camp-list-page',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CampListPageComponent implements OnInit {
 
-  constructor() { }
+  constructor() {   
 
-  ngOnInit() {
   }
+
+
+  ngOnInit() { }
+
 
 }
