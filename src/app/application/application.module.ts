@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ApplicationRoutingModule } from './application-routing.module';
@@ -9,24 +9,35 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 import { environment } from '../../environments/environment';
-import { DatabaseService } from './_service/database.service';
+import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
+import * as firebase from 'firebase';
+import { AuthenticationService } from './_service/authentication.service';
+import { CampListElementComponent } from './_template/camp-list-element/camp-list-element.component';
 
 
 @NgModule({
-  declarations: [WelcomPageComponent, CampListPageComponent],
+  declarations: [WelcomPageComponent, CampListPageComponent, MealListPageComponent, CampListElementComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
     AngularFirestoreModule,
-    AngularFireAuthModule  ]
+    AngularFireAuthModule
+  ],
+  providers: [
+    AngularFirestore,
+    AngularFireAuth,
+    AuthenticationService]
 })
-export class ApplicationModule { 
 
-    public databaseService: DatabaseService;
+export class ApplicationModule {
 
-    constructor(db: AngularFirestore, afAuth: AngularFireAuth){
-      this.databaseService = new DatabaseService(db, afAuth);
-    }
+
+  constructor(private auth: AuthenticationService) {
+
+    this.auth.signIn();
+
+
+  }
 
 }

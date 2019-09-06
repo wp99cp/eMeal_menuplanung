@@ -11,11 +11,6 @@
     <th class="sortable">#TNs</th>
   </tr>
 
-  <tr *ngFor="let camp of camps | async">
-    <td>{{camp.name}}</td>
-    <td>{{camp.description}}</td>
-    <td>{{camp.year}}</td>
-    <td>{{camp.participants}}</td>
-  </tr>
+  <app-camp-list-element *ngFor="let camp of camps | async" [camp]="camp"></app-camp-list-element>
 
 </table>

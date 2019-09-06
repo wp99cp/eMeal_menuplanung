@@ -1,0 +1,14 @@
+<h2>Erstelle ein neues Rezept.<br />
+    Oder bearbeite ein bereits Erstelltes.</h2>
+
+
+<table class="sortable_table table">
+    <tr>
+        <th class="sortable sorted">Name</th>
+    </tr>
+
+    <tr *ngFor="let meal of meals | async">
+        <td>{{meal.title}}</td>
+    </tr>
+
+</table>

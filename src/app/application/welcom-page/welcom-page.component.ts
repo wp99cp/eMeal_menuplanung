@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../_service/authentication.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-welcom-page',
@@ -7,9 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WelcomPageComponent implements OnInit {
 
-  constructor() { }
 
-  ngOnInit() {
-  }
+  constructor(private auth: AuthenticationService) { }
+
+  ngOnInit() { }
 
 }

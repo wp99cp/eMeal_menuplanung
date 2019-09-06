@@ -2,16 +2,25 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { WelcomPageComponent } from './welcom-page/welcom-page.component';
 import { CampListPageComponent } from './camp-list-page/camp-list-page.component';
+import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
 
 
 const routes: Routes = [
 
   {
-    path: 'welcom',
+    path: '',
     component: WelcomPageComponent
   },
   {
-    path: '',
+    path: 'camps',
+    component: CampListPageComponent
+  },
+  {
+    path: 'meals',
+    component: MealListPageComponent
+  },
+  {
+    path: 'camps/:id',
     component: CampListPageComponent
   }
 
