@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
 import { Camp } from '../_class/camp';
 import { map } from 'rxjs/operators'
-import { hasLifecycleHook } from '@angular/compiler/src/lifecycle_reflector';
 
 @Component({
   selector: 'app-camp-list-page',
@@ -41,7 +40,7 @@ export class CampListPageComponent implements OnInit {
 
       this.db.collection('camps', collRef => collRef.where('access.owner', "array-contains", this.user.uid)).snapshotChanges()
         .pipe(
-          map(docActions => docActions.map(docAction => new Camp(docAction.payload.doc.data(), docAction.payload.doc.id)))
+          map(docActions => docActions.map(docAction => new Camp(docAction.payload.doc.data(), docAction.payload.doc.id, this.db)))
         )
         .subscribe(camps => observer.next(camps));
 

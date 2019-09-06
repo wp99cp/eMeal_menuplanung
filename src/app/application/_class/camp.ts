@@ -1,21 +1,37 @@
-export class Camp {
+import { Push } from './push';
+import { AngularFirestore } from '@angular/fire/firestore';
+
+
+export class Camp extends Push {
+
+    protected readonly PATH = "camps/";
 
     public description: string;
     public name: string;
     public participants: number;
     public year: string;
-    public id: string;
 
-    constructor(data: unknown, id: string) {
+    constructor(data: unknown, public readonly id: string, db: AngularFirestore) {
+
+        super(db);
 
         this.description = data["description"];
         this.name = data["name"];
         this.participants = data["participants"];
         this.year = data["year"];
-        this.id = id;
 
     }
 
+    protected extractData(): Partial<unknown> {
+
+        return {
+            name: this.name,
+            description: this.description,
+            year: this.year,
+            participants: this.participants
+        };
+
+    }
 
 
 }

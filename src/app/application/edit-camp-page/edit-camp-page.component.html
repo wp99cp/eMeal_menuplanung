@@ -1,0 +1,30 @@
+<h2 *ngIf="camp | async; else lodingData">Bearbeite dein Lager: {{(camp | async)?.name}}</h2>
+
+<ng-template #lodingData>
+    <h2>Daten werden geladen...</h2>
+</ng-template>
+
+<div *ngIf="camp | async; let camp$">
+
+    <button *ngIf="saveButtonActive" (click)="save()">Seichern</button>
+
+    <p>Informationen zum {{camp$.name}}:</p>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Beschreibung</th>
+            <th>Jahr</th>
+            <th>#TNs</th>
+        </tr>
+        <tr>
+            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'name')">{{camp$.name}}</td>
+            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'description')">
+                {{camp$.description}}
+            </td>
+            <td>{{camp$.year}}</td>
+            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'participants')">
+                {{camp$.participants}}</td>
+        </tr>
+    </table>
+
+</div>

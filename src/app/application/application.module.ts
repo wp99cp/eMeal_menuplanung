@@ -10,13 +10,13 @@ import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestor
 import { AngularFireAuthModule, AngularFireAuth } from '@angular/fire/auth';
 import { environment } from '../../environments/environment';
 import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
-import * as firebase from 'firebase';
 import { AuthenticationService } from './_service/authentication.service';
 import { CampListElementComponent } from './_template/camp-list-element/camp-list-element.component';
+import { EditCampPageComponent } from './edit-camp-page/edit-camp-page.component';
 
 
 @NgModule({
-  declarations: [WelcomPageComponent, CampListPageComponent, MealListPageComponent, CampListElementComponent],
+  declarations: [WelcomPageComponent, CampListPageComponent, MealListPageComponent, CampListElementComponent, EditCampPageComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

@@ -14,6 +14,7 @@ export class CampListElementComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
+
   }
 
 }
