@@ -64,6 +64,4 @@ export class EditCampPageComponent implements OnInit {
 
   }
 
-
-
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { version } from '../../../../package.json';
 
 @Component({
   selector: 'app-template-footer',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./template-footer.component.sass']
 })
 export class TemplateFooterComponent implements OnInit {
+
+  public version: string = version;
 
   constructor() { }
 

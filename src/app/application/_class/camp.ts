@@ -1,5 +1,6 @@
 import { Push } from './push';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Day } from './day';
 
 
 export class Camp extends Push {
@@ -10,6 +11,8 @@ export class Camp extends Push {
     public name: string;
     public participants: number;
     public year: string;
+
+    private days: [Day];
 
     constructor(data: unknown, public readonly id: string, db: AngularFirestore) {
 
@@ -30,6 +33,18 @@ export class Camp extends Push {
             year: this.year,
             participants: this.participants
         };
+
+    }
+
+    public getDays(): [Day] {
+
+        return this.days;
+
+    }
+
+    public addDay(day: Day): void {
+
+        this.days.push(day);
 
     }
 

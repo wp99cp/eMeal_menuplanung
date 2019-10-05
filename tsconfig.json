@@ -14,6 +14,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "resolveJsonModule": true,
     "lib": [
       "es2020",
       "dom"
