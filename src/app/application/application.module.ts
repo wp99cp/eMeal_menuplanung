@@ -13,10 +13,11 @@ import { MealListPageComponent } from './meal-list-page/meal-list-page.component
 import { AuthenticationService } from './_service/authentication.service';
 import { CampListElementComponent } from './_template/camp-list-element/camp-list-element.component';
 import { EditCampPageComponent } from './edit-camp-page/edit-camp-page.component';
+import { DayElementComponent } from './_template/day-element/day-element.component';
 
 
 @NgModule({
-  declarations: [WelcomPageComponent, CampListPageComponent, MealListPageComponent, CampListElementComponent, EditCampPageComponent],
+  declarations: [WelcomPageComponent, CampListPageComponent, MealListPageComponent, CampListElementComponent, EditCampPageComponent, DayElementComponent],
   imports: [
     CommonModule,
     ApplicationRoutingModule,

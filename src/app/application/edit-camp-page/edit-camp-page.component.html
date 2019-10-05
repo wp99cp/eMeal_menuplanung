@@ -1,14 +1,18 @@
 <h2 *ngIf="camp | async; else lodingData">Bearbeite dein Lager: {{(camp | async)?.name}}</h2>
 
+<!-- Anzeige während dem Laden der Daten -->
 <ng-template #lodingData>
     <h2>Daten werden geladen...</h2>
 </ng-template>
 
-<div *ngIf="camp | async; let camp$">
 
-    <button *ngIf="saveButtonActive" (click)="save()">Seichern</button>
+<!-- Allgemeine Informationen zum Lager -->
 
-    <p>Informationen zum {{camp$.name}}:</p>
+<div *ngIf="camp | async; let $camp">
+
+    <button class="saveButton" *ngIf="saveButtonActive" (click)="save()">Speichern</button>
+
+    <p>Informationen zum {{$camp.name}}:</p>
     <table class="table">
         <tr>
             <th>Name</th>
@@ -17,16 +21,24 @@
             <th>#TNs</th>
         </tr>
         <tr>
-            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'name')">{{camp$.name}}</td>
+            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'name')">{{$camp.name}}</td>
             <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'description')">
-                {{camp$.description}}
+                {{$camp.description}}
             </td>
-            <td>{{camp$.year}}</td>
+            <td>{{$camp.year}}</td>
             <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'participants')">
-                {{camp$.participants}}</td>
+                {{$camp.participants}}</td>
         </tr>
     </table>
 
 </div>
 
+
+
 <h3>Wochenübersicht</h3>
+
+<!-- erst sichtbar, nachdem das camp geladen wurde-->
+<div *ngIf="camp | async; let $camp ">
+    <app-day-element *ngFor="let day of $camp.getDays() | async" [day]="day"></app-day-element>
+
+</div>

@@ -5,9 +5,12 @@ export abstract class Push {
 
     protected readonly abstract PATH: string;
     protected readonly abstract id: string;
+    protected readonly db: AngularFirestore;
 
 
-    constructor(private db: AngularFirestore) { }
+    constructor(private database: AngularFirestore) {
+        this.db = database;
+    }
 
     /**
      * 

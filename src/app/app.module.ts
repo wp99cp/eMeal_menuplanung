@@ -10,7 +10,7 @@ import { TemplateFooterComponent } from './_template/template-footer/template-fo
   declarations: [
     AppComponent,
     TemplateHeaderComponent,
-    TemplateFooterComponent
+    TemplateFooterComponent,
   ],
   imports: [
     BrowserModule,
