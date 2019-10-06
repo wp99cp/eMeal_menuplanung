@@ -1,4 +1,4 @@
-import { Push } from './push';
+import { FirebasePush } from './firebasePush';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Day } from './day';
 import { Observable } from 'rxjs';
@@ -7,25 +7,21 @@ import { map } from 'rxjs/operators'
 /**
  * 
  */
-export class Camp extends Push {
+export class Camp extends FirebasePush {
 
-    protected readonly PATH = "camps/";
+    protected readonly FIRESTORE_DB_PATH = "camps/";
 
-
-    public campId: string;
-
-    public name: any;
-
+    // fields of a camp
+    public name: string;
     public description: string;
     public participants: number;
     public year: string;
 
     private days: Observable<[Day]>;
 
-    constructor(data: unknown, public readonly id: string, db: AngularFirestore) {
+    constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, database: AngularFirestore) {
 
-        super(db);
-        this.campId = id;
+        super(database);
 
         this.description = data["description"];
         this.name = data["name"];
@@ -34,7 +30,7 @@ export class Camp extends Push {
 
     }
 
-    protected extractData(): Partial<unknown> {
+    protected extractDataToJSON(): Partial<unknown> {
 
         return {
             name: this.name,
@@ -65,10 +61,12 @@ export class Camp extends Push {
 
         this.days = Observable.create(observer => {
 
-            // TODO: uid
-            this.db.collection('camps/' + this.campId + '/days', collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2")).snapshotChanges()
+            // TODO: dynamic uid
+            this.FIRESTORE_DATABASE.collection(this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID + '/days',
+                collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2"))
+                .snapshotChanges()
                 .pipe(
-                    map(docActions => docActions.map(docAction => new Day(docAction.payload.doc.data(), docAction.payload.doc.id, this.db)))
+                    map(docRefs => docRefs.map(docRef => new Day(docRef.payload.doc.data(), docRef.payload.doc.id, this.FIRESTORE_DATABASE)))
                 )
                 .subscribe(camps => observer.next(camps));
         });

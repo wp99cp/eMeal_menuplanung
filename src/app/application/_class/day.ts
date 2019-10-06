@@ -1,12 +1,12 @@
-import { Push } from './push';
+import { FirebasePush } from './firebasePush';
 import { Meal } from './meal';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 
-export class Day extends Push {
+export class Day extends FirebasePush {
 
-    protected readonly PATH = "camps/.../days/";
+    protected readonly FIRESTORE_DB_PATH = "camps/.../days/";
     protected dayId: string;
 
     public date: Date;
@@ -14,18 +14,18 @@ export class Day extends Push {
 
     private meals: Observable<[Meal]>;
 
-    constructor(data: unknown, public readonly id: string, db: AngularFirestore) {
+    constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, db: AngularFirestore) {
 
         super(db);
 
-        this.dayId = id;
+        this.dayId = FIRESTORE_ELEMENT_ID;
 
         let date: firebase.firestore.Timestamp = data["date"];
         this.date = date.toDate();
 
     }
 
-    protected extractData(): Partial<unknown> {
+    protected extractDataToJSON(): Partial<unknown> {
 
         // json Data
         return {
@@ -54,9 +54,9 @@ export class Day extends Push {
         this.meals = Observable.create(observer => {
 
             // TODO: uid and where for current day...
-            this.db.collection('meals/', collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2")).snapshotChanges()
+            this.FIRESTORE_DATABASE.collection('meals/', collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2")).snapshotChanges()
                 .pipe(
-                    map(docActions => docActions.map(docAction => new Meal(docAction.payload.doc.data(), docAction.payload.doc.id, this.db)))
+                    map(docActions => docActions.map(docAction => new Meal(docAction.payload.doc.data(), docAction.payload.doc.id, this.FIRESTORE_DATABASE)))
                 )
                 .subscribe(camps => observer.next(camps));
         });

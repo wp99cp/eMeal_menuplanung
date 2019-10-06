@@ -1,11 +1,11 @@
-import { Push } from "./push";
+import { FirebasePush } from "./firebasePush";
 import { AngularFirestore } from "@angular/fire/firestore";
 
-export class Meal extends Push {
+export class Meal extends FirebasePush {
 
     public title: string;
 
-    constructor(data: unknown, public readonly id: string, db: AngularFirestore) {
+    constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, db: AngularFirestore) {
 
         super(db);
 
@@ -14,8 +14,8 @@ export class Meal extends Push {
     }
 
 
-    protected PATH: string;
-    protected extractData(): Partial<unknown> {
+    protected FIRESTORE_DB_PATH: string;
+    protected extractDataToJSON(): Partial<unknown> {
         throw new Error("Method not implemented.");
     }
 }

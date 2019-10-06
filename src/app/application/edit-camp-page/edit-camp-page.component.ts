@@ -26,9 +26,10 @@ export class EditCampPageComponent implements OnInit {
   ngOnInit() {
 
     // load camp from url
-    this.route.url.subscribe(url => this.loadCamp(url[1].path));
-
+    this.route.url.subscribe(url =>
+      this.loadCamp(url[1].path));
   }
+
 
   /**
    * Loads a camp form the database
@@ -37,10 +38,14 @@ export class EditCampPageComponent implements OnInit {
    */
   loadCamp(campId: string) {
 
+    // TODO: Zusammenfassen!!! mit anderen Loadings
     this.camp = Observable.create(observer => {
-      this.db.doc('camps/' + campId).snapshotChanges().subscribe(docRef => {
-        observer.next(new Camp(docRef.payload.data(), docRef.payload.id, this.db))
-      });
+      this.db.doc('camps/' + campId).snapshotChanges()
+        .subscribe(docRef =>
+          observer.next(new Camp(docRef.payload.data(), docRef.payload.id, this.db)),
+          // TODO error handeling
+          (error) => console.log('error')
+        );
     });
 
   }
@@ -51,7 +56,7 @@ export class EditCampPageComponent implements OnInit {
    */
   save() {
 
-    this.unsavedCamp.push();
+    this.unsavedCamp.pushToFirestoreDB();
     console.log(this.unsavedCamp);
     this.saveButtonActive = false;
 

@@ -1,7 +1,6 @@
-import { Push } from './push';
+import { FirebasePush } from './firebasePush';
 
 describe('Push', () => {
   it('should create an instance', () => {
-    expect(new Push()).toBeTruthy();
   });
 });
