@@ -28,8 +28,6 @@ export class EditCampPageComponent implements OnInit {
     // load camp from url
     this.route.url.subscribe(url => this.loadCamp(url[1].path));
 
-    this.camp.subscribe(camp => this.loadDays(camp));
-
   }
 
   /**
@@ -47,16 +45,6 @@ export class EditCampPageComponent implements OnInit {
 
   }
 
-  /**
-   * 
-   * @param camp 
-   */
-  loadDays(camp: Camp) {
-
-    camp.getDays().subscribe(days => console.log(days));
-
-
-  }
 
   /**
    * 

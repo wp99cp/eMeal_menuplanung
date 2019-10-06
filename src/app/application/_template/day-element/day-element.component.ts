@@ -10,6 +10,8 @@ export class DayElementComponent implements OnInit {
 
 
   @Input() day: Day;
+  private dateStr: string
+
 
   constructor() {
 
@@ -17,6 +19,12 @@ export class DayElementComponent implements OnInit {
 
 
   ngOnInit() {
+
+    // generate custum date string
+    this.dateStr = this.day.date.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });
+
+    this.day.getMeals().subscribe(meals => meals.forEach(meal => console.log(meal.title)));
+
   }
 
 }

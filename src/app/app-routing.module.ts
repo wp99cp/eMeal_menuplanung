@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'app',
     loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule)
+  },
+  {
+    path: 'app/settings',
+    loadChildren: () => import('./settings/settings.module').then(mod => mod.SettingsModule)
   }
 ];
 

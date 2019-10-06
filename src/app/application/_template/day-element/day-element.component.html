@@ -1,1 +1,6 @@
-<p>{{day.date}}</p>
+<div class="dayContainer">
+    <span class="dayDate"><b>{{dateStr}}</b></span>
+    <div *ngFor="let meal of day.getMeals() | async" class="dayMealList">
+        <span class="">{{meal.title}}</span>
+    </div>
+</div>
