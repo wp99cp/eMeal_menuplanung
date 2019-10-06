@@ -14,6 +14,7 @@ import { AuthenticationService } from './_service/authentication.service';
 import { CampListElementComponent } from './_template/camp-list-element/camp-list-element.component';
 import { EditCampPageComponent } from './edit-camp-page/edit-camp-page.component';
 import { DayElementComponent } from './_template/day-element/day-element.component';
+import { Router } from '@angular/router';
 
 
 @NgModule({
@@ -33,11 +34,8 @@ import { DayElementComponent } from './_template/day-element/day-element.compone
 
 export class ApplicationModule {
 
-
   constructor(private auth: AuthenticationService) {
-
     this.auth.signIn();
-
 
   }
 

@@ -12,4 +12,6 @@ import { InfoPageComponent } from './info-page/info-page.component';
     InformationsRoutingModule
   ]
 })
-export class InformationsModule { }
+export class InformationsModule {
+
+}
