@@ -35,13 +35,53 @@
 
 
 
-<h3>Wochenübersicht</h3>
+<h3>Bearbeiten</h3>
 
 <!-- erst sichtbar, nachdem das camp geladen wurde-->
 <mat-tab-group *ngIf="camp | async; let $camp ">
 
     <mat-tab *ngFor="let day of $camp.getDays() | async" label="{{day.getDateStr()}}">
 
+        <mat-accordion class="mat-elevation-z2">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Zmorgen
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Brot mit Aufstrich
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Zmittag
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        Hamburger und Pommes
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
+                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+
+
+            </mat-expansion-panel>
+        </mat-accordion>
 
     </mat-tab>
 

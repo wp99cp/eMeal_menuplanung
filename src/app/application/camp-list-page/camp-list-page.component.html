@@ -3,15 +3,15 @@
 
 
 <!-- List with camps-->
-<div *ngIf="camps; else loadingCamps">
+<div *ngIf="camps; else loadingCamps" class="mat-elevation-z1">
 
-  <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Name:"
+  <mat-form-field class="mat-form-field">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Nach Namen suchen:"
       matTooltip="Suche nach dem Namen eines Lagers.">
   </mat-form-field>
 
   <!-- Table with camps-->
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+  <table mat-table [dataSource]="dataSource">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -55,6 +55,7 @@
 </ng-template>
 
 
+<!-- Create a new Camp -->
 <div *ngIf="camps" class="newCampDiaglog">
   <h2 class="mat-h2">Erstelle ein neues Lager</h2>
 
@@ -62,52 +63,65 @@
     eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
     duo .</p>
 
+
   <mat-vertical-stepper [linear]="true" class="mat-elevation-z1">
-    <mat-step label="Infos zum Lager">
-      <p>Erstelle ein Lager und beginne mit planen. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-        et justo duo .</p>
 
-      <mat-form-field>
-        <input matInput placeholder="Name des Lagers">
-      </mat-form-field>
-      <br />
+    <mat-step label="Infos zum Lager" [stepControl]="newCampInfos">
+      <p>Zuerst benötigen wir ein paar allgemeine Informationen zu deinem Lager.</p>
 
-      <mat-form-field>
-        <input matInput placeholder="Beschreibung">
-      </mat-form-field>
+      <form [formGroup]="newCampInfos">
+
+
+        <mat-form-field>
+          <input matInput placeholder="Name des Lagers" required formControlName="name">
+        </mat-form-field>
+        <br />
+
+        <mat-form-field>
+          <input matInput placeholder="Beschreibung" required formControlName="description">
+        </mat-form-field>
+
+      </form>
+
       <br />
 
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
-    <mat-step label="Anzahl Teilnehmer">
-      <p>Bitte gib die voraussichtliche Anzahl Teilnehmende an.<br />
-        <i>In Zukunft wird es möglich sein, deine Lager mit der Cevi-DB zu verknüpfen. Somit bleibt die Teilmeheranzahl
-          stehts aktuell.</i>
-      </p>
-      <mat-form-field>
-        <input matInput placeholder="Anzahl Teilnehmende">
-      </mat-form-field>
 
+    <mat-step label="Anzahl Teilnehmer" [stepControl]="newCampParticipants">
+      <p>Bitte gib die voraussichtliche Anzahl Teilnehmende an. </p>
+      <form [formGroup]="newCampParticipants">
+
+        <mat-form-field>
+          <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'>
+        </mat-form-field>
+      </form>
+
+      <p class="warning">In Zukunft wird es möglich sein, deine Lager mit der Cevi-DB zu verknüpfen. Somit bleibt die
+        Teilmeheranzahl
+        stehts aktuell.</p>
       <br />
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
     <mat-step label="Mitarbeiter hinzufügen">
-      <i>In Zukunft kannst du in diesem Schritt Mitarbeiter zu deinem Lager hinzufügen. Mitarbeiter können das Lager
-        bearbeiten.</i>
+      <p class="warning">In Zukunft kannst du in diesem Schritt Mitarbeiter zu deinem Lager hinzufügen. Mitarbeiter
+        können das Lager bearbeiten, nicht aber löschen.</p>
       <br />
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
-    <mat-step label="Mit planen beginnen">
+    <mat-step label="Mit planen beginnen" [stepControl]="newCampDate">
       <p>Füge einen ersten Tag hinzu.</p>
+      <form [formGroup]="newCampDate">
 
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </form>
+
       <br />
-      <button mat-raised-button matStepperNext>Lager erstellen</button>
+      <button mat-raised-button matStepperNext (click)="createCamp()" type="submit">Lager erstellen</button>
     </mat-step>
   </mat-vertical-stepper>
 

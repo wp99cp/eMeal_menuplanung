@@ -4,11 +4,38 @@ import { Day } from './day';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { Observer } from 'firebase';
+import { firestore } from 'firebase';
+import { AuthenticationService } from '../_service/authentication.service';
+
 
 /**
  * 
  */
 export class Camp extends FirebasePush {
+
+    /**
+     * 
+     * creates a new Camp in the database
+     * 
+     * @param data as JSON
+     * @param database firestore database
+     * @param auth AuthenticationService
+     */
+    static createNewCamp(data: any, database: AngularFirestore, auth: AuthenticationService) {
+
+        auth.fireAuth.authState.subscribe((user: firebase.User) => {
+
+            // converte date to firestore.Timestamp
+            data['date'] = firestore.Timestamp.fromDate(new Date(data['date']));
+
+            // create access tag
+            data['access'] = { owner: [user.uid], editor: [] };
+
+            // write to database
+            database.collection(this.CAMPS_DIRECTORY).add(data);
+        });
+
+    }
 
     public static readonly CAMPS_DIRECTORY = "camps/";
     protected readonly FIRESTORE_DB_PATH = Camp.CAMPS_DIRECTORY;

@@ -23,13 +23,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
   declarations: [
     WelcomPageComponent,
     CampListPageComponent,
     MealListPageComponent,
-    EditCampPageComponent,
+    EditCampPageComponent
 
   ],
   imports: [
@@ -38,6 +40,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    ReactiveFormsModule,
 
     // Material Design
     MatTableModule,
@@ -50,7 +53,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatDatepickerModule,
     MatNativeDateModule,
     MatFormFieldModule,
-    MatTabsModule
+    MatTabsModule,
+    MatExpansionModule
+
   ],
   providers: [
     AngularFirestore,
