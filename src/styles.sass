@@ -1,43 +1,13 @@
-@import './sass/_colors'
-@import './sass/typography'
-@import './sass/table'
-@import './sass/buttons'
-@import './sass/animation'
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css'
 
 html, body
-  background-color: $prime
   font-size: 10px
   margin: 0
   padding: 0
-
-//##############################################################################
-//##############################################################################
-
-// Page Layout
-
-app-root
-  display: grid
-  grid-template-rows: 175px auto 100px
-  min-height: 100vh
+  font-family: Roboto
 
 main
-  margin-left: 110px
-  margin-right: 50px
+  margin: 25px
 
-.logo
-  position: absolute
-  right: 50px
-  top: 75px
-  font-size: 6.2rem
-  font-weight: bold
-  text-align: right
-  line-height: 2rem
-
-  color: $gray
-
-  span
-    color: $second
-
-  .smal
-    color: $white
-    font-size: 0.25em
+table
+  width: 100%

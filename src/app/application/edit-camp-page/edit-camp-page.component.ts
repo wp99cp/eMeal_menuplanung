@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Camp } from '../_class/camp';
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 
@@ -38,13 +38,12 @@ export class EditCampPageComponent implements OnInit {
    */
   loadCamp(campId: string) {
 
-    // TODO: Zusammenfassen!!! mit anderen Loadings
-    this.camp = Observable.create(observer => {
-      this.db.doc('camps/' + campId).snapshotChanges()
-        .subscribe(docRef =>
-          observer.next(new Camp(docRef.payload.data(), docRef.payload.id, this.db)),
-          // TODO error handeling
-          (error) => console.log('error')
+    // TODO: evtl. Zusammenfassbar mit den anderen Abfragen -> Auslagerung in ein Service...
+    this.camp = Observable.create((observer: Observer<Camp>) => {
+      this.db.doc(Camp.CAMPS_DIRECTORY + campId)
+        .snapshotChanges().subscribe(
+          (docRef) => observer.next(new Camp(docRef.payload.data(), docRef.payload.id, this.db)),
+          (error) => observer.error(error)
         );
     });
 

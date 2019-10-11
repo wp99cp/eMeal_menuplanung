@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
 import { Camp } from '../_class/camp';
 import { map } from 'rxjs/operators'
+import { MatTableDataSource } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-camp-list-page',
@@ -12,15 +14,26 @@ import { map } from 'rxjs/operators'
 })
 export class CampListPageComponent implements OnInit {
 
+  private displayedColumns: string[] = ['name', 'description', 'year', 'participants'];
+
+  private dataSource: MatTableDataSource<Camp>;
+
   private camps: Observable<Camp[]>;
   private user: firebase.User;
+
 
   /**
    * 
    * @param auth 
    * @param db 
    */
-  constructor(private auth: AuthenticationService, private db: AngularFirestore) { }
+  constructor(private auth: AuthenticationService, private db: AngularFirestore) {
+
+    this.dataSource = new MatTableDataSource();
+
+  }
+
+
 
   ngOnInit() {
 
@@ -28,9 +41,27 @@ export class CampListPageComponent implements OnInit {
       if (user) {
         this.user = user
         this.campListPage();
+
+        this.camps.subscribe((camps: Camp[]) => {
+          this.dataSource = new MatTableDataSource(camps)
+        });
+
+
       }
     });
 
+  }
+
+  /**
+   * 
+   * Filter nach Name des Lagers
+   * 
+   * @param filterValue 
+   */
+  applyFilter(filterValue: string) {
+    this.dataSource.filterPredicate = (camp: Camp, filter: string) =>
+      camp.name.trim().toLowerCase().includes(filter);
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   campListPage() {

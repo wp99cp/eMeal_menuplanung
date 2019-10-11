@@ -1,16 +1,114 @@
-<h2>Erstelle ein neues Lager.<br />
-  Oder bearbeite ein bereits Erstelltes.</h2>
+<h1 class="mat-h1">Erstelle ein neues Lager.<br />
+  Oder bearbeite ein bereits Erstelltes.</h1>
 
-<p>Klicke auf eines deiner Lager, um es zu Bearbeiten.</p>
 
-<table class="sortable_table table">
-  <tr>
-    <th class="sortable sorted">Name des Lagers</th>
-    <th>Beschreibung</th>
-    <th class="sortable">Jahr</th>
-    <th class="sortable">#TNs</th>
-  </tr>
+<!-- List with camps-->
+<div *ngIf="camps; else loadingCamps">
 
-  <app-camp-list-element *ngFor="let camp of camps | async" [camp]="camp"></app-camp-list-element>
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Name:"
+      matTooltip="Suche nach dem Namen eines Lagers.">
+  </mat-form-field>
 
-</table>
+  <!-- Table with camps-->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z1">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name des Lagers </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container><!-- Loading Animation -->
+    <ng-template #loadingCamps>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
+
+    <ng-container matColumnDef="year">
+      <th mat-header-cell *matHeaderCellDef> Jahr </th>
+      <td mat-cell *matCellDef="let element"> {{element.year}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="participants">
+      <th mat-header-cell *matHeaderCellDef> #TNs </th>
+      <td mat-cell *matCellDef="let element"> {{element.participants}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <!-- Link to Camp-->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" routerLink="{{row.FIRESTORE_ELEMENT_ID}}"
+      matTooltip="Klicke auf eines deiner Lager, um es zu Bearbeiten."></tr>
+
+  </table>
+
+</div>
+
+<!-- Loading Animation -->
+<ng-template #loadingCamps>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>
+
+
+<div *ngIf="camps" class="newCampDiaglog">
+  <h2 class="mat-h2">Erstelle ein neues Lager</h2>
+
+  <p>Erstelle ein Lager und beginne mit planen. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+    eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo
+    duo .</p>
+
+  <mat-vertical-stepper [linear]="true" class="mat-elevation-z1">
+    <mat-step label="Infos zum Lager">
+      <p>Erstelle ein Lager und beginne mit planen. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+        et justo duo .</p>
+
+      <mat-form-field>
+        <input matInput placeholder="Name des Lagers">
+      </mat-form-field>
+      <br />
+
+      <mat-form-field>
+        <input matInput placeholder="Beschreibung">
+      </mat-form-field>
+      <br />
+
+      <button mat-raised-button matStepperNext>Weiter</button>
+    </mat-step>
+    <mat-step label="Anzahl Teilnehmer">
+      <p>Bitte gib die voraussichtliche Anzahl Teilnehmende an.<br />
+        <i>In Zukunft wird es möglich sein, deine Lager mit der Cevi-DB zu verknüpfen. Somit bleibt die Teilmeheranzahl
+          stehts aktuell.</i>
+      </p>
+      <mat-form-field>
+        <input matInput placeholder="Anzahl Teilnehmende">
+      </mat-form-field>
+
+      <br />
+      <button mat-raised-button matStepperNext>Weiter</button>
+    </mat-step>
+    <mat-step label="Mitarbeiter hinzufügen">
+      <i>In Zukunft kannst du in diesem Schritt Mitarbeiter zu deinem Lager hinzufügen. Mitarbeiter können das Lager
+        bearbeiten.</i>
+      <br />
+      <button mat-raised-button matStepperNext>Weiter</button>
+    </mat-step>
+    <mat-step label="Mit planen beginnen">
+      <p>Füge einen ersten Tag hinzu.</p>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <br />
+      <button mat-raised-button matStepperNext>Lager erstellen</button>
+    </mat-step>
+  </mat-vertical-stepper>
+
+</div>

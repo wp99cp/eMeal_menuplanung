@@ -38,7 +38,11 @@
 <h3>Wochenübersicht</h3>
 
 <!-- erst sichtbar, nachdem das camp geladen wurde-->
-<div *ngIf="camp | async; let $camp ">
-    <app-day-element *ngFor="let day of $camp.getDays() | async" [day]="day"></app-day-element>
+<mat-tab-group *ngIf="camp | async; let $camp ">
 
-</div>
+    <mat-tab *ngFor="let day of $camp.getDays() | async" label="{{day.getDateStr()}}">
+
+
+    </mat-tab>
+
+</mat-tab-group>

@@ -3,13 +3,15 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Day } from './day';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
+import { Observer } from 'firebase';
 
 /**
  * 
  */
 export class Camp extends FirebasePush {
 
-    protected readonly FIRESTORE_DB_PATH = "camps/";
+    public static readonly CAMPS_DIRECTORY = "camps/";
+    protected readonly FIRESTORE_DB_PATH = Camp.CAMPS_DIRECTORY;
 
     // fields of a camp
     public name: string;
@@ -59,16 +61,18 @@ export class Camp extends FirebasePush {
      */
     private loadDays() {
 
-        this.days = Observable.create(observer => {
+        this.days = Observable.create((observer: Observer<Day[]>) => {
 
             // TODO: dynamic uid
-            this.FIRESTORE_DATABASE.collection(this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID + '/days',
+            this.FIRESTORE_DATABASE.collection(this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID + Day.DAYS_DIRECTORY,
                 collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2"))
                 .snapshotChanges()
                 .pipe(
-                    map(docRefs => docRefs.map(docRef => new Day(docRef.payload.doc.data(), docRef.payload.doc.id, this.FIRESTORE_DATABASE)))
+                    map((docRefs) =>
+                        docRefs.map((docRef) =>
+                            new Day(docRef.payload.doc.data(), docRef.payload.doc.id, this.FIRESTORE_DATABASE)))
                 )
-                .subscribe(camps => observer.next(camps));
+                .subscribe(days => observer.next(days));
         });
 
     }
