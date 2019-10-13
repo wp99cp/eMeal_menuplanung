@@ -31,7 +31,6 @@ export class Camp extends FirebasePush {
             // create access tag
             data['access'] = { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, coworkers) };
 
-
             // write to database
             database.collection(this.CAMPS_DIRECTORY).add(data);
         });

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Camp } from '../_class/camp';
 import { Observable, Observer } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -13,21 +14,27 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class EditCampPageComponent implements OnInit {
 
   // Toggle for saveButton
-  private saveButtonActive = false;
+  private campInfos: FormGroup;
+
 
   // camp Data from server
   private camp: Observable<Camp>;
 
   // local changes to the camp data (not sync with server)
-  private unsavedCamp: Camp = null;
-
-  constructor(private route: ActivatedRoute, private db: AngularFirestore) { }
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 
     // load camp from url
     this.route.url.subscribe(url =>
       this.loadCamp(url[1].path));
+
+    // set form values
+    this.camp.subscribe(camp => this.campInfos = this.formBuilder.group({
+      name: camp.name,
+      description: camp.description,
+    }));
+
   }
 
 
@@ -49,42 +56,25 @@ export class EditCampPageComponent implements OnInit {
 
   }
 
-
-  /**
-   * 
-   */
-  save() {
-
-    this.unsavedCamp.pushToFirestoreDB();
-    console.log(this.unsavedCamp);
-    this.saveButtonActive = false;
-
-
-  }
-
-  /**
-   * 
-   * @param str 
-   * @param field 
-   */
-  onValueChange(str: string, field: string) {
-
-    str = str.toString().replace(/<[^>]*>/g, '');
+  /** Save and reset the form */
+  saveCampInfo() {
 
     this.camp.subscribe(camp => {
 
-      this.saveButtonActive = true;
+      // save data to firestore
+      camp.name = this.campInfos.value.name;
+      camp.description = this.campInfos.value.description;
+      camp.pushToFirestoreDB();
 
-      switch (field) {
-        case 'name': camp.name = str; break;
-        case 'description': camp.description = str; break;
-        case 'participants': camp.participants = Number.parseInt(str); break;
-      }
-
-      this.unsavedCamp = camp;
+      // reset: deactivate save button
+      this.campInfos = this.formBuilder.group({
+        name: camp.name,
+        description: camp.description,
+      });
 
     });
 
   }
+
 
 }

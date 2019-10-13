@@ -1,88 +1,33 @@
-<h2 *ngIf="camp | async; else lodingData">Bearbeite dein Lager: {{(camp | async)?.name}}</h2>
+<ng-container *ngIf="camp | async; let $camp; else loadingCamps">
 
-<!-- Anzeige während dem Laden der Daten -->
-<ng-template #lodingData>
-    <h2>Daten werden geladen...</h2>
+    <h1 class="mat-h1">Bearbeite dein Lager: {{$camp.name}}</h1>
+
+    <!-- Allgemeine Informationen zum Lager -->
+    <form [formGroup]='campInfos'>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Name" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <textarea id="descriptionField" matInput placeholder="Beschreibnung"
+                formControlName="description"></textarea>
+        </mat-form-field>
+    </form>
+
+    <button mat-raised-button [disabled]="!campInfos.touched" (click)='saveCampInfo()'>Änderungen Speichern</button>
+
+
+    <mat-divider></mat-divider>
+
+    <h3>Wochenplan</h3>
+
+
+
+</ng-container>
+
+
+<!-- Loading Animation -->
+<ng-template #loadingCamps>
+    <h1 class="mat-h1">Daten werden geladen...</h1>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>
-
-
-<!-- Allgemeine Informationen zum Lager -->
-
-<div *ngIf="camp | async; let $camp">
-
-    <button class="saveButton" *ngIf="saveButtonActive" (click)="save()">Speichern</button>
-
-    <p>Informationen zum {{$camp.name}}:</p>
-    <table class="table">
-        <tr>
-            <th>Name</th>
-            <th>Beschreibung</th>
-            <th>Jahr</th>
-            <th>#TNs</th>
-        </tr>
-        <tr>
-            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'name')">{{$camp.name}}</td>
-            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'description')">
-                {{$camp.description}}
-            </td>
-            <td>{{$camp.year}}</td>
-            <td contenteditable (focusout)="onValueChange($event.target.innerHTML, 'participants')">
-                {{$camp.participants}}</td>
-        </tr>
-    </table>
-
-</div>
-
-
-
-<h3>Bearbeiten</h3>
-
-<!-- erst sichtbar, nachdem das camp geladen wurde-->
-<mat-tab-group *ngIf="camp | async; let $camp ">
-
-    <mat-tab *ngFor="let day of $camp.getDays() | async" label="{{day.getDateStr()}}">
-
-        <mat-accordion class="mat-elevation-z2">
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Zmorgen
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Brot mit Aufstrich
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-
-            </mat-expansion-panel>
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        Zmittag
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        Hamburger und Pommes
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-
-
-            </mat-expansion-panel>
-        </mat-accordion>
-
-    </mat-tab>
-
-</mat-tab-group>

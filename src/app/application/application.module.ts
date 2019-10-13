@@ -27,6 +27,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserListComponent } from './_template/user-list/user-list.component'
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatFormFieldModule,
     MatTabsModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatListModule
 
   ],
   providers: [
