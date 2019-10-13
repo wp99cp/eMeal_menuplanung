@@ -29,6 +29,9 @@ import { UserListComponent } from './_template/user-list/user-list.component'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DeleteCampComponent } from './_template/delete-camp/delete-camp.component';
 
 
 @NgModule({
@@ -37,8 +40,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     CampListPageComponent,
     MealListPageComponent,
     EditCampPageComponent,
-    UserListComponent
-
+    UserListComponent,
+    DeleteCampComponent
   ],
   imports: [
     CommonModule,
@@ -63,13 +66,16 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatExpansionModule,
     MatCheckboxModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatIconModule,
+    MatDialogModule
 
   ],
   providers: [
     AngularFirestore,
     AngularFireAuth,
-    AuthenticationService]
+    AuthenticationService
+  ]
 })
 
 export class ApplicationModule {

@@ -7,6 +7,8 @@ import { map } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../_interfaces/user';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteCampComponent } from '../_template/delete-camp/delete-camp.component';
 
 
 @Component({
@@ -17,7 +19,7 @@ import { User } from '../_interfaces/user';
 export class CampListPageComponent implements OnInit {
 
   // Datasource and colums for the table
-  protected displayedColumns: string[] = ['name', 'description', 'year', 'participants'];
+  protected displayedColumns: string[] = ['name', 'description', 'year', 'participants', 'menu'];
   private dataSource: MatTableDataSource<Camp>;
 
   // Camp Data
@@ -35,7 +37,7 @@ export class CampListPageComponent implements OnInit {
    * @param auth 
    * @param database 
    */
-  constructor(private auth: AuthenticationService, private database: AngularFirestore, private formBuilder: FormBuilder) {
+  constructor(public dialog: MatDialog, private auth: AuthenticationService, private database: AngularFirestore, private formBuilder: FormBuilder) {
 
     this.dataSource = new MatTableDataSource();
 
@@ -133,6 +135,21 @@ export class CampListPageComponent implements OnInit {
 
     this.selectedCoworkers = selectedCoworkers;
 
+  }
+
+  /**
+   * Deletes a selected camp
+   */
+  deleteCamp() {
+    /*
+    
+        let dialogRef = this.dialog.open(DeleteCampComponent, {
+          height: '400px',
+          width: '600px',
+          data: { name: 'Name' }
+        });
+    
+        */
   }
 
 }
