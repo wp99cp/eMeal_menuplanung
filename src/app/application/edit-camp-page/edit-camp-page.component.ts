@@ -17,11 +17,16 @@ export class EditCampPageComponent implements OnInit {
   private campInfos: FormGroup;
 
 
+  private days = [{ date: '12.12.2019' }, { date: '25.10.2019' }, { date: '25.10.2019' }, { date: '25.10.2019' }, { date: '25.10.2019' }, { date: '25.10.2019' }, { date: '25.10.2019' }]
+
   // camp Data from server
   private camp: Observable<Camp>;
 
   // local changes to the camp data (not sync with server)
-  constructor(private route: ActivatedRoute, private db: AngularFirestore, private formBuilder: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private formBuilder: FormBuilder) {
+
+    console.log(this.days.length)
+  }
 
   ngOnInit() {
 

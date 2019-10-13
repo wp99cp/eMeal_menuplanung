@@ -71,7 +71,6 @@ export class Camp extends FirebasePush {
         this.name = data["name"];
         this.participants = data["participants"];
         this.year = data["year"];
-
     }
 
     protected extractDataToJSON(): Partial<unknown> {
