@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
@@ -6,6 +6,7 @@ import { Camp } from '../_class/camp';
 import { map } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { User } from '../_interfaces/user';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class CampListPageComponent implements OnInit {
   private newCampInfos: FormGroup;
   private newCampParticipants: FormGroup;
   private newCampDate: FormGroup;
+  private selectedCoworkers: User[];
 
   /**
    * 
@@ -103,7 +105,8 @@ export class CampListPageComponent implements OnInit {
         // Create new Meals out of the data
         .pipe(map(docActions =>
           docActions.map(docAction =>
-            new Camp(docAction.payload.doc.data(), docAction.payload.doc.id, this.database)))
+            new Camp(docAction.payload.doc.data(), docAction.payload.doc.id, this.database)
+          ))
         )
         .subscribe(camps => observer.next(camps));
 
@@ -122,7 +125,14 @@ export class CampListPageComponent implements OnInit {
     let data: any = this.newCampInfos.value;
     Object.assign(data, data, this.newCampParticipants.value);
     Object.assign(data, data, this.newCampDate.value);
-    Camp.createNewCamp(data, this.database, this.auth);
+    Camp.createNewCamp(data, this.selectedCoworkers, this.database, this.auth);
+  }
+
+  /** A user get selected */
+  selectUser(selectedCoworkers) {
+
+    this.selectedCoworkers = selectedCoworkers;
 
   }
+
 }

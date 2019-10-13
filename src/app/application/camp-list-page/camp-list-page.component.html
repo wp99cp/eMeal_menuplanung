@@ -66,6 +66,7 @@
 
   <mat-vertical-stepper [linear]="true" class="mat-elevation-z1">
 
+    <!-- Allgemeine Infos -->
     <mat-step label="Infos zum Lager" [stepControl]="newCampInfos">
       <p>Zuerst benötigen wir ein paar allgemeine Informationen zu deinem Lager.</p>
 
@@ -88,6 +89,7 @@
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
 
+    <!-- Anzahl Teilnehmende -->
     <mat-step label="Anzahl Teilnehmer" [stepControl]="newCampParticipants">
       <p>Bitte gib die voraussichtliche Anzahl Teilnehmende an. </p>
       <form [formGroup]="newCampParticipants">
@@ -103,12 +105,24 @@
       <br />
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
+
+    <!-- Mitarbeiter -->
     <mat-step label="Mitarbeiter hinzufügen">
-      <p class="warning">In Zukunft kannst du in diesem Schritt Mitarbeiter zu deinem Lager hinzufügen. Mitarbeiter
-        können das Lager bearbeiten, nicht aber löschen.</p>
+
+      <p>Füge einen oder meherere Mitarbeiter zu deinem Lager hinzu. Mitarbeiter können das Lager bearbeiten,
+        nicht aber löschen.</p>
       <br />
+
+      <app-user-list (onSelection)='selectUser($event)'></app-user-list>
+
+      <br />
+
+      <p class="warning">Achtung im Moment können Mitarbeiter zu einem späteren Zeitpunkt nicht mehr eingeladen werden!
+      </p>
       <button mat-raised-button matStepperNext>Weiter</button>
     </mat-step>
+
+    <!-- Mit Planen beginnen -->
     <mat-step label="Mit planen beginnen" [stepControl]="newCampDate">
       <p>Füge einen ersten Tag hinzu.</p>
       <form [formGroup]="newCampDate">

@@ -21,7 +21,7 @@ export class Camp extends FirebasePush {
      * @param database firestore database
      * @param auth AuthenticationService
      */
-    static createNewCamp(data: any, database: AngularFirestore, auth: AuthenticationService) {
+    static createNewCamp(data: any, coworkers: any, database: AngularFirestore, auth: AuthenticationService) {
 
         auth.fireAuth.authState.subscribe((user: firebase.User) => {
 
@@ -29,11 +29,27 @@ export class Camp extends FirebasePush {
             data['date'] = firestore.Timestamp.fromDate(new Date(data['date']));
 
             // create access tag
-            data['access'] = { owner: [user.uid], editor: [] };
+            data['access'] = { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, coworkers) };
+
 
             // write to database
             database.collection(this.CAMPS_DIRECTORY).add(data);
         });
+
+    }
+
+    static generateCoworkersList(ownerUid: String, coworkers: any): String[] {
+
+        let uidList: String[] = [];
+
+
+        coworkers.forEach(coworker => {
+            let uid: String = coworker['uid'];
+            if (ownerUid != uid)
+                uidList.push(uid);
+        });
+
+        return uidList;
 
     }
 

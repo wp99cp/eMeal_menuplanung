@@ -24,14 +24,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ReactiveFormsModule } from '@angular/forms'
+import { ReactiveFormsModule } from '@angular/forms';
+import { UserListComponent } from './_template/user-list/user-list.component'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @NgModule({
   declarations: [
     WelcomPageComponent,
     CampListPageComponent,
     MealListPageComponent,
-    EditCampPageComponent
+    EditCampPageComponent,
+    UserListComponent
 
   ],
   imports: [
@@ -54,7 +58,8 @@ import { ReactiveFormsModule } from '@angular/forms'
     MatNativeDateModule,
     MatFormFieldModule,
     MatTabsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCheckboxModule
 
   ],
   providers: [
