@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 /**
  * Add's the ability to push changes of a child object to the FirebaseServer
  */
-export abstract class FirebasePush {
+export abstract class FirebaseObject {
 
     /** Path in the firestore databse to the collection of this object 
      *  (Note the path mus end with '/', e.g. 'camps/campId/days/')
@@ -31,9 +31,18 @@ export abstract class FirebasePush {
     public pushToFirestoreDB() {
 
         let docPath = this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID;
-
         this.FIRESTORE_DATABASE.doc(docPath)
             .update(this.extractDataToJSON());
+
+    }
+
+    /**
+     * Deletes a document in the firestore database
+     */
+    public deleteOnFirestoreDB() {
+
+        let docPath = this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID;
+        this.FIRESTORE_DATABASE.doc(docPath).delete();
 
     }
 

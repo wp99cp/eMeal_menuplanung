@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
@@ -7,8 +7,7 @@ import { map } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../_interfaces/user';
-import { MatDialog } from '@angular/material/dialog';
-import { DeleteCampComponent } from '../_template/delete-camp/delete-camp.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 
 @Component({
@@ -44,14 +43,14 @@ export class CampListPageComponent implements OnInit {
     // Create new camp; data form form
     // Here you can defind defaults values for the form fields
     this.newCampInfos = this.formBuilder.group({
-      name: '',
-      description: '',
+      name: 'Sommerlager',
+      description: 'Cevi Züri 11',
     });
     this.newCampParticipants = this.formBuilder.group({
-      participants: ''
+      participants: '21'
     });
     this.newCampDate = this.formBuilder.group({
-      date: ''
+      date: '23.03.2020'
     });
 
 
@@ -140,16 +139,34 @@ export class CampListPageComponent implements OnInit {
   /**
    * Deletes a selected camp
    */
-  deleteCamp() {
-    /*
-    
-        let dialogRef = this.dialog.open(DeleteCampComponent, {
-          height: '400px',
-          width: '600px',
-          data: { name: 'Name' }
-        });
-    
-        */
+  deleteCamp(camp: Camp) {
+
+    this.dialog.open(DeleteCampComponent, {
+      height: '200px',
+      width: '300px',
+      data: { name: camp.name }
+    }).afterClosed().subscribe(deleteConfirmed => {
+
+      if (deleteConfirmed)
+        camp.deleteOnFirestoreDB();
+
+    });
+
+  }
+
+}
+
+
+@Component({
+  templateUrl: './delete-camp.component.html',
+  styleUrls: ['./delete-camp.component.sass']
+})
+export class DeleteCampComponent implements OnInit {
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data) { }
+
+  ngOnInit() {
+
   }
 
 }

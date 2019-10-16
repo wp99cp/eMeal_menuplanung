@@ -1,4 +1,4 @@
-import { FirebasePush } from './firebasePush';
+import { FirebaseObject } from './firebaseObject';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Day } from './day';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { AuthenticationService } from '../_service/authentication.service';
 /**
  * 
  */
-export class Camp extends FirebasePush {
+export class Camp extends FirebaseObject {
 
     /**
      * 
@@ -25,28 +25,46 @@ export class Camp extends FirebasePush {
 
         auth.fireAuth.authState.subscribe((user: firebase.User) => {
 
-            // converte date to firestore.Timestamp
-            data['date'] = firestore.Timestamp.fromDate(new Date(data['date']));
+            let date = new Date(data['date']);
+            delete data['date'];
+
+            // set year of the camp
+            data['year'] = date.toLocaleDateString('de-CH', { year: 'numeric' });
+
+            // create first day
+            data['days'] = [{
+                date: firestore.Timestamp.fromDate(date),
+                meals: [],
+                participants: data['participants'],
+                overwriteParticipants: false
+            }];
 
             // create access tag
             data['access'] = { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, coworkers) };
 
             // write to database
             database.collection(this.CAMPS_DIRECTORY).add(data);
+
         });
 
     }
 
+    /**
+     * 
+     * @param ownerUid 
+     * @param coworkers 
+     */
     static generateCoworkersList(ownerUid: String, coworkers: any): String[] {
 
         let uidList: String[] = [];
 
-
-        coworkers.forEach(coworker => {
-            let uid: String = coworker['uid'];
-            if (ownerUid != uid)
-                uidList.push(uid);
-        });
+        if (coworkers != undefined) {
+            coworkers.forEach(coworker => {
+                let uid: String = coworker['uid'];
+                if (ownerUid != uid)
+                    uidList.push(uid);
+            });
+        }
 
         return uidList;
 
@@ -61,7 +79,7 @@ export class Camp extends FirebasePush {
     public participants: number;
     public year: string;
 
-    private days: Observable<[Day]>;
+    public days: Day[] = [];
 
     constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, database: AngularFirestore) {
 
@@ -71,8 +89,16 @@ export class Camp extends FirebasePush {
         this.name = data["name"];
         this.participants = data["participants"];
         this.year = data["year"];
+
+        if (data['days']) {
+            for (let dayData of data['days']) {
+                this.days.push(new Day(dayData, this));
+            }
+        }
+
     }
 
+    // doc on mother class 
     protected extractDataToJSON(): Partial<unknown> {
 
         return {
@@ -81,40 +107,6 @@ export class Camp extends FirebasePush {
             year: this.year,
             participants: this.participants
         };
-
-    }
-
-    /**
-     * 
-     */
-    public getDays(): Observable<[Day]> {
-
-        // The days get loaded by the first usage
-        if (this.days == undefined)
-            this.loadDays();
-
-        return this.days;
-
-    }
-
-    /**
-     * 
-     */
-    private loadDays() {
-
-        this.days = Observable.create((observer: Observer<Day[]>) => {
-
-            // TODO: dynamic uid
-            this.FIRESTORE_DATABASE.collection(this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID + Day.DAYS_DIRECTORY,
-                collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2"))
-                .snapshotChanges()
-                .pipe(
-                    map((docRefs) =>
-                        docRefs.map((docRef) =>
-                            new Day(docRef.payload.doc.data(), docRef.payload.doc.id, this.FIRESTORE_DATABASE)))
-                )
-                .subscribe(days => observer.next(days));
-        });
 
     }
 

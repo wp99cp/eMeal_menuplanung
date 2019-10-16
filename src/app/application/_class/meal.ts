@@ -1,7 +1,7 @@
-import { FirebasePush } from "./firebasePush";
+import { FirebaseObject } from "./firebaseObject";
 import { AngularFirestore } from "@angular/fire/firestore";
 
-export class Meal extends FirebasePush {
+export class Meal extends FirebaseObject {
 
     public title: string;
 

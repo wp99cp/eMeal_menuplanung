@@ -23,10 +23,10 @@
 
     <mat-grid-list [gutterSize]="'10px'" cols="7" rowHeight="300px">
 
-        <mat-grid-tile *ngFor="let day of days" class="mat-elevation-z1">
+        <mat-grid-tile *ngFor="let day of $camp.days" class="mat-elevation-z1">
 
             <mat-grid-tile-header>
-                <h4>{{day.date}}</h4>
+                <h4>{{day.getDateStr()}}</h4>
             </mat-grid-tile-header>
 
             <div class="mealList">

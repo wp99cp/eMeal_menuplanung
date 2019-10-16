@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ApplicationRoutingModule } from './application-routing.module';
 import { WelcomPageComponent } from './welcom-page/welcom-page.component';
-import { CampListPageComponent } from './camp-list-page/camp-list-page.component';
+import { CampListPageComponent, DeleteCampComponent } from './camp-list-page/camp-list-page.component';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
@@ -31,7 +31,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DeleteCampComponent } from './_template/delete-camp/delete-camp.component';
 
 
 @NgModule({
@@ -50,7 +49,6 @@ import { DeleteCampComponent } from './_template/delete-camp/delete-camp.compone
     AngularFirestoreModule,
     AngularFireAuthModule,
     ReactiveFormsModule,
-
     // Material Design
     MatTableModule,
     MatProgressBarModule,
@@ -75,6 +73,9 @@ import { DeleteCampComponent } from './_template/delete-camp/delete-camp.compone
     AngularFirestore,
     AngularFireAuth,
     AuthenticationService
+  ],
+  entryComponents: [
+    DeleteCampComponent
   ]
 })
 
