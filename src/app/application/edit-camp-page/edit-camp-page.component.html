@@ -13,12 +13,10 @@
                 formControlName="description"></textarea>
         </mat-form-field>
     </form>
-
     <button mat-raised-button [disabled]="!campInfos.touched" (click)='saveCampInfo()'>Änderungen Speichern</button>
 
-
+    <!-- WeekOverview of the camp-->
     <mat-divider></mat-divider>
-
     <app-week-view [camp]="$camp"></app-week-view>
 
 </ng-container>

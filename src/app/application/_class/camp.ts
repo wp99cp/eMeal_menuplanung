@@ -101,13 +101,15 @@ export class Camp extends FirebaseObject {
     // doc on mother class 
     protected extractDataToJSON(): Partial<unknown> {
 
-        return {
+        let res = {
             name: this.name,
             description: this.description,
             year: this.year,
-            participants: this.participants
+            participants: this.participants,
+            days: this.days.map(day => day.extractDataToJSON())
         };
-
+        console.log(res);
+        return res;
     }
 
 }

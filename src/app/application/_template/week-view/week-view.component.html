@@ -4,21 +4,29 @@
 
     <mat-grid-tile *ngFor="let day of camp.days" class="mat-elevation-z1">
 
+        <!-- Header of the day -->
         <mat-grid-tile-header>
             <h4>{{day.getDateStr()}} {{day.getDiscriptionInBracket()}}</h4>
         </mat-grid-tile-header>
 
+        <!-- Meal List for one day-->
         <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
+
+            <!-- Meal Element-->
             <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag>
                 <div class="meal-placeholder" *cdkDragPlaceholder></div>
                 <mat-card-header>
                     <mat-card-title>{{meal.title}}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p> {{meal.text}}</p>
+                    <p>{{meal.text}}</p>
                 </mat-card-content>
             </mat-card>
+
         </div>
+
     </mat-grid-tile>
 
 </mat-grid-list>
+
+<button mat-raised-button [disabled]="!mealsChanged" (click)='saveMeals()'>Änderungen Speichern</button>

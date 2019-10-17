@@ -17,7 +17,16 @@ export class WeekViewComponent implements OnInit {
   ngOnInit() {
   }
 
+  private mealsChanged: boolean = false;
+
+  /**
+   * 
+   * @param event 
+   */
   drop(event: CdkDragDrop<string[]>) {
+
+    this.mealsChanged = true;
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -27,6 +36,13 @@ export class WeekViewComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
+  }
+
+  saveMeals() {
+
+    this.camp.pushToFirestoreDB();
+    this.mealsChanged = false;
+
   }
 
 
