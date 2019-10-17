@@ -3,19 +3,33 @@ import { AngularFirestore } from "@angular/fire/firestore";
 
 export class Meal extends FirebaseObject {
 
-    public title: string;
+    protected FIRESTORE_ELEMENT_ID: string;
+    protected FIRESTORE_DB_PATH: string;
 
-    constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, db: AngularFirestore) {
+    public title: string;
+    public desciption: string;
+
+    constructor(data: MealData, db: AngularFirestore) {
 
         super(db);
-
-        this.title = data["title"];
+        this.title = data.title;
+        this.desciption = data.desciption;
+        this.FIRESTORE_ELEMENT_ID = data.docRef;
 
     }
 
+    public extractDataToJSON(): MealData {
 
-    protected FIRESTORE_DB_PATH: string;
-    protected extractDataToJSON(): Partial<unknown> {
-        throw new Error("Method not implemented.");
+        return {
+            title: this.title,
+            desciption: this.desciption,
+            docRef: this.FIRESTORE_ELEMENT_ID
+        };
     }
+}
+
+export interface MealData {
+    title: string,
+    desciption: string,
+    docRef: string
 }

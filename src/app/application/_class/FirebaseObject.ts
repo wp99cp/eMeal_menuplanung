@@ -22,7 +22,7 @@ export abstract class FirebaseObject {
     protected abstract extractDataToJSON(): Partial<unknown>;
 
 
-    constructor(protected readonly FIRESTORE_DATABASE: AngularFirestore) { }
+    constructor(public readonly FIRESTORE_DATABASE: AngularFirestore) { }
 
     /**
      * updates the referd document in the databse

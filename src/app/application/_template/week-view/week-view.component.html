@@ -7,6 +7,7 @@
         <!-- Header of the day -->
         <mat-grid-tile-header>
             <h4>{{day.getDateStr()}} {{day.getDiscriptionInBracket()}}</h4>
+            <mat-icon class="edit-day">edit</mat-icon>
         </mat-grid-tile-header>
 
         <!-- Meal List for one day-->
@@ -19,7 +20,7 @@
                     <mat-card-title>{{meal.title}}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>{{meal.text}}</p>
+                    <p>{{meal.desciption}}</p>
                 </mat-card-content>
             </mat-card>
 

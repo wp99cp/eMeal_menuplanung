@@ -1,16 +1,20 @@
 import { FirebaseObject } from './firebaseObject';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Day } from './day';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'
-import { Observer } from 'firebase';
+import { Day, DayData } from './day';
 import { firestore } from 'firebase';
 import { AuthenticationService } from '../_service/authentication.service';
+import { AccessData } from '../_interfaces/accessData';
+import { User } from '../_interfaces/user';
 
+export interface CampData {
+    name: string,
+    description: string,
+    participants: number,
+    year: string,
+    access: AccessData,
+    days: DayData[]
+}
 
-/**
- * 
- */
 export class Camp extends FirebaseObject {
 
     /**
@@ -21,29 +25,12 @@ export class Camp extends FirebaseObject {
      * @param database firestore database
      * @param auth AuthenticationService
      */
-    static createNewCamp(data: any, coworkers: any, database: AngularFirestore, auth: AuthenticationService) {
+    static createNewCamp(campData: CampData, database: AngularFirestore, auth: AuthenticationService) {
 
         auth.fireAuth.authState.subscribe((user: firebase.User) => {
 
-            let date = new Date(data['date']);
-            delete data['date'];
-
-            // set year of the camp
-            data['year'] = date.toLocaleDateString('de-CH', { year: 'numeric' });
-
-            // create first day
-            data['days'] = [{
-                date: firestore.Timestamp.fromDate(date),
-                meals: [],
-                participants: data['participants'],
-                overwriteParticipants: false
-            }];
-
-            // create access tag
-            data['access'] = { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, coworkers) };
-
             // write to database
-            database.collection(this.CAMPS_DIRECTORY).add(data);
+            database.collection(this.CAMPS_DIRECTORY).add(campData);
 
         });
 
@@ -54,7 +41,7 @@ export class Camp extends FirebaseObject {
      * @param ownerUid 
      * @param coworkers 
      */
-    static generateCoworkersList(ownerUid: String, coworkers: any): String[] {
+    static generateCoworkersList(ownerUid: String, coworkers: User[]): String[] {
 
         let uidList: String[] = [];
 
@@ -78,17 +65,19 @@ export class Camp extends FirebaseObject {
     public description: string;
     public participants: number;
     public year: string;
+    public access: AccessData;
 
     public days: Day[] = [];
 
-    constructor(data: unknown, public readonly FIRESTORE_ELEMENT_ID: string, database: AngularFirestore) {
+    constructor(data: CampData, public readonly FIRESTORE_ELEMENT_ID: string, database: AngularFirestore) {
 
         super(database);
 
-        this.description = data["description"];
-        this.name = data["name"];
-        this.participants = data["participants"];
-        this.year = data["year"];
+        this.description = data.description;
+        this.name = data.name;
+        this.participants = data.participants;
+        this.year = data.year;
+        this.access = data.access;
 
         if (data['days']) {
             for (let dayData of data['days']) {
@@ -99,17 +88,16 @@ export class Camp extends FirebaseObject {
     }
 
     // doc on mother class 
-    protected extractDataToJSON(): Partial<unknown> {
+    protected extractDataToJSON(): CampData {
 
-        let res = {
+        return {
             name: this.name,
             description: this.description,
             year: this.year,
             participants: this.participants,
-            days: this.days.map(day => day.extractDataToJSON())
+            days: this.days.map(day => day.extractDataToJSON()),
+            access: this.access
         };
-        console.log(res);
-        return res;
     }
 
 }

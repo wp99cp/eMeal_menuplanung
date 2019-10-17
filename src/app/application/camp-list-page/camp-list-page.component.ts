@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
-import { Camp } from '../_class/camp';
+import { Camp, CampData } from '../_class/camp';
 import { map } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../_interfaces/user';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { firestore } from 'firebase';
 
 
 @Component({
@@ -105,8 +106,10 @@ export class CampListPageComponent implements OnInit {
 
         // Create new Meals out of the data
         .pipe(map(docActions =>
-          docActions.map(docAction =>
-            new Camp(docAction.payload.doc.data(), docAction.payload.doc.id, this.database)
+          docActions.map(docAction => {
+            let campData: CampData = docAction.payload.doc.data() as CampData;
+            return new Camp(campData, docAction.payload.doc.id, this.database);
+          }
           ))
         )
         .subscribe(camps => observer.next(camps));
@@ -122,11 +125,25 @@ export class CampListPageComponent implements OnInit {
    */
   createCamp() {
 
+    let date = new Date(this.newCampDate.value.date);
+
+    // combinde data
+    let campData: CampData = {
+      name: this.newCampInfos.value.name,
+      description: this.newCampInfos.value.description,
+      access: { owner: [this.user.uid], editor: Camp.generateCoworkersList(this.user.uid, this.selectedCoworkers) },
+      year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
+      days: [{
+        date: firestore.Timestamp.fromDate(date),
+        meals: [],
+        description: ''
+      }],
+      participants: this.newCampParticipants.value.participants
+    };
+
+    console.log(campData)
     // Creates a new Camp
-    let data: any = this.newCampInfos.value;
-    Object.assign(data, data, this.newCampParticipants.value);
-    Object.assign(data, data, this.newCampDate.value);
-    Camp.createNewCamp(data, this.selectedCoworkers, this.database, this.auth);
+    Camp.createNewCamp(campData, this.database, this.auth);
   }
 
   /** A user get selected */

@@ -1,37 +1,39 @@
 import { Camp } from './camp';
+import { Meal, MealData } from './meal';
+import { firestore } from 'firebase';
+
+export interface DayData {
+    date: firestore.Timestamp,
+    description: string,
+    meals: MealData[],
+}
 
 export class Day {
 
-
     public date: Date;
     public description: string;
+    public meals: Meal[];
 
-    private relatedCamp: Camp;
-    // private meals: Observable<[Meal]>;
+    constructor(data: DayData, camp: Camp) {
 
-    public meals;
-
-    constructor(data: unknown, camp: Camp) {
-
-        let date: firebase.firestore.Timestamp = data["date"];
+        let date: firestore.Timestamp = data.date;
         this.date = date.toDate();
-        if (data['description'] != undefined) {
-            this.description = data['description'];
+        if (data.description != undefined) {
+            this.description = data.description;
         }
         else {
             this.description = '';
         }
-        this.relatedCamp = camp;
 
-        this.meals = data['meals'];
+        this.meals = data.meals.map(mealData => new Meal(mealData, camp.FIRESTORE_DATABASE));
     }
 
-    extractDataToJSON(): Partial<unknown> {
-        return {
-            date: this.date,
-            description: this.description,
-            meals: this.meals
+    extractDataToJSON(): DayData {
 
+        return {
+            date: firestore.Timestamp.fromDate(this.date),
+            description: this.description,
+            meals: this.meals.map((meal: Meal) => meal.extractDataToJSON())
         };
     }
 
