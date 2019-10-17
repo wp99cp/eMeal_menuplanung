@@ -3,8 +3,8 @@ import { AngularFirestore } from "@angular/fire/firestore";
 
 export class Meal extends FirebaseObject {
 
-    protected FIRESTORE_ELEMENT_ID: string;
-    protected FIRESTORE_DB_PATH: string;
+    protected readonly FIRESTORE_ELEMENT_ID: string;
+    protected readonly FIRESTORE_DB_PATH = 'meals/';
 
     public title: string;
     public desciption: string;

@@ -34,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
+import { EditMealComponent } from './edit-meal/edit-meal.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { WeekViewComponent } from './_template/week-view/week-view.component';
     EditCampPageComponent,
     UserListComponent,
     DeleteCampComponent,
-    WeekViewComponent
+    WeekViewComponent,
+    EditMealComponent
   ],
   imports: [
     CommonModule,

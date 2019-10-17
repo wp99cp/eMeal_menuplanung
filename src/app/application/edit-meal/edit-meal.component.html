@@ -1,0 +1,12 @@
+<ng-container *ngIf="false; else loadingMeal">
+
+    <h1 class="mat-h1">Bearbeite die Mahlzeit: {{menu.name}}</h1>
+
+</ng-container>
+
+
+<!-- Loading Animation -->
+<ng-template #loadingMeal>
+    <h1 class="mat-h1">Daten werden geladen...</h1>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>
