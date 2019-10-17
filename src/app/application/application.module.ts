@@ -31,6 +31,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { WeekViewComponent } from './_template/week-view/week-view.component';
 
 
 @NgModule({
@@ -40,7 +43,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MealListPageComponent,
     EditCampPageComponent,
     UserListComponent,
-    DeleteCampComponent
+    DeleteCampComponent,
+    WeekViewComponent
   ],
   imports: [
     CommonModule,
@@ -66,8 +70,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatListModule,
     MatGridListModule,
     MatIconModule,
-    MatDialogModule
-
+    MatDialogModule,
+    MatCardModule,
+    DragDropModule
   ],
   providers: [
     AngularFirestore,

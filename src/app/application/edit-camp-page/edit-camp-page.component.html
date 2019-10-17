@@ -19,27 +19,7 @@
 
     <mat-divider></mat-divider>
 
-    <h3>Wochenplan</h3>
-
-    <mat-grid-list [gutterSize]="'10px'" cols="7" rowHeight="300px">
-
-        <mat-grid-tile *ngFor="let day of $camp.days" class="mat-elevation-z1">
-
-            <mat-grid-tile-header>
-                <h4>{{day.getDateStr()}}</h4>
-            </mat-grid-tile-header>
-
-            <div class="mealList">
-                <p class="mat-elevation-z2">Lorem Ipsum set dolor</p>
-                <p class="mat-elevation-z2">Ipsum set dolor</p>
-                <p class="mat-elevation-z2">Dolor Lorem Ipsum </p>
-                <p class="mat-elevation-z2">Set doloripsum Lorem Ipsum</p>
-            </div>
-
-        </mat-grid-tile>
-
-    </mat-grid-list>
-
+    <app-week-view [camp]="$camp"></app-week-view>
 
 </ng-container>
 

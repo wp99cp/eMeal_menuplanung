@@ -1,0 +1,24 @@
+<h3>Wochenplan</h3>
+
+<mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{camp.days.length}}" rowHeight="400px">
+
+    <mat-grid-tile *ngFor="let day of camp.days" class="mat-elevation-z1">
+
+        <mat-grid-tile-header>
+            <h4>{{day.getDateStr()}} {{day.getDiscriptionInBracket()}}</h4>
+        </mat-grid-tile-header>
+
+        <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
+            <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag>
+                <div class="meal-placeholder" *cdkDragPlaceholder></div>
+                <mat-card-header>
+                    <mat-card-title>{{meal.title}}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p> {{meal.text}}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </mat-grid-tile>
+
+</mat-grid-list>
