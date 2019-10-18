@@ -1,14 +1,16 @@
-<h2>Willkommmen bei eMeal.<br />Deine Menuplanungssoftware für Lager.</h2>
+<h1 class="mat-h1">Willkommmen bei eMeal.<br />Deine Menuplanungssoftware für Lager.</h1>
 
-<p *ngIf="auth.fireAuth.user | async as user">Aktueller Benutzer: {{user.displayName}}</p>
-<br />
-<button routerLink="camps">Deinen Lager</button>
-<br />
-<br />
-<button routerLink="meals">Deine Rezepte</button>
-<br />
-<br />
-<button (click)="auth.signOut()">Abmelden</button>
-<br />
-<br />
-<button routerLink="settings">Einstellungen</button>
+
+<ng-container *ngIf="auth.fireAuth.user | async as user else loadingUserData">
+    <p>Aktueller Benutzer: {{user.displayName}}</p>
+
+    <button class="menu-button" mat-raised-button routerLink="camps">Deinen Lager</button>
+    <button class="menu-button" mat-raised-button routerLink="meals">Deine Rezepte</button>
+    <button class="menu-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
+    <button class="menu-button" mat-raised-button routerLink="settings">Einstellungen</button>
+</ng-container>
+
+<!-- Loading Animation -->
+<ng-template #loadingUserData>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

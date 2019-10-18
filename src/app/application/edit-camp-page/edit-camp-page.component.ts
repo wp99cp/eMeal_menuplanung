@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Camp } from '../_class/camp';
+import { Camp, CampData } from '../_class/camp';
 import { Observable, Observer } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -48,7 +48,7 @@ export class EditCampPageComponent implements OnInit {
     this.camp = Observable.create((observer: Observer<Camp>) => {
       this.db.doc(Camp.CAMPS_DIRECTORY + campId)
         .snapshotChanges().subscribe(
-          (docRef) => observer.next(new Camp(docRef.payload.data(), docRef.payload.id, this.db)),
+          (docRef) => observer.next(new Camp(docRef.payload.data() as CampData, docRef.payload.id, this.db)),
           (error) => observer.error(error)
         );
     });
