@@ -1,21 +1,12 @@
 import { FirebaseObject } from './firebaseObject';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Day, DayData } from './day';
-import { firestore } from 'firebase';
+import { Day } from './day';
 import { AuthenticationService } from '../_service/authentication.service';
 import { AccessData } from '../_interfaces/accessData';
 import { User } from '../_interfaces/user';
+import { FirestoreCamp } from '../_interfaces/firestore-camp';
 
-export interface CampData {
-    name: string,
-    description: string,
-    participants: number,
-    year: string,
-    access: AccessData,
-    days: DayData[]
-}
-
-export class Camp extends FirebaseObject {
+export class Camp extends FirebaseObject implements FirestoreCamp {
 
     /**
      * 
@@ -25,7 +16,7 @@ export class Camp extends FirebaseObject {
      * @param database firestore database
      * @param auth AuthenticationService
      */
-    static createNewCamp(campData: CampData, database: AngularFirestore, auth: AuthenticationService) {
+    static createNewCamp(campData: FirestoreCamp, database: AngularFirestore, auth: AuthenticationService) {
 
         auth.fireAuth.authState.subscribe((user: firebase.User) => {
 
@@ -66,13 +57,14 @@ export class Camp extends FirebaseObject {
     public participants: number;
     public year: string;
     public access: AccessData;
-
     public days: Day[] = [];
+    public readonly firestoreElementId: string
 
-    constructor(data: CampData, public readonly FIRESTORE_ELEMENT_ID: string, database: AngularFirestore) {
+    constructor(data: FirestoreCamp, campId: string, database: AngularFirestore) {
 
         super(database);
 
+        this.firestoreElementId = campId;
         this.description = data.description;
         this.name = data.name;
         this.participants = data.participants;
@@ -88,7 +80,7 @@ export class Camp extends FirebaseObject {
     }
 
     // doc on mother class 
-    protected extractDataToJSON(): CampData {
+    protected extractDataToJSON(): FirestoreCamp {
 
         return {
             name: this.name,

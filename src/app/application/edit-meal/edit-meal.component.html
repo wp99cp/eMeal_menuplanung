@@ -1,9 +1,12 @@
-<ng-container *ngIf="false; else loadingMeal">
+<ng-container *ngIf="meal | async; let $meal; else loadingMeal">
 
-    <h1 class="mat-h1">Bearbeite die Mahlzeit: {{menu.name}}</h1>
+    <h1 class="mat-h1">Bearbeite die Mahlzeit: {{$meal.title}}</h1>
+
+
+
+
 
 </ng-container>
-
 
 <!-- Loading Animation -->
 <ng-template #loadingMeal>

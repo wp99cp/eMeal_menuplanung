@@ -1,23 +1,20 @@
 import { Camp } from './camp';
-import { Meal, MealData } from './meal';
+import { Meal } from './meal';
 import { firestore } from 'firebase';
+import { DayData } from '../_interfaces/day-data';
 
-export interface DayData {
-    date: firestore.Timestamp,
-    description: string,
-    meals: MealData[],
-}
 
-export class Day {
+export class Day implements DayData {
 
-    public date: Date;
+    public date: firestore.Timestamp;
+    public dateAsTypeDate: Date;
     public description: string;
     public meals: Meal[];
 
     constructor(data: DayData, camp: Camp) {
 
         let date: firestore.Timestamp = data.date;
-        this.date = date.toDate();
+        this.dateAsTypeDate = date.toDate();
         if (data.description != undefined) {
             this.description = data.description;
         }
@@ -31,7 +28,7 @@ export class Day {
     extractDataToJSON(): DayData {
 
         return {
-            date: firestore.Timestamp.fromDate(this.date),
+            date: firestore.Timestamp.fromDate(this.dateAsTypeDate),
             description: this.description,
             meals: this.meals.map((meal: Meal) => meal.extractDataToJSON())
         };
@@ -50,7 +47,7 @@ export class Day {
 */
 
     public getDateStr(): String {
-        return this.date.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });
+        return this.dateAsTypeDate.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });
     }
     public getDiscriptionInBracket(): String {
         if (this.description != '')

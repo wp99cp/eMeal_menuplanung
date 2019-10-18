@@ -11,7 +11,7 @@ export abstract class FirebaseObject {
     protected readonly abstract FIRESTORE_DB_PATH: string;
 
     /** The firestore database element id */
-    protected readonly abstract FIRESTORE_ELEMENT_ID: string;
+    protected readonly abstract firestoreElementId;
 
     /**
      * 
@@ -30,7 +30,7 @@ export abstract class FirebaseObject {
      */
     public pushToFirestoreDB() {
 
-        let docPath = this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID;
+        let docPath = this.FIRESTORE_DB_PATH + this.firestoreElementId;
         this.FIRESTORE_DATABASE.doc(docPath)
             .update(this.extractDataToJSON());
 
@@ -41,7 +41,7 @@ export abstract class FirebaseObject {
      */
     public deleteOnFirestoreDB() {
 
-        let docPath = this.FIRESTORE_DB_PATH + this.FIRESTORE_ELEMENT_ID;
+        let docPath = this.FIRESTORE_DB_PATH + this.firestoreElementId;
         this.FIRESTORE_DATABASE.doc(docPath).delete();
 
     }

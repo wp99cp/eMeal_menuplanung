@@ -18,23 +18,23 @@
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name des Lagers </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.FIRESTORE_ELEMENT_ID}}"> {{element.name}} </td>
+      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.name}} </td>
     </ng-container>
 
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.FIRESTORE_ELEMENT_ID}}"> {{element.description}}
+      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.description}}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="year">
       <th mat-header-cell *matHeaderCellDef> Jahr </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.FIRESTORE_ELEMENT_ID}}"> {{element.year}} </td>
+      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.year}} </td>
     </ng-container>
 
     <ng-container matColumnDef="participants">
       <th mat-header-cell *matHeaderCellDef> #TNs </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.FIRESTORE_ELEMENT_ID}}"> {{element.participants}}
+      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.participants}}
       </td>
     </ng-container>
 

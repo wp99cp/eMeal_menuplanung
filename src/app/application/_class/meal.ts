@@ -1,35 +1,58 @@
 import { FirebaseObject } from "./firebaseObject";
 import { AngularFirestore } from "@angular/fire/firestore";
+import { Observable } from 'rxjs';
+import { Recipe } from './recipe';
+import { AccessData } from '../_interfaces/accessData';
+import { FirestoreMeal } from '../_interfaces/firestore-meal';
 
-export class Meal extends FirebaseObject {
 
-    protected readonly FIRESTORE_ELEMENT_ID: string;
-    protected readonly FIRESTORE_DB_PATH = 'meals/';
+
+/** Angular representation of a 'FirestoreMeal' */
+export class Meal extends FirebaseObject implements FirestoreMeal {
+
+    public static readonly FIRESTORE_DB_PATH = 'meals/';
+
+    public readonly firestoreElementId: string;
+    protected readonly FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH;
 
     public title: string;
     public desciption: string;
+    public access: AccessData;
 
-    constructor(data: MealData, db: AngularFirestore) {
+    private recipes: Observable<Recipe[]> = null;
+
+
+    constructor(data: FirestoreMeal, db: AngularFirestore) {
 
         super(db);
         this.title = data.title;
         this.desciption = data.desciption;
-        this.FIRESTORE_ELEMENT_ID = data.docRef;
+        this.firestoreElementId = data.firestoreElementId;
+        this.access = data.access;
 
     }
 
-    public extractDataToJSON(): MealData {
+    public extractDataToJSON(): FirestoreMeal {
 
         return {
             title: this.title,
             desciption: this.desciption,
-            docRef: this.FIRESTORE_ELEMENT_ID
+            access: this.access,
+            firestoreElementId: this.firestoreElementId
         };
     }
-}
 
-export interface MealData {
-    title: string,
-    desciption: string,
-    docRef: string
+    public getRecipes(): Observable<Recipe[]> {
+
+        if (this.recipes != null) {
+            return this.recipes;
+        }
+        else {
+
+            // loadRecipes
+
+            return new Observable<Recipe[]>();
+        }
+    }
+
 }
