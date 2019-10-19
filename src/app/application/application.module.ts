@@ -35,6 +35,7 @@ import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
+import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { EditMealComponent } from './edit-meal/edit-meal.component';
     UserListComponent,
     DeleteCampComponent,
     WeekViewComponent,
-    EditMealComponent
+    EditMealComponent,
+    EditRecipeComponent
   ],
   imports: [
     CommonModule,

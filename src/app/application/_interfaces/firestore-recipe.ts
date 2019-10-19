@@ -5,5 +5,6 @@ export interface FirestoreRecipe {
     ingredients: Ingredient[],
     name: string,
     description: string,
-    readonly access: AccessData
+    readonly access: AccessData,
+    notes: string
 }

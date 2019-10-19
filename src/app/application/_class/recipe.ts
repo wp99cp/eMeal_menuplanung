@@ -14,23 +14,32 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
     public ingredients: Ingredient[];
     public name: string;
     public description: string;
+    public notes: string;
 
-    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, database: AngularFirestore) {
+
+    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, database: AngularFirestore) {
         super(database);
 
-        this.FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH + firestoreElementId + '/recipes/';
+        this.FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH + mealId + '/recipes/';
         this.firestoreElementId = firestoreElementId;
 
         this.access = recipeData.access;
         this.ingredients = recipeData.ingredients;
         this.name = recipeData.name;
         this.description = recipeData.description;
+        this.notes = recipeData.notes;
 
     }
 
     protected extractDataToJSON(): FirestoreRecipe {
 
-        return this;
+        return {
+            access: this.access,
+            ingredients: this.ingredients,
+            name: this.name,
+            description: this.description,
+            notes: this.notes
+        };
 
     }
 

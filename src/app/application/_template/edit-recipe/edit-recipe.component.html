@@ -1,0 +1,69 @@
+<mat-expansion-panel>
+
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{recipe.name}}
+        </mat-panel-title>
+        <mat-panel-description>
+            {{recipe.description}}
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <!-- for each ingredient ... -->
+    <form [formGroup]="recipeForm">
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Name" formControlName="name">
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Beschreibung" formControlName="description">
+        </mat-form-field>
+
+        <!-- for each ingredient ... -->
+        <table mat-table [dataSource]="recipe.ingredients">
+
+            <!--- Note that these columns can be defined in any order.
+                          The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="measure">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%"> 1 Per. </th>
+                <td mat-cell *matCellDef="let ingredient"> {{ingredient.measure}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="calcMeasure">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%"> 10 Per. </th>
+                <td mat-cell *matCellDef="let ingredient"> {{10 * ingredient.measure}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="unit">
+                <th mat-header-cell *matHeaderCellDef style="width: 30%"> Einheit </th>
+                <td mat-cell *matCellDef="let ingredient"> {{ingredient.unit}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="food">
+                <th mat-header-cell *matHeaderCellDef> Lebensmittel </th>
+                <td mat-cell *matCellDef="let ingredient"> {{ingredient.food}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <h4>Notizen zum Rezept:</h4>
+        <mat-form-field class="full-width">
+            <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="notes"></textarea>
+        </mat-form-field>
+
+    </form>
+
+    <mat-action-row>
+        <button mat-raised-button [disabled]="!recipeForm.touched" (click)='saveRecipe()'>
+            Änderungen am Rezept speichern
+        </button>
+    </mat-action-row>
+
+</mat-expansion-panel>

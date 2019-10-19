@@ -35,17 +35,6 @@ export class Day implements DayData {
         };
     }
 
-    /** 
-    public getMeals(): Observable<[Meal]> {
-
-        // The days get loaded by the first usage
-        if (this.meals == undefined)
-            this.loadMeals();
-
-        return this.meals;
-
-    }
-*/
 
     public getDateStr(): String {
         return this.dateAsTypeDate.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });

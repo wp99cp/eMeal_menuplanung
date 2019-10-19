@@ -64,20 +64,14 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
             // loadRecipes
             this.recipes = Observable.create((observer: Observer<Recipe[]>) => {
 
-                console.log('meals/' + this.firestoreElementId + '/recipes')
                 this.FIRESTORE_DATABASE.collection('meals/' + this.firestoreElementId + '/recipes',
-                    collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2")).snapshotChanges()
+                    collRef => collRef.where('access.owner', "array-contains", "ZmXlaYpCPWOLlxhIs4z5CMd27Rn2"))
+                    .snapshotChanges()
 
                     // Create new Meals out of the data
                     .pipe(map(docActions =>
-                        docActions.map(docAction => {
-                            let recipeData: FirestoreRecipe = docAction.payload.doc.data() as FirestoreRecipe;
-
-                            console.log('hier')
-                            console.log(recipeData)
-
-                            return new Recipe(recipeData, docAction.payload.doc.id, this.FIRESTORE_DATABASE);
-                        }
+                        docActions.map(
+                            docAction => new Recipe(docAction.payload.doc.data() as FirestoreRecipe, docAction.payload.doc.id, this.firestoreElementId, this.FIRESTORE_DATABASE)
                         ))
                     )
                     .subscribe(recipes => observer.next(recipes));

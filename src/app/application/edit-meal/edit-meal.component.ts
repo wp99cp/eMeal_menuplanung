@@ -4,7 +4,6 @@ import { Observable, Observer } from 'rxjs';
 import { Meal } from '../_class/meal';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
-import { Ingredient } from '../_interfaces/ingredient';
 
 
 @Component({
@@ -14,9 +13,8 @@ import { Ingredient } from '../_interfaces/ingredient';
 })
 export class EditMealComponent implements OnInit {
 
-  displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food'];
-
   private meal: Observable<Meal>;
+
 
   constructor(private route: ActivatedRoute, private db: AngularFirestore) { }
 
@@ -24,9 +22,10 @@ export class EditMealComponent implements OnInit {
 
     // load camp from url
     this.route.url.subscribe(url =>
-
       // get mealId as last part of the url
-      this.loadMeal(url[url.length - 1].path));
+      this.loadMeal(url[url.length - 1].path)
+    );
+
 
   }
 
