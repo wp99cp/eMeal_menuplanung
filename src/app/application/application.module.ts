@@ -36,6 +36,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
+import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.compone
     DeleteCampComponent,
     WeekViewComponent,
     EditMealComponent,
-    EditRecipeComponent
+    EditRecipeComponent,
+    IngredientFieldComponent
   ],
   imports: [
     CommonModule,
