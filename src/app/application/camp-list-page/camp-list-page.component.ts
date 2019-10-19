@@ -2,13 +2,14 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Observer } from 'rxjs';
 import { AuthenticationService } from '../_service/authentication.service';
-import { Camp, FirestoreCamp } from '../_class/camp';
+import { Camp } from '../_class/camp';
 import { map } from 'rxjs/operators'
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { User } from '../_interfaces/user';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { firestore } from 'firebase';
+import { FirestoreCamp } from '../_interfaces/firestore-camp';
 
 
 @Component({

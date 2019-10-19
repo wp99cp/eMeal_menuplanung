@@ -2,6 +2,7 @@ import { Camp } from './camp';
 import { Meal } from './meal';
 import { firestore } from 'firebase';
 import { DayData } from '../_interfaces/day-data';
+import { FirestoreMeal } from '../_interfaces/firestore-meal';
 
 
 export class Day implements DayData {
@@ -22,7 +23,7 @@ export class Day implements DayData {
             this.description = '';
         }
 
-        this.meals = data.meals.map(mealData => new Meal(mealData, camp.FIRESTORE_DATABASE));
+        this.meals = data.meals.map(mealData => new Meal(mealData as FirestoreMeal, mealData.firestoreElementId, camp.FIRESTORE_DATABASE));
     }
 
     extractDataToJSON(): DayData {

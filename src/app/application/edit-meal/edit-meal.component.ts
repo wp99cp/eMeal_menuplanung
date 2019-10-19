@@ -7,17 +7,6 @@ import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { Ingredient } from '../_interfaces/ingredient';
 
 
-const ELEMENT_DATA: Ingredient[] = [
-
-  { unit: 'kg', measure: 1, food: 'Spärzli' },
-  { unit: 'l', measure: 0.1, food: 'Wasser' },
-  { unit: 'l', measure: 0.1, food: 'Wasser' },
-  { unit: 'l', measure: 2, food: 'Wasser' },
-  { unit: 'l', measure: 0.75, food: 'Wasser' },
-  { unit: 'dl', measure: 0.25, food: 'Wasser' },
-
-];
-
 @Component({
   selector: 'app-edit-meal',
   templateUrl: './edit-meal.component.html',
@@ -25,8 +14,7 @@ const ELEMENT_DATA: Ingredient[] = [
 })
 export class EditMealComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food'];
 
   private meal: Observable<Meal>;
 
@@ -48,7 +36,7 @@ export class EditMealComponent implements OnInit {
     this.meal = Observable.create((observer: Observer<Meal>) => {
       this.db.doc(Meal.FIRESTORE_DB_PATH + mealId)
         .snapshotChanges().subscribe(
-          (docRef) => observer.next(new Meal(docRef.payload.data() as FirestoreMeal, this.db)),
+          (docRef) => observer.next(new Meal(docRef.payload.data() as FirestoreMeal, docRef.payload.id, this.db)),
           (error) => observer.error(error)
         );
     });

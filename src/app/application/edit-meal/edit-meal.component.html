@@ -4,16 +4,18 @@
 
     <p>Klicke auf eines der Rezpete, um es zu bearbeiten.</p>
 
-    <mat-accordion>
+    <mat-accordion *ngIf="$meal.getRecipes() | async as recipes">
+
 
         <!-- for each recipe -->
-        <mat-expansion-panel>
+        <mat-expansion-panel *ngFor="let recipe of recipes">
+
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    Spätzli
+                    {{recipe.name}}
                 </mat-panel-title>
                 <mat-panel-description>
-                    Selbst gemachte Spätzli
+                    {{recipe.description}}
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
@@ -21,33 +23,33 @@
             <ng-container>
 
                 <!-- for each ingredient ... -->
-                <table mat-table [dataSource]=" dataSource">
+                <table mat-table [dataSource]="recipe.ingredients">
 
                     <!--- Note that these columns can be defined in any order.
                               The actual rendered columns are set as a property on the row definition" -->
 
                     <!-- Position Column -->
-                    <ng-container matColumnDef="position">
+                    <ng-container matColumnDef="measure">
                         <th mat-header-cell *matHeaderCellDef style="width: 10%"> 1 Per. </th>
-                        <td mat-cell *matCellDef="let element"> {{element.measure}} </td>
+                        <td mat-cell *matCellDef="let ingredient"> {{ingredient.measure}} </td>
                     </ng-container>
 
                     <!-- Name Column -->
-                    <ng-container matColumnDef="name">
+                    <ng-container matColumnDef="calcMeasure">
                         <th mat-header-cell *matHeaderCellDef style="width: 10%"> 10 Per. </th>
-                        <td mat-cell *matCellDef="let element"> {{10* element.measure}} </td>
+                        <td mat-cell *matCellDef="let ingredient"> {{10* ingredient.measure}} </td>
                     </ng-container>
 
                     <!-- Weight Column -->
-                    <ng-container matColumnDef="weight">
+                    <ng-container matColumnDef="unit">
                         <th mat-header-cell *matHeaderCellDef style="width: 30%"> Einheit </th>
-                        <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
+                        <td mat-cell *matCellDef="let ingredient"> {{ingredient.unit}} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->
-                    <ng-container matColumnDef="symbol">
+                    <ng-container matColumnDef="food">
                         <th mat-header-cell *matHeaderCellDef> Lebensmittel </th>
-                        <td mat-cell *matCellDef="let element"> {{element.food}} </td>
+                        <td mat-cell *matCellDef="let ingredient"> {{ingredient.food}} </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -70,67 +72,6 @@
 
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Salat
-                </mat-panel-title>
-                <mat-panel-description>
-                    Maissalat
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-
-            <!-- for each ingredient ... -->
-            <ng-container>
-
-                <!-- for each ingredient ... -->
-                <table mat-table [dataSource]=" dataSource">
-
-                    <!--- Note that these columns can be defined in any order.
-                                  The actual rendered columns are set as a property on the row definition" -->
-
-                    <!-- Position Column -->
-                    <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef style="width: 10%"> 1 Per. </th>
-                        <td mat-cell *matCellDef="let element"> {{element.measure}} </td>
-                    </ng-container>
-
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef style="width: 10%"> 10 Per. </th>
-                        <td mat-cell *matCellDef="let element"> {{10* element.measure}} </td>
-                    </ng-container>
-
-                    <!-- Weight Column -->
-                    <ng-container matColumnDef="weight">
-                        <th mat-header-cell *matHeaderCellDef style="width: 30%"> Einheit </th>
-                        <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
-                    </ng-container>
-
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="symbol">
-                        <th mat-header-cell *matHeaderCellDef> Lebensmittel </th>
-                        <td mat-cell *matCellDef="let element"> {{element.food}} </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-
-                <h4>Notizen zum Rezept:</h4>
-                <p>At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-                    sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-                    sanctus est Lorem ipsum dolor sit amet.</p>
-
-            </ng-container>
-
-            <mat-action-row>
-                <button mat-button>Änderungen am Rezept speichern</button>
-            </mat-action-row>
-
-        </mat-expansion-panel>
 
     </mat-accordion>
 
