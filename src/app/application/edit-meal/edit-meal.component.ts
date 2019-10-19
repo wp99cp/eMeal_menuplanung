@@ -4,6 +4,7 @@ import { Observable, Observer } from 'rxjs';
 import { Meal } from '../_class/meal';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -14,9 +15,10 @@ import { FirestoreMeal } from '../_interfaces/firestore-meal';
 export class EditMealComponent implements OnInit {
 
   private meal: Observable<Meal>;
+  private mealInfo: FormGroup;
 
 
-  constructor(private route: ActivatedRoute, private db: AngularFirestore) { }
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 
@@ -25,6 +27,15 @@ export class EditMealComponent implements OnInit {
       // get mealId as last part of the url
       this.loadMeal(url[url.length - 1].path)
     );
+
+    this.meal.subscribe(meal => {
+      this.mealInfo = this.formBuilder.group({
+        title: meal.title,
+        participants: 12,
+        participantsOverwrite: true
+      })
+    });
+
 
 
   }

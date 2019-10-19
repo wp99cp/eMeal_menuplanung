@@ -18,7 +18,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     protected readonly FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH;
 
     public title: string;
-    public desciption: string;
+    public description: string;
     public access: AccessData;
 
     private recipes: Observable<Recipe[]> = null;
@@ -28,7 +28,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
         super(db);
         this.title = data.title;
-        this.desciption = data.desciption;
+        this.description = data.description;
         this.firestoreElementId = firestoreElementId;
         this.access = data.access;
 
@@ -38,7 +38,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
         let firestoreMeal = {
             title: this.title,
-            desciption: this.desciption,
+            description: this.description,
             access: this.access,
             firestoreElementId: this.firestoreElementId
         };
@@ -46,7 +46,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         // Meals generated out of a day don't contain access and description properties
         // They are removed if they're undefinded...
         if (firestoreMeal.access == undefined) delete firestoreMeal.access;
-        if (firestoreMeal.desciption == undefined) delete firestoreMeal.desciption;
+        if (firestoreMeal.description == undefined) delete firestoreMeal.description;
 
         return firestoreMeal;
 

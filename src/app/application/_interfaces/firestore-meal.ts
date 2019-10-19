@@ -2,7 +2,7 @@ import { AccessData } from './accessData';
 
 export interface FirestoreMeal {
     title: string,
-    desciption: string,
+    description: string,
     access: AccessData,
     readonly firestoreElementId: string
 }

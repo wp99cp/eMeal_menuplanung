@@ -37,6 +37,7 @@ import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { IngredientFieldComponent } from './_template/ingredient-field/ingredien
     MatIconModule,
     MatDialogModule,
     MatCardModule,
-    DragDropModule
+    DragDropModule,
+    MatSlideToggleModule
   ],
   providers: [
     AngularFirestore,

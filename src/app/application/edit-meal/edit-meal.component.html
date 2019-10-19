@@ -4,6 +4,17 @@
 
     <p>Klicke auf eines der Rezpete, um es zu bearbeiten.</p>
 
+    <form [formGroup]='mealInfo'>
+
+        <mat-form-field class="full-width">
+            <textarea id="descriptionField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+            <textarea id="descriptionField" matInput placeholder="Mahlzeit" formControlName="participants"></textarea>
+        </mat-form-field>
+
+    </form>
+
     <mat-accordion *ngIf="$meal.getRecipes() | async as recipes">
 
         <!-- display recipe -->
