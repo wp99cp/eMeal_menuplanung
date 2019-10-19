@@ -4,6 +4,19 @@ import { Observable, Observer } from 'rxjs';
 import { Meal } from '../_class/meal';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
+import { Ingredient } from '../_interfaces/ingredient';
+
+
+const ELEMENT_DATA: Ingredient[] = [
+
+  { unit: 'kg', measure: 1, food: 'Spärzli' },
+  { unit: 'l', measure: 0.1, food: 'Wasser' },
+  { unit: 'l', measure: 0.1, food: 'Wasser' },
+  { unit: 'l', measure: 2, food: 'Wasser' },
+  { unit: 'l', measure: 0.75, food: 'Wasser' },
+  { unit: 'dl', measure: 0.25, food: 'Wasser' },
+
+];
 
 @Component({
   selector: 'app-edit-meal',
@@ -11,6 +24,9 @@ import { FirestoreMeal } from '../_interfaces/firestore-meal';
   styleUrls: ['./edit-meal.component.sass']
 })
 export class EditMealComponent implements OnInit {
+
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = ELEMENT_DATA;
 
   private meal: Observable<Meal>;
 
