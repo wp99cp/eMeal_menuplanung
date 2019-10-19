@@ -82,7 +82,9 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     // doc on mother class 
     protected extractDataToJSON(): FirestoreCamp {
 
-        return {
+
+
+        let campData = {
             name: this.name,
             description: this.description,
             year: this.year,
@@ -90,6 +92,9 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
             days: this.days.map(day => day.extractDataToJSON()),
             access: this.access
         };
+        console.log(campData)
+
+        return campData;
     }
 
 }

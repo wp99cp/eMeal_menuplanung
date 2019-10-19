@@ -35,7 +35,21 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     }
 
     public extractDataToJSON(): FirestoreMeal {
-        return this;
+
+        let firestoreMeal = {
+            title: this.title,
+            desciption: this.desciption,
+            access: this.access,
+            firestoreElementId: this.firestoreElementId
+        };
+
+        // Meals generated out of a day don't contain access and description properties
+        // They are removed if they're undefinded...
+        if (firestoreMeal.access == undefined) delete firestoreMeal.access;
+        if (firestoreMeal.desciption == undefined) delete firestoreMeal.desciption;
+
+        return firestoreMeal;
+
     }
 
     public getRecipes(): Observable<Recipe[]> {
