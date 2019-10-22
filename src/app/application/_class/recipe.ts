@@ -4,6 +4,9 @@ import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseObject } from './firebaseObject';
 import { Meal } from './meal';
+import { SpecificRecipe } from './specific-recipe';
+import { Observable, Observer } from 'rxjs';
+import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 
 export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
@@ -16,8 +19,10 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
     public description: string;
     public notes: string;
 
+    public specificRecipe: Observable<SpecificRecipe>;
 
-    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, database: AngularFirestore) {
+
+    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, database: AngularFirestore, private relatedCampId: string = null) {
         super(database);
 
         this.FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH + mealId + '/recipes/';
@@ -28,6 +33,28 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
         this.name = recipeData.name;
         this.description = recipeData.description;
         this.notes = recipeData.notes;
+
+        if (relatedCampId != null) {
+
+            this.loadSpecificRecipe();
+
+        }
+
+    }
+
+    private loadSpecificRecipe() {
+
+        this.specificRecipe = Observable.create((observer: Observer<SpecificRecipe>) => {
+
+            this.FIRESTORE_DATABASE
+                .collection(this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes',
+                    collRef => collRef.where('campId', "==", "campId").limit(1)).get()
+                .subscribe(specificRecipe => {
+                    let path = this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes/' + specificRecipe.docs[0].id;
+                    observer.next(new SpecificRecipe(specificRecipe.docs[0].data() as FirestoreSpecificRecipe, path, this.FIRESTORE_DATABASE));
+                });
+        });
+
 
     }
 

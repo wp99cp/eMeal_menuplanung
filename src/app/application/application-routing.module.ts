@@ -26,7 +26,7 @@ const routes: Routes = [
     component: EditCampPageComponent
   },
   {
-    path: 'camps/:id/meals/:mealId',
+    path: 'camps/:id/days/:dayNumber/meals/:mealId',
     component: EditMealComponent
   }
 

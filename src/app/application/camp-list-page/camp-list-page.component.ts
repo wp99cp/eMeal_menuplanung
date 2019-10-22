@@ -45,14 +45,14 @@ export class CampListPageComponent implements OnInit {
     // Create new camp; data form form
     // Here you can defind defaults values for the form fields
     this.newCampInfos = this.formBuilder.group({
-      name: 'Sommerlager',
-      description: 'Cevi Züri 11',
+      name: '',
+      description: '',
     });
     this.newCampParticipants = this.formBuilder.group({
-      participants: '21'
+      participants: ''
     });
     this.newCampDate = this.formBuilder.group({
-      date: '23.03.2020'
+      date: ''
     });
 
 

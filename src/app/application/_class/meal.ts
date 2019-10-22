@@ -6,6 +6,7 @@ import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { map } from 'rxjs/operators'
 import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
+import { SpecificMeal } from './specific-meal';
 
 
 
@@ -20,17 +21,40 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     public title: string;
     public description: string;
     public access: AccessData;
+    public specificMeal: Observable<SpecificMeal>;
 
     private recipes: Observable<Recipe[]> = null;
 
 
-    constructor(data: FirestoreMeal, firestoreElementId: string, db: AngularFirestore) {
+    constructor(data: FirestoreMeal, firestoreElementId: string, db: AngularFirestore, private relatedCampId: string = null) {
 
         super(db);
         this.title = data.title;
         this.description = data.description;
         this.firestoreElementId = firestoreElementId;
         this.access = data.access;
+
+        if (relatedCampId != null) {
+
+            this.loadSpecificMeal();
+
+        }
+
+    }
+
+    private loadSpecificMeal() {
+
+        this.specificMeal = Observable.create((observer: Observer<SpecificMeal>) => {
+
+            this.FIRESTORE_DATABASE
+                .collection('meals/' + this.firestoreElementId + '/specificMeals',
+                    collRef => collRef.where('campId', "==", "campId").limit(1)).get()
+                .subscribe(specificMeal => {
+                    let path = 'meals/' + this.firestoreElementId + '/specificMeals/' + specificMeal.docs[0].id;
+                    observer.next(new SpecificMeal(specificMeal.docs[0].data() as SpecificMeal, path, this.FIRESTORE_DATABASE));
+                });
+        });
+
 
     }
 
@@ -71,7 +95,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
                     // Create new Meals out of the data
                     .pipe(map(docActions =>
                         docActions.map(
-                            docAction => new Recipe(docAction.payload.doc.data() as FirestoreRecipe, docAction.payload.doc.id, this.firestoreElementId, this.FIRESTORE_DATABASE)
+                            docAction => new Recipe(docAction.payload.doc.data() as FirestoreRecipe, docAction.payload.doc.id, this.firestoreElementId, this.FIRESTORE_DATABASE, this.relatedCampId)
                         ))
                     )
                     .subscribe(recipes => observer.next(recipes));

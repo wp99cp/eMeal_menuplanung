@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Recipe } from '../../_class/recipe';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Ingredient } from '../../_interfaces/ingredient';
+import { SpecificMeal } from '../../_class/specific-meal';
+import { SpecificRecipe } from '../../_class/specific-recipe';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -15,27 +17,32 @@ export class EditRecipeComponent implements OnInit {
   protected recipeForm: FormGroup;
 
   @Input() recipe: Recipe;
+  @Input() specificRecipe: SpecificRecipe;
 
   private dataSource: MatTableDataSource<Ingredient>;
-
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 
-    // set form values
-    this.recipeForm = this.createForm();
+    console.log('recipe displayed')
+
+    this.recipeForm = this.formBuilder.group({
+      notes: this.recipe.notes,
+      description: this.recipe.description,
+      name: this.recipe.name,
+      participants: this.specificRecipe.participants
+
+    });
+
     this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
 
   }
 
-  private createForm(): FormGroup {
+  changePartcipations() {
 
-    return this.formBuilder.group({
-      notes: this.recipe.notes,
-      description: this.recipe.description,
-      name: this.recipe.name
-    });
+    this.specificRecipe.participants = this.recipeForm.value.participants;
+
   }
 
   delete(index: number) {
@@ -61,7 +68,7 @@ export class EditRecipeComponent implements OnInit {
   changeIngredient(value: string, index: number, element: string) {
 
     if (element == "calcMeasure") {
-      this.recipe.ingredients[index]["measure"] = Number.parseInt(value) / 12;
+      this.recipe.ingredients[index]["measure"] = Number.parseInt(value) / this.specificRecipe.participants;
     }
     else {
       this.recipe.ingredients[index][element] = value;
@@ -81,6 +88,11 @@ export class EditRecipeComponent implements OnInit {
 
     // reset: deactivate save button
     this.recipeForm.markAsUntouched();
+
+
+    // TODO push to firebase
+    this.specificRecipe.pushToFirestoreDB();
+
   }
 
 }

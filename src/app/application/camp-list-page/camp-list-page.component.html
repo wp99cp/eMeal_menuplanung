@@ -80,12 +80,14 @@
 
 
         <mat-form-field>
-          <input matInput placeholder="Name des Lagers" required formControlName="name">
+          <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32"
+            autocomplete="off">
+          <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
         </mat-form-field>
         <br />
 
         <mat-form-field>
-          <input matInput placeholder="Beschreibung" required formControlName="description">
+          <input matInput placeholder="Beschreibung" required formControlName="description" autocomplete="off">
         </mat-form-field>
 
       </form>

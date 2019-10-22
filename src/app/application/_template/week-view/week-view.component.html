@@ -2,7 +2,7 @@
 
 <mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{camp.days.length}}" rowHeight="400px">
 
-    <mat-grid-tile *ngFor="let day of camp.days" class="mat-elevation-z1">
+    <mat-grid-tile *ngFor="let day of camp.days; let i = index" class="mat-elevation-z1">
 
         <!-- Header of the day -->
         <mat-grid-tile-header>
@@ -15,7 +15,7 @@
 
             <!-- Meal Element-->
             <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-                routerLink="meals/{{meal.firestoreElementId}}">
+                routerLink="days/{{i}}/meals/{{meal.firestoreElementId}}">
                 <div class="meal-placeholder" *cdkDragPlaceholder></div>
                 <mat-card-header>
                     <mat-card-title>{{meal.title}}</mat-card-title>

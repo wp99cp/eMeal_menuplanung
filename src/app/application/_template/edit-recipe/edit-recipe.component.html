@@ -7,6 +7,9 @@
         <mat-panel-description>
             {{recipe.description}}
         </mat-panel-description>
+        <mat-panel-description>
+            für {{ specificRecipe.participants}} Personen
+        </mat-panel-description>
 
     </mat-expansion-panel-header>
 
@@ -18,16 +21,19 @@
         <mat-form-field class="full-width">
             <input matInput placeholder="Beschreibung" formControlName="description">
         </mat-form-field>
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Anzahl Personen" formControlName="participants" (input)=changePartcipations()>
+        </mat-form-field>
 
         <!-- for each ingredient ... -->
         <table mat-table [dataSource]="dataSource">
 
             <!--- Note that these columns can be defined in any order.
-                          The actual rendered columns are set as a property on the row definition" -->
+            The actual rendered columns are set as a property on the row definition" -->
 
             <!-- Position Column -->
             <ng-container matColumnDef="measure">
-                <th mat-header-cell *matHeaderCellDef style="width: 10%"> 1 Per. </th>
+                <th mat-header-cell *matHeaderCellDef style="width: 12%"> 1 Per. </th>
                 <td mat-cell *matCellDef="let ingredient; let i = index">
                     <ingredient [fieldValue]="ingredient.measure"
                         (valueChange)="changeIngredient($event, i, 'measure')">
@@ -38,9 +44,11 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="calcMeasure">
-                <th mat-header-cell *matHeaderCellDef style="width: 10%"> 12 Per. </th>
+                <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.participants}}
+                    Per.
+                </th>
                 <td mat-cell *matCellDef="let ingredient; let i = index">
-                    <ingredient [fieldValue]="12 * ingredient.measure"
+                    <ingredient [fieldValue]="specificRecipe.participants * ingredient.measure"
                         (valueChange)="changeIngredient($event, i, 'calcMeasure')">
                     </ingredient>
                 </td>
@@ -50,7 +58,7 @@
 
             <!-- Weight Column -->
             <ng-container matColumnDef="unit">
-                <th mat-header-cell *matHeaderCellDef style="width: 30%"> Einheit </th>
+                <th mat-header-cell *matHeaderCellDef style="width: 12%"> Einheit </th>
                 <td mat-cell *matCellDef="let ingredient; let i = index">
                     <ingredient [fieldValue]="ingredient.unit" (valueChange)="changeIngredient($event, i, 'unit')">
                     </ingredient>
