@@ -9,7 +9,6 @@ import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
 import { SpecificMeal } from './specific-meal';
 
 
-
 /** Angular representation of a 'FirestoreMeal' */
 export class Meal extends FirebaseObject implements FirestoreMeal {
 
@@ -21,6 +20,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     public title: string;
     public description: string;
     public access: AccessData;
+
     public specificMeal: Observable<SpecificMeal>;
 
     private recipes: Observable<Recipe[]> = null;
@@ -35,20 +35,19 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         this.access = data.access;
 
         if (relatedCampId != null) {
-
             this.loadSpecificMeal();
-
         }
 
     }
 
+    /** loads the specific Meal data */
     private loadSpecificMeal() {
 
         this.specificMeal = Observable.create((observer: Observer<SpecificMeal>) => {
 
             this.FIRESTORE_DATABASE
                 .collection('meals/' + this.firestoreElementId + '/specificMeals',
-                    collRef => collRef.where('campId', "==", "campId").limit(1)).get()
+                    collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
                 .subscribe(specificMeal => {
                     let path = 'meals/' + this.firestoreElementId + '/specificMeals/' + specificMeal.docs[0].id;
                     observer.next(new SpecificMeal(specificMeal.docs[0].data() as SpecificMeal, path, this.FIRESTORE_DATABASE));

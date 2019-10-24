@@ -3,7 +3,6 @@ import { Recipe } from '../../_class/recipe';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Ingredient } from '../../_interfaces/ingredient';
-import { SpecificMeal } from '../../_class/specific-meal';
 import { SpecificRecipe } from '../../_class/specific-recipe';
 
 @Component({
@@ -62,7 +61,6 @@ export class EditRecipeComponent implements OnInit {
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
-    console.log(this.dataSource.data)
   }
 
   changeIngredient(value: string, index: number, element: string) {

@@ -5,6 +5,10 @@ import { Observable, Observer } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
+import { DayData } from '../_interfaces/day-data';
+import { NullTemplateVisitor } from '@angular/compiler';
+import { firestore } from 'firebase';
+import { Day } from '../_class/day';
 
 
 @Component({
@@ -73,6 +77,28 @@ export class EditCampPageComponent implements OnInit {
       });
 
     });
+
+  }
+
+
+  addNewDay() {
+
+    let sub = this.camp.subscribe(camp => {
+
+      sub.unsubscribe();
+
+      let date = new Date(camp.days[camp.days.length - 1].dateAsTypeDate);
+      date.setDate(date.getDate() + 1);
+
+      let day = new Day({
+        date: firestore.Timestamp.fromDate(date),
+        description: "",
+        meals: []
+      }, camp);
+
+      camp.days.push(day);
+      camp.pushToFirestoreDB();
+    })
 
   }
 

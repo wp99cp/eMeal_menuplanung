@@ -48,7 +48,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
             this.FIRESTORE_DATABASE
                 .collection(this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes',
-                    collRef => collRef.where('campId', "==", "campId").limit(1)).get()
+                    collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
                 .subscribe(specificRecipe => {
                     let path = this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes/' + specificRecipe.docs[0].id;
                     observer.next(new SpecificRecipe(specificRecipe.docs[0].data() as FirestoreSpecificRecipe, path, this.FIRESTORE_DATABASE));
