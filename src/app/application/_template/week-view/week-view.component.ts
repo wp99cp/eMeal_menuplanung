@@ -5,6 +5,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { firestore } from 'firebase';
+import { AddMealComponent } from '../add-meal/add-meal.component';
 
 @Component({
   selector: 'app-week-view',
@@ -100,6 +101,17 @@ export class WeekViewComponent implements OnInit {
   addMeal() {
 
     console.log('Füge eine Mahlzeit hinzu...')
+
+    this.dialog.open(AddMealComponent, {
+      height: '640px',
+      width: '900px',
+      data: null
+
+    }).afterClosed().subscribe(result => {
+
+      console.log(result)
+
+    });
 
   }
 

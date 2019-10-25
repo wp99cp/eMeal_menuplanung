@@ -1,0 +1,48 @@
+<h3 mat-dialog-title>Mahlzeiten hinzufügen.</h3>
+
+<p>Wähle eine/mehrere Mahlzeit/en aus, um sie deinem Lager hinzuzufügen.</p>
+
+<table mat-table [dataSource]="mealList" class="mat-elevation-z8">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+        </td>
+    </ng-container>
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Titel </th>
+        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <!-- lastname Column -->
+    <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
+        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+
+</table>
+
+<br />
+<br />
+<button mat-button [disabled]="true">Neue Mahlzeit erstellen</button>
+
+<br />
+<br />
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="null">Abbrechen</button>
+    <button mat-button [disabled]="true" [mat-dialog-close]="selection">Mahlzeiten hinzufügen</button>
+</div>

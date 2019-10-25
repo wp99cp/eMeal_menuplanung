@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Camp } from '../_class/camp';
-import { Observable, Observer } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, Observer } from 'rxjs';
+import { Camp } from '../_class/camp';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
-import { DayData } from '../_interfaces/day-data';
-import { NullTemplateVisitor } from '@angular/compiler';
-import { firestore } from 'firebase';
-import { Day } from '../_class/day';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({

@@ -38,6 +38,7 @@ import { EditMealComponent } from './edit-meal/edit-meal.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { AddMealComponent } from './_template/add-meal/add-meal.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     WeekViewComponent,
     EditMealComponent,
     EditRecipeComponent,
-    IngredientFieldComponent
+    IngredientFieldComponent,
+    AddMealComponent
   ],
   imports: [
     CommonModule,
@@ -90,7 +92,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   ],
   entryComponents: [
     DeleteCampComponent,
-    EditDayComponent
+    EditDayComponent,
+    AddMealComponent
   ]
 })
 
