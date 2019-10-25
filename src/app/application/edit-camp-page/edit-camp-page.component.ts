@@ -37,6 +37,7 @@ export class EditCampPageComponent implements OnInit {
     this.camp.subscribe(camp => this.campInfos = this.formBuilder.group({
       name: camp.name,
       description: camp.description,
+      participants: camp.participants
     }));
 
   }
@@ -68,13 +69,11 @@ export class EditCampPageComponent implements OnInit {
       // save data to firestore
       camp.name = this.campInfos.value.name;
       camp.description = this.campInfos.value.description;
+      camp.participants = this.campInfos.value.participants;
       camp.pushToFirestoreDB();
 
       // reset: deactivate save button
-      this.campInfos = this.formBuilder.group({
-        name: camp.name,
-        description: camp.description,
-      });
+      this.campInfos.markAsUntouched();
 
     });
 

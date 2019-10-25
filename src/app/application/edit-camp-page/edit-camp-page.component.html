@@ -12,6 +12,12 @@
             <textarea id="descriptionField" matInput placeholder="Beschreibnung"
                 formControlName="description"></textarea>
         </mat-form-field>
+
+        <mat-form-field class="full-width">
+            <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants">
+        </mat-form-field>
+
+        <p> Verknüpfe dein Lager mit der Cevi.DB, so bleibt die Teilnehmeranzahl stehts aktuell. </p>
     </form>
     <button mat-raised-button [disabled]="!campInfos.touched" (click)='saveCampInfo()'>Änderungen Speichern</button>
 
