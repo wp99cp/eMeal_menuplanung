@@ -96,6 +96,14 @@ export class WeekViewComponent implements OnInit {
 
   }
 
+
+  addMeal() {
+
+    console.log('Füge eine Mahlzeit hinzu...')
+
+  }
+
+
 }
 
 
@@ -136,6 +144,5 @@ export class EditDayComponent implements OnInit {
     this.data.name.description = this.dayInfo.value.description;
 
   }
-
 
 }

@@ -5,7 +5,8 @@
     <!-- Allgemeine Informationen zum Lager -->
     <form [formGroup]='campInfos'>
         <mat-form-field class="full-width">
-            <input matInput placeholder="Name" formControlName="name">
+            <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off">
+            <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
         </mat-form-field>
 
         <mat-form-field class="full-width">
@@ -21,9 +22,29 @@
     </form>
     <button mat-raised-button [disabled]="!campInfos.touched" (click)='saveCampInfo()'>Änderungen Speichern</button>
 
-    <!-- WeekOverview of the camp-->
+
+    <!-- Export section -->
+    <mat-divider></mat-divider>
+    <h3>Exportieren</h3>
+    <p>Exportiere und drucke dein Lager.</p>
+    <button mat-raised-button [disabled]="true">Als PDF speichern</button>
+    <br />
+    <br />
+    <button mat-raised-button [disabled]="true">Als Excel-Sheet speichern</button>
+
+    <!-- Week Overview -->
     <mat-divider></mat-divider>
     <app-week-view [camp]="$camp"></app-week-view>
+
+    <!-- Zusammenarbeit -->
+    <mat-divider></mat-divider>
+    <h3>Mitarbeiter</h3>
+    <p>Gib dein Lager anderen Nutzern frei.</p>
+    <button mat-raised-button [disabled]="true">Nutzer einladen.</button>
+    <br />
+    <br />
+    <p>Öffentliche Lager können von allen angemeldeten Nutzern als Vorlage verwendet werden.</p>
+    <button mat-raised-button [disabled]="true">Veröffentlichen</button>
 
 </ng-container>
 

@@ -25,6 +25,10 @@
             <input matInput placeholder="Anzahl Personen" formControlName="participants" (input)=changePartcipations()>
         </mat-form-field>
 
+
+        <mat-divider></mat-divider>
+
+
         <!-- for each ingredient ... -->
         <table mat-table [dataSource]="dataSource">
 
@@ -52,7 +56,7 @@
                         (valueChange)="changeIngredient($event, i, 'calcMeasure')">
                     </ingredient>
                 </td>
-                <td mat-footer-cell *matFooterCellDef> </td>
+                <td mat-footer-cell *matFooterCellDef> Total </td>
 
             </ng-container>
 
