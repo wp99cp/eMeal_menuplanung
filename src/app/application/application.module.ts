@@ -24,7 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { UserListComponent } from './_template/user-list/user-list.component'
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
@@ -33,7 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { WeekViewComponent } from './_template/week-view/week-view.component';
+import { WeekViewComponent, EditDayComponent } from './_template/week-view/week-view.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
@@ -48,6 +48,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     EditCampPageComponent,
     UserListComponent,
     DeleteCampComponent,
+    EditDayComponent,
     WeekViewComponent,
     EditMealComponent,
     EditRecipeComponent,
@@ -88,15 +89,18 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     AuthenticationService
   ],
   entryComponents: [
-    DeleteCampComponent
+    DeleteCampComponent,
+    EditDayComponent
   ]
 })
 
 export class ApplicationModule {
 
+
   constructor(private auth: AuthenticationService) {
     this.auth.signIn();
 
   }
+
 
 }

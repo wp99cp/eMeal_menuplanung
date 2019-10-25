@@ -81,26 +81,6 @@ export class EditCampPageComponent implements OnInit {
   }
 
 
-  addNewDay() {
-
-    let sub = this.camp.subscribe(camp => {
-
-      sub.unsubscribe();
-
-      let date = new Date(camp.days[camp.days.length - 1].dateAsTypeDate);
-      date.setDate(date.getDate() + 1);
-
-      let day = new Day({
-        date: firestore.Timestamp.fromDate(date),
-        description: "",
-        meals: []
-      }, camp);
-
-      camp.days.push(day);
-      camp.pushToFirestoreDB();
-    })
-
-  }
 
 
 }

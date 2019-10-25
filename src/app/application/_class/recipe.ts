@@ -25,7 +25,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
     constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, database: AngularFirestore, private relatedCampId: string = null) {
         super(database);
 
-        this.FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH + mealId + '/recipes/';
+        this.FIRESTORE_DB_PATH = 'meals/' + mealId + '/recipes/';
         this.firestoreElementId = firestoreElementId;
 
         this.access = recipeData.access;

@@ -1,0 +1,29 @@
+<h3 mat-dialog-title>{{data.name.getDateStr()}} bearbeiten.</h3>
+
+<form [formGroup]='dayInfo'>
+
+    <mat-form-field class="full-width">
+        <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field class="full-width">
+        <input matInput [matDatepicker]="picker" placeholder="Datum" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+</form>
+
+<br />
+
+<button mat-button color="warn" [mat-dialog-close]="-1">Tag löschen</button>
+
+<br />
+<br />
+
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="0">Abbrechen</button>
+    <button mat-button (click)="saveDayData()" [mat-dialog-close]="1">Übernehmen</button>
+</div>
