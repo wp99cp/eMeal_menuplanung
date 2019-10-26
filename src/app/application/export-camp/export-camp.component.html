@@ -1,5 +1,6 @@
 <button class="print default" (click)="print()">Lager Drucken</button>
 <h1 class="warning onlyOnPrint">Diese Seite nicht drucken!</h1>
+<h1 class="warning onlyOnPrint">Das Dokument beginnt auf der nächsten Seite.</h1>
 
 <p>
     Im folgenden die Druckforschau deiens Lagers. <br />
@@ -7,29 +8,21 @@
 </p>
 
 <!-- Titleblatt -->
-<h1 class="onNewPage">Name des Lagers</h1>
-<h2>Wochenplan Küche</h2>
+<div class="onNewPage titlePage">
+    <h1>Sommerlager 2018</h1>
 
+    <p>Version vom 12.12.2019</p>
+    <p>Erstellt von Vorname Nachname v/o Ceviname</p>
+</div>
 <!-- Wochenplan -->
 <h1 class="onNewPage">Wochenplan</h1>
 
 <!-- Mahlzeiten -->
 <h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1>
 
-<!-- Mahlzeiten -->
-<h1 class="onNewPage">Zmittag (Montag, 1. Dezemeber 2019)</h1>
-
-<!-- Mahlzeiten -->
-<h1 class="onNewPage">Znacht (Montag, 1. Dezemeber 2019)</h1>
-
 <!-- Einkaufsliste -->
 <h1 class="onNewPage">Einkaufsliste (Ganzes Lager)</h1>
 
-<!-- Einkaufsliste -->
-<h1 class="onNewPage">Einkaufsliste (Ganzes Lager ohne Frischprodukte)</h1>
-
-<!-- Einkaufsliste -->
-<h1 class="onNewPage">Frischprodukte</h1>
-
 <!-- Last new Page -->
 <h1 class="onNewPage onlyOnPrint warning">Diese Seite nicht drucken!</h1>
+<h1 class="warning onlyOnPrint">Das Dokument endet auf der vorherigen Seite.</h1>

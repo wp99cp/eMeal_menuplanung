@@ -7,11 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExportCampComponent implements OnInit {
 
+  
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  /** Druckt die aktuelle Seite (mit der Druckfunktion des Browsers). */
   print() {
 
     window.print();
