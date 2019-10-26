@@ -39,6 +39,7 @@ import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.compone
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AddMealComponent } from './_template/add-meal/add-meal.component';
+import { ExportCampComponent } from './export-camp/export-camp.component';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { AddMealComponent } from './_template/add-meal/add-meal.component';
     EditMealComponent,
     EditRecipeComponent,
     IngredientFieldComponent,
-    AddMealComponent
+    AddMealComponent,
+    ExportCampComponent
   ],
   imports: [
     CommonModule,

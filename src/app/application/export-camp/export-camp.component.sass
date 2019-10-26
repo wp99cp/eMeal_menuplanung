@@ -1,0 +1,15 @@
+.onNewPage
+    page-break-before: always
+
+.onlyOnPrint
+    display: none
+
+@media screen 
+    .onNewPage
+        border-top: solid 1px lightgray
+        margin-top: 50px
+        padding-top: 25px
+
+@media print 
+    .onlyOnPrint
+        display: block

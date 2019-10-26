@@ -5,6 +5,7 @@ import { CampListPageComponent } from './camp-list-page/camp-list-page.component
 import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
 import { EditCampPageComponent } from './edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
+import { ExportCampComponent } from './export-camp/export-camp.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'camps/:id',
     component: EditCampPageComponent
+  },
+  {
+    path: 'camps/:id/export',
+    component: ExportCampComponent
   },
   {
     path: 'camps/:id/days/:dayNumber/meals/:mealId',
