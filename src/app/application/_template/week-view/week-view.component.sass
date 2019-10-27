@@ -11,11 +11,14 @@
     overflow: hidden
     width: calc(100% - 20px)
 
+.mat-card-header-text
+    margin: auto
+
 .meal-card
     padding: 20px 10px
     border-bottom: solid 1px #ccc
     color: rgba(0, 0, 0, 0.87)
-    display: flex
+    display: flow-root
     flex-direction: row
     align-items: center
     justify-content: space-between
@@ -23,6 +26,7 @@
     cursor: move
     background: white
     font-size: 14px
+    text-align: center
 
 .cdk-drag-preview
     box-sizing: border-box
@@ -44,6 +48,10 @@
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
     margin: 10px
     border-radius: 2px
+
+.mat-grid-tile-header
+    background-color: #3f51b5
+    opacity: 0.8
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////

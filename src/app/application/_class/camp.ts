@@ -16,14 +16,10 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
      * @param database firestore database
      * @param auth AuthenticationService
      */
-    static createNewCamp(campData: FirestoreCamp, database: AngularFirestore, auth: AuthenticationService) {
+    static createNewCamp(campData: FirestoreCamp, database: AngularFirestore) {
 
-        auth.fireAuth.authState.subscribe((user: firebase.User) => {
-
-            // write to database
-            database.collection(this.CAMPS_DIRECTORY).add(campData);
-
-        });
+        // write to database
+        database.collection(this.CAMPS_DIRECTORY).add(campData);
 
     }
 

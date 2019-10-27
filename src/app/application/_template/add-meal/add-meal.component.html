@@ -2,18 +2,19 @@
 
 <p>Wähle eine/mehrere Mahlzeit/en aus, um sie deinem Lager hinzuzufügen.</p>
 
-<table mat-table [dataSource]="mealList" class="mat-elevation-z8">
+<table mat-table [dataSource]="mealTableSource" class="mat-elevation-z8">
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                [checked]="selectedMeal.hasValue() && isAllSelected()"
+                [indeterminate]="selectedMeal.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
             </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectedMeal.toggle(row) : null"
+                [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
         </td>
     </ng-container>
@@ -30,9 +31,26 @@
         <td mat-cell *matCellDef="let element"> {{element.description}} </td>
     </ng-container>
 
+    <!-- lastname Column -->
+    <ng-container matColumnDef="useAs">
+        <th mat-header-cell *matHeaderCellDef> Verwenden als </th>
+        <td mat-cell *matCellDef="let element">
+            <mat-form-field>
+                <select matNativeControl #select (input)="selected(element, select.value )">
+                    <option value="Zmorgen">Zmorgen</option>
+                    <option value="Zmittag">Zmittag</option>
+                    <option value="Znacht">Znacht</option>
+                    <option value="Zvieri">Zvieri</option>
+                    <option value="Znüni">Znüni</option>
+                    <option value="Leitersnack">Leitersnack</option>
+                    <option value="Vorbereiten">Vorbereiten</option>
+                </select>
+            </mat-form-field>
+        </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
-    </tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectedMeal.toggle(row)"> </tr>
 
 </table>
 
@@ -44,5 +62,5 @@
 <br />
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="null">Abbrechen</button>
-    <button mat-button [disabled]="true" [mat-dialog-close]="selection">Mahlzeiten hinzufügen</button>
+    <button mat-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
 </div>

@@ -1,13 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Observer } from 'rxjs';
-import { Meal } from '../_class/meal';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { FirestoreMeal } from '../_interfaces/firestore-meal';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { Camp } from '../_class/camp';
-import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
-
+import { Meal } from '../_class/meal';
+import { FirestoreMeal } from '../_interfaces/firestore-meal';
 
 @Component({
   selector: 'app-edit-meal',

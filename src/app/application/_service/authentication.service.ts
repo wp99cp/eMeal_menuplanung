@@ -1,20 +1,48 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase';
 import { Router } from '@angular/router';
+import * as firebase from 'firebase';
 import { Subscription } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
-
 /**
  * This service handels the authentication process.
+ * AuthenticationService is singleton. The active instance can be globaly access over
+ * AuthenticationService.service
  * 
  */
 export class AuthenticationService {
 
-  constructor(public fireAuth: AngularFireAuth, private router: Router) { }
+  private static service: AuthenticationService = null;
+  private static user: firebase.User = null;
+
+  /** Get the firebase.User which is currently signed in */
+  public static getUser(): firebase.User {
+    return AuthenticationService.user;
+  }
+
+  /** get the AuthenticationService */
+  public static getService(): AuthenticationService {
+    return AuthenticationService.service;
+  }
+
+
+  // ************************************************
+  // ************************************************
+  // ************************************************
+
+  constructor(public fireAuth: AngularFireAuth, private router: Router) {
+
+    // sets global service filed
+    AuthenticationService.service = this;
+
+    // Update global user field
+    fireAuth.user.subscribe(user => AuthenticationService.user = user);
+
+  }
 
   // needs for stop automatic resignin
   private signInSubscription: Subscription;
@@ -24,11 +52,11 @@ export class AuthenticationService {
    * 
    */
   public signIn() {
-
     this.signInSubscription =
       this.fireAuth.authState.subscribe(user => {
-        if (user == null)
+        if (user == null) {
           this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider);
+        }
       });
 
   }

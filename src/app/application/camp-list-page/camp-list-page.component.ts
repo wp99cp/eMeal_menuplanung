@@ -144,7 +144,7 @@ export class CampListPageComponent implements OnInit {
 
     console.log(campData)
     // Creates a new Camp
-    Camp.createNewCamp(campData, this.database, this.auth);
+    Camp.createNewCamp(campData, this.database);
   }
 
   /** A user get selected */

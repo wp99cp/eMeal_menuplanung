@@ -4,6 +4,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificRecipe {
 
+    public campId: string;
+
     public participants: number;
 
     protected FIRESTORE_DB_PATH: string;
@@ -23,7 +25,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
     protected extractDataToJSON(): FirestoreSpecificRecipe {
 
         return {
-            participants: this.participants
+            participants: this.participants,
+            campId: this.campId
         }
 
     }

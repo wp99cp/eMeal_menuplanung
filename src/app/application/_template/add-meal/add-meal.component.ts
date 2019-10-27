@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Meal } from '../../_class/meal';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators'
+import { MatTableDataSource } from '@angular/material/table';
+import { map, first } from 'rxjs/operators';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
+import { AuthenticationService } from '../../_service/authentication.service';
 
 
 @Component({
@@ -15,39 +15,56 @@ import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 export class AddMealComponent implements OnInit {
 
 
-  private selection = new SelectionModel<FirestoreMeal>(true, []);
-  private displayedColumns: string[] = ['select', 'title', 'description'];
-  private mealList = new MatTableDataSource<FirestoreMeal>();
+  // Datasource for the table
+  private mealTableSource = new MatTableDataSource<FirestoreMeal>();
+  // only use for the mat table 
+  protected readonly displayedColumns: string[] = ['select', 'useAs', 'title', 'description'];
 
-  constructor(private database: AngularFirestore) { }
+  // Selected Meals form the table
+  private selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
 
+  /** Constructor */
+  constructor(private database: AngularFirestore, private auth: AuthenticationService) { }
+
+  /** on init */
   ngOnInit(): void {
 
-    // TODO: very bad solution for get only once...
-    let thisObserver = this.database.collection('meals',
-      collRef => collRef.where('access.owner', "array-contains", 'ZmXlaYpCPWOLlxhIs4z5CMd27Rn2')).snapshotChanges()
-      // Create new Users out of the data
-      .pipe(map(docActions => docActions.map(docRef => docRef.payload.doc.data() as FirestoreMeal)))
-      .subscribe((meals: FirestoreMeal[]) => {
-        this.mealList = new MatTableDataSource<FirestoreMeal>(meals);
-        thisObserver.unsubscribe();
-      })
+    this.auth.fireAuth.authState.pipe(first()).subscribe(user => {
+
+      // TODO: very bad solution for get only once...
+      let observerMeals = this.database.collection('meals',
+        collRef => collRef.where('access.owner', "array-contains", user.uid)).snapshotChanges()
+        // Create new Users out of the data
+        .pipe(map(docActions => docActions.map(docRef => {
+
+          let meal = docRef.payload.doc.data() as FirestoreMeal;
+          meal.firestoreElementId = docRef.payload.doc.id;
+          return meal;
+
+        })))
+        .subscribe((meals: FirestoreMeal[]) => {
+          this.mealTableSource = new MatTableDataSource<FirestoreMeal>(meals);
+          observerMeals.unsubscribe();
+        })
+
+
+    });
 
   }
 
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.mealList.data.length;
+    const numSelected = this.selectedMeal.selected.length;
+    const numRows = this.mealTableSource.data.length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-      this.selection.clear() :
-      this.mealList.data.forEach(user => this.selection.select(user));
+      this.selectedMeal.clear() :
+      this.mealTableSource.data.forEach(user => this.selectedMeal.select(user));
   }
 
   /** The label for the checkbox on the passed row */
@@ -55,8 +72,13 @@ export class AddMealComponent implements OnInit {
     if (!user) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(user) ? 'deselect' : 'select'} row ${user.title}`;
+    return `${this.selectedMeal.isSelected(user) ? 'deselect' : 'select'} row ${user.title}`;
   }
 
+  /** Set usedAs parameter to firestoreMeal */
+  selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
+    firestoreMeal["usedAs"] = usedAs;
+
+  }
 }

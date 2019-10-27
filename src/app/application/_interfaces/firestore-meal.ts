@@ -4,5 +4,5 @@ export interface FirestoreMeal {
     title: string,
     description: string,
     access: AccessData,
-    readonly firestoreElementId: string
+    firestoreElementId: string
 }

@@ -1,11 +1,15 @@
-import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { firestore } from 'firebase';
 import { Camp } from '../../_class/camp';
 import { Day } from '../../_class/day';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { firestore } from 'firebase';
+import { Meal } from '../../_class/meal';
+import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { AddMealComponent } from '../add-meal/add-meal.component';
+import { AuthenticationService } from '../../_service/authentication.service';
 
 @Component({
   selector: 'app-week-view',
@@ -71,9 +75,8 @@ export class WeekViewComponent implements OnInit {
       else if (save == -1) {
         this.camp.days.splice(this.camp.days.indexOf(day), 1);
 
-        console.log(this.camp.days)
-
         this.camp.pushToFirestoreDB();
+
       }
 
     });
@@ -98,26 +101,49 @@ export class WeekViewComponent implements OnInit {
   }
 
 
+  /**
+   * 
+   */
   addMeal() {
 
-    console.log('Füge eine Mahlzeit hinzu...')
 
     this.dialog.open(AddMealComponent, {
       height: '640px',
       width: '900px',
       data: null
+    }).afterClosed()
+      .subscribe((result: SelectionModel<FirestoreMeal>) => {
 
-    }).afterClosed().subscribe(result => {
+        if (result != null) {
 
-      console.log(result)
+          result.selected.forEach(firestoreMeal => {
 
-    });
+            let meal = new Meal(
+              {
+                description: firestoreMeal.title,
+                title: firestoreMeal["usedAs"] ? firestoreMeal["usedAs"] : 'Zmorgen',
+                access: null,
+                firestoreElementId: firestoreMeal.firestoreElementId
+              },
+              firestoreMeal.firestoreElementId,
+              this.camp.FIRESTORE_DATABASE);
+
+            meal.createSpecificData(this.camp);
+
+            this.camp.days[0].meals.push(meal);
+
+            this.camp.pushToFirestoreDB();
+
+          });
+
+        }
+
+      });
 
   }
 
 
 }
-
 
 
 

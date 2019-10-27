@@ -1,17 +1,16 @@
-import { AccessData } from '../_interfaces/accessData';
-import { Ingredient } from '../_interfaces/ingredient';
-import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FirebaseObject } from './firebaseObject';
-import { Meal } from './meal';
-import { SpecificRecipe } from './specific-recipe';
 import { Observable, Observer } from 'rxjs';
+import { AccessData } from '../_interfaces/accessData';
+import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
 import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
+import { Ingredient } from '../_interfaces/ingredient';
+import { FirebaseObject } from './firebaseObject';
+import { SpecificRecipe } from './specific-recipe';
 
 export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
     protected FIRESTORE_DB_PATH: string;
-    protected firestoreElementId: any;
+    public firestoreElementId: any;
 
     public access: AccessData;
     public ingredients: Ingredient[];

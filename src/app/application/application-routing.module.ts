@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { WelcomPageComponent } from './welcom-page/welcom-page.component';
+import { RouterModule, Routes } from '@angular/router';
 import { CampListPageComponent } from './camp-list-page/camp-list-page.component';
-import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
 import { EditCampPageComponent } from './edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './edit-meal/edit-meal.component';
 import { ExportCampComponent } from './export-camp/export-camp.component';
+import { MealListPageComponent } from './meal-list-page/meal-list-page.component';
+import { WelcomPageComponent } from './welcom-page/welcom-page.component';
 
 
 const routes: Routes = [

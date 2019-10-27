@@ -4,10 +4,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 
 export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMeal {
 
+    public campId: string;
+
     public participants: number;
 
     protected FIRESTORE_DB_PATH: string;
-    protected firestoreElementId: string;
+    public firestoreElementId: string;
 
     constructor(firestoreSpecificMeal: FirestoreSpecificMeal, path: string, db: AngularFirestore) {
 
@@ -23,7 +25,8 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
     protected extractDataToJSON(): FirestoreSpecificMeal {
 
         return {
-            participants: this.participants
+            participants: this.participants,
+            campId: this.campId
         }
 
     }
