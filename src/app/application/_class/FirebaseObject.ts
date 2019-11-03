@@ -1,5 +1,4 @@
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthenticationService } from '../_service/authentication.service';
+import { DatabaseService } from '../_service/database.service';
 
 /**
  * Add's the ability to push changes of a child object to the FirebaseServer
@@ -12,7 +11,7 @@ export abstract class FirebaseObject {
     /** Path in the firestore databse to the collection of this object 
          *  (Note the path mus end with '/', e.g. 'camps/campId/days/')
         */
-    protected readonly abstract FIRESTORE_DB_PATH: string;
+    protected readonly abstract firestorePath: string;
 
     /** The firestore database element id */
     protected readonly abstract firestoreElementId;
@@ -23,26 +22,19 @@ export abstract class FirebaseObject {
      * used for updating the document in the database.
      * 
      */
-    protected abstract extractDataToJSON(): Partial<unknown>;
+    public abstract extractDataToJSON(): Partial<unknown>;
 
-    /** load User */
-    constructor(public readonly FIRESTORE_DATABASE: AngularFirestore) { 
-        FirebaseObject.user = AuthenticationService.getUser()
-    }
 
-    /** updates the refered object in the databse */
-    public pushToFirestoreDB() {
 
-        let docPath = this.FIRESTORE_DB_PATH + this.firestoreElementId;
-        this.FIRESTORE_DATABASE.doc(docPath).update(this.extractDataToJSON());
+    public getDocPath(): string {
+
+        return this.firestorePath + this.firestoreElementId;
 
     }
 
-    /** Deletes a document in the firestore database  */
-    public deleteOnFirestoreDB() {
+    public getCollection(): string {
 
-        let docPath = this.FIRESTORE_DB_PATH + this.firestoreElementId;
-        this.FIRESTORE_DATABASE.doc(docPath).delete();
+        return this.firestorePath;
 
     }
 

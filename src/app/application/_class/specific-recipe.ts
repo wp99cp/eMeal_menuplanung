@@ -1,6 +1,6 @@
-import { FirebaseObject } from './firebaseObject';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
+import { FirebaseObject } from './firebaseObject';
 
 export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificRecipe {
 
@@ -8,21 +8,21 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
     public participants: number;
 
-    protected FIRESTORE_DB_PATH: string;
+    protected firestorePath: string;
     protected firestoreElementId: string;
 
     constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string, db: AngularFirestore) {
 
-        super(db);
+        super();
 
-        this.FIRESTORE_DB_PATH = path.substring(0, path.lastIndexOf('/'));
+        this.firestorePath = path.substring(0, path.lastIndexOf('/'));
         this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
         this.participants = firestoreSpecificRecipes.participants;
 
     }
 
-    protected extractDataToJSON(): FirestoreSpecificRecipe {
+    public extractDataToJSON(): FirestoreSpecificRecipe {
 
         return {
             participants: this.participants,

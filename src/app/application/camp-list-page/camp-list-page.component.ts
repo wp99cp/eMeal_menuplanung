@@ -10,6 +10,7 @@ import { User } from '../_interfaces/user';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
+import { DatabaseService } from '../_service/database.service';
 
 
 @Component({
@@ -25,7 +26,6 @@ export class CampListPageComponent implements OnInit {
 
   // Camp Data
   private camps: Observable<Camp[]>;
-  private user: firebase.User;
 
   // Form data to create new Camp
   private newCampInfos: FormGroup;
@@ -38,7 +38,7 @@ export class CampListPageComponent implements OnInit {
    * @param auth 
    * @param database 
    */
-  constructor(public dialog: MatDialog, private auth: AuthenticationService, private database: AngularFirestore, private formBuilder: FormBuilder) {
+  constructor(public dialog: MatDialog, private databaseService: DatabaseService, private formBuilder: FormBuilder) {
 
     this.dataSource = new MatTableDataSource();
 
@@ -48,13 +48,14 @@ export class CampListPageComponent implements OnInit {
       name: '',
       description: '',
     });
+
     this.newCampParticipants = this.formBuilder.group({
       participants: ''
     });
+
     this.newCampDate = this.formBuilder.group({
       date: ''
     });
-
 
 
   }
@@ -64,18 +65,13 @@ export class CampListPageComponent implements OnInit {
    */
   ngOnInit() {
 
-    this.auth.fireAuth.authState.subscribe(user => {
-      if (user) {
-        this.user = user
-        this.campListPage()
+    this.camps = this.databaseService.getEditableCamps();
 
-          // Update MatTableDataSource
-          .subscribe((camps: Camp[]) => {
-            this.dataSource = new MatTableDataSource(camps)
-          });
-
-      }
+    // Update MatTableDataSource
+    this.camps.subscribe((camps: Camp[]) => {
+      this.dataSource = new MatTableDataSource(camps)
     });
+
 
   }
 
@@ -94,57 +90,36 @@ export class CampListPageComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  /**
-   * 
-   */
-  campListPage(): Observable<Camp[]> {
-
-    // load Camps as Observable<Camp[]>
-    this.camps = Observable.create((observer: Observer<Camp[]>) => {
-
-      this.database.collection('camps',
-        collRef => collRef.where('access.owner', "array-contains", this.user.uid)).snapshotChanges()
-
-        // Create new Meals out of the data
-        .pipe(map(docActions =>
-          docActions.map(docAction => {
-            let campData: FirestoreCamp = docAction.payload.doc.data() as FirestoreCamp;
-            return new Camp(campData, docAction.payload.doc.id, this.database);
-          }
-          ))
-        )
-        .subscribe(camps => observer.next(camps));
-
-    });
-
-    return this.camps;
-
-  }
 
   /**
    * Creats a new Camp
    */
   createCamp() {
 
-    let date = new Date(this.newCampDate.value.date);
+    this.databaseService.getCurrentUser().subscribe(user => {
 
-    // combinde data
-    let campData: FirestoreCamp = {
-      name: this.newCampInfos.value.name,
-      description: this.newCampInfos.value.description,
-      access: { owner: [this.user.uid], editor: Camp.generateCoworkersList(this.user.uid, this.selectedCoworkers) },
-      year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
-      days: [{
-        date: firestore.Timestamp.fromDate(date),
-        meals: [],
-        description: ''
-      }],
-      participants: this.newCampParticipants.value.participants
-    };
+      let date = new Date(this.newCampDate.value.date);
 
-    console.log(campData)
-    // Creates a new Camp
-    Camp.createNewCamp(campData, this.database);
+      // combinde data
+      let campData: FirestoreCamp = {
+        name: this.newCampInfos.value.name,
+        description: this.newCampInfos.value.description,
+        access: { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, this.selectedCoworkers) },
+        year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
+        days: [{
+          date: firestore.Timestamp.fromDate(date),
+          meals: [],
+          description: ''
+        }],
+        participants: this.newCampParticipants.value.participants
+      };
+
+
+      // Creates a new Camp
+      this.databaseService.addDocument(campData, 'camps');
+    });
+
+
   }
 
   /** A user get selected */
@@ -165,8 +140,11 @@ export class CampListPageComponent implements OnInit {
       data: { name: camp.name }
     }).afterClosed().subscribe(deleteConfirmed => {
 
-      if (deleteConfirmed)
-        camp.deleteOnFirestoreDB();
+      if (deleteConfirmed) {
+
+        this.databaseService.deleteDocument(camp);
+
+      }
 
     });
 

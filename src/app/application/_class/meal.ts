@@ -1,23 +1,14 @@
-import { AngularFirestore } from "@angular/fire/firestore";
-import { Observable, Observer } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
-import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
-import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { Camp } from './camp';
 import { FirebaseObject } from "./firebaseObject";
 import { Recipe } from './recipe';
 import { SpecificMeal } from './specific-meal';
 
-/** Angular representation of a 'FirestoreMeal' */
 export class Meal extends FirebaseObject implements FirestoreMeal {
 
-    public static readonly FIRESTORE_DB_PATH = 'meals/';
-
-    public readonly firestoreElementId: string;
-    protected readonly FIRESTORE_DB_PATH = Meal.FIRESTORE_DB_PATH;
+    public readonly firestorePath = 'meals/';
 
     public title: string;
     public description: string;
@@ -27,34 +18,34 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     private recipes: Observable<Recipe[]> = null;
 
 
-    constructor(data: FirestoreMeal, firestoreElementId: string, db: AngularFirestore, private relatedCampId: string = null) {
+    constructor(data: FirestoreMeal, public readonly firestoreElementId: string) {
 
-        super(db);
+        super();
+
         this.title = data.title;
         this.description = data.description;
-        this.firestoreElementId = firestoreElementId;
         this.access = data.access;
-
-        if (relatedCampId != null) {
-            this.loadSpecificMeal();
-        }
 
     }
 
-    /** loads the specific Meal data */
-    private loadSpecificMeal() {
 
+
+    /** loads the specific Meal data */
+    private loadSpecificMeal(relatedCampId: string) {
+
+        /*
         this.specificMeal = Observable.create((observer: Observer<SpecificMeal>) => {
 
             this.FIRESTORE_DATABASE
-                .collection(Meal.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificMeals',
+                .collection(Meal.firestorePath + this.firestoreElementId + '/specificMeals',
                     collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
                 .subscribe(specificMeal => {
-                    let path = Meal.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificMeals/' + specificMeal.docs[0].id;
+                    let path = Meal.firestorePath + this.firestoreElementId + '/specificMeals/' + specificMeal.docs[0].id;
                     observer.next(new SpecificMeal(specificMeal.docs[0].data() as FirestoreSpecificMeal, path, this.FIRESTORE_DATABASE));
                 });
         });
 
+*/
 
     }
 
@@ -79,6 +70,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     /**  */
     public getRecipes(): Observable<Recipe[]> {
 
+        throw "Fehlr noch";
+        /*
 
         if (this.recipes != null) {
 
@@ -88,7 +81,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
             // loadRecipes
             this.recipes = Observable.create((observer: Observer<Recipe[]>) => {
-                this.FIRESTORE_DATABASE.collection(Meal.FIRESTORE_DB_PATH + this.firestoreElementId + '/recipes', collRef =>
+                this.FIRESTORE_DATABASE.collection(Meal.firestorePath + this.firestoreElementId + '/recipes', collRef =>
                     collRef.where('access.owner', "array-contains", Meal.user.uid))
                     .snapshotChanges()
                     // Create new Meals out of the data
@@ -111,6 +104,9 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
             return this.recipes;
 
         }
+
+        */
+        return null;
     }
 
     /**
@@ -121,11 +117,14 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
      */
     public createSpecificData(camp: Camp) {
 
+        throw "Funktion zur Zeit nocht möglich";
+        /*
+
         let specificMealData: FirestoreSpecificMeal = {
             participants: camp.participants,
             campId: camp.firestoreElementId
         };
-        this.FIRESTORE_DATABASE.collection(Meal.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificMeals').add(specificMealData);
+        this.FIRESTORE_DATABASE.collection(Meal.firestorePath + this.firestoreElementId + '/specificMeals').add(specificMealData);
 
         this.getRecipes().subscribe(recipes => recipes.forEach(recipe => {
 
@@ -133,10 +132,12 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
                 participants: camp.participants,
                 campId: camp.firestoreElementId
             };
-            let path = Meal.FIRESTORE_DB_PATH + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + "/specificRecipes";
+            let path = Meal.firestorePath + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + "/specificRecipes";
             this.FIRESTORE_DATABASE.collection(path).add(specificRecipeData);
 
         }));
+
+        */
 
     }
 

@@ -35,7 +35,7 @@ export class UserListComponent implements OnInit {
         let user: User = {
           firstName: docData['firstName'],
           lastName: docData['lastName'],
-          mail: docData['mail'],
+          email: docData['mail'],
           uid: docData['uid'],
 
         }

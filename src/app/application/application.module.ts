@@ -37,9 +37,9 @@ import { AddMealComponent } from './_template/add-meal/add-meal.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 import { UserListComponent } from './_template/user-list/user-list.component';
-import { EditDayComponent, WeekViewComponent } from './_template/week-view/week-view.component';
-
-
+import { WeekViewComponent } from './_template/week-view/week-view.component';
+import { DatabaseService } from './_service/database.service';
+import { EditDayComponent } from './_template/edit-day/edit-day.component';
 
 
 @NgModule({
@@ -90,12 +90,14 @@ import { EditDayComponent, WeekViewComponent } from './_template/week-view/week-
   providers: [
     AngularFirestore,
     AngularFireAuth,
-    AuthenticationService
+    AuthenticationService,
+    DatabaseService
   ],
   entryComponents: [
     DeleteCampComponent,
     EditDayComponent,
-    AddMealComponent
+    AddMealComponent,
+    EditDayComponent
   ]
 })
 

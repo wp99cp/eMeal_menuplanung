@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Camp } from '../_class/camp';
-import { FirestoreCamp } from '../_interfaces/firestore-camp';
-import { MatDialog } from '@angular/material/dialog';
+import { DatabaseService } from '../_service/database.service';
 
 
 @Component({
@@ -16,26 +14,35 @@ import { MatDialog } from '@angular/material/dialog';
 export class EditCampPageComponent implements OnInit {
 
   // Toggle for saveButton
-  private campInfos: FormGroup;
+  private campInfosForm: FormGroup;
 
   // camp Data from server
   private camp: Observable<Camp>;
 
   // local changes to the camp data (not sync with server)
-  constructor(private route: ActivatedRoute, private db: AngularFirestore, private formBuilder: FormBuilder) { }
+  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+
+    this.campInfosForm = this.formBuilder.group({
+      name: '',
+      description: '',
+      participants: ''
+    })
 
     // load camp from url
     this.route.url.subscribe(url =>
       this.loadCamp(url[1].path));
 
-    // set form values
-    this.camp.subscribe(camp => this.campInfos = this.formBuilder.group({
-      name: camp.name,
-      description: camp.description,
-      participants: camp.participants
-    }));
+    // update Values
+    this.camp.subscribe(camp =>
+      this.campInfosForm.setValue({
+        name: camp.name,
+        description: camp.description,
+        participants: camp.participants
+
+      })
+    );
 
   }
 
@@ -47,36 +54,26 @@ export class EditCampPageComponent implements OnInit {
    */
   loadCamp(campId: string) {
 
-    // TODO: evtl. Zusammenfassbar mit den anderen Abfragen -> Auslagerung in ein Service...
-    this.camp = Observable.create((observer: Observer<Camp>) => {
-      this.db.doc(Camp.CAMPS_DIRECTORY + campId)
-        .snapshotChanges().subscribe(
-          (docRef) => observer.next(new Camp(docRef.payload.data() as FirestoreCamp, docRef.payload.id, this.db)),
-          (error) => observer.error(error)
-        );
-    });
+    this.camp = this.databaseService.getCampById(campId);
 
   }
 
   /** Save and reset the form */
-  saveCampInfo() {
+  protected saveCampInfo(camp: Camp) {
 
-    this.camp.subscribe(camp => {
+    this.saveValueChanges(camp);
+    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath())
 
-      // save data to firestore
-      camp.name = this.campInfos.value.name;
-      camp.description = this.campInfos.value.description;
-      camp.participants = this.campInfos.value.participants;
-      camp.pushToFirestoreDB();
-
-      // reset: deactivate save button
-      this.campInfos.markAsUntouched();
-
-    });
+    // deactivate save button
+    this.campInfosForm.markAsUntouched();
 
   }
 
-
-
+  /** saved the changed values form the form */
+  private saveValueChanges(camp: Camp) {
+    camp.name = this.campInfosForm.value.name;
+    camp.description = this.campInfosForm.value.description;
+    camp.participants = this.campInfosForm.value.participants;
+  }
 
 }

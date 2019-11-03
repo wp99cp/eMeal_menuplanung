@@ -9,7 +9,7 @@ import { SpecificRecipe } from './specific-recipe';
 
 export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
-    protected FIRESTORE_DB_PATH: string;
+    protected firestorePath: string;
     public firestoreElementId: any;
 
     public access: AccessData;
@@ -21,10 +21,10 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
     public specificRecipe: Observable<SpecificRecipe>;
 
 
-    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, database: AngularFirestore, private relatedCampId: string = null) {
-        super(database);
+    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, private relatedCampId: string = null) {
+        super();
 
-        this.FIRESTORE_DB_PATH = 'meals/' + mealId + '/recipes/';
+        this.firestorePath = 'meals/' + mealId + '/recipes/';
         this.firestoreElementId = firestoreElementId;
 
         this.access = recipeData.access;
@@ -43,21 +43,24 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
     private loadSpecificRecipe() {
 
+        throw "Erooro";
+
+        /*
         this.specificRecipe = Observable.create((observer: Observer<SpecificRecipe>) => {
 
             this.FIRESTORE_DATABASE
-                .collection(this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes',
+                .collection(this.firestorePath + this.firestoreElementId + '/specificRecipes',
                     collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
                 .subscribe(specificRecipe => {
-                    let path = this.FIRESTORE_DB_PATH + this.firestoreElementId + '/specificRecipes/' + specificRecipe.docs[0].id;
+                    let path = this.firestorePath + this.firestoreElementId + '/specificRecipes/' + specificRecipe.docs[0].id;
                     observer.next(new SpecificRecipe(specificRecipe.docs[0].data() as FirestoreSpecificRecipe, path, this.FIRESTORE_DATABASE));
                 });
         });
-
+        */
 
     }
 
-    protected extractDataToJSON(): FirestoreRecipe {
+    public extractDataToJSON(): FirestoreRecipe {
 
         return {
             access: this.access,

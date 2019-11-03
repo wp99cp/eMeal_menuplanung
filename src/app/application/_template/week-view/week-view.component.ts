@@ -1,15 +1,15 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 import { Camp } from '../../_class/camp';
 import { Day } from '../../_class/day';
 import { Meal } from '../../_class/meal';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
+import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../add-meal/add-meal.component';
-import { AuthenticationService } from '../../_service/authentication.service';
+import { EditDayComponent } from '../edit-day/edit-day.component';
 
 @Component({
   selector: 'app-week-view',
@@ -20,10 +20,9 @@ export class WeekViewComponent implements OnInit {
 
   @Input() camp: Camp;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public databaseService: DatabaseService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   protected mealsChanged: boolean = false;
 
@@ -49,12 +48,12 @@ export class WeekViewComponent implements OnInit {
   /** Speichert das Lager ab */
   saveMeals() {
 
-    this.camp.pushToFirestoreDB();
+    this.saveCamp();
     this.mealsChanged = false;
 
   }
 
-  // TODO: 
+
   editDay(day: Day) {
 
     console.log('edit day:');
@@ -75,7 +74,7 @@ export class WeekViewComponent implements OnInit {
       else if (save == -1) {
         this.camp.days.splice(this.camp.days.indexOf(day), 1);
 
-        this.camp.pushToFirestoreDB();
+        this.saveCamp();
 
       }
 
@@ -96,10 +95,15 @@ export class WeekViewComponent implements OnInit {
     }, this.camp);
 
     this.camp.days.push(day);
-    this.camp.pushToFirestoreDB();
+
+    this.saveCamp();
 
   }
 
+
+  private saveCamp() {
+    this.databaseService.updateDocument(this.camp.extractDataToJSON(), this.camp.getDocPath());
+  }
 
   /**
    * 
@@ -125,14 +129,13 @@ export class WeekViewComponent implements OnInit {
                 access: null,
                 firestoreElementId: firestoreMeal.firestoreElementId
               },
-              firestoreMeal.firestoreElementId,
-              this.camp.FIRESTORE_DATABASE);
+              firestoreMeal.firestoreElementId);
 
             meal.createSpecificData(this.camp);
 
             this.camp.days[0].meals.push(meal);
 
-            this.camp.pushToFirestoreDB();
+            this.saveCamp();
 
           });
 
@@ -142,45 +145,5 @@ export class WeekViewComponent implements OnInit {
 
   }
 
-
-}
-
-
-
-@Component({
-  templateUrl: './edit-day.component.html',
-  styleUrls: ['./edit-day.component.sass']
-})
-export class EditDayComponent implements OnInit {
-
-  private dayInfo: FormGroup;
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
-
-  ngOnInit() {
-
-
-
-    this.dayInfo = this.formBuilder.group({
-
-      description: this.data.name.description,
-      date: this.data.name.dateAsTypeDate
-
-    });
-
-  }
-
-  delete() {
-
-    this.data.name
-
-  }
-
-  saveDayData() {
-
-    this.data.name.dateAsTypeDate = this.dayInfo.value.date;
-    this.data.name.description = this.dayInfo.value.description;
-
-  }
 
 }

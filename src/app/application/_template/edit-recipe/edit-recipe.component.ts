@@ -82,14 +82,16 @@ export class EditRecipeComponent implements OnInit {
     this.recipe.description = this.recipeForm.value.description;
     this.recipe.name = this.recipeForm.value.name;
 
-    this.recipe.pushToFirestoreDB();
+    throw "edit recipe";
+    // this.recipe.pushToFirestoreDB();
 
     // reset: deactivate save button
     this.recipeForm.markAsUntouched();
 
+    throw "edit recipe";
 
     // TODO push to firebase
-    this.specificRecipe.pushToFirestoreDB();
+    //this.specificRecipe.pushToFirestoreDB();
 
   }
 

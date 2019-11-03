@@ -1,8 +1,8 @@
 <h1 class="mat-h1">Willkommmen bei eMeal.<br />Deine Menuplanungssoftware für Lager.</h1>
 
 
-<ng-container *ngIf="auth.fireAuth.user | async as user else loadingUserData">
-    <p>Aktueller Benutzer: {{user.displayName}}</p>
+<ng-container *ngIf="currentUser | async; let user">
+    <p>Aktueller Benutzer: {{user.uid}} </p>
 
     <button class="menu-button" mat-raised-button routerLink="camps">Deinen Lager</button>
     <button class="menu-button" mat-raised-button routerLink="meals">Deine Rezepte</button>

@@ -1,27 +1,12 @@
-import { FirebaseObject } from './firebaseObject';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Day } from './day';
-import { AuthenticationService } from '../_service/authentication.service';
 import { AccessData } from '../_interfaces/accessData';
-import { User } from '../_interfaces/user';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
+import { User } from '../_interfaces/user';
+import { Day } from './day';
+import { FirebaseObject } from './firebaseObject';
 
 export class Camp extends FirebaseObject implements FirestoreCamp {
 
-    /**
-     * 
-     * creates a new Camp in the database
-     * 
-     * @param data as JSON
-     * @param database firestore database
-     * @param auth AuthenticationService
-     */
-    static createNewCamp(campData: FirestoreCamp, database: AngularFirestore) {
 
-        // write to database
-        database.collection(this.CAMPS_DIRECTORY).add(campData);
-
-    }
 
     /**
      * 
@@ -45,7 +30,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     }
 
     public static readonly CAMPS_DIRECTORY = "camps/";
-    protected readonly FIRESTORE_DB_PATH = Camp.CAMPS_DIRECTORY;
+    protected readonly firestorePath = Camp.CAMPS_DIRECTORY;
 
     // fields of a camp
     public name: string;
@@ -56,9 +41,9 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     public days: Day[] = [];
     public readonly firestoreElementId: string
 
-    constructor(data: FirestoreCamp, campId: string, database: AngularFirestore) {
+    constructor(data: FirestoreCamp, campId: string) {
 
-        super(database);
+        super();
 
         this.firestoreElementId = campId;
         this.description = data.description;
@@ -76,7 +61,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     }
 
     // doc on mother class 
-    protected extractDataToJSON(): FirestoreCamp {
+    public extractDataToJSON(): FirestoreCamp {
 
         let campData = {
             name: this.name,

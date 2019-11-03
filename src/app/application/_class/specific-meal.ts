@@ -1,6 +1,6 @@
-import { FirebaseObject } from './firebaseObject';
-import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
+import { FirebaseObject } from './firebaseObject';
 
 export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMeal {
 
@@ -8,21 +8,21 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
 
     public participants: number;
 
-    protected FIRESTORE_DB_PATH: string;
+    protected firestorePath: string;
     public firestoreElementId: string;
 
     constructor(firestoreSpecificMeal: FirestoreSpecificMeal, path: string, db: AngularFirestore) {
 
-        super(db);
+        super();
 
-        this.FIRESTORE_DB_PATH = path.substring(0, path.lastIndexOf('/'));
+        this.firestorePath = path.substring(0, path.lastIndexOf('/'));
         this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
         this.participants = firestoreSpecificMeal.participants;
 
     }
 
-    protected extractDataToJSON(): FirestoreSpecificMeal {
+    public extractDataToJSON(): FirestoreSpecificMeal {
 
         return {
             participants: this.participants,

@@ -3,7 +3,7 @@
     <h1 class="mat-h1">Bearbeite dein Lager: {{$camp.name}}</h1>
 
     <!-- Allgemeine Informationen zum Lager -->
-    <form [formGroup]='campInfos'>
+    <form [formGroup]='campInfosForm'>
         <mat-form-field class="full-width">
             <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off">
             <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
@@ -20,7 +20,8 @@
 
         <p> Verknüpfe dein Lager mit der Cevi.DB, so bleibt die Teilnehmeranzahl stehts aktuell. </p>
     </form>
-    <button mat-raised-button [disabled]="!campInfos.touched" (click)='saveCampInfo()'>Änderungen Speichern</button>
+    <button mat-raised-button [disabled]="!campInfosForm.touched" (click)='saveCampInfo($camp)'>Änderungen
+        Speichern</button>
 
 
     <!-- Export section -->

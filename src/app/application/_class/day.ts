@@ -4,7 +4,9 @@ import { firestore } from 'firebase';
 import { DayData } from '../_interfaces/day-data';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 
-
+/**
+ * 
+ */
 export class Day implements DayData {
 
     public date: firestore.Timestamp;
@@ -23,7 +25,7 @@ export class Day implements DayData {
             this.description = '';
         }
 
-        this.meals = data.meals.map(mealData => new Meal(mealData as FirestoreMeal, mealData.firestoreElementId, camp.FIRESTORE_DATABASE));
+        this.meals = data.meals.map(mealData => new Meal(mealData as FirestoreMeal, mealData.firestoreElementId));
     }
 
     extractDataToJSON(): DayData {
@@ -39,6 +41,7 @@ export class Day implements DayData {
     public getDateStr(): String {
         return this.dateAsTypeDate.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });
     }
+
     public getDiscriptionInBracket(): String {
         if (this.description != '')
             return '(' + this.description + ')';
