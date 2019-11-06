@@ -1,8 +1,11 @@
 import { Observable } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
+import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
+import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
+import { DatabaseService } from '../_service/database.service';
 import { Camp } from './camp';
-import { FirebaseObject } from "./firebaseObject";
+import { FirebaseObject } from './firebaseObject';
 import { Recipe } from './recipe';
 import { SpecificMeal } from './specific-meal';
 
@@ -51,7 +54,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
     public extractDataToJSON(): FirestoreMeal {
 
-        let firestoreMeal = {
+        const firestoreMeal = {
             title: this.title,
             description: this.description,
             access: this.access,
@@ -60,84 +63,56 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
         // Meals generated out of a day don't contain access and description properties
         // They are removed if they're undefinded...
-        if (firestoreMeal.access == undefined) delete firestoreMeal.access;
-        if (firestoreMeal.description == undefined) delete firestoreMeal.description;
+        if (firestoreMeal.access === undefined) { delete firestoreMeal.access; }
+        if (firestoreMeal.description === undefined) { delete firestoreMeal.description; }
 
         return firestoreMeal;
 
     }
 
     /**  */
-    public getRecipes(): Observable<Recipe[]> {
-
-        throw "Fehlr noch";
-        /*
+    public loadAndSetRecipes(databaseService: DatabaseService): Observable<Recipe[]> {
 
         if (this.recipes != null) {
-
             return this.recipes;
-        }
-        else {
+
+        } else {
 
             // loadRecipes
-            this.recipes = Observable.create((observer: Observer<Recipe[]>) => {
-                this.FIRESTORE_DATABASE.collection(Meal.firestorePath + this.firestoreElementId + '/recipes', collRef =>
-                    collRef.where('access.owner', "array-contains", Meal.user.uid))
-                    .snapshotChanges()
-                    // Create new Meals out of the data
-                    .pipe(map(docActions =>
-                        docActions.map(docAction =>
-                            new Recipe(
-                                docAction.payload.doc.data() as FirestoreRecipe,
-                                docAction.payload.doc.id,
-                                this.firestoreElementId,
-                                this.FIRESTORE_DATABASE,
-                                this.relatedCampId
-                            )
-                        ))
-                    ).subscribe(recipes =>
-                        observer.next(recipes)
-                    );
-            });
-
+            this.recipes = databaseService.getRecipes(this.firestoreElementId);
 
             return this.recipes;
 
         }
 
-        */
-        return null;
     }
 
     /**
-     * 
+     *
      * Creates specific meal and recipe documents in the database for a related camp
-     * 
-     * @param camp Releted Camp 
+     *
+     * @param camp Releted Camp
+     *
      */
-    public createSpecificData(camp: Camp) {
+    public createSpecificData(databaseService: DatabaseService, camp: Camp) {
 
-        throw "Funktion zur Zeit nocht möglich";
-        /*
-
-        let specificMealData: FirestoreSpecificMeal = {
+        const specificMealData: FirestoreSpecificMeal = {
             participants: camp.participants,
             campId: camp.firestoreElementId
         };
-        this.FIRESTORE_DATABASE.collection(Meal.firestorePath + this.firestoreElementId + '/specificMeals').add(specificMealData);
+        const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
+        databaseService.addDocument(specificMealData, mealPath);
 
-        this.getRecipes().subscribe(recipes => recipes.forEach(recipe => {
+        this.loadAndSetRecipes(databaseService).subscribe(recipes => recipes.forEach(recipe => {
 
-            let specificRecipeData: FirestoreSpecificRecipe = {
+            const specificRecipeData: FirestoreSpecificRecipe = {
                 participants: camp.participants,
                 campId: camp.firestoreElementId
             };
-            let path = Meal.firestorePath + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + "/specificRecipes";
-            this.FIRESTORE_DATABASE.collection(path).add(specificRecipeData);
+            const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + '/specificRecipes';
+            databaseService.addDocument(specificRecipeData, recipePath);
 
         }));
-
-        */
 
     }
 

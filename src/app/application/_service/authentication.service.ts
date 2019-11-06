@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { User } from '../_interfaces/user';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -17,12 +19,8 @@ import { Subscription } from 'rxjs';
 export class AuthenticationService {
 
   private static service: AuthenticationService = null;
-  private static user: firebase.User = null;
 
-  /** Get the firebase.User which is currently signed in */
-  public static getUser(): firebase.User {
-    return AuthenticationService.user;
-  }
+
 
   /** get the AuthenticationService */
   public static getService(): AuthenticationService {
@@ -38,10 +36,6 @@ export class AuthenticationService {
 
     // sets global service filed
     AuthenticationService.service = this;
-
-    // Update global user field
-    fireAuth.user.subscribe(user => AuthenticationService.user = user);
-
   }
 
   // needs for stop automatic resignin
@@ -58,6 +52,18 @@ export class AuthenticationService {
           this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider);
         }
       });
+
+  }
+
+
+  /** Returns the current User of the database  */
+  public getCurrentUser(): Observable<User> {
+
+    return this.fireAuth.authState.pipe(
+      map((userData) => {
+        return { firstName: userData.displayName, lastName: userData.displayName, uid: userData.uid, email: userData.email };
+      })
+    );
 
   }
 

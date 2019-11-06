@@ -33,12 +33,11 @@ export class CampListPageComponent implements OnInit {
   private newCampDate: FormGroup;
   private selectedCoworkers: User[];
 
-  /**
-   * 
-   * @param auth 
-   * @param database 
-   */
-  constructor(public dialog: MatDialog, private databaseService: DatabaseService, private formBuilder: FormBuilder) {
+  constructor(
+    public dialog: MatDialog,
+    private databaseService: DatabaseService,
+    private auth: AuthenticationService,
+    private formBuilder: FormBuilder) {
 
     this.dataSource = new MatTableDataSource();
 
@@ -96,7 +95,7 @@ export class CampListPageComponent implements OnInit {
    */
   createCamp() {
 
-    this.databaseService.getCurrentUser().subscribe(user => {
+    this.auth.getCurrentUser().subscribe(user => {
 
       let date = new Date(this.newCampDate.value.date);
 

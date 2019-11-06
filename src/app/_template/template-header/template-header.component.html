@@ -1,8 +1,16 @@
 <mat-toolbar color="primary">
-
     <mat-toolbar-row>
 
         <span>Menuplanung für Lager</span>
+
+    </mat-toolbar-row>
+
+    <mat-toolbar-row class="linkList" *ngIf="path | async; let path">
+
+        <ng-container *ngFor="let item of path; let i = index">
+            <p class="separator" *ngIf="i != 0"> · </p>
+            <p routerLink="..">{{item}}</p>
+        </ng-container>
 
     </mat-toolbar-row>
 

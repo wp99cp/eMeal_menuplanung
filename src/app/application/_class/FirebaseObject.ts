@@ -14,7 +14,7 @@ export abstract class FirebaseObject {
     protected readonly abstract firestorePath: string;
 
     /** The firestore database element id */
-    protected readonly abstract firestoreElementId;
+    protected readonly abstract firestoreElementId: string;
 
     /**
      * 
@@ -24,14 +24,25 @@ export abstract class FirebaseObject {
      */
     public abstract extractDataToJSON(): Partial<unknown>;
 
-
-
     public getDocPath(): string {
 
         return this.firestorePath + this.firestoreElementId;
 
     }
 
+    /**
+     * Returns the elementId of the element in the firebase database
+     */
+    public getElemementId(): string {
+
+        return this.firestoreElementId;
+
+    }
+
+    /**
+     * Returns the elementId of the element in the firebase database
+     *
+     */
     public getCollection(): string {
 
         return this.firestorePath;

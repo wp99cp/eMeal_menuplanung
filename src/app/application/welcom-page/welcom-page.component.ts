@@ -17,7 +17,7 @@ export class WelcomPageComponent implements OnInit {
 
   ngOnInit() {
 
-    this.currentUser = this.databaseService.getCurrentUser();
+    this.currentUser = this.auth.getCurrentUser();
     this.currentUser.subscribe(console.log)
 
   }

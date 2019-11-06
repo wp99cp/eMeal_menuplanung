@@ -131,7 +131,7 @@ export class WeekViewComponent implements OnInit {
               },
               firestoreMeal.firestoreElementId);
 
-            meal.createSpecificData(this.camp);
+            meal.createSpecificData(this.databaseService, this.camp);
 
             this.camp.days[0].meals.push(meal);
 

@@ -12,11 +12,13 @@ const routes: Routes = [
 
   {
     path: '',
-    component: WelcomPageComponent
+    component: WelcomPageComponent,
+    data: { title: 'Menuplanung für Lager', path: ['eMeal'] }
   },
   {
     path: 'camps',
-    component: CampListPageComponent
+    component: CampListPageComponent,
+    data: { title: 'meine Lager', path: ['eMeal', 'Meine Lager'] }
   },
   {
     path: 'meals',
@@ -24,15 +26,28 @@ const routes: Routes = [
   },
   {
     path: 'camps/:id',
-    component: EditCampPageComponent
+    component: EditCampPageComponent,
+    data: {
+      title: 'Chlauslager 2019',
+      path: ['eMeal', 'meine Lager', 'Chlauslager 2019']
+    }
   },
   {
     path: 'camps/:id/export',
-    component: ExportCampComponent
+    component: ExportCampComponent,
+    data: {
+      title: 'Chlauslager 2019 exportieren',
+      path: ['eMeal', 'meine Lager', 'Chlauslager 2019', 'exportieren']
+    }
+
   },
   {
     path: 'camps/:id/days/:dayNumber/meals/:mealId',
-    component: EditMealComponent
+    component: EditMealComponent,
+    data: {
+      title: 'Sonntag Znacht (Älplermaccaroni)',
+      path: ['eMeal', 'meine Lager', 'Chlauslager 2019', 'Sonntag (1. Dezember)', 'Znacht (Älplermaccaroni)']
+    }
   }
 
 ];
