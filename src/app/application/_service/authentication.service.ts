@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 /**
  * This service handels the authentication process.

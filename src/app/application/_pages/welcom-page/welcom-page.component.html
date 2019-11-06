@@ -1,0 +1,20 @@
+<h1 class="mat-h1">
+    Willkommmen bei eMeal.<br />
+    Die Menuplanungssoftware für Lager.
+</h1>
+
+<!-- fast actions: overview -->
+<ng-container *ngIf="currentUser | async; let user; else loadingUserData">
+
+    <p>Angemeldet als: {{user.firstName}} </p>
+
+    <button class="menu-button" mat-raised-button routerLink="camps">Meine Lager</button>
+    <button class="menu-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
+    <button class="menu-button" mat-raised-button routerLink="settings">Einstellungen</button>
+
+</ng-container>
+
+<!-- Loading Animation -->
+<ng-template #loadingUserData>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

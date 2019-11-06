@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Camp } from '../_class/camp';
-import { DatabaseService } from '../_service/database.service';
+import { Camp } from '../../_class/camp';
+import { DatabaseService } from '../../_service/database.service';
 
 
 @Component({

@@ -1,16 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Observer } from 'rxjs';
-import { AuthenticationService } from '../_service/authentication.service';
-import { Camp } from '../_class/camp';
-import { map } from 'rxjs/operators'
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { User } from '../_interfaces/user';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { firestore } from 'firebase';
-import { FirestoreCamp } from '../_interfaces/firestore-camp';
-import { DatabaseService } from '../_service/database.service';
+import { Observable } from 'rxjs';
+import { Camp } from '../../_class/camp';
+import { FirestoreCamp } from '../../_interfaces/firestore-camp';
+import { User } from '../../_interfaces/user';
+import { AuthenticationService } from '../../_service/authentication.service';
+import { DatabaseService } from '../../_service/database.service';
 
 
 @Component({

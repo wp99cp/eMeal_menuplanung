@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from '../../_service/authentication.service';
 
 @Component({
   selector: 'app-meal-list-page',
@@ -16,14 +15,11 @@ export class MealListPageComponent implements OnInit {
 
   /**
    * Speichert den aktuellen Benutzer ab und startet anschliessend die campListPage() Funktion.
-   * 
-   * @param auth 
-   * @param db 
    */
   constructor(private auth: AuthenticationService, private db: AngularFirestore) {
     this.auth.fireAuth.authState.subscribe(user => {
       if (user) {
-        this.user = user
+        this.user = user;
         this.mealListPage();
       }
     });
@@ -36,7 +32,7 @@ export class MealListPageComponent implements OnInit {
 
   mealListPage() {
 
-    this.meals = this.db.collection('meals', ref => ref.where('access.owner', "array-contains", this.user.uid)).valueChanges();
+    this.meals = this.db.collection('meals', ref => ref.where('access.owner', 'array-contains', this.user.uid)).valueChanges();
 
 
   }

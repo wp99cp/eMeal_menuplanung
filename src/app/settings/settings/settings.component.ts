@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { version } from '../../../../package.json';
+import { version as softwareVersion } from '../../../../package.json';
 
 @Component({
   selector: 'app-settings',
@@ -8,15 +8,20 @@ import { version } from '../../../../package.json';
 })
 export class SettingsComponent implements OnInit {
 
-  public version: string = version;
+  public version: string = softwareVersion;
 
   // TODO: set automatic
-  public username: string = "Lorem Ipsum";
-  public mail: string = "lorem.ipsum@domain.org";
+  public username = 'Cyrill Püntner v/o JPG';
+  public mail = 'jpg@zh11.ch';
 
+  // TODO: include private authenticationService
   constructor() { }
 
   ngOnInit() {
+
+    // fields with authenticationService
+    // TODO: include authenticationService into this module
+
   }
 
 }
