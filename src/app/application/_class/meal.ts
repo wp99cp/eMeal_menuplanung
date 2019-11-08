@@ -1,4 +1,4 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
@@ -7,7 +7,6 @@ import { DatabaseService } from '../_service/database.service';
 import { Camp } from './camp';
 import { FirebaseObject } from './firebaseObject';
 import { Recipe } from './recipe';
-import { SpecificMeal } from './specific-meal';
 
 export class Meal extends FirebaseObject implements FirestoreMeal {
 
@@ -28,11 +27,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         this.description = data.description;
         this.access = data.access;
 
-        if (recipes != null) {
-            this.recipes = recipes;
-        } else {
-            this.recipes = of();
-        }
+        this.recipes = recipes;
+
 
     }
 
@@ -63,6 +59,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
      */
     public createSpecificData(databaseService: DatabaseService, camp: Camp) {
 
+        // TODO: doppelte Erstellung vermeiden!!!
         const specificMealData: FirestoreSpecificMeal = {
             participants: camp.participants,
             campId: camp.firestoreElementId
@@ -70,12 +67,16 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
         databaseService.addDocument(specificMealData, mealPath);
 
+        if (this.recipes === undefined) {
+            this.recipes = databaseService.getRecipes(this.firestoreElementId, camp.firestoreElementId);
+        }
         this.recipes.subscribe(recipes => recipes.forEach(recipe => {
 
             const specificRecipeData: FirestoreSpecificRecipe = {
                 participants: camp.participants,
                 campId: camp.firestoreElementId
             };
+
             const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + '/specificRecipes';
             databaseService.addDocument(specificRecipeData, recipePath);
 

@@ -27,6 +27,7 @@ import { AuthenticationService } from './authentication.service';
 export class DatabaseService {
 
 
+
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -36,6 +37,14 @@ export class DatabaseService {
 
     return map(docChangeAction =>
       docChangeAction.map(docData => new Camp(docData.payload.doc.data(), docData.payload.doc.id)));
+
+  }
+
+  /** creates the meals objects */
+  private static createMeals(): OperatorFunction<DocumentChangeAction<FirestoreMeal>[], Meal[]> {
+
+    return map(docChangeAction =>
+      docChangeAction.map(docData => new Meal(docData.payload.doc.data(), docData.payload.doc.id)));
 
   }
 
@@ -128,6 +137,14 @@ export class DatabaseService {
           .pipe(DatabaseService.createCamps())
       ));
 
+  }
+
+  public getEditableMeals(): Observable<Meal[]> {
+    return this.createAccessQueryFn()
+      .pipe(mergeMap(queryFn =>
+        this.requestCollection('meals', queryFn)
+          .pipe(DatabaseService.createMeals())
+      ));
   }
 
   /**

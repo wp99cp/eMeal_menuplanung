@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Camp } from '../../_class/camp';
 import { DatabaseService } from '../../_service/database.service';
-import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
+import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 
 @Component({
@@ -66,8 +66,8 @@ export class EditCampPageComponent implements OnInit {
 
   private setHeaderInfo(camp: Camp): void {
 
-    TemplateHeaderComponent.title = camp.name;
-    TemplateHeaderComponent.path = ['eMeal', 'meine Lager', camp.name];
+    Header.title = camp.name;
+    Header.path = ['eMeal', 'meine Lager', camp.name];
 
   }
 

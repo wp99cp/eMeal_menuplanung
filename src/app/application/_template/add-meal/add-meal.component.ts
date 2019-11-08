@@ -1,10 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, first } from 'rxjs/operators';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
-import { AuthenticationService } from '../../_service/authentication.service';
+import { DatabaseService } from '../../_service/database.service';
 
 
 @Component({
@@ -24,31 +22,15 @@ export class AddMealComponent implements OnInit {
   private selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
 
   /** Constructor */
-  constructor(private database: AngularFirestore, private auth: AuthenticationService) { }
+  constructor(private databaseService: DatabaseService) { }
 
   /** on init */
   ngOnInit(): void {
 
-    this.auth.fireAuth.authState.pipe(first()).subscribe(user => {
-
-      // TODO: very bad solution for get only once...
-      let observerMeals = this.database.collection('meals',
-        collRef => collRef.where('access.owner', "array-contains", user.uid)).snapshotChanges()
-        // Create new Users out of the data
-        .pipe(map(docActions => docActions.map(docRef => {
-
-          let meal = docRef.payload.doc.data() as FirestoreMeal;
-          meal.firestoreElementId = docRef.payload.doc.id;
-          return meal;
-
-        })))
-        .subscribe((meals: FirestoreMeal[]) => {
-          this.mealTableSource = new MatTableDataSource<FirestoreMeal>(meals);
-          observerMeals.unsubscribe();
-        })
-
-
-    });
+    this.databaseService.getEditableMeals()
+      .subscribe((meals: FirestoreMeal[]) => {
+        this.mealTableSource = new MatTableDataSource<FirestoreMeal>(meals);
+      });
 
   }
 
@@ -78,7 +60,8 @@ export class AddMealComponent implements OnInit {
   /** Set usedAs parameter to firestoreMeal */
   selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
-    firestoreMeal["usedAs"] = usedAs;
+    firestoreMeal['usedAs'] = usedAs;
 
   }
+
 }

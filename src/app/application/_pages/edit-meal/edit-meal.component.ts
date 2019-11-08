@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { DatabaseService } from '../../_service/database.service';
-import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
-import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-meal',
@@ -56,7 +55,6 @@ export class EditMealComponent implements OnInit {
     this.meal = this.databaseService.getMealById(this.mealId, this.campId);
     this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.campId);
 
-    console.log('hier');
     this.camp.subscribe(camp => this.meal.subscribe(meal => this.setHeaderInfo(camp, meal)));
 
   }
@@ -64,8 +62,8 @@ export class EditMealComponent implements OnInit {
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(camp, meal): void {
 
-    TemplateHeaderComponent.title = meal.title;
-    TemplateHeaderComponent.path = ['eMeal', 'meine Lager', camp.name, '', meal.title];
+    Header.title = meal.title;
+    Header.path = ['eMeal', 'meine Lager', camp.name, '', meal.title];
 
   }
 

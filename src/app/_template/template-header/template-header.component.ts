@@ -16,6 +16,7 @@ export class TemplateHeaderComponent {
   // Standardtitel: Menuplanung für Lager
   public static title = 'Menuplanung für Lager';
   public static path: string[];
+  static TemplateHeaderComponent: {};
 
   constructor(private router: Router, private route: ActivatedRoute) { }
 
