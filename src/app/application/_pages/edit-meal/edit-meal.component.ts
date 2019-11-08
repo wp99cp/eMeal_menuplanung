@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
-import { FirestoreMeal } from '../../_interfaces/firestore-meal';
-import { DatabaseService } from '../../_service/database.service';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { DatabaseService } from '../../_service/database.service';
 
 @Component({
   selector: 'app-edit-meal',
@@ -49,6 +47,5 @@ export class EditMealComponent implements OnInit {
     });
 
   }
-
 
 }

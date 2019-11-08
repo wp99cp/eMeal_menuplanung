@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Ingredient } from '../../_interfaces/ingredient';
 import { SpecificRecipe } from '../../_class/specific-recipe';
+import { DatabaseService } from '../../_service/database.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -20,11 +21,9 @@ export class EditRecipeComponent implements OnInit {
 
   private dataSource: MatTableDataSource<Ingredient>;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
   ngOnInit() {
-
-    console.log('recipe displayed')
 
     this.recipeForm = this.formBuilder.group({
       notes: this.recipe.notes,
@@ -65,8 +64,8 @@ export class EditRecipeComponent implements OnInit {
 
   changeIngredient(value: string, index: number, element: string) {
 
-    if (element == "calcMeasure") {
-      this.recipe.ingredients[index]["measure"] = Number.parseInt(value) / this.specificRecipe.participants;
+    if (element === 'calcMeasure') {
+      this.recipe.ingredients[index]['measure'] = Number.parseInt(value) / this.specificRecipe.participants;
     }
     else {
       this.recipe.ingredients[index][element] = value;
@@ -82,16 +81,11 @@ export class EditRecipeComponent implements OnInit {
     this.recipe.description = this.recipeForm.value.description;
     this.recipe.name = this.recipeForm.value.name;
 
-    throw "edit recipe";
-    // this.recipe.pushToFirestoreDB();
+    this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
+    this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());
 
     // reset: deactivate save button
     this.recipeForm.markAsUntouched();
-
-    throw "edit recipe";
-
-    // TODO push to firebase
-    //this.specificRecipe.pushToFirestoreDB();
 
   }
 

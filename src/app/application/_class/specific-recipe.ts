@@ -16,10 +16,13 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
         super();
 
+
         this.firestorePath = path.substring(0, path.lastIndexOf('/'));
         this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
         this.participants = firestoreSpecificRecipes.participants;
+        this.campId = firestoreSpecificRecipes.campId;
+
     }
 
     public extractDataToJSON(): FirestoreSpecificRecipe {

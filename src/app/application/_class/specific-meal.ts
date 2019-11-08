@@ -18,6 +18,8 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
         this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
         this.participants = firestoreSpecificMeal.participants;
+        this.campId = firestoreSpecificMeal.campId;
+
 
     }
 

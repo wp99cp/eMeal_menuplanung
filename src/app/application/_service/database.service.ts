@@ -70,7 +70,7 @@ export class DatabaseService {
 
     // TODO: ggf. bessere Lösung als '[0]'
     return map(docChangeAction =>
-      docChangeAction.map(docData => new SpecificMeal(docData.payload.doc.data(), path))[0]);
+      docChangeAction.map(docData => new SpecificMeal(docData.payload.doc.data(), path + '/' + docData.payload.doc.id))[0]);
 
   }
 
@@ -79,7 +79,7 @@ export class DatabaseService {
 
     // TODO: ggf. bessere Lösung als '[0]'
     return map(docChangeAction =>
-      docChangeAction.map(docData => new SpecificRecipe(docData.payload.doc.data(), path))[0]);
+      docChangeAction.map(docData => new SpecificRecipe(docData.payload.doc.data(), path + '/' + docData.payload.doc.id))[0]);
 
   }
 
