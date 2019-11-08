@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
@@ -17,11 +17,10 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     public description: string;
     public access: AccessData;
 
-    public specificMeal: Observable<SpecificMeal>;
-    private recipes: Observable<Recipe[]> = null;
+    public recipes: Observable<Recipe[]>;
 
 
-    constructor(data: FirestoreMeal, public readonly firestoreElementId: string) {
+    constructor(data: FirestoreMeal, public readonly firestoreElementId: string, recipes?: Observable<Recipe[]>) {
 
         super();
 
@@ -29,26 +28,11 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         this.description = data.description;
         this.access = data.access;
 
-    }
-
-
-
-    /** loads the specific Meal data */
-    private loadSpecificMeal(relatedCampId: string) {
-
-        /*
-        this.specificMeal = Observable.create((observer: Observer<SpecificMeal>) => {
-
-            this.FIRESTORE_DATABASE
-                .collection(Meal.firestorePath + this.firestoreElementId + '/specificMeals',
-                    collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
-                .subscribe(specificMeal => {
-                    let path = Meal.firestorePath + this.firestoreElementId + '/specificMeals/' + specificMeal.docs[0].id;
-                    observer.next(new SpecificMeal(specificMeal.docs[0].data() as FirestoreSpecificMeal, path, this.FIRESTORE_DATABASE));
-                });
-        });
-
-*/
+        if (recipes != null) {
+            this.recipes = recipes;
+        } else {
+            this.recipes = of();
+        }
 
     }
 
@@ -70,23 +54,6 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
     }
 
-    /**  */
-    public loadAndSetRecipes(databaseService: DatabaseService): Observable<Recipe[]> {
-
-        if (this.recipes != null) {
-            return this.recipes;
-
-        } else {
-
-            // loadRecipes
-            this.recipes = databaseService.getRecipes(this.firestoreElementId);
-
-            return this.recipes;
-
-        }
-
-    }
-
     /**
      *
      * Creates specific meal and recipe documents in the database for a related camp
@@ -103,7 +70,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
         const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
         databaseService.addDocument(specificMealData, mealPath);
 
-        this.loadAndSetRecipes(databaseService).subscribe(recipes => recipes.forEach(recipe => {
+        this.recipes.subscribe(recipes => recipes.forEach(recipe => {
 
             const specificRecipeData: FirestoreSpecificRecipe = {
                 participants: camp.participants,

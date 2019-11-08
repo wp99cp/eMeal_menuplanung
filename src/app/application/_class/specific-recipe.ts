@@ -11,7 +11,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
     protected firestorePath: string;
     protected firestoreElementId: string;
 
-    constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string, db: AngularFirestore) {
+
+    constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string) {
 
         super();
 
@@ -19,7 +20,6 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
         this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
         this.participants = firestoreSpecificRecipes.participants;
-
     }
 
     public extractDataToJSON(): FirestoreSpecificRecipe {
@@ -27,7 +27,7 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
         return {
             participants: this.participants,
             campId: this.campId
-        }
+        };
 
     }
 

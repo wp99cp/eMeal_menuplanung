@@ -5,13 +5,12 @@ import { FirebaseObject } from './firebaseObject';
 export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMeal {
 
     public campId: string;
-
     public participants: number;
 
     protected firestorePath: string;
     public firestoreElementId: string;
 
-    constructor(firestoreSpecificMeal: FirestoreSpecificMeal, path: string, db: AngularFirestore) {
+    constructor(firestoreSpecificMeal: FirestoreSpecificMeal, path: string) {
 
         super();
 
@@ -27,7 +26,7 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
         return {
             participants: this.participants,
             campId: this.campId
-        }
+        };
 
     }
 

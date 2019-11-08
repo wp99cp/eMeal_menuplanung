@@ -21,7 +21,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
     public specificRecipe: Observable<SpecificRecipe>;
 
 
-    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, private relatedCampId: string = null) {
+    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, specificRecipe: Observable<SpecificRecipe>) {
         super();
 
         this.firestorePath = 'meals/' + mealId + '/recipes/';
@@ -33,30 +33,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
         this.description = recipeData.description;
         this.notes = recipeData.notes;
 
-        if (relatedCampId != null) {
-
-            this.loadSpecificRecipe();
-
-        }
-
-    }
-
-    private loadSpecificRecipe() {
-
-        throw "Erooro";
-
-        /*
-        this.specificRecipe = Observable.create((observer: Observer<SpecificRecipe>) => {
-
-            this.FIRESTORE_DATABASE
-                .collection(this.firestorePath + this.firestoreElementId + '/specificRecipes',
-                    collRef => collRef.where('campId', "==", this.relatedCampId).limit(1)).get()
-                .subscribe(specificRecipe => {
-                    let path = this.firestorePath + this.firestoreElementId + '/specificRecipes/' + specificRecipe.docs[0].id;
-                    observer.next(new SpecificRecipe(specificRecipe.docs[0].data() as FirestoreSpecificRecipe, path, this.FIRESTORE_DATABASE));
-                });
-        });
-        */
+        this.specificRecipe = specificRecipe;
 
     }
 

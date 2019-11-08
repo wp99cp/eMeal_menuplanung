@@ -7,6 +7,7 @@ import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { DatabaseService } from '../../_service/database.service';
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-edit-meal',
@@ -16,11 +17,13 @@ import { DatabaseService } from '../../_service/database.service';
 export class EditMealComponent implements OnInit {
 
   private meal: Observable<Meal>;
+  private specificMeal: Observable<SpecificMeal>;
+
   private mealInfo: FormGroup;
   private camp: Camp;
   private campId: string;
-  private dayNumber: string
-  private mealId: string
+  private dayNumber: string;
+  private mealId: string;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
@@ -33,14 +36,16 @@ export class EditMealComponent implements OnInit {
       this.dayNumber = url[url.length - 3].path;
       this.mealId = url[url.length - 1].path;
 
-      // load Meal
-      this.meal = this.databaseService.getMealById(this.mealId);
+      // load Meal and specific meal
+      this.meal = this.databaseService.getMealById(this.mealId, this.campId);
+      this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.campId);
+
     });
 
     this.meal.subscribe(meal => {
       this.mealInfo = this.formBuilder.group({
         title: meal.title
-      })
+      });
     });
 
   }

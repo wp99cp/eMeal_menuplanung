@@ -1,5 +1,5 @@
 <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
-    <ng-container *ngIf="$meal.specificMeal | async; let $specificMeal; else loadingMeal">
+    <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
         <h1 class="mat-h1">Bearbeite die Mahlzeit: {{$meal.title}}</h1>
 
@@ -13,9 +13,10 @@
 
         </form>
 
-        <mat-accordion *ngIf="$meal.getRecipes() | async as recipes">
+        <mat-accordion *ngIf="$meal.recipes | async as recipes">
+
             <ng-container *ngFor="let recipe of recipes">
-                <ng-container *ngIf="recipe.specificRecipe | async; let $specificRecipe">
+                <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
                     <!-- display recipe -->
                     <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe"> </app-edit-recipe>
                 </ng-container>

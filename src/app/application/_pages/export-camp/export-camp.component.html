@@ -20,10 +20,10 @@
 </div>
 
 <!-- Wochenplan -->
-<h1 class="onNewPage">Wochenplan</h1>
+<!-- <h1 class="onNewPage">Wochenplan</h1> -->
 
 <!-- Mahlzeiten -->
-<h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1>
+<!-- <h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1> -->
 
 <!-- Einkaufsliste -->
 <h1 class="onNewPage">Einkaufsliste (Ganzes Lager)</h1>
@@ -31,20 +31,22 @@
 <br />
 <br />
 
-<ng-container *ngFor="let categorie of shoppingList">
+<div *ngIf="shoppingList | async; let list">
+    <ng-container *ngFor="let categorie of list">
 
-    <h2>{{categorie.name}}</h2>
-    <table>
-        <ng-container *ngFor="let ingredient of categorie.ingredients">
-            <tr>
-                <td>{{ingredient.measure}}</td>
-                <td>{{ingredient.unit}}</td>
-                <td>{{ingredient.food}}</td>
-            </tr>
-        </ng-container>
-    </table>
+        <h2>{{categorie.name}}</h2>
+        <table>
+            <ng-container *ngFor="let ingredient of categorie.ingredients">
+                <tr>
+                    <td>{{ingredient.measure}}</td>
+                    <td>{{ingredient.unit}}</td>
+                    <td>{{ingredient.food}}</td>
+                </tr>
+            </ng-container>
+        </table>
 
-</ng-container>
+    </ng-container>
+</div>
 
 <!-- Last new Page -->
 <h1 class="onNewPage onlyOnPrint warning">Diese Seite nicht drucken!</h1>

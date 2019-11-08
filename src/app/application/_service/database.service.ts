@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { Observable, OperatorFunction } from 'rxjs';
+import { Observable, of, OperatorFunction } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
 import { Meal } from '../_class/meal';
 import { Recipe } from '../_class/recipe';
+import { SpecificMeal } from '../_class/specific-meal';
+import { SpecificRecipe } from '../_class/specific-recipe';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
+import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
+import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { AuthenticationService } from './authentication.service';
 
 /**
@@ -22,6 +26,7 @@ import { AuthenticationService } from './authentication.service';
 })
 export class DatabaseService {
 
+
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -34,9 +39,16 @@ export class DatabaseService {
 
   }
 
-  private static createRecipe(mealId: string, campId?: string): OperatorFunction<DocumentChangeAction<FirestoreRecipe>[], Recipe[]> {
+  /** creates a recipe object */
+  private static createRecipe(mealId: string, campId: string, dbService: DatabaseService):
+    OperatorFunction<DocumentChangeAction<FirestoreRecipe>[], Recipe[]> {
+
     return map(docChangeAction =>
-      docChangeAction.map(docData => new Recipe(docData.payload.doc.data(), docData.payload.doc.id, mealId, campId)));
+      docChangeAction.map(docData => {
+        const recipeId = docData.payload.doc.id;
+        return new Recipe(docData.payload.doc.data(), recipeId, mealId, dbService.getSpecificRecipe(mealId, campId, recipeId));
+      }));
+
   }
 
   /**  */
@@ -47,9 +59,27 @@ export class DatabaseService {
   }
 
   /**  */
-  private static createMeal(): OperatorFunction<Action<DocumentSnapshot<FirestoreMeal>>, Meal> {
+  private static createMeal(recipes: Observable<Recipe[]>): OperatorFunction<Action<DocumentSnapshot<FirestoreMeal>>, Meal> {
 
-    return map(docSnapshot => new Meal(docSnapshot.payload.data(), docSnapshot.payload.id));
+    return map(docSnapshot => new Meal(docSnapshot.payload.data(), docSnapshot.payload.id, recipes));
+
+  }
+
+  /** */
+  private static createSpecificMeal(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificMeal>[], SpecificMeal> {
+
+    // TODO: ggf. bessere Lösung als '[0]'
+    return map(docChangeAction =>
+      docChangeAction.map(docData => new SpecificMeal(docData.payload.doc.data(), path))[0]);
+
+  }
+
+  /** */
+  private static createSpecificRecipe(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificRecipe>[], SpecificRecipe> {
+
+    // TODO: ggf. bessere Lösung als '[0]'
+    return map(docChangeAction =>
+      docChangeAction.map(docData => new SpecificRecipe(docData.payload.doc.data(), path))[0]);
 
   }
 
@@ -68,6 +98,27 @@ export class DatabaseService {
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService) { }
 
+
+  /** @return loads the specific meal */
+  public getSpecificMeal(mealId: string, campId: string): Observable<SpecificMeal> {
+
+    const path = 'meals/' + mealId + '/specificMeals';
+    return this.requestCollection(path, collRef => collRef.where('campId', '==', campId).limit(1))
+      .pipe(DatabaseService.createSpecificMeal(path));
+
+  }
+
+  /** @return loads the specific recipe */
+  public getSpecificRecipe(mealId: string, campId: string, recipeId: string): Observable<SpecificRecipe> {
+
+    const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes';
+
+    return this.requestCollection(path,
+      collRef => collRef.where('campId', '==', campId).limit(1)
+    ).pipe(DatabaseService.createSpecificRecipe(path));
+
+  }
+
   /** @returns a Observable of the camps the currentUser can eddit */
   public getEditableCamps(): Observable<Camp[]> {
 
@@ -80,17 +131,86 @@ export class DatabaseService {
   }
 
   /**
+   * fetch the mealInfos for a given camp,
+   * using a cloud function to create this infos.
+   *
+   * @retuns mealsInfo
+   */
+  public getMealsInfoExport(): Observable<any> {
+    return of([
+      {
+        name: 'Zmittag',
+        meal: 'Hörndli und Ghacktes',
+        date: 'Mittwoch, 11. November 2019',
+
+        recipes: [
+          {
+            name: 'Hörndli'
+          }
+        ]
+      }
+    ]);
+  }
+
+  /** */
+  public getCampInfoExport(): Observable<any> {
+
+    return of(
+      {
+        name: 'Chlauslager 2019'
+      }
+    );
+
+  }
+
+  /**
+   * @return the shoppingList generated by a CloudFunction
+   */
+  public getShoppingList(): Observable<any> {
+    return of([
+      {
+        name: 'Fleisch',
+        ingredients: [
+          {
+            food: 'Hackfleisch',
+            unit: 'kg',
+            measure: '2'
+          }, {
+            food: 'Brätchügeli',
+            unit: 'kg',
+            measure: '1'
+          }, {
+            food: 'Brätchügeli',
+            unit: 'kg',
+            measure: '1'
+          }
+        ]
+      },
+      {
+        name: 'Gemüse und Früchte',
+        ingredients: [
+          {
+            food: 'Apfel',
+            unit: 'kg',
+            measure: '2'
+          }
+        ]
+      }
+    ]);
+  }
+
+  /**
    * @returns observable list of all recipes form the current meal.
    *
    * @param mealId id of the current meal
    * @param campId id of the current camp
    */
-  public getRecipes(mealId: string, campId: string = null): Observable<Recipe[]> {
+  public getRecipes(mealId: string, campId: string): Observable<Recipe[]> {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
         this.requestCollection('meals/' + mealId + '/recipes', queryFn)
-          .pipe(DatabaseService.createRecipe(mealId, campId))
+          .pipe(DatabaseService.createRecipe(mealId, campId, this))
       ));
 
   }
@@ -101,9 +221,11 @@ export class DatabaseService {
 
   }
 
-  public getMealById(mealId: string): Observable<Meal> {
+  public getMealById(mealId: string, campId: string): Observable<Meal> {
 
-    return this.requestDocument('meals/' + mealId).pipe(DatabaseService.createMeal());
+    return this.requestDocument('meals/' + mealId).pipe(
+      DatabaseService.createMeal(this.getRecipes(mealId, campId))
+    );
 
   }
 
