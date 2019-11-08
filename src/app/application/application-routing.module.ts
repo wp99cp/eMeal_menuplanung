@@ -12,13 +12,11 @@ const routes: Routes = [
 
   {
     path: '',
-    component: WelcomPageComponent,
-    data: { title: 'Menuplanung für Lager', path: ['eMeal'] }
+    component: WelcomPageComponent
   },
   {
     path: 'camps',
-    component: CampListPageComponent,
-    data: { title: 'meine Lager', path: ['eMeal', 'Meine Lager'] }
+    component: CampListPageComponent
   },
   {
     path: 'meals',
@@ -26,28 +24,16 @@ const routes: Routes = [
   },
   {
     path: 'camps/:id',
-    component: EditCampPageComponent,
-    data: {
-      title: 'Chlauslager 2019',
-      path: ['eMeal', 'meine Lager', 'Chlauslager 2019']
-    }
+    component: EditCampPageComponent
   },
   {
     path: 'camps/:id/export',
-    component: ExportCampComponent,
-    data: {
-      title: 'Chlauslager 2019 exportieren',
-      path: ['eMeal', 'meine Lager', 'Chlauslager 2019', 'exportieren']
-    }
+    component: ExportCampComponent
 
   },
   {
-    path: 'camps/:id/days/:dayNumber/meals/:mealId',
-    component: EditMealComponent,
-    data: {
-      title: 'Sonntag Znacht (Älplermaccaroni)',
-      path: ['eMeal', 'meine Lager', 'Chlauslager 2019', 'Sonntag (1. Dezember)', 'Znacht (Älplermaccaroni)']
-    }
+    path: 'camps/:id/meals/:mealId',
+    component: EditMealComponent
   }
 
 ];
@@ -56,4 +42,8 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ApplicationRoutingModule { }
+export class ApplicationRoutingModule {
+
+
+
+}

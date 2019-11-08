@@ -6,6 +6,8 @@ import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { DatabaseService } from '../../_service/database.service';
+import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-meal',
@@ -14,13 +16,12 @@ import { DatabaseService } from '../../_service/database.service';
 })
 export class EditMealComponent implements OnInit {
 
-  private meal: Observable<Meal>;
-  private specificMeal: Observable<SpecificMeal>;
+  protected mealInfo: FormGroup;
+  protected specificMeal: Observable<SpecificMeal>;
 
-  private mealInfo: FormGroup;
-  private camp: Camp;
+  private meal: Observable<Meal>;
+  private camp: Observable<Camp>;
   private campId: string;
-  private dayNumber: string;
   private mealId: string;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
@@ -29,14 +30,9 @@ export class EditMealComponent implements OnInit {
 
     // load camp from url
     this.route.url.subscribe(url => {
-      // get mealId as last part of the url
-      this.campId = url[url.length - 5].path;
-      this.dayNumber = url[url.length - 3].path;
-      this.mealId = url[url.length - 1].path;
 
-      // load Meal and specific meal
-      this.meal = this.databaseService.getMealById(this.mealId, this.campId);
-      this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.campId);
+      // get mealId as last part of the url
+      this.afterGetURL(url);
 
     });
 
@@ -45,6 +41,31 @@ export class EditMealComponent implements OnInit {
         title: meal.title
       });
     });
+
+
+
+  }
+
+
+  private afterGetURL(url) {
+
+    this.campId = url[url.length - 3].path;
+    this.mealId = url[url.length - 1].path;
+    // load Meal and specific meal
+    this.camp = this.databaseService.getCampById(this.campId);
+    this.meal = this.databaseService.getMealById(this.mealId, this.campId);
+    this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.campId);
+
+    console.log('hier');
+    this.camp.subscribe(camp => this.meal.subscribe(meal => this.setHeaderInfo(camp, meal)));
+
+  }
+
+  /** setzt die HeaderInfos für die aktuelle Seite */
+  private setHeaderInfo(camp, meal): void {
+
+    TemplateHeaderComponent.title = meal.title;
+    TemplateHeaderComponent.path = ['eMeal', 'meine Lager', camp.name, '', meal.title];
 
   }
 

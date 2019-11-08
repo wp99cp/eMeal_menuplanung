@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
+import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
 
 /**
  * WelcomPage of the eMeal appliction after signed in.
@@ -21,6 +22,16 @@ export class WelcomPageComponent implements OnInit {
   ngOnInit() {
 
     this.currentUser = this.auth.getCurrentUser();
+
+    this.setHeaderInfo()
+  }
+
+
+  /** setzt die HeaderInfos für die aktuelle Seite */
+  private setHeaderInfo(): void {
+
+    TemplateHeaderComponent.title = 'Willkommen bei eMeal!';
+
 
   }
 

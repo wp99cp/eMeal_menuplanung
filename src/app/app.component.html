@@ -1,7 +1,7 @@
 <app-template-header></app-template-header>
 
 <main class="mat-body">
-  <router-outlet></router-outlet>
+  <router-outlet (activate)="onActivate($event)"></router-outlet>
 </main>
 
 <app-template-footer></app-template-footer>

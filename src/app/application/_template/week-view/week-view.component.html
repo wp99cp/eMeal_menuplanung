@@ -23,7 +23,7 @@
 
             <!-- Meal Element-->
             <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-                routerLink="days/{{i}}/meals/{{meal.firestoreElementId}}">
+                routerLink="meals/{{meal.firestoreElementId}}">
                 <div class="meal-placeholder" *cdkDragPlaceholder></div>
                 <mat-card-header>
                     <mat-card-title>{{meal.title}}</mat-card-title>

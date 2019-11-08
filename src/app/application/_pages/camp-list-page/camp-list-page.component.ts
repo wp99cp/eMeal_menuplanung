@@ -9,6 +9,8 @@ import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+import { Router } from '@angular/router';
+import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
 
 
 @Component({
@@ -35,7 +37,8 @@ export class CampListPageComponent implements OnInit {
     public dialog: MatDialog,
     private databaseService: DatabaseService,
     private auth: AuthenticationService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private router: Router) {
 
     this.dataSource = new MatTableDataSource();
 
@@ -62,6 +65,8 @@ export class CampListPageComponent implements OnInit {
    */
   ngOnInit() {
 
+    this.setHeaderInfo();
+
     this.camps = this.databaseService.getEditableCamps();
 
     // Update MatTableDataSource
@@ -69,6 +74,13 @@ export class CampListPageComponent implements OnInit {
       this.dataSource = new MatTableDataSource(camps)
     });
 
+  }
+
+  /** setzt die HeaderInfos für die aktuelle Seite */
+  private setHeaderInfo(): void {
+
+    TemplateHeaderComponent.title = 'Meine Lager';
+    TemplateHeaderComponent.path = ['eMeal', 'meine Lager'];
 
   }
 
@@ -146,6 +158,7 @@ export class CampListPageComponent implements OnInit {
     });
 
   }
+
 
 }
 

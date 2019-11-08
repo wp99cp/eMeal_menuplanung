@@ -1,40 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { Data, Router, RoutesRecognized, ActivationEnd, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
+/**
+ * Header Component für sämtliche Seiten innerhalb der Application.
+ *
+ */
 @Component({
   selector: 'app-template-header',
   templateUrl: './template-header.component.html',
   styleUrls: ['./template-header.component.sass']
 })
-export class TemplateHeaderComponent implements OnInit {
+export class TemplateHeaderComponent {
 
-  protected path: Observable<string[]>;
+  // Standardtitel: Menuplanung für Lager
+  public static title = 'Menuplanung für Lager';
+  public static path: string[];
 
-  private defaultTitle = 'Menuplanung für Lager';
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
-  constructor(router: Router, activatedRoute: ActivatedRoute) {
-    this.path = router.events.pipe(
-      filter(e => e instanceof NavigationEnd),
-      map(() => activatedRoute),
-      map(route => {
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
-        return route;
-      }),
-      mergeMap(route => route.data),
-      map(data => data.hasOwnProperty('path') ? data.path : [])
+  // Methoden für das HTML file
+  protected getTitle() { return TemplateHeaderComponent.title; }
+  protected getPath() { return TemplateHeaderComponent.path; }
 
-    );
-  }
+  protected navigateTo(level: number = 1) {
 
-  ngOnInit(): void {
+    let urlStr = window.location.pathname;
+
+    for (let i = 0; i < this.getPath().length - level - 1; i++) {
+
+      urlStr = urlStr.substring(0, urlStr.lastIndexOf('/'));
+
+    }
+
+    this.router.navigate([urlStr]);
 
   }
 
 }
-
-

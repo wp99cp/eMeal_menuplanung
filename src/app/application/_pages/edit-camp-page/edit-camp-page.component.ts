@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Camp } from '../../_class/camp';
 import { DatabaseService } from '../../_service/database.service';
+import { TemplateHeaderComponent } from 'src/app/_template/template-header/template-header.component';
 
 
 @Component({
@@ -28,11 +29,12 @@ export class EditCampPageComponent implements OnInit {
       name: '',
       description: '',
       participants: ''
-    })
+    });
 
     // load camp from url
     this.route.url.subscribe(url =>
       this.loadCamp(url[1].path));
+
 
     // update Values
     this.camp.subscribe(camp =>
@@ -42,6 +44,8 @@ export class EditCampPageComponent implements OnInit {
         participants: camp.participants
 
       })
+
+
     );
 
   }
@@ -49,12 +53,21 @@ export class EditCampPageComponent implements OnInit {
 
   /**
    * Loads a camp form the database
-   * 
+   *
    * @param campId Id of the camp
    */
   loadCamp(campId: string) {
 
     this.camp = this.databaseService.getCampById(campId);
+    this.camp.subscribe(camp => this.setHeaderInfo(camp));
+
+
+  }
+
+  private setHeaderInfo(camp: Camp): void {
+
+    TemplateHeaderComponent.title = camp.name;
+    TemplateHeaderComponent.path = ['eMeal', 'meine Lager', camp.name];
 
   }
 
