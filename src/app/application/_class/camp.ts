@@ -4,24 +4,27 @@ import { User } from '../_interfaces/user';
 import { Day } from './day';
 import { FirebaseObject } from './firebaseObject';
 
+/**
+ * 
+ */
 export class Camp extends FirebaseObject implements FirestoreCamp {
 
 
-
     /**
-     * 
-     * @param ownerUid 
-     * @param coworkers 
+     *
+     * @param ownerUid
+     * @param coworkers
      */
     static generateCoworkersList(ownerUid: String, coworkers: User[]): String[] {
 
-        let uidList: String[] = [];
+        const uidList: String[] = [];
 
         if (coworkers != undefined) {
             coworkers.forEach(coworker => {
-                let uid: String = coworker['uid'];
-                if (ownerUid != uid)
+                const uid = coworker.uid;
+                if (ownerUid != uid) {
                     uidList.push(uid);
+                }
             });
         }
 

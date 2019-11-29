@@ -14,6 +14,7 @@ import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
 import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
 import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { AuthenticationService } from './authentication.service';
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -26,11 +27,10 @@ import { AuthenticationService } from './authentication.service';
 })
 export class DatabaseService {
 
-
-
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
+
 
   /** creates the camp objects */
   private static createCamps(): OperatorFunction<DocumentChangeAction<FirestoreCamp>[], Camp[]> {
@@ -77,6 +77,8 @@ export class DatabaseService {
   /** */
   private static createSpecificMeal(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificMeal>[], SpecificMeal> {
 
+    // TODO: Checken, ob bereits existiert, wenn es bereits existiert, dann anpassen...
+
     // TODO: ggf. bessere Lösung als '[0]'
     return map(docChangeAction =>
       docChangeAction.map(docData => new SpecificMeal(docData.payload.doc.data(), path + '/' + docData.payload.doc.id))[0]);
@@ -85,6 +87,8 @@ export class DatabaseService {
 
   /** */
   private static createSpecificRecipe(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificRecipe>[], SpecificRecipe> {
+
+    // TODO: Checken, ob bereits existiert, wenn es bereits existiert, dann anpassen...
 
     // TODO: ggf. bessere Lösung als '[0]'
     return map(docChangeAction =>
@@ -105,7 +109,8 @@ export class DatabaseService {
    * @param db AngularFirestore: the database
    * @param auth AngularFireAuth
    */
-  constructor(private db: AngularFirestore, private authService: AuthenticationService) { }
+  constructor(private db: AngularFirestore, private authService: AuthenticationService,
+    private functions: AngularFireFunctions) { }
 
 
   /** @return loads the specific meal */
@@ -122,9 +127,8 @@ export class DatabaseService {
 
     const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes';
 
-    return this.requestCollection(path,
-      collRef => collRef.where('campId', '==', campId).limit(1)
-    ).pipe(DatabaseService.createSpecificRecipe(path));
+    return this.requestCollection(path, collRef => collRef.where('campId', '==', campId).limit(1))
+      .pipe(DatabaseService.createSpecificRecipe(path));
 
   }
 
@@ -154,19 +158,9 @@ export class DatabaseService {
    * @retuns mealsInfo
    */
   public getMealsInfoExport(): Observable<any> {
-    return of([
-      {
-        name: 'Zmittag',
-        meal: 'Hörndli und Ghacktes',
-        date: 'Mittwoch, 11. November 2019',
 
-        recipes: [
-          {
-            name: 'Hörndli'
-          }
-        ]
-      }
-    ]);
+    return this.functions.httpsCallable('getMealsInfoExport')({});
+
   }
 
   /** */

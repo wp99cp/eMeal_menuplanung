@@ -40,6 +40,7 @@ import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { DatabaseService } from './_service/database.service';
 import { EditDayComponent } from './_template/edit-day/edit-day.component';
+import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '@angular/fire/functions';
 
 
 @NgModule({
@@ -62,6 +63,8 @@ import { EditDayComponent } from './_template/edit-day/edit-day.component';
     CommonModule,
     ApplicationRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+
+    AngularFireFunctionsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
     ReactiveFormsModule,
@@ -91,7 +94,9 @@ import { EditDayComponent } from './_template/edit-day/edit-day.component';
     AngularFirestore,
     AngularFireAuth,
     AuthenticationService,
-    DatabaseService
+    DatabaseService,
+    // { provide: FUNCTIONS_ORIGIN, useValue: 'http://localhost:4200' }
+    // { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
   ],
   entryComponents: [
     DeleteCampComponent,

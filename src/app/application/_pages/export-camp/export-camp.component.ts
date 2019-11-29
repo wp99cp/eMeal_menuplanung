@@ -46,6 +46,9 @@ export class ExportCampComponent implements OnInit {
 
     this.today = (new Date()).toLocaleDateString('de-CH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+    // Test function
+    databaseService.getMealsInfoExport().subscribe(console.log);
+
   }
 
   ngOnInit() {
