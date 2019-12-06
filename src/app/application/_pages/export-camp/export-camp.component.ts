@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { Camp } from '../../_class/camp';
+import { MatAccordion } from '@angular/material/expansion';
 
 /** ExportCampComponent:
  * Export Seite für Lager. Möglichkeit ein in eMeal erstelltes Lager als
@@ -35,6 +36,12 @@ import { Camp } from '../../_class/camp';
 })
 export class ExportCampComponent implements OnInit {
 
+  @ViewChild('accordion', { static: false }) Accordion: MatAccordion;
+
+
+  protected displayedColumns: string[] = ['measure', 'unit', 'food'];
+
+
   protected today: string;
 
   protected user: Observable<User>;
@@ -46,22 +53,25 @@ export class ExportCampComponent implements OnInit {
 
     this.today = (new Date()).toLocaleDateString('de-CH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-    // Test function
-    databaseService.getMealsInfoExport().subscribe(console.log);
-
   }
 
   ngOnInit() {
 
     this.user = this.authService.getCurrentUser();
-    this.shoppingList = this.databaseService.getShoppingList();
-    this.campInfo = this.databaseService.getCampInfoExport();
+    this.shoppingList = this.databaseService.getShoppingList('2OIKgjC6B8hB8MEVFw6G');
+    this.campInfo = this.databaseService.getCampInfoExport('2OIKgjC6B8hB8MEVFw6G');
     this.mealsInfo = this.databaseService.getMealsInfoExport();
+
+    this.shoppingList.subscribe(console.log);
+    this.campInfo.subscribe(console.log);
+    this.mealsInfo.subscribe(console.log);
 
   }
 
   /** Druckt die aktuelle Seite (mit der Druckfunktion des Browsers). */
-  print() {
+  async print() {
+
+    await this.Accordion.openAll();
 
     window.print();
 

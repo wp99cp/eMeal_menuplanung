@@ -4,7 +4,7 @@
 
     <!-- Allgemeine Informationen zum Lager -->
     <form [formGroup]='campInfosForm'>
-       
+
         <mat-form-field class="full-width">
             <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off">
             <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
@@ -20,7 +20,7 @@
         </mat-form-field>
 
         <p> Verknüpfe dein Lager mit der Cevi.DB, so bleibt die Teilnehmeranzahl stehts aktuell. </p>
-   
+
     </form>
 
 
@@ -35,7 +35,7 @@
     <mat-divider></mat-divider>
     <h3>Exportieren</h3>
     <p>Exportiere und drucke dein Lager.</p>
-    <button mat-raised-button routerLink="export">PDF Druckansicht</button>
+    <button mat-raised-button routerLink="export">Zusammenfassung</button>
 
     <!-- Week Overview -->
     <mat-divider></mat-divider>

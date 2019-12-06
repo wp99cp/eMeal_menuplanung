@@ -4,11 +4,15 @@
 .onlyOnPrint
     display: none
 
+.measureField
+    width: 100px
+    float: right
+
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-@media screen 
+@media screen
 
     .onNewPage
         border-top: solid 1px lightgray
@@ -19,9 +23,14 @@
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-@media print   
+@media print
+
+    .print
+        visibility: visible
+        display: block
 
     .onlyOnPrint
+        visibility: visible
         display: block
 
     .titlePage
@@ -31,4 +40,4 @@
 
         h1
             font-size: 34px
-            margin-bottom: 600px
+            margin-bottom: 450px

@@ -1,6 +1,4 @@
-<button class="print default" (click)="print()">Lager Drucken</button>
-<h1 class="warning onlyOnPrint">Diese Seite nicht drucken!</h1>
-<h1 class="warning onlyOnPrint">Das Dokument beginnt auf der nächsten Seite.</h1>
+<button mat-raised-button (click)="print()">Lager Drucken</button>
 
 <p>
     Das Ausdruck ist in einem Google Chrome Brwoser über die Druckfunktion möglich.
@@ -8,10 +6,9 @@
 
 
 <!-- add this div in final version -->
-<!-- <div class="onlyOnPrint"> -->
 
 <!-- Titleblatt -->
-<div class="onNewPage titlePage">
+<div class="titlePage print">
     <h1>Sommerlager 2018</h1>
 
     <p>Version vom {{today}} </p>
@@ -26,30 +23,49 @@
 <!-- <h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1> -->
 
 <!-- Einkaufsliste -->
-<h1 class="onNewPage">Einkaufsliste (Ganzes Lager)</h1>
+<h1 class="onNewPage print">Einkaufsliste (Ganzes Lager)</h1>
 
 <br />
 <br />
 
-<div *ngIf="shoppingList | async; let list">
-    <ng-container *ngFor="let categorie of list">
+<div class="print" *ngIf="shoppingList | async; let list">
 
-        <h2>{{categorie.name}}</h2>
-        <table>
-            <ng-container *ngFor="let ingredient of categorie.ingredients">
-                <tr>
-                    <td>{{ingredient.measure}}</td>
-                    <td>{{ingredient.unit}}</td>
-                    <td>{{ingredient.food}}</td>
-                </tr>
-            </ng-container>
-        </table>
+    <mat-accordion #accordion="matAccordion" [multi]="true">
+        <mat-expansion-panel *ngFor="let categorie of list">
 
-    </ng-container>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{categorie.name}}
+                </mat-panel-title>
+
+            </mat-expansion-panel-header>
+
+            <table mat-table [dataSource]="categorie.ingredients">
+
+                <ng-container matColumnDef="measure">
+                    <td mat-cell *matCellDef="let element" style="width: 75px; text-align: right; padding-right: 10px">
+                        {{element.measure}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="unit">
+                    <td mat-cell *matCellDef="let element" style="width: 75px">
+                        {{element.unit}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="food">
+                    <td mat-cell *matCellDef="let element" style="width: calc(100% - 150px)">
+                        {{element.food}}
+                    </td>
+                </ng-container>
+
+                <!-- Link to Camp-->
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
 </div>
-
-<!-- Last new Page -->
-<h1 class="onNewPage onlyOnPrint warning">Diese Seite nicht drucken!</h1>
-<h1 class="warning onlyOnPrint">Das Dokument endet auf der vorherigen Seite.</h1>
-
-<!-- </div> -->

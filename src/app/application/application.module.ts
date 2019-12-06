@@ -95,8 +95,7 @@ import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '
     AngularFireAuth,
     AuthenticationService,
     DatabaseService,
-    // { provide: FUNCTIONS_ORIGIN, useValue: 'http://localhost:4200' }
-    // { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
+    { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
   ],
   entryComponents: [
     DeleteCampComponent,
