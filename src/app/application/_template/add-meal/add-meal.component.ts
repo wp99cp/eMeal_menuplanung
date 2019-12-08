@@ -14,12 +14,12 @@ export class AddMealComponent implements OnInit {
 
 
   // Datasource for the table
-  private mealTableSource = new MatTableDataSource<FirestoreMeal>();
+  public mealTableSource = new MatTableDataSource<FirestoreMeal>();
   // only use for the mat table 
-  protected readonly displayedColumns: string[] = ['select', 'useAs', 'title', 'description'];
+  public readonly displayedColumns: string[] = ['select', 'useAs', 'title', 'description'];
 
   // Selected Meals form the table
-  private selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
+  public selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
 
   /** Constructor */
   constructor(private databaseService: DatabaseService) { }

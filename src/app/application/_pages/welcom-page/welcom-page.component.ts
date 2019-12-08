@@ -15,7 +15,7 @@ import { TemplateHeaderComponent as Header } from 'src/app/_template/template-he
 })
 export class WelcomPageComponent implements OnInit {
 
-  protected currentUser: Observable<User>;
+  public currentUser: Observable<User>;
 
   constructor(public auth: AuthenticationService) { }
 

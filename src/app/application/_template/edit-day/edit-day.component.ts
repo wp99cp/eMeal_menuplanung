@@ -9,7 +9,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class EditDayComponent implements OnInit {
 
-  private dayInfo: FormGroup;
+  public dayInfo: FormGroup;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
 

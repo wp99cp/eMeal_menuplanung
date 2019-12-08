@@ -21,10 +21,10 @@ export class TemplateHeaderComponent {
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   // Methoden für das HTML file
-  protected getTitle() { return TemplateHeaderComponent.title; }
-  protected getPath() { return TemplateHeaderComponent.path; }
+  public getTitle() { return TemplateHeaderComponent.title; }
+  public getPath() { return TemplateHeaderComponent.path; }
 
-  protected navigateTo(level: number = 1) {
+  public navigateTo(level: number = 1) {
 
     let urlStr = window.location.pathname;
 

@@ -28,16 +28,18 @@
 <br />
 <br />
 
-<div class="print" *ngIf="shoppingList | async; let list">
+<div class="print" *ngIf="shoppingListWithError | async; let list">
+
+    <p class="warning" *ngFor="let error of list.error">{{error}}</p>
 
     <mat-accordion #accordion="matAccordion" [multi]="true">
-        <mat-expansion-panel *ngFor="let categorie of list">
+
+        <mat-expansion-panel *ngFor="let categorie of list.shoppingList">
 
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     {{categorie.name}}
                 </mat-panel-title>
-
             </mat-expansion-panel-header>
 
             <table mat-table [dataSource]="categorie.ingredients">

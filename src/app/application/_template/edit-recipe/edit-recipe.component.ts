@@ -13,13 +13,13 @@ import { DatabaseService } from '../../_service/database.service';
 })
 export class EditRecipeComponent implements OnInit {
 
-  protected displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
-  protected recipeForm: FormGroup;
+  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
+  public recipeForm: FormGroup;
 
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
 
-  private dataSource: MatTableDataSource<Ingredient>;
+  public dataSource: MatTableDataSource<Ingredient>;
 
   constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 

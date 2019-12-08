@@ -15,10 +15,10 @@ import { TemplateHeaderComponent as Header } from 'src/app/_template/template-he
 export class EditCampPageComponent implements OnInit {
 
   // Toggle for saveButton
-  private campInfosForm: FormGroup;
+  public campInfosForm: FormGroup;
 
   // camp Data from server
-  private camp: Observable<Camp>;
+  public camp: Observable<Camp>;
 
   // local changes to the camp data (not sync with server)
   constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) { }
@@ -72,7 +72,7 @@ export class EditCampPageComponent implements OnInit {
   }
 
   /** Save and reset the form */
-  protected saveCampInfo(camp: Camp) {
+  public saveCampInfo(camp: Camp) {
 
     this.saveValueChanges(camp);
     this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath())

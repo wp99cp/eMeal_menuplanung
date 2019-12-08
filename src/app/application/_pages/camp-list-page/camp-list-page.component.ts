@@ -21,24 +21,23 @@ import { DatabaseService } from '../../_service/database.service';
 export class CampListPageComponent implements OnInit {
 
   // Datasource and colums for the table
-  protected displayedColumns: string[] = ['name', 'description', 'year', 'participants', 'menu'];
-  private dataSource: MatTableDataSource<Camp>;
+  public displayedColumns: string[] = ['name', 'description', 'year', 'participants', 'menu'];
+  public dataSource: MatTableDataSource<Camp>;
 
   // Camp Data
-  private camps: Observable<Camp[]>;
+  public camps: Observable<Camp[]>;
 
   // Form data to create new Camp
-  private newCampInfos: FormGroup;
-  private newCampParticipants: FormGroup;
-  private newCampDate: FormGroup;
+  public newCampInfos: FormGroup;
+  public newCampParticipants: FormGroup;
+  public newCampDate: FormGroup;
   private selectedCoworkers: User[];
 
   constructor(
     public dialog: MatDialog,
     private databaseService: DatabaseService,
     private auth: AuthenticationService,
-    private formBuilder: FormBuilder,
-    private router: Router) {
+    private formBuilder: FormBuilder) {
 
     this.dataSource = new MatTableDataSource();
 

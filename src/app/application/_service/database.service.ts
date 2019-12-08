@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
 import { Observable, of, OperatorFunction } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
 import { Meal } from '../_class/meal';
@@ -183,8 +183,9 @@ export class DatabaseService {
 
     return this.functions
       .httpsCallable('getShoppingList')({ campId: id })
-      .pipe(map(responseData => responseData.data))
-      .pipe(map(ings => {
+      .pipe(map(response => {
+
+        const ings = response.data;
 
         const arry = {};
 
@@ -209,11 +210,12 @@ export class DatabaseService {
 
         }
 
-        return arry;
+        return { shoppingList: arry, error: response.error };
 
       }))
-      .pipe(map(cats => {
+      .pipe(map(data => {
 
+        const cats = data.shoppingList;
         const arry = [];
 
         for (const cat in cats) {
@@ -228,7 +230,7 @@ export class DatabaseService {
 
         }
 
-        return arry;
+        return { shoppingList: arry, error: data.error };
 
       }));
 

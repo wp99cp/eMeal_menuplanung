@@ -18,13 +18,13 @@ import { EditDayComponent } from '../edit-day/edit-day.component';
 })
 export class WeekViewComponent implements OnInit {
 
+  public mealsChanged = false;
   @Input() camp: Camp;
 
   constructor(public dialog: MatDialog, public databaseService: DatabaseService) { }
 
   ngOnInit() { }
 
-  protected mealsChanged: boolean = false;
 
   /**
    * 

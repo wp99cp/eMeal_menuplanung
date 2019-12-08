@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../_service/authentication.service';
 })
 export class MealListPageComponent implements OnInit {
 
-  private meals: Observable<any[]>;
+  public meals: Observable<any[]>;
   private user: firebase.User;
 
   /**

@@ -15,10 +15,10 @@ import { DatabaseService } from '../../_service/database.service';
 })
 export class EditMealComponent implements OnInit {
 
-  protected mealInfo: FormGroup;
-  protected specificMeal: Observable<SpecificMeal>;
+  public mealInfo: FormGroup;
+  public specificMeal: Observable<SpecificMeal>;
 
-  private meal: Observable<Meal>;
+  public meal: Observable<Meal>;
   private camp: Observable<Camp>;
   private campId: string;
   private mealId: string;

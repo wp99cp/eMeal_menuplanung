@@ -16,9 +16,9 @@ export class UserListComponent implements OnInit {
 
   @Output() onSelection = new EventEmitter<User[]>();
 
-  private selection = new SelectionModel<User>(true, []);
-  private displayedColumns: string[] = ['select', 'firstName', 'lastName', 'mail'];
-  private userList = new MatTableDataSource<User>();
+  public selection = new SelectionModel<User>(true, []);
+  public displayedColumns: string[] = ['select', 'firstName', 'lastName', 'mail'];
+  public userList = new MatTableDataSource<User>();
 
   constructor(private database: AngularFirestore) { }
 
