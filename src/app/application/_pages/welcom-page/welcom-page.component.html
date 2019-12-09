@@ -1,16 +1,16 @@
 <h1 class="mat-h1">
-    Willkommmen bei eMeal.<br />
-    Die Menuplanungssoftware für Lager.
+    Willkommmen bei eMeal,<br />
+    der Menuplanungssoftware für Lager.
 </h1>
 
 <!-- fast actions: overview -->
 <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
 
-    <p>Angemeldet als: {{user.firstName}} </p>
-
     <button class="menu-button" mat-raised-button routerLink="camps">Meine Lager</button>
     <button class="menu-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
     <button class="menu-button" mat-raised-button routerLink="settings">Einstellungen</button>
+
+    <p>Du bist angemeldet als {{user.firstName}}.</p>
 
 </ng-container>
 

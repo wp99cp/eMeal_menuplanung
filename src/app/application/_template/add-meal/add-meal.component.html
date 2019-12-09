@@ -56,11 +56,17 @@
 
 <br />
 <br />
-<button mat-button [disabled]="true">Neue Mahlzeit erstellen</button>
+<button mat-raised-button (click)="newMeal()">Neue Mahlzeit erstellen</button>
+<button mat-raised-button>Importieren</button>
+
+<p class="info">
+    <b>Automatischer Import (Beta): </b>Die Import-Funktion ermöglicht es dir Rezepte aus verschiedenen Quellen
+    automatisch zu Importieren. So z.B. von swissmilk.ch
+</p>
 
 <br />
 <br />
 <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="null">Abbrechen</button>
-    <button mat-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
+    <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+    <button mat-raised-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
 </div>

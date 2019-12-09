@@ -15,7 +15,8 @@ export class AddMealComponent implements OnInit {
 
   // Datasource for the table
   public mealTableSource = new MatTableDataSource<FirestoreMeal>();
-  // only use for the mat table 
+
+  // only use for the mat table
   public readonly displayedColumns: string[] = ['select', 'useAs', 'title', 'description'];
 
   // Selected Meals form the table
@@ -61,6 +62,12 @@ export class AddMealComponent implements OnInit {
   selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
     firestoreMeal['usedAs'] = usedAs;
+
+  }
+
+  newMeal() {
+
+    this.databaseService.addMeal();
 
   }
 

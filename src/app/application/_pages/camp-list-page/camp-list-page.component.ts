@@ -11,6 +11,7 @@ import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+import { MatStepper } from '@angular/material/stepper';
 
 
 @Component({
@@ -84,10 +85,8 @@ export class CampListPageComponent implements OnInit {
   }
 
   /**
-   * 
    * Filter nach Name des Lagers
-   * 
-   * @param filterValue 
+   *
    */
   applyFilter(filterValue: string) {
     this.dataSource.filterPredicate = (camp: Camp, filter: string) =>
@@ -102,14 +101,14 @@ export class CampListPageComponent implements OnInit {
   /**
    * Creats a new Camp
    */
-  createCamp() {
+  createCamp(campCreator: MatStepper) {
 
     this.auth.getCurrentUser().subscribe(user => {
 
-      let date = new Date(this.newCampDate.value.date);
+      const date = new Date(this.newCampDate.value.date);
 
       // combinde data
-      let campData: FirestoreCamp = {
+      const campData: FirestoreCamp = {
         name: this.newCampInfos.value.name,
         description: this.newCampInfos.value.description,
         access: { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, this.selectedCoworkers) },
@@ -124,7 +123,12 @@ export class CampListPageComponent implements OnInit {
 
 
       // Creates a new Camp
-      this.databaseService.addDocument(campData, 'camps');
+      this.databaseService.addDocument(campData, 'camps')
+
+        // reset form
+        .then(ref => campCreator.reset());
+
+
     });
 
 

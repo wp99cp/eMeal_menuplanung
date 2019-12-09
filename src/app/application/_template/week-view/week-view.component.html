@@ -26,10 +26,10 @@
                 routerLink="meals/{{meal.firestoreElementId}}">
                 <div class="meal-placeholder" *cdkDragPlaceholder></div>
                 <mat-card-header>
-                    <mat-card-title>{{meal.title}}</mat-card-title>
+                    <p>{{meal.title}}</p>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>{{meal.description}}</p>
+                    <p class="description">{{meal.description}}</p>
                 </mat-card-content>
             </mat-card>
 

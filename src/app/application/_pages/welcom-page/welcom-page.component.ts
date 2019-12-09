@@ -30,7 +30,8 @@ export class WelcomPageComponent implements OnInit {
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(): void {
 
-    Header.title = 'Willkommen bei eMeal!';
+
+    Header.title = 'Lager planen leicht gemacht!';
     Header.path = [];
 
   }

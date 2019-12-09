@@ -116,6 +116,54 @@ export class DatabaseService {
 
 
 
+  /**
+   * 
+   */
+  public addMeal() {
+
+    this.authService.getCurrentUser().subscribe(user => {
+
+      this.db.collection('meals').add({
+
+        access: { owner: [user.uid], editor: [] },
+        description: '',
+        recipe: '',
+        title: 'Neue Mahlzeit'
+
+      });
+
+    });
+
+
+  }
+
+  public addRecipe(mealId: string, campId: string) {
+
+    this.authService.getCurrentUser().subscribe(user => {
+
+      this.db.collection('meals/' + mealId + '/recipes/').add({
+
+        access: { owner: [user.uid], editor: [] },
+        description: '',
+        ingredients: [],
+        name: 'Neues Rezept'
+
+      }).then(ref => {
+        this.db.collection('meals/' + mealId + '/recipes/' + ref.id + '/specificRecipes').add({
+
+          participants: 0,
+          campId
+
+        });
+
+      });
+
+
+    });
+
+
+  }
+
 
   /** @return loads the specific meal */
   public getSpecificMeal(mealId: string, campId: string): Observable<SpecificMeal> {
@@ -314,5 +362,7 @@ export class DatabaseService {
     ));
 
   }
+
+
 
 }

@@ -15,11 +15,26 @@
                 formControlName="description"></textarea>
         </mat-form-field>
 
+        <p class="info">
+            <b>Die Teilnehmer-Anzahl </b> kann an verschiedenen Stellen in der App verändert werden. Änderst du die
+            Teilnehmer-Anzahl hier hat das auf sämtliche Rezepte und Mahlzeiten einen Einfluss: Alle Mahlzeiten und
+            Rezepte mit unveränderter Teilnehmeranzahl werden aktualisiert.<br />
+            Ändert sich die Anzahl der Teilnehmerinnen deines Lagers, so passe das hier an:
+
+        </p>
+
         <mat-form-field class="full-width">
             <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants">
         </mat-form-field>
 
-        <p> Verknüpfe dein Lager mit der Cevi.DB, so bleibt die Teilnehmeranzahl stehts aktuell. </p>
+        <br>
+        <br>
+
+        <p class="info">
+            <b>Cevi-DB: </b>In Zukunft wird es möglich sein, dein Lager mit der Cevi-DB zu verknüpfen. So wird die
+            Teilnehmeranzahl automatisch aktualisiert. Ausserdem erhältst du Informationen zu Allergien und Vegetarier
+            direkt in den betroffenen Rezepten angezeigt
+        </p>
 
     </form>
 
@@ -27,29 +42,47 @@
     <button mat-raised-button [disabled]="true">
         Cevi-DB verknüpfen
     </button>
+
     <button mat-raised-button [disabled]="!campInfosForm.touched" (click)='saveCampInfo($camp)'>
         Änderungen Speichern
     </button>
 
-    <!-- Export section -->
-    <mat-divider></mat-divider>
-    <h3>Exportieren</h3>
-    <p>Exportiere und drucke dein Lager.</p>
-    <button mat-raised-button routerLink="export">Zusammenfassung</button>
+
 
     <!-- Week Overview -->
     <mat-divider></mat-divider>
     <app-week-view [camp]="$camp"></app-week-view>
 
+    <!-- Export section -->
+    <mat-divider></mat-divider>
+
+    <p class="info">
+        Hast du deine Planung abgeschlossen, so kannst du hier ein Lagerdossier erstellen. Das Lagerdossier beinhaltet
+        sämtliche Rezepte inkl. Mengenangaben, eine Wochenübersicht sowie eine Einkaufsliste für dein gesamtes Lager.
+        Du kannst das Lagerdossier als PDF herunterladen oder stehts aktualisiert online anschauen.
+        <br>
+        In Zukunft wird hierfür keine Internetverbindung mehr benötigt – einmal gespeichert kannst du auch offline auf
+        das Lagerdossier zugreifen.
+    </p>
+
+    <button mat-raised-button routerLink="export">Zusammenfassung erstellen.</button>
+
     <!-- Zusammenarbeit -->
     <mat-divider></mat-divider>
     <h3>Mitarbeiter</h3>
-    <p>Gib dein Lager anderen Nutzern frei.</p>
+
+    <p class="info">
+        <b>Mitarbeiter: </b> Die Mitarbeiterfunktion befindet sich noch in der Testphase; du kannst zurzeit keine
+        weiteren Mitarbeiter hinzufügen oder Mitarbeiter entfernen. Diese Funktion ist aber schon bald verfügbar,
+    </p>
     <button mat-raised-button [disabled]="true">Nutzer einladen.</button>
-    <br />
-    <br />
-    <p>Öffentliche Lager können von allen angemeldeten Nutzern als Vorlage verwendet werden.</p>
+    <p class="info">
+        Öffentliche Lager können von allen angemeldeten Nutzern als Vorlage verwendet werden.
+    </p>
     <button mat-raised-button [disabled]="true">Veröffentlichen</button>
+
+
+
 
 </ng-container>
 

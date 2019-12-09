@@ -13,6 +13,13 @@
 
         </form>
 
+        <br>
+
+        <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
+
+        <br>
+        <br>
+
         <mat-accordion *ngIf="$meal.recipes | async as recipes">
 
             <ng-container *ngFor="let recipe of recipes">

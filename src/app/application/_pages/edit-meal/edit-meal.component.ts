@@ -67,4 +67,10 @@ export class EditMealComponent implements OnInit {
 
   }
 
+  newRecipe() {
+
+    this.databaseService.addRecipe(this.mealId, this.campId);
+
+  }
+
 }
