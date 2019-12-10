@@ -79,8 +79,6 @@ export class ExportCampComponent implements OnInit {
   /** Druckt die aktuelle Seite (mit der Druckfunktion des Browsers). */
   async print() {
 
-    await this.Accordion.openAll();
-
     window.print();
 
   }

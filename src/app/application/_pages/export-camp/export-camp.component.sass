@@ -1,12 +1,40 @@
 .onNewPage
     page-break-before: always
 
+#shoppingListElement
+    margin: 0 50px
+    width: auto
+    column-gap: 50px
+    column-count: 2
+    display: block
+
+    .foodCategory:first-child
+        h3:first-of-type
+            margin-top: 0
+
+.foodCategory
+    break-before: avoid-column
+    display: inline
+
+td.mat-cell
+    border-bottom-style: none
+
+th.mat-header-cell
+    border-bottom-style: none
+
 .onlyOnPrint
     display: none
 
 .measureField
     width: 100px
     float: right
+
+.mat-expansion-panel
+    box-shadow: none !important
+
+tr.mat-row
+    line-height: 2em
+    height: 0
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -34,11 +62,10 @@
         display: block
 
     .titlePage
-        margin-top: 300px
+        margin-top: 250px
         text-align: center
         width: 100%
 
         h1
             font-size: 34px
-            margin-bottom: 450px
-n
+            margin-bottom: 350px

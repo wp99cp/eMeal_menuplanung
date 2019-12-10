@@ -32,15 +32,11 @@
 
     <p class="warning" *ngFor="let error of list.error">{{error}}</p>
 
-    <mat-accordion #accordion="matAccordion" [multi]="true">
+    <div id="shoppingListElement">
 
-        <mat-expansion-panel *ngFor="let categorie of list.shoppingList">
+        <div *ngFor="let categorie of list.shoppingList" class="foodCategory">
 
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    {{categorie.name}}
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+            <h3> {{categorie.name}} </h3>
 
             <table mat-table [dataSource]="categorie.ingredients">
 
@@ -67,7 +63,7 @@
 
             </table>
 
-        </mat-expansion-panel>
-    </mat-accordion>
+        </div>
+    </div>
 
 </div>
