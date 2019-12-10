@@ -27,8 +27,8 @@ export class WeekViewComponent implements OnInit {
 
 
   /**
-   * 
-   * @param event 
+   *
+   * @param event
    */
   drop(event: CdkDragDrop<string[]>) {
 
@@ -66,12 +66,9 @@ export class WeekViewComponent implements OnInit {
 
     }).afterClosed().subscribe((save: number) => {
 
-      if (save == 1) {
+      if (save === 1) {
         this.mealsChanged = true;
-      }
-
-      // delete
-      else if (save == -1) {
+      } else if (save === -1) {
         this.camp.days.splice(this.camp.days.indexOf(day), 1);
 
         this.saveCamp();
@@ -106,7 +103,7 @@ export class WeekViewComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
   addMeal() {
 
