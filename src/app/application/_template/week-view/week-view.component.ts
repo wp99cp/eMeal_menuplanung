@@ -1,3 +1,4 @@
+import { SpecificMeal } from './../../_class/specific-meal';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
@@ -117,17 +118,20 @@ export class WeekViewComponent implements OnInit {
 
         if (result != null) {
 
-          result.selected.forEach(firestoreMeal => {
+          result.selected.forEach(async firestoreMeal => {
 
-            let meal = new Meal(
+            const meal = new Meal(
               {
                 description: firestoreMeal.title,
-                title: firestoreMeal["usedAs"] ? firestoreMeal["usedAs"] : 'Zmorgen',
+                title: firestoreMeal.usedAs ? firestoreMeal.usedAs : 'Zmorgen',
                 access: null,
                 firestoreElementId: firestoreMeal.firestoreElementId
               },
               firestoreMeal.firestoreElementId);
 
+
+            const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp)
+            meal.setSpecificMeal(specificMealId);
             meal.createSpecificData(this.databaseService, this.camp);
 
             this.camp.days[0].meals.push(meal);

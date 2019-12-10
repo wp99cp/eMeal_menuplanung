@@ -117,7 +117,7 @@ export class DatabaseService {
 
 
   /**
-   * 
+   *
    */
   public addMeal() {
 
