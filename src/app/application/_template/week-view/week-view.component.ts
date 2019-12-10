@@ -26,11 +26,6 @@ export class WeekViewComponent implements OnInit {
 
   ngOnInit() { }
 
-
-  /**
-   *
-   * @param event
-   */
   drop(event: CdkDragDrop<string[]>) {
 
     this.mealsChanged = true;
@@ -83,12 +78,12 @@ export class WeekViewComponent implements OnInit {
 
   addNewDay() {
 
-    let date = new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
+    const date = new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
     date.setDate(date.getDate() + 1);
 
-    let day = new Day({
+    const day = new Day({
       date: firestore.Timestamp.fromDate(date),
-      description: "",
+      description: '',
       meals: []
     }, this.camp);
 
@@ -100,7 +95,9 @@ export class WeekViewComponent implements OnInit {
 
 
   private saveCamp() {
+
     this.databaseService.updateDocument(this.camp.extractDataToJSON(), this.camp.getDocPath());
+
   }
 
   /**
@@ -124,13 +121,12 @@ export class WeekViewComponent implements OnInit {
               {
                 description: firestoreMeal.title,
                 title: firestoreMeal.usedAs ? firestoreMeal.usedAs : 'Zmorgen',
-                access: null,
                 firestoreElementId: firestoreMeal.firestoreElementId
               },
               firestoreMeal.firestoreElementId);
 
 
-            const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp)
+            const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp);
             meal.setSpecificMeal(specificMealId);
             meal.createSpecificData(this.databaseService, this.camp);
 
