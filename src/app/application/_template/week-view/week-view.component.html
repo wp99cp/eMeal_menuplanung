@@ -1,40 +1,62 @@
 <h3>Wochenplan</h3>
 
 <br />
-<button mat-raised-button [disabled]="!mealsChanged" (click)='saveMeals()' class="button">Änderungen Speichern</button>
-<button mat-raised-button (click)='addNewDay()' class="button">Tag hinzufügen</button>
-<button mat-raised-button (click)='addMeal()' class="button">Mahlzeit hinzufügen</button>
+<button
+  mat-raised-button
+  [disabled]="!mealsChanged"
+  (click)="saveMeals()"
+  class="button"
+  color="save"
+>
+  Änderungen Speichern
+</button>
+<button mat-raised-button (click)="addNewDay()" class="button">
+  Tag hinzufügen
+</button>
+<button mat-raised-button (click)="addMeal()" class="button">
+  Mahlzeit hinzufügen
+</button>
 <br />
 <br />
 
-<mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{camp.days.length <= 7? camp.days.length: 5}}"
-    rowHeight="400px">
+<mat-grid-list
+  cdkDropListGroup
+  [gutterSize]="'10px'"
+  cols="{{ camp.days.length <= 7 ? camp.days.length : 5 }}"
+  rowHeight="400px"
+>
+  <mat-grid-tile
+    *ngFor="let day of camp.days; let i = index"
+    class="mat-elevation-z1"
+  >
+    <!-- Header of the day -->
+    <mat-grid-tile-header>
+      <h4>{{ day.getDateStr() }} {{ day.getDiscriptionInBracket() }}</h4>
+      <mat-icon class="edit-day" (click)="editDay(day)">edit</mat-icon>
+    </mat-grid-tile-header>
 
-    <mat-grid-tile *ngFor="let day of camp.days; let i = index" class="mat-elevation-z1">
-
-        <!-- Header of the day -->
-        <mat-grid-tile-header>
-            <h4>{{day.getDateStr()}} {{day.getDiscriptionInBracket()}}</h4>
-            <mat-icon class="edit-day" (click)="editDay(day)">edit</mat-icon>
-        </mat-grid-tile-header>
-
-        <!-- Meal List for one day-->
-        <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
-
-            <!-- Meal Element-->
-            <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-                routerLink="meals/{{meal.firestoreElementId}}">
-                <div class="meal-placeholder" *cdkDragPlaceholder></div>
-                <mat-card-header>
-                    <p>{{meal.title}}</p>
-                </mat-card-header>
-                <mat-card-content>
-                    <p class="description">{{meal.description}}</p>
-                </mat-card-content>
-            </mat-card>
-
-        </div>
-
-    </mat-grid-tile>
-
+    <!-- Meal List for one day-->
+    <div
+      class="meal-list"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="day.meals"
+    >
+      <!-- Meal Element-->
+      <mat-card
+        class="meal-card mat-elevation-z2"
+        *ngFor="let meal of day.meals"
+        cdkDrag
+        routerLink="meals/{{ meal.firestoreElementId }}"
+      >
+        <div class="meal-placeholder" *cdkDragPlaceholder></div>
+        <mat-card-header>
+          <p>{{ meal.title }}</p>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="description">{{ meal.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-grid-tile>
 </mat-grid-list>
