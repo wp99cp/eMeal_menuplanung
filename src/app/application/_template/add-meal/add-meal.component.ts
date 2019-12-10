@@ -61,7 +61,7 @@ export class AddMealComponent implements OnInit {
   /** Set usedAs parameter to firestoreMeal */
   selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
-    firestoreMeal['usedAs'] = usedAs;
+    firestoreMeal.usedAs = usedAs;
 
   }
 
