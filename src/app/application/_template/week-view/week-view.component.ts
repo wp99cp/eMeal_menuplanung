@@ -128,10 +128,9 @@ export class WeekViewComponent implements OnInit {
 
             const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp);
             meal.setSpecificMeal(specificMealId);
-            meal.createSpecificData(this.databaseService, this.camp);
+            meal.createSpecificRecipes(this.databaseService, this.camp);
 
             this.camp.days[0].meals.push(meal);
-
             this.saveCamp();
 
           });

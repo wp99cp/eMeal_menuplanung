@@ -70,27 +70,25 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
    * @param camp Releted Camp
    *
    */
-  public createSpecificData(databaseService: DatabaseService, camp: Camp) {
-
-    // TODO: doppelte Erstellung vermeiden!!!
-    this.createSpecificMeal(databaseService, camp);
+  public createSpecificRecipes(databaseService: DatabaseService, camp: Camp) {
 
     if (this.recipes === undefined) {
-      this.recipes = databaseService.getRecipes(this.firestoreElementId, camp.firestoreElementId);
+      this.recipes = databaseService.getRecipes(this.firestoreElementId, this.specificId, camp.firestoreElementId);
     }
 
-    this.recipes.subscribe(recipes => recipes.forEach(recipe => {
+    this.recipes.subscribe(recipes => recipes.forEach(recipe =>
+      this.createSpecificRecipe(camp, recipe.firestoreElementId, databaseService)
+    ));
 
-      const specificRecipeData: FirestoreSpecificRecipe = {
-        participants: camp.participants,
-        campId: camp.firestoreElementId
-      };
+  }
 
-      const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipe.firestoreElementId + '/specificRecipes';
-      databaseService.addDocument(specificRecipeData, recipePath);
-
-    }));
-
+  public createSpecificRecipe(camp: Camp, recipeId: string, databaseService: DatabaseService) {
+    const specificRecipeData: FirestoreSpecificRecipe = {
+      participants: camp.participants,
+      campId: camp.firestoreElementId
+    };
+    const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipeId + '/specificRecipes/' + this.specificId;
+    databaseService.addDocument(specificRecipeData, recipePath);
   }
 
   public setSpecificMeal(specificId: string) {
@@ -106,6 +104,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
       participants: camp.participants,
       campId: camp.firestoreElementId
     };
+
     const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
     const ref = await databaseService.addDocument(specificMealData, mealPath);
 

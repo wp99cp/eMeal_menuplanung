@@ -1,43 +1,43 @@
 <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
-    <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
+  <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-        <h1 class="mat-h1">Bearbeite die Mahlzeit: {{$meal.title}}</h1>
+    <h1 class="mat-h1">Bearbeite die Mahlzeit: {{$meal.title}}</h1>
 
-        <p>Klicke auf eines der Rezpete, um es zu bearbeiten.</p>
+    <p>Klicke auf eines der Rezpete, um es zu bearbeiten.</p>
 
-        <form [formGroup]='mealInfo'>
+    <form [formGroup]='mealInfo'>
 
-            <mat-form-field class="full-width">
-                <textarea id="descriptionField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
-            </mat-form-field>
+      <mat-form-field class="full-width">
+        <textarea id="descriptionField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
+      </mat-form-field>
 
-        </form>
+    </form>
 
-        <br>
+    <br>
 
-        <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
+    <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
 
-        <br>
-        <br>
+    <br>
+    <br>
 
-        <mat-accordion *ngIf="$meal.recipes | async as recipes">
+    <mat-accordion *ngIf="$meal.recipes | async as recipes">
 
-            <ng-container *ngFor="let recipe of recipes">
-                <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
-                    <!-- display recipe -->
-                    <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe"> </app-edit-recipe>
-                </ng-container>
-            </ng-container>
+      <ng-container *ngFor="let recipe of recipes">
+        <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
+          <!-- display recipe -->
+          <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe"> </app-edit-recipe>
+        </ng-container>
+      </ng-container>
 
-        </mat-accordion>
+    </mat-accordion>
 
-    </ng-container>
+  </ng-container>
 </ng-container>
 
 
 
 <!-- Loading Animation -->
 <ng-template #loadingMeal>
-    <h1 class="mat-h1">Daten werden geladen...</h1>
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <h1 class="mat-h1">Daten werden geladen...</h1>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>

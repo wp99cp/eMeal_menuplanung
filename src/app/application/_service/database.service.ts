@@ -51,13 +51,14 @@ export class DatabaseService {
   }
 
   /** creates a recipe object */
-  private static createRecipe(mealId: string, campId: string, dbService: DatabaseService):
+  private static createRecipe(mealId: string, specificMealId: string, campId: string, dbService: DatabaseService):
     OperatorFunction<DocumentChangeAction<FirestoreRecipe>[], Recipe[]> {
 
     return map(docChangeAction =>
       docChangeAction.map(docData => {
         const recipeId = docData.payload.doc.id;
-        return new Recipe(docData.payload.doc.data(), recipeId, mealId, dbService.getSpecificRecipe(mealId, campId, recipeId));
+        return new Recipe(docData.payload.doc.data(), recipeId, mealId,
+          dbService.getSpecificRecipe(mealId, specificMealId, campId, recipeId));
       }));
 
   }
@@ -79,21 +80,14 @@ export class DatabaseService {
   /** */
   private static createSpecificMeal(path: string): OperatorFunction<Action<DocumentSnapshot<SpecificMeal>>, SpecificMeal> {
 
-    // TODO: Checken, ob bereits existiert, wenn es bereits existiert, dann anpassen...
-
-    // TODO: ggf. bessere Lösung als '[0]'
-    return map(docData => new SpecificMeal(docData.payload.data(), path + '/' + docData.payload.id));
+    return map(docData => new SpecificMeal(docData.payload.data(), path));
 
   }
 
   /** */
-  private static createSpecificRecipe(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificRecipe>[], SpecificRecipe> {
+  private static createSpecificRecipe(path: string): OperatorFunction<Action<DocumentSnapshot<FirestoreSpecificRecipe>>, SpecificRecipe> {
 
-    // TODO: Checken, ob bereits existiert, wenn es bereits existiert, dann anpassen...
-
-    // TODO: ggf. bessere Lösung als '[0]'
-    return map(docChangeAction =>
-      docChangeAction.map(docData => new SpecificRecipe(docData.payload.doc.data(), path + '/' + docData.payload.doc.id))[0]);
+    return map(docData => new SpecificRecipe(docData.payload.data(), path));
 
   }
 
@@ -136,31 +130,20 @@ export class DatabaseService {
 
   }
 
-  public addRecipe(mealId: string, campId: string) {
+  public  addRecipe(mealId: string, campId: string) {
 
-    this.authService.getCurrentUser().subscribe(user => {
+    return this.authService.getCurrentUser().pipe(map(user => {
 
-      this.db.collection('meals/' + mealId + '/recipes/').add({
+      return this.db.collection('meals/' + mealId + '/recipes/').add({
 
         access: { owner: [user.uid], editor: [] },
         description: '',
         ingredients: [],
         name: 'Neues Rezept'
 
-      }).then(ref => {
-        this.db.collection('meals/' + mealId + '/recipes/' + ref.id + '/specificRecipes').add({
-
-          participants: 0,
-          campId
-
-        });
-
       });
 
-
-    });
-
-
+    }));
   }
 
 
@@ -173,12 +156,11 @@ export class DatabaseService {
   }
 
   /** @return loads the specific recipe */
-  public getSpecificRecipe(mealId: string, campId: string, recipeId: string): Observable<SpecificRecipe> {
+  public getSpecificRecipe(mealId: string, specificMealId: string, campId: string, recipeId: string): Observable<SpecificRecipe> {
 
-    const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes';
+    const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes/' + specificMealId;
 
-    return this.requestCollection(path, collRef => collRef.where('campId', '==', campId).limit(1))
-      .pipe(DatabaseService.createSpecificRecipe(path));
+    return this.requestDocument(path).pipe(DatabaseService.createSpecificRecipe(path));
 
   }
 
@@ -288,12 +270,12 @@ export class DatabaseService {
    * @param mealId id of the current meal
    * @param campId id of the current camp
    */
-  public getRecipes(mealId: string, campId: string): Observable<Recipe[]> {
+  public getRecipes(mealId: string, specificMealId: string, campId: string): Observable<Recipe[]> {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
         this.requestCollection('meals/' + mealId + '/recipes', queryFn)
-          .pipe(DatabaseService.createRecipe(mealId, campId, this))
+          .pipe(DatabaseService.createRecipe(mealId, specificMealId, campId, this))
       ));
 
   }
@@ -304,10 +286,10 @@ export class DatabaseService {
 
   }
 
-  public getMealById(mealId: string, campId: string): Observable<Meal> {
+  public getMealById(mealId: string, specificMealId: string, campId: string): Observable<Meal> {
 
     return this.requestDocument('meals/' + mealId).pipe(
-      DatabaseService.createMeal(this.getRecipes(mealId, campId))
+      DatabaseService.createMeal(this.getRecipes(mealId, specificMealId, campId))
     );
 
   }
@@ -319,11 +301,19 @@ export class DatabaseService {
 
   }
 
-  /** adds any Partial to the database */
-  // TODO: only add FirebaseObjects not Partial<any>
-  public addDocument(firebaseObject: Partial<any>, collectionPath: string) {
+  /**
+   *  adds any Partial to the database
+   * @param path the path can be a document path or a collection path
+   */
+  public async addDocument(firebaseObject: Partial<any>, path: string): Promise<firebase.firestore.DocumentReference> {
 
-    return this.db.collection(collectionPath).add(firebaseObject);
+    if ((path.match(/\//g) || []).length % 2 === 0) {
+
+      return await this.db.collection(path).add(firebaseObject);
+    }
+
+    this.db.doc(path).set(firebaseObject);
+    return this.db.doc(path).ref;
 
   }
 

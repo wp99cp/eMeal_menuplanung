@@ -1,4 +1,4 @@
 export interface FirestoreSpecificMeal {
-    participants: number,
-    campId: string
+  participants: number;
+  campId: string;
 }

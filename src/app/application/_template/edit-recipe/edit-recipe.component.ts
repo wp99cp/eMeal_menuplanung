@@ -65,9 +65,8 @@ export class EditRecipeComponent implements OnInit {
   changeIngredient(value: string, index: number, element: string) {
 
     if (element === 'calcMeasure') {
-      this.recipe.ingredients[index]['measure'] = Number.parseInt(value) / this.specificRecipe.participants;
-    }
-    else {
+      this.recipe.ingredients[index].measure = Number.parseInt(value) / this.specificRecipe.participants;
+    } else {
       this.recipe.ingredients[index][element] = value;
     }
     this.recipeForm.markAsTouched();
@@ -80,6 +79,7 @@ export class EditRecipeComponent implements OnInit {
     this.recipe.notes = this.recipeForm.value.notes;
     this.recipe.description = this.recipeForm.value.description;
     this.recipe.name = this.recipeForm.value.name;
+
 
     this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
     this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());
