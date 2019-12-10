@@ -22,6 +22,7 @@ export class EditMealComponent implements OnInit {
   private camp: Observable<Camp>;
   private campId: string;
   private mealId: string;
+  private specificMealId: string;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
@@ -48,12 +49,14 @@ export class EditMealComponent implements OnInit {
 
   private afterGetURL(url) {
 
-    this.campId = url[url.length - 3].path;
-    this.mealId = url[url.length - 1].path;
-    // load Meal and specific meal
+    this.campId = url[url.length - 4].path;
+    this.mealId = url[url.length - 2].path;
+    this.specificMealId = url[url.length - 1].path;
+
+    // load camp, meal and specificMeal
     this.camp = this.databaseService.getCampById(this.campId);
     this.meal = this.databaseService.getMealById(this.mealId, this.campId);
-    this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.campId);
+    this.specificMeal = this.databaseService.getSpecificMeal(this.mealId, this.specificMealId, this.campId);
 
     this.camp.subscribe(camp => this.meal.subscribe(meal => this.setHeaderInfo(camp, meal)));
 
@@ -63,7 +66,7 @@ export class EditMealComponent implements OnInit {
   private setHeaderInfo(camp, meal): void {
 
     Header.title = meal.title;
-    Header.path = ['eMeal', 'meine Lager', camp.name, '', meal.title];
+    Header.path = ['eMeal', 'meine Lager', camp.name, '', '', meal.title];
 
   }
 

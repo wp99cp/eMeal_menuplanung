@@ -26,7 +26,7 @@
     <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
       <!-- Meal Element-->
       <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-        routerLink="meals/{{ meal.firestoreElementId }}">
+        routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}">
         <div class="meal-placeholder" *cdkDragPlaceholder></div>
         <mat-card-header>
           <p>{{ meal.title }}</p>

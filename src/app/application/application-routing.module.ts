@@ -32,7 +32,7 @@ const routes: Routes = [
 
   },
   {
-    path: 'camps/:id/meals/:mealId',
+    path: 'camps/:id/meals/:mealId/:specificId',
     component: EditMealComponent
   }
 

@@ -77,13 +77,12 @@ export class DatabaseService {
   }
 
   /** */
-  private static createSpecificMeal(path: string): OperatorFunction<DocumentChangeAction<FirestoreSpecificMeal>[], SpecificMeal> {
+  private static createSpecificMeal(path: string): OperatorFunction<Action<DocumentSnapshot<SpecificMeal>>, SpecificMeal> {
 
     // TODO: Checken, ob bereits existiert, wenn es bereits existiert, dann anpassen...
 
     // TODO: ggf. bessere Lösung als '[0]'
-    return map(docChangeAction =>
-      docChangeAction.map(docData => new SpecificMeal(docData.payload.doc.data(), path + '/' + docData.payload.doc.id))[0]);
+    return map(docData => new SpecificMeal(docData.payload.data(), path + '/' + docData.payload.id));
 
   }
 
@@ -166,11 +165,10 @@ export class DatabaseService {
 
 
   /** @return loads the specific meal */
-  public getSpecificMeal(mealId: string, campId: string): Observable<SpecificMeal> {
+  public getSpecificMeal(mealId: string, specificMealId: string, campId: string): Observable<SpecificMeal> {
 
-    const path = 'meals/' + mealId + '/specificMeals';
-    return this.requestCollection(path, collRef => collRef.where('campId', '==', campId).limit(1))
-      .pipe(DatabaseService.createSpecificMeal(path));
+    const path = 'meals/' + mealId + '/specificMeals/' + specificMealId;
+    return this.requestDocument(path).pipe(DatabaseService.createSpecificMeal(path));
 
   }
 
