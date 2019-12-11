@@ -1,6 +1,6 @@
 export interface FirestoreSpecificRecipe {
 
-    participants: number,
-    campId: string
+    participants: number;
+    campId: string;
 
 }

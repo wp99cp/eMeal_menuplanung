@@ -1,38 +1,37 @@
 import { AngularFirestore } from '@angular/fire/firestore';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { FirebaseObject } from './firebaseObject';
+import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 
 export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificRecipe {
 
-    public campId: string;
+  public campId: string;
 
-    public participants: number;
+  public participants: number;
 
-    protected firestorePath: string;
-    protected firestoreElementId: string;
-
-
-    constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string) {
-
-        super();
+  protected firestorePath: string;
+  protected firestoreElementId: string;
 
 
-        this.firestorePath = path.substring(0, path.lastIndexOf('/'));
-        this.firestoreElementId = path.substring(path.lastIndexOf('/'));
+  constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string) {
 
-        this.participants = firestoreSpecificRecipes.participants;
-        this.campId = firestoreSpecificRecipes.campId;
+    super();
 
-    }
+    this.firestorePath = path.substring(0, path.lastIndexOf('/'));
+    this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
-    public extractDataToJSON(): FirestoreSpecificRecipe {
+    this.participants = firestoreSpecificRecipes.participants;
+    this.campId = firestoreSpecificRecipes.campId;
 
-        return {
-            participants: this.participants,
-            campId: this.campId
-        };
+  }
 
-    }
+  public extractDataToJSON(): FirestoreSpecificRecipe {
+
+    return {
+      participants: this.participants,
+      campId: this.campId
+    };
+
+  }
 
 
 }

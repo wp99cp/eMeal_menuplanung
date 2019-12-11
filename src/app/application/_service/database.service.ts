@@ -85,9 +85,30 @@ export class DatabaseService {
   }
 
   /** */
-  private static createSpecificRecipe(path: string): OperatorFunction<Action<DocumentSnapshot<FirestoreSpecificRecipe>>, SpecificRecipe> {
+  private static createSpecificRecipe(path: string, campId: string, databaseService: DatabaseService):
+    OperatorFunction<Action<DocumentSnapshot<FirestoreSpecificRecipe>>, SpecificRecipe> {
 
-    return map(docData => new SpecificRecipe(docData.payload.data(), path));
+    return map(docData => {
+
+      // TODO: better fix!!!!
+      // führtzu  Problemen beim Export!!!!!!!!!
+
+      if (docData.payload.data() !== undefined) {
+        return new SpecificRecipe(docData.payload.data(), path);
+
+      } else {
+
+        const specificRecipe: FirestoreSpecificRecipe = {
+          participants: 1,
+          campId
+        };
+
+        // TODO: speicher in DB
+        databaseService.addDocument(specificRecipe, path);
+
+        return new SpecificRecipe(specificRecipe, path);
+      }
+    });
 
   }
 
@@ -130,7 +151,7 @@ export class DatabaseService {
 
   }
 
-  public  addRecipe(mealId: string, campId: string) {
+  public addRecipe(mealId: string, campId: string) {
 
     return this.authService.getCurrentUser().pipe(map(user => {
 
@@ -160,7 +181,7 @@ export class DatabaseService {
 
     const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes/' + specificMealId;
 
-    return this.requestDocument(path).pipe(DatabaseService.createSpecificRecipe(path));
+    return this.requestDocument(path).pipe(DatabaseService.createSpecificRecipe(path, campId, this));
 
   }
 
@@ -297,7 +318,7 @@ export class DatabaseService {
   /** Updates an element in the database */
   public updateDocument(firebaseObject: Partial<any>, documentPath: string) {
 
-    return this.db.doc(documentPath).update(firebaseObject);
+    return this.db.doc(documentPath).set(firebaseObject);
 
   }
 

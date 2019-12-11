@@ -8,10 +8,18 @@
     <form [formGroup]='mealInfo'>
 
       <mat-form-field class="full-width">
-        <textarea id="descriptionField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
+        <textarea id="titleField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
       </mat-form-field>
 
     </form>
+
+    <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()'>
+      Änderungen am Rezept speichern
+    </button>
 
     <br>
 
