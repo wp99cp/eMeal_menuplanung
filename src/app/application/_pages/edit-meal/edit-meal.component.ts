@@ -18,7 +18,6 @@ export class EditMealComponent implements OnInit {
 
   public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
-
   public meal: Observable<Meal>;
   private camp: Observable<Camp>;
   private campId: Observable<string>;
@@ -29,15 +28,18 @@ export class EditMealComponent implements OnInit {
 
   ngOnInit() {
 
+    // Objecte definieren
     this.campId = this.route.url.pipe(map(url => url[url.length - 4].path));
     this.mealId = this.route.url.pipe(map(url => url[url.length - 2].path));
     this.specificMealId = this.route.url.pipe(map(url => url[url.length - 1].path));
-
     this.camp = this.campId.pipe(mergeMap(id => this.databaseService.getCampById(id)));
     this.meal = this.campId.pipe(mergeMap(campId =>
-      this.mealId.pipe(mergeMap(mealId => this.specificMealId.pipe(mergeMap(specificMealId =>
-        this.databaseService.getMealById(mealId, specificMealId, campId)
-      ))))));
+      this.mealId.pipe(mergeMap(mealId =>
+        this.specificMealId.pipe(mergeMap(specificMealId =>
+          this.databaseService.getMealById(mealId, specificMealId, campId)
+        ))
+      ))
+    ));
 
     this.specificMeal = this.campId.pipe(mergeMap(campId =>
       this.mealId.pipe(mergeMap(mealId => this.specificMealId.pipe(mergeMap(specificMealId =>
@@ -51,9 +53,8 @@ export class EditMealComponent implements OnInit {
       });
     });
 
-    this.meal.subscribe(meal =>
-      this.camp.subscribe(camp => this.setHeaderInfo(camp, meal))
-    );
+    // set header Info
+    this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
 
   }
 
