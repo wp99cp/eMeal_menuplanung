@@ -28,7 +28,13 @@
     <br>
     <br>
 
-    <mat-accordion *ngIf="$meal.recipes | async as recipes">
+    <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
+
+      <!-- Loading Animation -->
+      <ng-template #loadingMeal>
+        <p class="info">Daten werden geladen...</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </ng-template>
 
       <ng-container *ngFor="let recipe of recipes">
         <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
