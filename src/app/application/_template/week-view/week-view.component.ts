@@ -17,6 +17,10 @@ import { EditDayComponent } from '../edit-day/edit-day.component';
   templateUrl: './week-view.component.html',
   styleUrls: ['./week-view.component.sass']
 })
+
+// TODO: verwendung einer Mahlzeit (Zmorgen, Zmittag, ...) kann nachträglich geändert werden
+// add custom Tag für Verwendung (z.B Vorbereiten...)
+
 export class WeekViewComponent implements OnInit {
 
   public mealsChanged = false;

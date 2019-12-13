@@ -11,6 +11,11 @@ import { DatabaseService } from '../../_service/database.service';
   templateUrl: './edit-recipe.component.html',
   styleUrls: ['./edit-recipe.component.sass']
 })
+
+// TODO: überschreiben von MasterDocument (Recipe) mit Daten (vorallem bei den Zutaten),.
+// die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
+// toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
+//
 export class EditRecipeComponent implements OnInit {
 
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];

@@ -90,9 +90,6 @@ export class DatabaseService {
 
     return map(docData => {
 
-      // TODO: better fix!!!!
-      // führtzu  Problemen beim Export!!!!!!!!!
-
       if (docData.payload.data() !== undefined) {
         return new SpecificRecipe(docData.payload.data(), path);
 
@@ -103,7 +100,6 @@ export class DatabaseService {
           campId
         };
 
-        // TODO: speicher in DB
         databaseService.addDocument(specificRecipe, path);
 
         return new SpecificRecipe(specificRecipe, path);

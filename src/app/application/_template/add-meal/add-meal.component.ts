@@ -10,6 +10,9 @@ import { DatabaseService } from '../../_service/database.service';
   templateUrl: './add-meal.component.html',
   styleUrls: ['./add-meal.component.sass']
 })
+
+// TODO: fix bug, deselect nach der Auswahl der Verwendung...
+
 export class AddMealComponent implements OnInit {
 
 
