@@ -61,7 +61,7 @@ export class CampListPageComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    */
   ngOnInit() {
 
@@ -111,7 +111,7 @@ export class CampListPageComponent implements OnInit {
       const campData: FirestoreCamp = {
         name: this.newCampInfos.value.name,
         description: this.newCampInfos.value.description,
-        access: { owner: [user.uid], editor: Camp.generateCoworkersList(user.uid, this.selectedCoworkers) },
+        access: { owner: [user.uid].concat(Camp.generateCoworkersList(user.uid, this.selectedCoworkers)), editor: [] },
         year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
         days: [{
           date: firestore.Timestamp.fromDate(date),
