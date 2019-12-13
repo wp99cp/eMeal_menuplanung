@@ -49,7 +49,8 @@ export class EditMealComponent implements OnInit {
     this.meal.subscribe(meal => {
       this.mealInfo = this.formBuilder.group({
         title: meal.title,
-        description: meal.description
+        description: meal.description,
+        weekTitle: meal.weekTitle !== '' ? meal.weekTitle : meal.title
       });
     });
 
@@ -65,6 +66,7 @@ export class EditMealComponent implements OnInit {
 
       meal.description = this.mealInfo.value.description;
       meal.title = this.mealInfo.value.title;
+      meal.weekTitle = this.mealInfo.value.weekTitle;
 
       this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
 

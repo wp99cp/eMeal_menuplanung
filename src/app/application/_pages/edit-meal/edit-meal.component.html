@@ -15,6 +15,13 @@
         <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
       </mat-form-field>
 
+      <p class="info">Name des Rezeptes, wie es in der Wochenübersicht angezeigt wird.</p>
+
+      <mat-form-field class="full-width">
+        <textarea id="weekTitleField" matInput placeholder="Name in der Wochenübersicht"
+          formControlName="weekTitle"></textarea>
+      </mat-form-field>
+
     </form>
 
     <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()'>

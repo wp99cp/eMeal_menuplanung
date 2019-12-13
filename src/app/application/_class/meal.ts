@@ -18,6 +18,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public access: AccessData;
   public recipes: Observable<Recipe[]>;
   public specificId: string = undefined;
+  public weekTitle = '';
 
 
   constructor(data: FirestoreMeal, public readonly firestoreElementId: string, recipes?: Observable<Recipe[]>) {
@@ -30,6 +31,9 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
     this.recipes = recipes;
 
+    if (data.weekTitle) {
+      this.weekTitle = data.weekTitle;
+    }
     if (data.specificId) {
       this.specificId = data.specificId;
     }
@@ -42,7 +46,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
       title: this.title,
       description: this.description,
       access: this.access,
-      firestoreElementId: this.firestoreElementId
+      firestoreElementId: this.firestoreElementId,
+      weekTitle: this.weekTitle
     };
 
     // Meals generated out of a day don't contain access and description properties
