@@ -19,7 +19,7 @@ export class EditMealComponent implements OnInit {
   public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
   public meal: Observable<Meal>;
-  private camp: Observable<Camp>;
+  public camp: Observable<Camp>;
   private campId: Observable<string>;
   private mealId: Observable<string>;
   private specificMealId: Observable<string>;
@@ -49,12 +49,15 @@ export class EditMealComponent implements OnInit {
     this.specificMeal.subscribe(specificMeal =>
       this.meal.subscribe(meal => {
         this.mealInfo = this.formBuilder.group({
+
           title: meal.title,
           description: meal.description,
 
           // der weekTitle eines spezifischenMela muss nicht zwingend gesetzt sein...
           // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
-          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.title
+          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.title,
+          overrideParticipants: specificMeal.overrideParticipants,
+          participants: specificMeal.participants
 
         });
       }));
@@ -85,6 +88,8 @@ export class EditMealComponent implements OnInit {
     const specificMealSubs = this.specificMeal.subscribe(specificMeal => {
 
       specificMeal.weekTitle = this.mealInfo.value.weekTitle;
+      specificMeal.overrideParticipants = this.mealInfo.value.overrideParticipants;
+      specificMeal.participants = this.mealInfo.value.participants;
 
       this.databaseService.updateDocument(specificMeal.extractDataToJSON(), specificMeal.getDocPath());
 

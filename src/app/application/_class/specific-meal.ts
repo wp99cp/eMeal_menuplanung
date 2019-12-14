@@ -1,4 +1,3 @@
-import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
 import { FirebaseObject } from './firebaseObject';
 
@@ -6,6 +5,7 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
 
   public campId: string;
   public participants: number;
+  public overrideParticipants = false;
   public weekTitle = '';
 
   protected firestorePath: string;
@@ -25,6 +25,10 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
       this.weekTitle = data.weekTitle;
     }
 
+    if (data.overrideParticipants !== undefined) {
+      this.overrideParticipants = data.overrideParticipants;
+    }
+
   }
 
   public extractDataToJSON(): FirestoreSpecificMeal {
@@ -32,7 +36,8 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
     return {
       participants: this.participants,
       campId: this.campId,
-      weekTitle: this.weekTitle
+      weekTitle: this.weekTitle,
+      overrideParticipants: this.overrideParticipants
     };
 
   }

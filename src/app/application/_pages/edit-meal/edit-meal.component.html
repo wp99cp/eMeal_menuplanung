@@ -8,7 +8,7 @@
     <form [formGroup]='mealInfo'>
 
       <mat-form-field class="full-width">
-        <textarea id="titleField" matInput placeholder="Mahlzeit" formControlName="title"></textarea>
+        <input id="titleField" matInput placeholder="Mahlzeit" formControlName="title">
       </mat-form-field>
 
       <mat-form-field class="full-width">
@@ -20,8 +20,26 @@
         tragen.</p>
 
       <mat-form-field class="full-width">
-        <textarea id="weekTitleField" matInput placeholder="Name in der Wochenübersicht"
-          formControlName="weekTitle"></textarea>
+        <input id="weekTitleField" matInput placeholder="Name in der Wochenübersicht" formControlName="weekTitle">
+      </mat-form-field>
+
+      <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden des Lagers berechnet.
+        Diese Berechnung kann allerdings auch übersteuert werden.</p>
+
+      <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
+      <br />
+      <br />
+
+      <ng-container *ngIf="camp | async; let $camp">
+        <p class="warning" *ngIf="$camp.participants != $specificMeal.participants"><b>Achtung: </b>
+          Abweichende Teilnehmeranzahl! Das Lager hat {{$camp.participants}} Teilnehmende, dieses Rezept wird aber für
+          {{$specificMeal.participants}} Personen berechnet.
+        </p>
+      </ng-container>
+
+      <mat-form-field class="full-width" *ngIf="mealInfo.value.overrideParticipants">
+        <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
+          formControlName="participants" type="number">
       </mat-form-field>
 
     </form>

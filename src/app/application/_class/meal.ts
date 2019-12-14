@@ -19,7 +19,6 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public recipes: Observable<Recipe[]>;
   public specificId: string = undefined;
 
-
   constructor(data: FirestoreMeal, public readonly firestoreElementId: string, recipes?: Observable<Recipe[]>) {
 
     super();
@@ -42,7 +41,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
       title: this.title,
       description: this.description,
       access: this.access,
-      firestoreElementId: this.firestoreElementId
+      firestoreElementId: this.firestoreElementId,
     };
 
     // Meals generated out of a day don't contain access and description properties
@@ -103,7 +102,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     const specificMealData: FirestoreSpecificMeal = {
       participants: camp.participants,
       campId: camp.firestoreElementId,
-      weekTitle: this.title
+      weekTitle: this.title,
+      overrideParticipants: false
     };
 
     const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
