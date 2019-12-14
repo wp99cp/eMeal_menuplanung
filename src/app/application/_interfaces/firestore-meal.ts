@@ -8,5 +8,4 @@ export interface FirestoreMeal {
   firestoreElementId: string;
   usedAs?: string;
   specificId?: string;
-  weekTitle: string;
 }

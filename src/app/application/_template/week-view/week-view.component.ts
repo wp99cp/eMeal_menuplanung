@@ -125,8 +125,7 @@ export class WeekViewComponent implements OnInit {
               {
                 description: firestoreMeal.title,
                 title: firestoreMeal.usedAs ? firestoreMeal.usedAs : 'Zmorgen',
-                firestoreElementId: firestoreMeal.firestoreElementId,
-                weekTitle: ''
+                firestoreElementId: firestoreMeal.firestoreElementId
               },
               firestoreMeal.firestoreElementId);
 

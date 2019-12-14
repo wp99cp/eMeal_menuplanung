@@ -46,13 +46,18 @@ export class EditMealComponent implements OnInit {
         this.databaseService.getSpecificMeal(mealId, specificMealId, campId)
       ))))));
 
-    this.meal.subscribe(meal => {
-      this.mealInfo = this.formBuilder.group({
-        title: meal.title,
-        description: meal.description,
-        weekTitle: meal.weekTitle !== '' ? meal.weekTitle : meal.title
-      });
-    });
+    this.specificMeal.subscribe(specificMeal =>
+      this.meal.subscribe(meal => {
+        this.mealInfo = this.formBuilder.group({
+          title: meal.title,
+          description: meal.description,
+
+          // der weekTitle eines spezifischenMela muss nicht zwingend gesetzt sein...
+          // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
+          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.title
+
+        });
+      }));
 
     // set header Info
     this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
@@ -62,18 +67,34 @@ export class EditMealComponent implements OnInit {
   public saveMeal() {
 
     // update meal
-    this.meal.subscribe(meal => {
+    const mealSubs = this.meal.subscribe(meal => {
 
       meal.description = this.mealInfo.value.description;
       meal.title = this.mealInfo.value.title;
-      meal.weekTitle = this.mealInfo.value.weekTitle;
 
       this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
 
       // reset: deactivate save button
       this.mealInfo.markAsUntouched();
+      mealSubs.unsubscribe();
 
     });
+
+
+    // update specificMeal
+    const specificMealSubs = this.specificMeal.subscribe(specificMeal => {
+
+      specificMeal.weekTitle = this.mealInfo.value.weekTitle;
+
+      this.databaseService.updateDocument(specificMeal.extractDataToJSON(), specificMeal.getDocPath());
+
+      // reset: deactivate save button
+      this.mealInfo.markAsUntouched();
+      specificMealSubs.unsubscribe();
+
+    });
+
+
   }
 
   /** setzt die HeaderInfos für die aktuelle Seite */
