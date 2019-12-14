@@ -1,22 +1,25 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
+<mat-toolbar color="save">
+  <mat-toolbar-row id="title">
 
-        <span>{{getTitle()}}</span>
+    <span>{{getTitle()}}</span>
 
-        <ng-template #defaultTitel>
-            <span>Menuplanung für Lager</span>
-        </ng-template>
+    <ng-template #defaultTitel>
+      <span>Menuplanung für Lager</span>
+    </ng-template>
 
-    </mat-toolbar-row>
+  </mat-toolbar-row>
 
-    <!-- Path -->
-    <mat-toolbar-row class="linkList" *ngIf="getPath()">
+  <!-- Path -->
+  <mat-toolbar-row class="linkList" *ngIf="getPath()">
 
-        <ng-container *ngFor="let item of getPath(); let i = index">
-            <p class="separator" *ngIf="i != 0"> · </p>
-            <p (click)="navigateTo( i )">{{item}}</p>
-        </ng-container>
+    <ng-container *ngFor="let item of getPath(); let i = index">
+      <ng-container *ngIf="item != ''">
+        <p class="separator" *ngIf="i != 0"> · </p>
+        <p (click)="navigateTo( i )">{{item}}</p>
+      </ng-container>
 
-    </mat-toolbar-row>
+    </ng-container>
+
+  </mat-toolbar-row>
 
 </mat-toolbar>

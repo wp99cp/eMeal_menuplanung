@@ -84,7 +84,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public createSpecificRecipe(camp: Camp, recipeId: string, databaseService: DatabaseService) {
     const specificRecipeData: FirestoreSpecificRecipe = {
       participants: camp.participants,
-      campId: camp.firestoreElementId
+      campId: camp.firestoreElementId,
+      overrideParticipants: false
     };
     const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipeId + '/specificRecipes/' + this.specificId;
     databaseService.addDocument(specificRecipeData, recipePath);

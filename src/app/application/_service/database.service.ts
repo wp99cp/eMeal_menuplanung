@@ -97,7 +97,8 @@ export class DatabaseService {
 
         const specificRecipe: FirestoreSpecificRecipe = {
           participants: 1,
-          campId
+          campId,
+          overrideParticipants: false
         };
 
         databaseService.addDocument(specificRecipe, path);
