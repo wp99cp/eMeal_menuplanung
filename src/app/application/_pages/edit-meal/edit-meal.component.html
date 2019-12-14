@@ -1,9 +1,40 @@
 <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
   <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-    <h1 class="mat-h1">Bearbeite die Mahlzeit: {{$meal.title}}</h1>
+    <br>
+    <h2>Rezepte</h2>
 
-    <p>Klicke auf eines der Rezpete, um es zu bearbeiten.</p>
+    <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
+
+      <!-- Loading Animation -->
+      <ng-template #loadingMeal>
+        <p class="info">Daten werden geladen...</p>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </ng-template>
+
+      <ng-container *ngFor="let recipe of recipes">
+        <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
+          <!-- display recipe -->
+          <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal>
+          </app-edit-recipe>
+        </ng-container>
+      </ng-container>
+
+    </mat-accordion>
+
+
+    <br>
+    <br>
+
+    <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <!-- Einstellungen zur Mahlzeit-->
+    <h2>Einstellungen zur Mahlzeit</h2>
 
     <form [formGroup]='mealInfo'>
 
@@ -31,8 +62,10 @@
       <br />
 
       <ng-container *ngIf="camp | async; let $camp">
-        <p class="warning" *ngIf="$camp.participants != $specificMeal.participants"><b>Achtung: </b>
-          Abweichende Teilnehmeranzahl! Das Lager hat {{$camp.participants}} Teilnehmende, dieses Rezept wird aber für
+        <p class="warning"
+          *ngIf="$camp.participants != $specificMeal.participants && mealInfo.value.overrideParticipants"><b>Achtung:
+          </b>
+          Abweichende Teilnehmeranzahl! Das Lager hat {{$camp.participants}} Teilnehmende, diese Mahlzeit wird aber für
           {{$specificMeal.participants}} Personen berechnet.
         </p>
       </ng-container>
@@ -48,29 +81,7 @@
       Änderungen am Rezept speichern
     </button>
 
-    <br>
 
-    <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
-
-    <br>
-    <br>
-
-    <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
-
-      <!-- Loading Animation -->
-      <ng-template #loadingMeal>
-        <p class="info">Daten werden geladen...</p>
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </ng-template>
-
-      <ng-container *ngFor="let recipe of recipes">
-        <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
-          <!-- display recipe -->
-          <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe"> </app-edit-recipe>
-        </ng-container>
-      </ng-container>
-
-    </mat-accordion>
 
   </ng-container>
 </ng-container>

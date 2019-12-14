@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Ingredient } from '../../_interfaces/ingredient';
 import { SpecificRecipe } from '../../_class/specific-recipe';
 import { DatabaseService } from '../../_service/database.service';
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -21,6 +22,7 @@ export class EditRecipeComponent implements OnInit {
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
 
+  @Input() specificMeal: SpecificMeal;
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
 
@@ -34,8 +36,8 @@ export class EditRecipeComponent implements OnInit {
       notes: this.recipe.notes,
       description: this.recipe.description,
       name: this.recipe.name,
-      participants: this.specificRecipe.participants
-
+      participants: this.specificRecipe.participants,
+      overrideParticipants: this.specificRecipe.overrideParticipants
     });
 
     this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
@@ -84,7 +86,8 @@ export class EditRecipeComponent implements OnInit {
     this.recipe.notes = this.recipeForm.value.notes;
     this.recipe.description = this.recipeForm.value.description;
     this.recipe.name = this.recipeForm.value.name;
-
+    this.specificRecipe.overrideParticipants = this.recipeForm.value.overrideParticipants;
+    this.specificRecipe.participants = this.recipeForm.value.participants;
 
     this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
     this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());

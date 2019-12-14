@@ -7,20 +7,24 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
   public campId: string;
 
   public participants: number;
-
+  public overrideParticipants = false;
   protected firestorePath: string;
   protected firestoreElementId: string;
 
 
-  constructor(firestoreSpecificRecipes: FirestoreSpecificRecipe, path: string) {
+  constructor(data: FirestoreSpecificRecipe, path: string) {
 
     super();
 
     this.firestorePath = path.substring(0, path.lastIndexOf('/'));
     this.firestoreElementId = path.substring(path.lastIndexOf('/'));
 
-    this.participants = firestoreSpecificRecipes.participants;
-    this.campId = firestoreSpecificRecipes.campId;
+    this.participants = data.participants;
+    this.campId = data.campId;
+
+    if (data.overrideParticipants !== undefined) {
+      this.overrideParticipants = data.overrideParticipants;
+    }
 
   }
 
@@ -28,7 +32,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
     return {
       participants: this.participants,
-      campId: this.campId
+      campId: this.campId,
+      overrideParticipants: this.overrideParticipants
     };
 
   }

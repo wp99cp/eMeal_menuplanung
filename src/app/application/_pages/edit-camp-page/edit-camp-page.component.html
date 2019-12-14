@@ -1,27 +1,20 @@
 <ng-container *ngIf="camp | async; let $camp; else: loadingCamps">
-  <h1 class="mat-h1">Bearbeite dein Lager: {{ $camp.name }}</h1>
+
+  <!-- Week Overview -->
+  <app-week-view [camp]="$camp"></app-week-view>
 
   <!-- Allgemeine Informationen zum Lager -->
+  <mat-divider></mat-divider>
+  <h2>Einstellungen zum Lager</h2>
+
   <form [formGroup]="campInfosForm">
     <mat-form-field class="full-width">
-      <input
-        matInput
-        placeholder="Name"
-        formControlName="name"
-        #name
-        maxlength="32"
-        autocomplete="off"
-      />
+      <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off" />
       <mat-hint align="end">{{ name.value.length }} / 32</mat-hint>
     </mat-form-field>
 
     <mat-form-field class="full-width">
-      <textarea
-        id="descriptionField"
-        matInput
-        placeholder="Beschreibnung"
-        formControlName="description"
-      ></textarea>
+      <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="description"></textarea>
     </mat-form-field>
 
     <p class="info">
@@ -34,11 +27,7 @@
     </p>
 
     <mat-form-field class="full-width">
-      <input
-        matInput
-        placeholder="Anzahl Teilnehmende"
-        formControlName="participants"
-      />
+      <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants" />
     </mat-form-field>
 
     <br />
@@ -56,18 +45,11 @@
     Cevi-DB verknüpfen
   </button>
 
-  <button
-    mat-raised-button
-    [disabled]="!campInfosForm.touched"
-    (click)="saveCampInfo($camp)"
-    color="save"
-  >
+  <button mat-raised-button [disabled]="!campInfosForm.touched" (click)="saveCampInfo($camp)" color="save">
     Änderungen Speichern
   </button>
 
-  <!-- Week Overview -->
-  <mat-divider></mat-divider>
-  <app-week-view [camp]="$camp"></app-week-view>
+
 
   <!-- Export section -->
 
@@ -91,7 +73,7 @@
 
   <!-- Zusammenarbeit -->
   <mat-divider></mat-divider>
-  <h3>Mitarbeiter</h3>
+  <h2>Mitarbeiter</h2>
 
   <p class="info">
     <b>Mitarbeiter: </b> Die Mitarbeiterfunktion befindet sich noch in der

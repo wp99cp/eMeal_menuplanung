@@ -147,7 +147,7 @@ export class DatabaseService {
 
   }
 
-  public addRecipe(mealId: string, campId: string) {
+  public addRecipe(mealId: string, campId: string, title: string) {
 
     return this.authService.getCurrentUser().pipe(map(user => {
 
@@ -156,7 +156,7 @@ export class DatabaseService {
         access: { owner: [user.uid], editor: [] },
         description: '',
         ingredients: [],
-        name: 'Neues Rezept'
+        name: title
 
       });
 

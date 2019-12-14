@@ -1,6 +1,5 @@
 <mat-expansion-panel>
 
-
   <mat-expansion-panel-header>
 
     <mat-panel-title>
@@ -16,6 +15,91 @@
 
   </mat-expansion-panel-header>
 
+  <h3>Zutaten:</h3>
+  <!-- for each ingredient ... -->
+  <table mat-table [dataSource]="dataSource">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="measure">
+      <th mat-header-cell *matHeaderCellDef style="width: 12%"> 1 Per. </th>
+      <td mat-cell *matCellDef="let ingredient; let i = index">
+        <ingredient [fieldValue]="ingredient.measure" (valueChange)="changeIngredient($event, i, 'measure')">
+        </ingredient>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> Menge </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="calcMeasure">
+      <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.participants}}
+        Per.
+      </th>
+      <td mat-cell *matCellDef="let ingredient; let i = index">
+        <ingredient [fieldValue]="specificRecipe.participants * ingredient.measure"
+          (valueChange)="changeIngredient($event, i, 'calcMeasure')">
+        </ingredient>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> Total </td>
+
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="unit">
+      <th mat-header-cell *matHeaderCellDef style="width: 12%"> Einheit </th>
+      <td mat-cell *matCellDef="let ingredient; let i = index">
+        <ingredient [fieldValue]="ingredient.unit" (valueChange)="changeIngredient($event, i, 'unit')">
+        </ingredient>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> Einheit </td>
+
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="food">
+      <th mat-header-cell *matHeaderCellDef> Lebensmittel </th>
+      <td mat-cell *matCellDef="let ingredient; let i = index">
+        <ingredient [fieldValue]="ingredient.food" (valueChange)="changeIngredient($event, i, 'food')">
+        </ingredient>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> Lebensmittel </td>
+
+    </ng-container>
+
+    <!-- Delete Column -->
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let i = index">
+        <mat-icon (click)="delete(i)">delete</mat-icon>
+      </td>
+      <td mat-footer-cell *matFooterCellDef> </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns" (click)="add()"></tr>
+
+  </table>
+
+  <button mat-raised-button color="save" [disabled]="!recipeForm.touched" (click)='saveRecipe()'>
+    Änderungen am Rezept speichern
+  </button>
+
+  <br>
+  <br>
+
+  <h3>Notizen zum Rezept:</h3>
+  <mat-form-field class="full-width">
+    <textarea id="descriptionField" matInput placeholder="Notizen zum Rezept" formControlName="notes"></textarea>
+  </mat-form-field>
+
+  <br>
+  <br>
+
+  <h3>Einstellungen zum Rezept:</h3>
 
   <p class="info"><b>Achtung: </b> Das Bearbeiten der Informationen zu einem Rezept hat Auswirkungen auf alle
     identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
@@ -27,12 +111,31 @@
       <input matInput placeholder="Name" formControlName="name">
     </mat-form-field>
     <mat-form-field class="full-width">
-      <input matInput placeholder="Beschreibung" formControlName="description">
+      <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
     </mat-form-field>
 
-    <p class="info">Das Bearbeiten der Personen-Anzahl hat keine Auswirkungen auf andere Mahlzeiten/ Lager. </p>
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Anzahl Personen" formControlName="participants" (input)=changePartcipations()>
+
+
+    <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden der Mahlzeit berechnet.
+      Diese Berechnung kann allerdings auch übersteuert werden.</p>
+
+
+    <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
+    <br />
+    <br />
+
+
+    <p class="warning"
+      *ngIf="specificMeal.participants != specificRecipe.participants && recipeForm.value.overrideParticipants">
+      <b>Achtung: </b>
+      Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird aber
+      für {{specificRecipe.participants}} Personen berechnet.
+    </p>
+
+
+    <mat-form-field class="full-width" *ngIf="recipeForm.value.overrideParticipants">
+      <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
+        (input)=changePartcipations() formControlName="participants" type="number">
     </mat-form-field>
 
 
@@ -42,85 +145,8 @@
     <p class="info"><b>Achtung: </b> Das Bearbeiten der Zutaten eines Rezeptes hat Auswirkungen auf alle
       identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
 
-    <!-- for each ingredient ... -->
-    <table mat-table [dataSource]="dataSource">
-
-      <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
-
-      <!-- Position Column -->
-      <ng-container matColumnDef="measure">
-        <th mat-header-cell *matHeaderCellDef style="width: 12%"> 1 Per. </th>
-        <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="ingredient.measure" (valueChange)="changeIngredient($event, i, 'measure')">
-          </ingredient>
-        </td>
-        <td mat-footer-cell *matFooterCellDef> Menge </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="calcMeasure">
-        <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.participants}}
-          Per.
-        </th>
-        <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="specificRecipe.participants * ingredient.measure"
-            (valueChange)="changeIngredient($event, i, 'calcMeasure')">
-          </ingredient>
-        </td>
-        <td mat-footer-cell *matFooterCellDef> Total </td>
-
-      </ng-container>
-
-      <!-- Weight Column -->
-      <ng-container matColumnDef="unit">
-        <th mat-header-cell *matHeaderCellDef style="width: 12%"> Einheit </th>
-        <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="ingredient.unit" (valueChange)="changeIngredient($event, i, 'unit')">
-          </ingredient>
-        </td>
-        <td mat-footer-cell *matFooterCellDef> Einheit </td>
-
-      </ng-container>
-
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="food">
-        <th mat-header-cell *matHeaderCellDef> Lebensmittel </th>
-        <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="ingredient.food" (valueChange)="changeIngredient($event, i, 'food')">
-          </ingredient>
-        </td>
-        <td mat-footer-cell *matFooterCellDef> Lebensmittel </td>
-
-      </ng-container>
-
-      <!-- Delete Column -->
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef> </th>
-        <td mat-cell *matCellDef="let i = index">
-          <mat-icon (click)="delete(i)">delete</mat-icon>
-        </td>
-        <td mat-footer-cell *matFooterCellDef> </td>
-
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr mat-footer-row *matFooterRowDef="displayedColumns" (click)="add()"></tr>
-
-    </table>
-
-    <h4>Notizen zum Rezept:</h4>
-    <mat-form-field class="full-width">
-      <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="notes"></textarea>
-    </mat-form-field>
-
   </form>
 
-  <mat-action-row>
-    <button mat-raised-button color="save" [disabled]="!recipeForm.touched" (click)='saveRecipe()'>
-      Änderungen am Rezept speichern
-    </button>
-  </mat-action-row>
+
 
 </mat-expansion-panel>
