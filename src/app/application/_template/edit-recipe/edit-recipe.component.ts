@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Recipe } from '../../_class/recipe';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,11 +26,14 @@ export class EditRecipeComponent implements OnInit {
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
 
+
   public dataSource: MatTableDataSource<Ingredient>;
 
   constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
   ngOnInit() {
+
+    this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
 
     this.recipeForm = this.formBuilder.group({
       notes: this.recipe.notes,
@@ -40,7 +43,6 @@ export class EditRecipeComponent implements OnInit {
       overrideParticipants: this.specificRecipe.overrideParticipants
     });
 
-    this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
 
   }
 
