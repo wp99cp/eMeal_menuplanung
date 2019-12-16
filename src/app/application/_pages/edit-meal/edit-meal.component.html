@@ -15,7 +15,7 @@
       <ng-container *ngFor="let recipe of recipes">
         <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
           <!-- display recipe -->
-          <app-edit-recipe [recipe]=" recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal>
+          <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal>
           </app-edit-recipe>
         </ng-container>
       </ng-container>

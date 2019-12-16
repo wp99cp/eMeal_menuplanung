@@ -15,7 +15,7 @@
 
 <mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{ camp.days.length <= 7 ? camp.days.length : 5 }}"
   rowHeight="400px">
-  <mat-grid-tile *ngFor="let day of camp.days; let i = index" class="mat-elevation-z1">
+  <mat-grid-tile *ngFor="let day of camp.days; let i = index" class="mat-elevation-z3">
     <!-- Header of the day -->
     <mat-grid-tile-header>
       <h4>{{ day.getDateStr() }} {{ day.getDiscriptionInBracket() }}</h4>
