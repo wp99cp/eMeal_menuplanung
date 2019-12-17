@@ -1,40 +1,58 @@
+h1
+  line-height: 2em
+
 .onNewPage
-    page-break-before: always
+  page-break-before: always
 
 #shoppingListElement
-    margin: 0 50px
-    width: auto
-    column-gap: 50px
-    column-count: 2
-    display: block
+  margin: 0 50px
+  width: auto
+  column-gap: 50px
+  column-count: 2
+  display: block
 
-    .foodCategory:first-child
-        h3:first-of-type
-            margin-top: 0
+  .foodCategory:first-child
+    h3:first-of-type
+      margin-top: 0
 
 .foodCategory
-    break-before: avoid-column
-    display: inline
+  break-before: avoid-column
+  display: inline
 
 td.mat-cell
-    border-bottom-style: none
+  border-bottom-style: none
 
 th.mat-header-cell
-    border-bottom-style: none
+  border-bottom-style: none
 
 .onlyOnPrint
-    display: none
+  display: none
 
 .measureField
-    width: 100px
-    float: right
+  width: 100px
+  float: right
 
 .mat-expansion-panel
-    box-shadow: none !important
+  box-shadow: none !important
 
 tr.mat-row
-    line-height: 2em
-    height: 0
+  line-height: 2em
+  height: 0
+
+.weekTable
+  table
+    font-family: arial, sans-serif
+    border-collapse: collapse
+    width: 100%
+
+  td, th
+    border: 1px solid #dddddd
+    text-align: left
+    padding: 8px
+    height: 50px
+
+  tr:nth-child(even)
+    background-color: #dddddd
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -42,10 +60,10 @@ tr.mat-row
 
 @media screen
 
-    .onNewPage
-        border-top: solid 1px lightgray
-        margin-top: 50px
-        padding-top: 25px
+  .onNewPage
+    border-top: solid 1px lightgray
+    margin-top: 50px
+    padding-top: 25px
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -53,19 +71,29 @@ tr.mat-row
 
 @media print
 
-    .print
-        visibility: visible
-        display: block
+  .print
+    visibility: visible
+    display: block
 
-    .onlyOnPrint
-        visibility: visible
-        display: block
+  .onlyOnPrint
+    visibility: visible
+    display: block
 
-    .titlePage
-        margin-top: 250px
-        text-align: center
-        width: 100%
+  .titlePage
+    margin-top: 200px
+    text-align: center
+    width: 100%
 
-        h1
-            font-size: 34px
-            margin-bottom: 350px
+    h1
+      font-size: 34px
+      margin-bottom: 300px
+
+  .info
+    color: #f6f6f6
+    font-style: italic !important
+
+  .landscape
+    transform: rotate(90deg)
+    margin-top: 8.5cm
+    width: 25cm
+    margin-left: auto

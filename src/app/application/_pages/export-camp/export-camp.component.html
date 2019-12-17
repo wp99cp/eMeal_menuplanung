@@ -1,26 +1,73 @@
 <button mat-raised-button (click)="print()">Lager Drucken</button>
 
 <p>
-    Das Ausdruck ist in einem Google Chrome Brwoser über die Druckfunktion möglich.
+  Das Ausdruck ist in einem Google Chrome Brwoser über die Druckfunktion möglich.
 </p>
 
 
-<!-- add this div in final version -->
-
 <!-- Titleblatt -->
-<div class="titlePage print">
-    <h1>Sommerlager 2018</h1>
 
-    <p>Version vom {{today}} </p>
-    <p *ngIf="user | async; let user">{{user.firstName}}</p>
+<div class="titlePage print">
+
+  <h1 *ngIf="campInfo | async; let camp">Menuplanung<br />{{camp.data.name}}</h1>
+  <p>Version vom {{today}} </p>
+  <p *ngIf="user | async; let user">{{user.firstName}}</p>
+  <p><br></p>
+  <p class="info">Dieses Lagerdossier wurde mit eMeal erstellt.<br />eMeal.zh11.ch</p>
+</div>
+
+<!-- Allgemeines zum Lager -->
+<div class="onNewPage print" *ngIf="campInfo | async; let camp">
+
+
 
 </div>
 
+
 <!-- Wochenplan -->
+<div class="onNewPage print landscape" *ngIf="weekTable | async; let $weekTable">
+
+  <h1>Wochenplan</h1>
+
+  <table class="weekTable">
+
+    <tr>
+      <th></th>
+      <th *ngFor="let header of $weekTable.tableHeaders">{{header}}</th>
+    </tr>
+
+    <tr *ngFor="let rowTitle of $weekTable.rowTitles; let i = index">
+      <td>{{rowTitle}}</td>
+      <td *ngFor="let element of $weekTable.rowEntries[i]">{{element}}</td>
+    </tr>
+
+  </table>
+  <!-- Allgemeines zum Lager -->
+  <ng-container *ngIf="campInfo | async; let camp">
+
+    <h3>Allgemeines zum {{camp.data.name}}</h3>
+    <p>{{camp.data.description}}</p>
+
+    <p><br></p>
+    <p><b>Anzahl Teilnehmende: </b>{{camp.data.participants}}</p>
+    <p><b>Jahr: </b>{{camp.data.year}}</p>
+    <p><b>Anzahl Tage:</b> {{camp.data.days.length}}</p>
+
+  </ng-container>
+
+</div>
 <!-- <h1 class="onNewPage">Wochenplan</h1> -->
 
 <!-- Mahlzeiten -->
 <!-- <h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1> -->
+<ng-container *ngIf="mealsInfo | async; let meals">
+  <div class="onNewPage print" *ngFor="let meal of meals.data">
+
+    <p>{{meal.title}}</p>
+
+  </div>
+</ng-container>
+
 
 <!-- Einkaufsliste -->
 <h1 class="onNewPage print">Einkaufsliste (Ganzes Lager)</h1>
@@ -30,40 +77,40 @@
 
 <div class="print" *ngIf="shoppingListWithError | async; let list">
 
-    <p class="warning" *ngFor="let error of list.error">{{error}}</p>
+  <p class="warning" *ngFor="let error of list.error">{{error}}</p>
 
-    <div id="shoppingListElement">
+  <div id="shoppingListElement">
 
-        <div *ngFor="let categorie of list.shoppingList" class="foodCategory">
+    <div *ngFor="let categorie of list.shoppingList" class="foodCategory">
 
-            <h3> {{categorie.name}} </h3>
+      <h3> {{categorie.name}} </h3>
 
-            <table mat-table [dataSource]="categorie.ingredients">
+      <table mat-table [dataSource]="categorie.ingredients">
 
-                <ng-container matColumnDef="measure">
-                    <td mat-cell *matCellDef="let element" style="width: 75px; text-align: right; padding-right: 10px">
-                        {{element.measure}}
-                    </td>
-                </ng-container>
+        <ng-container matColumnDef="measure">
+          <td mat-cell *matCellDef="let element" style="width: 75px; text-align: right; padding-right: 10px">
+            {{element.measure}}
+          </td>
+        </ng-container>
 
-                <ng-container matColumnDef="unit">
-                    <td mat-cell *matCellDef="let element" style="width: 75px">
-                        {{element.unit}}
-                    </td>
-                </ng-container>
+        <ng-container matColumnDef="unit">
+          <td mat-cell *matCellDef="let element" style="width: 75px">
+            {{element.unit}}
+          </td>
+        </ng-container>
 
-                <ng-container matColumnDef="food">
-                    <td mat-cell *matCellDef="let element" style="width: calc(100% - 150px)">
-                        {{element.food}}
-                    </td>
-                </ng-container>
+        <ng-container matColumnDef="food">
+          <td mat-cell *matCellDef="let element" style="width: calc(100% - 150px)">
+            {{element.food}}
+          </td>
+        </ng-container>
 
-                <!-- Link to Camp-->
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <!-- Link to Camp-->
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-            </table>
+      </table>
 
-        </div>
     </div>
+  </div>
 
 </div>
