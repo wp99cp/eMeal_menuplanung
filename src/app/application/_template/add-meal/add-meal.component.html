@@ -4,69 +4,68 @@
 
 <table mat-table [dataSource]="mealTableSource" class="mat-elevation-z8">
 
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null"
-                [checked]="selectedMeal.hasValue() && isAllSelected()"
-                [indeterminate]="selectedMeal.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-            </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectedMeal.toggle(row) : null"
-                [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)">
-            </mat-checkbox>
-        </td>
-    </ng-container>
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selectedMeal.hasValue() && isAllSelected()"
+        [indeterminate]="selectedMeal.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectedMeal.toggle(row) : null"
+        [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
 
-    <!-- firstName Column -->
-    <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef> Titel </th>
-        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
-    </ng-container>
+  <!-- firstName Column -->
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef> Titel </th>
+    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+  </ng-container>
 
-    <!-- lastname Column -->
-    <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-    </ng-container>
+  <!-- lastname Column -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
+    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+  </ng-container>
 
-    <!-- lastname Column -->
-    <ng-container matColumnDef="useAs">
-        <th mat-header-cell *matHeaderCellDef> Verwenden als </th>
-        <td mat-cell *matCellDef="let element">
-            <mat-form-field>
-                <select matNativeControl #select (input)="selected(element, select.value )">
-                    <option value="Zmorgen">Zmorgen</option>
-                    <option value="Zmittag">Zmittag</option>
-                    <option value="Znacht">Znacht</option>
-                    <option value="Zvieri">Zvieri</option>
-                    <option value="Znüni">Znüni</option>
-                    <option value="Leitersnack">Leitersnack</option>
-                    <option value="Vorbereiten">Vorbereiten</option>
-                </select>
-            </mat-form-field>
-        </td>
-    </ng-container>
+  <!-- lastname Column -->
+  <ng-container matColumnDef="useAs">
+    <th mat-header-cell *matHeaderCellDef> Verwenden als </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-form-field>
+        <select matNativeControl #select (input)="selected(element, select.value )">
+          <option value="Zmorgen">Zmorgen</option>
+          <option value="Zmittag">Zmittag</option>
+          <option value="Znacht">Znacht</option>
+          <option value="Zvieri">Zvieri</option>
+          <option value="Znüni">Znüni</option>
+          <option value="Leitersnack">Leitersnack</option>
+          <option value="Vorbereiten">Vorbereiten</option>
+        </select>
+      </mat-form-field>
+    </td>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectedMeal.toggle(row)"> </tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"> </tr>
 
 </table>
 
 <br />
 <br />
-<button mat-raised-button (click)="newMeal()">Neue Mahlzeit erstellen</button>
+<button mat-raised-button (click)=" newMeal()">Neue Mahlzeit erstellen</button>
 <button mat-raised-button>Importieren</button>
 
 <p class="info">
-    <b>Automatischer Import (Beta): </b>Die Import-Funktion ermöglicht es dir Rezepte aus verschiedenen Quellen
-    automatisch zu Importieren. So z.B. von swissmilk.ch
+  <b>Automatischer Import (Beta): </b>Die Import-Funktion ermöglicht es dir Rezepte aus verschiedenen Quellen
+  automatisch zu Importieren. So z.B. von swissmilk.ch
 </p>
 
 <br />
 <br />
 <div mat-dialog-actions>
-    <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-    <button mat-raised-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
+  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
 </div>
