@@ -106,7 +106,7 @@ export class EditMealComponent implements OnInit {
   private setHeaderInfo(camp, meal): void {
 
     Header.title = meal.title;
-    Header.path = ['eMeal', 'meine Lager', camp.name, '', '', meal.title];
+    Header.path = ['Startseite', 'meine Lager', camp.name, '', '', meal.title];
 
   }
 

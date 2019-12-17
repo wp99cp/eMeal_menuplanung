@@ -67,7 +67,7 @@ export class EditCampPageComponent implements OnInit {
   private setHeaderInfo(camp: Camp): void {
 
     Header.title = camp.name;
-    Header.path = ['eMeal', 'meine Lager', camp.name];
+    Header.path = ['Startseite', 'meine Lager', camp.name];
 
   }
 

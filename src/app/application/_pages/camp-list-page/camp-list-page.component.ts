@@ -80,7 +80,7 @@ export class CampListPageComponent implements OnInit {
   private setHeaderInfo(): void {
 
     Header.title = 'Meine Lager';
-    Header.path = ['eMeal', 'meine Lager'];
+    Header.path = ['Startseite', 'meine Lager'];
 
   }
 
