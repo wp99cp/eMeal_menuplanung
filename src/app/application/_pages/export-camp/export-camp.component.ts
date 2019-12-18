@@ -73,63 +73,7 @@ export class ExportCampComponent implements OnInit {
       this.setHeaderInfo(campInfo.data.name)
     );
 
-    this.weekTable = this.campInfo.pipe(map(campInfo => {
-
-      const days = campInfo.data.days;
-
-      // sortieren nach Datum
-      days.sort((a, b) => a.date - b.date);
-
-      const tableHeaders = [];
-
-      interface HashTable {
-        [key: string]: string[];
-      }
-      const rows: HashTable = {};
-
-      days.forEach((day: { date: any; meals: [{ title: string; description: string; }] }) => {
-
-        tableHeaders.push(new Date(day.date._seconds * 1000).toDateString());
-
-        // sort meals
-        day.meals.sort((a, b) => a.title.localeCompare(b.title));
-
-        // add meals of day
-        day.meals.forEach(meal => {
-          if (rows[meal.title] === undefined) {
-            rows[meal.title] = [];
-
-            for (let i = 0; i < tableHeaders.length - 1; i++) {
-              rows[meal.title].push('-');
-            }
-
-          }
-          rows[meal.title].push(meal.description);
-        });
-
-        // add empty
-        for (const key in rows) {
-          if (rows[key].length < tableHeaders.length) {
-            rows[key].push('-');
-          }
-        }
-
-      });
-
-      const newRows = [];
-      const rowTitles = [];
-
-      for (const key in rows) {
-
-        newRows.push(rows[key]);
-        rowTitles.push(key);
-
-      }
-
-      const result: any = { tableHeaders, rowEntries: newRows, rowTitles };
-      return result;
-
-    }));
+    this.weekTable = this.campInfo.pipe(map(transformToWeekTable()));
     this.mealsInfo = this.databaseService.getMealsInfoExport();
 
     // print on console
@@ -158,4 +102,64 @@ export class ExportCampComponent implements OnInit {
 
 }
 
+
+function transformToWeekTable(): (value: any, index: number) => any {
+
+  return campInfo => {
+
+    const days = campInfo.data.days;
+
+    // sortieren nach Datum
+    days.sort((a, b) => a.date - b.date);
+
+    const tableHeaders = [];
+    interface HashTable {
+      [key: string]: string[];
+    }
+
+    const rows: HashTable = {};
+
+    days.forEach((day: { date: any; meals: [{ title: string; description: string; }]; }) => {
+
+      tableHeaders.push(new Date(day.date._seconds * 1000).toDateString());
+      // sort meals
+      day.meals.sort((a, b) => a.title.localeCompare(b.title));
+      // add meals of day
+      day.meals.forEach(meal => {
+
+        if (rows[meal.title] === undefined) {
+          rows[meal.title] = [];
+          for (let i = 0; i < tableHeaders.length - 1; i++) {
+            rows[meal.title].push('-');
+          }
+
+        } else if (rows[meal.title].length === tableHeaders.length) {
+          throw new Error('Dublicate meal on a one day!');
+        }
+
+        rows[meal.title].push(meal.description);
+
+      });
+
+      // add empty
+      for (const key in rows) {
+        if (rows[key].length < tableHeaders.length) {
+          rows[key].push('-');
+        }
+      }
+
+    });
+
+    const newRows = [];
+    const rowTitles = [];
+
+    for (const key in rows) {
+      newRows.push(rows[key]);
+      rowTitles.push(key);
+    }
+
+    const result: any = { tableHeaders, rowEntries: newRows, rowTitles };
+    return result;
+  };
+}
 
