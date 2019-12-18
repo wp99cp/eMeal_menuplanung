@@ -3,11 +3,10 @@ import { Observable, of } from 'rxjs';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { Camp } from '../../_class/camp';
 import { MatAccordion } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
 import { map, flatMap } from 'rxjs/operators';
-import { firestore } from 'firebase';
+import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 /** ExportCampComponent:
  * Export Seite für Lager. Möglichkeit ein in eMeal erstelltes Lager als
@@ -69,6 +68,10 @@ export class ExportCampComponent implements OnInit {
 
     this.shoppingListWithError = this.campId.pipe(flatMap(campId => this.databaseService.getShoppingList(campId)));
     this.campInfo = this.campId.pipe(flatMap(campId => this.databaseService.getCampInfoExport(campId)));
+
+    this.campInfo.subscribe(campInfo =>
+      this.setHeaderInfo(campInfo.data.name)
+    );
 
     this.weekTable = this.campInfo.pipe(map(campInfo => {
 
@@ -144,4 +147,15 @@ export class ExportCampComponent implements OnInit {
 
   }
 
+
+  /** setzt die HeaderInfos für die aktuelle Seite */
+  private setHeaderInfo(name): void {
+
+    Header.title = 'Zusammenfassung ' + name;
+    Header.path = ['Startseite', 'meine Lager', name, 'Zusammenfassung'];
+
+  }
+
 }
+
+
