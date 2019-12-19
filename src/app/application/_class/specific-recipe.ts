@@ -12,6 +12,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
   public overrideParticipants = false;
   protected firestorePath: string;
   protected firestoreElementId: string;
+  public specificMealId: string;
+
 
   public static getCollectionPath(mealId: string, recipeId: string) {
     return Recipe.getPath(mealId, recipeId) + '/specificRecipes/';
@@ -21,12 +23,13 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
     return SpecificRecipe.getCollectionPath(mealId, recipeId) + specificMealId;
   }
 
-  public static createEmptySpecificRecipe(campId) {
+  public static createEmptySpecificRecipe(campId: string, specificMealId: string) {
 
     const specificRecipe: FirestoreSpecificRecipe = {
       participants: 1,
       campId,
-      overrideParticipants: false
+      overrideParticipants: false,
+      specificMealId
     };
 
     return specificRecipe;
@@ -38,6 +41,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
     this.firestorePath = path.substring(0, path.lastIndexOf('/'));
     this.firestoreElementId = path.substring(path.lastIndexOf('/'));
+
+    this.specificMealId = data.specificMealId;
 
     this.participants = data.participants;
     this.campId = data.campId;
@@ -53,7 +58,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
     return {
       participants: this.participants,
       campId: this.campId,
-      overrideParticipants: this.overrideParticipants
+      overrideParticipants: this.overrideParticipants,
+      specificMealId: this.specificMealId
     };
 
   }

@@ -15,6 +15,7 @@ import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recip
 import { AuthenticationService } from './authentication.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AccessData } from '../_interfaces/accessData';
+import { firestore } from 'firebase';
 
 
 /**
@@ -83,7 +84,7 @@ export class DatabaseService {
   }
 
   /** */
-  private static createSpecificRecipe(path: string, campId: string, databaseService: DatabaseService):
+  private static createSpecificRecipe(path: string, specificMealId: string, campId: string, databaseService: DatabaseService):
     OperatorFunction<Action<DocumentSnapshot<FirestoreSpecificRecipe>>, SpecificRecipe> {
 
     return map(docData => {
@@ -92,7 +93,7 @@ export class DatabaseService {
 
       if (specificRecipe === undefined) {
         // erstelle ein neues Dokument und gebe die Daten zurück.
-        specificRecipe = SpecificRecipe.createEmptySpecificRecipe(campId);
+        specificRecipe = SpecificRecipe.createEmptySpecificRecipe(campId, specificMealId);
         databaseService.addDocument(specificRecipe, path);
       }
 
@@ -157,7 +158,7 @@ export class DatabaseService {
 
     const path = SpecificRecipe.getPath(mealId, recipeId, specificMealId);
     return this.requestDocument(path)
-      .pipe(DatabaseService.createSpecificRecipe(path, campId, this));
+      .pipe(DatabaseService.createSpecificRecipe(path, specificMealId, campId, this));
 
   }
 

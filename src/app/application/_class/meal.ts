@@ -7,6 +7,7 @@ import { DatabaseService } from '../_service/database.service';
 import { Camp } from './camp';
 import { FirebaseObject } from './firebaseObject';
 import { Recipe } from './recipe';
+import { SpecificMeal } from './specific-meal';
 
 export class Meal extends FirebaseObject implements FirestoreMeal {
 
@@ -119,7 +120,8 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     const specificRecipeData: FirestoreSpecificRecipe = {
       participants: camp.participants,
       campId: camp.firestoreElementId,
-      overrideParticipants: false
+      overrideParticipants: false,
+      specificMealId: this.specificId
     };
     const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipeId + '/specificRecipes/' + this.specificId;
     databaseService.addDocument(specificRecipeData, recipePath);

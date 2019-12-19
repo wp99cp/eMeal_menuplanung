@@ -6,6 +6,7 @@ import { Ingredient } from '../../_interfaces/ingredient';
 import { SpecificRecipe } from '../../_class/specific-recipe';
 import { DatabaseService } from '../../_service/database.service';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { Camp } from '../../_class/camp';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -25,6 +26,7 @@ export class EditRecipeComponent implements OnInit {
   @Input() specificMeal: SpecificMeal;
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
+  @Input() camp: Camp;
 
 
   public dataSource: MatTableDataSource<Ingredient>;
@@ -74,7 +76,8 @@ export class EditRecipeComponent implements OnInit {
   changeIngredient(value: string, index: number, element: string) {
 
     if (element === 'calcMeasure') {
-      this.recipe.ingredients[index].measure = Number.parseInt(value) / this.specificRecipe.participants;
+      this.recipe.ingredients[index].measure = Number.parseInt(value) / (this.specificRecipe.overrideParticipants ? this.specificRecipe.participants :
+        (this.specificMeal.overrideParticipants ? this.specificMeal.participants : this.camp.participants));
     } else {
       this.recipe.ingredients[index][element] = value;
     }

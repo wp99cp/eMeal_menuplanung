@@ -1,88 +1,96 @@
-<ng-container *ngIf="meal | async; let $meal; else loadingMeal">
-  <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
+<ng-container *ngIf="camp | async; let $camp; else loadingMeal">
+  <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
+    <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-    <br>
-    <h2>Rezepte</h2>
+      <br>
+      <h2>Rezepte</h2>
 
-    <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
+      <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
 
-      <!-- Loading Animation -->
-      <ng-template #loadingMeal>
-        <p class="info">Daten werden geladen...</p>
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </ng-template>
+        <!-- Loading Animation -->
+        <ng-template #loadingMeal>
+          <p class="info">Daten werden geladen...</p>
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </ng-template>
 
-      <ng-container *ngFor="let recipe of recipes">
-        <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
-          <!-- display recipe -->
-          <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal>
-          </app-edit-recipe>
+        <ng-container *ngFor="let recipe of recipes">
+          <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
+            <!-- display recipe -->
+            <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal
+              [camp]=$camp>
+            </app-edit-recipe>
+          </ng-container>
         </ng-container>
-      </ng-container>
 
-    </mat-accordion>
-
-
-    <br>
-    <br>
-
-    <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
-
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <!-- Einstellungen zur Mahlzeit-->
-    <h2>Einstellungen zur Mahlzeit</h2>
-
-    <form [formGroup]='mealInfo'>
-
-      <mat-form-field class="full-width">
-        <input id="titleField" matInput placeholder="Mahlzeit" formControlName="title">
-      </mat-form-field>
-
-      <mat-form-field class="full-width">
-        <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
-      </mat-form-field>
-
-      <p class="info">Name der Mahlzeit in der Wochenübersicht. Standardmässig identisch zum Title. Dieser Wert ist
-        spezifisch, dass heisst mehrere übereinstimmende Mahlzeiten können verschiedene Titel in der Wochenübersicht
-        tragen.</p>
-
-      <mat-form-field class="full-width">
-        <input id="weekTitleField" matInput placeholder="Name in der Wochenübersicht" formControlName="weekTitle">
-      </mat-form-field>
-
-      <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden des Lagers berechnet.
-        Diese Berechnung kann allerdings auch übersteuert werden.</p>
-
-      <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
-      <br />
-      <br />
-
-      <ng-container *ngIf="camp | async; let $camp">
-        <p class="warning"
-          *ngIf="$camp.participants != $specificMeal.participants && mealInfo.value.overrideParticipants"><b>Achtung:
-          </b>
-          Abweichende Teilnehmeranzahl! Das Lager hat {{$camp.participants}} Teilnehmende, diese Mahlzeit wird aber für
-          {{$specificMeal.participants}} Personen berechnet.
-        </p>
-      </ng-container>
-
-      <mat-form-field class="full-width" *ngIf="mealInfo.value.overrideParticipants">
-        <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
-          formControlName="participants" type="number">
-      </mat-form-field>
-
-    </form>
-
-    <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()'>
-      Änderungen am Rezept speichern
-    </button>
+      </mat-accordion>
 
 
+      <br>
+      <br>
 
+      <button mat-raised-button (click)="newRecipe()">Neues Rezept hinzufügen</button>
+
+      <br>
+      <br>
+      <br>
+      <br>
+
+      <!-- Einstellungen zur Mahlzeit-->
+      <h2>Einstellungen zur Mahlzeit</h2>
+
+      <form [formGroup]='mealInfo'>
+
+        <mat-form-field class="full-width">
+          <input id="titleField" matInput placeholder="Mahlzeit" formControlName="title">
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
+        </mat-form-field>
+
+        <p class="info">Name der Mahlzeit in der Wochenübersicht. Standardmässig identisch zum Title. Dieser Wert ist
+          spezifisch, dass heisst mehrere übereinstimmende Mahlzeiten können verschiedene Titel in der Wochenübersicht
+          tragen.</p>
+
+        <mat-form-field class="full-width">
+          <input id="weekTitleField" matInput placeholder="Name in der Wochenübersicht" formControlName="weekTitle">
+        </mat-form-field>
+
+        <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden des Lagers
+          berechnet.
+          Diese Berechnung kann allerdings auch übersteuert werden.</p>
+
+        <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
+        <br />
+        <br />
+
+        <ng-container *ngIf="camp | async; let $camp">
+
+          <!-- TODO: muss noch angepasst werden!!!! Stimmt so nicht wirklich. -->
+          <p class="warning"
+            *ngIf="$camp.participants != $specificMeal.participants && mealInfo.value.overrideParticipants"><b>Achtung:
+            </b>
+            Abweichende Teilnehmeranzahl! Das Lager hat {{$camp.participants}} Teilnehmende, diese Mahlzeit wird aber
+            für
+            {{$specificMeal.participants}} Personen berechnet.
+          </p>
+
+        </ng-container>
+
+        <mat-form-field class="full-width" *ngIf="mealInfo.value.overrideParticipants">
+          <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
+            formControlName="participants" type="number">
+        </mat-form-field>
+
+      </form>
+
+      <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()'>
+        Änderungen am Rezept speichern
+      </button>
+
+
+
+    </ng-container>
   </ng-container>
 </ng-container>
 

@@ -1,8 +1,6 @@
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { Ingredient } from '../_interfaces/ingredient';
 import { FirebaseObject } from './firebaseObject';
 import { SpecificRecipe } from './specific-recipe';

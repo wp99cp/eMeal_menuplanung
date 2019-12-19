@@ -11,7 +11,10 @@
     </mat-panel-description>
 
     <mat-panel-description>
-      für {{ specificRecipe.participants}} Personen
+      für
+      {{ specificRecipe.overrideParticipants? specificRecipe.participants:
+        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants) }}
+      Personen
     </mat-panel-description>
 
   </mat-expansion-panel-header>
@@ -36,11 +39,13 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="calcMeasure">
-      <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.participants}}
+      <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.overrideParticipants? specificRecipe.participants:
+        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants)}}
         Per.
       </th>
       <td mat-cell *matCellDef="let ingredient; let i = index">
-        <ingredient [fieldValue]="specificRecipe.participants * ingredient.measure"
+        <ingredient [fieldValue]="(specificRecipe.overrideParticipants? specificRecipe.participants:
+        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants)) * ingredient.measure"
           (valueChange)="changeIngredient($event, i, 'calcMeasure')">
         </ingredient>
       </td>
@@ -127,6 +132,7 @@
     <br />
 
 
+    <!-- TODO: muss noch angepasst werden!!!! Stimmt so nicht wirklich. -->
     <p class="warning"
       *ngIf="specificMeal.participants != specificRecipe.participants && recipeForm.value.overrideParticipants">
       <b>Achtung: </b>
