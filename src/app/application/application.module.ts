@@ -41,6 +41,7 @@ import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { DatabaseService } from './_service/database.service';
 import { EditDayComponent } from './_template/edit-day/edit-day.component';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '@angular/fire/functions';
+import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '
     EditRecipeComponent,
     IngredientFieldComponent,
     AddMealComponent,
-    ExportCampComponent
+    ExportCampComponent,
+    FeedbackPageComponent
   ],
   imports: [
     CommonModule,

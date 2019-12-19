@@ -118,6 +118,17 @@ export class DatabaseService {
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
 
+  public addFeedback(feedback: any) {
+
+    this.authService.getCurrentUser().subscribe(user => {
+      feedback.acces = { owner: [user.uid], editor: [] };
+      feedback.user = user;
+      this.addDocument(feedback, 'feedback');
+    });
+
+  }
+
+
   /**
    * Creates a new empty meal for the current user. The current user got onwer rights.
    */

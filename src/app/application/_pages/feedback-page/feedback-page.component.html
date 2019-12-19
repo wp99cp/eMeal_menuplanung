@@ -1,0 +1,17 @@
+<h1 class="mat-h1">Melde einen Fehler an den Entwickler!</h1>
+<p class="info">Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
+  für Rückfragen ggf. mit dir in Kontakt treten.</p>
+
+<div [formGroup]="feedbackForm" style="display: grid">
+
+  <mat-form-field>
+    <input matInput placeholder="Titel / Thema" formControlName="title">
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button (click)="send()">Feedback senden!</button>
+
+</div>
