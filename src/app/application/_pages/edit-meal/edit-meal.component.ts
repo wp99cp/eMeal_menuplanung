@@ -53,7 +53,7 @@ export class EditMealComponent implements OnInit {
           title: meal.title,
           description: meal.description,
 
-          // der weekTitle eines spezifischenMela muss nicht zwingend gesetzt sein...
+          // der weekTitle eines spezifischenMeal muss nicht zwingend gesetzt sein...
           // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
           weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.title,
           overrideParticipants: specificMeal.overrideParticipants,
