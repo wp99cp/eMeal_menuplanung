@@ -70,7 +70,7 @@ export class AddMealComponent implements OnInit {
 
   newMeal() {
 
-    this.databaseService.addMeal();
+    this.databaseService.addNewMeal();
 
   }
 

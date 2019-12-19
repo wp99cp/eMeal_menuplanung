@@ -1,7 +1,9 @@
 import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
 import { FirebaseObject } from './firebaseObject';
+import { Meal } from './meal';
 
 export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMeal {
+
 
   public campId: string;
   public participants: number;
@@ -10,6 +12,17 @@ export class SpecificMeal extends FirebaseObject implements FirestoreSpecificMea
 
   protected firestorePath: string;
   public firestoreElementId: string;
+
+  /**
+  * gibt den Firestore Path zurück
+  */
+  public static getCollectionPath(mealId: string): string {
+    return Meal.getPath(mealId) + '/specificMeals/';
+  }
+
+  public static getPath(mealId: string, specificMealId: string): string {
+    return SpecificMeal.getCollectionPath(mealId) + specificMealId;
+  }
 
   constructor(data: FirestoreSpecificMeal, path: string) {
 

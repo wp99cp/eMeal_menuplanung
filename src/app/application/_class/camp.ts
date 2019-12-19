@@ -8,7 +8,6 @@ import { FirebaseObject } from './firebaseObject';
 export class Camp extends FirebaseObject implements FirestoreCamp {
 
 
-
   public static readonly CAMPS_DIRECTORY = "camps/";
   protected readonly firestorePath = Camp.CAMPS_DIRECTORY;
 
@@ -21,10 +20,17 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
   public days: Day[] = [];
   public readonly firestoreElementId: string;
 
+  public static getCollectionPath(): string {
+    return 'camps/';
+  }
 
-  static generateCoworkersList(ownerUid: String, coworkers: User[]): String[] {
+  public static getPath(campId: string): string {
+    return Camp.getCollectionPath() + campId;
+  }
 
-    const uidList: String[] = [];
+  static generateCoworkersList(ownerUid: string, coworkers: User[]): string[] {
+
+    const uidList: string[] = [];
 
     if (coworkers !== undefined) {
       coworkers.forEach(coworker => {

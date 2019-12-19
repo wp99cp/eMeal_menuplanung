@@ -14,27 +14,53 @@ export class Day implements DayData {
   public description: string;
   public meals: Meal[];
 
+
+  /**
+   *
+   * Creates an empty meal. The given user has owner access to the meal.
+   *
+   * @param user User with owner access. If missing, no user has access.
+   */
+  public static getEmptyMeal(uids?: string[]): FirestoreMeal {
+
+    if (uids === undefined) {
+      uids = [];
+    }
+
+    const meal: FirestoreMeal = {
+      access: { owner: uids, editor: [] },
+      description: '',
+      title: 'Neue Mahlzeit'
+    };
+
+    return meal;
+
+  }
+
   constructor(data: DayData, camp: Camp) {
 
     const date: firestore.Timestamp = data.date;
     this.dateAsTypeDate = date.toDate();
 
-    if (data.description !== undefined) {
-      this.description = data.description;
-    } else {
-      this.description = '';
-    }
+    // optionale Felder
+    this.description = data.description !== undefined ? data.description : '';
 
     this.meals = data.meals.map(mealData => new Meal(mealData as FirestoreMeal, mealData.firestoreElementId));
   }
 
   extractDataToJSON(): DayData {
 
-    return {
+    const dayData: DayData = {
       date: firestore.Timestamp.fromDate(this.dateAsTypeDate),
-      description: this.description,
       meals: this.meals.map((meal: Meal) => meal.extractDataToJSON())
     };
+
+    // optionale Felder
+    if (this.description !== '') {
+      dayData.description = this.description;
+    }
+
+    return dayData;
   }
 
 
@@ -51,12 +77,5 @@ export class Day implements DayData {
     return '';
   }
 
-  /**
-   *
-   */
-  private loadMeals() {
-
-
-  }
 
 }

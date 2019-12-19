@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { Observable, of, OperatorFunction } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { Observable, OperatorFunction } from 'rxjs';
+import { map, mergeMap, } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
 import { Meal } from '../_class/meal';
@@ -11,11 +11,10 @@ import { SpecificRecipe } from '../_class/specific-recipe';
 import { FirestoreCamp } from '../_interfaces/firestore-camp';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
-import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
 import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { AuthenticationService } from './authentication.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
-
+import { AccessData } from '../_interfaces/accessData';
 
 
 /**
@@ -32,7 +31,6 @@ export class DatabaseService {
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
-
 
   /** creates the camp objects */
   private static createCamps(): OperatorFunction<DocumentChangeAction<FirestoreCamp>[], Camp[]> {
@@ -90,21 +88,16 @@ export class DatabaseService {
 
     return map(docData => {
 
-      if (docData.payload.data() !== undefined) {
-        return new SpecificRecipe(docData.payload.data(), path);
+      let specificRecipe: FirestoreSpecificRecipe = docData.payload.data();
 
-      } else {
-
-        const specificRecipe: FirestoreSpecificRecipe = {
-          participants: 1,
-          campId,
-          overrideParticipants: false
-        };
-
+      if (specificRecipe === undefined) {
+        // erstelle ein neues Dokument und gebe die Daten zurück.
+        specificRecipe = SpecificRecipe.createEmptySpecificRecipe(campId);
         databaseService.addDocument(specificRecipe, path);
-
-        return new SpecificRecipe(specificRecipe, path);
       }
+
+      return new SpecificRecipe(specificRecipe, path);
+
     });
 
   }
@@ -124,61 +117,47 @@ export class DatabaseService {
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
 
+  /**
+   * Creates a new empty meal for the current user. The current user got onwer rights.
+   */
+  public addNewMeal() {
 
+    this.authService.getCurrentUser().subscribe(user =>
+      this.db.collection(Meal.getCollectionPath())
+        .add(Meal.getEmptyMeal([user.uid as string]))
+    );
+
+  }
 
 
   /**
-   *
+   * Fügt ein neues Rezept mit dem übergebenen Titel und den gegeben AccessData hinzu.
    */
-  public addMeal() {
+  public addNewRecipe(mealId: string, access?: AccessData, name?: string) {
 
-    this.authService.getCurrentUser().subscribe(user => {
-
-      this.db.collection('meals').add({
-
-        access: { owner: [user.uid], editor: [] },
-        description: '',
-        recipe: '',
-        title: 'Neue Mahlzeit'
-
-      });
-
-    });
-
+    return this.db.collection(Recipe.getCollectionPath(mealId))
+      .add(Recipe.getEmptyRecipe(name, access));
 
   }
 
-  public addRecipe(mealId: string, campId: string, title: string) {
 
-    return this.authService.getCurrentUser().pipe(map(user => {
-
-      return this.db.collection('meals/' + mealId + '/recipes/').add({
-
-        access: { owner: [user.uid], editor: [] },
-        description: '',
-        ingredients: [],
-        name: title
-
-      });
-
-    }));
-  }
-
-
-  /** @return loads the specific meal */
+  /**
+   * @return loads the specific meal
+   */
   public getSpecificMeal(mealId: string, specificMealId: string, campId: string): Observable<SpecificMeal> {
 
-    const path = 'meals/' + mealId + '/specificMeals/' + specificMealId;
-    return this.requestDocument(path).pipe(DatabaseService.createSpecificMeal(path));
+    const path = SpecificMeal.getPath(mealId, specificMealId);
+    return this.requestDocument(path)
+      .pipe(DatabaseService.createSpecificMeal(path));
 
   }
 
   /** @return loads the specific recipe */
   public getSpecificRecipe(mealId: string, specificMealId: string, campId: string, recipeId: string): Observable<SpecificRecipe> {
 
-    const path = 'meals/' + mealId + '/recipes/' + recipeId + '/specificRecipes/' + specificMealId;
-
-    return this.requestDocument(path).pipe(DatabaseService.createSpecificRecipe(path, campId, this));
+    const path = SpecificRecipe.getPath(mealId, recipeId, specificMealId);
+    return this.requestDocument(path)
+      .pipe(DatabaseService.createSpecificRecipe(path, campId, this));
 
   }
 
@@ -187,7 +166,7 @@ export class DatabaseService {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
-        this.requestCollection('camps', queryFn)
+        this.requestCollection(Camp.getCollectionPath(), queryFn)
           .pipe(DatabaseService.createCamps())
       ));
 
@@ -196,7 +175,7 @@ export class DatabaseService {
   public getEditableMeals(): Observable<Meal[]> {
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
-        this.requestCollection('meals', queryFn)
+        this.requestCollection(Meal.getCollectionPath(), queryFn)
           .pipe(DatabaseService.createMeals())
       ));
   }
@@ -216,9 +195,7 @@ export class DatabaseService {
   /** */
   public getCampInfoExport(id: string): Observable<any> {
 
-    return this.functions.httpsCallable('getCampInfoExport')(
-      { campId: id }
-    );
+    return this.functions.httpsCallable('getCampInfoExport')({ campId: id });
 
   }
 
@@ -229,56 +206,7 @@ export class DatabaseService {
 
     return this.functions
       .httpsCallable('getShoppingList')({ campId: id })
-      .pipe(map(response => {
-
-        const ings = response.data;
-
-        const arry = {};
-
-        for (const ing in ings) {
-
-          if (ing) {
-
-            if (!arry[ings[ing].category]) {
-              arry[ings[ing].category] = [];
-
-            }
-
-            arry[ings[ing].category].push({
-
-              food: ing,
-              measure: ings[ing].measure.toFixed(2),
-              unit: ings[ing].unit
-
-            });
-
-          }
-
-        }
-
-        return { shoppingList: arry, error: response.error };
-
-      }))
-      .pipe(map(data => {
-
-        const cats = data.shoppingList;
-        const arry = [];
-
-        for (const cat in cats) {
-
-          if (cat) {
-
-            arry.push({
-              name: cat,
-              ingredients: cats[cat]
-            });
-          }
-
-        }
-
-        return { shoppingList: arry, error: data.error };
-
-      }));
+      .pipe(map(this.transformToShoppingList()));
 
   }
 
@@ -292,7 +220,7 @@ export class DatabaseService {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
-        this.requestCollection('meals/' + mealId + '/recipes', queryFn)
+        this.requestCollection(Recipe.getCollectionPath(mealId), queryFn)
           .pipe(DatabaseService.createRecipe(mealId, specificMealId, campId, this))
       ));
 
@@ -300,13 +228,13 @@ export class DatabaseService {
 
   public getCampById(campId: string): Observable<Camp> {
 
-    return this.requestDocument('camps/' + campId).pipe(DatabaseService.createCamp());
+    return this.requestDocument(Camp.getPath(campId)).pipe(DatabaseService.createCamp());
 
   }
 
   public getMealById(mealId: string, specificMealId: string, campId: string): Observable<Meal> {
 
-    return this.requestDocument('meals/' + mealId).pipe(
+    return this.requestDocument(Meal.getPath(mealId)).pipe(
       DatabaseService.createMeal(this.getRecipes(mealId, specificMealId, campId))
     );
 
@@ -326,7 +254,6 @@ export class DatabaseService {
   public async addDocument(firebaseObject: Partial<any>, path: string): Promise<firebase.firestore.DocumentReference> {
 
     if ((path.match(/\//g) || []).length % 2 === 0) {
-
       return await this.db.collection(path).add(firebaseObject);
     }
 
@@ -368,6 +295,41 @@ export class DatabaseService {
     ));
 
   }
+
+
+  private transformToShoppingList(): (value: any, index: number) => { shoppingList: any[]; error: any; } {
+
+    return response => {
+      const ings = response.data;
+      const arry = {};
+      for (const ing in ings) {
+        if (ing) {
+          if (!arry[ings[ing].category]) {
+            arry[ings[ing].category] = [];
+          }
+          arry[ings[ing].category].push({
+            food: ing,
+            measure: ings[ing].measure.toFixed(2),
+            unit: ings[ing].unit
+          });
+        }
+      }
+      const data = { shoppingList: arry, error: response.error };
+      const cats = data.shoppingList;
+      const array = [];
+      for (const cat in cats) {
+        if (cat) {
+          array.push({
+            name: cat,
+            ingredients: cats[cat]
+          });
+        }
+      }
+      return { shoppingList: array, error: data.error };
+    };
+
+  }
+
 
 
 

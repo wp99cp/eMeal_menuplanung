@@ -2,16 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 import { Camp } from '../../_class/camp';
-import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { MatStepper } from '@angular/material/stepper';
+import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 
 
 @Component({

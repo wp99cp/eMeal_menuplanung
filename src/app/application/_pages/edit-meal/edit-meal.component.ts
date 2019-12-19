@@ -112,10 +112,8 @@ export class EditMealComponent implements OnInit {
 
   newRecipe() {
 
-    this.campId.pipe(mergeMap(campId =>
-      this.meal.pipe(mergeMap(meal =>
-        this.databaseService.addRecipe(meal.firestoreElementId, campId, meal.title)
-      ))
+    this.meal.pipe(mergeMap(meal =>
+      this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.title)
     )).subscribe();
 
   }

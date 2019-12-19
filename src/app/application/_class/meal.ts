@@ -1,4 +1,3 @@
-import { SpecificMeal } from './specific-meal';
 import { Observable } from 'rxjs';
 import { AccessData } from '../_interfaces/accessData';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
@@ -11,6 +10,7 @@ import { Recipe } from './recipe';
 
 export class Meal extends FirebaseObject implements FirestoreMeal {
 
+
   public readonly firestorePath = 'meals/';
 
   public title: string;
@@ -18,6 +18,40 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public access: AccessData;
   public recipes: Observable<Recipe[]>;
   public specificId: string = undefined;
+
+
+  /**
+   *
+   * Creates an empty meal. The given user has owner access to the meal.
+   *
+   * @param user User with owner access. If missing, no user has access.
+   */
+  public static getEmptyMeal(uids?: string[]): FirestoreMeal {
+
+    if (uids === undefined) {
+      uids = [];
+    }
+
+    const meal: FirestoreMeal = {
+      access: { owner: uids, editor: [] },
+      description: '',
+      title: 'Neue Mahlzeit'
+    };
+
+    return meal;
+
+  }
+
+  /**
+   * gibt den Firestore Path zurück
+   */
+  public static getCollectionPath(): string {
+    return 'meals/';
+  }
+
+  public static getPath(mealId: string): string {
+    return Meal.getCollectionPath() + mealId;
+  }
 
   constructor(data: FirestoreMeal, public readonly firestoreElementId: string, recipes?: Observable<Recipe[]>) {
 

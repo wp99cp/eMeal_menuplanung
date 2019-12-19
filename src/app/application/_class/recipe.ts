@@ -6,48 +6,91 @@ import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recip
 import { Ingredient } from '../_interfaces/ingredient';
 import { FirebaseObject } from './firebaseObject';
 import { SpecificRecipe } from './specific-recipe';
+import { Meal } from './meal';
 
 export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
-    protected firestorePath: string;
-    public firestoreElementId: any;
+  protected firestorePath: string;
+  public firestoreElementId: any;
 
-    public access: AccessData;
-    public ingredients: Ingredient[];
-    public name: string;
-    public description: string;
-    public notes: string;
+  public access: AccessData;
+  public ingredients: Ingredient[];
+  public name: string;
+  public description: string;
+  public notes: string;
 
-    public specificRecipe: Observable<SpecificRecipe>;
+  public specificRecipe: Observable<SpecificRecipe>;
 
+  /**
+   *
+   * Creates a new empty recipe with the given title and access rights.
+   *
+   * @param name Title of the recipe
+   * @param access Access rights for the recipe
+   */
+  public static getEmptyRecipe(name?: string, access?: AccessData): FirestoreRecipe {
 
-    constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, specificRecipe: Observable<SpecificRecipe>) {
-        super();
+    // set undefined variables
+    name = name === undefined ? '' : name;
+    access = access === undefined ? { editor: [], owner: [] } : access;
 
-        this.firestorePath = 'meals/' + mealId + '/recipes/';
-        this.firestoreElementId = firestoreElementId;
+    const recipe: FirestoreRecipe = {
+      access,
+      description: '',
+      ingredients: [],
+      name,
+      notes: ''
+    };
 
-        this.access = recipeData.access;
-        this.ingredients = recipeData.ingredients;
-        this.name = recipeData.name;
-        this.description = recipeData.description;
-        this.notes = recipeData.notes;
+    return recipe;
 
-        this.specificRecipe = specificRecipe;
+  }
 
-    }
+  /**
+   * gibt den Firestore Path zurück
+   */
+  public static getCollectionPath(mealId: string): string {
 
-    public extractDataToJSON(): FirestoreRecipe {
+    return Meal.getCollectionPath() + mealId + '/recipes/';
 
-        return {
-            access: this.access,
-            ingredients: this.ingredients,
-            name: this.name,
-            description: this.description,
-            notes: this.notes
-        };
+  }
 
-    }
+  /**
+  * gibt den Firestore Path zurück
+  */
+  public static getPath(mealId: string, recipeId: string): string {
+
+    return Recipe.getCollectionPath(mealId) + recipeId;
+
+  }
+
+  constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, specificRecipe: Observable<SpecificRecipe>) {
+    super();
+
+    this.firestorePath = 'meals/' + mealId + '/recipes/';
+    this.firestoreElementId = firestoreElementId;
+
+    this.access = recipeData.access;
+    this.ingredients = recipeData.ingredients;
+    this.name = recipeData.name;
+    this.description = recipeData.description;
+    this.notes = recipeData.notes;
+
+    this.specificRecipe = specificRecipe;
+
+  }
+
+  public extractDataToJSON(): FirestoreRecipe {
+
+    return {
+      access: this.access,
+      ingredients: this.ingredients,
+      name: this.name,
+      description: this.description,
+      notes: this.notes
+    };
+
+  }
 
 
 }
