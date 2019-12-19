@@ -133,13 +133,24 @@
     <br />
 
 
-    <!-- TODO: muss noch angepasst werden!!!! Stimmt so nicht wirklich. -->
-    <p class="warning"
-      *ngIf="specificMeal.participants != specificRecipe.participants && recipeForm.value.overrideParticipants">
-      <b>Achtung: </b>
-      Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird aber
-      für {{specificRecipe.participants}} Personen berechnet.
-    </p>
+    <ng-container *ngIf="recipeForm.value.overrideParticipants">
+
+      <p class="warning"
+        *ngIf="specificMeal.overrideParticipants && specificMeal.participants != specificRecipe.participants">
+        <b>Achtung: </b>
+        Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird
+        aber für {{specificRecipe.participants}} Personen berechnet.
+      </p>
+
+      <p class="warning"
+        *ngIf="!specificMeal.overrideParticipants &&  camp.participants != specificRecipe.participants">
+        <b>Achtung: </b>
+        Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende, dieses Rezept wird
+        aber für {{specificRecipe.participants}} Personen berechnet.
+      </p>
+
+    </ng-container>
+
 
 
     <mat-form-field class="full-width" *ngIf="recipeForm.value.overrideParticipants">
