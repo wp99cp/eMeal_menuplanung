@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Camp } from '../../_class/camp';
-import { DatabaseService } from '../../_service/database.service';
+import { mergeMap } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
+import { Camp } from '../../_class/camp';
+import { DatabaseService } from '../../_service/database.service';
 
 @Component({
   selector: 'app-edit-camp-page',
   templateUrl: './edit-camp-page.component.html',
   styleUrls: ['./edit-camp-page.component.sass']
 })
-export class EditCampPageComponent implements OnInit {
+export class EditCampPageComponent implements OnInit, OnDestroy {
 
   // Toggle for saveButton
   public campInfosForm: FormGroup;
@@ -21,9 +22,7 @@ export class EditCampPageComponent implements OnInit {
   public camp: Observable<Camp>;
 
   // local changes to the camp data (not sync with server)
-  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) { }
-
-  ngOnInit() {
+  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) {
 
     this.campInfosForm = this.formBuilder.group({
       name: '',
@@ -31,10 +30,12 @@ export class EditCampPageComponent implements OnInit {
       participants: ''
     });
 
-    // load camp from url
-    this.route.url.subscribe(url =>
-      this.loadCamp(url[1].path));
 
+    this.camp = this.route.url.pipe(mergeMap(
+      url => this.databaseService.getCampById(url[1].path)
+    ));
+
+    this.camp.subscribe(camp => this.setHeaderInfo(camp));
 
     // update Values
     this.camp.subscribe(camp =>
@@ -50,17 +51,15 @@ export class EditCampPageComponent implements OnInit {
 
   }
 
+  ngOnInit() { }
 
-  /**
-   * Loads a camp form the database
-   *
-   * @param campId Id of the camp
-   */
-  loadCamp(campId: string) {
+  // save on destroy
+  ngOnDestroy(): void {
 
-    this.camp = this.databaseService.getCampById(campId);
-    this.camp.subscribe(camp => this.setHeaderInfo(camp));
-
+    if (this.campInfosForm.touched) {
+      console.log('Autosave Camp');
+      this.camp.subscribe(camp => this.saveCamp(camp));
+    }
 
   }
 
@@ -72,7 +71,7 @@ export class EditCampPageComponent implements OnInit {
   }
 
   /** Save and reset the form */
-  public saveCampInfo(camp: Camp) {
+  public saveCamp(camp: Camp) {
 
     this.saveValueChanges(camp);
     this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath())

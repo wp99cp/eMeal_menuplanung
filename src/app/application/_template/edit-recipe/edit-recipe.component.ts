@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Recipe } from '../../_class/recipe';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,7 +18,7 @@ import { Camp } from '../../_class/camp';
 // die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
 // toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
 //
-export class EditRecipeComponent implements OnInit {
+export class EditRecipeComponent implements OnInit, OnDestroy {
 
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
@@ -45,6 +45,17 @@ export class EditRecipeComponent implements OnInit {
       overrideParticipants: this.specificRecipe.overrideParticipants
     });
 
+
+  }
+
+
+  // save on destroy
+  ngOnDestroy(): void {
+
+    if (this.recipeForm.touched) {
+      console.log('Autosave Recipe');
+      this.saveRecipe();
+    }
 
   }
 

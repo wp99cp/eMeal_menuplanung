@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import { DatabaseService } from '../../_service/database.service';
   templateUrl: './edit-meal.component.html',
   styleUrls: ['./edit-meal.component.sass']
 })
-export class EditMealComponent implements OnInit {
+export class EditMealComponent implements OnInit, OnDestroy {
 
   public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
@@ -66,6 +66,17 @@ export class EditMealComponent implements OnInit {
     this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
 
   }
+
+  // save on destroy (only if changed)
+  ngOnDestroy(): void {
+
+    if (this.mealInfo.touched) {
+      console.log('Autosave Meal');
+      this.saveMeal();
+    }
+
+  }
+
 
   public saveMeal() {
 

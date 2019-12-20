@@ -15,8 +15,6 @@ import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recip
 import { AuthenticationService } from './authentication.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AccessData } from '../_interfaces/accessData';
-import { firestore } from 'firebase';
-
 
 /**
  * An angular service to provide data form the AngularFirestore database.
