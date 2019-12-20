@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,13 +8,15 @@ import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { DatabaseService } from '../../_service/database.service';
+import { Saveable } from '../../_service/auto-save.service';
+import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
 
 @Component({
   selector: 'app-edit-meal',
   templateUrl: './edit-meal.component.html',
   styleUrls: ['./edit-meal.component.sass']
 })
-export class EditMealComponent implements OnInit, OnDestroy {
+export class EditMealComponent implements OnInit, Saveable {
 
   public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
@@ -23,6 +25,9 @@ export class EditMealComponent implements OnInit, OnDestroy {
   private campId: Observable<string>;
   private mealId: Observable<string>;
   private specificMealId: Observable<string>;
+
+  @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
+
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
@@ -68,7 +73,10 @@ export class EditMealComponent implements OnInit, OnDestroy {
   }
 
   // save on destroy (only if changed)
-  ngOnDestroy(): void {
+  public save(): void {
+
+    // save childs
+    this.editRecipes.forEach(editRecipe => editRecipe.save());
 
     if (this.mealInfo.touched) {
       console.log('Autosave Meal');

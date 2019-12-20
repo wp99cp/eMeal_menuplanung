@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -6,14 +6,18 @@ import { mergeMap } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
+import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
+import { WeekViewComponent } from '../../_template/week-view/week-view.component';
 
 @Component({
   selector: 'app-edit-camp-page',
   templateUrl: './edit-camp-page.component.html',
   styleUrls: ['./edit-camp-page.component.sass']
 })
-export class EditCampPageComponent implements OnInit, OnDestroy {
+export class EditCampPageComponent implements OnInit, Saveable {
+
+  @ViewChildren(WeekViewComponent) weekViews: QueryList<WeekViewComponent>;
 
   // Toggle for saveButton
   public campInfosForm: FormGroup;
@@ -51,10 +55,16 @@ export class EditCampPageComponent implements OnInit, OnDestroy {
 
   }
 
+
+
+
   ngOnInit() { }
 
   // save on destroy
-  ngOnDestroy(): void {
+  public save(): void {
+
+    // saveChilds
+    this.weekViews.forEach(weekView => weekView.save());
 
     if (this.campInfosForm.touched) {
       console.log('Autosave Camp');

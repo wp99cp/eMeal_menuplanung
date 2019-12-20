@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, Directive } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 
@@ -11,17 +11,17 @@ import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../add-meal/add-meal.component';
 import { EditDayComponent } from '../edit-day/edit-day.component';
+import { Saveable } from '../../_service/auto-save.service';
 
 @Component({
   selector: 'app-week-view',
   templateUrl: './week-view.component.html',
   styleUrls: ['./week-view.component.sass']
 })
-
 // TODO: verwendung einer Mahlzeit (Zmorgen, Zmittag, ...) kann nachträglich geändert werden
 // add custom Tag für Verwendung (z.B Vorbereiten...)
 
-export class WeekViewComponent implements OnInit, OnDestroy {
+export class WeekViewComponent implements OnInit, Saveable {
 
   public mealsChanged = false;
   @Input() camp: Camp;
@@ -30,7 +30,7 @@ export class WeekViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() { }
 
-  ngOnDestroy() {
+  public save() {
 
     if (this.mealsChanged) {
       console.log('Autosave camp');

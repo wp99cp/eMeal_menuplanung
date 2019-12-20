@@ -7,6 +7,7 @@ import { ExportCampComponent } from './_pages/export-camp/export-camp.component'
 import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
+import { AutoSaveService } from './_service/auto-save.service';
 
 
 const routes: Routes = [
@@ -29,7 +30,8 @@ const routes: Routes = [
   },
   {
     path: 'camps/:id',
-    component: EditCampPageComponent
+    component: EditCampPageComponent,
+    canDeactivate: [AutoSaveService]
   },
   {
     path: 'camps/:id/export',
@@ -38,7 +40,8 @@ const routes: Routes = [
   },
   {
     path: 'camps/:id/meals/:mealId/:specificId',
-    component: EditMealComponent
+    component: EditMealComponent,
+    canDeactivate: [AutoSaveService]
   }
 
 ];

@@ -7,6 +7,7 @@ import { SpecificRecipe } from '../../_class/specific-recipe';
 import { DatabaseService } from '../../_service/database.service';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { Camp } from '../../_class/camp';
+import { Saveable } from '../../_service/auto-save.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -18,7 +19,7 @@ import { Camp } from '../../_class/camp';
 // die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
 // toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
 //
-export class EditRecipeComponent implements OnInit, OnDestroy {
+export class EditRecipeComponent implements OnInit, Saveable {
 
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
@@ -50,7 +51,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
 
   // save on destroy
-  ngOnDestroy(): void {
+  public save(): void {
 
     if (this.recipeForm.touched) {
       console.log('Autosave Recipe');

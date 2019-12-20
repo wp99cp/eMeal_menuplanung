@@ -42,6 +42,7 @@ import { DatabaseService } from './_service/database.service';
 import { EditDayComponent } from './_template/edit-day/edit-day.component';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '@angular/fire/functions';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
+import { AutoSaveService } from './_service/auto-save.service';
 
 
 @NgModule({
@@ -97,6 +98,7 @@ import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.comp
     AngularFireAuth,
     AuthenticationService,
     DatabaseService,
+    AutoSaveService,
     { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
   ],
   entryComponents: [
