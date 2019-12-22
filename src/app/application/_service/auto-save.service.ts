@@ -11,6 +11,9 @@ export interface Saveable {
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * AutoSaveService
+ */
 export class AutoSaveService implements CanDeactivate<Saveable> {
 
   canDeactivate(component: Saveable) {
