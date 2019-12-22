@@ -27,6 +27,7 @@ import { AccessData } from '../_interfaces/accessData';
 })
 export class DatabaseService {
 
+
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -125,6 +126,22 @@ export class DatabaseService {
     });
 
   }
+
+  importRecipe(url: string): Promise<any> {
+
+    url = 'https://emeal.zh11.ch/services/loadContent.php?url=' + url;
+
+    const options = {
+      method: 'GET',
+      headers: [
+        ['Content-Type', 'application/json'],
+      ],
+    };
+
+    return fetch(url, options).then(res => res.json());
+
+  }
+
 
 
   /**
