@@ -24,15 +24,7 @@ export class FeedbackPageComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-
-    this.dbService.importRecipe(
-      'https://www.swissmilk.ch/de/rezepte-kochideen/rezepte/RB_KAF2002_31_B/vanillekipferl/'
-    ).then(res =>
-      console.log(res)
-    );
-
-  }
+  ngOnInit() { }
 
   public send() {
 

@@ -43,6 +43,7 @@ import { EditDayComponent } from './_template/edit-day/edit-day.component';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '@angular/fire/functions';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
+import { ImportComponent } from './_template/import/import.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { AutoSaveService } from './_service/auto-save.service';
     IngredientFieldComponent,
     AddMealComponent,
     ExportCampComponent,
-    FeedbackPageComponent
+    FeedbackPageComponent,
+    ImportComponent
   ],
   imports: [
     CommonModule,
@@ -105,7 +107,8 @@ import { AutoSaveService } from './_service/auto-save.service';
     DeleteCampComponent,
     EditDayComponent,
     AddMealComponent,
-    EditDayComponent
+    EditDayComponent,
+    ImportComponent
   ]
 })
 

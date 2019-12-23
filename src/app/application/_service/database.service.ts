@@ -15,6 +15,7 @@ import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recip
 import { AuthenticationService } from './authentication.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AccessData } from '../_interfaces/accessData';
+import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -127,14 +128,14 @@ export class DatabaseService {
 
   }
 
-  importRecipe(url: string): Promise<any> {
+  importRecipe(url: string): Promise<RawMealData | ErrorOnImport> {
 
     url = 'https://emeal.zh11.ch/services/loadContent.php?url=' + url;
 
     const options = {
       method: 'GET',
       headers: [
-        ['Content-Type', 'application/json'],
+        ['Content-Type', 'application/json, charset=utf-8'],
       ],
     };
 

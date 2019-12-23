@@ -34,6 +34,7 @@ function loadFromSwissmilk($dom, $url)
   $baseMeasure = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'IngredientsCalculator--header--text')]")->item(0);
   $recipeJson->baseMeasure = $baseMeasure->getElementsByTagName("span")->item(0)->textContent;
   $recipeJson->baseMeasureUnit = $baseMeasure->getElementsByTagName("label")->item(0)->textContent;
+  $recipeJson->title = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'DetailPageHeader--title')]")->item(0)->textContent;
 
   $recipeJson->recipes = $recipes;
   $recipeJson->source = $url;

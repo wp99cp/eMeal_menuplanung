@@ -3,6 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { DatabaseService } from '../../_service/database.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ImportComponent } from '../import/import.component';
+import { Meal } from '../../_class/meal';
+import { AccessData } from '../../_interfaces/accessData';
+import { AuthenticationService } from '../../_service/authentication.service';
+import { Recipe } from '../../_class/recipe';
 
 
 @Component({
@@ -26,7 +32,7 @@ export class AddMealComponent implements OnInit {
   public selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
 
   /** Constructor */
-  constructor(private databaseService: DatabaseService) { }
+  constructor(private databaseService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) { }
 
   /** on init */
   ngOnInit(): void {
@@ -71,6 +77,44 @@ export class AddMealComponent implements OnInit {
   newMeal() {
 
     this.databaseService.addNewMeal();
+
+  }
+
+  import() {
+
+    this.dialog.open(ImportComponent, {
+      height: '640px',
+      width: '900px',
+      data: null
+    }).afterClosed()
+      .subscribe((result: Meal) => {
+
+        console.log(Meal.getCollectionPath());
+
+        this.authService.getCurrentUser().subscribe(user => {
+
+          const document = result.extractDataToJSON();
+          const access: AccessData = { owner: [user.uid as string], editor: [] };
+          document.access = access;
+          this.databaseService.addDocument(document, 'meals').then(doc => {
+
+            console.log(doc.id);
+
+            result.recipes.subscribe(recipes => {
+
+              recipes.forEach(recipe => {
+
+                const recipeData = recipe.extractDataToJSON();
+                recipeData.access = { owner: [user.uid as string], editor: [] };
+                this.databaseService.addDocument(recipeData, 'meals/' + doc.id + '/recipes');
+
+              });
+            });
+
+          });
+
+        });
+      });
 
   }
 

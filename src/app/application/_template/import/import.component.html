@@ -1,0 +1,20 @@
+<h3 mat-dialog-title>Mahlzeit importieren (BETA).</h3>
+
+
+<div [formGroup]="input" style="display: grid">
+
+  <mat-form-field>
+    <input matInput placeholder="URL der Webseite (swissmilk.ch)" formControlName="url">
+  </mat-form-field>
+
+  <button mat-raised-button (click)="loadFromURL()">Rezeptvorschau laden</button>
+
+</div>
+
+<p *ngIf="mealStr !== ''">{{mealStr}}</p>
+
+
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [disabled]="!readyForImport" [mat-dialog-close]="meal">Mahlzeit erstellen</button>
+</div>
