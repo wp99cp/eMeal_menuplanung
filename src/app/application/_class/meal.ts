@@ -139,7 +139,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     const specificMealData: FirestoreSpecificMeal = {
       participants: camp.participants,
       campId: camp.firestoreElementId,
-      weekTitle: this.title,
+      weekTitle: this.description,
       overrideParticipants: false
     };
 
