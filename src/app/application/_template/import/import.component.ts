@@ -30,8 +30,7 @@ export class ImportComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
 
   loadFromURL() {
@@ -94,7 +93,6 @@ export class ImportComponent implements OnInit {
     console.log('finished');
     this.mealStr = JSON.stringify(this.meal.extractDataToJSON());
     recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.extractDataToJSON()))
-
 
     this.readyForImport = true;
 
