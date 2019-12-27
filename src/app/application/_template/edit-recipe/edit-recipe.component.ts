@@ -87,12 +87,40 @@ export class EditRecipeComponent implements OnInit, Saveable {
 
   changeIngredient(value: string, index: number, element: string) {
 
-    if (element === 'calcMeasure') {
-      this.recipe.ingredients[index].measure = Number.parseInt(value) / (this.specificRecipe.overrideParticipants ? this.specificRecipe.participants :
-        (this.specificMeal.overrideParticipants ? this.specificMeal.participants : this.camp.participants));
+
+    if (element === 'measure' && value.includes('\t')) {
+
+      this.recipe.ingredients.splice(index, 1);
+      const ex = /([0-9]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.]|[0-9])+\t))+/gi;
+      console.log(value.match(ex));
+      const ingredientsAsArray = value.match(ex).join().split(',');
+      console.log(ingredientsAsArray);
+
+      let i = index;
+      for (const ing of ingredientsAsArray) {
+
+        const ingredientAsArray = ing.split('\t');
+
+        this.recipe.ingredients.push({
+          food: ingredientAsArray[2],
+          unit: ingredientAsArray[1],
+          measure: Number.parseInt(ingredientAsArray[0], 10)
+        });
+
+        i++;
+
+      }
+
+      this.dataSource._updateChangeSubscription();
+
+    } else if (element === 'calcMeasure') {
+      this.recipe.ingredients[index].measure =
+        Number.parseInt(value, 10) / (this.specificRecipe.overrideParticipants ? this.specificRecipe.participants :
+          (this.specificMeal.overrideParticipants ? this.specificMeal.participants : this.camp.participants));
     } else {
       this.recipe.ingredients[index][element] = value;
     }
+
     this.recipeForm.markAsTouched();
 
   }
