@@ -25,14 +25,18 @@
     <!-- Meal List for one day-->
     <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
       <!-- Meal Element-->
-      <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-        routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}">
+      <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag>
         <div class="meal-placeholder" *cdkDragPlaceholder></div>
         <mat-card-header>
           <p>{{ meal.title }}</p>
         </mat-card-header>
         <mat-card-content>
           <p class="description">{{ meal.description }}</p>
+          <mat-icon class="edit-meal-icon meal-icon"
+            routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}">edit
+          </mat-icon>
+          <mat-icon class="delete-meal-icon meal-icon" (click)="deleteMeal(meal.firestoreElementId, meal.specificId)">
+            delete</mat-icon>
         </mat-card-content>
       </mat-card>
     </div>

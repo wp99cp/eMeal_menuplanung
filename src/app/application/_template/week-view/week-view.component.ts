@@ -155,4 +155,12 @@ export class WeekViewComponent implements OnInit, Saveable {
   }
 
 
+  public deleteMeal(mealId: string, specificMealId: string) {
+
+    this.camp.removeMeal(specificMealId);
+    this.saveCamp();
+    this.databaseService.deleteMeal(mealId, specificMealId);
+
+  }
+
 }

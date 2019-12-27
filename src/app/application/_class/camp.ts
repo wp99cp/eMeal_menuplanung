@@ -79,4 +79,16 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     return campData;
   }
 
+  public async removeMeal(specificMealId: string): Promise<void> {
+
+    for (const day of this.days) {
+      for (const meal of day.meals) {
+        if (meal.specificId === specificMealId) {
+          await day.meals.splice(day.meals.indexOf(meal), 1);
+        }
+      }
+    }
+
+  }
+
 }

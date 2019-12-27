@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { version as softwareVersion } from '../../../../package.json';
+import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 @Component({
   selector: 'app-settings',
@@ -15,12 +16,23 @@ export class SettingsComponent implements OnInit {
   public mail = 'jpg@zh11.ch';
 
   // TODO: include private authenticationService
-  constructor() { }
+  constructor() {
+
+    this.setHeaderInfo();
+
+  }
 
   ngOnInit() {
 
     // fields with authenticationService
     // TODO: include authenticationService into this module
+
+  }
+
+  private setHeaderInfo(): void {
+
+    Header.title = 'Einstellungen';
+    Header.path = ['Startseite', 'Einstellungen'];
 
   }
 

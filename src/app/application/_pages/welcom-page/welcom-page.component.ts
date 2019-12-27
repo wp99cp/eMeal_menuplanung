@@ -32,7 +32,7 @@ export class WelcomPageComponent implements OnInit {
   private setHeaderInfo(): void {
 
 
-    Header.title = 'Lager planen leicht gemacht!';
+    Header.title = 'Lagerplanen leicht gemacht!';
     Header.path = [];
 
   }

@@ -29,6 +29,7 @@ import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
 export class DatabaseService {
 
 
+
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -128,7 +129,17 @@ export class DatabaseService {
 
   }
 
-  importRecipe(url: string): Promise<RawMealData | ErrorOnImport> {
+  public deleteMeal(mealId: string, specificMealId: string) {
+
+    this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
+    this.db.collectionGroup('specificRecipes', collRef => collRef.where('specificMealId', '==', specificMealId)).get()
+      .subscribe(
+        docRefs => docRefs.forEach(docRef => docRef.ref.delete())
+      );
+
+  }
+
+  public importRecipe(url: string): Promise<RawMealData | ErrorOnImport> {
 
     url = 'https://emeal.zh11.ch/services/loadContent.php?url=' + url;
 
