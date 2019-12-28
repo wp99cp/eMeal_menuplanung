@@ -3,6 +3,7 @@ import { Meal } from './meal';
 import { firestore } from 'firebase';
 import { DayData } from '../_interfaces/day-data';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
+import { SettingsService } from '../_service/settings.service';
 
 /**
  *
@@ -64,8 +65,8 @@ export class Day implements DayData {
   }
 
 
-  public getDateStr(): String {
-    return this.dateAsTypeDate.toLocaleDateString('de-CH', { "weekday": "long", "month": "short", "day": "2-digit" });
+  public getDateStr(): string {
+    return SettingsService.toString(this.dateAsTypeDate);
   }
 
   public getDiscriptionInBracket(): String {

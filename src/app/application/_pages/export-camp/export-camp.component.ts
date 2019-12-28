@@ -7,6 +7,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
 import { map, flatMap } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+import { SettingsService } from '../../_service/settings.service';
 
 /** ExportCampComponent:
  * Export Seite für Lager. Möglichkeit ein in eMeal erstelltes Lager als
@@ -40,43 +41,42 @@ export class ExportCampComponent implements OnInit {
 
   @ViewChild('accordion', { static: false }) Accordion: MatAccordion;
 
-
-  public displayedColumns: string[] = ['measure', 'unit', 'food'];
-
   private campId: Observable<string>;
 
+  public displayedColumns: string[] = ['measure', 'unit', 'food'];
   public today: string;
   public user: Observable<User>;
   public shoppingListWithError: Observable<any>;
   public campInfo: Observable<any>;
   public weekTable: Observable<any>;
   public mealsInfo: Observable<any>;
+  public weekViewErrorMessage = '';
 
   constructor(private route: ActivatedRoute, private authService: AuthenticationService, private databaseService: DatabaseService) {
 
-    this.today = (new Date()).toLocaleDateString('de-CH', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
-    // load camp from url
-    this.route.url.subscribe(url => this.campId = of(url[1].path));
+    this.today = SettingsService.toString(new Date());
 
   }
 
   ngOnInit() {
 
 
+    // load campId from url
+    this.campId = this.route.url.pipe(map(url => url[1].path));
+
+    // ladet den aktuellen Nutzer
     this.user = this.authService.getCurrentUser();
 
+    // ladet die Infos für den Export und passt sie ggf. an
     this.shoppingListWithError = this.campId.pipe(flatMap(campId => this.databaseService.getShoppingList(campId)));
     this.campInfo = this.campId.pipe(flatMap(campId => this.databaseService.getCampInfoExport(campId)));
-
-    this.campInfo.subscribe(campInfo =>
-      this.setHeaderInfo(campInfo.data.name)
-    );
-
-    this.weekTable = this.campInfo.pipe(map(transformToWeekTable()));
     this.mealsInfo = this.databaseService.getMealsInfoExport();
+    this.weekTable = this.campInfo.pipe(map(this.transformToWeekTable()));
 
-    // print on console
+    // setzt den Header
+    this.campInfo.subscribe(campInfo => this.setHeaderInfo(campInfo.data.name));
+
+    // print der geladenen Daten auf der Console
     this.shoppingListWithError.subscribe(console.log);
     this.campInfo.subscribe(console.log);
     this.weekTable.subscribe(console.log);
@@ -93,73 +93,86 @@ export class ExportCampComponent implements OnInit {
 
 
   /** setzt die HeaderInfos für die aktuelle Seite */
-  private setHeaderInfo(name): void {
+  private setHeaderInfo(campName): void {
 
-    Header.title = 'Zusammenfassung ' + name;
-    Header.path = ['Startseite', 'meine Lager', name, 'Zusammenfassung'];
+    Header.title = 'Zusammenfassung ' + campName;
+    Header.path = ['Startseite', 'meine Lager', campName, 'Zusammenfassung'];
 
   }
 
-}
+
+  /** Passt die CampExport Daten so an, dass daraus eine Wochenübersichtstabelle generiert werden kann */
+  private transformToWeekTable(): (campInfo: any) => any {
+
+    // löscht frühere Fehlermeldungen
+    this.weekViewErrorMessage = '';
+
+    return campInfo => {
+
+      const days = campInfo.data.days;
+
+      // sortieren nach Datum
+      interface WithDate { date: number; }
+      days.sort((a: WithDate, b: WithDate) => a.date - b.date);
+
+      const tableHeaders = [];
+
+      interface HashTable { [key: string]: string[]; }
+      const rows: HashTable = {};
+
+      days.forEach((day: { date: any; meals: [{ title: string; description: string; }]; }) => {
+
+        // converts datum to local date string
+        tableHeaders.push(SettingsService.toString(new Date(day.date._seconds * 1000)));
+
+        // sort meals
+        day.meals.sort((a, b) => a.title.localeCompare(b.title));
+
+        // add meals of day
+        day.meals.forEach(meal => {
 
 
-function transformToWeekTable(): (value: any, index: number) => any {
+          if (rows[meal.title] === undefined) {
 
-  return campInfo => {
+            rows[meal.title] = [];
+            for (let i = 0; i < tableHeaders.length - 1; i++) {
+              rows[meal.title].push('-');
+            }
 
-    const days = campInfo.data.days;
 
-    // sortieren nach Datum
-    days.sort((a, b) => a.date - b.date);
+          } else if (rows[meal.title].length === tableHeaders.length) {
 
-    const tableHeaders = [];
-    interface HashTable {
-      [key: string]: string[];
-    }
+            this.weekViewErrorMessage = 'Wochenplan kann nicht erstellt werden. Doppelte Mahlzeiten am selben Tag.';
+            throw new Error('Dublicate meal on a one day!');
 
-    const rows: HashTable = {};
-
-    days.forEach((day: { date: any; meals: [{ title: string; description: string; }]; }) => {
-
-      tableHeaders.push(new Date(day.date._seconds * 1000).toDateString());
-      // sort meals
-      day.meals.sort((a, b) => a.title.localeCompare(b.title));
-      // add meals of day
-      day.meals.forEach(meal => {
-
-        if (rows[meal.title] === undefined) {
-          rows[meal.title] = [];
-          for (let i = 0; i < tableHeaders.length - 1; i++) {
-            rows[meal.title].push('-');
           }
 
-        } else if (rows[meal.title].length === tableHeaders.length) {
-          throw new Error('Dublicate meal on a one day!');
-        }
+          rows[meal.title].push(meal.description);
 
-        rows[meal.title].push(meal.description);
+        });
+
+        // add empty
+        for (const key in rows) {
+          if (rows[key].length < tableHeaders.length) {
+            rows[key].push('-');
+          }
+        }
 
       });
 
-      // add empty
+      const newRows = [];
+      const rowTitles = [];
+
       for (const key in rows) {
-        if (rows[key].length < tableHeaders.length) {
-          rows[key].push('-');
+        if (key) {
+          newRows.push(rows[key]);
+          rowTitles.push(key);
         }
       }
 
-    });
+      return { tableHeaders, rowEntries: newRows, rowTitles };
+    };
+  }
 
-    const newRows = [];
-    const rowTitles = [];
 
-    for (const key in rows) {
-      newRows.push(rows[key]);
-      rowTitles.push(key);
-    }
-
-    const result: any = { tableHeaders, rowEntries: newRows, rowTitles };
-    return result;
-  };
 }
-

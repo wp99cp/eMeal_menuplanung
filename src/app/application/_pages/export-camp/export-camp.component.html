@@ -25,6 +25,8 @@
 
 
 <!-- Wochenplan -->
+<p class="warning" *ngIf="weekViewErrorMessage !== ''">{{weekViewErrorMessage}}</p>
+
 <div class="onNewPage print landscape" *ngIf="weekTable | async; let $weekTable">
 
   <h1>Wochenplan</h1>
@@ -33,7 +35,8 @@
 
     <tr>
       <th></th>
-      <th *ngFor="let header of $weekTable.tableHeaders">{{header}}</th>
+      <th *ngFor="let header of $weekTable.tableHeaders">
+        {{header}}</th>
     </tr>
 
     <tr *ngFor="let rowTitle of $weekTable.rowTitles; let i = index">
