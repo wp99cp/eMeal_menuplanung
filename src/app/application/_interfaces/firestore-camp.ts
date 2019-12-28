@@ -12,6 +12,7 @@ export interface FirestoreCamp {
   name: string;
   description: string;
   participants: number;
+  vegetarier: number;
   year: string;
 
   days: DayData[];

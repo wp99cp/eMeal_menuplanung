@@ -19,6 +19,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
   public access: AccessData;
   public days: Day[] = [];
   public readonly firestoreElementId: string;
+  public vegetarier: number;
 
   public static getCollectionPath(): string {
     return 'camps/';
@@ -55,6 +56,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     this.participants = data.participants;
     this.year = data.year;
     this.access = data.access;
+    this.vegetarier = data.vegetarier;
 
     if (data['days']) {
       for (let dayData of data['days']) {
@@ -73,7 +75,8 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
       year: this.year,
       participants: this.participants,
       days: this.days.map(day => day.extractDataToJSON()),
-      access: this.access
+      access: this.access,
+      vegetarier: this.vegetarier
     };
 
     return campData;

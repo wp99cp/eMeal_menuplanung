@@ -31,7 +31,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
     this.campInfosForm = this.formBuilder.group({
       name: '',
       description: '',
-      participants: ''
+      participants: '',
+      vegetarier: ''
     });
 
 
@@ -46,8 +47,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
       this.campInfosForm.setValue({
         name: camp.name,
         description: camp.description,
-        participants: camp.participants
-
+        participants: camp.participants,
+        vegetarier: camp.vegetarier ? camp.vegetarier : 0
       })
 
 
@@ -96,6 +97,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     camp.name = this.campInfosForm.value.name;
     camp.description = this.campInfosForm.value.description;
     camp.participants = this.campInfosForm.value.participants;
+    camp.vegetarier = this.campInfosForm.value.vegetarier;
   }
 
 }

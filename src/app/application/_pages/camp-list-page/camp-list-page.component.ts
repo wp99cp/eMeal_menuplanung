@@ -117,7 +117,8 @@ export class CampListPageComponent implements OnInit {
           meals: [],
           description: ''
         }],
-        participants: this.newCampParticipants.value.participants
+        participants: this.newCampParticipants.value.participants,
+        vegetarier: 0
       };
 
 
