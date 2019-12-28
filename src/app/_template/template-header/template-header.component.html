@@ -15,7 +15,7 @@
     <ng-container *ngFor="let item of getPath(); let i = index">
       <ng-container *ngIf="item != ''">
         <p class="separator" *ngIf="i != 0"> · </p>
-        <p (click)="navigateTo( i )">{{item}}</p>
+        <p (click)="navigateTo( i )" class="clickable">{{item}}</p>
       </ng-container>
 
     </ng-container>

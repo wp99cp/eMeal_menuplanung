@@ -20,30 +20,34 @@
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name des Lagers </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.name}} </td>
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.description}}
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.description}}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="year">
         <th mat-header-cell *matHeaderCellDef> Jahr </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.year}} </td>
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.year}} </td>
       </ng-container>
 
       <ng-container matColumnDef="participants">
         <th mat-header-cell *matHeaderCellDef> #TNs </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}"> {{element.participants}}
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.participants}}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="menu">
         <th mat-header-cell *matHeaderCellDef> Löschen </th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon (click)='deleteCamp(element)'>delete</mat-icon>
+          <mat-icon (click)='deleteCamp(element)' class="clickable">delete</mat-icon>
         </td>
       </ng-container>
 

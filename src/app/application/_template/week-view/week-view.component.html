@@ -19,7 +19,7 @@
     <!-- Header of the day -->
     <mat-grid-tile-header>
       <h4>{{ day.getDateStr() }} {{ day.getDiscriptionInBracket() }}</h4>
-      <mat-icon class="edit-day" (click)="editDay(day)">edit</mat-icon>
+      <mat-icon class="edit-day clickable" (click)="editDay(day)">edit</mat-icon>
     </mat-grid-tile-header>
 
     <!-- Meal List for one day-->
@@ -32,11 +32,11 @@
         </mat-card-header>
         <mat-card-content>
           <p class="description">{{ meal.description }}</p>
-          <mat-icon class="edit-meal-icon meal-icon"
+          <mat-icon class="edit-meal-icon meal-icon clickable"
             routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}">edit
           </mat-icon>
-          <mat-icon class="delete-meal-icon meal-icon" (click)="deleteMeal(meal.firestoreElementId, meal.specificId)">
-            delete</mat-icon>
+          <mat-icon class="delete-meal-icon meal-icon clickable"
+            (click)="deleteMeal(meal.firestoreElementId, meal.specificId)"> delete</mat-icon>
         </mat-card-content>
       </mat-card>
     </div>
