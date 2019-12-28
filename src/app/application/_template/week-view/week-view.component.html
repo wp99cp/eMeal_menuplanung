@@ -25,10 +25,12 @@
     <!-- Meal List for one day-->
     <div class="meal-list" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="day.meals">
       <!-- Meal Element-->
-      <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag>
-        <div class="meal-placeholder" *cdkDragPlaceholder></div>
+      <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
+        [ngClass]="{'participantsWarning': meal.participantsWarning}">
+        <div class=" meal-placeholder" *cdkDragPlaceholder>
+        </div>
         <mat-card-header>
-          <p>{{ meal.title }}</p>
+          <p>{{ meal.title }} </p>
         </mat-card-header>
         <mat-card-content>
           <p class="description">{{ meal.description }}</p>
@@ -43,5 +45,7 @@
   </mat-grid-tile>
 </mat-grid-list>
 
+<p *ngIf="showParticipantsWarning" class="participantsWarning"><b>Achtung:</b> Bei gewissen Mahlzeiten stimmen die
+  Teilnehmeranzahlen ggf. nicht mit der des Lagers überein! </p>
 <br>
 <br>

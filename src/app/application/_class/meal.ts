@@ -19,7 +19,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public access: AccessData;
   public recipes: Observable<Recipe[]>;
   public specificId: string = undefined;
-
+  public participantsWarning = undefined;
 
   /**
    *
@@ -68,6 +68,10 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
       this.specificId = data.specificId;
     }
 
+    if (data.participantsWarning) {
+      this.participantsWarning = data.participantsWarning;
+    }
+
   }
 
   public extractDataToJSON(): FirestoreMeal {
@@ -83,6 +87,9 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     // They are removed if they're undefinded...
     if (this.specificId !== undefined) {
       firestoreMeal.specificId = this.specificId;
+    }
+    if (this.participantsWarning !== undefined) {
+      firestoreMeal.participantsWarning = this.participantsWarning;
     }
     if (firestoreMeal.access === undefined) {
       delete firestoreMeal.access;

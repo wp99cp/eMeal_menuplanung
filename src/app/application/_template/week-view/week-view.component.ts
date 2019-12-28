@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Input, OnDestroy, OnInit, ViewChild, Directive } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, Directive, SimpleChanges, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 
@@ -21,14 +21,25 @@ import { Saveable } from '../../_service/auto-save.service';
 // TODO: verwendung einer Mahlzeit (Zmorgen, Zmittag, ...) kann nachträglich geändert werden
 // add custom Tag für Verwendung (z.B Vorbereiten...)
 
-export class WeekViewComponent implements OnInit, Saveable {
+export class WeekViewComponent implements OnChanges, Saveable {
 
   public mealsChanged = false;
+  public showParticipantsWarning = false;
   @Input() camp: Camp;
 
   constructor(public dialog: MatDialog, public databaseService: DatabaseService) { }
 
-  ngOnInit() { }
+  /**
+   * updates the participantsWarning
+   */
+  ngOnChanges() {
+
+    this.showParticipantsWarning = false;
+    this.camp.days.forEach(day => day.meals.forEach(meal => {
+      this.showParticipantsWarning = this.showParticipantsWarning || meal.participantsWarning;
+    }));
+
+  }
 
   public save() {
 
