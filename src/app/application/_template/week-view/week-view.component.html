@@ -1,9 +1,11 @@
 <h2>Wochenplan</h2>
 
 <br />
-<button mat-raised-button [disabled]="!mealsChanged" (click)="saveMeals()" class="button saveButton" color="save">
+
+<span *ngIf="mealsChanged" (click)="saveMeals()" class="mat-raised-button button saveButton mat-save">
   Änderungen Speichern
-</button>
+</span>
+
 <button mat-raised-button (click)="addNewDay()" class="button">
   Tag hinzufügen
 </button>
