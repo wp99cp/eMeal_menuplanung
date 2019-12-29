@@ -97,8 +97,16 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
       if (save === 1) {
         this.mealsChanged = true;
+
       } else if (save === -1) {
+
         this.camp.days.splice(this.camp.days.indexOf(day), 1);
+
+        day.meals.forEach(meal => {
+
+          this.databaseService.deleteSpecificMealAndRecipes(meal.firestoreElementId, meal.specificId);
+
+        });
 
         this.saveCamp();
 
@@ -179,7 +187,7 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
     this.camp.removeMeal(specificMealId);
     this.saveCamp();
-    this.databaseService.deleteMeal(mealId, specificMealId);
+    this.databaseService.deleteSpecificMealAndRecipes(mealId, specificMealId);
 
   }
 

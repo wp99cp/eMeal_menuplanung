@@ -30,6 +30,7 @@ export class DatabaseService {
 
 
 
+
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -129,7 +130,8 @@ export class DatabaseService {
 
   }
 
-  public deleteMeal(mealId: string, specificMealId: string) {
+
+  public deleteSpecificMealAndRecipes(mealId: string, specificMealId: string) {
 
     this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
     this.db.collectionGroup('specificRecipes', collRef => collRef.where('specificMealId', '==', specificMealId)).get()
