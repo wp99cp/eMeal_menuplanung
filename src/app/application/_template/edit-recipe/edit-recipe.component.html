@@ -1,4 +1,4 @@
-<mat-expansion-panel>
+<mat-expansion-panel (closed)="onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel">
 
   <mat-expansion-panel-header>
 
@@ -92,9 +92,10 @@
 
     </table>
 
-    <button mat-raised-button color="save" [disabled]="!recipeForm.touched" (click)='saveRecipe()'>
-      Änderungen am Rezept speichern
-    </button>
+    <span class="mat-raised-button mat-save saveButton" color="save" (click)='saveRecipe()'
+      *ngIf="!recipeForm.untouched">
+      Änderungen speichern
+    </span>
 
     <br>
     <br>

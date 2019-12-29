@@ -13,15 +13,15 @@
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </ng-template>
 
-        <ng-container *ngFor="let recipe of recipes">
+        <ng-container *ngFor="let recipe of recipes; let i = index">
           <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
             <!-- display recipe -->
             <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal
-              [camp]=$camp>
+              [camp]=$camp [index]=i [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)">
             </app-edit-recipe>
           </ng-container>
         </ng-container>
-        
+
       </mat-accordion>
       <button mat-raised-button id="addRecipe" (click)="newRecipe()">Neues Rezept hinzufügen</button>
 
@@ -79,8 +79,8 @@
 
       </form>
 
-      <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()'>
-        Änderungen am Rezept speichern
+      <button mat-raised-button color="save" [disabled]="!mealInfo.touched" (click)='saveMeal()' class="saveButton">
+        Änderungen speichern
       </button>
 
 

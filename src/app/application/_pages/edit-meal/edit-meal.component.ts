@@ -18,6 +18,7 @@ import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.com
 })
 export class EditMealComponent implements OnInit, Saveable {
 
+  public indexOfOpenedPanel = -1;
   public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
   public meal: Observable<Meal>;
@@ -30,6 +31,13 @@ export class EditMealComponent implements OnInit, Saveable {
 
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
+
+  public newOpened(index: number) {
+
+    console.log(index);
+    this.indexOfOpenedPanel = index;
+
+  }
 
   ngOnInit() {
 

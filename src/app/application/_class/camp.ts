@@ -7,7 +7,6 @@ import { FirebaseObject } from './firebaseObject';
 
 export class Camp extends FirebaseObject implements FirestoreCamp {
 
-
   public static readonly CAMPS_DIRECTORY = "camps/";
   protected readonly firestorePath = Camp.CAMPS_DIRECTORY;
 

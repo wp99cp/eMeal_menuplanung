@@ -23,16 +23,25 @@ import { Saveable } from '../../_service/auto-save.service';
 
 export class WeekViewComponent implements OnChanges, Saveable {
 
+  public colCounter = this.calculateCols();
+
   public mealsChanged = false;
   public showParticipantsWarning = false;
   @Input() camp: Camp;
 
-  constructor(public dialog: MatDialog, public databaseService: DatabaseService) { }
+  constructor(public dialog: MatDialog, public databaseService: DatabaseService) {
+
+    // change number of collums when resize window
+    window.addEventListener('resize', () => this.colCounter = this.calculateCols());
+
+  }
+
 
   /**
    * updates the participantsWarning
    */
   ngOnChanges() {
+
 
     this.showParticipantsWarning = false;
     this.camp.days.forEach(day => day.meals.forEach(meal => {
@@ -173,5 +182,11 @@ export class WeekViewComponent implements OnChanges, Saveable {
     this.databaseService.deleteMeal(mealId, specificMealId);
 
   }
+
+  private calculateCols() {
+
+    return Math.floor(document.body.scrollWidth / 360);
+  }
+
 
 }

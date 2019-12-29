@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { Recipe } from '../../_class/recipe';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,7 +19,7 @@ import { Saveable } from '../../_service/auto-save.service';
 // die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
 // toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
 //
-export class EditRecipeComponent implements OnInit, Saveable {
+export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
@@ -28,11 +28,18 @@ export class EditRecipeComponent implements OnInit, Saveable {
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
   @Input() camp: Camp;
+  @Input() index: number;
+  @Input() isOpen: boolean;
+  @Output() opened = new EventEmitter<number>();
+
+  private nodes: Element[];
 
 
   public dataSource: MatTableDataSource<Ingredient>;
 
-  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
+  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) {
+
+  }
 
   ngOnInit() {
 
@@ -46,9 +53,54 @@ export class EditRecipeComponent implements OnInit, Saveable {
       overrideParticipants: this.specificRecipe.overrideParticipants
     });
 
+    this.nodes = this.getNodes();
 
   }
 
+  private getNodes(): any {
+    return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
+  }
+
+  onExpand() {
+    this.opened.emit(this.index);
+
+  }
+
+  onClose() {
+    this.opened.emit(-1);
+
+  }
+
+  ngAfterViewInit() {
+
+    this.setFocusChanges();
+
+  }
+
+
+  private setFocusChanges() {
+
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.nodes.length; i++) {
+      this.nodes[i].removeEventListener('keydown', this.keyListner(i));
+      this.nodes[i].addEventListener('keydown', this.keyListner(i));
+    }
+  }
+
+  private keyListner(i: number, ): EventListenerOrEventListenerObject {
+    return (event: any) => {
+      if (event.key === 'Enter') {
+
+        if (i + 1 < this.nodes.length) {
+          const nextFocus = i % 4 === 0 ? i + 2 : i + 1;
+          (this.nodes[nextFocus] as HTMLElement).focus();
+        } else {
+
+          this.add();
+        }
+      }
+    };
+  }
 
   // save on destroy
   public save(): void {
@@ -82,6 +134,12 @@ export class EditRecipeComponent implements OnInit, Saveable {
     };
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
+
+
+    // set focus to new Element
+    this.setFocusChanges();
+    this.nodes = this.getNodes();
+    (this.nodes[this.nodes.length - 4] as HTMLElement).focus();
 
   }
 
@@ -121,6 +179,7 @@ export class EditRecipeComponent implements OnInit, Saveable {
       this.recipe.ingredients[index][element] = value;
     }
 
+    console.log('Test');
     this.recipeForm.markAsTouched();
 
   }
