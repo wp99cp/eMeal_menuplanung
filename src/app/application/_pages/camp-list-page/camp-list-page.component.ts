@@ -18,6 +18,15 @@ import { MatPaginatorIntl } from '@angular/material';
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
   customPaginatorIntl.itemsPerPageLabel = 'Lager pro Seite';
+  customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
+  
+    length = Math.max(length, 0);
+    const startIndex = (page * pageSize === 0 && length !== 0) ? 1 : page * pageSize;
+    // If the start index exceeds the list length, do not try and fix the end index to the end.
+    const endIndex =  Math.min(startIndex - 1 + pageSize, length); 
+   return startIndex + " bis " + endIndex + " von " + length
+});
+
   return customPaginatorIntl;
 }
 
@@ -93,9 +102,15 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    // Condition for the filter
-    this.dataSource.filterPredicate = (camp: Camp, filter: string) =>
-      camp.name.trim().toLowerCase().includes(filter);
+    // Eigenschaft für die Sortierung
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+         case 'name': return item.name.toLowerCase();
+         case 'description': return (item.description !== null)? item.description.toLowerCase(): '';
+         case 'year': return item.year;
+         default: return item[property];
+      }
+    };
 
     this.camps.subscribe(camps => {
       this.dataSource.data = camps;
@@ -112,22 +127,6 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
     Header.path = ['Startseite', 'meine Lager'];
 
   }
-
-  /**
-   * Filter nach Name des Lagers
-   *
-   */
-  applyFilter(filterValue: string) {
-
-    // apply filter to the table
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-
-  }
-
 
   /**
    * Creats a new Camp
