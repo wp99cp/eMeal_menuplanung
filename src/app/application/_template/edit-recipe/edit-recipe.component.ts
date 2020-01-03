@@ -8,6 +8,7 @@ import { DatabaseService } from '../../_service/database.service';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { Camp } from '../../_class/camp';
 import { Saveable } from '../../_service/auto-save.service';
+import { Meal } from '../../_class/meal';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -24,6 +25,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
 
+  @Input() meal: Meal;
   @Input() specificMeal: SpecificMeal;
   @Input() recipe: Recipe;
   @Input() specificRecipe: SpecificRecipe;
@@ -77,6 +79,12 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
+
+  public deleteRecipe() {
+
+    this.databaseService.deleteRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
+
+  }
 
   private setFocusChanges() {
 

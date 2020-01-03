@@ -22,6 +22,10 @@
 
     <h3>Zutaten:</h3>
 
+    <mat-icon (click)="deleteRecipe()" class="clickable delete-recipe"
+      matTooltip="Lösche dieses Rezept (Achtung diese Aktion hat ggf. Auswirkungen auf andere Lager).">delete</mat-icon>
+
+
     <!-- for each ingredient ... -->
     <table mat-table [dataSource]="dataSource">
 

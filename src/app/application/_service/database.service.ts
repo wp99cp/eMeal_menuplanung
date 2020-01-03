@@ -28,9 +28,6 @@ import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
 })
 export class DatabaseService {
 
-
-
-
   // *********************************************************************************************
   // private static methodes
   // *********************************************************************************************
@@ -119,6 +116,21 @@ export class DatabaseService {
    * @param auth AngularFireAuth
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
+
+  /**
+   * Löscht ein Rezept und seine SpecificRecipes
+   *
+   */
+  public deleteRecipe(mealId: string, recipeId: string) {
+
+    this.db.doc(Recipe.getPath(mealId, recipeId)).delete();
+    this.db.collection(SpecificRecipe.getCollectionPath(mealId, recipeId)).get()
+      .subscribe(
+        docRefs => docRefs.forEach(docRef => docRef.ref.delete())
+      );
+
+  }
+
 
   public addFeedback(feedback: any) {
 
