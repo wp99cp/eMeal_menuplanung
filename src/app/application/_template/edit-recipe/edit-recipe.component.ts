@@ -1,14 +1,15 @@
-import { Component, OnInit, Input, OnDestroy, AfterViewInit, EventEmitter, Output } from '@angular/core';
-import { Recipe } from '../../_class/recipe';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { Ingredient } from '../../_interfaces/ingredient';
-import { SpecificRecipe } from '../../_class/specific-recipe';
-import { DatabaseService } from '../../_service/database.service';
-import { SpecificMeal } from '../../_class/specific-meal';
+
 import { Camp } from '../../_class/camp';
-import { Saveable } from '../../_service/auto-save.service';
 import { Meal } from '../../_class/meal';
+import { Recipe } from '../../_class/recipe';
+import { SpecificMeal } from '../../_class/specific-meal';
+import { SpecificRecipe } from '../../_class/specific-recipe';
+import { Ingredient } from '../../_interfaces/ingredient';
+import { Saveable } from '../../_service/auto-save.service';
+import { DatabaseService } from '../../_service/database.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -110,13 +111,18 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     };
   }
 
+
+
   // save on destroy
-  public save(): void {
+  public async save(): Promise<boolean> {
 
     if (this.recipeForm.touched) {
       console.log('Autosave Recipe');
       this.saveRecipe();
+      return true;
     }
+
+    return false;
 
   }
 
