@@ -44,6 +44,7 @@ import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 import { ImportComponent } from './_template/import/import.component';
+import { MatSnackBarModule } from '@angular/material';
 
 
 @NgModule({
@@ -93,7 +94,8 @@ import { ImportComponent } from './_template/import/import.component';
     MatDialogModule,
     MatCardModule,
     DragDropModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSnackBarModule
   ],
   providers: [
     AngularFirestore,

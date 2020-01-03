@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
-import { DatabaseService } from '../../_service/database.service';
 import { Saveable } from '../../_service/auto-save.service';
+import { DatabaseService } from '../../_service/database.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
 
 @Component({
@@ -30,7 +31,7 @@ export class EditMealComponent implements OnInit, Saveable {
   @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
 
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService, ) { }
 
   public newOpened(index: number) {
 
@@ -80,8 +81,11 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+
+
+
   // save on destroy (only if changed)
-  public save(): void {
+  public async save(): Promise<boolean> {
 
     // save childs
     this.editRecipes.forEach(editRecipe => editRecipe.save());
@@ -89,7 +93,10 @@ export class EditMealComponent implements OnInit, Saveable {
     if (this.mealInfo.touched) {
       console.log('Autosave Meal');
       this.saveMeal();
+      return true;
     }
+
+    return false;
 
   }
 
@@ -139,9 +146,9 @@ export class EditMealComponent implements OnInit, Saveable {
 
   newRecipe() {
 
-    this.meal.pipe(mergeMap(meal =>
+    this.meal.pipe(take(1)).subscribe(meal =>
       this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.title)
-    )).subscribe();
+    );
 
   }
 

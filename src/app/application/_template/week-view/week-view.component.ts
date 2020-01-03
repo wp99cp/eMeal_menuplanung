@@ -50,13 +50,15 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
   }
 
-  public save() {
+  public async save() {
 
     if (this.mealsChanged) {
       console.log('Autosave camp');
       this.saveMeals();
+      return true;
     }
 
+    return false;
   }
 
   drop(event: CdkDragDrop<string[]>) {

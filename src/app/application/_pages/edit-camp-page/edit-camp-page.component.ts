@@ -25,6 +25,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
   // camp Data from server
   public camp: Observable<Camp>;
 
+
   // local changes to the camp data (not sync with server)
   constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) {
 
@@ -61,16 +62,29 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   ngOnInit() { }
 
+
+
+
   // save on destroy
-  public save(): void {
+  public async save(): Promise<boolean> {
+
+    let saved = false;
 
     // saveChilds
-    this.weekViews.forEach(weekView => weekView.save());
+
+    // TODO: diese Lösung funktioiert noch nicht....
+    this.weekViews.forEach(async weekView => {
+      saved = await weekView.save();
+    });
 
     if (this.campInfosForm.touched) {
       console.log('Autosave Camp');
       this.camp.subscribe(camp => this.saveCamp(camp));
+      saved = true;
     }
+
+    return saved;
+
 
   }
 
