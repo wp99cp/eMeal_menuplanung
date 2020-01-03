@@ -2,6 +2,11 @@
 
 <p>Wähle eine/mehrere Mahlzeit/en aus, um sie deinem Lager hinzuzufügen.</p>
 
+<mat-form-field class="mat-form-field">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen...">
+</mat-form-field>
+
+
 <table mat-table [dataSource]="mealTableSource" class="mat-elevation-z8">
 
   <!-- Checkbox Column -->

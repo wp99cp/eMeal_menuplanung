@@ -80,6 +80,17 @@ export class AddMealComponent implements OnInit {
 
   }
 
+ 
+  applyFilter(filterValue: string) {
+    this.mealTableSource.filterPredicate = (meal: FirestoreMeal, filter: string) =>
+      // Condition for the filter
+      meal.title.trim().toLowerCase().includes(filter) || meal.description.trim().toLowerCase().includes(filter);
+
+    // apply filter to the table
+    this.mealTableSource.filter = filterValue.trim().toLowerCase();
+  }
+
+
   import() {
 
     this.dialog.open(ImportComponent, {

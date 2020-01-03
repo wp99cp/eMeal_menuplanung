@@ -1,24 +1,39 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator, MatSort } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+
 import { Camp } from '../../_class/camp';
+import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { MatStepper } from '@angular/material/stepper';
-import { FirestoreCamp } from '../../_interfaces/firestore-camp';
+import { MatPaginatorIntl } from '@angular/material';
 
+export function CustomPaginator() {
+  const customPaginatorIntl = new MatPaginatorIntl();
+  customPaginatorIntl.itemsPerPageLabel = 'Lager pro Seite';
+  return customPaginatorIntl;
+}
 
 @Component({
   selector: 'app-camp-list-page',
   templateUrl: './camp-list-page.component.html',
-  styleUrls: ['./camp-list-page.component.sass']
+  styleUrls: ['./camp-list-page.component.sass'],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() } 
+  ]
 })
-export class CampListPageComponent implements OnInit {
+export class CampListPageComponent implements AfterViewInit, OnInit {
+
+  @ViewChild(MatPaginator, { static: true })  paginator: MatPaginator;
+
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   // Datasource and colums for the table
   public displayedColumns: string[] = ['name', 'description', 'year', 'participants', 'menu'];
@@ -41,6 +56,7 @@ export class CampListPageComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource();
 
+
     // Create new camp; data form form
     // Here you can defind defaults values for the form fields
     this.newCampInfos = this.formBuilder.group({
@@ -57,23 +73,37 @@ export class CampListPageComponent implements OnInit {
     });
 
 
+
+  }
+
+  ngOnInit(){
+
+    this.setHeaderInfo();
+    this.camps = this.databaseService.getEditableCamps();
+
+
   }
 
   /**
    *
    */
-  ngOnInit() {
-
-    this.setHeaderInfo();
-
-    this.camps = this.databaseService.getEditableCamps();
-
+  ngAfterViewInit() {
+ 
     // Update MatTableDataSource
-    this.camps.subscribe((camps: Camp[]) => {
-      this.dataSource = new MatTableDataSource(camps)
-    });
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    // Condition for the filter
+    this.dataSource.filterPredicate = (camp: Camp, filter: string) =>
+      camp.name.trim().toLowerCase().includes(filter);
+
+    this.camps.subscribe(camps => {
+      this.dataSource.data = camps;
+    })
 
   }
+
+
 
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(): void {
@@ -88,12 +118,14 @@ export class CampListPageComponent implements OnInit {
    *
    */
   applyFilter(filterValue: string) {
-    this.dataSource.filterPredicate = (camp: Camp, filter: string) =>
-      // Condition for the filter
-      camp.name.trim().toLowerCase().includes(filter);
 
     // apply filter to the table
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+
   }
 
 
@@ -126,7 +158,7 @@ export class CampListPageComponent implements OnInit {
       this.databaseService.addDocument(campData, 'camps')
 
         // reset form
-        .then(ref => campCreator.reset());
+        .then(() => campCreator.reset());
 
 
     });

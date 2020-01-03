@@ -1,67 +1,67 @@
 <h1 class="mat-h1">Erstelle ein neues Lager.<br />
   Oder bearbeite ein bereits Erstelltes.</h1>
 
-<!-- List with camps-->
-<div *ngIf="camps; else loadingCamps">
 
-  <ng-container *ngIf="(camps| async)?.length > 0">
+
+
+<!-- List with camps-->
+<div [hidden]="(camps| async)?.length == 0">
 
     <mat-form-field class="mat-form-field" id="searchForCamp">
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Lager suchen..."
         matTooltip="Suche nach dem Namen eines Lagers.">
     </mat-form-field>
-
-
+  
+  
     <!-- Table with camps-->
-    <table mat-table [dataSource]="dataSource" id="campsTable">
-
+    <table mat-table [dataSource]="dataSource" id="campsTable" matSort >
+  
       <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
-
+  
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name des Lagers </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name des Lagers </th>
         <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
           {{element.name}} </td>
       </ng-container>
-
+  
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef> Beschreibung </th>
         <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
           {{element.description}}
         </td>
       </ng-container>
-
+  
       <ng-container matColumnDef="year">
         <th mat-header-cell *matHeaderCellDef> Jahr </th>
         <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
           {{element.year}} </td>
       </ng-container>
-
+  
       <ng-container matColumnDef="participants">
         <th mat-header-cell *matHeaderCellDef> #TNs </th>
         <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
           {{element.participants}}
         </td>
       </ng-container>
-
+  
       <ng-container matColumnDef="menu">
         <th mat-header-cell *matHeaderCellDef> Löschen </th>
         <td mat-cell *matCellDef="let element">
           <mat-icon (click)='deleteCamp(element)' class="clickable">delete</mat-icon>
         </td>
       </ng-container>
-
+  
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
+  
       <!-- Link to Camp-->
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"
         matTooltip="Klicke auf eines deiner Lager, um es zu Bearbeiten."></tr>
-
+  
     </table>
 
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
-
-  </ng-container>
 </div>
 
 <!-- Loading Animation -->
@@ -79,7 +79,7 @@
 
       <h2 class="mat-h2">Mit Planen beginnen.</h2>
       <p>Erstelle ein neues Lager und beginne sofort mit dem Planen.</p>
-      <button mat-raised-button matStepperNext>Lager erstellen.</button>
+      <button mat-raised-button matStepperNext>Lager erstellen</button>
 
     </mat-step>
 
@@ -89,8 +89,8 @@
       <form [formGroup]="newCampInfos">
 
         <mat-form-field>
-          <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32"
-            autocomplete="off">
+          <input matInput placeholder="Name" required formControlName="name" #name maxlength="32" autocomplete="off">
+          <mat-hint align="start"><strong>Name des Lagers</strong></mat-hint>
           <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
         </mat-form-field>
 
