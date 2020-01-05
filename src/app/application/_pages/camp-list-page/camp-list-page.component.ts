@@ -19,13 +19,13 @@ export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
   customPaginatorIntl.itemsPerPageLabel = 'Lager pro Seite';
   customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
-  
+
     length = Math.max(length, 0);
     const startIndex = (page * pageSize === 0 && length !== 0) ? 1 : page * pageSize;
     // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex =  Math.min(startIndex - 1 + pageSize, length); 
-   return startIndex + " bis " + endIndex + " von " + length
-});
+    const endIndex = Math.min(startIndex - 1 + pageSize, length);
+    return startIndex + " bis " + endIndex + " von " + length
+  });
 
   return customPaginatorIntl;
 }
@@ -35,12 +35,12 @@ export function CustomPaginator() {
   templateUrl: './camp-list-page.component.html',
   styleUrls: ['./camp-list-page.component.sass'],
   providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() } 
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
   ]
 })
 export class CampListPageComponent implements AfterViewInit, OnInit {
 
-  @ViewChild(MatPaginator, { static: true })  paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -85,7 +85,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
     this.setHeaderInfo();
     this.camps = this.databaseService.getEditableCamps();
@@ -97,7 +97,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
    *
    */
   ngAfterViewInit() {
- 
+
     // Update MatTableDataSource
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -105,10 +105,10 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
     // Eigenschaft für die Sortierung
     this.dataSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-         case 'name': return item.name.toLowerCase();
-         case 'description': return (item.description !== null)? item.description.toLowerCase(): '';
-         case 'year': return item.year;
-         default: return item[property];
+        case 'name': return item.name.toLowerCase();
+        case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
+        case 'year': return item.year;
+        default: return item[property];
       }
     };
 
