@@ -51,6 +51,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
     if (data.vegi !== undefined) {
       this.vegi = data.vegi;
+    } else {
+      this.vegi = 'all';
     }
 
     if (data.overrideParticipants !== undefined) {
