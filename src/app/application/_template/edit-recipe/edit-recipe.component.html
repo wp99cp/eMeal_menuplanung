@@ -9,12 +9,7 @@
       {{recipe.description}}
     </mat-panel-description>
 
-    <mat-panel-description>
-      für
-      {{ specificRecipe.overrideParticipants? specificRecipe.participants:
-        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants) }}
-      Personen
-    </mat-panel-description>
+    <mat-panel-description> {{ getPanelDescriptionParticipants() }} </mat-panel-description>
 
   </mat-expansion-panel-header>
 
@@ -44,13 +39,9 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="calcMeasure">
-        <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{specificRecipe.overrideParticipants? specificRecipe.participants:
-        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants)}}
-          Per.
-        </th>
+        <th mat-header-cell *matHeaderCellDef style="width: 12%"> {{calculateParticipantsNumber()}} Per. </th>
         <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="(specificRecipe.overrideParticipants? specificRecipe.participants:
-        (specificMeal.overrideParticipants? specificMeal.participants: camp.participants)) * ingredient.measure"
+          <ingredient [fieldValue]="calculateParticipantsNumber() * ingredient.measure"
             (valueChange)="changeIngredient($event, i, 'calcMeasure')">
           </ingredient>
         </td>
@@ -84,7 +75,7 @@
       <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef> </th>
         <td mat-cell *matCellDef="let i = index">
-          <mat-icon (click)="delete(i)" class="clickable">delete</mat-icon>
+          <mat-icon (click)="deleteIngredient(i)" class="clickable">delete</mat-icon>
         </td>
         <td mat-footer-cell *matFooterCellDef> </td>
 
@@ -92,7 +83,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr mat-footer-row *matFooterRowDef="displayedColumns" (click)="add()"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns" (click)="addIngredientField()"></tr>
 
     </table>
 
@@ -140,8 +131,10 @@
     </mat-radio-group>
 
     <br />
+    <br />
 
     <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
+
     <br />
     <br />
 

@@ -23,9 +23,13 @@ import { DatabaseService } from '../../_service/database.service';
 //
 export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
-  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
   public recipeForm: FormGroup;
+  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
+  public dataSource: MatTableDataSource<Ingredient>;
 
+  private ingredientFieldNodes: Element[];
+
+  //  fields given by the parent element
   @Input() meal: Meal;
   @Input() specificMeal: SpecificMeal;
   @Input() recipe: Recipe;
@@ -35,14 +39,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   @Input() isOpen: boolean;
   @Output() opened = new EventEmitter<number>();
 
-  private nodes: Element[];
-
-
-  public dataSource: MatTableDataSource<Ingredient>;
-
-  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) {
-
-  }
+  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
   ngOnInit() {
 
@@ -57,19 +54,28 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       vegi: this.specificRecipe.vegi
     });
 
-    this.nodes = this.getNodes();
+    this.ingredientFieldNodes = this.getNodes();
 
   }
 
+  /**
+   * @returns all nodes of an ingredient-field in this recipe-panel
+   */
   private getNodes(): any {
     return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
   }
 
+  /**
+   * this recipe was opened
+   */
   onExpand() {
     this.opened.emit(this.index);
 
   }
 
+  /**
+   * this recipe was closed
+   */
   onClose() {
     this.opened.emit(-1);
 
@@ -91,9 +97,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   private setFocusChanges() {
 
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.nodes.length; i++) {
-      this.nodes[i].removeEventListener('keydown', this.keyListner(i));
-      this.nodes[i].addEventListener('keydown', this.keyListner(i));
+    for (let i = 0; i < this.ingredientFieldNodes.length; i++) {
+      this.ingredientFieldNodes[i].removeEventListener('keydown', this.keyListner(i));
+      this.ingredientFieldNodes[i].addEventListener('keydown', this.keyListner(i));
     }
   }
 
@@ -101,12 +107,12 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     return (event: any) => {
       if (event.key === 'Enter') {
 
-        if (i + 1 < this.nodes.length) {
+        if (i + 1 < this.ingredientFieldNodes.length) {
           const nextFocus = i % 4 === 0 ? i + 2 : i + 1;
-          (this.nodes[nextFocus] as HTMLElement).focus();
+          (this.ingredientFieldNodes[nextFocus] as HTMLElement).focus();
         } else {
 
-          this.add();
+          this.addIngredientField();
         }
       }
     };
@@ -127,13 +133,22 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
+  /**
+   * Ändert die Teilnehmeranzahl
+   *
+   */
   changePartcipations() {
 
     this.specificRecipe.participants = this.recipeForm.value.participants;
 
   }
 
-  delete(index: number) {
+  /**
+   * Löscht ein Ingredient aus dem Rezept
+   *
+   * @param index Index des Ingredient = Zeile in der Tabelle
+   */
+  deleteIngredient(index: number) {
 
     this.dataSource.data.splice(index, 1);
     this.dataSource._updateChangeSubscription();
@@ -141,61 +156,139 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
-  add() {
-    this.dataSource.data[this.dataSource.data.length] = {
-      food: '',
-      unit: '',
-      measure: null
-    };
+  /**
+   * Fügt ein leeres Ingredient-Field am Ende der Tabelle hinzu.
+   */
+  addIngredientField() {
+
+    // generiert leere Daten für ein neues Ingredient
+    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null };
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
-
     // set focus to new Element
     this.setFocusChanges();
-    this.nodes = this.getNodes();
-    (this.nodes[this.nodes.length - 4] as HTMLElement).focus();
+    this.ingredientFieldNodes = this.getNodes();
+    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 4] as HTMLElement).focus();
 
   }
 
+  /**
+   * Aktion bei einer Veränderung eines Ingreident-Feldes
+   */
   changeIngredient(value: string, index: number, element: string) {
 
-
+    // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
     if (element === 'measure' && value.includes('\t')) {
-
-      this.recipe.ingredients.splice(index, 1);
-      const ex = /([0-9]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.]|[0-9])+\t))+/gi;
-      console.log(value.match(ex));
-      const ingredientsAsArray = value.match(ex).join().split(',');
-      console.log(ingredientsAsArray);
-
-      let i = index;
-      for (const ing of ingredientsAsArray) {
-
-        const ingredientAsArray = ing.split('\t');
-
-        this.recipe.ingredients.push({
-          food: ingredientAsArray[2],
-          unit: ingredientAsArray[1],
-          measure: Number.parseInt(ingredientAsArray[0], 10)
-        });
-
-        i++;
-
-      }
-
-      this.dataSource._updateChangeSubscription();
+      this.parseTableInput(index, value);
 
     } else if (element === 'calcMeasure') {
-      this.recipe.ingredients[index].measure =
-        Number.parseInt(value, 10) / (this.specificRecipe.overrideParticipants ? this.specificRecipe.participants :
-          (this.specificMeal.overrideParticipants ? this.specificMeal.participants : this.camp.participants));
+
+      // Berechnung für eine Person
+      this.recipe.ingredients[index].measure = Number.parseInt(value, 10) / this.calculateParticipantsNumber();
+
     } else {
+
+      // übernahme ins Object Recipe
       this.recipe.ingredients[index][element] = value;
     }
 
-    console.log('Test');
     this.recipeForm.markAsTouched();
+
+  }
+
+  /**
+   * Parst einen Input als Tabelle
+   */
+  private parseTableInput(index: number, value: string) {
+
+    this.recipe.ingredients.splice(index, 1);
+
+    // Regulärer Ausdruck für das Parsing des Inputs
+    const ex = /([0-9]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.]|[0-9])+\t))+/gi;
+
+    const ingredientsAsArray = value.match(ex).join().split(',');
+
+    let i = index;
+
+    for (const ing of ingredientsAsArray) {
+
+      const ingredientAsArray = ing.split('\t');
+
+      this.recipe.ingredients.push({
+        food: ingredientAsArray[2],
+        unit: ingredientAsArray[1],
+        measure: Number.parseInt(ingredientAsArray[0], 10)
+      });
+
+      i++;
+    }
+
+    this.dataSource._updateChangeSubscription();
+  }
+
+  /**
+   * Berechnet die Anzahl Teilnehmende dieses Rezeptes für die Berechnung.
+   *
+   * Beachtet dabei lokale Überschreibungen der Teilnehmeranzahl des Lagers im Rezept oder in der Mahlzeit
+   * und berücksichtigt das "Vegi"-Feld...
+   *
+   */
+
+  public calculateParticipantsNumber() {
+
+    // Rezept nur für Vegetarier
+    if (this.specificRecipe.vegi === 'vegiOnly') {
+      return this.camp.vegetarier;
+
+    } else {
+
+      // Anzahl Vegis, die Abgezogen werdem
+      const abzug = this.specificRecipe.vegi !== 'nonVegi' ? 0 : this.camp.vegetarier;
+
+      // Anzahl wurde im Rezept Überschrieben
+      if (this.specificRecipe.overrideParticipants) {
+
+        return this.specificRecipe.participants - abzug;
+
+
+      } else {
+
+        // Anzahl Teilnehmer der Mahlzeit
+        return (this.specificMeal.overrideParticipants ?
+          // Anzahl wurde in der Mahlzeit überschrieben
+          (this.specificMeal.participants - abzug) :
+          // Anzahl wurde nicht überschrieben
+          (this.camp.participants - abzug));
+
+      }
+    }
+
+  }
+
+  /**
+   * Stellt die Beschreibung für die Anzahl Teilnehmende eines Rezeptes zusammen.
+   * inkl. Anzeige Vegi oder nicht usw.
+   *
+   */
+  public getPanelDescriptionParticipants() {
+
+    if (this.specificRecipe.vegi === 'all') {
+
+      return 'für ' + this.calculateParticipantsNumber() + ' Personen';
+
+    }
+    if (this.specificRecipe.vegi === 'vegiOnly') {
+
+      return 'nur für Vegis (' + this.calculateParticipantsNumber() + ' P.)';
+
+    }
+
+    if (this.specificRecipe.vegi === 'nonVegi') {
+
+      return 'nur für Nicht-Vegis (' + this.calculateParticipantsNumber() + ' P.)';
+
+    }
 
   }
 
