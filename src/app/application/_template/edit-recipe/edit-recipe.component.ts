@@ -53,7 +53,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       description: this.recipe.description,
       name: this.recipe.name,
       participants: this.specificRecipe.participants,
-      overrideParticipants: this.specificRecipe.overrideParticipants
+      overrideParticipants: this.specificRecipe.overrideParticipants,
+      vegi: this.specificRecipe.vegi
     });
 
     this.nodes = this.getNodes();
@@ -206,6 +207,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     this.recipe.name = this.recipeForm.value.name;
     this.specificRecipe.overrideParticipants = this.recipeForm.value.overrideParticipants;
     this.specificRecipe.participants = this.recipeForm.value.participants;
+    this.specificRecipe.vegi = this.recipeForm.value.vegi;
 
     this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
     this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());

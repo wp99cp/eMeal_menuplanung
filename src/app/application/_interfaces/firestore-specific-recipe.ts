@@ -4,5 +4,6 @@ export interface FirestoreSpecificRecipe {
   campId: string;
   overrideParticipants: boolean;
   specificMealId: string;
-
+  vegi: 'all' | 'vegiOnly' | 'nonVegi';
+  
 }

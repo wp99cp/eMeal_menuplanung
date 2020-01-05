@@ -130,8 +130,16 @@
 
 
     <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden der Mahlzeit berechnet.
-      Diese Berechnung kann allerdings auch übersteuert werden.</p>
+      Diese Berechnung kann allerdings auch übersteuert werden.<br>
+      Vegi rezepte werden dur für die Anzahl Vegis in diesem Lager berechenet.</p>
 
+    <mat-radio-group formControlName="vegi">
+      <mat-radio-button value="all"> Rezept für alle </mat-radio-button>
+      <mat-radio-button value="vegiOnly"> Nur für Vegetarier </mat-radio-button>
+      <mat-radio-button value="nonVegi"> Nur für Nicht-Vegetarier </mat-radio-button>
+    </mat-radio-group>
+
+    <br />
 
     <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
     <br />

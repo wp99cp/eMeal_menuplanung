@@ -44,7 +44,7 @@ import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 import { ImportComponent } from './_template/import/import.component';
-import { MatSnackBarModule, MatSortModule } from '@angular/material';
+import { MatSnackBarModule, MatSortModule, MatRadioModule } from '@angular/material';
 
 
 @NgModule({
@@ -100,7 +100,8 @@ import { MatSnackBarModule, MatSortModule } from '@angular/material';
     MatTableModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule
   ],
   providers: [
     AngularFirestore,
@@ -122,7 +123,7 @@ import { MatSnackBarModule, MatSortModule } from '@angular/material';
     MatPaginatorModule,
     MatSortModule
   ],
-  bootstrap:[
+  bootstrap: [
     CampListPageComponent
   ]
 })

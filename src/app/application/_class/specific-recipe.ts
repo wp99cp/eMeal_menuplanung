@@ -8,6 +8,7 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
   public campId: string;
 
+  public vegi: 'all' | 'vegiOnly' | 'nonVegi';
   public participants: number;
   public overrideParticipants = false;
   protected firestorePath: string;
@@ -29,7 +30,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
       participants: 1,
       campId,
       overrideParticipants: false,
-      specificMealId
+      specificMealId,
+      vegi: 'all'
     };
 
     return specificRecipe;
@@ -47,6 +49,10 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
     this.participants = data.participants;
     this.campId = data.campId;
 
+    if (data.vegi !== undefined) {
+      this.vegi = data.vegi;
+    }
+
     if (data.overrideParticipants !== undefined) {
       this.overrideParticipants = data.overrideParticipants;
     }
@@ -59,7 +65,8 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
       participants: this.participants,
       campId: this.campId,
       overrideParticipants: this.overrideParticipants,
-      specificMealId: this.specificMealId
+      specificMealId: this.specificMealId,
+      vegi: this.vegi
     };
 
   }
