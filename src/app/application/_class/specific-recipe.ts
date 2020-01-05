@@ -1,6 +1,5 @@
-import { AngularFirestore } from '@angular/fire/firestore';
+import { FirestoreSpecificRecipe, VegiStates } from '../_interfaces/firestore-specific-recipe';
 import { FirebaseObject } from './firebaseObject';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
 import { Recipe } from './recipe';
 
 export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificRecipe {
@@ -8,7 +7,7 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
   public campId: string;
 
-  public vegi: 'all' | 'vegiOnly' | 'nonVegi';
+  public vegi: VegiStates;
   public participants: number;
   public overrideParticipants = false;
   protected firestorePath: string;
