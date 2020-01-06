@@ -23,15 +23,13 @@ export class WelcomPageComponent implements OnInit {
   ngOnInit() {
 
     this.currentUser = this.auth.getCurrentUser();
-
     this.setHeaderInfo();
+
   }
 
 
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(): void {
-
-
     Header.title = 'Lagerplanen leicht gemacht!';
     Header.path = [];
 
