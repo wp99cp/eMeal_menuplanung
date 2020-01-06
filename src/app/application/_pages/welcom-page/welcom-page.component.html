@@ -3,11 +3,12 @@
   der Menuplanungssoftware für Lager.
 </h1>
 
+<button class="header-right-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
+
 <!-- fast actions: overview -->
 <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
 
   <button class="menu-button" mat-raised-button routerLink="camps">Meine Lager</button>
-  <button class="menu-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
   <button class="menu-button" mat-raised-button routerLink="settings">Einstellungen</button>
   <button class="menu-button" mat-raised-button routerLink="feedback">Fehler melden</button>
 
@@ -19,7 +20,7 @@
 <p>- Rezepte löschen</p>
 <p>- Benachrichtigung für automatisches Speichern</p>
 <p>- Suchfeld für neue Mahlzeiten</p>
-<p>- Optionen für einfache Integration von Vegetarter</p>
+<p>- Optionen für einfache Integration von Vegetarier</p>
 <p>- Verschiedene Bug fixes</p>
 <br>
 
