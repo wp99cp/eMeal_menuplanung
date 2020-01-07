@@ -1,53 +1,113 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css'
+@import 'sass/colors'
+@import 'sass/fonts'
+@import 'sass/animations'
+
+
+///////////////////////////////////////////////////////////////
+// Grundlegende Einstellungen zum Hauptfenster der Applikation
+///////////////////////////////////////////////////////////////
+
+html
+  overflow-x: hidden
 
 html, body
-  font-size: 10px
+
+  // formatfüllend
   margin: 0
   padding: 0
-  font-family: sans-serif
+
+  background-color: $background-color
+  color: $background-text-color
+  font: $default-font
+
+
+app-root
+  display: grid
+  grid-template-rows: 65px auto 160px
+  height: 100%
+  grid-gap: 45px
 
 main
-  max-width: 1500px
-  margin: 0
-  min-height: calc(100% - 335px)
-  padding: 0 50px
-  padding-top: 150px
+
+  // Ausrichtung im Fenster
+  max-width: 1350px
+  margin: 0 30px
+  width: calc(100% - 60px)
+
+  // content color
+  color: $background-text-color
 
   p
+    // maximale Breite eines Textkörpers
     max-width: 850px
+    font: $p-font
+    margin: 0 0 2.5px 0
 
-  .mat-h1
-    line-height: 1.25em
-    font-weight: 500
-    font-size: 3.5rem
+  h1, .mat-h1
+    font: $h1-font
 
-table
-  width: 100%
+  h2
+    margin: 50px 0 10px
 
-.warning
-  color: red
+  // Tabellen füllen die gesamte Breite des Bildschirms
+  table
+    width: 100%
 
-.info
-  color: gray
-  margin-top: 20px
-  margin-bottom: 10px
-  // display: none
 
+
+
+///////////////////////////////////////////////////////////////
+// Grundlegende Styles von Elementen der gesamten Applikation
+///////////////////////////////////////////////////////////////
+
+// Horizontaler strich
 .mat-divider
   margin: 25px 0 !important
+  color: $info-text-color
 
-.full-width
-  width: 100%
 
-textarea
-  line-height: 1.45em
-  min-height: 80px
+// Hervorhebungen von Textelementen
+.warning
+  color: $warning-text-color
+
+.info
+  color: $info-text-color
+
+.news-element
+  margin: 10px 0 10px 140px
+
+
+
+// News Items
+.news-element::before
+  padding: 5px 22px
+  border-radius: 10px
+  color: $prime-text-color
+
+
+.news-fixed::before
+  content: "FIXED"
+  margin: 5px 49px 5px -140px
+  background: $complementar-color-light
+
+.news-feature::before
+  content: "FEATURE"
+  margin: 5px 23px 5px -140px
+  background: $second-color-light
+
+
+////////////////////////////////////////////////////////////////
+// Buttons
+///////////////////////////////////////////////////////////////
 
 .mat-raised-button
   margin: 15px !important
 
+// Speicherbutton
 .saveButton
   opacity: 0 !important
+  background-color: $prime-color
+  color: $prime-text-color
 
 .saveButton:not([disabled])
   display: block !important
@@ -59,24 +119,83 @@ textarea
   left: auto !important
   top: auto !important
 
-// globaler style für save-Buttons
-.mat-save
-  background-color: #99bf62
-  color: #fff
-
-.mat-card-header-text
-  height: auto
-  margin: 0 !important
-
-.clickable
-  cursor: pointer !important
-
 .header-right-button
   position: fixed !important
   right: 0
   top: 0
   z-index: 120
 
+
+.full-width
+  width: 100%
+
+// Curser zum Clicken
+.clickable
+  cursor: pointer !important
+
+///////////////////////////////////////////////////////////////
+// Icons
+///////////////////////////////////////////////////////////////
+
+.mat-icon
+  text-align: center
+  margin: auto
+  font: $icon-font
+  color: $icon-color
+
+.mat-icon:hover
+  color: $icon-color-hover
+
+
+
+
+///////////////////////////////////////////////////////////////
+// Tabellen
+///////////////////////////////////////////////////////////////
+
+.delete-icon
+  text-align: right
+
+.delete-header
+  width: 35px
+  text-align: right
+
+
+tbody
+
+  tr
+    transition: all $default-animation
+
+  tr:hover
+    background-color: $prime-color-light
+
+
+
+
+///////////////////////////////////////////////////////////////
+// Formulare
+///////////////////////////////////////////////////////////////
+
+textarea
+  line-height: 1.45em
+  min-height: 80px
+
+// color overriding
+.mat-step-icon-selected
+  background-color: $prime-color !important
+.mat-step-icon-state-edit
+  background-color: unset !important
+
+// verhindert, dass Buchstaben abgeschnitten werden
+.mat-step-text-label
+  line-height: 1.25em
+
+.mat-input-element
+  font: $p-font !important
+
+///////////////////////////////////////////////////////////////
+// Drucken einer Seite
+///////////////////////////////////////////////////////////////
 
 // print modus
 @media print

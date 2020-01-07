@@ -73,9 +73,10 @@
 
       <!-- Delete Column -->
       <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef> </th>
+        <th mat-header-cell *matHeaderCellDef class="delete-header"> </th>
         <td mat-cell *matCellDef="let i = index">
-          <mat-icon (click)="deleteIngredient(i)" class="clickable">delete</mat-icon>
+          <mat-icon (click)="deleteIngredient(i)" class="clickable delete-icon" matTooltip="Zutat löschen"> delete
+          </mat-icon>
         </td>
         <td mat-footer-cell *matFooterCellDef> </td>
 
@@ -83,7 +84,8 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      <tr mat-footer-row *matFooterRowDef="displayedColumns" (click)="addIngredientField()"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns" matTooltip="Zutat einfügen" (click)="addIngredientField()">
+      </tr>
 
     </table>
 

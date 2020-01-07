@@ -84,24 +84,31 @@ export class EditMealComponent implements OnInit, Saveable {
 
 
 
-  // save on destroy (only if changed)
+  /**
+   * save on destroy (only if changed)
+   *
+   */
   public async save(): Promise<boolean> {
 
+    let hasChanges = false;
+
     // save childs
-    this.editRecipes.forEach(editRecipe => editRecipe.save());
+    await this.editRecipes.forEach(async editRecipe => {
+      editRecipe.save().then(changes => { hasChanges = hasChanges || changes; });
+    });
 
     if (this.mealInfo.touched) {
       console.log('Autosave Meal');
-      this.saveMeal();
+      await this.saveMeal();
       return true;
     }
 
-    return false;
+    return hasChanges;
 
   }
 
 
-  public saveMeal() {
+  public async saveMeal() {
 
     // update meal
     const mealSubs = this.meal.subscribe(meal => {
@@ -144,7 +151,16 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+  /**
+   * Erstellt ein neues Rezept.
+   *
+   * Um Datenverluste zu vermeiden werden zuerst alle offenen Änderungen
+   * der anderen Rezepte gespeichert.
+   *
+   */
   newRecipe() {
+
+    this.save();
 
     this.meal.pipe(take(1)).subscribe(meal =>
       this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.title)

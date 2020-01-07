@@ -6,21 +6,19 @@
   Änderungen Speichern
 </span>
 
-<button mat-raised-button (click)="addNewDay()" class="button">
-  Tag hinzufügen
-</button>
 <button mat-raised-button (click)="addMeal()" class="button">
   Mahlzeit hinzufügen
 </button>
 <br />
 <br />
 
-<mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{ colCounter }}" rowHeight="400px">
+<mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{ colCounter }}" rowHeight="430px">
+
   <mat-grid-tile *ngFor="let day of camp.days; let i = index" class="mat-elevation-z3">
     <!-- Header of the day -->
     <mat-grid-tile-header>
       <h4>{{ day.getDateStr() }} {{ day.getDiscriptionInBracket() }}</h4>
-      <mat-icon class="edit-day clickable" (click)="editDay(day)">edit</mat-icon>
+      <mat-icon class="edit-day clickable" (click)="editDay(day)" matTooltip="Tag bearbeiten">edit</mat-icon>
     </mat-grid-tile-header>
 
     <!-- Meal List for one day-->
@@ -33,17 +31,29 @@
         <mat-card-header>
           <p>{{ meal.title }} </p>
         </mat-card-header>
+
         <mat-card-content>
+
           <p class="description">{{ meal.description }}</p>
+
           <mat-icon class="edit-meal-icon meal-icon clickable"
-            routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}">edit
+            routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}" matTooltip="Rezept bearbeiten">edit
           </mat-icon>
+
           <mat-icon class="delete-meal-icon meal-icon clickable"
-            (click)="deleteMeal(meal.firestoreElementId, meal.specificId)"> delete</mat-icon>
+            (click)="deleteMeal(meal.firestoreElementId, meal.specificId)" matTooltip="Rezept löschen"> delete
+          </mat-icon>
+
         </mat-card-content>
       </mat-card>
     </div>
   </mat-grid-tile>
+
+  <mat-grid-tile class="mat-elevation-z3">
+    <mat-icon class="add-day-icon clickable" matTooltip="Tag hinzufügen" (click)="addNewDay()"> add_circle_outline
+    </mat-icon>
+  </mat-grid-tile>
+
 </mat-grid-list>
 
 <p *ngIf="showParticipantsWarning" class="participantsWarning"><b>Achtung:</b> Bei gewissen Mahlzeiten stimmen die

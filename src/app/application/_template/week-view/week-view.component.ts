@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Input, OnDestroy, OnInit, ViewChild, Directive, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 
@@ -8,10 +8,10 @@ import { Camp } from '../../_class/camp';
 import { Day } from '../../_class/day';
 import { Meal } from '../../_class/meal';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
+import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../add-meal/add-meal.component';
 import { EditDayComponent } from '../edit-day/edit-day.component';
-import { Saveable } from '../../_service/auto-save.service';
 
 @Component({
   selector: 'app-week-view',

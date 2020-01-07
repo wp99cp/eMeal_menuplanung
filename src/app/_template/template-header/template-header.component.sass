@@ -1,18 +1,25 @@
-.separator
-  margin: 5px
 
-#title
-  height: 64px
-  width: 400px
-  float: left
+@import '../../../sass/colors'
+@import '../../../sass/fonts'
 
-.linkList
+// Allgemeines zum Header
+.header
+  background-color: $prime-color
+  color: $prime-color-light
+
+  display: inline-grid
+  position: fixed
+  grid-template-columns: auto auto
+
+  z-index: 100
+
+// Seitennavigation im Header
+.nav-link-list
   float: right
   width: auto
-  font-size: 12px
+  margin-left: auto
+  font: $header-nav-font
 
-.mat-toolbar
-  display: block
-  position: fixed
-  top: 0
-  z-index: 100
+  // Saparator '·' between the navigation in the header
+  .nav-separator
+    margin: 5px

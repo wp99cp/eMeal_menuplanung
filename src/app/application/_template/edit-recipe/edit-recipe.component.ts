@@ -38,6 +38,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   @Input() index: number;
   @Input() isOpen: boolean;
   @Output() opened = new EventEmitter<number>();
+  @Output() saveOthers = new EventEmitter<boolean>();
 
   constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
@@ -88,8 +89,16 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   }
 
 
+  /**
+   * Löscht ein Rezept.
+   *
+   * Um Datenverlust zu vermeiden, werden zu erst alle offenen Änderungen
+   * der anderen Rezepte gespeichert.
+   *
+   */
   public deleteRecipe() {
 
+    this.saveOthers.emit(true);
     this.databaseService.deleteRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
 
   }
@@ -125,7 +134,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
     if (this.recipeForm.touched) {
       console.log('Autosave Recipe');
-      this.saveRecipe();
+      await this.saveRecipe();
       return true;
     }
 
@@ -292,7 +301,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
-  saveRecipe() {
+  async saveRecipe() {
+
+    console.log('Test');
 
     // save data to firestore
     this.recipe.notes = this.recipeForm.value.notes;

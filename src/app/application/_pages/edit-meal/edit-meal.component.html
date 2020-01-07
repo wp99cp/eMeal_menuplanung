@@ -17,7 +17,8 @@
           <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
             <!-- display recipe -->
             <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal
-              [camp]=$camp [index]=i [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]=$meal>
+              [camp]=$camp [index]=i [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]=$meal
+              (saveOthers)="save(); indexOfOpenedPanel = -1">
             </app-edit-recipe>
           </ng-container>
         </ng-container>
