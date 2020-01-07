@@ -1,5 +1,54 @@
+:host
+  width: 100%
+  height: 100%
+  display: grid
+  grid-template-rows: 50px auto 50px
+  grid-template-columns: 40% 60%
+  grid-gap: 10px
+  grid-template-areas: "header header" "left right" "buttons buttons"
+
+.mat-dialog-title
+  grid-area: header
+  height: 100%
+  margin: 0
+
+.day-form
+  grid-area: right
+
+  .mat-form-field
+    width: calc(100% - 40px)
+
+  h4
+    margin: 20px
+
+.delete-day-button
+  float: right
+
+#day-overview
+  grid-area: left
+
+.mat-buttons
+  height: 100%
+  padding: 0
+  grid-area: buttons
+  float: right
+  display: block
+
+  button
+    float: right
+
 .mat-form-field
-    font-size: 14px
-    width: auto
-    margin: 5px 20px
+  font-size: 14px
+  width: auto
+  margin: 5px 20px
+
+
+
+@media only screen and (max-width: 1200px)
+
+  :host
+    grid-template-areas: "header header" "right right" "buttons buttons"
+
+  #day-overview
+    display: none
 

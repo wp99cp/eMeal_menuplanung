@@ -45,6 +45,7 @@ import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.comp
 import { AutoSaveService } from './_service/auto-save.service';
 import { ImportComponent } from './_template/import/import.component';
 import { MatSnackBarModule, MatSortModule, MatRadioModule } from '@angular/material';
+import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
 
 
 @NgModule({
@@ -63,7 +64,8 @@ import { MatSnackBarModule, MatSortModule, MatRadioModule } from '@angular/mater
     AddMealComponent,
     ExportCampComponent,
     FeedbackPageComponent,
-    ImportComponent
+    ImportComponent,
+    MealsOverviewComponent
   ],
   imports: [
     CommonModule,
@@ -116,7 +118,8 @@ import { MatSnackBarModule, MatSortModule, MatRadioModule } from '@angular/mater
     EditDayComponent,
     AddMealComponent,
     EditDayComponent,
-    ImportComponent
+    ImportComponent,
+    MealsOverviewComponent
   ],
   exports: [
     MatTableModule,

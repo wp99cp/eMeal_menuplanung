@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Day } from '../../_class/day';
 
 @Component({
   selector: 'app-edit-day',
@@ -11,29 +12,23 @@ export class EditDayComponent implements OnInit {
 
   public dayInfo: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data, private formBuilder: FormBuilder) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { day: Day }, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 
     this.dayInfo = this.formBuilder.group({
 
-      description: this.data.name.description,
-      date: this.data.name.dateAsTypeDate
+      description: this.data.day.description,
+      date: this.data.day.dateAsTypeDate
 
     });
 
   }
 
-  delete() {
-
-    this.data.name
-
-  }
-
   saveDayData() {
 
-    this.data.name.dateAsTypeDate = this.dayInfo.value.date;
-    this.data.name.description = this.dayInfo.value.description;
+    this.data.day.dateAsTypeDate = this.dayInfo.value.date;
+    this.data.day.description = this.dayInfo.value.description;
 
   }
 

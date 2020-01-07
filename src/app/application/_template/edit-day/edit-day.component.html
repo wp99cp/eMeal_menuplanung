@@ -1,29 +1,30 @@
-<h3 mat-dialog-title>{{data.name.getDateStr()}} bearbeiten.</h3>
+<h3 mat-dialog-title>Tag bearbeiten</h3>
 
-<form [formGroup]='dayInfo'>
+<mat-grid-list id="day-overview" cdkDropListGroup cols="1">
+  <mat-grid-tile class="mat-elevation-z3">
+    <app-meals-overview [hideIcons]="true" [day]="data.day"></app-meals-overview>
+  </mat-grid-tile>
+</mat-grid-list>
 
-    <mat-form-field class="full-width">
-        <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
-    </mat-form-field>
+<form [formGroup]='dayInfo' class="day-form">
 
-    <br />
+  <h4>Informationen zum Tag bearbeiten</h4>
 
-    <mat-form-field class="full-width">
-        <input matInput [matDatepicker]="picker" placeholder="Datum" formControlName="date">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput [matDatepicker]="picker" placeholder="Datum" formControlName="date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="warn" class="delete-day-button" [mat-dialog-close]="-1">Tag löschen</button>
 
 </form>
 
-<br />
-
-<button mat-button color="warn" [mat-dialog-close]="-1">Tag löschen</button>
-
-<br />
-<br />
-
-<div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="0">Abbrechen</button>
-    <button mat-button (click)="saveDayData()" [mat-dialog-close]="1">Übernehmen</button>
+<div mat-dialog-actions class="mat-buttons">
+  <button mat-raised-button [mat-dialog-close]="0">Abbrechen</button>
+  <button mat-raised-button color="save" (click)="saveDayData()" [mat-dialog-close]="1">Übernehmen</button>
 </div>

@@ -57,10 +57,15 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     this.access = data.access;
     this.vegetarier = data.vegetarier;
 
-    if (data['days']) {
-      for (let dayData of data['days']) {
+    if (data.days) {
+
+      for (const dayData of data.days) {
         this.days.push(new Day(dayData, this));
       }
+
+      // Sortiert die Tage aufsetigend
+      this.days.sort((a, b) => a.dateAsTypeDate.getTime() - b.dateAsTypeDate.getTime());
+
     }
 
   }
@@ -68,7 +73,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
   // doc on mother class
   public extractDataToJSON(): FirestoreCamp {
 
-    let campData = {
+    return {
       name: this.name,
       description: this.description,
       year: this.year,
@@ -78,7 +83,6 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
       vegetarier: this.vegetarier
     };
 
-    return campData;
   }
 
   public async removeMeal(specificMealId: string): Promise<void> {

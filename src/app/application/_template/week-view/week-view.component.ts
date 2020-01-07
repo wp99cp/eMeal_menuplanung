@@ -85,40 +85,6 @@ export class WeekViewComponent implements OnChanges, Saveable {
   }
 
 
-  editDay(day: Day) {
-
-    console.log('edit day:');
-    console.log(day);
-
-    this.dialog.open(EditDayComponent, {
-      height: '400px',
-      width: '700px',
-      data: { name: day }
-
-    }).afterClosed().subscribe((save: number) => {
-
-      if (save === 1) {
-        this.mealsChanged = true;
-
-      } else if (save === -1) {
-
-        this.camp.days.splice(this.camp.days.indexOf(day), 1);
-
-        day.meals.forEach(meal => {
-
-          this.databaseService.deleteSpecificMealAndRecipes(meal.firestoreElementId, meal.specificId);
-
-        });
-
-        this.saveCamp();
-
-      }
-
-    });
-
-  }
-
-
   addNewDay() {
 
     const date = new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
@@ -150,8 +116,8 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
 
     this.dialog.open(AddMealComponent, {
-      height: '640px',
-      width: '900px',
+      height: '618px',
+      width: '1000px',
       data: null
     }).afterClosed()
       .subscribe((result: SelectionModel<FirestoreMeal>) => {
@@ -190,6 +156,32 @@ export class WeekViewComponent implements OnChanges, Saveable {
     this.camp.removeMeal(specificMealId);
     this.saveCamp();
     this.databaseService.deleteSpecificMealAndRecipes(mealId, specificMealId);
+
+  }
+
+  public editDay(save: number, day: Day) {
+
+
+    if (save === 1) {
+      this.mealsChanged = true;
+
+    } else if (save === -1) {
+
+      this.camp.days.splice(this.camp.days.indexOf(day), 1);
+
+      day.meals.forEach(meal => {
+
+        this.databaseService.deleteSpecificMealAndRecipes(meal.firestoreElementId, meal.specificId);
+
+      });
+
+      this.save();
+
+    }
+
+
+
+
 
   }
 
