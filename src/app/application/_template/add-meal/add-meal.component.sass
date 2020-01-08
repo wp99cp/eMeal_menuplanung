@@ -1,0 +1,50 @@
+:host
+  width: 100%
+  height: 100%
+  display: grid
+  grid-template-rows: 50px auto  50px 50px
+  grid-template-columns: 50% 50%
+  grid-gap: 10px
+  grid-template-areas: "header header" "table table" "paginator paginator" "buttons buttons"
+
+.mat-paginator
+  display: block
+  grid-area: paginator
+
+.mat-table
+  tr
+    height: 45px
+
+  .mat-form-field
+    height: 45px
+    margin-top: -10px
+    overflow: hidden
+    width: 125px
+
+  .selection-header
+    width: 40px
+
+  .title-header
+    width: 250px
+
+  .use-as-header
+    width: 125px
+
+.mat-dialog-title
+  grid-area: header
+  height: 100%
+  margin: 0
+
+.meal-search-table
+  grid-area: table
+
+.mat-buttons
+  height: 100%
+  padding: 0
+  grid-area: buttons
+  float: right
+  display: block
+
+  button
+    float: right
+    margin: 7px  10px  !important

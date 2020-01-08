@@ -114,7 +114,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
     this.camps.subscribe(camps => {
       this.dataSource.data = camps;
-    })
+    });
 
   }
 

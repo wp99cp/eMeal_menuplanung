@@ -14,4 +14,6 @@ export interface FirestoreMeal {
   usedAs?: string;
   specificId?: string;
   participantsWarning?: boolean;
+  keywords?: string;
+
 }

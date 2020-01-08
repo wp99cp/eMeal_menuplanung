@@ -1,49 +1,86 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { FirestoreMeal } from '../../_interfaces/firestore-meal';
-import { DatabaseService } from '../../_service/database.service';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
-import { ImportComponent } from '../import/import.component';
+import { MatTableDataSource } from '@angular/material/table';
+
 import { Meal } from '../../_class/meal';
 import { AccessData } from '../../_interfaces/accessData';
+import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { AuthenticationService } from '../../_service/authentication.service';
-import { Recipe } from '../../_class/recipe';
+import { DatabaseService } from '../../_service/database.service';
+import { ImportComponent } from '../import/import.component';
+
+export function CustomPaginator() {
+  const customPaginatorIntl = new MatPaginatorIntl();
+  customPaginatorIntl.itemsPerPageLabel = 'Mahlzeiten pro Zeite';
+  customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
+
+    length = Math.max(length, 0);
+    const startIndex = (page * pageSize === 0 && length !== 0) ? 1 : page * pageSize;
+    // If the start index exceeds the list length, do not try and fix the end index to the end.
+    const endIndex = Math.min(startIndex - 1 + pageSize, length);
+    return startIndex + ' bis ' + endIndex + ' von ' + length;
+  });
+
+  return customPaginatorIntl;
+}
 
 
 @Component({
   selector: 'app-add-meal',
   templateUrl: './add-meal.component.html',
-  styleUrls: ['./add-meal.component.sass']
+  styleUrls: ['./add-meal.component.sass'],
+  providers: [
+    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
+  ]
 })
 
 // TODO: fix bug, deselect nach der Auswahl der Verwendung...
 
-export class AddMealComponent implements OnInit {
+export class AddMealComponent implements AfterViewInit {
 
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   // Datasource for the table
   public mealTableSource = new MatTableDataSource<FirestoreMeal>();
 
   // only use for the mat table
-  public readonly displayedColumns: string[] = ['select', 'useAs', 'title', 'description'];
+  public readonly displayedColumns: string[] = ['select', 'title', 'description', 'useAs'];
 
   // Selected Meals form the table
   public selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
 
   /** Constructor */
-  constructor(private databaseService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) { }
+  constructor(private databaseService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) {
 
-  /** on init */
-  ngOnInit(): void {
+    this.mealTableSource = new MatTableDataSource();
 
-    this.databaseService.getEditableMeals()
-      .subscribe((meals: FirestoreMeal[]) => {
-        this.mealTableSource = new MatTableDataSource<FirestoreMeal>(meals);
-      });
 
   }
 
+  ngAfterViewInit() {
+
+    // Eigenschaft für die Sortierung
+    this.mealTableSource.sort = this.sort;
+    this.mealTableSource.sortingDataAccessor = (item, property) => {
+      console.log('sort')
+      switch (property) {
+        case 'title': return item.title.toLowerCase();
+        case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
+        default: return item[property];
+      }
+    };
+
+    this.databaseService.getEditableMeals().subscribe((meals: FirestoreMeal[]) => {
+      this.mealTableSource.data = (meals);
+    });
+
+    this.mealTableSource.paginator = this.paginator;
+
+
+  }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -80,11 +117,13 @@ export class AddMealComponent implements OnInit {
 
   }
 
- 
+
   applyFilter(filterValue: string) {
     this.mealTableSource.filterPredicate = (meal: FirestoreMeal, filter: string) =>
       // Condition for the filter
-      meal.title.trim().toLowerCase().includes(filter) || meal.description.trim().toLowerCase().includes(filter);
+      meal.title.trim().toLowerCase().includes(filter) ||
+      meal.description.trim().toLowerCase().includes(filter) ||
+      (meal.keywords !== undefined && meal.keywords.trim().toLowerCase().includes(filter));
 
     // apply filter to the table
     this.mealTableSource.filter = filterValue.trim().toLowerCase();

@@ -11,7 +11,6 @@ import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../add-meal/add-meal.component';
-import { EditDayComponent } from '../edit-day/edit-day.component';
 
 @Component({
   selector: 'app-week-view',
@@ -175,6 +174,7 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
       });
 
+      this.mealsChanged = true;
       this.save();
 
     }
@@ -187,7 +187,7 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
   private calculateCols() {
 
-    return Math.floor(document.body.scrollWidth / 360);
+    return Math.floor(document.body.scrollWidth / 280);
   }
 
 
