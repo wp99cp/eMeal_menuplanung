@@ -1,8 +1,7 @@
-<button mat-raised-button (click)="print()">Lager Drucken</button>
+<button mat-raised-button (click)="print()" class="saveButton" matTooltip="Lager drucken (nur in Google Chrome)">Lager
+  Drucken</button>
 
-<p>
-  Das Ausdruck ist in einem Google Chrome Brwoser über die Druckfunktion möglich.
-</p>
+
 
 
 <!-- Titleblatt -->
@@ -15,14 +14,6 @@
   <p><br></p>
   <p class="info">Dieses Lagerdossier wurde mit eMeal erstellt.<br />eMeal.zh11.ch</p>
 </div>
-
-<!-- Allgemeines zum Lager -->
-<div class="onNewPage print" *ngIf="campInfo | async; let camp">
-
-
-
-</div>
-
 
 <!-- Wochenplan -->
 <p class="warning" *ngIf="weekViewErrorMessage !== ''">{{weekViewErrorMessage}}</p>
@@ -59,26 +50,12 @@
   </ng-container>
 
 </div>
-<!-- <h1 class="onNewPage">Wochenplan</h1> -->
-
-<!-- Mahlzeiten -->
-<!-- <h1 class="onNewPage">Zmorgen (Montag, 1. Dezemeber 2019)</h1> -->
-<ng-container *ngIf="mealsInfo | async; let meals">
-  <div class="onNewPage print" *ngFor="let meal of meals.data">
-
-    <p>{{meal.title}}</p>
-
-  </div>
-</ng-container>
 
 
 <!-- Einkaufsliste -->
-<h1 class="onNewPage print">Einkaufsliste (Ganzes Lager)</h1>
-
-<br />
-<br />
-
 <div class="print" *ngIf="shoppingListWithError | async; let list">
+
+  <h1 class="onNewPage">Einkaufsliste (Ganzes Lager)</h1>
 
   <p class="warning" *ngFor="let error of list.error">{{error}}</p>
 
@@ -117,3 +94,12 @@
   </div>
 
 </div>
+
+<!-- Mahlzeiten -->
+<ng-container *ngIf="mealsInfo | async; let meals">
+  <div class="onNewPage print" *ngFor="let meal of meals.data">
+
+    <h1>Mahlzeit: {{meal.title}}</h1>
+
+  </div>
+</ng-container>

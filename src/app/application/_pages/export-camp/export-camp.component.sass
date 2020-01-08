@@ -39,6 +39,10 @@ tr.mat-row
   line-height: 2em
   height: 0
 
+.titlePage
+  text-align: center
+  width: 100%
+
 .weekTable
   table
     font-family: arial, sans-serif
@@ -60,10 +64,20 @@ tr.mat-row
 
 @media screen
 
-  .onNewPage
-    border-top: solid 1px lightgray
-    margin-top: 50px
-    padding-top: 25px
+  :host
+    display: block
+    width: calc(100vw - 100px)
+
+  .print
+    width: 100%
+    padding: 100px 20px 75px
+    box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12)
+    background-color: white
+    margin: 25px auto
+    max-width: 1200px
+
+    p
+      max-width: 100%
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -71,9 +85,13 @@ tr.mat-row
 
 @media print
 
+  p
+    max-width: 100%
+
   .print
     visibility: visible
     display: block
+
 
   .onlyOnPrint
     visibility: visible
@@ -81,8 +99,7 @@ tr.mat-row
 
   .titlePage
     margin-top: 200px
-    text-align: center
-    width: 100%
+
 
     h1
       font-size: 34px
