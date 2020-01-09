@@ -3,7 +3,7 @@
 <div class="meal-search-table">
 
   <mat-form-field class="mat-form-field full-width">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen...">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
   </mat-form-field>
 
 
@@ -36,12 +36,14 @@
       <td mat-cell *matCellDef="let element"> {{element.description}} </td>
     </ng-container>
 
-    <!-- lastname Column -->
+    <!-- lastname Column TODO: automatisch gemässt type -->
     <ng-container matColumnDef="useAs">
-      <th mat-header-cell *matHeaderCellDef class="use-as-header"> Verwenden als </th>
-      <td mat-cell *matCellDef="let element" matTooltip="verwenden als">
-        <mat-form-field>
-          <select matNativeControl #select (input)="selected(element, select.value )">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="use-as-header" matTooltip="letzte Verwendung">
+        Verwenden als </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field matTooltip="wähle Verwendung">
+          <select matNativeControl #select (input)="selected(element, select.value )"
+            [value]="element.lastMeal !== undefined ? element.lastMeal : ''">
             <option value="Zmorgen">Zmorgen</option>
             <option value="Zmittag">Zmittag</option>
             <option value="Znacht">Znacht</option>
@@ -64,7 +66,8 @@
 
 <div mat-dialog-actions class=" mat-buttons">
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="selectedMeal">Mahlzeiten hinzufügen</button>
-  <button mat-raised-button (click)="newMeal()">Neue Mahlzeit erstellen</button>
-  <button mat-raised-button (click)="import()">Importieren</button>
+  <button mat-raised-button [mat-dialog-close]="selectedMeal" color="save" [disabled]="!selectedMeal.hasValue()"
+    (click)="addLastMeal()">Mahlzeiten hinzufügen</button>
+  <button mat-raised-button (click)="newMeal()">Mahlzeit erstellen</button>
+  <button mat-raised-button (click)="import()" matTooltip="Importieren von Swissmilk.ch">Importieren</button>
 </div>

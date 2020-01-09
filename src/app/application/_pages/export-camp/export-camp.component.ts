@@ -5,7 +5,7 @@ import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, mergeMap } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 import { SettingsService } from '../../_service/settings.service';
 
@@ -64,6 +64,9 @@ export class ExportCampComponent implements OnInit {
     // load campId from url
     this.campId = this.route.url.pipe(map(url => url[1].path));
 
+    // set header info
+    this.campId.pipe(mergeMap(id => this.databaseService.getCampById(id))).subscribe(camp => this.setHeaderInfo(camp.name));
+
     // ladet den aktuellen Nutzer
     this.user = this.authService.getCurrentUser();
 
@@ -72,9 +75,6 @@ export class ExportCampComponent implements OnInit {
     this.campInfo = this.campId.pipe(flatMap(campId => this.databaseService.getCampInfoExport(campId)));
     this.mealsInfo = this.databaseService.getMealsInfoExport();
     this.weekTable = this.campInfo.pipe(map(this.transformToWeekTable()));
-
-    // setzt den Header
-    this.campInfo.subscribe(campInfo => this.setHeaderInfo(campInfo.data.name));
 
     // print der geladenen Daten auf der Console
     this.shoppingListWithError.subscribe(console.log);

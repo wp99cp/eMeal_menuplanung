@@ -44,8 +44,9 @@ import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 import { ImportComponent } from './_template/import/import.component';
-import { MatSnackBarModule, MatSortModule, MatRadioModule } from '@angular/material';
+import { MatSnackBarModule, MatSortModule, MatRadioModule, MatSelectModule } from '@angular/material';
 import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
+import { CreateMealComponent } from './_template/create-meal/create-meal.component';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
     ExportCampComponent,
     FeedbackPageComponent,
     ImportComponent,
-    MealsOverviewComponent
+    MealsOverviewComponent,
+    CreateMealComponent
   ],
   imports: [
     CommonModule,
@@ -103,7 +105,8 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatRadioModule
+    MatRadioModule,
+    MatSelectModule
   ],
   providers: [
     AngularFirestore,
@@ -119,6 +122,7 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
     AddMealComponent,
     EditDayComponent,
     ImportComponent,
+    CreateMealComponent,
     MealsOverviewComponent
   ],
   exports: [

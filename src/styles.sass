@@ -20,7 +20,6 @@ html, body
   color: $background-text-color
   font: $default-font
 
-
 app-root
   display: grid
   grid-template-rows: 65px auto 160px
@@ -72,6 +71,8 @@ main
 
 .info
   color: $info-text-color
+  font-style: italic
+  font-size: 1.3rem
 
 .news-element
   margin: 10px 0 10px 140px
@@ -100,6 +101,9 @@ main
 // Buttons
 ///////////////////////////////////////////////////////////////
 
+.mat-button
+  user-select: none
+
 .mat-save
   background-color: $prime-color
   color: $prime-text-color
@@ -112,6 +116,7 @@ main
   opacity: 0 !important
   background-color: $prime-color
   color: $prime-text-color
+  user-select: none
 
 .saveButton:not([disabled])
   display: block !important
@@ -146,6 +151,7 @@ main
   margin: auto
   font: $icon-font
   color: $icon-color
+  user-select: none
 
 .mat-icon:hover
   color: $icon-color-hover
@@ -164,6 +170,8 @@ main
   width: 35px
   text-align: right
 
+th
+  user-select: none
 
 tbody
 
@@ -173,6 +181,8 @@ tbody
   tr:hover
     background-color: $prime-color-light
 
+  td
+    outline: none
 
 
 
@@ -184,6 +194,15 @@ tbody
 .mat-dialog-container
   font: $dialog-font
 
+
+// TODO: bessere Version
+.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background
+  background-color: $prime-color
+
+// TODO: bessere Version
+.mat-ripple-element, .mat-checkbox-persistent-ripple
+  background-color: $prime-color
+  opacity: 0.25
 
 
 ///////////////////////////////////////////////////////////////

@@ -1,0 +1,16 @@
+<h3 mat-dialog-title>Mahlzeiten erstellen.</h3>
+
+<form [formGroup]="newMealForm">
+  <mat-form-field>
+    <input matInput required formControlName="title" placeholder="Name der Mahlzeit">
+  </mat-form-field>
+  <mat-form-field>
+    <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
+  </mat-form-field>
+</form>
+
+<div mat-dialog-actions class=" mat-buttons">
+  <button mat-raised-button [mat-dialog-close]="close()">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="create()" color="save"
+    [disabled]="newMealForm.value.title == ''">Mahlzeiten erstellen</button>
+</div>

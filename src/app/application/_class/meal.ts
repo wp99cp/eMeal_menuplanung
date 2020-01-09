@@ -21,6 +21,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public specificId: string = undefined;
   public participantsWarning = undefined;
   public keywords: string;
+  public lastMeal: string;
 
   /**
    *
@@ -75,9 +76,11 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
     if (data.keywords) {
       this.keywords = data.keywords;
-      console.log(this.keywords)
     }
 
+    if (data.lastMeal) {
+      this.lastMeal = data.lastMeal;
+    }
 
   }
 
@@ -97,6 +100,9 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     }
     if (this.keywords !== undefined) {
       firestoreMeal.keywords = this.keywords;
+    }
+    if (this.lastMeal !== undefined) {
+      firestoreMeal.lastMeal = this.lastMeal;
     }
     if (this.participantsWarning !== undefined) {
       firestoreMeal.participantsWarning = this.participantsWarning;

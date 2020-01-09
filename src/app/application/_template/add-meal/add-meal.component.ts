@@ -10,6 +10,8 @@ import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { ImportComponent } from '../import/import.component';
+import { CreateMealComponent } from '../create-meal/create-meal.component';
+import { Observable } from 'rxjs';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
@@ -65,10 +67,10 @@ export class AddMealComponent implements AfterViewInit {
     // Eigenschaft für die Sortierung
     this.mealTableSource.sort = this.sort;
     this.mealTableSource.sortingDataAccessor = (item, property) => {
-      console.log('sort')
       switch (property) {
         case 'title': return item.title.toLowerCase();
         case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
+        case 'useAs': return (item.lastMeal !== undefined) ? item.lastMeal.toLowerCase() : '';
         default: return item[property];
       }
     };
@@ -111,9 +113,44 @@ export class AddMealComponent implements AfterViewInit {
 
   }
 
-  newMeal() {
+  /**
+   * Setzt das Feld lastMeal und speichet die Mahlzeit.
+   * LastMeal wird speichert somit den letzten Wert der Verwendung einer Mahlzeit.
+   */
+  addLastMeal() {
 
-    this.databaseService.addNewMeal();
+    this.mealTableSource.data.forEach(meal => {
+      if (meal.usedAs && meal.firestoreElementId) {
+        const mealObj = new Meal(meal, meal.firestoreElementId, null);
+        mealObj.lastMeal = meal.usedAs;
+        this.databaseService.updateDocument(mealObj.extractDataToJSON(), Meal.getPath(meal.firestoreElementId));
+      }
+    });
+
+  }
+
+  /**
+   * Öffnent den Dialog für, um eine neue Mahlzeit zu erstellen.
+   */
+  public newMeal() {
+
+    this.dialog.open(CreateMealComponent, {
+      height: '640px',
+      width: '900px',
+      data: null
+
+    }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
+
+      meal.subscribe(mealData => this.databaseService.addDocument(mealData, 'meals'));
+
+      this.setFocusToSeachField();
+
+    });
+  }
+
+  public setFocusToSeachField() {
+
+    document.getElementById('search-field').focus();
 
   }
 
@@ -123,14 +160,17 @@ export class AddMealComponent implements AfterViewInit {
       // Condition for the filter
       meal.title.trim().toLowerCase().includes(filter) ||
       meal.description.trim().toLowerCase().includes(filter) ||
-      (meal.keywords !== undefined && meal.keywords.trim().toLowerCase().includes(filter));
+      (meal.keywords !== undefined && meal.keywords.trim().toLowerCase().includes(filter)) ||
+      (meal.lastMeal !== undefined && meal.lastMeal.trim().toLowerCase().includes(filter));
 
     // apply filter to the table
     this.mealTableSource.filter = filterValue.trim().toLowerCase();
   }
 
-
-  import() {
+  /**
+   * öffnet den Import Dialog
+   */
+  public import() {
 
     this.dialog.open(ImportComponent, {
       height: '640px',
@@ -164,6 +204,9 @@ export class AddMealComponent implements AfterViewInit {
           });
 
         });
+
+        this.setFocusToSeachField();
+
       });
 
   }
