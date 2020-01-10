@@ -14,13 +14,14 @@ import { map } from 'rxjs/operators';
  * This service handels the authentication process.
  * AuthenticationService is singleton. The active instance can be globaly access over
  * AuthenticationService.service
- * 
+ *
  */
 export class AuthenticationService {
 
   private static service: AuthenticationService = null;
 
-
+  // needs for stop automatic resignin
+  private signInSubscription: Subscription;
 
   /** get the AuthenticationService */
   public static getService(): AuthenticationService {
@@ -38,18 +39,17 @@ export class AuthenticationService {
     AuthenticationService.service = this;
   }
 
-  // needs for stop automatic resignin
-  private signInSubscription: Subscription;
+
 
   /**
    * SignIn and keep force resignIn until the methode signOut get called.
-   * 
+   *
    */
   public signIn() {
     this.signInSubscription =
       this.fireAuth.authState.subscribe(user => {
         if (user == null) {
-          this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider);
+          this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
         }
       });
 
@@ -61,7 +61,7 @@ export class AuthenticationService {
 
     return this.fireAuth.authState.pipe(
       map((userData) => {
-        return { firstName: userData.displayName, lastName: userData.displayName, uid: userData.uid, email: userData.email };
+        return { displayName: userData.displayName, uid: userData.uid, email: userData.email };
       })
     );
 
@@ -69,9 +69,9 @@ export class AuthenticationService {
 
   /**
    * signOut the current user an navigate to information page
-   * 
-   * @param redictToInfomationPage 
-   * 
+   *
+   * @param redictToInfomationPage
+   *
    */
   public signOut(redictToInfomationPage: boolean = true) {
 

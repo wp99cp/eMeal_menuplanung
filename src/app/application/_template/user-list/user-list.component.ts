@@ -17,34 +17,34 @@ export class UserListComponent implements OnInit {
   @Output() onSelection = new EventEmitter<User[]>();
 
   public selection = new SelectionModel<User>(true, []);
-  public displayedColumns: string[] = ['select', 'firstName', 'lastName', 'mail'];
+  public displayedColumns: string[] = ['select', 'displayName', 'email'];
   public userList = new MatTableDataSource<User>();
 
   constructor(private database: AngularFirestore) { }
 
+  // TODO: Lazy load!!!!
   ngOnInit(): void {
 
     // TODO: very bad solution for get only once...
-    let thisObserver = this.database.collection('users',
-      collRef => collRef.where('visibility', "==", 'visible')).snapshotChanges()
+    const thisObserver = this.database.collection('users',
+      collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges()
       // Create new Users out of the data
       .pipe(map(docActions => docActions.map(docRef => {
 
-        let docData = docRef.payload.doc.data();
+        const docData: any = docRef.payload.doc.data();
+        
+        const user: User = {
+          displayName: docData.displayName,
+          email: docData.email,
+          uid: docData.uid,
+        };
 
-        let user: User = {
-          firstName: docData['firstName'],
-          lastName: docData['lastName'],
-          email: docData['mail'],
-          uid: docData['uid'],
-
-        }
         return user;
       })))
       .subscribe((users: User[]) => {
         this.userList = new MatTableDataSource<User>(users);
         thisObserver.unsubscribe();
-      })
+      });
 
   }
 
