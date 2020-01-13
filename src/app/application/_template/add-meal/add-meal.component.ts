@@ -1,17 +1,17 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable } from 'rxjs';
 
 import { Meal } from '../../_class/meal';
 import { AccessData } from '../../_interfaces/accessData';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { ImportComponent } from '../import/import.component';
 import { CreateMealComponent } from '../create-meal/create-meal.component';
-import { Observable } from 'rxjs';
+import { ImportComponent } from '../import/import.component';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();

@@ -17,6 +17,7 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 import { AccessData } from '../_interfaces/accessData';
 import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
 import { User } from '../_interfaces/user';
+import { firestore } from 'firebase';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -28,6 +29,7 @@ import { User } from '../_interfaces/user';
   providedIn: 'root'
 })
 export class DatabaseService {
+
 
   // *********************************************************************************************
   // private static methodes
@@ -118,6 +120,11 @@ export class DatabaseService {
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
 
+  public updateAccessData(access: AccessData, path: string) {
+
+    this.db.doc(path).set({ access }, { merge: true });
+
+  }
   /**
    *
    * @param userIDs

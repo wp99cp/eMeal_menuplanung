@@ -134,6 +134,8 @@ export class WeekViewComponent implements OnChanges, Saveable {
               firestoreMeal.firestoreElementId);
 
 
+            this.databaseService.updateAccessData(this.camp.access, 'meals/' + firestoreMeal.firestoreElementId);
+
             const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp);
             meal.setSpecificMeal(specificMealId);
             meal.createSpecificRecipes(this.databaseService, this.camp);
