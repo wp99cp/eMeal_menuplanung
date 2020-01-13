@@ -11,6 +11,7 @@ import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../add-meal/add-meal.component';
+import { Recipe } from '../../_class/recipe';
 
 @Component({
   selector: 'app-week-view',
@@ -134,7 +135,12 @@ export class WeekViewComponent implements OnChanges, Saveable {
               firestoreMeal.firestoreElementId);
 
 
-            this.databaseService.updateAccessData(this.camp.access, 'meals/' + firestoreMeal.firestoreElementId);
+            // update acces form camp
+            this.databaseService.updateAccessData(this.camp.access, Meal.getPath(firestoreMeal.firestoreElementId));
+            this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes => recipes.forEach(
+              recipe => this.databaseService.updateAccessData(this.camp.access,
+                Recipe.getPath(firestoreMeal.firestoreElementId, recipe.firestoreElementId))
+            ));
 
             const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp);
             meal.setSpecificMeal(specificMealId);

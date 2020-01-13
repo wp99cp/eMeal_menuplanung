@@ -52,7 +52,7 @@ export class DatabaseService {
   }
 
   /** creates a recipe object */
-  private static createRecipe(mealId: string, specificMealId: string, campId: string, dbService: DatabaseService):
+  private static createRecipe(mealId: string, dbService: DatabaseService, specificMealId?: string, campId?: string):
     OperatorFunction<DocumentChangeAction<FirestoreRecipe>[], Recipe[]> {
 
     return map(docChangeAction =>
@@ -307,15 +307,18 @@ export class DatabaseService {
    * @param mealId id of the current meal
    * @param campId id of the current camp
    */
-  public getRecipes(mealId: string, specificMealId: string, campId: string): Observable<Recipe[]> {
+  public getRecipes(mealId: string, specificMealId?: string, campId?: string): Observable<Recipe[]> {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
         this.requestCollection(Recipe.getCollectionPath(mealId), queryFn)
-          .pipe(DatabaseService.createRecipe(mealId, specificMealId, campId, this))
+          .pipe(DatabaseService.createRecipe(mealId, this, specificMealId, campId))
       ));
 
+
   }
+
+
 
   public getCampById(campId: string): Observable<Camp> {
 
