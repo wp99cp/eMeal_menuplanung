@@ -30,7 +30,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
     // set undefined variables
     name = name === undefined ? '' : name;
-    access = access === undefined ? { editor: [], owner: [] } : access;
+    access = access === undefined ? {} : access;
 
     const recipe: FirestoreRecipe = {
       access,

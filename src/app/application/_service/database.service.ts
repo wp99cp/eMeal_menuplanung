@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { Observable, OperatorFunction } from 'rxjs';
+import { Observable, OperatorFunction, combineLatest, of } from 'rxjs';
 import { map, mergeMap, } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
@@ -16,6 +16,7 @@ import { AuthenticationService } from './authentication.service';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AccessData } from '../_interfaces/accessData';
 import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
+import { User } from '../_interfaces/user';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -116,6 +117,36 @@ export class DatabaseService {
    * @param auth AngularFireAuth
    */
   constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
+
+  /**
+   *
+   * @param userIDs
+   */
+  public getUsers(access: AccessData): Observable<User[]> {
+
+    const arrayOfUsers = Object.keys(access).map(userID => this.getUserById(userID));
+    return combineLatest(arrayOfUsers);
+
+  }
+
+  /**
+   *
+   */
+  public getUserById(userId: string): Observable<User> {
+
+    return this.requestDocument('users/' + userId).pipe(map((docRef: any) => {
+
+      const user: User = {
+        displayName: docRef.payload.data().displayName,
+        email: docRef.payload.data().email,
+        uid: userId
+      };
+
+      return user;
+
+    }));
+
+  }
 
   /**
    * Löscht ein Rezept und seine SpecificRecipes
@@ -344,8 +375,9 @@ export class DatabaseService {
   private createAccessQueryFn(): Observable<QueryFn> {
 
     return this.authService.getCurrentUser().pipe(map(user =>
-      (collRef => collRef.where('access.owner', 'array-contains', user.uid))
-    ));
+      (collRef => collRef
+        .where('access.' + user.uid, 'in', ['editor', 'owner'])
+      )));
 
   }
 

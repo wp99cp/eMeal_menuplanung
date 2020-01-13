@@ -7,7 +7,7 @@ import { FirebaseObject } from './firebaseObject';
 
 export class Camp extends FirebaseObject implements FirestoreCamp {
 
-  public static readonly CAMPS_DIRECTORY = "camps/";
+  public static readonly CAMPS_DIRECTORY = 'camps/';
   protected readonly firestorePath = Camp.CAMPS_DIRECTORY;
 
   // fields of a camp
@@ -28,15 +28,15 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
     return Camp.getCollectionPath() + campId;
   }
 
-  static generateCoworkersList(ownerUid: string, coworkers: User[]): string[] {
+  static generateCoworkersList(ownerUid: string, coworkers: User[]): AccessData {
 
-    const uidList: string[] = [];
+    const uidList: AccessData = {};
 
     if (coworkers !== undefined) {
       coworkers.forEach(coworker => {
         const uid = coworker.uid;
         if (ownerUid !== uid) {
-          uidList.push(uid);
+          uidList[uid] = 'editor';
         }
       });
     }
@@ -77,10 +77,10 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
       name: this.name,
       description: this.description,
       year: this.year,
-      participants: this.participants,
+      participants: (this.participants as number),
       days: this.days.map(day => day.extractDataToJSON()),
       access: this.access,
-      vegetarier: this.vegetarier
+      vegetarier: (this.vegetarier as number)
     };
 
   }

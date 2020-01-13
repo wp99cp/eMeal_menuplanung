@@ -12,10 +12,6 @@
  */
 export interface AccessData {
 
-  /** Uids von Usern die das Object bearbeiten (nicht aber löschen) dürfen */
-  editor: string[];
-
-  /** Uids von Usern die das Object bearbeiten und löschen dürfen */
-  owner: string[];
+  [uid: string]: 'owner' | 'editor';
 
 }

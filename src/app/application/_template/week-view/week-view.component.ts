@@ -127,8 +127,8 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
             const meal = new Meal(
               {
-                description: firestoreMeal.title,
-                title: firestoreMeal.usedAs ? firestoreMeal.usedAs : 'Zmorgen',
+                description: firestoreMeal.name,
+                name: firestoreMeal.usedAs ? firestoreMeal.usedAs : 'Zmorgen',
                 firestoreElementId: firestoreMeal.firestoreElementId
               },
               firestoreMeal.firestoreElementId);

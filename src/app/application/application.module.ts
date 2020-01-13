@@ -47,6 +47,7 @@ import { ImportComponent } from './_template/import/import.component';
 import { MatSnackBarModule, MatSortModule, MatRadioModule, MatSelectModule } from '@angular/material';
 import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
 import { CreateMealComponent } from './_template/create-meal/create-meal.component';
+import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.component';
 
 
 @NgModule({
@@ -67,7 +68,8 @@ import { CreateMealComponent } from './_template/create-meal/create-meal.compone
     FeedbackPageComponent,
     ImportComponent,
     MealsOverviewComponent,
-    CreateMealComponent
+    CreateMealComponent,
+    ListOfUsersComponent
   ],
   imports: [
     CommonModule,

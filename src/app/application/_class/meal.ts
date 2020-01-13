@@ -14,7 +14,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
   public readonly firestorePath = 'meals/';
 
-  public title: string;
+  public name: string;
   public description: string;
   public access: AccessData;
   public recipes: Observable<Recipe[]>;
@@ -36,9 +36,9 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
     }
 
     const meal: FirestoreMeal = {
-      access: { owner: uids, editor: [] },
+      access: Object.assign({}, ...uids.map(uid => ({ [uid]: 'owner' }))),
       description: '',
-      title: 'Neue Mahlzeit'
+      name: 'Neue Mahlzeit'
     };
 
     return meal;
@@ -60,7 +60,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
 
     super();
 
-    this.title = data.title;
+    this.name = data.name;
     this.description = data.description;
     this.access = data.access;
 
@@ -87,7 +87,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
   public extractDataToJSON(): FirestoreMeal {
 
     const firestoreMeal: FirestoreMeal = {
-      title: this.title,
+      name: this.name,
       description: this.description,
       access: this.access,
       firestoreElementId: this.firestoreElementId,

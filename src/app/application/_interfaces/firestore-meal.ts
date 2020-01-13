@@ -8,7 +8,7 @@ export type MealName = 'Zmorgen' | 'Zmittag' | 'Znacht' | 'Zvieri' | 'Znüni' | 
  */
 export interface FirestoreMeal {
 
-  title: string;
+  name: string;
   description: string;
 
   access?: AccessData;

@@ -42,9 +42,9 @@ export class CreateMealComponent implements OnInit {
 
     return this.authService.getCurrentUser().pipe(map(user => {
       return {
-        title: this.newMealForm.value.title,
+        name: this.newMealForm.value.title,
         description: this.newMealForm.value.description,
-        access: { owner: [user.uid], editor: [] }
+        access: { [user.uid]: 'owner' }
       };
     }));
 

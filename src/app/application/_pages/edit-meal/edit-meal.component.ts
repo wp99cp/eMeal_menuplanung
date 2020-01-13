@@ -64,12 +64,12 @@ export class EditMealComponent implements OnInit, Saveable {
       this.meal.subscribe(meal => {
         this.mealInfo = this.formBuilder.group({
 
-          title: meal.title,
+          title: meal.name,
           description: meal.description,
 
           // der weekTitle eines spezifischenMeal muss nicht zwingend gesetzt sein...
           // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
-          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.title,
+          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.name,
           overrideParticipants: specificMeal.overrideParticipants,
           participants: specificMeal.participants
 
@@ -114,7 +114,7 @@ export class EditMealComponent implements OnInit, Saveable {
     const mealSubs = this.meal.subscribe(meal => {
 
       meal.description = this.mealInfo.value.description;
-      meal.title = this.mealInfo.value.title;
+      meal.name = this.mealInfo.value.title;
 
       this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
 
@@ -146,8 +146,8 @@ export class EditMealComponent implements OnInit, Saveable {
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(camp, meal): void {
 
-    Header.title = meal.title;
-    Header.path = ['Startseite', 'meine Lager', camp.name, '', '', meal.title];
+    Header.title = meal.name;
+    Header.path = ['Startseite', 'meine Lager', camp.name, '', '', meal.name];
 
   }
 
@@ -163,7 +163,7 @@ export class EditMealComponent implements OnInit, Saveable {
     this.save();
 
     this.meal.pipe(take(1)).subscribe(meal =>
-      this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.title)
+      this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.name)
     );
 
   }

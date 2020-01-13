@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { firestore } from 'firebase';
-import { Observable } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
@@ -14,6 +14,8 @@ import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { MatPaginatorIntl } from '@angular/material';
+import { AccessData } from '../../_interfaces/accessData';
+import { map } from 'rxjs/operators';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
@@ -55,7 +57,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
   public newCampInfos: FormGroup;
   public newCampParticipants: FormGroup;
   public newCampDate: FormGroup;
-  private selectedCoworkers: User[];
+  public access: AccessData;
 
   constructor(
     public dialog: MatDialog,
@@ -81,7 +83,10 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
       date: ''
     });
 
-
+    auth.getCurrentUser().pipe(map(user => {
+      const accessData: AccessData = { [user.uid]: 'owner' };
+      return accessData;
+    })).subscribe(access => { this.access = access; });
 
   }
 
@@ -89,7 +94,6 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
     this.setHeaderInfo();
     this.camps = this.databaseService.getEditableCamps();
-
 
   }
 
@@ -133,34 +137,29 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
    */
   createCamp(campCreator: MatStepper) {
 
-    this.auth.getCurrentUser().subscribe(user => {
 
-      const date = new Date(this.newCampDate.value.date);
+    const date = new Date(this.newCampDate.value.date);
 
-      // combinde data
-      const campData: FirestoreCamp = {
-        name: this.newCampInfos.value.name,
-        description: this.newCampInfos.value.description,
-        access: { owner: [user.uid].concat(Camp.generateCoworkersList(user.uid, this.selectedCoworkers)), editor: [] },
-        year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
-        days: [{
-          date: firestore.Timestamp.fromDate(date),
-          meals: [],
-          description: ''
-        }],
-        participants: this.newCampParticipants.value.participants,
-        vegetarier: 0
-      };
+    // combinde data
+    const campData: FirestoreCamp = {
+      name: this.newCampInfos.value.name,
+      description: this.newCampInfos.value.description,
+      access: this.access,
+      year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
+      days: [{
+        date: firestore.Timestamp.fromDate(date),
+        meals: [],
+        description: ''
+      }],
+      participants: this.newCampParticipants.value.participants,
+      vegetarier: 0
+    };
 
+    // Creates a new Camp
+    this.databaseService.addDocument(campData, 'camps')
 
-      // Creates a new Camp
-      this.databaseService.addDocument(campData, 'camps')
-
-        // reset form
-        .then(() => campCreator.reset());
-
-
-    });
+      // reset form
+      .then(() => campCreator.reset());
 
 
   }
@@ -168,7 +167,11 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
   /** A user get selected */
   selectUser(selectedCoworkers) {
 
-    this.selectedCoworkers = selectedCoworkers;
+    this.auth.getCurrentUser().pipe(map(user => {
+      const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
+      accessData[user.uid] = 'owner';
+      return accessData;
+    })).subscribe(access => { this.access = access; });
 
   }
 

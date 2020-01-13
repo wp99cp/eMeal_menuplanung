@@ -4,6 +4,7 @@ import { firestore } from 'firebase';
 import { DayData } from '../_interfaces/day-data';
 import { FirestoreMeal } from '../_interfaces/firestore-meal';
 import { SettingsService } from '../_service/settings.service';
+import { AccessData } from '../_interfaces/accessData';
 
 /**
  *
@@ -28,10 +29,11 @@ export class Day implements DayData {
       uids = [];
     }
 
+    const access: AccessData = Object.assign({}, ...uids.map(uid => ({ [uid]: 'owner' })));
     const meal: FirestoreMeal = {
-      access: { owner: uids, editor: [] },
+      access,
       description: '',
-      title: 'Neue Mahlzeit'
+      name: 'Neue Mahlzeit'
     };
 
     return meal;

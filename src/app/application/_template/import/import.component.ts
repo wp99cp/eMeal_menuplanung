@@ -51,7 +51,7 @@ export class ImportComponent implements OnInit {
 
     const mealData: FirestoreMeal = {
 
-      title: newRawMealData.title,
+      name: newRawMealData.title,
       description: newRawMealData.notes
 
     };

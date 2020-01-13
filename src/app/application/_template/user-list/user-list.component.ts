@@ -4,6 +4,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators'
 import { User } from '../../_interfaces/user';
+import { AuthenticationService } from '../../_service/authentication.service';
+import { MatSnackBar } from '@angular/material';
 
 
 
@@ -20,32 +22,36 @@ export class UserListComponent implements OnInit {
   public displayedColumns: string[] = ['select', 'displayName', 'email'];
   public userList = new MatTableDataSource<User>();
 
-  constructor(private database: AngularFirestore) { }
+  constructor(private database: AngularFirestore, private authService: AuthenticationService, public snackBar: MatSnackBar) { }
 
   // TODO: Lazy load!!!!
   ngOnInit(): void {
 
-    // TODO: very bad solution for get only once...
-    const thisObserver = this.database.collection('users',
-      collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges()
-      // Create new Users out of the data
-      .pipe(map(docActions => docActions.map(docRef => {
+    this.authService.getCurrentUser().subscribe(currentUser => {
+      // TODO: very bad solution for get only once...
+      const thisObserver = this.database.collection('users',
+        collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges()
+        // Create new Users out of the data
+        .pipe(map(docActions => docActions.map(docRef => {
 
-        const docData: any = docRef.payload.doc.data();
-        
-        const user: User = {
-          displayName: docData.displayName,
-          email: docData.email,
-          uid: docData.uid,
-        };
+          const docData: any = docRef.payload.doc.data();
 
-        return user;
-      })))
-      .subscribe((users: User[]) => {
-        this.userList = new MatTableDataSource<User>(users);
-        thisObserver.unsubscribe();
-      });
+          const user: User = {
+            displayName: docData.displayName,
+            email: docData.email,
+            uid: docRef.payload.doc.id
+          };
 
+          return user;
+        })))
+        .subscribe((users: User[]) => {
+
+          this.userList = new MatTableDataSource<User>(users.filter(user => user.uid !== currentUser.uid));
+          thisObserver.unsubscribe();
+
+        });
+
+    });
   }
 
 
@@ -73,6 +79,8 @@ export class UserListComponent implements OnInit {
 
   coworkersSelected() {
     this.onSelection.emit(this.selection.selected);
+    this.selection.clear();
+    this.snackBar.open('Ausgewählte Nutzer wurden hinzugefügt.', '', { duration: 2000 });
 
 
   }

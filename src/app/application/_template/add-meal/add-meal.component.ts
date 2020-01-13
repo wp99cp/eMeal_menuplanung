@@ -49,7 +49,7 @@ export class AddMealComponent implements AfterViewInit {
   public mealTableSource = new MatTableDataSource<FirestoreMeal>();
 
   // only use for the mat table
-  public readonly displayedColumns: string[] = ['select', 'title', 'description', 'useAs'];
+  public readonly displayedColumns: string[] = ['select', 'name', 'description', 'useAs'];
 
   // Selected Meals form the table
   public selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
@@ -68,7 +68,7 @@ export class AddMealComponent implements AfterViewInit {
     this.mealTableSource.sort = this.sort;
     this.mealTableSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'title': return item.title.toLowerCase();
+        case 'name': return item.name.toLowerCase();
         case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
         case 'useAs': return (item.lastMeal !== undefined) ? item.lastMeal.toLowerCase() : '';
         default: return item[property];
@@ -103,7 +103,7 @@ export class AddMealComponent implements AfterViewInit {
     if (!user) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selectedMeal.isSelected(user) ? 'deselect' : 'select'} row ${user.title}`;
+    return `${this.selectedMeal.isSelected(user) ? 'deselect' : 'select'} row ${user.name}`;
   }
 
   /** Set usedAs parameter to firestoreMeal */
@@ -158,7 +158,7 @@ export class AddMealComponent implements AfterViewInit {
   applyFilter(filterValue: string) {
     this.mealTableSource.filterPredicate = (meal: FirestoreMeal, filter: string) =>
       // Condition for the filter
-      meal.title.trim().toLowerCase().includes(filter) ||
+      meal.name.trim().toLowerCase().includes(filter) ||
       meal.description.trim().toLowerCase().includes(filter) ||
       (meal.keywords !== undefined && meal.keywords.trim().toLowerCase().includes(filter)) ||
       (meal.lastMeal !== undefined && meal.lastMeal.trim().toLowerCase().includes(filter));
@@ -184,7 +184,7 @@ export class AddMealComponent implements AfterViewInit {
         this.authService.getCurrentUser().subscribe(user => {
 
           const document = result.extractDataToJSON();
-          const access: AccessData = { owner: [user.uid as string], editor: [] };
+          const access: AccessData = { [user.uid as string]: 'owner' };
           document.access = access;
           this.databaseService.addDocument(document, 'meals').then(doc => {
 
@@ -195,7 +195,7 @@ export class AddMealComponent implements AfterViewInit {
               recipes.forEach(recipe => {
 
                 const recipeData = recipe.extractDataToJSON();
-                recipeData.access = { owner: [user.uid as string], editor: [] };
+                recipeData.access = access;
                 this.databaseService.addDocument(recipeData, 'meals/' + doc.id + '/recipes');
 
               });
