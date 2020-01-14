@@ -1,0 +1,19 @@
+<h1>Einstellungen und Benutzerkonto</h1>
+
+<h2>Dein Benutzerkonto</h2>
+<ng-container *ngIf="(user | async); let user">
+  <p>
+    <b>Benutzername:</b> {{user.displayName}}
+    <br />
+    <b>Mailadresse:</b> {{user.email}}
+  </p>
+</ng-container>
+
+
+<h2>Über eMeal</h2>
+<p>eMeal ist eine freie Software des Cevi Züri 11</p>
+
+<!-- TODO: global copy rigth tag (package.json) -->
+<p>{{copyrights}}<br />
+  Aktuelle Version: {{version}} <br />
+  <a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a></p>

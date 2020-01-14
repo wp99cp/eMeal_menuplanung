@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
 import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
+import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
-import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 
 
@@ -15,6 +17,10 @@ const routes: Routes = [
   {
     path: '',
     component: WelcomPageComponent
+  },
+  {
+    path: 'settings',
+    component: AppSettingsPageComponent
   },
   {
     path: 'feedback',
@@ -43,6 +49,7 @@ const routes: Routes = [
     component: EditMealComponent,
     canDeactivate: [AutoSaveService]
   }
+
 
 ];
 

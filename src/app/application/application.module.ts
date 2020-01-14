@@ -28,6 +28,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { environment } from '../../environments/environment';
+import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
 import { CampListPageComponent, DeleteCampComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
@@ -70,7 +71,8 @@ import { ApplicationRoutingModule } from './application-routing.module';
     ImportComponent,
     MealsOverviewComponent,
     CreateMealComponent,
-    ListOfUsersComponent
+    ListOfUsersComponent,
+    AppSettingsPageComponent
   ],
   imports: [
     CommonModule,

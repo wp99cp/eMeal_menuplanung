@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
@@ -11,10 +11,6 @@ const routes: Routes = [
   {
     path: 'app',
     loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule)
-  },
-  {
-    path: 'app/settings',
-    loadChildren: () => import('./settings/settings.module').then(mod => mod.SettingsModule)
   }
 ];
 

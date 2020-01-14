@@ -31,7 +31,7 @@ export class EditMealComponent implements OnInit, Saveable {
   @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
 
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService, ) { }
+  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
 
   public newOpened(index: number) {
 
