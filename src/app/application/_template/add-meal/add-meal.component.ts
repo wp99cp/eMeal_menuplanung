@@ -28,7 +28,7 @@ export function CustomPaginator() {
   return customPaginatorIntl;
 }
 
-
+// TODO: fix bug, deselect nach der Auswahl der Verwendung...
 @Component({
   selector: 'app-add-meal',
   templateUrl: './add-meal.component.html',
@@ -37,9 +37,6 @@ export function CustomPaginator() {
     { provide: MatPaginatorIntl, useValue: CustomPaginator() }
   ]
 })
-
-// TODO: fix bug, deselect nach der Auswahl der Verwendung...
-
 export class AddMealComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

@@ -10,7 +10,7 @@
 
   <h1 *ngIf="campInfo | async; let camp">Menuplanung<br />{{camp.data.name}}</h1>
   <p>Version vom {{today}} </p>
-  <p *ngIf="user | async; let user">{{user.firstName}}</p>
+  <p *ngIf="user | async; let user">{{user.displayName}}</p>
   <p><br></p>
   <p class="info">Dieses Lagerdossier wurde mit eMeal erstellt.<br />eMeal.zh11.ch</p>
 </div>

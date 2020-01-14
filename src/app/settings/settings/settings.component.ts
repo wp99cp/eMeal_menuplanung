@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { version as softwareVersion } from '../../../../package.json';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+
+import { version as softwareVersion } from '../../../../package.json';
 
 @Component({
   selector: 'app-settings',

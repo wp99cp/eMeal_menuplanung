@@ -4,7 +4,9 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireFunctionsModule, FUNCTIONS_REGION } from '@angular/fire/functions';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,30 +26,29 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
 import { environment } from '../../environments/environment';
-import { ApplicationRoutingModule } from './application-routing.module';
 import { CampListPageComponent, DeleteCampComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
+import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AuthenticationService } from './_service/authentication.service';
+import { AutoSaveService } from './_service/auto-save.service';
+import { DatabaseService } from './_service/database.service';
 import { AddMealComponent } from './_template/add-meal/add-meal.component';
+import { CreateMealComponent } from './_template/create-meal/create-meal.component';
+import { EditDayComponent } from './_template/edit-day/edit-day.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
+import { ImportComponent } from './_template/import/import.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
+import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.component';
+import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
-import { DatabaseService } from './_service/database.service';
-import { EditDayComponent } from './_template/edit-day/edit-day.component';
-import { AngularFireFunctionsModule, FUNCTIONS_REGION, FUNCTIONS_ORIGIN } from '@angular/fire/functions';
-import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
-import { AutoSaveService } from './_service/auto-save.service';
-import { ImportComponent } from './_template/import/import.component';
-import { MatSnackBarModule, MatSortModule, MatRadioModule, MatSelectModule } from '@angular/material';
-import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
-import { CreateMealComponent } from './_template/create-meal/create-meal.component';
-import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.component';
+import { ApplicationRoutingModule } from './application-routing.module';
 
 
 @NgModule({
@@ -75,10 +76,10 @@ import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.co
     CommonModule,
     ApplicationRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-
     AngularFireFunctionsModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
+
     ReactiveFormsModule,
     // Material Design
     MatTableModule,
