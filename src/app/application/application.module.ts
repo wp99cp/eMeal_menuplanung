@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION } from '@angular/fire/functions';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule } from '@angular/material';
@@ -26,8 +26,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { environment } from 'src/environments/environment';
 
-import { environment } from '../../environments/environment';
 import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
 import { CampListPageComponent, DeleteCampComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
@@ -74,6 +74,14 @@ import { ApplicationRoutingModule } from './application-routing.module';
     ListOfUsersComponent,
     AppSettingsPageComponent
   ],
+  providers: [
+    AngularFirestore,
+    AngularFireAuth,
+    AuthenticationService,
+    DatabaseService,
+    AutoSaveService,
+    { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
+  ],
   imports: [
     CommonModule,
     ApplicationRoutingModule,
@@ -113,14 +121,7 @@ import { ApplicationRoutingModule } from './application-routing.module';
     MatRadioModule,
     MatSelectModule
   ],
-  providers: [
-    AngularFirestore,
-    AngularFireAuth,
-    AuthenticationService,
-    DatabaseService,
-    AutoSaveService,
-    { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
-  ],
+
   entryComponents: [
     DeleteCampComponent,
     EditDayComponent,
