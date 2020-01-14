@@ -2,13 +2,16 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { WeekViewComponent } from '../../_template/week-view/week-view.component';
+import { AuthenticationService } from '../../_service/authentication.service';
+import { Meal } from '../../_class/meal';
+import { Recipe } from '../../_class/recipe';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -27,7 +30,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
 
   // local changes to the camp data (not sync with server)
-  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder) {
+  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder, private auth: AuthenticationService) {
 
     this.campInfosForm = this.formBuilder.group({
       name: '',
@@ -112,6 +115,29 @@ export class EditCampPageComponent implements OnInit, Saveable {
     camp.description = this.campInfosForm.value.description;
     camp.participants = this.campInfosForm.value.participants;
     camp.vegetarier = this.campInfosForm.value.vegetarier;
+  }
+
+  /** A user get selected */
+  selectUser(selectedCoworkers) {
+
+    this.auth.getCurrentUser().pipe(map(user => {
+      const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
+      accessData[user.uid] = 'owner';
+      return accessData;
+    })).subscribe(access => this.camp.subscribe(camp => {
+      this.databaseService.updateAccessData(access, Camp.getPath(camp.firestoreElementId));
+      camp.days.forEach(day => day.meals.forEach(meal => {
+        this.databaseService.updateAccessData(access, Meal.getPath(meal.firestoreElementId));
+
+        this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes =>
+          recipes.forEach(recipe =>
+            this.databaseService.updateAccessData(access, Recipe.getPath(meal.firestoreElementId, recipe.firestoreElementId))
+          ));
+
+      }));
+
+    }));
+
   }
 
 }

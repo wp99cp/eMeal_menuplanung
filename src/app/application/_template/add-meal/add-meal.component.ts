@@ -110,6 +110,7 @@ export class AddMealComponent implements AfterViewInit {
   selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
     firestoreMeal.usedAs = usedAs;
+    console.log(usedAs);
 
   }
 

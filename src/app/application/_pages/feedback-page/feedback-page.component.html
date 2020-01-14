@@ -2,7 +2,7 @@
 <p class="info">Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
   für Rückfragen ggf. mit dir in Kontakt treten.</p>
 
-<div [formGroup]="feedbackForm" style="display: grid">
+<form [formGroup]="feedbackForm" style="display: grid">
 
   <mat-form-field>
     <input matInput placeholder="Titel / Thema" formControlName="title">
@@ -14,4 +14,4 @@
 
   <button mat-raised-button (click)="send()">Feedback senden!</button>
 
-</div>
+</form>

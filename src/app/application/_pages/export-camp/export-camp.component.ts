@@ -120,34 +120,34 @@ export class ExportCampComponent implements OnInit {
       interface HashTable { [key: string]: string[]; }
       const rows: HashTable = {};
 
-      days.forEach((day: { date: any; meals: [{ title: string; description: string; }]; }) => {
+      days.forEach((day: { date: any; meals: [{ name: string; description: string; }]; }) => {
 
         // converts datum to local date string
         tableHeaders.push(SettingsService.toString(new Date(day.date._seconds * 1000)));
 
         // sort meals
-        day.meals.sort((a, b) => a.title.localeCompare(b.title));
+        day.meals.sort((a, b) => a.name.localeCompare(b.name));
 
         // add meals of day
         day.meals.forEach(meal => {
 
 
-          if (rows[meal.title] === undefined) {
+          if (rows[meal.name] === undefined) {
 
-            rows[meal.title] = [];
+            rows[meal.name] = [];
             for (let i = 0; i < tableHeaders.length - 1; i++) {
-              rows[meal.title].push('-');
+              rows[meal.name].push('-');
             }
 
 
-          } else if (rows[meal.title].length === tableHeaders.length) {
+          } else if (rows[meal.name].length === tableHeaders.length) {
 
             this.weekViewErrorMessage = 'Wochenplan kann nicht erstellt werden. Doppelte Mahlzeiten am selben Tag.';
             throw new Error('Dublicate meal on a one day!');
 
           }
 
-          rows[meal.title].push(meal.description);
+          rows[meal.name].push(meal.description);
 
         });
 

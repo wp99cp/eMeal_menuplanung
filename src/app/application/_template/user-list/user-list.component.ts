@@ -47,11 +47,30 @@ export class UserListComponent implements OnInit {
         .subscribe((users: User[]) => {
 
           this.userList = new MatTableDataSource<User>(users.filter(user => user.uid !== currentUser.uid));
+
+          this.userList.filterPredicate = (user: User, filter: string) =>
+            // Condition for the filter
+            (filter.trim().length >= 3 && user.displayName.trim().toLowerCase().includes(filter)) || this.selection.isSelected(user);
+
+          this.userList.filter = 'NO-NAME';
+
           thisObserver.unsubscribe();
 
         });
 
     });
+  }
+
+  applyFilter(filterValue: string) {
+
+    if (filterValue.trim().length < 3) {
+      this.userList.filter = 'NO-NAME';
+      return;
+    }
+
+    // apply filter to the table
+    this.userList.filter = filterValue.trim().toLowerCase();
+
   }
 
 

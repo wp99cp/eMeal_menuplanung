@@ -41,10 +41,9 @@
   <mat-divider></mat-divider>
 
   <h2>Mitarbeiter</h2>
-
   <app-list-of-users [userList]="(camp | async)?.access"></app-list-of-users>
 
-  <button mat-raised-button [disabled]="true">Nutzer einladen.</button>
+  <app-user-list (onSelection)='selectUser($event)'></app-user-list>
 
 </ng-container>
 
