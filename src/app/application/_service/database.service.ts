@@ -136,6 +136,11 @@ export class DatabaseService {
 
   }
 
+  public updateUser(doc: any, uid: string) {
+
+    this.db.doc('users/' + uid).update(doc);
+
+  }
   /**
    *
    */
@@ -146,6 +151,7 @@ export class DatabaseService {
       const user: User = {
         displayName: docRef.payload.data().displayName,
         email: docRef.payload.data().email,
+        visibility: docRef.payload.data().visibility,
         uid: userId
       };
 

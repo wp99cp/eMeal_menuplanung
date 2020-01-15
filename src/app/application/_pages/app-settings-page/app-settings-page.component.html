@@ -1,19 +1,45 @@
 <h1>Einstellungen und Benutzerkonto</h1>
 
 <h2>Dein Benutzerkonto</h2>
-<ng-container *ngIf="(user | async); let user">
-  <p>
-    <b>Benutzername:</b> {{user.displayName}}
-    <br />
-    <b>Mailadresse:</b> {{user.email}}
-  </p>
-</ng-container>
+<form [formGroup]="userDataForm" style="display: grid" *ngIf="userDataForm !== undefined else loadingUserSettings">
 
+  <mat-form-field>
+    <input matInput placeholder="Name" formControlName="displayName">
+  </mat-form-field>
 
-<h2>Über eMeal</h2>
+  <mat-form-field matTooltip="Die User-Id ist unveränderlich.">
+    <input matInput placeholder="User-Id" [value]="(user | async)?.uid" disabled>
+  </mat-form-field>
+
+  <mat-form-field matTooltip="Ändere deine Mailadresse in deinem Google Konto.">
+    <input matInput placeholder="Mailadresse" [value]="(user | async)?.email" disabled>
+  </mat-form-field>
+
+  <p *ngIf="userDataForm.value.visibility == 'visible'" class="info">
+    Andere Nutzer von eMeal können dich finden und zu Lager hinzufügen: </p>
+  <p *ngIf="userDataForm.value.visibility == 'hidden'" class="info">
+    Andere Nutzer von eMeal können dich nicht finden und keine Lager mit dir teilen: </p>
+
+  <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
+    <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit"
+      (input)="visibilityChanged(visibilitySelect.value)">
+      <option value="hidden">versteckt</option>
+      <option value="visible">sichtbar</option>
+    </select>
+  </mat-form-field>
+
+  <button mat-raised-button [disabled]="userDataForm.untouched" (click)="updateUserData()">Speichern</button>
+
+</form>
+
+<!-- Loading Animation -->
+<ng-template #loadingUserSettings>
+  <mat-progress-bar mode="query"></mat-progress-bar>
+</ng-template>
+
+<h2>Über eMeal - Menuplanung</h2>
 <p>eMeal ist eine freie Software des Cevi Züri 11</p>
-
-<!-- TODO: global copy rigth tag (package.json) -->
-<p>{{copyrights}}<br />
-  Aktuelle Version: {{version}} <br />
-  <a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a></p>
+<p>{{copyrights}}</p>
+<p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)</p>
+<p></p>
+<p>Entwickler: <a href="mailto:eMeal-admin@zh11.ch">Cyrill Püntener v/o JPG</a></p>
