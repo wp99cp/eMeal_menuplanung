@@ -73,6 +73,7 @@ export class AddMealComponent implements AfterViewInit {
     };
 
     this.databaseService.getEditableMeals().subscribe((meals: FirestoreMeal[]) => {
+      meals.forEach(meal => meal.usedAs = meal.lastMeal);
       this.mealTableSource.data = (meals);
     });
 
@@ -118,6 +119,7 @@ export class AddMealComponent implements AfterViewInit {
   addLastMeal() {
 
     this.mealTableSource.data.forEach(meal => {
+      console.log(meal.usedAs)
       if (meal.usedAs && meal.firestoreElementId) {
         const mealObj = new Meal(meal, meal.firestoreElementId, null);
         mealObj.lastMeal = meal.usedAs;

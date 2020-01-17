@@ -44,7 +44,7 @@
         Verwenden als </th>
       <td mat-cell *matCellDef="let element">
         <mat-form-field matTooltip="wähle Verwendung">
-          <select matNativeControl #select (input)="selected(element, select.value )"
+          <select matNativeControl #select (input)="selected(element, select.value)"
             [value]="element.lastMeal !== undefined ? element.lastMeal : ''">
             <option value="Zmorgen">Zmorgen</option>
             <option value="Zmittag">Zmittag</option>
