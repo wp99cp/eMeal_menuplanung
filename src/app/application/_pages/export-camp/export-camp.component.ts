@@ -73,7 +73,7 @@ export class ExportCampComponent implements OnInit {
     // ladet die Infos für den Export und passt sie ggf. an
     this.shoppingListWithError = this.campId.pipe(flatMap(campId => this.databaseService.getShoppingList(campId)));
     this.campInfo = this.campId.pipe(flatMap(campId => this.databaseService.getCampInfoExport(campId)));
-    this.mealsInfo = this.databaseService.getMealsInfoExport();
+    this.mealsInfo = this.campId.pipe(flatMap(campId => this.databaseService.getMealsInfoExport(campId)));
     this.weekTable = this.campInfo.pipe(map(this.transformToWeekTable()));
 
     // print der geladenen Daten auf der Console

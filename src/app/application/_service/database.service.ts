@@ -290,9 +290,9 @@ export class DatabaseService {
    *
    * @retuns mealsInfo
    */
-  public getMealsInfoExport(): Observable<any> {
+  public getMealsInfoExport(id: string): Observable<any> {
 
-    return this.functions.httpsCallable('getMealsInfoExport')({});
+    return this.functions.httpsCallable('getMealsInfoExport')({ campId: id });
 
   }
 
