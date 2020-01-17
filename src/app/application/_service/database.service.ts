@@ -178,11 +178,18 @@ export class DatabaseService {
 
   public addFeedback(feedback: any) {
 
-    this.authService.getCurrentUser().subscribe(user => {
-      feedback.acces = { owner: [user.uid], editor: [] };
-      feedback.user = user;
-      this.addDocument(feedback, 'feedback');
-    });
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://emeal.zh11.ch/services/sendMailToTrello.php', true);
+
+    // Send the proper header information along with the request
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+    xhr.onreadystatechange = function () { // Call a function when the state changes.
+      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        // Request finished. Do processing here.
+      }
+    }
+    xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
 
   }
 
