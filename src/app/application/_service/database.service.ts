@@ -369,10 +369,10 @@ export class DatabaseService {
 
   }
 
-  /** deletes any FirebaseObject form the database */
-  public deleteDocument(firebaseObject: FirebaseObject) {
+  /** deletes a Camp form the database */
+  public deleteCamp(camp: Camp) {
 
-    return this.db.doc(firebaseObject.getDocPath()).delete();
+    return this.db.doc(Camp.getPath(camp.firestoreElementId)).delete();
 
   }
 

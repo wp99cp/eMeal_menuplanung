@@ -85,9 +85,22 @@ export class WeekViewComponent implements OnChanges, Saveable {
   }
 
 
+  /**
+   * Fügt einen neuen Tag zum Lager hinzu
+   */
   addNewDay() {
 
-    const date = new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
+    let date: Date;
+
+    if (this.camp.days.length !== 0) {
+      date = new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
+
+    } else {
+      // if camp is empty add a day with the date of today
+      date = new Date();
+
+    }
+
     date.setDate(date.getDate() + 1);
 
     const day = new Day({

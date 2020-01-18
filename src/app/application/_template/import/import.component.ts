@@ -30,7 +30,7 @@ export class ImportComponent implements OnInit {
 
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
 
   loadFromURL() {
@@ -66,7 +66,8 @@ export class ImportComponent implements OnInit {
         const ingredientNew: Ingredient = {
           food: ingredient.food,
           unit: ingredient.unit,
-          measure: ((ingredient.measure as number) / (newRawMealData.baseMeasure as number))
+          measure: ((ingredient.measure as number) / (newRawMealData.baseMeasure as number)),
+          comment: ''
         };
 
         return ingredientNew;

@@ -24,10 +24,11 @@ import { DatabaseService } from '../../_service/database.service';
 export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   public recipeForm: FormGroup;
-  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'delete'];
+  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'delete'];
   public dataSource: MatTableDataSource<Ingredient>;
 
   private ingredientFieldNodes: Element[];
+  private keyListnerEnter: EventListenerOrEventListenerObject;
 
   //  fields given by the parent element
   @Input() meal: Meal;
@@ -103,13 +104,21 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
+
+  // TODO: better solution, multiple action listeners vermeiden!!!
   private setFocusChanges() {
 
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.ingredientFieldNodes.length; i++) {
-      this.ingredientFieldNodes[i].removeEventListener('keydown', this.keyListner(i));
-      this.ingredientFieldNodes[i].addEventListener('keydown', this.keyListner(i));
+    // delete old listeners
+    for (const node of this.ingredientFieldNodes) {
+      node.removeEventListener('keydown', this.keyListnerEnter);
     }
+
+    // add new listeners
+    for (let i = 0; i < this.ingredientFieldNodes.length; i++) {
+      this.keyListnerEnter = this.keyListner(i);
+      this.ingredientFieldNodes[i].addEventListener('keydown', this.keyListnerEnter);
+    }
+
   }
 
   private keyListner(i: number, ): EventListenerOrEventListenerObject {
@@ -117,7 +126,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       if (event.key === 'Enter') {
 
         if (i + 1 < this.ingredientFieldNodes.length) {
-          const nextFocus = i % 4 === 0 ? i + 2 : i + 1;
+          console.log(i)
+          const nextFocus = i % 5 === 0 ? i + 2 : i + 1;
           (this.ingredientFieldNodes[nextFocus] as HTMLElement).focus();
         } else {
 
@@ -171,14 +181,14 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   addIngredientField() {
 
     // generiert leere Daten für ein neues Ingredient
-    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null };
+    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null, comment: '' };
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
     // set focus to new Element
     this.setFocusChanges();
     this.ingredientFieldNodes = this.getNodes();
-    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 4] as HTMLElement).focus();
+    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
 
   }
 
@@ -227,7 +237,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       this.recipe.ingredients.push({
         food: ingredientAsArray[2],
         unit: ingredientAsArray[1],
-        measure: Number.parseFloat(ingredientAsArray[0])
+        measure: Number.parseFloat(ingredientAsArray[0]),
+        comment: ''
       });
 
       i++;
