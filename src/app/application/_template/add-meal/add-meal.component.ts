@@ -108,7 +108,6 @@ export class AddMealComponent implements AfterViewInit {
   selected(firestoreMeal: FirestoreMeal, usedAs: string) {
 
     firestoreMeal.usedAs = usedAs;
-    console.log(usedAs);
 
   }
 
@@ -119,7 +118,7 @@ export class AddMealComponent implements AfterViewInit {
   addLastMeal() {
 
     this.mealTableSource.data.forEach(meal => {
-      console.log(meal.usedAs)
+
       if (meal.usedAs && meal.firestoreElementId) {
         const mealObj = new Meal(meal, meal.firestoreElementId, null);
         mealObj.lastMeal = meal.usedAs;
@@ -179,16 +178,12 @@ export class AddMealComponent implements AfterViewInit {
     }).afterClosed()
       .subscribe((result: Meal) => {
 
-        console.log(Meal.getCollectionPath());
-
         this.authService.getCurrentUser().subscribe(user => {
 
           const document = result.extractDataToJSON();
           const access: AccessData = { [user.uid as string]: 'owner' };
           document.access = access;
           this.databaseService.addDocument(document, 'meals').then(doc => {
-
-            console.log(doc.id);
 
             result.recipes.subscribe(recipes => {
 

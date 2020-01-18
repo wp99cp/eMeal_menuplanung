@@ -59,8 +59,6 @@ export class ImportComponent implements OnInit {
 
     const recipes: Recipe[] = [];
 
-    console.log(newRawMealData.baseMeasure);
-
     newRawMealData.recipes.forEach(rawRecipeData => {
 
       rawRecipeData.ingredients = rawRecipeData.ingredients.map(ingredient => {
@@ -90,7 +88,6 @@ export class ImportComponent implements OnInit {
 
     this.meal.recipes = of(recipes);
 
-    console.log('finished');
     this.mealStr = JSON.stringify(this.meal.extractDataToJSON());
     recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.extractDataToJSON()))
 

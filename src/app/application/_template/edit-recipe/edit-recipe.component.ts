@@ -303,8 +303,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   async saveRecipe() {
 
-    console.log('Test');
-
     // save data to firestore
     this.recipe.notes = this.recipeForm.value.notes;
     this.recipe.description = this.recipeForm.value.description;

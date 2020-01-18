@@ -35,7 +35,6 @@ export class EditMealComponent implements OnInit, Saveable {
 
   public newOpened(index: number) {
 
-    console.log(index);
     this.indexOfOpenedPanel = index;
 
   }
