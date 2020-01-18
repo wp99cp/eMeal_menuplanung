@@ -194,7 +194,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     } else if (element === 'calcMeasure') {
 
       // Berechnung für eine Person
-      this.recipe.ingredients[index].measure = Number.parseInt(value, 10) / this.calculateParticipantsNumber();
+      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.calculateParticipantsNumber();
 
     } else {
 
