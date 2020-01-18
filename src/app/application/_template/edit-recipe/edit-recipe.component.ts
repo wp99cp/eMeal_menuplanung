@@ -214,7 +214,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     this.recipe.ingredients.splice(index, 1);
 
     // Regulärer Ausdruck für das Parsing des Inputs
-    const ex = /([0-9]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.]|[0-9])+\t))+/gi;
+    const ex = /([0-9]|[.][0-9])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.]|[0-9])+\t))+/gi;
 
     const ingredientsAsArray = value.match(ex).join().split(',');
 
@@ -227,7 +227,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       this.recipe.ingredients.push({
         food: ingredientAsArray[2],
         unit: ingredientAsArray[1],
-        measure: Number.parseInt(ingredientAsArray[0], 10)
+        measure: Number.parseFloat(ingredientAsArray[0])
       });
 
       i++;
