@@ -9,6 +9,10 @@ import { map, flatMap, mergeMap } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 import { SettingsService } from '../../_service/settings.service';
 
+
+interface HashTable { [key: string]: string[]; }
+
+
 /** ExportCampComponent:
  * Export Seite für Lager. Möglichkeit ein in eMeal erstelltes Lager als
  * PDF zu exportieren. Der Export funktioniert über die Druckfunktion des
@@ -101,6 +105,7 @@ export class ExportCampComponent implements OnInit {
   }
 
 
+
   /** Passt die CampExport Daten so an, dass daraus eine Wochenübersichtstabelle generiert werden kann */
   private transformToWeekTable(): (campInfo: any) => any {
 
@@ -117,8 +122,7 @@ export class ExportCampComponent implements OnInit {
 
       const tableHeaders = [];
 
-      interface HashTable { [key: string]: string[]; }
-      const rows: HashTable = {};
+      let rows: HashTable = {};
 
       days.forEach((day: { date: any; meals: [{ name: string; description: string; }]; }) => {
 
@@ -160,6 +164,8 @@ export class ExportCampComponent implements OnInit {
 
       });
 
+      rows = this.sortList(rows);
+
       const newRows = [];
       const rowTitles = [];
 
@@ -175,4 +181,27 @@ export class ExportCampComponent implements OnInit {
   }
 
 
+  /**
+   * Sortiert die Mahlzeiten in der richtigen Reihenfolge (Zmorgen, Znüni, ...)
+   * und gibt das sortierte Object zurück.
+   *
+   * @param rows Zeilen der Tabelle
+   */
+  private sortList(rows: HashTable): HashTable {
+
+    const rowsOrdered = {};
+
+    // Reihenfolge der Mahlzeiten
+    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
+
+    // Sortiert das Objekt
+    Object.keys(rows)
+      .sort((a, b) => orderOfMahlzeiten.indexOf(a) - orderOfMahlzeiten.indexOf(b))
+      .forEach((key) => {
+        rowsOrdered[key] = rows[key];
+      });
+
+    return rowsOrdered;
+
+  }
 }
