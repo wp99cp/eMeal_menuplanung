@@ -48,6 +48,8 @@ export class ExportCampComponent implements OnInit {
   private campId: Observable<string>;
 
   public displayedColumns: string[] = ['measure', 'unit', 'food'];
+  public displayedColumnsRecipe: string[] = ['measure', 'totalMeasure', 'unit', 'food', 'comment'];
+
   public today: string;
   public user: Observable<User>;
   public shoppingListWithError: Observable<any>;
@@ -180,7 +182,9 @@ export class ExportCampComponent implements OnInit {
     };
   }
 
-
+  public toString(date) {
+    return SettingsService.toString(new Date(date._seconds * 1000));
+  }
   /**
    * Sortiert die Mahlzeiten in der richtigen Reihenfolge (Zmorgen, Znüni, ...)
    * und gibt das sortierte Object zurück.

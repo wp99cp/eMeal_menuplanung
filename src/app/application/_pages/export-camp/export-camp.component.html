@@ -98,11 +98,62 @@
 
 <!-- Mahlzeiten -->
 <ng-container *ngIf="mealsInfo | async; let meals">
-  <div class="onNewPage print" *ngFor="let meal of meals.data">
+  <div class="onNewPage print mealPage" *ngFor="let meal of meals.data">
 
-    <h1>Mahlzeit: {{meal.meal}}</h1>
+    <div class="mealHeader">
+      <h1 class="mealName">{{meal.name}}</h1>
+      <span class="description">{{meal.description}}</span>
+      <span class="usedAs">{{meal.usedAs}}</span>
+      <span class="date">{{toString(meal.date)}}</span>
+    </div>
 
-    <p>Zurzeit können die Mahlzeiten noch nicht exportiert werden!</p>
+    <div class="recipes">
+      <div *ngFor="let recipe of meal.recipes" class="recipe">
+
+        <h2 class="recipe-title">{{recipe.name}}</h2>
+        <span class="vegi-info">{{recipe.vegi}} ({{recipe.participants}})</span>
+        <span class="description">{{recipe.description}}</span>
+        <span class="notes">{{recipe.notes}}</span>
+
+        <table class="ingredients" mat-table [dataSource]="recipe.ingredients">
+
+          <ng-container matColumnDef="measure">
+            <td mat-cell *matCellDef="let element">
+              {{element.measure}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="totalMeasure">
+            <td mat-cell *matCellDef="let element">
+              {{element.measure * recipe.participants}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="unit">
+            <td mat-cell *matCellDef="let element">
+              {{element.unit}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="food">
+            <td mat-cell *matCellDef="let element">
+              {{element.food}}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="comment">
+            <td mat-cell *matCellDef="let element">
+              {{element.comment}}
+            </td>
+          </ng-container>
+
+          <!-- Link to Camp-->
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsRecipe;"></tr>
+
+        </table>
+
+      </div>
+    </div>
 
   </div>
 </ng-container>
