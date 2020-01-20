@@ -66,6 +66,11 @@ export class EditCampPageComponent implements OnInit, Saveable {
   ngOnInit() { }
 
 
+  public campSettings() {
+
+    console.log('campSettings');
+
+  }
 
 
   // save on destroy

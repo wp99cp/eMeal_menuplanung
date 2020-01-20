@@ -50,6 +50,7 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
+import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/export-pdf-with-latex.component';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { ApplicationRoutingModule } from './application-routing.module';
     MealsOverviewComponent,
     CreateMealComponent,
     ListOfUsersComponent,
-    AppSettingsPageComponent
+    AppSettingsPageComponent,
+    ExportPdfWithLatexComponent
   ],
   providers: [
     AngularFirestore,

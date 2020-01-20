@@ -10,6 +10,7 @@ import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.comp
 import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
+import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/export-pdf-with-latex.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,11 @@ const routes: Routes = [
   {
     path: 'camps/:id/export',
     component: ExportCampComponent
+
+  },
+  {
+    path: 'camps/:id/export-2',
+    component: ExportPdfWithLatexComponent
 
   },
   {

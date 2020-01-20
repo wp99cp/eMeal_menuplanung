@@ -8,7 +8,7 @@
 
 <div class="titlePage print">
 
-  <h1 *ngIf="campInfo | async; let camp">Menuplanung<br />{{camp.data.name}}</h1>
+  <h1 *ngIf="campInfo | async; let camp" class="dossier-title">Menuplanung<br />{{camp.data.name}}</h1>
   <p>Version vom {{today}} </p>
   <p *ngIf="user | async; let user">{{user.displayName}}</p>
   <p><br></p>
@@ -37,15 +37,15 @@
 
   </table>
   <!-- Allgemeines zum Lager -->
-  <ng-container *ngIf="campInfo | async; let camp">
+  <ng-container *ngIf="(exportedCamp | async)?.data.campData ; let camp">
 
-    <h3>Allgemeines zum {{camp.data.name}}</h3>
-    <p>{{camp.data.description}}</p>
+    <h3>Allgemeines zum {{camp.name}}</h3>
+    <p>{{camp.description}}</p>
 
     <p><br></p>
-    <p><b>Anzahl Teilnehmende: </b>{{camp.data.participants}}</p>
-    <p><b>Jahr: </b>{{camp.data.year}}</p>
-    <p><b>Anzahl Tage:</b> {{camp.data.days.length}}</p>
+    <p><b>Anzahl Teilnehmende: </b>{{camp.participants}}</p>
+    <p><b>Jahr: </b>{{camp.year}}</p>
+    <p><b>Anzahl Tage:</b> {{camp.days.length}}</p>
 
   </ng-container>
 
@@ -98,7 +98,7 @@
 
 <!-- Mahlzeiten -->
 <ng-container *ngIf="mealsInfo | async; let meals">
-  <div class="onNewPage print mealPage" *ngFor="let meal of meals.data">
+  <div class="onNewPage print mealPage" *ngFor="let meal of meals">
 
     <div class="mealHeader">
       <h1 class="mealName">{{meal.name}}</h1>

@@ -1,9 +1,12 @@
 <ng-container *ngIf="camp | async; let $camp; else: loadingCamps">
 
+
   <!-- Week Overview -->
   <app-week-view [camp]="$camp"></app-week-view>
 
   <!-- Allgemeine Informationen zum Lager -->
+  <!-- <button mat-raised-button (click)="campSettings()"> Einstellungen zum Lager </button> -->
+
   <mat-divider></mat-divider>
   <h2>Einstellungen zum Lager</h2>
 
