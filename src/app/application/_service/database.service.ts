@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { Observable, OperatorFunction, combineLatest, of } from 'rxjs';
+import { Observable, OperatorFunction, combineLatest, of, forkJoin } from 'rxjs';
 import { map, mergeMap, } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
@@ -18,6 +18,7 @@ import { AccessData } from '../_interfaces/accessData';
 import { RawMealData, ErrorOnImport } from '../_interfaces/rawMealData';
 import { User } from '../_interfaces/user';
 import { firestore } from 'firebase';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -118,13 +119,36 @@ export class DatabaseService {
    * @param db AngularFirestore: the database
    * @param auth AngularFireAuth
    */
-  constructor(private db: AngularFirestore, private authService: AuthenticationService, private functions: AngularFireFunctions) { }
+  constructor(
+    private db: AngularFirestore,
+    private authService: AuthenticationService,
+    private functions: AngularFireFunctions,
+    private cloud: AngularFireStorage) { }
 
   public updateAccessData(access: AccessData, path: string) {
 
     this.db.doc(path).set({ access }, { merge: true });
 
   }
+
+
+  public getExports(campId: string) {
+
+    return this.db.collection('camps/' + campId + '/exports', query => query.orderBy('exportDate', 'desc'))
+      .snapshotChanges().pipe(mergeMap(docChangeAction =>
+        forkJoin(docChangeAction.map((docData: any) =>
+          this.cloud.ref(docData.payload.doc.data().path + '.pdf').getDownloadURL().pipe(map(downloadPath => {
+            const exportData = docData.payload.doc.data();
+            // update path with a valid doc path
+            exportData.path = downloadPath;
+            return exportData;
+          }))
+        )))
+      );
+
+  }
+
+
   /**
    *
    * @param userIDs

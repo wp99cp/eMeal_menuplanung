@@ -8,7 +8,8 @@
 
 <div class="titlePage print">
 
-  <h1 *ngIf="campInfo | async; let camp" class="dossier-title">Menuplanung<br />{{camp.data.name}}</h1>
+  <h1 *ngIf="(exportedCamp | async).data.campData; let camp" class="dossier-title">Menuplanung<br />{{camp.data.name}}
+  </h1>
   <p>Version vom {{today}} </p>
   <p *ngIf="user | async; let user">{{user.displayName}}</p>
   <p><br></p>

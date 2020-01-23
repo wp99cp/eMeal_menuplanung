@@ -17,4 +17,13 @@ export class SettingsService {
 
   }
 
+  /**
+ * Konvertier ein Datum in den passenden 'Swiss-String'
+ */
+  public static toStringMinutes(date: Date): string {
+
+    return date.toLocaleDateString('de-CH', { weekday: 'long', year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: 'numeric', timeZone: 'Europe/Berlin' });
+
+  }
+
 }

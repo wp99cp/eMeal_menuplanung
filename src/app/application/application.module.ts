@@ -2,8 +2,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreModule, } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION } from '@angular/fire/functions';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule } from '@angular/material';
@@ -89,6 +91,7 @@ import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/expo
     ApplicationRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
     AngularFireFunctionsModule,
+    AngularFireStorageModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
 

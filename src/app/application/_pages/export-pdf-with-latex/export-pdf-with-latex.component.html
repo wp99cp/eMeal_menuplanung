@@ -1,3 +1,16 @@
-<p>export-pdf-with-latex works!</p>
+<h1>Lagerhandbuch erstellen</h1>
 
-<button (click)="pdf()">PDF</button>
+<button mat-raised-button (click)="pdf()">Lagerhandbuch erstellen.</button>
+
+<p>Kurze Zeit nach deinem Klick erscheint das fertige Lagerhandbuch in der Downloadliste. Du kannst es nun jederzeit
+  herunterladen.</p>
+<p><b>Achtung:</b> Zur Zeit fehlt leider die Wochenübersicht im Lagerhandbuch!</p>
+<p><b>Achtung:</b> Zur Zeit werden Fehler beim export nicht angezeigt!</p>
+
+<div *ngIf="(exports | async); let exports" class="docs">
+  <a class="export-overview" *ngFor="let export of exports" href="{{export.path}}" class="dload" target="_blank">
+    <div class="pdfIcon"></div>
+    <h3>Lagerhandbuch</h3>
+    <p>Änderungsdatum: {{toString(export.exportDate)}}</p>
+  </a>
+</div>
