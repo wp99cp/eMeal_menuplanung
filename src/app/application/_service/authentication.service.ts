@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { User } from '../_interfaces/user';
+import { MainMenuComponent } from 'src/app/_template/main-menu/main-menu.component';
 
 
 @Injectable({
@@ -19,26 +20,14 @@ import { User } from '../_interfaces/user';
  */
 export class AuthenticationService {
 
-  private static service: AuthenticationService = null;
 
   // needs for stop automatic resignin
   private signInSubscription: Subscription;
 
-  /** get the AuthenticationService */
-  public static getService(): AuthenticationService {
-    return AuthenticationService.service;
-  }
 
 
-  // ************************************************
-  // ************************************************
-  // ************************************************
 
-  constructor(public fireAuth: AngularFireAuth, private router: Router) {
-
-    // sets global service filed
-    AuthenticationService.service = this;
-  }
+  constructor(public fireAuth: AngularFireAuth, private router: Router) { }
 
 
 
@@ -51,6 +40,8 @@ export class AuthenticationService {
       this.fireAuth.authState.subscribe(user => {
         if (user == null) {
           this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+        } else {
+          MainMenuComponent.authServ = this;
         }
       });
 
@@ -68,6 +59,12 @@ export class AuthenticationService {
 
   }
 
+  public isSignedIn(): Observable<boolean> {
+
+    return this.fireAuth.authState.pipe(map(userData => (userData != null)));
+
+  }
+
   /**
    * signOut the current user an navigate to information page
    *
@@ -77,7 +74,9 @@ export class AuthenticationService {
   public signOut(redictToInfomationPage: boolean = true) {
 
     // stop automatic resignin an signOut the current user
-    this.signInSubscription.unsubscribe();
+    if (this.signInSubscription) {
+      this.signInSubscription.unsubscribe();
+    }
     this.fireAuth.auth.signOut();
 
     // Navigate to informationPage
@@ -88,7 +87,9 @@ export class AuthenticationService {
     *  A better way would be to call the method signIn after each entrance to the ApplicationModule (route "/app/.."), such that the
     *  user don't havt to reload any data.
     */
-    if (redictToInfomationPage) this.router.navigate(['/']).then(r => window.location.reload());
+    if (redictToInfomationPage) {
+      this.router.navigate(['/']).then(r => window.location.reload());
+    }
 
   }
 

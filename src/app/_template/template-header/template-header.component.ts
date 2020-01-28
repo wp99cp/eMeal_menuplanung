@@ -58,10 +58,7 @@ export class TemplateHeaderComponent {
 
   public showMenu() {
 
-
     TemplateHeaderComponent.showMenu(true);
-
-
 
   }
 

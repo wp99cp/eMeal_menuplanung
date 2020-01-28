@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <path fill="#e2e5e7" d="M128 0c-17.6 0-32 14.4-32 32v448c0 17.6 14.4 32 32 32h320c17.6 0 32-14.4 32-32V128L352 0H128z"/>
+  <path fill="#b0b7bd" d="M384 128h96L352 0v96c0 17.6 14.4 32 32 32z"/>
+  <path fill="#cad1d8" d="M480 224l-96-96h96z"/>
+  <path fill="#d3ac14" d="M416 416c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V256c0-8.8 7.2-16 16-16h352c8.8 0 16 7.2 16 16v160z"/>
+  <path fill="#cad1d8" d="M400 432H96v16h304c8.8 0 16-7.2 16-16v-16c0 8.8-7.2 16-16 16z"/>
+  <text _ngcontent-emd-c8="" fill="#fff" id="zwei" x="32" y="390" style="font-size: 140px; font-weight: 500;font-family: sans-serif;"> HTML </text>
+</svg>

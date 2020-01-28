@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { Observable, OperatorFunction, combineLatest, of, forkJoin } from 'rxjs';
+import { Observable, OperatorFunction, combineLatest, of, forkJoin, ObservableInput } from 'rxjs';
 import { map, mergeMap, } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
@@ -132,19 +132,13 @@ export class DatabaseService {
   }
 
 
-  public getExports(campId: string) {
+  /**
+   * gets the last 5 Elements
+   */
+  public getExports(campId: string): Observable<ExportData[]> {
 
-    return this.db.collection('camps/' + campId + '/exports', query => query.orderBy('exportDate', 'desc'))
-      .snapshotChanges().pipe(mergeMap(docChangeAction =>
-        forkJoin(docChangeAction.map((docData: any) =>
-          this.cloud.ref(docData.payload.doc.data().path + '.pdf').getDownloadURL().pipe(map(downloadPath => {
-            const exportData = docData.payload.doc.data();
-            // update path with a valid doc path
-            exportData.path = downloadPath;
-            return exportData;
-          }))
-        )))
-      );
+    return this.db.collection('camps/' + campId + '/exports', query => query.orderBy('exportDate', 'desc').limit(6))
+      .snapshotChanges().pipe(this.getPathsToCloudDocuments());
 
   }
 
@@ -412,6 +406,28 @@ export class DatabaseService {
   }
 
 
+  private getPathsToCloudDocuments(): OperatorFunction<DocumentChangeAction<ExportDocData>[], ExportData[]> {
 
+    return mergeMap(docChangeAction =>
+      forkJoin(docChangeAction.map(docData => {
+
+        const exportDocData = docData.payload.doc.data();
+
+        const pathsObservables: Observable<string[]> = forkJoin(exportDocData.docs.map(docType =>
+          this.cloud.ref(exportDocData.path + '.' + docType).getDownloadURL() as Observable<string>)
+        );
+
+        return pathsObservables.pipe(map(paths => ({ exportDate: exportDocData.exportDate, paths })));
+
+      }))
+    );
+  }
 
 }
+
+
+interface ExportDocData { path: string; docs: string[]; exportDate: any; }
+interface ExportData { paths: string[]; exportDate: any; }
+
+
+

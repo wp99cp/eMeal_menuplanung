@@ -150,12 +150,11 @@ import { DownloadComponent } from './_template/download/download.component';
 
 export class ApplicationModule {
 
-
   constructor(private auth: AuthenticationService) {
 
     this.auth.signIn();
+    
 
   }
-
 
 }

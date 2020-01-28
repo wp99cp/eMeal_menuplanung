@@ -1,9 +1,4 @@
-<h1 class="mat-h1">
-  Willkommmen bei eMeal,<br />
-  der Menuplanungssoftware für Lager.
-</h1>
-
-<button class="header-right-button" mat-raised-button (click)="auth.signOut()">Abmelden</button>
+<h1 class="mat-h1">{{title}}</h1>
 
 <!-- fast actions: overview -->
 <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
@@ -15,6 +10,11 @@
   <p>Du bist angemeldet als {{user.displayName}}.</p>
 
 </ng-container>
+
+
+<h2>What's new in Version 0.11</h2>
+<p class="news-element news-feature">Neu im zh11.ch-Look.</p>
+<p class="news-element news-feature">Seitennavigation erleichtert das Navigieren inerhalb der App.</p>
 
 
 <h2>What's new in Version 0.10</h2>

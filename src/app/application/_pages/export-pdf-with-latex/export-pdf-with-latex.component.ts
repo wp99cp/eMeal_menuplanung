@@ -16,12 +16,15 @@ export class ExportPdfWithLatexComponent implements OnInit {
 
   private campId: Observable<string>;
 
+  public pending = false;
   public exports: Observable<any[]>;
+  public message: string;
 
   constructor(private route: ActivatedRoute, private dbService: DatabaseService) {
 
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
+    this.exports.subscribe(console.log);
 
     this.campId.pipe(mergeMap(campId => dbService.getCampById(campId))).subscribe(camp => this.setHeaderInfo(camp.name));
 
@@ -30,17 +33,35 @@ export class ExportPdfWithLatexComponent implements OnInit {
   ngOnInit() {
   }
 
-  pdf() {
+  /**
+   * Request a PDF export of the camp
+   */
+  createPDF() {
 
-    this.campId.subscribe(campId => this.dbService.createPDF(campId));
+    this.pending = true;
+    this.campId
+      .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
+      .subscribe(() => { this.pending = false; },
 
+        // bug report on error
+        (err) => {
 
+          this.pending = false;
+          this.message = 'Beim Export ist ein unerwarteter Fehler aufgetreten! Bitte versuches später erneut.';
+          this.campId.subscribe(campId =>
+            this.dbService.addFeedback({
+              title: 'Fehler beim Export',
+              feedback: `Das exportieren eines Lagers (` + campId + `) ist fehlgeschlagen!
+            Dies ist eine automatische Fehlermeldung des Systems. Zeitpunkt: ` + new Date().toUTCString()
+            }));
+
+        });
 
   }
 
-  public toString(date) {
+  public getDate(date: any) {
 
-    return SettingsService.toStringMinutes(new Date(date.seconds * 1000));
+    return new Date(date.seconds * 1000);
 
   }
 

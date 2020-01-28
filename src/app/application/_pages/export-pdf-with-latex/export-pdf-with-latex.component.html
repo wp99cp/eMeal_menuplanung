@@ -1,16 +1,21 @@
 <h1>Lagerhandbuch erstellen</h1>
 
-<button mat-raised-button (click)="pdf()">Lagerhandbuch erstellen.</button>
+<button mat-raised-button (click)="createPDF()">Lagerhandbuch erstellen.</button>
 
 <p>Kurze Zeit nach deinem Klick erscheint das fertige Lagerhandbuch in der Downloadliste. Du kannst es nun jederzeit
   herunterladen.</p>
-<p><b>Achtung:</b> Zur Zeit fehlt leider die Wochenübersicht im Lagerhandbuch!</p>
-<p><b>Achtung:</b> Zur Zeit werden Fehler beim export nicht angezeigt!</p>
+<p>Es werden jeweils die letzten 6 Exporte angezeigt. Exporte stehen maximal einen Monat zur Verfügung.</p>
 
-<div *ngIf="(exports | async); let exports" class="docs">
-  <a class="export-overview" *ngFor="let export of exports" href="{{export.path}}" class="dload" target="_blank">
-    <div class="pdfIcon"></div>
-    <h3>Lagerhandbuch</h3>
-    <p>Änderungsdatum: {{toString(export.exportDate)}}</p>
-  </a>
+<div *ngIf="pending" class="waiting">
+  <mat-progress-bar mode="query"> </mat-progress-bar>
+</div>
+
+<span *ngIf="message !== ''" class="error-message"> {{message}}</span>
+
+<div *ngIf="(exports | async); let exports" class="camp-export-list">
+  <div class="docs camp-export" *ngFor="let export of exports">
+    <h3>Lagerhandbuch und Einkaufsliste</h3>
+    <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
+      [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')" [docPath]="path"></app-download>
+  </div>
 </div>

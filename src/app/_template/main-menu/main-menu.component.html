@@ -1,4 +1,4 @@
-<a class="iconText" href="https://zh11.ch">
+<a class="iconText" href="https://zh11.ch" matTooltip="Cevi Züri 11 - Webseite">
   <img class="logo" src="/assets/icons/logo.svg" width="30" heigth="30" alt="Logo Cevi Züri 11">
   <span class="logoName">Cevi Züri 11</span>
   <span class="logoSubname">8052 Zürich</span>
@@ -6,8 +6,45 @@
 
 
 <hr />
+<div *ngIf="isSignedIn() else notSignedIn" class="nav" (click)="closeMenu()">
 
-<div class="nav">
+  <ul class="top">
+    <li><a routerLink="/app" matTooltip="Zur Startseite"> Startseite </a></li>
+    <li><a routerLink="/app/camps" matTooltip="Meine Lager"> Lager </a></li>
+    <li class="deactive"><a matTooltip="Kommt bald"> Mahlzeiten </a></li>
+    <hr />
+    <li class="deactive"><a matTooltip="Kommt bald"> Rezept Vorlagen </a></li>
+  </ul>
 
+
+  <ul class="bottom">
+    <hr />
+    <li class="deactive"><a matTooltip="Kommt bald">Informationen</a></li>
+    <li class="deactive"><a matTooltip="Kommt bald">Einführung</a></li>
+    <li><a routerLink="/app/feedback" matTooltip="Melde einen Fehler">Fehler melden</a></li>
+    <hr />
+    <li><a routerLink="/app/settings" matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a></li>
+    <li><a routerLink="/" matTooltip="Von eMeal abmelden" (click)="signOut()">Abmelden</a></li>
+  </ul>
 
 </div>
+
+<ng-template #notSignedIn>
+  <div class="nav" (click)="closeMenu()">
+
+    <ul class="top">
+      <li><a routerLink="/" matTooltip="Über eMeal">Startseite</a></li>
+      <li class="deactive"><a matTooltip="Kommt bald">Informationen</a></li>
+    </ul>
+
+    <ul class="bottom">
+      <hr />
+      <li><a class="deactive" matTooltip="Kommt bald">Registrieren</a></li>
+      <li class="deactive"><a matTooltip="Kommt bald">Ausprobieren</a></li>
+      <li><a routerLink="/app" matTooltip="Anmelden und loslegen!">Anmelden</a></li>
+      <hr />
+      <li><a href="https://zh11.ch/impressum" matTooltip="Impressum und Datenschutz">Impressum</a></li>
+    </ul>
+
+  </div>
+</ng-template>
