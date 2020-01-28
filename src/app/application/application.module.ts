@@ -54,6 +54,7 @@ import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
 import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/export-pdf-with-latex.component';
 import { DownloadComponent } from './_template/download/download.component';
+import { VersionHistoryModule } from '../modules/version-history/version-history.module';
 
 
 @NgModule({
@@ -78,8 +79,7 @@ import { DownloadComponent } from './_template/download/download.component';
     ListOfUsersComponent,
     AppSettingsPageComponent,
     ExportPdfWithLatexComponent,
-    DownloadComponent
-  ],
+    DownloadComponent],
   providers: [
     AngularFirestore,
     AngularFireAuth,
@@ -96,7 +96,7 @@ import { DownloadComponent } from './_template/download/download.component';
     AngularFireStorageModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
-
+    VersionHistoryModule,
     ReactiveFormsModule,
     // Material Design
     MatTableModule,
@@ -153,7 +153,7 @@ export class ApplicationModule {
   constructor(private auth: AuthenticationService) {
 
     this.auth.signIn();
-    
+
 
   }
 

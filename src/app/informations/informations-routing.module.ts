@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { InfoPageComponent } from './info-page/info-page.component';
-import { HelpPageComponent } from './help-page/help-page.component';
+import { InformationspageComponent } from './help-page/informations-page.component';
 
 
 const routes: Routes = [
@@ -11,8 +11,8 @@ const routes: Routes = [
     component: InfoPageComponent
   },
   {
-    path: 'help',
-    component: HelpPageComponent
+    path: 'infos',
+    component: InformationspageComponent
   }
 
 ];

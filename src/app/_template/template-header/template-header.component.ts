@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 
@@ -11,7 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './template-header.component.html',
   styleUrls: ['./template-header.component.sass']
 })
-export class TemplateHeaderComponent {
+export class TemplateHeaderComponent implements OnInit {
+
 
   // Standardtitel: Menuplanung für Lager
   public static title = 'Menuplanung für Lager';
@@ -19,12 +20,18 @@ export class TemplateHeaderComponent {
   static TemplateHeaderComponent: {};
 
   public static menuState = false;
+  public static forcedState = false;
 
-  public static showMenu(force = false) {
+  public static showMenu(force = null, fixState = false) {
 
-    console.log("click");
+    if (fixState) {
+      TemplateHeaderComponent.forcedState = force;
+    } else if (force) {
+      TemplateHeaderComponent.forcedState = false;
+    }
 
-    if (TemplateHeaderComponent.menuState || force) {
+    if ((TemplateHeaderComponent.forcedState === false && force === null && TemplateHeaderComponent.menuState) ||
+      (force !== null && TemplateHeaderComponent.menuState !== force)) {
 
       TemplateHeaderComponent.menuState = !TemplateHeaderComponent.menuState;
 
@@ -35,7 +42,27 @@ export class TemplateHeaderComponent {
     }
   }
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+
+    if (document.body.clientWidth > 1200) {
+      TemplateHeaderComponent.showMenu(true, true);
+    }
+    window.addEventListener('resize', (event) => {
+      if (document.body.clientWidth > 1200) {
+        TemplateHeaderComponent.showMenu(true, true);
+      } else {
+        TemplateHeaderComponent.showMenu(false);
+
+      }
+    });
+
+  }
+
+
+
 
   // Methoden für das HTML file
   public getTitle() { return TemplateHeaderComponent.title; }

@@ -1,57 +1,24 @@
-<h1 class="mat-h1">{{title}}</h1>
+<div class="centered">
+  <span class="page-title">Jetzt loslegen!</span>
 
-<!-- fast actions: overview -->
-<ng-container *ngIf="currentUser | async; let user; else loadingUserData">
+  <h1 class="mat-h1">{{title}}</h1>
 
-  <button class="menu-button" mat-raised-button routerLink="camps">Meine Lager</button>
-  <button class="menu-button" mat-raised-button routerLink="settings">Einstellungen</button>
-  <button class="menu-button" mat-raised-button routerLink="feedback">Fehler melden</button>
+  <article>
+    <h2>Mit Planen beginnen.</h2>
+    <!-- fast actions: overview -->
+    <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
+      <p>Beginne jetzt gleich mit dem Planen deines ersten Lagers.<br /> Übrigens du bist angemeldet als
+        {{user.displayName}}.</p>
+      <button class="full-width" mat-raised-button routerLink="camps">Zu meinen Lagern</button>
+    </ng-container>
 
-  <p>Du bist angemeldet als {{user.displayName}}.</p>
+    <!-- Loading Animation -->
+    <ng-template #loadingUserData>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
 
-</ng-container>
+  </article>
 
+  <app-version-info></app-version-info>
 
-<h2>What's new in Version 0.11</h2>
-<p class="news-element news-feature">Neu im zh11.ch-Look.</p>
-<p class="news-element news-feature">Seitennavigation erleichtert das Navigieren inerhalb der App.</p>
-
-
-<h2>What's new in Version 0.10</h2>
-<p class="news-element news-feature">Das Lagerdossier wurde ergänz! Es werden nun auch die Mahlzeiten angezeigt. Und die
-  neue Version (aktuell noch im Test-Lauf) ermöglicht es dir in Zukunft Lager von allen Geräten aus zu exportieren. In
-  Zukunft stehen dir eine PDF- und ein CSV-Verion der Einkaufsliste zur Auswahl.</p>
-<p class="news-element news-fixed">Verschiedene Bug-Fixes erhöhen die Stabilität von eMeal und beheben Fehler in der
-  Applikation.</p>
-<br>
-
-<h2>What's new in Version 0.9</h2>
-<p class="news-element news-feature">Login ist nun mit jedem Google-Account möglich.</p>
-<p class="news-element news-feature">Änderungen im Hintergrund erhöhen die Sicherheit der Applikation.</p>
-<p class="news-element news-feature">Nun kannst du deine Lager mit anderen Teilen und Zusammenarbeiten. Deinen
-  Benutzernamen und Sichtbarkeit für andere verändern.</p>
-<p class="news-element news-fixed">Verschiedene Bug-Fixes erhöhen die Stabilität von eMeal und beheben Fehler in der
-  Applikation.</p>
-<br>
-
-<h2>What's new in Version 0.8</h2>
-<p class="news-element news-feature">Neu kannst du erstellte Rezepte ganz einfach wieder löschen, werden offene
-  Änderungen automatisch gespeichert, wirst du benachrichtigt, und du kannst nach Mahlzeiten suchen. Die Berechnung für
-  vegetarische Alternativgerichte wurde vereinfacht.</p>
-<p class="news-element news-feature">Das Layout der Applikation wurde verändert und verbessert. Zahlreiche Hinweise
-  wurden ergänzt.</p>
-<p class="news-element news-fixed">Verschiedene Bug-Fixes erhöhen die Stabilität von eMeal und beheben Fehler in der
-  Applikation.</p>
-<br>
-
-<h2>What's new in Version 0.7</h2>
-<p class="news-element news-feature">Offene Änderungen werden beim verlassen einer Seite automatisch gespeichert. Neu
-  kannst du Rezepte von Swissmilk automatisiert importieren (BETA-Version). Und ausserdem lassen sich Mahlzeiten nun
-  wieder aus einem Lager entfehrnen.</p>
-<p class="news-element news-fixed">Verschiedene Bug-Fixes erhöhen die Stabilität von eMeal und beheben Fehler in der
-  Applikation.</p>
-
-<!-- Loading Animation -->
-<ng-template #loadingUserData>
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</ng-template>
+</div>

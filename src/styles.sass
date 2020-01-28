@@ -36,7 +36,7 @@ app-root.show-menu
 app-main-menu
   grid-area: menu
   background-color: #fff
-  box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2)
+  box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 10px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2)
   z-index: 300
   display: none
   position: fixed
@@ -116,7 +116,7 @@ main
     margin-top: 60px
     margin-bottom: 10px
 
-  h3 
+  h3
     color: rgb(117, 117, 117)
     display: block
     font-size: 20.4px
@@ -135,9 +135,14 @@ main
   margin-left: auto
   margin-right: auto
   max-width: 760px
-    
-article 
-  a 
+
+@media screen and (min-width: 1200px)
+  .centered
+    margin-left: 10%
+
+
+article
+  a
     color: rgb(150, 191, 16)
     cursor: pointer
     display: inline
@@ -171,24 +176,6 @@ a
 .news-element
   margin: 10px 0 10px 140px
 
-
-
-// News Items
-.news-element::before
-  padding: 5px 22px
-  border-radius: 10px
-  color: $prime-text-color
-
-
-.news-fixed::before
-  content: "FIXED"
-  margin: 5px 49px 5px -140px
-  background: $complementar-color-light
-
-.news-feature::before
-  content: "FEATURE"
-  margin: 5px 23px 5px -140px
-  background: $second-color-light
 
 
 ////////////////////////////////////////////////////////////////
@@ -250,8 +237,6 @@ a
 
 .mat-icon:hover
   color: $icon-color-hover
-
-
 
 
 ///////////////////////////////////////////////////////////////
@@ -320,6 +305,9 @@ textarea
 
 .mat-input-element
   font: $p-font !important
+
+.mat-form-field
+  font-size: 14px
 
 ///////////////////////////////////////////////////////////////
 // Drucken einer Seite

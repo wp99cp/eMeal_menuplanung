@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InformationspageComponent } from './informations-page.component';
+import { VersionHistoryComponent } from './version-history.component';
 
-describe('HelpPageComponent', () => {
-  let component: InformationspageComponent;
-  let fixture: ComponentFixture<InformationspageComponent>;
+describe('VersionHistoryComponent', () => {
+  let component: VersionHistoryComponent;
+  let fixture: ComponentFixture<VersionHistoryComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InformationspageComponent ]
+      declarations: [ VersionHistoryComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InformationspageComponent);
+    fixture = TestBed.createComponent(VersionHistoryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

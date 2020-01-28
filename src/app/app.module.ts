@@ -14,7 +14,6 @@ import { TemplateHeaderComponent } from './_template/template-header/template-he
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

@@ -1,186 +1,189 @@
-<h1 class="mat-h1">Erstelle ein neues Lager.<br />
-  Oder bearbeite ein bereits Erstelltes.</h1>
+<div class="centered">
+  <span class="page-title">Meine Lager</span>
+
+  <h1 class="mat-h1">Erstelle ein neues Lager. Oder bearbeite ein bereits Erstelltes.</h1>
 
 
+  <!-- List with camps-->
+  <div [hidden]="(camps| async)?.length == 0" class="mat-elevation-z3">
 
+    <!-- Table with camps-->
+    <table mat-table [dataSource]="dataSource" id="campsTable" matSort matSortActive="name" matSortDirection="asc">
 
-<!-- List with camps-->
-<div [hidden]="(camps| async)?.length == 0" class="mat-elevation-z3">
-
-  <!-- Table with camps-->
-  <table mat-table [dataSource]="dataSource" id="campsTable" matSort matSortActive="name" matSortDirection="asc">
-
-    <!--- Note that these columns can be defined in any order.
+      <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header id="name-header"> Name
-      </th>
-      <td mat-cell *matCellDef="let element" matTooltip="{{element.name}} öffnen"
-        routerLink="{{element.firestoreElementId}}" class="clickable">
-        {{element.name}} </td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header id="name-header"> Name
+        </th>
+        <td mat-cell *matCellDef="let element" matTooltip="{{element.name}} öffnen"
+          routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.name}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Beschreibung </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
-        {{element.description}}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Beschreibung </th>
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.description}}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="year">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header id="year-header"> Jahr </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
-        {{element.year}} </td>
-    </ng-container>
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header id="year-header"> Jahr </th>
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+          {{element.year}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="participants">
-      <th mat-header-cell *matHeaderCellDef class="center" id="tn-header"> #TNs </th>
-      <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable center">
-        {{element.participants}}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="participants">
+        <th mat-header-cell *matHeaderCellDef class="center" id="tn-header"> #TNs </th>
+        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable center">
+          {{element.participants}}
+        </td>
+      </ng-container>
 
-    <!-- TODO: only show icon if you are allowed to delete the camp (access: owner)-->
-    <ng-container matColumnDef="menu">
-      <th mat-header-cell *matHeaderCellDef class="delete-header"> </th>
-      <td mat-cell *matCellDef="let element" class="delete-icon">
-        <mat-icon (click)='deleteCamp(element)' class="clickable mat-icon-style" matTooltip="Lager löschen">delete
-        </mat-icon>
-      </td>
-    </ng-container>
+      <!-- TODO: only show icon if you are allowed to delete the camp (access: owner)-->
+      <ng-container matColumnDef="menu">
+        <th mat-header-cell *matHeaderCellDef class="delete-header"> </th>
+        <td mat-cell *matCellDef="let element" class="delete-icon">
+          <mat-icon (click)='deleteCamp(element)' class="clickable mat-icon-style" matTooltip="Lager löschen">delete
+          </mat-icon>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
-    <!-- Link to Camp-->
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="camp-row"></tr>
+      <!-- Link to Camp-->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="camp-row"></tr>
 
-  </table>
+    </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
-</div>
+  </div>
 
-<!-- Loading Animation -->
-<ng-template #loadingCamps>
-  <mat-progress-bar mode="query"> </mat-progress-bar>
-</ng-template>
+  <!-- Loading Animation -->
+  <ng-template #loadingCamps>
+    <mat-progress-bar mode="query"> </mat-progress-bar>
+  </ng-template>
 
 
-<!-- Create a new Camp -->
-<div *ngIf="camps" class="newCampDiaglog">
+  <!-- Create a new Camp -->
+  <div *ngIf="camps" class="newCampDiaglog">
 
-  <mat-vertical-stepper #campCreator [linear]="true">
+    <mat-vertical-stepper #campCreator [linear]="true">
 
-    <mat-step label="Lager erstellen.">
+      <mat-step label="Lager erstellen.">
 
-      <h2 class="mat-h2">Mit Planen beginnen.</h2>
-      <p>Erstelle ein neues Lager und beginne sofort mit dem Planen.</p>
-      <button mat-raised-button matStepperNext>Lager erstellen</button>
+        <h2 class="mat-h2">Mit Planen beginnen.</h2>
+        <p>Erstelle ein neues Lager und beginne sofort mit dem Planen.</p>
+        <button mat-raised-button matStepperNext>Lager erstellen</button>
 
-    </mat-step>
+      </mat-step>
 
-    <!-- Allgemeine Infos -->
-    <mat-step label="Allgemeine Infos zum Lager." [stepControl]="newCampInfos">
+      <!-- Allgemeine Infos -->
+      <mat-step label="Allgemeine Infos zum Lager." [stepControl]="newCampInfos">
 
-      <form [formGroup]="newCampInfos">
+        <form [formGroup]="newCampInfos">
 
-        <mat-form-field>
-          <input matInput placeholder="Name" required formControlName="name" #name maxlength="32" autocomplete="off">
-          <mat-hint align="start"><strong>Name des Lagers</strong></mat-hint>
-          <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
-        </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Name" required formControlName="name" #name maxlength="32" autocomplete="off">
+            <mat-hint align="start"><strong>Name des Lagers</strong></mat-hint>
+            <mat-hint align="end">{{name.value.length}} / 32</mat-hint>
+          </mat-form-field>
+
+          <br />
+
+          <mat-form-field>
+            <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
+          </mat-form-field>
+
+        </form>
 
         <br />
 
-        <mat-form-field>
-          <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
-        </mat-form-field>
+        <button mat-raised-button matStepperNext>Weiter</button>
+      </mat-step>
 
-      </form>
+      <!-- Anzahl Teilnehmende -->
+      <mat-step label="Anzahl Teilnehmer." [stepControl]="newCampParticipants">
 
-      <br />
+        <form [formGroup]="newCampParticipants">
 
-      <button mat-raised-button matStepperNext>Weiter</button>
-    </mat-step>
+          <mat-form-field>
+            <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'>
+          </mat-form-field>
 
-    <!-- Anzahl Teilnehmende -->
-    <mat-step label="Anzahl Teilnehmer." [stepControl]="newCampParticipants">
+        </form>
 
-      <form [formGroup]="newCampParticipants">
+        <p>
+          Bitte gib die voraussichtliche Anzahl Teilnehmende an. Du kannst die Teilnehmer-Anzahl später jederzeit
+          anpassen.
+        </p>
 
-        <mat-form-field>
-          <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'>
-        </mat-form-field>
+        <br />
 
-      </form>
+        <p class="info">
+          In Zukunft wird es möglich sein, dein Lager mit der Cevi-DB zu verknüpfen. So wird die
+          Teilnehmeranzahl automatisch aktualisiert. Ausserdem erhältst du Informationen zu Allergien und Vegetarier
+          direkt in den betroffenen Rezepten angezeigt.
+        </p>
 
-      <p>
-        Bitte gib die voraussichtliche Anzahl Teilnehmende an. Du kannst die Teilnehmer-Anzahl später jederzeit
-        anpassen.
-      </p>
+        <br />
 
-      <br />
+        <button mat-raised-button matStepperNext>Weiter</button>
 
-      <p class="info">
-        In Zukunft wird es möglich sein, dein Lager mit der Cevi-DB zu verknüpfen. So wird die
-        Teilnehmeranzahl automatisch aktualisiert. Ausserdem erhältst du Informationen zu Allergien und Vegetarier
-        direkt in den betroffenen Rezepten angezeigt.
-      </p>
+      </mat-step>
 
-      <br />
+      <!-- Mitarbeiter -->
+      <mat-step label="Mitarbeiter hinzufügen (Beta).">
 
-      <button mat-raised-button matStepperNext>Weiter</button>
+        <p>
+          Füge einen oder mehrere Mitarbeiter zu deinem Lager hinzu. Mitarbeiter können das Lager bearbeiten,
+          nicht aber löschen.
+        </p>
 
-    </mat-step>
+        <br />
 
-    <!-- Mitarbeiter -->
-    <mat-step label="Mitarbeiter hinzufügen (Beta).">
+        <app-user-list (onSelection)='selectUser($event)'></app-user-list>
+        <app-list-of-users [userList]="access"></app-list-of-users>
 
-      <p>
-        Füge einen oder mehrere Mitarbeiter zu deinem Lager hinzu. Mitarbeiter können das Lager bearbeiten,
-        nicht aber löschen.
-      </p>
+        <br>
 
-      <br />
+        <p class="info">
+          Diese Funktion befindet sich noch in der Testphase, ggf. können Mitarbeite noch nicht auf alle Daten zugreifen
+          oder diese nur eingeschränkt bearbeiten. Achtung im Moment können Mitarbeiter zu einem späteren Zeitpunkt
+          nicht
+          mehr eingeladen werden!
+        </p>
 
-      <app-user-list (onSelection)='selectUser($event)'></app-user-list>
-      <app-list-of-users [userList]="access"></app-list-of-users>
+        <br>
 
-      <br>
+        <button mat-raised-button matStepperNext>Weiter</button>
+      </mat-step>
 
-      <p class="info">
-        Diese Funktion befindet sich noch in der Testphase, ggf. können Mitarbeite noch nicht auf alle Daten zugreifen
-        oder diese nur eingeschränkt bearbeiten. Achtung im Moment können Mitarbeiter zu einem späteren Zeitpunkt nicht
-        mehr eingeladen werden!
-      </p>
+      <!-- Mit Planen beginnen -->
+      <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">
 
-      <br>
+        <p>Füge einen ersten Tag hinzu.</p>
 
-      <button mat-raised-button matStepperNext>Weiter</button>
-    </mat-step>
+        <form [formGroup]="newCampDate">
 
-    <!-- Mit Planen beginnen -->
-    <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </form>
 
-      <p>Füge einen ersten Tag hinzu.</p>
+        <br />
 
-      <form [formGroup]="newCampDate">
+        <button mat-raised-button matStepperNext (click)="createCamp(campCreator)" type="submit">
+          Lager erstellen
+        </button>
 
-        <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </form>
+      </mat-step>
+    </mat-vertical-stepper>
 
-      <br />
-
-      <button mat-raised-button matStepperNext (click)="createCamp(campCreator)" type="submit">
-        Lager erstellen
-      </button>
-
-    </mat-step>
-  </mat-vertical-stepper>
+  </div>
 
 </div>

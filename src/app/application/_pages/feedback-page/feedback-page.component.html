@@ -1,17 +1,20 @@
-<h1 class="mat-h1">Melde einen Fehler an den Entwickler!</h1>
-<p class="info">Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
-  für Rückfragen ggf. mit dir in Kontakt treten.</p>
+<div class="centered">
 
-<form [formGroup]="feedbackForm" style="display: grid">
+  <span class="page-title">Feedback geben</span>
+  <h1>Melde einen Fehler an den Entwickler!</h1>
 
-  <mat-form-field>
-    <input matInput placeholder="Titel / Thema" formControlName="title">
-  </mat-form-field>
+  <h2>Feedback verfassen.</h2>
+  <p>Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
+    für Rückfragen ggf. mit dir in Kontakt treten.</p>
 
-  <mat-form-field>
-    <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback"></textarea>
-  </mat-form-field>
+  <form [formGroup]="feedbackForm" style="display: grid">
+    <mat-form-field>
+      <input matInput placeholder="Titel / Thema" formControlName="title">
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback"></textarea>
+    </mat-form-field>
+    <button mat-raised-button (click)="send()">Feedback senden!</button>
+  </form>
 
-  <button mat-raised-button (click)="send()">Feedback senden!</button>
-
-</form>
+</div>

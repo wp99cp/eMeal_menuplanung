@@ -1,45 +1,52 @@
-<h1>Einstellungen und Benutzerkonto</h1>
+<div class="centered">
 
-<h2>Dein Benutzerkonto</h2>
-<form [formGroup]="userDataForm" style="display: grid" *ngIf="userDataForm !== undefined else loadingUserSettings">
+  <span class="page-title">Konto / Einstellungen</span>
 
-  <mat-form-field>
-    <input matInput placeholder="Name" formControlName="displayName">
-  </mat-form-field>
+  <h1>Bearbeite dein Konto oder verändere Einstellungen.</h1>
 
-  <mat-form-field matTooltip="Die User-Id ist unveränderlich.">
-    <input matInput placeholder="User-Id" [value]="(user | async)?.uid" disabled>
-  </mat-form-field>
+  <article>
+    <h2>Dein Benutzerkonto</h2>
+    <form [formGroup]="userDataForm" style="display: grid" *ngIf="userDataForm !== undefined else loadingUserSettings">
 
-  <mat-form-field matTooltip="Ändere deine Mailadresse in deinem Google Konto.">
-    <input matInput placeholder="Mailadresse" [value]="(user | async)?.email" disabled>
-  </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="displayName">
+      </mat-form-field>
 
-  <p *ngIf="userDataForm.value.visibility == 'visible'" class="info">
-    Andere Nutzer von eMeal können dich finden und zu Lager hinzufügen: </p>
-  <p *ngIf="userDataForm.value.visibility == 'hidden'" class="info">
-    Andere Nutzer von eMeal können dich nicht finden und keine Lager mit dir teilen: </p>
+      <mat-form-field matTooltip="Die User-Id ist unveränderlich.">
+        <input matInput placeholder="User-Id" [value]="(user | async)?.uid" disabled>
+      </mat-form-field>
 
-  <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
-    <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit"
-      (input)="visibilityChanged(visibilitySelect.value)">
-      <option value="hidden">versteckt</option>
-      <option value="visible">sichtbar</option>
-    </select>
-  </mat-form-field>
+      <mat-form-field matTooltip="Ändere deine Mailadresse in deinem Google Konto.">
+        <input matInput placeholder="Mailadresse" [value]="(user | async)?.email" disabled>
+      </mat-form-field>
 
-  <button mat-raised-button [disabled]="userDataForm.untouched" (click)="updateUserData()">Speichern</button>
+      <p *ngIf="userDataForm.value.visibility == 'visible'" class="info">
+        Andere Nutzer von eMeal können dich finden und zu Lager hinzufügen: </p>
+      <p *ngIf="userDataForm.value.visibility == 'hidden'" class="info">
+        Andere Nutzer von eMeal können dich nicht finden und keine Lager mit dir teilen: </p>
 
-</form>
+      <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
+        <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit"
+          (input)="visibilityChanged(visibilitySelect.value)">
+          <option value="hidden">versteckt</option>
+          <option value="visible">sichtbar</option>
+        </select>
+      </mat-form-field>
 
-<!-- Loading Animation -->
-<ng-template #loadingUserSettings>
-  <mat-progress-bar mode="query"></mat-progress-bar>
-</ng-template>
+      <button mat-raised-button [disabled]="userDataForm.untouched" (click)="updateUserData()">Speichern</button>
 
-<h2>Über eMeal - Menuplanung</h2>
-<p>eMeal ist eine freie Software des Cevi Züri 11</p>
-<p>{{copyrights}}</p>
-<p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)</p>
-<p></p>
-<p>Entwickler: <a href="mailto:eMeal-admin@zh11.ch">Cyrill Püntener v/o JPG</a></p>
+    </form>
+  </article>
+
+  <!-- Loading Animation -->
+  <ng-template #loadingUserSettings>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </ng-template>
+
+  <article>
+    <h2>Über eMeal - Menüplanung</h2>
+    <p>eMeal ist eine freie Software des Cevi Züri 11 ({{copyrights}})</p>
+    <p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)<br />
+      Entwickler: <a href="mailto:eMeal-admin@zh11.ch">Cyrill Püntener v/o JPG</a></p>
+  </article>
+</div>
