@@ -18,6 +18,23 @@ export class TemplateHeaderComponent {
   public static path: string[];
   static TemplateHeaderComponent: {};
 
+  public static menuState = false;
+
+  public static showMenu(force = false) {
+
+    console.log("click");
+
+    if (TemplateHeaderComponent.menuState || force) {
+
+      TemplateHeaderComponent.menuState = !TemplateHeaderComponent.menuState;
+
+      document.querySelector('app-root').classList.toggle('show-menu');
+      document.querySelector('app-main-menu').classList.toggle('show-menu');
+      document.querySelector('.header').classList.toggle('show-menu');
+      document.querySelector('.show-main-menu').classList.toggle('show-menu');
+    }
+  }
+
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   // Methoden für das HTML file
@@ -37,5 +54,17 @@ export class TemplateHeaderComponent {
     this.router.navigate([urlStr]);
 
   }
+
+
+  public showMenu() {
+
+
+    TemplateHeaderComponent.showMenu(true);
+
+
+
+  }
+
+
 
 }

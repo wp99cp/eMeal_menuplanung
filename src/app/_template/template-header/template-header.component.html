@@ -1,5 +1,8 @@
-<mat-toolbar class="header">
-  <mat-toolbar-row id="header-title">
+<div class="header">
+
+  <mat-icon class="show-main-menu" alt="Hauptmenü" matTooltip="Hauptmenü" (click)="showMenu()">menu</mat-icon>
+
+  <div id="header-title">
 
     <span>{{getTitle()}}</span>
 
@@ -7,12 +10,13 @@
       <span>Menuplanung für Lager</span>
     </ng-template>
 
-  </mat-toolbar-row>
+  </div>
 
   <!-- Path -->
-  <mat-toolbar-row class="nav-link-list" *ngIf="getPath()">
+  <div class="nav-link-list" *ngIf="getPath()">
 
     <ng-container *ngFor="let item of getPath(); let i = index">
+
       <ng-container *ngIf="item != ''">
         <p class="nav-separator" *ngIf="i != 0"> · </p>
         <p (click)="navigateTo( i )" class="clickable">{{item}}</p>
@@ -20,6 +24,6 @@
 
     </ng-container>
 
-  </mat-toolbar-row>
+  </div>
 
-</mat-toolbar>
+</div>

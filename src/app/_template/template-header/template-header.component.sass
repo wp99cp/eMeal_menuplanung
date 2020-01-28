@@ -4,14 +4,32 @@
 
 // Allgemeines zum Header
 .header
-  background-color: $prime-color
-  color: $prime-color-light
-
-  display: inline-grid
-  position: fixed
-  grid-template-columns: auto auto
-
+  background-color: white
+  color: #757575
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+  grid-template-columns: 50px auto auto
   z-index: 100
+  height: 100%
+  width: 100%
+  display: grid
+
+.header.show-menu
+  grid-template-columns: auto auto
+  width: calc(100% - 280px)
+  margin-left: 280px
+
+  #header-title
+    margin: 0 25px
+
+
+.mat-icon.show-menu
+  display: none
+
+
+#header-title
+  line-height: 50px
+  font-size: 1.8rem
+  font-weight: 600
 
 // Seitennavigation im Header
 .nav-link-list
@@ -19,7 +37,28 @@
   width: auto
   margin-left: auto
   font: $header-nav-font
+  margin-right: 15px
+  display: flex
+
+  p
+    line-height: 50px
+    margin: 0
 
   // Saparator '·' between the navigation in the header
   .nav-separator
-    margin: 5px
+    line-height: 50px
+    margin: 0 5px
+
+.show-main-menu
+  margin: auto
+  font-size: 28px
+  line-height: 28px
+  color: #757575
+  width: 28px
+  height: 28px
+  cursor: pointer !important
+
+
+
+.show-main-menu.show-menu
+  opacity: 0

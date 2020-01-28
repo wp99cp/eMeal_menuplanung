@@ -12,13 +12,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { MatIconModule, MatTooltipModule } from '@angular/material';
+import { MainMenuComponent } from './_template/main-menu/main-menu.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateHeaderComponent,
-    TemplateFooterComponent
+    TemplateFooterComponent,
+    MainMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,9 @@ import { environment } from '../environments/environment';
     // Material Design for the entire app
     MatToolbarModule,
     MatMenuModule,
+    MatTooltipModule,
     MatButtonModule,
+    MatIconModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],

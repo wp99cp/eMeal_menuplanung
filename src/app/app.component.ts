@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TemplateHeaderComponent } from './_template/template-header/template-header.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,12 @@ export class AppComponent {
         window.clearInterval(scrollToTop);
       }
     }, 16);
+  }
+
+  public closeMenu() {
+
+    TemplateHeaderComponent.showMenu();
+
   }
 
 }

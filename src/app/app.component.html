@@ -1,7 +1,9 @@
 <app-template-header></app-template-header>
 
-<main>
+<app-main-menu></app-main-menu>
+
+<main (click)="closeMenu()">
   <router-outlet (activate)="onActivate($event)"></router-outlet>
 </main>
 
-<app-template-footer></app-template-footer>
+<app-template-footer (click)="closeMenu()"></app-template-footer>

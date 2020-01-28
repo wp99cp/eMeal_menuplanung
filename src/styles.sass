@@ -20,20 +20,55 @@ html, body
   color: $background-text-color
   font: $default-font
 
+
+
 app-root
   display: grid
-  grid-template-rows: 65px auto 160px
+  grid-template-rows: 50px auto 250px
   height: 100%
-  grid-gap: 45px
+  width: 100%
+  grid-template-columns: 280px auto
+  grid-template-areas: "header header" "main main" "footer footer"
+
+app-root.show-menu
+  grid-template-areas: "menu header" "menu main" "menu footer"
+
+app-main-menu
+  grid-area: menu
+  background-color: #fff
+  box-shadow: 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12), 0 8px 10px -5px rgba(0,0,0,.2)
+  z-index: 300
+  display: none
+  position: fixed
+  height: 100%
+  width: 280px
+
+app-main-menu.show-menu
+  display: inline-grid
+
+app-template-header
+  grid-area: header
+  width: 100%
+  position: fixed
+  height: 50px
+  z-index: 200
+
+app-template-header.show-menu
+  width: calc(100% - 280px)
+  margin-left: 280px
+
+app-template-footer
+  grid-area: footer
+  background-color: $second-color
+  padding: 100px 25px 65px 25px
+
 
 main
 
-  // Ausrichtung im Fenster
-  max-width: 1350px
-  margin: 0 30px
-  width: calc(100% - 60px)
+  grid-area: main
+  padding: 25px
 
-  // content color
+    // content color
   color: $background-text-color
 
   p
@@ -52,8 +87,8 @@ main
   table
     width: 100%
 
-
-
+a
+  text-decoration: none
 
 ///////////////////////////////////////////////////////////////
 // Grundlegende Styles von Elementen der gesamten Applikation
@@ -132,7 +167,8 @@ main
   position: fixed !important
   right: 0
   top: 0
-  z-index: 120
+  z-index: 201
+  margin: 7px !important
 
 
 .full-width
