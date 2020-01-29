@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { DatabaseService } from '../../_service/database.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-feedback-page',
@@ -13,7 +14,10 @@ export class FeedbackPageComponent implements OnInit {
 
   public feedbackForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private dbService: DatabaseService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private dbService: DatabaseService,
+    public snackBar: MatSnackBar) {
 
     this.setHeaderInfo();
 
@@ -29,7 +33,7 @@ export class FeedbackPageComponent implements OnInit {
   public send() {
 
     this.dbService.addFeedback(this.feedbackForm.value);
-    alert('Dein Feedback wurde erfolgreich gesenden! Dank dir!');
+    this.snackBar.open('Dein Feedback wurde  gesenden!', '', { duration: 2000 });
     this.feedbackForm.reset();
 
   }
