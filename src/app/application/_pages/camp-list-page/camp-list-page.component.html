@@ -134,32 +134,6 @@
 
       </mat-step>
 
-      <!-- Mitarbeiter -->
-      <mat-step label="Mitarbeiter hinzufügen (Beta).">
-
-        <p>
-          Füge einen oder mehrere Mitarbeiter zu deinem Lager hinzu. Mitarbeiter können das Lager bearbeiten,
-          nicht aber löschen.
-        </p>
-
-        <br />
-
-        <app-user-list (onSelection)='selectUser($event)'></app-user-list>
-        <app-list-of-users [userList]="access"></app-list-of-users>
-
-        <br>
-
-        <p class="info">
-          Diese Funktion befindet sich noch in der Testphase, ggf. können Mitarbeite noch nicht auf alle Daten zugreifen
-          oder diese nur eingeschränkt bearbeiten. Achtung im Moment können Mitarbeiter zu einem späteren Zeitpunkt
-          nicht
-          mehr eingeladen werden!
-        </p>
-
-        <br>
-
-        <button mat-raised-button matStepperNext>Weiter</button>
-      </mat-step>
 
       <!-- Mit Planen beginnen -->
       <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">

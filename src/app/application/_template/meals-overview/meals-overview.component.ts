@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Day } from '../../_class/day';
 import { MatDialog } from '@angular/material';
-import { EditDayComponent } from '../edit-day/edit-day.component';
+import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
 
 @Component({
   selector: 'app-meals-overview',

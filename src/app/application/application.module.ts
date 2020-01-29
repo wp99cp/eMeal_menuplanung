@@ -41,11 +41,11 @@ import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component'
 import { AuthenticationService } from './_service/authentication.service';
 import { AutoSaveService } from './_service/auto-save.service';
 import { DatabaseService } from './_service/database.service';
-import { AddMealComponent } from './_template/add-meal/add-meal.component';
-import { CreateMealComponent } from './_template/create-meal/create-meal.component';
-import { EditDayComponent } from './_template/edit-day/edit-day.component';
+import { AddMealComponent } from './_dialoges/add-meal/add-meal.component';
+import { CreateMealComponent } from './_dialoges/create-meal/create-meal.component';
+import { EditDayComponent } from './_dialoges/edit-day/edit-day.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
-import { ImportComponent } from './_template/import/import.component';
+import { ImportComponent } from './_dialoges/import/import.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.component';
 import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
@@ -55,6 +55,7 @@ import { ApplicationRoutingModule } from './application-routing.module';
 import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/export-pdf-with-latex.component';
 import { DownloadComponent } from './_template/download/download.component';
 import { VersionHistoryModule } from '../modules/version-history/version-history.module';
+import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
 
 
 @NgModule({
@@ -79,7 +80,9 @@ import { VersionHistoryModule } from '../modules/version-history/version-history
     ListOfUsersComponent,
     AppSettingsPageComponent,
     ExportPdfWithLatexComponent,
-    DownloadComponent],
+    DownloadComponent,
+    ShareDialogComponent
+  ],
   providers: [
     AngularFirestore,
     AngularFireAuth,
@@ -136,7 +139,8 @@ import { VersionHistoryModule } from '../modules/version-history/version-history
     EditDayComponent,
     ImportComponent,
     CreateMealComponent,
-    MealsOverviewComponent
+    MealsOverviewComponent,
+    ShareDialogComponent
   ],
   exports: [
     MatTableModule,

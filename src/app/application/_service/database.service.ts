@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
 import { Observable, OperatorFunction, combineLatest, of, forkJoin, ObservableInput } from 'rxjs';
-import { map, mergeMap, } from 'rxjs/operators';
+import { map, mergeMap, take, } from 'rxjs/operators';
 import { Camp } from '../_class/camp';
 import { FirebaseObject } from '../_class/firebaseObject';
 import { Meal } from '../_class/meal';
@@ -139,6 +139,22 @@ export class DatabaseService {
 
     return this.db.collection('camps/' + campId + '/exports', query => query.orderBy('exportDate', 'desc').limit(6))
       .snapshotChanges().pipe(this.getPathsToCloudDocuments());
+
+  }
+
+  public getVisibleUsers() {
+
+    return this.db.collection('users', collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges().pipe(take(2))
+      // Create new Users out of the data
+      .pipe(map(docActions => docActions.map(docRef => {
+        const docData: any = docRef.payload.doc.data();
+        const user: User = {
+          displayName: docData.displayName,
+          email: docData.email,
+          uid: docRef.payload.doc.id
+        };
+        return user;
+      })));
 
   }
 

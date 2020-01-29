@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-export-pdf-with-latex',
@@ -20,7 +21,7 @@ export class ExportPdfWithLatexComponent implements OnInit {
   public exports: Observable<any[]>;
   public message: string;
 
-  constructor(private route: ActivatedRoute, private dbService: DatabaseService) {
+  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router) {
 
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
@@ -28,9 +29,35 @@ export class ExportPdfWithLatexComponent implements OnInit {
 
     this.campId.pipe(mergeMap(campId => dbService.getCampById(campId))).subscribe(camp => this.setHeaderInfo(camp.name));
 
+
+
   }
 
   ngOnInit() {
+
+    this.campId.pipe(mergeMap(id => this.dbService.getCampById(id)))
+      .pipe(take(1))
+      .subscribe(camp =>
+        HeaderNavComponent.addToHeaderNav({
+          active: true,
+          description: 'Zurück zum ' + camp.name,
+          name: camp.name,
+          action: (() => this.router.navigate(['..'], { relativeTo: this.route })),
+          icon: 'home',
+          separatorAfter: true
+        }, 0)
+      );
+
+
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Lager erneut exportieren',
+      name: 'Neuer Export',
+      action: (() => this.createPDF()),
+      icon: 'create_new_folder'
+    });
+
   }
 
   /**

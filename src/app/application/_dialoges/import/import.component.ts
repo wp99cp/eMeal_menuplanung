@@ -90,7 +90,7 @@ export class ImportComponent implements OnInit {
     this.meal.recipes = of(recipes);
 
     this.mealStr = JSON.stringify(this.meal.extractDataToJSON());
-    recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.extractDataToJSON()))
+    recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.extractDataToJSON()));
 
     this.readyForImport = true;
 

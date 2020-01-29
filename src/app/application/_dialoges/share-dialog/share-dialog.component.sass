@@ -1,0 +1,29 @@
+:host
+  width: 100%
+  height: 100%
+  display: grid
+  grid-template-rows: 50px auto 50px
+  grid-template-columns: 30% auto
+  grid-gap: 20px
+  grid-template-areas: "header header" "users add" "buttons buttons"
+
+h3
+  grid-area: header
+
+.current-collaborators
+  grid-area: users
+
+.add-collaborators
+  grid-area: add
+
+
+.mat-buttons
+  height: 100%
+  padding: 0
+  grid-area: buttons
+  float: right
+  display: block
+
+  button
+    float: right
+    margin: 7px  10px  !important

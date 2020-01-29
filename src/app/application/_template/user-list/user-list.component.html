@@ -1,16 +1,15 @@
 <div>
 
-  <h3>Nutzer hinzufügen</h3>
+  <h4>Nutzer hinzufügen</h4>
 
   <mat-form-field class="mat-form-field full-width">
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Nach Nutzer suchen">
   </mat-form-field>
 
-  <table mat-table [dataSource]="userList" *ngIf="userList.filteredData.length > 0">
-
+  <table mat-table [dataSource]="userList">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef> </th>
+      <th mat-header-cell *matHeaderCellDef class="selector"> </th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
           [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
@@ -20,13 +19,13 @@
 
     <!-- firstName Column -->
     <ng-container matColumnDef="displayName">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <th mat-header-cell *matHeaderCellDef class="name"> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.displayName}} </td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Mailadresse </th>
+      <th mat-header-cell *matHeaderCellDef class="mailadresse"> Mailadresse </th>
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
@@ -35,7 +34,13 @@
     </tr>
   </table>
 
+  <p class="info" *ngIf="userList.filteredData.length == 0">
+    Aus Gründen des Datenschutzes werden Benutzer erst nach einer Suche angezeigt.
+  </p>
+
+
+  <button mat-raised-button (click)='coworkersSelected()' color="save" [disabled]="!selection.hasValue()">
+    Lager teilen
+  </button>
+
 </div>
-<br />
-<button mat-raised-button (click)='coworkersSelected()' [disabled]="!selection.hasValue()"> Lager teilen</button>
-<br />

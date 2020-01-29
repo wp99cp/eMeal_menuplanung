@@ -10,7 +10,7 @@ import { AccessData } from '../../_interfaces/accessData';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { CreateMealComponent } from '../create-meal/create-meal.component';
+import { CreateMealComponent } from '../../_dialoges/create-meal/create-meal.component';
 import { ImportComponent } from '../import/import.component';
 
 export function CustomPaginator() {

@@ -13,13 +13,15 @@ import { TemplateFooterComponent } from './_template/template-footer/template-fo
 import { TemplateHeaderComponent } from './_template/template-header/template-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderNavComponent } from './_template/header-nav/header-nav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TemplateHeaderComponent,
     TemplateFooterComponent,
-    MainMenuComponent
+    MainMenuComponent,
+    HeaderNavComponent
   ],
   imports: [
     BrowserModule,

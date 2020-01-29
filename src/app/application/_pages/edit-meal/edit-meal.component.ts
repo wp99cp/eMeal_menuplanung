@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
@@ -11,6 +11,7 @@ import { SpecificMeal } from '../../_class/specific-meal';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-edit-meal',
@@ -31,7 +32,11 @@ export class EditMealComponent implements OnInit, Saveable {
   @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
 
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private databaseService: DatabaseService,
+    private router: Router) { }
 
   public newOpened(index: number) {
 
@@ -40,6 +45,7 @@ export class EditMealComponent implements OnInit, Saveable {
   }
 
   ngOnInit() {
+
 
     // Objecte definieren
     this.campId = this.route.url.pipe(map(url => url[url.length - 4].path));
@@ -77,6 +83,46 @@ export class EditMealComponent implements OnInit, Saveable {
 
     // set header Info
     this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
+
+
+
+    this.camp.pipe(take(1)).subscribe(camp =>
+
+      HeaderNavComponent.addToHeaderNav({
+        active: true,
+        description: 'Zurück zum ' + camp.name,
+        name: camp.name,
+        action: (() => this.router.navigate(['../../..'], { relativeTo: this.route })),
+        icon: 'home',
+        separatorAfter: true
+      }, 0)
+
+    );
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Änderungen speichern',
+      name: 'Speichern',
+      action: (() => null),
+      icon: 'save'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Informationen zur Mahlzeit',
+      name: 'Info',
+      action: (() => null),
+      icon: 'info'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Neues Rezept erstellen',
+      name: 'Rezept',
+      action: (() => this.newRecipe()),
+      icon: 'playlist_add'
+    });
+
 
   }
 

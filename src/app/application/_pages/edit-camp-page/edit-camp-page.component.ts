@@ -1,8 +1,8 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, map, last, take } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
@@ -12,6 +12,9 @@ import { WeekViewComponent } from '../../_template/week-view/week-view.component
 import { AuthenticationService } from '../../_service/authentication.service';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
+import { MatDialog } from '@angular/material';
+import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.component';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -30,7 +33,13 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
 
   // local changes to the camp data (not sync with server)
-  constructor(private route: ActivatedRoute, private databaseService: DatabaseService, private formBuilder: FormBuilder, private auth: AuthenticationService) {
+  constructor(
+    private route: ActivatedRoute,
+    private databaseService: DatabaseService,
+    private formBuilder: FormBuilder,
+    private auth: AuthenticationService,
+    private router: Router,
+    public dialog: MatDialog) {
 
     this.campInfosForm = this.formBuilder.group({
       name: '',
@@ -63,7 +72,41 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
 
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Änderungen Speichern',
+      name: 'Speichern',
+      action: null,
+      icon: 'save'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Informationen zum Lager',
+      name: 'Info',
+      action: (() => null),
+      icon: 'info'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Mitarbeiter verwalten',
+      name: 'Mitarbeiter',
+      action: (() => this.shareDialog()),
+      icon: 'group_add'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Lager exportieren',
+      name: 'Export',
+      action: (() => this.router.navigate(['export-2'], { relativeTo: this.route })),
+      icon: 'cloud_download'
+    });
+
+  }
 
 
   public campSettings() {
@@ -103,11 +146,26 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   }
 
+  public shareDialog() {
+
+    this.camp
+      .pipe(take(1))
+      .pipe(mergeMap(camp =>
+        this.dialog.open(ShareDialogComponent, {
+          height: '618px',
+          width: '1000px',
+          data: { camp }
+        }).afterClosed()
+      ))
+      .subscribe((camp) => this.saveCamp(camp));
+
+  }
+
   /** Save and reset the form */
   public saveCamp(camp: Camp) {
 
     this.saveValueChanges(camp);
-    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath())
+    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
 
     // deactivate save button
     this.campInfosForm.markAsUntouched();

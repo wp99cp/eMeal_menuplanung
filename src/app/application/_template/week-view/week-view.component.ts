@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
 
@@ -10,8 +10,9 @@ import { Meal } from '../../_class/meal';
 import { FirestoreMeal } from '../../_interfaces/firestore-meal';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
-import { AddMealComponent } from '../add-meal/add-meal.component';
+import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Recipe } from '../../_class/recipe';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-week-view',
@@ -21,7 +22,7 @@ import { Recipe } from '../../_class/recipe';
 // TODO: verwendung einer Mahlzeit (Zmorgen, Zmittag, ...) kann nachträglich geändert werden
 // add custom Tag für Verwendung (z.B Vorbereiten...)
 
-export class WeekViewComponent implements OnChanges, Saveable {
+export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   public colCounter = this.calculateCols();
 
@@ -33,6 +34,18 @@ export class WeekViewComponent implements OnChanges, Saveable {
 
     // change number of collums when resize window
     window.addEventListener('resize', () => this.colCounter = this.calculateCols());
+
+  }
+
+  ngOnInit() {
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Mahlzeiten hinzufügen',
+      name: 'Mahlzeiten',
+      action: (() => this.addMeal()),
+      icon: 'menu_book'
+    }, 1);
 
   }
 

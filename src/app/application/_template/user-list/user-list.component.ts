@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators'
+import { map, mergeMap } from 'rxjs/operators';
+
 import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
-import { MatSnackBar } from '@angular/material';
+import { DatabaseService } from '../../_service/database.service';
 
 
 
@@ -16,52 +17,47 @@ import { MatSnackBar } from '@angular/material';
 })
 export class UserListComponent implements OnInit {
 
-  @Output() onSelection = new EventEmitter<User[]>();
+  @Output() afterSelection = new EventEmitter<User[]>();
 
   public selection = new SelectionModel<User>(true, []);
   public displayedColumns: string[] = ['select', 'displayName', 'email'];
   public userList = new MatTableDataSource<User>();
 
-  constructor(private database: AngularFirestore, private authService: AuthenticationService, public snackBar: MatSnackBar) { }
+  constructor(private dbService: DatabaseService, private authService: AuthenticationService, public snackBar: MatSnackBar) { }
 
-  // TODO: Lazy load!!!!
   ngOnInit(): void {
 
-    this.authService.getCurrentUser().subscribe(currentUser => {
-      // TODO: very bad solution for get only once...
-      const thisObserver = this.database.collection('users',
-        collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges()
-        // Create new Users out of the data
-        .pipe(map(docActions => docActions.map(docRef => {
+    this.dbService.getVisibleUsers()
+      .pipe(this.removeCurrentUser())
+      .subscribe((users: User[]) => {
 
-          const docData: any = docRef.payload.doc.data();
+        this.userList = new MatTableDataSource<User>(users);
+        this.userList.filterPredicate = this.userFilterPredicate();
+        this.userList.filter = 'NO-NAME';
 
-          const user: User = {
-            displayName: docData.displayName,
-            email: docData.email,
-            uid: docRef.payload.doc.id
-          };
+      });
 
-          return user;
-        })))
-        .subscribe((users: User[]) => {
-
-          this.userList = new MatTableDataSource<User>(users.filter(user => user.uid !== currentUser.uid));
-
-          this.userList.filterPredicate = (user: User, filter: string) =>
-            // Condition for the filter
-            (filter.trim().length >= 3 && user.displayName.trim().toLowerCase().includes(filter)) || this.selection.isSelected(user);
-
-          this.userList.filter = 'NO-NAME';
-
-          thisObserver.unsubscribe();
-
-        });
-
-    });
   }
 
-  applyFilter(filterValue: string) {
+
+
+  private userFilterPredicate(): (data: User, filter: string) => boolean {
+
+    return (user: User, filter: string) =>
+      // Condition for the filter
+      (filter.trim().length >= 3 && user.displayName.trim().toLowerCase().includes(filter))
+      || this.selection.isSelected(user);
+
+  }
+
+  private removeCurrentUser() {
+
+    return mergeMap((users: User[]) => this.authService.getCurrentUser()
+      .pipe(map(currentUser => users.filter(user => user.uid !== currentUser.uid))));
+
+  }
+
+  public applyFilter(filterValue: string) {
 
     if (filterValue.trim().length < 3) {
       this.userList.filter = 'NO-NAME';
@@ -97,7 +93,7 @@ export class UserListComponent implements OnInit {
   }
 
   coworkersSelected() {
-    this.onSelection.emit(this.selection.selected);
+    this.afterSelection.emit(this.selection.selected);
     this.selection.clear();
     this.snackBar.open('Ausgewählte Nutzer wurden hinzugefügt.', '', { duration: 2000 });
 

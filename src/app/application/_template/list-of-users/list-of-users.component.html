@@ -1,1 +1,5 @@
-<p *ngFor="let owner of (owners | async)">{{owner.displayName}}</p>
+<h4>Aktuelle Mitarbeiter</h4>
+
+<div *ngFor="let owner of (owners | async)" class="user">
+  <span> {{owner.displayName}} </span>
+</div>

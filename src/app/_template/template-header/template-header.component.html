@@ -2,13 +2,9 @@
 
   <mat-icon class="show-main-menu" alt="Hauptmenü" matTooltip="Hauptmenü" (click)="showMenu()">menu</mat-icon>
 
-  <div id="header-title">
+  <app-header-nav class="header-nav"></app-header-nav>
 
-    <span>eMeal - Menüplanung</span>
-
-  </div>
-
-  <!-- Path -->
+  <!-- Path
   <div class="nav-link-list" *ngIf="getPath()">
 
     <ng-container *ngFor="let item of getPath(); let i = index">
@@ -21,5 +17,6 @@
     </ng-container>
 
   </div>
+ -->
 
 </div>
