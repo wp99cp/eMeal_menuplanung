@@ -12,9 +12,10 @@ import { WeekViewComponent } from '../../_template/week-view/week-view.component
 import { AuthenticationService } from '../../_service/authentication.service';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.component';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
+import { CampInfoComponent } from '../../_dialoges/camp-info/camp-info.component';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -25,8 +26,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   @ViewChildren(WeekViewComponent) weekViews: QueryList<WeekViewComponent>;
 
-  // Toggle for saveButton
-  public campInfosForm: FormGroup;
 
   // camp Data from server
   public camp: Observable<Camp>;
@@ -36,41 +35,17 @@ export class EditCampPageComponent implements OnInit, Saveable {
   constructor(
     private route: ActivatedRoute,
     private databaseService: DatabaseService,
-    private formBuilder: FormBuilder,
     private auth: AuthenticationService,
     private router: Router,
-    public dialog: MatDialog) {
-
-    this.campInfosForm = this.formBuilder.group({
-      name: '',
-      description: '',
-      participants: '',
-      vegetarier: ''
-    });
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar) {
 
 
     this.camp = this.route.url.pipe(mergeMap(
       url => this.databaseService.getCampById(url[1].path)
     ));
 
-    this.camp.subscribe(camp => this.setHeaderInfo(camp));
-
-    // update Values
-    this.camp.subscribe(camp =>
-      this.campInfosForm.setValue({
-        name: camp.name,
-        description: camp.description,
-        participants: camp.participants,
-        vegetarier: camp.vegetarier ? camp.vegetarier : 0
-      })
-
-
-    );
-
   }
-
-
-
 
   ngOnInit() {
 
@@ -83,10 +58,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
+      active: true,
       description: 'Informationen zum Lager',
       name: 'Info',
-      action: (() => null),
+      action: (() => this.campInfoDialog()),
       icon: 'info'
     });
 
@@ -109,13 +84,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
   }
 
 
-  public campSettings() {
-
-    console.log('campSettings');
-
-  }
-
-
   // save on destroy
   public async save(): Promise<boolean> {
 
@@ -128,23 +96,30 @@ export class EditCampPageComponent implements OnInit, Saveable {
       saved = await weekView.save();
     });
 
-    if (this.campInfosForm.touched) {
-      console.log('Autosave Camp');
-      this.camp.subscribe(camp => this.saveCamp(camp));
-      saved = true;
-    }
-
     return saved;
 
+  }
+
+
+  public campInfoDialog() {
+
+    this.camp
+      .pipe(take(1))
+      .pipe(mergeMap(camp =>
+        this.dialog.open(CampInfoComponent, {
+          height: '618px',
+          width: '1000px',
+          data: { camp }
+        }).afterClosed()
+      ))
+      .subscribe((camp: Camp | null) => {
+        if (camp !== null) {
+          this.saveCamp(camp);
+        }
+      });
 
   }
 
-  private setHeaderInfo(camp: Camp): void {
-
-    Header.title = camp.name;
-    Header.path = ['Startseite', 'meine Lager', camp.name];
-
-  }
 
   public shareDialog() {
 
@@ -164,42 +139,9 @@ export class EditCampPageComponent implements OnInit, Saveable {
   /** Save and reset the form */
   public saveCamp(camp: Camp) {
 
-    this.saveValueChanges(camp);
     this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
 
-    // deactivate save button
-    this.campInfosForm.markAsUntouched();
-
-  }
-
-  /** saved the changed values form the form */
-  private saveValueChanges(camp: Camp) {
-    camp.name = this.campInfosForm.value.name;
-    camp.description = this.campInfosForm.value.description;
-    camp.participants = this.campInfosForm.value.participants;
-    camp.vegetarier = this.campInfosForm.value.vegetarier;
-  }
-
-  /** A user get selected */
-  selectUser(selectedCoworkers) {
-
-    this.auth.getCurrentUser().pipe(map(user => {
-      const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
-      accessData[user.uid] = 'owner';
-      return accessData;
-    })).subscribe(access => this.camp.subscribe(camp => {
-      this.databaseService.updateAccessData(access, Camp.getPath(camp.firestoreElementId));
-      camp.days.forEach(day => day.meals.forEach(meal => {
-        this.databaseService.updateAccessData(access, Meal.getPath(meal.firestoreElementId));
-
-        this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes =>
-          recipes.forEach(recipe =>
-            this.databaseService.updateAccessData(access, Recipe.getPath(meal.firestoreElementId, recipe.firestoreElementId))
-          ));
-
-      }));
-
-    }));
+    this.snackBar.open('Änderungen wurden gespeichert!', '', { duration: 2000 });
 
   }
 

@@ -56,6 +56,7 @@ import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/expo
 import { DownloadComponent } from './_template/download/download.component';
 import { VersionHistoryModule } from '../modules/version-history/version-history.module';
 import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
+import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
 
 
 @NgModule({
@@ -81,7 +82,8 @@ import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.comp
     AppSettingsPageComponent,
     ExportPdfWithLatexComponent,
     DownloadComponent,
-    ShareDialogComponent
+    ShareDialogComponent,
+    CampInfoComponent
   ],
   providers: [
     AngularFirestore,
@@ -140,7 +142,8 @@ import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.comp
     ImportComponent,
     CreateMealComponent,
     MealsOverviewComponent,
-    ShareDialogComponent
+    ShareDialogComponent,
+    CampInfoComponent
   ],
   exports: [
     MatTableModule,

@@ -1,0 +1,30 @@
+<h3>Einstellungen zum Lager</h3>
+
+<p class="info-text">Bearbeite die Informationen zum {{camp.name}}.</p>
+
+<form [formGroup]="campInfosForm">
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off" />
+    <mat-hint align="end">{{ name.value.length }} / 32</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants" type="number" />
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Davon Vegetarier" formControlName="vegetarier" type="number" />
+  </mat-form-field>
+
+</form>
+
+<div mat-dialog-actions class="mat-buttons">
+  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [disabled]="!campInfosForm.touched" [mat-dialog-close]="saveValueChanges()"
+    color="save">Speichern</button>
+</div>

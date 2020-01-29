@@ -2,16 +2,10 @@
   <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
     <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-      <br>
-      <h2>Rezepte</h2>
+      <span class="page-title">Mahlzeit bearbeiten</span>
+      <h1>{{$meal.name}}</h1>
 
       <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
-
-        <!-- Loading Animation -->
-        <ng-template #loadingMeal>
-          <p class="info">Daten werden geladen...</p>
-          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        </ng-template>
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
           <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
@@ -93,6 +87,7 @@
 
 <!-- Loading Animation -->
 <ng-template #loadingMeal>
+  <span class="page-title">Mahlzeit bearbeiten</span>
   <h1 class="mat-h1">Daten werden geladen...</h1>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>

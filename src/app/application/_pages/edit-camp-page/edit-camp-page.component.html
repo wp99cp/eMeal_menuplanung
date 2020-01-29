@@ -1,45 +1,16 @@
 <ng-container *ngIf="camp | async; let $camp; else: loadingCamps">
 
+  <span class="page-title">Wochenplan</span>
+  <h1>{{$camp.name}}</h1>
 
   <!-- Week Overview -->
   <app-week-view [camp]="$camp"></app-week-view>
-
-  <!-- Allgemeine Informationen zum Lager -->
-  <!-- <button mat-raised-button (click)="campSettings()"> Einstellungen zum Lager </button> -->
-
-  <mat-divider></mat-divider>
-  <h2>Einstellungen zum Lager</h2>
-
-  <form [formGroup]="campInfosForm">
-
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off" />
-      <mat-hint align="end">{{ name.value.length }} / 32</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="description"></textarea>
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants" type="number" />
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Davon Vegetarier" formControlName="vegetarier" type="number" />
-    </mat-form-field>
-
-  </form>
-
-  <button mat-raised-button [disabled]="!campInfosForm.touched" (click)="saveCamp($camp)" color="save"
-    class="saveButton">
-    Änderungen Speichern
-  </button>
 
 </ng-container>
 
 <!-- Loading Animation -->
 <ng-template #loadingCamps>
+  <span class="page-title">Wochenplan</span>
   <h1 class="mat-h1">Daten werden geladen...</h1>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>
