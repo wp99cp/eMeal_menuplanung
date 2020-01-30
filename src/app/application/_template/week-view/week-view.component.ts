@@ -44,7 +44,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
       description: 'Mahlzeiten hinzufügen',
       name: 'Mahlzeiten',
       action: (() => this.addMeal()),
-      icon: 'menu_book'
+      icon: 'fastfood'
     }, 1);
 
   }

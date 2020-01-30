@@ -117,10 +117,10 @@ export class EditMealComponent implements OnInit, Saveable {
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
-      description: 'Neues Rezept erstellen',
-      name: 'Rezept',
+      description: 'Rezept hinzufügen',
+      name: 'Rezepte',
       action: (() => this.newRecipe()),
-      icon: 'playlist_add'
+      icon: 'menu_book'
     });
 
 
