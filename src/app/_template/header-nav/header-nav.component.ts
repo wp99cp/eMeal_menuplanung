@@ -9,7 +9,7 @@ export interface HeaderNav {
   name: string;
   action: () => any;
   icon?: string;
-  separatorAfter?: true
+  separatorAfter?: true;
 
 }
 

@@ -1,21 +1,16 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { mergeMap, map, last, take } from 'rxjs/operators';
-import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+import { mergeMap, take, map } from 'rxjs/operators';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { Camp } from '../../_class/camp';
+import { CampInfoComponent } from '../../_dialoges/camp-info/camp-info.component';
+import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { WeekViewComponent } from '../../_template/week-view/week-view.component';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
-import { MatDialog, MatSnackBar } from '@angular/material';
-import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.component';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-import { CampInfoComponent } from '../../_dialoges/camp-info/camp-info.component';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -26,20 +21,15 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   @ViewChildren(WeekViewComponent) weekViews: QueryList<WeekViewComponent>;
 
-
   // camp Data from server
   public camp: Observable<Camp>;
 
-
-  // local changes to the camp data (not sync with server)
   constructor(
     private route: ActivatedRoute,
     private databaseService: DatabaseService,
-    private auth: AuthenticationService,
     private router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar) {
-
 
     this.camp = this.route.url.pipe(mergeMap(
       url => this.databaseService.getCampById(url[1].path)
@@ -89,9 +79,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
     let saved = false;
 
-    // saveChilds
-
-    // TODO: diese Lösung funktioiert noch nicht....
     this.weekViews.forEach(async weekView => {
       saved = await weekView.save();
     });
@@ -101,22 +88,31 @@ export class EditCampPageComponent implements OnInit, Saveable {
   }
 
 
+  /**
+   * Opens the dialog for the camp infos
+   *
+   */
   public campInfoDialog() {
 
-    this.camp
-      .pipe(take(1))
-      .pipe(mergeMap(camp =>
-        this.dialog.open(CampInfoComponent, {
-          height: '618px',
-          width: '1000px',
-          data: { camp }
-        }).afterClosed()
-      ))
-      .subscribe((camp: Camp | null) => {
-        if (camp !== null) {
-          this.saveCamp(camp);
-        }
-      });
+    // Takes the unsaved changes form the weekview and puts the
+    // changes from the dialog on top of this...
+    this.weekViews.first.saveCamp().pipe(mergeMap(camp =>
+
+      // Dialog öffnen
+      this.dialog.open(CampInfoComponent, {
+        height: '618px',
+        width: '1000px',
+        data: { camp }
+      }).afterClosed()
+
+    )).subscribe((camp: Camp | null) => {
+
+      // Speichern der Änderungen im Dialog-Fenster
+      if (camp !== null) {
+        this.saveCamp(camp);
+      }
+
+    });
 
   }
 
@@ -139,9 +135,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
   /** Save and reset the form */
   public saveCamp(camp: Camp) {
 
-    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
-
     this.snackBar.open('Änderungen wurden gespeichert!', '', { duration: 2000 });
+    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
 
   }
 

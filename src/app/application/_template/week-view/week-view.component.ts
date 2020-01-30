@@ -13,6 +13,7 @@ import { DatabaseService } from '../../_service/database.service';
 import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Recipe } from '../../_class/recipe';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-week-view',
@@ -129,9 +130,10 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   }
 
 
-  private saveCamp() {
+  public saveCamp(): Observable<Camp> {
 
     this.databaseService.updateDocument(this.camp.extractDataToJSON(), this.camp.getDocPath());
+    return of(this.camp);
 
   }
 

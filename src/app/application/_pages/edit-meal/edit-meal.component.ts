@@ -1,17 +1,19 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { MealInfoComponent } from '../../_dialoges/meal-info/meal-info.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-edit-meal',
@@ -21,7 +23,6 @@ import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.comp
 export class EditMealComponent implements OnInit, Saveable {
 
   public indexOfOpenedPanel = -1;
-  public mealInfo: FormGroup;
   public specificMeal: Observable<SpecificMeal>;
   public meal: Observable<Meal>;
   public camp: Observable<Camp>;
@@ -36,6 +37,7 @@ export class EditMealComponent implements OnInit, Saveable {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
+    public dialog: MatDialog,
     private router: Router) { }
 
   public newOpened(index: number) {
@@ -65,21 +67,7 @@ export class EditMealComponent implements OnInit, Saveable {
         this.databaseService.getSpecificMeal(mealId, specificMealId, campId)
       ))))));
 
-    this.specificMeal.subscribe(specificMeal =>
-      this.meal.subscribe(meal => {
-        this.mealInfo = this.formBuilder.group({
 
-          title: meal.name,
-          description: meal.description,
-
-          // der weekTitle eines spezifischenMeal muss nicht zwingend gesetzt sein...
-          // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
-          weekTitle: specificMeal.weekTitle !== '' ? specificMeal.weekTitle : meal.name,
-          overrideParticipants: specificMeal.overrideParticipants,
-          participants: specificMeal.participants
-
-        });
-      }));
 
     // set header Info
     this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
@@ -108,10 +96,10 @@ export class EditMealComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
+      active: true,
       description: 'Informationen zur Mahlzeit',
       name: 'Info',
-      action: (() => null),
+      action: (() => this.mealInfoDialog()),
       icon: 'info'
     });
 
@@ -126,7 +114,37 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+  /**
+   *
+   */
+  public mealInfoDialog() {
 
+    this.camp.pipe(take(1)).pipe(mergeMap(camp =>
+      this.meal.pipe(take(1)).pipe(mergeMap(meal =>
+        this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal => {
+
+          // Speichern der noch offenen Änderungen
+          this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
+          this.databaseService.updateDocument(specificMeal.extractDataToJSON(), specificMeal.getDocPath());
+
+          // Dialog öffnen
+          return this.dialog.open(MealInfoComponent, {
+            height: '618px',
+            width: '1000px',
+            data: { camp, meal, specificMeal }
+          }).afterClosed();
+
+        }))
+      ))
+    )).subscribe(([mealResponse, specificMealResponse]: [Meal, SpecificMeal]) => {
+
+      // Speichern der geänderten Daten im Dialog-Fenster
+      this.databaseService.updateDocument(mealResponse.extractDataToJSON(), mealResponse.getDocPath());
+      this.databaseService.updateDocument(specificMealResponse.extractDataToJSON(), specificMealResponse.getDocPath());
+
+    });
+
+  }
 
 
   /**
@@ -142,12 +160,6 @@ export class EditMealComponent implements OnInit, Saveable {
       editRecipe.save().then(changes => { hasChanges = hasChanges || changes; });
     });
 
-    if (this.mealInfo.touched) {
-      console.log('Autosave Meal');
-      await this.saveMeal();
-      return true;
-    }
-
     return hasChanges;
 
   }
@@ -158,32 +170,14 @@ export class EditMealComponent implements OnInit, Saveable {
     // update meal
     const mealSubs = this.meal.subscribe(meal => {
 
-      meal.description = this.mealInfo.value.description;
-      meal.name = this.mealInfo.value.title;
 
       this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
 
       // reset: deactivate save button
-      this.mealInfo.markAsUntouched();
       mealSubs.unsubscribe();
 
     });
 
-
-    // update specificMeal
-    const specificMealSubs = this.specificMeal.subscribe(specificMeal => {
-
-      specificMeal.weekTitle = this.mealInfo.value.weekTitle;
-      specificMeal.overrideParticipants = this.mealInfo.value.overrideParticipants;
-      specificMeal.participants = this.mealInfo.value.participants;
-
-      this.databaseService.updateDocument(specificMeal.extractDataToJSON(), specificMeal.getDocPath());
-
-      // reset: deactivate save button
-      this.mealInfo.markAsUntouched();
-      specificMealSubs.unsubscribe();
-
-    });
 
 
   }
