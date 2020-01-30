@@ -3,6 +3,9 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { Camp } from '../../_class/camp';
 import { MAT_DIALOG_DATA } from '@angular/material';
 
+/**
+ * CampInfoComponent ist ein Dialog zum bearbeiten der Camp-Infos
+ */
 @Component({
   selector: 'app-camp-info',
   templateUrl: './camp-info.component.html',
