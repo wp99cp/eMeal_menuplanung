@@ -141,18 +141,15 @@ main
     margin-left: 10%
 
 
-article
-  a
-    color: rgb(150, 191, 16)
-    cursor: pointer
-    display: inline
-    font-size: 17px
-    font-weight: 500
-    height: auto
-    line-height: 28.05px
-
 a
   text-decoration: none
+  color: rgb(150, 191, 16)
+  cursor: pointer
+  display: inline
+  font-size: 17px
+  font-weight: 500
+  height: auto
+  line-height: 28.05px
 
 
 
@@ -171,7 +168,6 @@ a
 .mat-divider
   margin: 25px 0 !important
   color: $info-text-color
-
 
 // Hervorhebungen von Textelementen
 .warning
@@ -283,6 +279,13 @@ tbody
 .mat-dialog-container
   font: $dialog-font
 
+  h3
+    margin-bottom: 8px
+    margin-top: 22px
+
+  p
+    margin-top: 3px
+    margin-bottom: 7px
 
 // TODO: bessere Version
 .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background
@@ -297,6 +300,18 @@ tbody
 ///////////////////////////////////////////////////////////////
 // Formulare
 ///////////////////////////////////////////////////////////////
+
+.half-right
+  width: calc(50% - 10px)
+  margin-left: 10px
+
+.half-left
+  width: calc(50% - 10px)
+  margin-right: 10px
+
+.checkbox
+  margin: 20px 0
+  display: block
 
 textarea
   line-height: 1.45em

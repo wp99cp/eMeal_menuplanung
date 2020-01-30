@@ -2,20 +2,28 @@
   <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
     <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-      <span class="page-title">Mahlzeit bearbeiten</span>
       <h1>{{$meal.name}}</h1>
+
+      <p><b>Anzahl Teilnehmende:</b>
+        {{$specificMeal.overrideParticipants ?  $specificMeal.participants : $camp.participants}} Per. (Vegis im Lager:
+        {{$camp.vegetarier}} Per.) </p>
+
 
       <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
           <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
             <!-- display recipe -->
-            <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]=$specificMeal
-              [camp]=$camp [index]=i [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]=$meal
+            <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]="$specificMeal"
+              [camp]="$camp" [index]="i" [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="$meal"
               (saveOthers)="save(); indexOfOpenedPanel = -1">
             </app-edit-recipe>
           </ng-container>
         </ng-container>
+
+        <p *ngIf="recipes.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
+          <a (click)="newRecipe()">Rezept einfügen</a>.
+        </p>
 
       </mat-accordion>
 
@@ -27,7 +35,6 @@
 
 <!-- Loading Animation -->
 <ng-template #loadingMeal>
-  <span class="page-title">Mahlzeit bearbeiten</span>
   <h1 class="mat-h1">Daten werden geladen...</h1>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>

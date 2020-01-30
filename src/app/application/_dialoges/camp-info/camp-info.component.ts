@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
   templateUrl: './camp-info.component.html',
   styleUrls: ['./camp-info.component.sass']
 })
-export class CampInfoComponent implements OnInit {
+export class CampInfoComponent {
 
   public campInfosForm: FormGroup;
   public camp: Camp;
@@ -38,9 +38,6 @@ export class CampInfoComponent implements OnInit {
     this.camp.vegetarier = this.campInfosForm.value.vegetarier;
 
     return this.camp;
-  }
-
-  ngOnInit() {
   }
 
 }

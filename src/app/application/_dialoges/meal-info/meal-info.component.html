@@ -3,36 +3,34 @@
 
 <form [formGroup]='mealInfo'>
 
-  <mat-form-field class="full-width">
+  <h3>Name und Beschreibung</h3>
+  <mat-form-field class="half-left">
     <input id="titleField" matInput placeholder="Mahlzeit" formControlName="title">
+  </mat-form-field>
+
+  <mat-form-field class="half-right">
+    <input id="weekTitleField" matInput placeholder="Name in der Wochenübersicht" formControlName="weekTitle">
   </mat-form-field>
 
   <mat-form-field class="full-width">
     <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
   </mat-form-field>
 
-  <p class="info">Name der Mahlzeit in der Wochenübersicht. Standardmässig identisch zum Title. Dieser Wert ist
-    spezifisch, dass heisst mehrere übereinstimmende Mahlzeiten können verschiedene Titel in der Wochenübersicht
-    tragen.</p>
 
-  <mat-form-field class="full-width">
-    <input id="weekTitleField" matInput placeholder="Name in der Wochenübersicht" formControlName="weekTitle">
-  </mat-form-field>
-
-  <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden des Lagers
-    berechnet.
-    Diese Berechnung kann allerdings auch übersteuert werden.</p>
-
-  <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
-
+  <h3>Anzahl Teilnehmende</h3>
+  <p *ngIf="!mealInfo.value.overrideParticipants || camp.participants == specificMeal.participants">
+    Diese Mahlzeit wird für {{camp.participants}} Teilnehmende berechnet.
+  </p>
   <!-- TODO: muss noch angepasst werden!!!! Stimmt so nicht wirklich. -->
   <p class="warning" *ngIf="camp.participants != specificMeal.participants && mealInfo.value.overrideParticipants">
-    <b>Achtung:
-    </b>
-    Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende, diese Mahlzeit wird aber
-    für
-    {{specificMeal.participants}} Personen berechnet.
+    <b>Achtung: </b> Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende,
+    diese Mahlzeit wird aber für {{specificMeal.participants}} Personen berechnet.
   </p>
+
+  <mat-checkbox formControlName="overrideParticipants" class="checkbox">
+    Teilnehmeranzahl (nur) für diese Mahlzeit anpassen
+  </mat-checkbox>
+
 
   <mat-form-field class="full-width" *ngIf="mealInfo.value.overrideParticipants">
     <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"

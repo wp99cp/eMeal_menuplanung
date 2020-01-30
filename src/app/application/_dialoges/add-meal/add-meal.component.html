@@ -1,4 +1,4 @@
-<h3 mat-dialog-title>Mahlzeiten hinzufügen.</h3>
+<h2 mat-dialog-title>Mahlzeiten hinzufügen.</h2>
 
 <div class="meal-search-table">
 
@@ -62,6 +62,11 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"> </tr>
 
   </table>
+
+  <p *ngIf="mealTableSource.data.length == 0" class="info">
+    Du hast noch keine Mahlzeiten erstellt. Erstelle oder importiere zuerst eine Mahlzeit.
+  </p>
+
 </div>
 
 <mat-paginator [pageSize]="6"></mat-paginator>

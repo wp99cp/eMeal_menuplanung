@@ -1,12 +1,26 @@
-<h3 mat-dialog-title>Mahlzeiten erstellen.</h3>
+<h2 mat-dialog-title>Mahlzeiten erstellen.</h2>
 
 <form [formGroup]="newMealForm">
+
+  <h3>Allgemeines</h3>
   <mat-form-field>
     <input matInput required formControlName="title" placeholder="Name der Mahlzeit">
   </mat-form-field>
+
   <mat-form-field>
     <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
   </mat-form-field>
+
+  <p class="info">
+    Eine gute Beschreibung enthält Angaben zum Alter der TNs.
+    Sowie weitere wichtige Informationen zur Mahlzeit.
+  </p>
+
+  <h3 class="info">Rezepte</h3>
+  <p class="info">Zurzeit können beim Erstellen einer Mahlzeit noch keine Rezepte eingefügt werden. <br />
+    Füge Rezepte hinzu, indem du die Mahlzeit bearbeitest.¨
+  </p>
+
 </form>
 
 <div mat-dialog-actions class=" mat-buttons">

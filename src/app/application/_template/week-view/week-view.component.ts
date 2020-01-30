@@ -223,7 +223,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   private calculateCols() {
 
-    return Math.floor(document.body.scrollWidth / 280);
+    return Math.floor(document.body.scrollWidth / 340);
   }
 
 

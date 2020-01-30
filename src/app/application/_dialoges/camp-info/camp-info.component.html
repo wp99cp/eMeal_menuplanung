@@ -1,8 +1,8 @@
-<h3>Einstellungen zum Lager</h3>
-
-<p class="info-text">Bearbeite die Informationen zum {{camp.name}}.</p>
+<h2>Einstellungen zum {{camp.name}}</h2>
 
 <form [formGroup]="campInfosForm">
+
+  <h3>Name und Beschreibung</h3>
 
   <mat-form-field class="full-width">
     <input matInput placeholder="Name" formControlName="name" #name maxlength="32" autocomplete="off" />
@@ -13,13 +13,17 @@
     <textarea id="descriptionField" matInput placeholder="Beschreibnung" formControlName="description"></textarea>
   </mat-form-field>
 
-  <mat-form-field class="full-width">
+  <h3>Anzahl Teilnehmende</h3>
+
+  <mat-form-field class="half-left">
     <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants" type="number" />
   </mat-form-field>
 
-  <mat-form-field class="full-width">
+  <mat-form-field class="half-right">
     <input matInput placeholder="Davon Vegetarier" formControlName="vegetarier" type="number" />
   </mat-form-field>
+
+  <p class="info">Deine Mahlzeiten und Rezepte werden automatisch auf die geänderte Teilnehmeranzahl angepasst.</p>
 
 </form>
 
