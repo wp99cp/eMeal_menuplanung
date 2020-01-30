@@ -9,6 +9,7 @@
 
 html
   overflow-x: hidden
+  overflow-y: scroll
 
 html, body
 
@@ -161,6 +162,20 @@ a
   width: auto
 
 
+////////
+.loading-green
+  background: linear-gradient(90deg,transparent,#96bf1045 50%,transparent)
+  width: 300px
+  background-color: #96bf100a
+
+.loading-gray
+  background: linear-gradient(90deg, transparent, rgba(34, 33, 29, 0.24) 50%, transparent)
+  width: 380px
+  background-color: rgba(34, 33, 29, 0.12)
+  height: 20px
+  display: block
+
+
 ///////////////////////////////////////////////////////////////
 // Grundlegende Styles von Elementen der gesamten Applikation
 ///////////////////////////////////////////////////////////////
@@ -281,7 +296,7 @@ tbody
   font: $dialog-font
 
   h3
-    margin-bottom: 8px
+    margin-bottom: 12px
     margin-top: 22px
 
   p

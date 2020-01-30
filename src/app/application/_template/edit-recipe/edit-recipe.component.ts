@@ -1,15 +1,19 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { SpecificRecipe } from '../../_class/specific-recipe';
+import { RecipeInfoComponent } from '../../_dialoges/recipe-info/recipe-info.component';
 import { Ingredient } from '../../_interfaces/ingredient';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -32,16 +36,16 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   //  fields given by the parent element
   @Input() meal: Meal;
-  @Input() specificMeal: SpecificMeal;
+  @Input() public specificMeal: SpecificMeal;
   @Input() recipe: Recipe;
-  @Input() specificRecipe: SpecificRecipe;
-  @Input() camp: Camp;
+  @Input() public specificRecipe: SpecificRecipe;
+  @Input() public camp: Camp;
   @Input() index: number;
   @Input() isOpen: boolean;
   @Output() opened = new EventEmitter<number>();
   @Output() saveOthers = new EventEmitter<boolean>();
 
-  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService) { }
+  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService, public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -49,14 +53,10 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
     this.recipeForm = this.formBuilder.group({
       notes: this.recipe.notes,
-      description: this.recipe.description,
-      name: this.recipe.name,
-      participants: this.specificRecipe.participants,
-      overrideParticipants: this.specificRecipe.overrideParticipants,
-      vegi: this.specificRecipe.vegi
     });
 
     this.ingredientFieldNodes = this.getNodes();
+
 
   }
 
@@ -73,13 +73,70 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   onExpand() {
     this.opened.emit(this.index);
 
+    // set Timeout: sowohl zu optischen Zwecken als auch
+    // damit beim Wechsel zwischen Rezepten das Menu nicht verschwindet
+    setTimeout(() => {
+
+
+      HeaderNavComponent.remove('Infos zum Rezept');
+      HeaderNavComponent.remove('Rezept löschen');
+
+      HeaderNavComponent.addToHeaderNav({
+        active: true,
+        description: 'Informationen zum Rezept',
+        name: 'Infos zum Rezept',
+        action: (() => this.openRecipeInfo()),
+        icon: 'info'
+      });
+      HeaderNavComponent.addToHeaderNav({
+        active: true,
+        description: 'Rezept löschen',
+        name: 'Rezept löschen',
+        action: (() => this.deleteRecipe()),
+        icon: 'delete'
+      });
+
+    }, 150);
+  }
+
+  private openRecipeInfo() {
+
+    this.dialog.open(RecipeInfoComponent, {
+      height: '618px',
+      width: '1000px',
+      data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe: this.specificRecipe }
+    }).afterClosed().subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
+
+      this.databaseService.updateDocument(recipe.extractDataToJSON(), recipe.getDocPath());
+      this.databaseService.updateDocument(specificRecipe.extractDataToJSON(), specificRecipe.getDocPath());
+
+    });
+
   }
 
   /**
    * this recipe was closed
    */
   onClose() {
+
     this.opened.emit(-1);
+    HeaderNavComponent.remove('Infos zum Rezept');
+    HeaderNavComponent.remove('Rezept löschen');
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Wähle zuerst ein Rezept',
+      name: 'Infos zum Rezept',
+      action: (() => null),
+      icon: 'info'
+    });
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Wähle zuerst ein Rezept',
+      name: 'Rezept löschen',
+      action: (() => null),
+      icon: 'delete'
+    });
 
   }
 
@@ -152,15 +209,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
-  /**
-   * Ändert die Teilnehmeranzahl
-   *
-   */
-  changePartcipations() {
-
-    this.specificRecipe.participants = this.recipeForm.value.participants;
-
-  }
 
   /**
    * Löscht ein Ingredient aus dem Rezept
@@ -314,13 +362,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   async saveRecipe() {
 
-    // save data to firestore
     this.recipe.notes = this.recipeForm.value.notes;
-    this.recipe.description = this.recipeForm.value.description;
-    this.recipe.name = this.recipeForm.value.name;
-    this.specificRecipe.overrideParticipants = this.recipeForm.value.overrideParticipants;
-    this.specificRecipe.participants = this.recipeForm.value.participants;
-    this.specificRecipe.vegi = this.recipeForm.value.vegi;
+
 
     this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
     this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());

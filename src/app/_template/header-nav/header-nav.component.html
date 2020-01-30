@@ -1,15 +1,15 @@
 <div class="header-nav" *ngIf="getHeaderNav().length > 0 else defaultHeader">
 
-  <ng-container *ngFor="let navElem of getHeaderNav()">
+  <ng-container *ngFor="let navElem of getHeaderNav(); let index = index">
 
     <div class="clickable nav-elem {{navElem.active ? '': 'deactive'}}" matTooltip="{{navElem.description}}"
       (click)="navElem.active ? navElem.action(): null">
 
       <mat-icon *ngIf="navElem.icon !== undefined" class="nav-icon">{{navElem.icon}}</mat-icon>
-      <span> {{navElem.name}} </span>
+      <span class="nav-icon-description"> {{navElem.name}} </span>
     </div>
 
-    <hr *ngIf="navElem.separatorAfter == true" />
+    <hr *ngIf="navElem.separatorAfter == true && (index != getHeaderNav().length -1 )" />
 
   </ng-container>
 </div>

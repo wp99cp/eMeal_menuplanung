@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Day } from '../../_class/day';
 import { MatDialog } from '@angular/material';
 import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
@@ -8,7 +8,7 @@ import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
   templateUrl: './meals-overview.component.html',
   styleUrls: ['./meals-overview.component.sass']
 })
-export class MealsOverviewComponent implements OnInit {
+export class MealsOverviewComponent implements OnChanges {
 
   @Input() day: Day;
   @Input() hideIcons = false;
@@ -18,7 +18,15 @@ export class MealsOverviewComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit() { }
+
+  ngOnChanges() {
+
+    // Sortiert die Mahlzeiten
+    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
+    this.day.meals.sort((a, b) => orderOfMahlzeiten.indexOf(a.name) - orderOfMahlzeiten.indexOf(b.name));
+
+  }
+
 
 
   /**

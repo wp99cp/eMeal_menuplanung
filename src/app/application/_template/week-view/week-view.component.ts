@@ -79,9 +79,10 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   public async save() {
 
     if (this.mealsChanged) {
-      HeaderNavComponent.togle('Speichern');
-      this.saveMeals();
 
+      HeaderNavComponent.turnOff('Speichern');
+
+      this.saveMeals();
       this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
 
       return true;
@@ -92,8 +93,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   drop(event: CdkDragDrop<string[]>) {
 
+    if (!this.mealsChanged) {
+      HeaderNavComponent.toggle('Speichern');
+    }
+
     this.mealsChanged = true;
-    HeaderNavComponent.togle('Speichern');
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

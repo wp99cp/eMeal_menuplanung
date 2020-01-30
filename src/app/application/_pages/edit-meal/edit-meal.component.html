@@ -1,6 +1,6 @@
-<ng-container *ngIf="camp | async; let $camp; else loadingMeal">
-  <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
-    <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
+<ng-container *ngIf="(camp | async) as $camp; else loadingMeal">
+  <ng-container *ngIf="(meal | async) as $meal; else loadingMeal">
+    <ng-container *ngIf="(specificMeal | async) as $specificMeal; else loadingMeal">
 
       <span class="big-page-title">{{$meal.name}}</span>
 
@@ -9,10 +9,10 @@
         {{$camp.vegetarier}} Per.) </p>
 
 
-      <mat-accordion *ngIf="$meal.recipes | async as recipes; else loadingMeal">
+      <mat-accordion *ngIf="($meal.recipes | async) as recipes; else loadingMeal">
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
-          <ng-container *ngIf="recipe.specificRecipe | async as $specificRecipe">
+          <ng-container *ngIf="(recipe.specificRecipe | async) as $specificRecipe">
             <!-- display recipe -->
             <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]="$specificMeal"
               [camp]="$camp" [index]="i" [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="$meal"
@@ -21,11 +21,16 @@
           </ng-container>
         </ng-container>
 
-        <p *ngIf="recipes.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
+        <p *ngIf="recipes?.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
           <a (click)="newRecipe()">Rezept einfügen</a>.
         </p>
 
       </mat-accordion>
+
+      <p class="info" id="change-warning" *ngIf="($meal.recipes | async)?.length != 0"><b>Achtung: </b>
+        Das Bearbeiten der Zutaten eines Rezeptes hat Auswirkungen auf alle
+        identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
+
 
     </ng-container>
   </ng-container>

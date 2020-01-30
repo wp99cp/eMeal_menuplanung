@@ -7,27 +7,32 @@
 
 <!-- Meal List for one day-->
 <div class="meal-list" cdkDropList (cdkDropListDropped)="mealDropped.emit($event)" [cdkDropListData]="day.meals">
+
   <!-- Meal Element-->
-  <mat-card class="meal-card mat-elevation-z2" *ngFor="let meal of day.meals" cdkDrag
-    [ngClass]="{'participantsWarning': meal.participantsWarning}">
-    <div class=" meal-placeholder" *cdkDragPlaceholder>
+  <ng-container *ngFor="let meal of day.meals; let i = index">
+
+    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.participantsWarning}">
+
+      <div class=" meal-placeholder" *cdkDragPlaceholder> </div>
+
+      <span class="meal-card-name"> {{ meal.name }} </span>
+
+      <span class="meal-card-description">{{ meal.description }}</span>
+
+      <div class="meal-card-icons">
+        <mat-icon class="edit-meal-icon meal-icon clickable" *ngIf="!hideIcons"
+          routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}" matTooltip="Rezept bearbeiten">edit
+        </mat-icon>
+        <mat-icon class="delete-meal-icon meal-icon clickable" *ngIf="!hideIcons"
+          (click)="mealDeleted.emit([meal.firestoreElementId, meal.specificId])" matTooltip="Rezept löschen"> delete
+        </mat-icon>
+      </div>
+
     </div>
-    <mat-card-header>
-      <p>{{ meal.name }} </p>
-    </mat-card-header>
 
-    <mat-card-content>
+    <span *ngIf="i != day.meals.length - 1" class="meal-separator"> * * * * * </span>
 
-      <p class="description">{{ meal.description }}</p>
+  </ng-container>
 
-      <mat-icon class="edit-meal-icon meal-icon clickable" *ngIf="!hideIcons"
-        routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}" matTooltip="Rezept bearbeiten">edit
-      </mat-icon>
 
-      <mat-icon class="delete-meal-icon meal-icon clickable" *ngIf="!hideIcons"
-        (click)="mealDeleted.emit([meal.firestoreElementId, meal.specificId])" matTooltip="Rezept löschen"> delete
-      </mat-icon>
-
-    </mat-card-content>
-  </mat-card>
 </div>

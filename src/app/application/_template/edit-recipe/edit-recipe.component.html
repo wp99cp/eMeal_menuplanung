@@ -1,6 +1,6 @@
 <mat-expansion-panel (closed)="onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel">
 
-  <mat-expansion-panel-header [collapsedHeight]="'70px'">
+  <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
 
     <mat-panel-title>
       <b>{{recipe.name}}</b>
@@ -15,8 +15,6 @@
 
   <form [formGroup]="recipeForm">
 
-    <mat-icon (click)="deleteRecipe()" class="clickable delete-recipe"
-      matTooltip="Lösche dieses Rezept (Achtung diese Aktion hat ggf. Auswirkungen auf andere Lager).">delete</mat-icon>
 
     <!-- for each ingredient ... -->
     <table mat-table [dataSource]="dataSource">
@@ -105,72 +103,6 @@
     <mat-form-field class="full-width">
       <textarea matInput placeholder="Notizen zum Rezept" formControlName="notes"></textarea>
     </mat-form-field>
-
-    <!--
-
-    <h3>Einstellungen zum Rezept:</h3>
-
-    <p class="info"><b>Achtung: </b> Das Bearbeiten der Informationen zu einem Rezept hat Auswirkungen auf alle
-      identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
-
-    <mat-form-field class="full-width">
-      <input matInput placeholder="Name" formControlName="name">
-    </mat-form-field>
-    <mat-form-field class="full-width">
-      <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
-    </mat-form-field>
-
-    <p class="info">Die Mengen einer Mahlzeit werden automatisch gemäss der Anzahl Teilnehmenden der Mahlzeit berechnet.
-      Diese Berechnung kann allerdings auch übersteuert werden.<br>
-      Vegi rezepte werden dur für die Anzahl Vegis in diesem Lager berechenet.</p>
-
-    <mat-radio-group formControlName="vegi">
-      <mat-radio-button value="all"> Rezept für alle </mat-radio-button>
-      <mat-radio-button value="vegiOnly"> Nur für Vegetarier </mat-radio-button>
-      <mat-radio-button value="nonVegi"> Nur für Nicht-Vegetarier </mat-radio-button>
-    </mat-radio-group>
-
-    <br />
-    <br />
-
-    <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
-
-    <br />
-    <br />
-
-
-    <ng-container *ngIf="recipeForm.value.overrideParticipants">
-
-      <p class="warning"
-        *ngIf="specificMeal.overrideParticipants && specificMeal.participants != specificRecipe.participants">
-        <b>Achtung: </b>
-        Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird
-        aber für {{specificRecipe.participants}} Personen berechnet.
-      </p>
-
-      <p class="warning"
-        *ngIf="!specificMeal.overrideParticipants &&  camp.participants != specificRecipe.participants">
-        <b>Achtung: </b>
-        Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende, dieses Rezept wird
-        aber für {{specificRecipe.participants}} Personen berechnet.
-      </p>
-
-    </ng-container>
-
-
-
-    <mat-form-field class="full-width" *ngIf="recipeForm.value.overrideParticipants">
-      <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
-        (input)=changePartcipations() formControlName="participants" type="number">
-    </mat-form-field>
-
-    -->
-
-    <mat-divider></mat-divider>
-
-
-    <p class="info"><b>Achtung: </b> Das Bearbeiten der Zutaten eines Rezeptes hat Auswirkungen auf alle
-      identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
 
 
   </form>

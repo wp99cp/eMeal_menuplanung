@@ -81,7 +81,7 @@ export class EditMealComponent implements OnInit, Saveable {
         description: 'Zurück zum ' + camp.name,
         name: camp.name,
         action: (() => this.router.navigate(['../../..'], { relativeTo: this.route })),
-        icon: 'home',
+        icon: 'nature_people',
         separatorAfter: true
       }, 0)
 
@@ -98,10 +98,9 @@ export class EditMealComponent implements OnInit, Saveable {
     HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Informationen zur Mahlzeit',
-      name: 'Info',
+      name: 'Mahlzeit',
       action: (() => this.mealInfoDialog()),
       icon: 'info',
-      separatorAfter: true
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -109,7 +108,24 @@ export class EditMealComponent implements OnInit, Saveable {
       description: 'Rezept hinzufügen',
       name: 'Rezepte',
       action: (() => this.newRecipe()),
-      icon: 'menu_book'
+      icon: 'menu_book',
+      separatorAfter: true
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Wähle zuerst ein Rezept',
+      name: 'Infos zum Rezept',
+      action: (() => null),
+      icon: 'info'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Wähle zuerst ein Rezept',
+      name: 'Rezept löschen',
+      action: (() => null),
+      icon: 'delete'
     });
 
 

@@ -1,0 +1,59 @@
+<h2>Informationen zum Rezept</h2>
+
+<form [formGroup]="recipeForm" class="form1">
+
+  <h3>Allgemeines zum Rezept: {{recipe.name}}</h3>
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Name" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
+  </mat-form-field>
+
+</form>
+
+<form [formGroup]="recipeForm" class="form2">
+  <h3>Anzahl Teilnehmende</h3>
+
+  <mat-radio-group formControlName="vegi">
+    <mat-radio-button value="all"> Rezept für alle </mat-radio-button>
+    <mat-radio-button value="vegiOnly"> Nur für Vegetarier </mat-radio-button>
+    <mat-radio-button value="nonVegi"> Nur für Nicht-Vegetarier </mat-radio-button>
+  </mat-radio-group>
+
+
+  <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
+
+  <ng-container *ngIf="recipeForm.value.overrideParticipants">
+
+    <p class="warning"
+      *ngIf="specificMeal.overrideParticipants && specificMeal.participants != specificRecipe.participants">
+      <b>Achtung: </b>
+      Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird
+      aber für {{specificRecipe.participants}} Personen berechnet.
+    </p>
+
+    <p class="warning" *ngIf="!specificMeal.overrideParticipants &&  camp.participants != specificRecipe.participants">
+      <b>Achtung: </b>
+      Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende, dieses Rezept wird
+      aber für {{specificRecipe.participants}} Personen berechnet.
+    </p>
+
+  </ng-container>
+
+  <mat-form-field class="full-width" *ngIf="recipeForm.value.overrideParticipants">
+    <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"
+      formControlName="participants" type="number">
+  </mat-form-field>
+
+</form>
+
+
+
+<div mat-dialog-actions class="mat-buttons">
+  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [disabled]="!recipeForm.touched" [mat-dialog-close]="saveValueChanges()"
+    color="save">Speichern</button>
+</div>

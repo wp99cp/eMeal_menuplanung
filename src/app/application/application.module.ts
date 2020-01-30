@@ -58,6 +58,7 @@ import { VersionHistoryModule } from '../modules/version-history/version-history
 import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
 import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
 import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
+import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.component';
 
 
 @NgModule({
@@ -85,7 +86,8 @@ import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
     DownloadComponent,
     ShareDialogComponent,
     CampInfoComponent,
-    MealInfoComponent
+    MealInfoComponent,
+    RecipeInfoComponent
   ],
   providers: [
     AngularFirestore,
@@ -146,7 +148,8 @@ import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
     MealsOverviewComponent,
     ShareDialogComponent,
     CampInfoComponent,
-    MealInfoComponent
+    MealInfoComponent,
+    RecipeInfoComponent
   ],
   exports: [
     MatTableModule,

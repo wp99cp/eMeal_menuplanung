@@ -43,7 +43,7 @@ export class ExportPdfWithLatexComponent implements OnInit {
           description: 'Zurück zum ' + camp.name,
           name: camp.name,
           action: (() => this.router.navigate(['..'], { relativeTo: this.route })),
-          icon: 'home',
+          icon: 'nature_people',
           separatorAfter: true
         }, 0)
       );

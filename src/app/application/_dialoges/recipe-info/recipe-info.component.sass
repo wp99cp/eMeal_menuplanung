@@ -1,0 +1,43 @@
+:host
+  width: 100%
+  height: 100%
+  display: grid
+  grid-template-rows: 50px auto 50px
+  grid-gap: 20px 40px
+  grid-template-columns: calc(40% - 20px) auto
+  grid-template-areas: "header header"  "form1 form2" "buttons buttons"
+
+
+
+h3
+  grid-area: header
+
+.form1
+  grid-area: form1
+
+.form2
+  grid-area: form2
+
+.info-text
+  grid-area: info
+
+.mat-buttons
+  grid: buttons
+  height: 100%
+  padding: 0
+  grid-area: buttons
+  float: right
+  display: block
+
+  button
+    float: right
+    margin: 7px  10px  !important
+
+
+.mat-radio-group
+  display: block
+  margin: 10px 0
+
+  .mat-radio-button
+    margin-right: 10px
+

@@ -20,6 +20,7 @@ export interface HeaderNav {
 })
 export class HeaderNavComponent {
 
+
   private static headerNav: HeaderNav[] = [];
 
   public static addToHeaderNav(navElem: HeaderNav, index = HeaderNavComponent.headerNav.length) {
@@ -28,10 +29,23 @@ export class HeaderNavComponent {
 
   }
 
-  public static togle(name: string) {
+  public static toggle(name: string) {
 
     const element = HeaderNavComponent.headerNav.find(el => el.name === name);
     element.active = !element.active;
+
+  }
+
+  public static turnOff(name: string) {
+
+    const element = HeaderNavComponent.headerNav.find(el => el.name === name);
+    element.active = false;
+
+  }
+
+  public static remove(name: string) {
+
+    HeaderNavComponent.headerNav = HeaderNavComponent.headerNav.filter(el => (el.name !== name));
 
   }
 

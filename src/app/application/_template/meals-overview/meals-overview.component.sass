@@ -3,7 +3,6 @@
 
 .meal-list
   min-height: 260px
-  display: block
   border-radius: 4px
   overflow: hidden
   position: inherit
@@ -25,43 +24,49 @@
 
 
 
-.mat-card-header
+
+/////////I
+
+.meal-card
+  padding: 0
+  padding: 10px 0
+  margin: 0 10px
+  display: grid
+  grid-template-areas: "none name icons" "desc desc desc"
+  grid-template-columns: 60px auto 60px
+  text-align: center
+  cursor: move
+
+.meal-separator
+  color: lightgray
+  text-align: center
+  margin: auto
+  display: block
+
+
+.meal-card-name
+  grid-area: name
   text-align: center
   display: inline
   width: 100%
-
-.mat-card-content
-  margin-bottom: 16px
-
-  p
-    font-weight: bold
-
-
-.meal-card::after
-  content: "* * * * *"
-  color: lightgray
-
-.meal-card:last-child::after
-  content: ""
-
-.mat-card-header
   font-size: 12px
-  font-weight: bold
+  margin: 0
+  color: gray
+  line-height: 30px
 
-  p
-    margin: 0
-    font-style: italic
-    font-size: 12px
-    color: gray
+.meal-card-description
+  grid-area: desc
+  font-size: 14px
+  line-height: 20px
+  padding: 0 20px
 
-.meal-card
-  text-align: center
-  margin: 3px
-  border-bottom: none !important
-  box-shadow: none
-  padding: 5px
-  background: none
-  cursor: move
+.meal-card-icons
+  grid-area: icons
+  float: right
+  font-size: 20px
+  opacity: 0.75
+
+
 
 .participantsWarning
   color: #e06331
@@ -74,29 +79,16 @@
 .cdk-drag-animating
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
 
-.meal-card:last-child
-  border: none
-
 .meal-list.cdk-drop-list-dragging .meal-card:not(.cdk-drag-placeholder)
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
 
 .meal-placeholder
   background: #ebe8e8
-  min-height: 60px
+  min-height: 75px
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
   margin: 10px
   border-radius: 2px
 
-.mat-grid-tile-header
-  background: rgba(6, 19, 18, 0.43)
-  opacity: 0.8
-
-
-.description
-  margin-bottom: 18px !important
-
-.description:last
-  margin-bottom: 0 !important
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -107,12 +99,4 @@
   top: 15px
   color: white
 
-.meal-icon
-  float: right
-  margin-top: -70px
-  font-size: 20px
-  opacity: 0.75
-  margin-right: 10px
 
-.edit-meal-icon
-  margin-right: 35px
