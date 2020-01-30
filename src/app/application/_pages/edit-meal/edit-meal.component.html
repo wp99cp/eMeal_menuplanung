@@ -2,7 +2,7 @@
   <ng-container *ngIf="meal | async; let $meal; else loadingMeal">
     <ng-container *ngIf="specificMeal | async; let $specificMeal; else loadingMeal">
 
-      <h1>{{$meal.name}}</h1>
+      <span class="big-page-title">{{$meal.name}}</span>
 
       <p><b>Anzahl Teilnehmende:</b>
         {{$specificMeal.overrideParticipants ?  $specificMeal.participants : $camp.participants}} Per. (Vegis im Lager:

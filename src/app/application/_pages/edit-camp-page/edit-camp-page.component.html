@@ -1,6 +1,6 @@
 <ng-container *ngIf="camp | async; let $camp; else: loadingCamps">
 
-  <h1>{{$camp.name}}</h1>
+  <span class="big-page-title">{{$camp.name}}</span>
 
   <p><b>Anzahl Teilnehmende:</b> {{$camp.participants}} Per. (davon Vegis: {{$camp.vegetarier}} Per.)</p>
 

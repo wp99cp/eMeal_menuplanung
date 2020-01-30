@@ -40,14 +40,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
   ngOnInit() {
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Änderungen Speichern',
-      name: 'Speichern',
-      action: null,
-      icon: 'save'
-    });
-
-    HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Informationen zum Lager',
       name: 'Info',
@@ -68,7 +60,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
       description: 'Lager exportieren',
       name: 'Export',
       action: (() => this.router.navigate(['export-2'], { relativeTo: this.route })),
-      icon: 'cloud_download'
+      icon: 'cloud_download',
+      separatorAfter: true
     });
 
   }
@@ -108,7 +101,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     )).subscribe((camp: Camp | null) => {
 
       // Speichern der Änderungen im Dialog-Fenster
-      if (camp !== null) {
+      if (camp !== null && camp !== undefined) {
         this.saveCamp(camp);
       }
 
@@ -135,7 +128,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
   /** Save and reset the form */
   public saveCamp(camp: Camp) {
 
-    this.snackBar.open('Änderungen wurden gespeichert!', '', { duration: 2000 });
+    this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
     this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
 
   }

@@ -14,6 +14,7 @@ import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Recipe } from '../../_class/recipe';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 import { Observable, of } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-week-view',
@@ -31,7 +32,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   public showParticipantsWarning = false;
   @Input() camp: Camp;
 
-  constructor(public dialog: MatDialog, public databaseService: DatabaseService) {
+  constructor(
+    public dialog: MatDialog,
+    public databaseService: DatabaseService,
+    public snackBar: MatSnackBar) {
+
 
     // change number of collums when resize window
     window.addEventListener('resize', () => this.colCounter = this.calculateCols());
@@ -41,12 +46,20 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   ngOnInit() {
 
     HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Änderungen Speichern',
+      name: 'Speichern',
+      action: (() => this.save()),
+      icon: 'save'
+    }, 0);
+
+    HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Mahlzeiten hinzufügen',
       name: 'Mahlzeiten',
       action: (() => this.addMeal()),
       icon: 'fastfood'
-    }, 1);
+    });
 
   }
 
@@ -55,7 +68,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    * updates the participantsWarning
    */
   ngOnChanges() {
-
 
     this.showParticipantsWarning = false;
     this.camp.days.forEach(day => day.meals.forEach(meal => {
@@ -67,8 +79,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   public async save() {
 
     if (this.mealsChanged) {
-      console.log('Autosave camp');
+      HeaderNavComponent.togle('Speichern');
       this.saveMeals();
+
+      this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
+
       return true;
     }
 
@@ -78,6 +93,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   drop(event: CdkDragDrop<string[]>) {
 
     this.mealsChanged = true;
+    HeaderNavComponent.togle('Speichern');
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

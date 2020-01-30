@@ -92,7 +92,7 @@ export class EditMealComponent implements OnInit, Saveable {
       description: 'Änderungen speichern',
       name: 'Speichern',
       action: (() => null),
-      icon: 'save'
+      icon: 'save',
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -100,7 +100,8 @@ export class EditMealComponent implements OnInit, Saveable {
       description: 'Informationen zur Mahlzeit',
       name: 'Info',
       action: (() => this.mealInfoDialog()),
-      icon: 'info'
+      icon: 'info',
+      separatorAfter: true
     });
 
     HeaderNavComponent.addToHeaderNav({
