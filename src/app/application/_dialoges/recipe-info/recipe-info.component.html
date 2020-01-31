@@ -23,25 +23,19 @@
     <mat-radio-button value="nonVegi"> Nur für Nicht-Vegetarier </mat-radio-button>
   </mat-radio-group>
 
+  <p>Das Rezept wird für
+    {{calcRecipeParticipants(
+      camp.participants,
+      camp.vegetarier,
+      specificMeal.participants,
+      specificRecipe.participants,
+      specificMeal.overrideParticipants,
+      specificRecipe.overrideParticipants,
+      specificRecipe.vegi)
+    }}
+    Personen berechnet.</p>
 
-  <mat-checkbox formControlName="overrideParticipants">Teilnehmeranzahl manuell anpassen</mat-checkbox>
-
-  <ng-container *ngIf="recipeForm.value.overrideParticipants">
-
-    <p class="warning"
-      *ngIf="specificMeal.overrideParticipants && specificMeal.participants != specificRecipe.participants">
-      <b>Achtung: </b>
-      Abweichende Teilnehmeranzahl! Die Mahlzeit hat {{specificMeal.participants}} Teilnehmende, dieses Rezept wird
-      aber für {{specificRecipe.participants}} Personen berechnet.
-    </p>
-
-    <p class="warning" *ngIf="!specificMeal.overrideParticipants &&  camp.participants != specificRecipe.participants">
-      <b>Achtung: </b>
-      Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende, dieses Rezept wird
-      aber für {{specificRecipe.participants}} Personen berechnet.
-    </p>
-
-  </ng-container>
+  <mat-checkbox formControlName="overrideParticipants" class="checkbox">Teilnehmeranzahl manuell anpassen</mat-checkbox>
 
   <mat-form-field class="full-width" *ngIf="recipeForm.value.overrideParticipants">
     <input id="participants" matInput placeholder="Anzahl Personen (nur) für diese Mahlzeit"

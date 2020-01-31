@@ -57,7 +57,7 @@ export class ShareDialogComponent implements OnInit {
 
           this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes =>
             recipes.forEach(recipe =>
-              this.databaseService.updateAccessData(access, Recipe.getPath(meal.firestoreElementId, recipe.firestoreElementId))
+              this.databaseService.updateAccessData(access, Recipe.getPath(recipe.firestoreElementId))
             ));
 
         }));

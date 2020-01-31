@@ -1,41 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { User } from '../../_interfaces/user';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { DatabaseService } from '../../_service/database.service';
-import { MatAccordion } from '@angular/material/expansion';
-import { ActivatedRoute } from '@angular/router';
-import { map, flatMap, mergeMap } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, mergeMap, take } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+
+import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
-
-interface HashTable { [key: string]: string[]; }
-
-
-/** ExportCampComponent:
- * Export Seite für Lager. Möglichkeit ein in eMeal erstelltes Lager als
- * PDF zu exportieren. Der Export funktioniert über die Druckfunktion des
- * Browsers (z.B. Chrome).
- *
- * Hierzu wird eine HTML Seite generiert, jed <h1>-Überschrift wird beim
- * Drucken automatisch auf eine neue Seite gesetzt. So entsteht das Lager-
- * Dossier.
- *
- * Die Daten fürs Lagerdossier werden von einer cloud function zusammengestellt
- * und in mehreren Teilen abgeholt.
- *
- * Bestandteile:
- *
- * - shoppingList: Einkaufsliste mit allen Zutaten, Mengenangaben und Masseinheiten.
- * Soriert nach food categories.
- *
- * - campInfo: Informationen zum aktuellen Lager. Enthält die Wochenübersicht, sowie
- * sämtliche allgemeine Daten.
- *
- * - mealsInfo: Liste sämtlicher Meal inkl. allen Rezeptdaten. Enthält Zutaten, Notizen
- * Personenanzahl und Rezeptangaben zu den Mahlzeiten.
- */
 @Component({
   selector: 'app-export-camp',
   templateUrl: './export-camp.component.html',
@@ -43,58 +15,82 @@ interface HashTable { [key: string]: string[]; }
 })
 export class ExportCampComponent implements OnInit {
 
-  @ViewChild('accordion', { static: false }) Accordion: MatAccordion;
-
   private campId: Observable<string>;
 
-  public displayedColumns: string[] = ['measure', 'unit', 'food'];
-  public displayedColumnsRecipe: string[] = ['measure', 'totalMeasure', 'unit', 'food', 'comment'];
+  public pending = false;
+  public exports: Observable<any[]>;
+  public message: string;
 
-  public today: string;
-  public user: Observable<User>;
-  public shoppingListWithError: Observable<any>;
-  public exportedCamp: Observable<{ data: { mealsInfo: any, campData: any, shoppingList: any } }>;
-  public weekTable: Observable<any>;
-  public mealsInfo: Observable<any>;
-  public weekViewErrorMessage = '';
+  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router) {
 
-  constructor(private route: ActivatedRoute, private authService: AuthenticationService, private databaseService: DatabaseService) {
+    this.campId = this.route.url.pipe(map(url => url[1].path));
+    this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
+    this.exports.subscribe(console.log);
 
-    this.today = SettingsService.toString(new Date());
+    this.campId.pipe(mergeMap(campId => dbService.getCampById(campId))).subscribe(camp => this.setHeaderInfo(camp.name));
+
+
 
   }
 
   ngOnInit() {
 
+    this.campId.pipe(mergeMap(id => this.dbService.getCampById(id)))
+      .pipe(take(1))
+      .subscribe(camp =>
+        HeaderNavComponent.addToHeaderNav({
+          active: true,
+          description: 'Zurück zum ' + camp.name,
+          name: camp.name,
+          action: (() => this.router.navigate(['..'], { relativeTo: this.route })),
+          icon: 'nature_people',
+          separatorAfter: true
+        }, 0)
+      );
 
-    // load campId from url
-    this.campId = this.route.url.pipe(map(url => url[1].path));
 
-    // set header info
-    this.campId.pipe(mergeMap(id => this.databaseService.getCampById(id))).subscribe(camp => this.setHeaderInfo(camp.name));
 
-    // ladet den aktuellen Nutzer
-    this.user = this.authService.getCurrentUser();
-
-    // ladet die Infos für den Export und passt sie ggf. an
-    this.exportedCamp = this.campId.pipe(flatMap(campId => this.databaseService.exportCamp(campId)));
-
-    this.exportedCamp.subscribe(console.log);
-
-    // set data
-    this.weekTable = this.exportedCamp.pipe(map(exportedCamp => this.transformToWeekTable(exportedCamp.data.campData)));
-    this.mealsInfo = this.exportedCamp.pipe(map(exportedCamp => exportedCamp.data.mealsInfo));
-    this.shoppingListWithError = this.exportedCamp.pipe(map(exportedCamp => exportedCamp.data.shoppingList));
-
-  }
-
-  /** Druckt die aktuelle Seite (mit der Druckfunktion des Browsers). */
-  async print() {
-
-    window.print();
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Lager erneut exportieren',
+      name: 'Neuer Export',
+      action: (() => this.createPDF()),
+      icon: 'create_new_folder'
+    });
 
   }
 
+  /**
+   * Request a PDF export of the camp
+   */
+  createPDF() {
+
+    this.pending = true;
+    this.campId
+      .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
+      .subscribe(() => { this.pending = false; },
+
+        // bug report on error
+        (err) => {
+
+          this.pending = false;
+          this.message = 'Beim Export ist ein unerwarteter Fehler aufgetreten! Bitte versuches später erneut.';
+          this.campId.subscribe(campId =>
+            this.dbService.addFeedback({
+              title: 'Fehler beim Export',
+              feedback: `Das exportieren eines Lagers (` + campId + `) ist fehlgeschlagen!
+            Dies ist eine automatische Fehlermeldung des Systems. Zeitpunkt: ` + new Date().toUTCString()
+            }));
+
+        });
+
+  }
+
+  public getDate(date: any) {
+
+    return new Date(date.seconds * 1000);
+
+  }
 
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(campName): void {
@@ -104,106 +100,4 @@ export class ExportCampComponent implements OnInit {
 
   }
 
-
-
-  /** Passt die CampExport Daten so an, dass daraus eine Wochenübersichtstabelle generiert werden kann */
-  private transformToWeekTable(campInfo: any) {
-
-    // löscht frühere Fehlermeldungen
-    this.weekViewErrorMessage = '';
-
-
-
-    const days = campInfo.days;
-
-    // sortieren nach Datum
-    interface WithDate { date: number; }
-    days.sort((a: WithDate, b: WithDate) => a.date - b.date);
-
-    const tableHeaders = [];
-
-    let rows: HashTable = {};
-
-    days.forEach((day: { date: any; meals: [{ name: string; description: string; }]; }) => {
-
-      // converts datum to local date string
-      tableHeaders.push(SettingsService.toString(new Date(day.date._seconds * 1000)));
-
-      // sort meals
-      day.meals.sort((a, b) => a.name.localeCompare(b.name));
-
-      // add meals of day
-      day.meals.forEach(meal => {
-
-
-        if (rows[meal.name] === undefined) {
-
-          rows[meal.name] = [];
-          for (let i = 0; i < tableHeaders.length - 1; i++) {
-            rows[meal.name].push('-');
-          }
-
-
-        } else if (rows[meal.name].length === tableHeaders.length) {
-
-          this.weekViewErrorMessage = 'Wochenplan kann nicht erstellt werden. Doppelte Mahlzeiten am selben Tag.';
-          throw new Error('Dublicate meal on a one day!');
-
-        }
-
-        rows[meal.name].push(meal.description);
-
-      });
-
-      // add empty
-      for (const key in rows) {
-        if (rows[key].length < tableHeaders.length) {
-          rows[key].push('-');
-        }
-      }
-
-    });
-
-    rows = this.sortList(rows);
-
-    const newRows = [];
-    const rowTitles = [];
-
-    for (const key in rows) {
-      if (key) {
-        newRows.push(rows[key]);
-        rowTitles.push(key);
-      }
-    }
-
-    return { tableHeaders, rowEntries: newRows, rowTitles };
-
-  }
-
-  public toString(date) {
-    return SettingsService.toString(new Date(date._seconds * 1000));
-  }
-  /**
-   * Sortiert die Mahlzeiten in der richtigen Reihenfolge (Zmorgen, Znüni, ...)
-   * und gibt das sortierte Object zurück.
-   *
-   * @param rows Zeilen der Tabelle
-   */
-  private sortList(rows: HashTable): HashTable {
-
-    const rowsOrdered = {};
-
-    // Reihenfolge der Mahlzeiten
-    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
-
-    // Sortiert das Objekt
-    Object.keys(rows)
-      .sort((a, b) => orderOfMahlzeiten.indexOf(a) - orderOfMahlzeiten.indexOf(b))
-      .forEach((key) => {
-        rowsOrdered[key] = rows[key];
-      });
-
-    return rowsOrdered;
-
-  }
 }

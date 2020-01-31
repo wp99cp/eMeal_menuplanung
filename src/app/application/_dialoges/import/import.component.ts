@@ -79,7 +79,8 @@ export class ImportComponent implements OnInit {
         description: '',
         ingredients: rawRecipeData.ingredients,
         notes: '',
-        access: null
+        access: null,
+        meals: []
 
       };
       const recipe = new Recipe(recipeData, '', '', null);

@@ -16,7 +16,7 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
 
 
   public static getCollectionPath(mealId: string, recipeId: string) {
-    return Recipe.getPath(mealId, recipeId) + '/specificRecipes/';
+    return Recipe.getPath(recipeId) + '/specificRecipes/';
   }
 
   public static getPath(mealId: string, recipeId: string, specificMealId: string) {

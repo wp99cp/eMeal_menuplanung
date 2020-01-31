@@ -1,4 +1,4 @@
-<a class="iconText" href="https://zh11.ch" matTooltip="Cevi Züri 11 - Webseite">
+<a class="iconText" routerLink="/app" atTooltip="Zur Startseite">
   <img class="logo" src="/assets/icons/logo.svg" width="30" heigth="30" alt="Logo Cevi Züri 11">
   <span class="logoName">Cevi Züri 11</span>
   <span class="logoSubname">8052 Zürich</span>
@@ -9,10 +9,6 @@
 <div *ngIf="isSignedIn() else notSignedIn" class="nav" (click)="closeMenu()">
 
   <ul class="top">
-    <li>
-      <mat-icon class="nav-icon">home</mat-icon>
-      <a routerLink="/app" matTooltip="Zur Startseite"> Startseite </a>
-    </li>
     <li>
       <mat-icon class="nav-icon">nature_people</mat-icon>
       <a routerLink="/app/camps" matTooltip="Meine Lager"> Meine Lager </a>
@@ -30,6 +26,7 @@
 
   <ul class="bottom">
     <hr />
+    <li> <a routerLink="/app" m> Startseite </a> </li>
     <li class="deactive"><a matTooltip="Kommt bald">Hilfe / Erklärungen</a></li>
     <li> <a routerLink="/app/feedback" matTooltip="Melde einen Fehler">Fehler melden</a> </li>
     <hr />

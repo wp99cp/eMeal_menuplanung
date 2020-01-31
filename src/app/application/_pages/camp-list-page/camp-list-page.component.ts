@@ -1,23 +1,22 @@
-import { Component, Inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator, MatSort } from '@angular/material';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { firestore } from 'firebase';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
+import { AccessData } from '../../_interfaces/accessData';
 import { FirestoreCamp } from '../../_interfaces/firestore-camp';
-import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { MatPaginatorIntl } from '@angular/material';
-import { AccessData } from '../../_interfaces/accessData';
-import { map } from 'rxjs/operators';
+import { DeleteCampComponent } from './delete-camp.component';
 
-export function CustomPaginator() {
+export function customPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
   customPaginatorIntl.itemsPerPageLabel = 'Lager pro Seite';
   customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
@@ -37,7 +36,7 @@ export function CustomPaginator() {
   templateUrl: './camp-list-page.component.html',
   styleUrls: ['./camp-list-page.component.sass'],
   providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
+    { provide: MatPaginatorIntl, useValue: customPaginator() }
   ]
 })
 export class CampListPageComponent implements AfterViewInit, OnInit {
@@ -181,8 +180,8 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
   deleteCamp(camp: Camp) {
 
     this.dialog.open(DeleteCampComponent, {
-      height: '200px',
-      width: '300px',
+      height: '400px',
+      width: '560px',
       data: { name: camp.name }
     }).afterClosed().subscribe(deleteConfirmed => {
 
@@ -199,17 +198,3 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
 }
 
-
-@Component({
-  templateUrl: './delete-camp.component.html',
-  styleUrls: ['./delete-camp.component.sass']
-})
-export class DeleteCampComponent implements OnInit {
-
-  constructor(@Inject(MAT_DIALOG_DATA) public data) { }
-
-  ngOnInit() {
-
-  }
-
-}

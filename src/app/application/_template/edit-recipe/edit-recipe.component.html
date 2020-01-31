@@ -5,11 +5,14 @@
     <mat-panel-title>
       <b>{{recipe.name}}</b>
     </mat-panel-title>
-    <mat-panel-description>
+    <mat-panel-description class="header-description">
       {{recipe.description}}
     </mat-panel-description>
 
-    <mat-panel-description> {{ getPanelDescriptionParticipants() }} </mat-panel-description>
+    <mat-panel-description class="header-participants"
+      [ngClass]="{'participantsWarning': specificRecipe.overrideParticipants || specificRecipe.vegi !== 'all'}"
+      matTooltip="{{(specificRecipe.overrideParticipants || specificRecipe.vegi !== 'all') ? 'Geänderte Teilnehmeranzahl!': ''}}">
+      {{ getPanelDescriptionParticipants() }} </mat-panel-description>
 
   </mat-expansion-panel-header>
 
@@ -34,9 +37,9 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="calcMeasure">
-        <th mat-header-cell *matHeaderCellDef style="width: 10%"> {{calculateParticipantsNumber()}} Per. </th>
+        <th mat-header-cell *matHeaderCellDef style="width: 10%"> {{mealPart}} Per. </th>
         <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="calculateParticipantsNumber() * ingredient.measure"
+          <ingredient [fieldValue]="mealPart * ingredient.measure"
             (valueChange)="changeIngredient($event, i, 'calcMeasure')">
           </ingredient>
         </td>
@@ -95,18 +98,10 @@
 
     </table>
 
-    <span class="mat-raised-button mat-save saveButton" color="save" (click)='saveRecipe()'
-      *ngIf="!recipeForm.untouched">
-      Änderungen speichern
-    </span>
-
     <mat-form-field class="full-width">
       <textarea matInput placeholder="Notizen zum Rezept" formControlName="notes"></textarea>
     </mat-form-field>
 
-
   </form>
-
-
 
 </mat-expansion-panel>

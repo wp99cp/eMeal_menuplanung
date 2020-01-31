@@ -1,11 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material';
+
 import { Camp } from '../../_class/camp';
-import { Meal } from '../../_class/meal';
+import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { SpecificRecipe } from '../../_class/specific-recipe';
-import { Recipe } from '../../_class/recipe';
+import { SettingsService } from '../../_service/settings.service';
 
 @Component({
   selector: 'app-recipe-info',
@@ -19,6 +20,8 @@ export class RecipeInfoComponent implements OnInit {
   public specificMeal: SpecificMeal;
   public recipe: Recipe;
   public recipeForm: FormGroup;
+
+  public calcRecipeParticipants = SettingsService.calcRecipeParticipants;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp, specificMeal: SpecificMeal, recipe: Recipe, specificRecipe: SpecificRecipe },
@@ -44,6 +47,7 @@ export class RecipeInfoComponent implements OnInit {
   ngOnInit() {
 
   }
+
 
   saveValueChanges() {
 

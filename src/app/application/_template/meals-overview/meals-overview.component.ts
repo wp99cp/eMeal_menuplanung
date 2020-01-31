@@ -16,14 +16,26 @@ export class MealsOverviewComponent implements OnChanges {
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day]>();
 
+  public warning: string;
+
   constructor(public dialog: MatDialog) { }
 
 
   ngOnChanges() {
 
     // Sortiert die Mahlzeiten
-    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
-    this.day.meals.sort((a, b) => orderOfMahlzeiten.indexOf(a.name) - orderOfMahlzeiten.indexOf(b.name));
+    this.warning = '';
+    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
+    const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];
+
+    this.day.meals.sort((a, b) => {
+
+      if (a.name === b.name) {
+        this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.name)] + '!';
+      }
+
+      return orderOfMahlzeiten.indexOf(a.name) - orderOfMahlzeiten.indexOf(b.name);
+    });
 
   }
 

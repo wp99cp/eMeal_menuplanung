@@ -9,13 +9,14 @@ import { Meal } from './meal';
 export class Recipe extends FirebaseObject implements FirestoreRecipe {
 
   protected firestorePath: string;
-  public firestoreElementId: any;
+  public firestoreElementId: string;
 
   public access: AccessData;
   public ingredients: Ingredient[];
   public name: string;
   public description: string;
   public notes: string;
+  public meals: string[];
 
   public specificRecipe: Observable<SpecificRecipe>;
 
@@ -26,7 +27,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
    * @param name Title of the recipe
    * @param access Access rights for the recipe
    */
-  public static getEmptyRecipe(name?: string, access?: AccessData): FirestoreRecipe {
+  public static getEmptyRecipe(mealId: string, name?: string, access?: AccessData): FirestoreRecipe {
 
     // set undefined variables
     name = name === undefined ? '' : name;
@@ -37,7 +38,8 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
       description: '',
       ingredients: [],
       name,
-      notes: ''
+      notes: '',
+      meals: [mealId]
     };
 
     return recipe;
@@ -47,25 +49,27 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
   /**
    * gibt den Firestore Path zurück
    */
-  public static getCollectionPath(mealId: string): string {
+  public static getCollectionPath(): string {
 
-    return Meal.getCollectionPath() + mealId + '/recipes/';
+    return 'recipes/';
 
   }
 
   /**
   * gibt den Firestore Path zurück
   */
-  public static getPath(mealId: string, recipeId: string): string {
+  public static getPath(recipeId: string): string {
 
-    return Recipe.getCollectionPath(mealId) + recipeId;
+    return Recipe.getCollectionPath() + recipeId;
 
   }
 
   constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, specificRecipe: Observable<SpecificRecipe>) {
     super();
 
-    this.firestorePath = 'meals/' + mealId + '/recipes/';
+    this.meals = recipeData.meals;
+
+    this.firestorePath = 'recipes/';
     this.firestoreElementId = firestoreElementId;
 
     this.access = recipeData.access;
@@ -81,6 +85,7 @@ export class Recipe extends FirebaseObject implements FirestoreRecipe {
   public extractDataToJSON(): FirestoreRecipe {
 
     return {
+      meals: this.meals,
       access: this.access,
       ingredients: this.ingredients,
       name: this.name,

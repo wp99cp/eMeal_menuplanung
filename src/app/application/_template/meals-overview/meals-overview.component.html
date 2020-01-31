@@ -11,13 +11,14 @@
   <!-- Meal Element-->
   <ng-container *ngFor="let meal of day.meals; let i = index">
 
-    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.participantsWarning}">
+    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.participantsWarning}"
+      matTooltip="{{meal.participantsWarning ? 'Geänderte Teilnehmeranzahl!' : ''}}">
 
       <div class=" meal-placeholder" *cdkDragPlaceholder> </div>
 
       <span class="meal-card-name"> {{ meal.name }} </span>
 
-      <span class="meal-card-description">{{ meal.description }}</span>
+      <span class=" meal-card-description">{{ meal.description }}</span>
 
       <div class="meal-card-icons">
         <mat-icon class="edit-meal-icon meal-icon clickable" *ngIf="!hideIcons"
@@ -34,5 +35,6 @@
 
   </ng-container>
 
-
 </div>
+
+<p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Wird beim Export nicht unterstützt!">{{warning}}</p>

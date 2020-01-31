@@ -31,7 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from 'src/environments/environment';
 
 import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
-import { CampListPageComponent, DeleteCampComponent } from './_pages/camp-list-page/camp-list-page.component';
+import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.component';
+import { DeleteCampComponent } from './_pages/camp-list-page/delete-camp.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
@@ -52,13 +53,14 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
-import { ExportPdfWithLatexComponent } from './_pages/export-pdf-with-latex/export-pdf-with-latex.component';
 import { DownloadComponent } from './_template/download/download.component';
 import { VersionHistoryModule } from '../modules/version-history/version-history.module';
 import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
 import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
 import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
 import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.component';
+import { AddRecipeComponent } from './_dialoges/add-recipe/add-recipe.component';
+import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.component';
 
 
 @NgModule({
@@ -82,12 +84,14 @@ import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.compone
     CreateMealComponent,
     ListOfUsersComponent,
     AppSettingsPageComponent,
-    ExportPdfWithLatexComponent,
+    ExportCampComponent,
     DownloadComponent,
     ShareDialogComponent,
     CampInfoComponent,
     MealInfoComponent,
-    RecipeInfoComponent
+    RecipeInfoComponent,
+    AddRecipeComponent,
+    CreateRecipeComponent
   ],
   providers: [
     AngularFirestore,
@@ -149,7 +153,9 @@ import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.compone
     ShareDialogComponent,
     CampInfoComponent,
     MealInfoComponent,
-    RecipeInfoComponent
+    RecipeInfoComponent,
+    AddRecipeComponent,
+    CreateRecipeComponent
   ],
   exports: [
     MatTableModule,

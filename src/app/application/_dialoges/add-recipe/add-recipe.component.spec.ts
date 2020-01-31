@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExportPdfWithLatexComponent } from './export-pdf-with-latex.component';
+import { AddRecipeComponent } from './add-recipe.component';
 
-describe('ExportPdfWithLatexComponent', () => {
-  let component: ExportPdfWithLatexComponent;
-  let fixture: ComponentFixture<ExportPdfWithLatexComponent>;
+describe('AddRecipeComponent', () => {
+  let component: AddRecipeComponent;
+  let fixture: ComponentFixture<AddRecipeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExportPdfWithLatexComponent ]
+      declarations: [ AddRecipeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExportPdfWithLatexComponent);
+    fixture = TestBed.createComponent(AddRecipeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

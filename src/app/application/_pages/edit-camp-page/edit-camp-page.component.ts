@@ -48,7 +48,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: true,
+      active: false,
       description: 'Mitarbeiter verwalten',
       name: 'Mitarbeiter',
       action: (() => this.shareDialog()),
@@ -56,7 +56,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: true,
+      active: false,
       description: 'Lager exportieren',
       name: 'Export',
       action: (() => this.router.navigate(['export-2'], { relativeTo: this.route })),

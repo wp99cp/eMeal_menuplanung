@@ -5,7 +5,8 @@
       <span class="big-page-title">{{$meal.name}}</span>
 
       <p><b>Anzahl Teilnehmende:</b>
-        {{$specificMeal.overrideParticipants ?  $specificMeal.participants : $camp.participants}} Per. (Vegis im Lager:
+        {{calcMealPart($camp.participants, $specificMeal.participants, $specificMeal.overrideParticipants )}} Per.
+        (Vegis im Lager:
         {{$camp.vegetarier}} Per.) </p>
 
 

@@ -39,7 +39,18 @@ export class HeaderNavComponent {
   public static turnOff(name: string) {
 
     const element = HeaderNavComponent.headerNav.find(el => el.name === name);
-    element.active = false;
+    if (element) {
+      element.active = false;
+    }
+
+  }
+
+  public static turnOn(name: string) {
+
+    const element = HeaderNavComponent.headerNav.find(el => el.name === name);
+    if (element) {
+      element.active = true;
+    }
 
   }
 

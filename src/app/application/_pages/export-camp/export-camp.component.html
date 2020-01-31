@@ -1,160 +1,24 @@
-<button mat-raised-button (click)="print()" class="saveButton" matTooltip="Lager drucken (nur in Google Chrome)">Lager
-  Drucken</button>
+<div class="centered">
 
+  <span class="page-title">Lager exportieren</span>
 
+  <h1>Lagerhandbuch erstellen und herunterladen.</h1>
 
+  <p>Kurze Zeit nach deinem Klick erscheint das fertige Lagerhandbuch in der Downloadliste. Du kannst es nun jederzeit
+    herunterladen. Es werden jeweils die letzten 6 Exporte angezeigt. Exporte stehen maximal einen Monat zur Verfügung.
+  </p>
 
-<!-- Titleblatt -->
-
-<div class="titlePage print">
-
-  <h1 *ngIf="(exportedCamp | async).data.campData; let camp" class="dossier-title">Menuplanung<br />{{camp.data.name}}
-  </h1>
-  <p>Version vom {{today}} </p>
-  <p *ngIf="user | async; let user">{{user.displayName}}</p>
-  <p><br></p>
-  <p class="info">Dieses Lagerdossier wurde mit eMeal erstellt.<br />eMeal.zh11.ch</p>
-</div>
-
-<!-- Wochenplan -->
-<p class="warning" *ngIf="weekViewErrorMessage !== ''">{{weekViewErrorMessage}}</p>
-
-<div class="onNewPage print landscape" *ngIf="weekTable | async; let $weekTable">
-
-  <h1>Wochenplan</h1>
-
-  <table class="weekTable">
-
-    <tr>
-      <th></th>
-      <th *ngFor="let header of $weekTable.tableHeaders">
-        {{header}}</th>
-    </tr>
-
-    <tr *ngFor="let rowTitle of $weekTable.rowTitles; let i = index">
-      <td>{{rowTitle}}</td>
-      <td *ngFor="let element of $weekTable.rowEntries[i]">{{element}}</td>
-    </tr>
-
-  </table>
-  <!-- Allgemeines zum Lager -->
-  <ng-container *ngIf="(exportedCamp | async)?.data.campData ; let camp">
-
-    <h3>Allgemeines zum {{camp.name}}</h3>
-    <p>{{camp.description}}</p>
-
-    <p><br></p>
-    <p><b>Anzahl Teilnehmende: </b>{{camp.participants}}</p>
-    <p><b>Jahr: </b>{{camp.year}}</p>
-    <p><b>Anzahl Tage:</b> {{camp.days.length}}</p>
-
-  </ng-container>
-
-</div>
-
-
-<!-- Einkaufsliste -->
-<div class="print" *ngIf="shoppingListWithError | async; let list">
-
-  <h1 class="onNewPage">Einkaufsliste (Ganzes Lager)</h1>
-
-  <p class="warning" *ngFor="let error of list.error">{{error}}</p>
-
-  <div id="shoppingListElement">
-
-    <div *ngFor="let categorie of list.shoppingList" class="foodCategory">
-
-      <h3> {{categorie.name}} </h3>
-
-      <table mat-table [dataSource]="categorie.ingredients">
-
-        <ng-container matColumnDef="measure">
-          <td mat-cell *matCellDef="let element"
-            style="width: 30px; text-align: right; padding-right: 10px; padding-left: 0">
-            {{element.measure}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="unit">
-          <td mat-cell *matCellDef="let element" style="width: 25px">
-            {{element.unit}}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="food">
-          <td mat-cell *matCellDef="let element" style="width: calc(100% - 55px)">
-            {{element.food}}
-          </td>
-        </ng-container>
-
-        <!-- Link to Camp-->
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-      </table>
-
-    </div>
+  <div *ngIf="pending" class="waiting">
+    <mat-progress-bar mode="query"> </mat-progress-bar>
   </div>
 
-</div>
+  <span *ngIf="message !== ''" class="error-message"> {{message}}</span>
 
-<!-- Mahlzeiten -->
-<ng-container *ngIf="mealsInfo | async; let meals">
-  <div class="onNewPage print mealPage" *ngFor="let meal of meals">
-
-    <div class="mealHeader">
-      <h1 class="mealName">{{meal.name}}</h1>
-      <span class="description">{{meal.description}}</span>
-      <span class="usedAs">{{meal.usedAs}}</span>
-      <span class="date">{{toString(meal.date)}}</span>
+  <div *ngIf="(exports | async); let exports" class="camp-export-list">
+    <div class="docs camp-export" *ngFor="let export of exports">
+      <h3>Lagerhandbuch und Einkaufsliste</h3>
+      <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
+        [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')" [docPath]="path"></app-download>
     </div>
-
-    <div class="recipes">
-      <div *ngFor="let recipe of meal.recipes" class="recipe">
-
-        <h2 class="recipe-title">{{recipe.name}}</h2>
-        <span class="vegi-info">{{recipe.vegi}} ({{recipe.participants}})</span>
-        <span class="description">{{recipe.description}}</span>
-        <span class="notes">{{recipe.notes}}</span>
-
-        <table class="ingredients" mat-table [dataSource]="recipe.ingredients">
-
-          <ng-container matColumnDef="measure">
-            <td mat-cell *matCellDef="let element">
-              {{element.measure}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="totalMeasure">
-            <td mat-cell *matCellDef="let element">
-              {{element.measure * recipe.participants}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="unit">
-            <td mat-cell *matCellDef="let element">
-              {{element.unit}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="food">
-            <td mat-cell *matCellDef="let element">
-              {{element.food}}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="comment">
-            <td mat-cell *matCellDef="let element">
-              {{element.comment}}
-            </td>
-          </ng-container>
-
-          <!-- Link to Camp-->
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsRecipe;"></tr>
-
-        </table>
-
-      </div>
-    </div>
-
   </div>
-</ng-container>
+</div>

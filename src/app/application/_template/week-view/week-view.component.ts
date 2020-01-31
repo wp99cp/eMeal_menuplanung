@@ -78,6 +78,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   public async save() {
 
+
     if (this.mealsChanged) {
 
       HeaderNavComponent.turnOff('Speichern');
@@ -187,7 +188,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
             this.databaseService.updateAccessData(this.camp.access, Meal.getPath(firestoreMeal.firestoreElementId));
             this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes => recipes.forEach(
               recipe => this.databaseService.updateAccessData(this.camp.access,
-                Recipe.getPath(firestoreMeal.firestoreElementId, recipe.firestoreElementId))
+                Recipe.getPath(recipe.firestoreElementId))
             ));
 
             const specificMealId = await meal.createSpecificMeal(this.databaseService, this.camp);

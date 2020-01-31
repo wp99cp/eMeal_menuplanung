@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
@@ -14,6 +15,10 @@ import { MealInfoComponent } from '../../_dialoges/meal-info/meal-info.component
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
+import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.component';
+import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
+import { Recipe } from '../../_class/recipe';
+import { SettingsService } from '../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-meal',
@@ -29,6 +34,8 @@ export class EditMealComponent implements OnInit, Saveable {
   private campId: Observable<string>;
   private mealId: Observable<string>;
   private specificMealId: Observable<string>;
+
+  public calcMealPart = SettingsService.calcMealParticipants;
 
   @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
 
@@ -91,7 +98,7 @@ export class EditMealComponent implements OnInit, Saveable {
       active: false,
       description: 'Änderungen speichern',
       name: 'Speichern',
-      action: (() => null),
+      action: (() => this.saveButton()),
       icon: 'save',
     });
 
@@ -128,6 +135,13 @@ export class EditMealComponent implements OnInit, Saveable {
       icon: 'delete'
     });
 
+
+  }
+
+  private saveButton() {
+
+    HeaderNavComponent.turnOff('Speichern');
+    this.save();
 
   }
 
@@ -218,8 +232,21 @@ export class EditMealComponent implements OnInit, Saveable {
 
     this.save();
 
-    this.meal.pipe(take(1)).subscribe(meal =>
-      this.databaseService.addNewRecipe(meal.firestoreElementId, meal.access, meal.name)
+
+    this.mealId.subscribe(mealId =>
+
+      this.dialog.open(AddRecipeComponent, {
+        height: '618px',
+        width: '1000px',
+        data: null
+      }).afterClosed().subscribe((results: SelectionModel<Recipe>) => {
+
+        if (results) {
+          results.selected.forEach(recipe => this.databaseService.addRecipe(recipe.firestoreElementId, mealId));
+        }
+
+      })
+
     );
 
   }

@@ -65,6 +65,17 @@ export class DatabaseService {
 
   }
 
+  /** creates a recipe object */
+  private static createRecipes(): OperatorFunction<DocumentChangeAction<FirestoreRecipe>[], Recipe[]> {
+
+    return map(docChangeAction =>
+      docChangeAction.map(docData => {
+        const recipeId = docData.payload.doc.id;
+        return new Recipe(docData.payload.doc.data(), recipeId, null, null);
+      }));
+
+  }
+
   /**  */
   private static createCamp(): OperatorFunction<Action<DocumentSnapshot<FirestoreCamp>>, Camp> {
 
@@ -199,13 +210,14 @@ export class DatabaseService {
    * Löscht ein Rezept und seine SpecificRecipes
    *
    */
-  public deleteRecipe(mealId: string, recipeId: string) {
+  public removeRecipe(mealId: string, recipeId: string) {
 
-    this.db.doc(Recipe.getPath(mealId, recipeId)).delete();
+    console.log(mealId)
+    this.db.doc(Recipe.getPath(recipeId)).update({
+      meals: firestore.FieldValue.arrayRemove(mealId)
+    });
     this.db.collection(SpecificRecipe.getCollectionPath(mealId, recipeId)).get()
-      .subscribe(
-        docRefs => docRefs.forEach(docRef => docRef.ref.delete())
-      );
+      .subscribe(docRefs => docRefs.forEach(docRef => docRef.ref.delete()));
 
   }
 
@@ -273,8 +285,16 @@ export class DatabaseService {
    */
   public addNewRecipe(mealId: string, access?: AccessData, name?: string) {
 
-    return this.db.collection(Recipe.getCollectionPath(mealId))
-      .add(Recipe.getEmptyRecipe(name, access));
+    return this.db.collection(Recipe.getCollectionPath())
+      .add(Recipe.getEmptyRecipe(mealId, name, access));
+
+  }
+
+
+  public addRecipe(recipeId: string, mealId: string) {
+
+    return this.db.doc(Recipe.getPath(recipeId))
+      .update({ meals: firestore.FieldValue.arrayUnion(mealId) });
 
   }
 
@@ -339,14 +359,31 @@ export class DatabaseService {
    */
   public getRecipes(mealId: string, specificMealId?: string, campId?: string): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn()
+    return this.createAccessQueryFn(['meals', 'array-contains', mealId])
       .pipe(mergeMap(queryFn =>
-        this.requestCollection(Recipe.getCollectionPath(mealId), queryFn)
+        this.requestCollection(Recipe.getCollectionPath(), queryFn)
           .pipe(DatabaseService.createRecipe(mealId, this, specificMealId, campId))
       ));
 
 
   }
+
+  /**
+   * @returns observable list of all recipes form the current meal.
+   *
+   * @param mealId id of the current meal
+   * @param campId id of the current camp
+   */
+  public getEditableRecipes(): Observable<Recipe[]> {
+
+    return this.createAccessQueryFn()
+      .pipe(mergeMap(queryFn =>
+        this.requestCollection(Recipe.getCollectionPath(), queryFn)
+          .pipe(DatabaseService.createRecipes())
+      ));
+
+  }
+
 
 
 
@@ -412,7 +449,17 @@ export class DatabaseService {
 
 
   /** creates a query function for access restriction (using the currentUser) */
-  private createAccessQueryFn(): Observable<QueryFn> {
+  private createAccessQueryFn(query?: [string, firestore.WhereFilterOp, string]): Observable<QueryFn> {
+
+    if (query !== null && query !== undefined) {
+
+      return this.authService.getCurrentUser().pipe(map(user =>
+        (collRef => collRef
+          .where('access.' + user.uid, 'in', ['editor', 'owner'])
+          .where(query[0], query[1], query[2])
+        )));
+
+    }
 
     return this.authService.getCurrentUser().pipe(map(user =>
       (collRef => collRef

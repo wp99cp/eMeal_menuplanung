@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
@@ -14,6 +14,7 @@ import { Ingredient } from '../../_interfaces/ingredient';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { of } from 'rxjs';
+import { SettingsService } from '../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -25,7 +26,8 @@ import { of } from 'rxjs';
 // die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
 // toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
 //
-export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
+export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnChanges {
+
 
   public recipeForm: FormGroup;
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'delete'];
@@ -45,7 +47,12 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   @Output() opened = new EventEmitter<number>();
   @Output() saveOthers = new EventEmitter<boolean>();
 
-  constructor(private formBuilder: FormBuilder, private databaseService: DatabaseService, public dialog: MatDialog) { }
+  public mealPart: number;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private databaseService: DatabaseService,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
 
@@ -57,6 +64,32 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
     this.ingredientFieldNodes = this.getNodes();
 
+    this.calcPart();
+
+  }
+
+  ngOnChanges() {
+
+    // reactivates the save button
+    setTimeout(() => {
+
+      this.ingredientFieldNodes = this.getNodes();
+      this.setFocusChanges();
+
+    }, 500);
+
+  }
+
+  private calcPart() {
+
+    this.mealPart = SettingsService.calcRecipeParticipants(
+      this.camp.participants,
+      this.camp.vegetarier,
+      this.specificMeal.participants,
+      this.specificRecipe.participants,
+      this.specificMeal.overrideParticipants,
+      this.specificRecipe.overrideParticipants,
+      this.specificRecipe.vegi);
 
   }
 
@@ -64,7 +97,14 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
    * @returns all nodes of an ingredient-field in this recipe-panel
    */
   private getNodes(): any {
-    return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
+
+
+    if (document.getElementsByClassName('mat-expansion-panel')[this.index]) {
+
+      return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
+    }
+
+    return [];
   }
 
   /**
@@ -76,7 +116,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     // set Timeout: sowohl zu optischen Zwecken als auch
     // damit beim Wechsel zwischen Rezepten das Menu nicht verschwindet
     setTimeout(() => {
-
 
       HeaderNavComponent.remove('Infos zum Rezept');
       HeaderNavComponent.remove('Rezept löschen');
@@ -138,6 +177,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
       icon: 'delete'
     });
 
+
   }
 
   ngAfterViewInit() {
@@ -157,12 +197,11 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
   public deleteRecipe() {
 
     this.saveOthers.emit(true);
-    this.databaseService.deleteRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
+    this.databaseService.removeRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
 
   }
 
 
-  // TODO: better solution, multiple action listeners vermeiden!!!
   private setFocusChanges() {
 
     // delete old listeners
@@ -178,12 +217,16 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   }
 
-  private keyListner(i: number, ): EventListenerOrEventListenerObject {
+  private keyListner(i: number): EventListenerOrEventListenerObject {
+
     return (event: any) => {
+
+      HeaderNavComponent.turnOn('Speichern');
+
       if (event.key === 'Enter') {
 
         if (i + 1 < this.ingredientFieldNodes.length) {
-          console.log(i)
+
           const nextFocus = i % 5 === 0 ? i + 2 : i + 1;
           (this.ingredientFieldNodes[nextFocus] as HTMLElement).focus();
         } else {
@@ -198,6 +241,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
 
   // save on destroy
   public async save(): Promise<boolean> {
+
+    this.calcPart();
 
     if (this.recipeForm.touched) {
       console.log('Autosave Recipe');
@@ -252,7 +297,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     } else if (element === 'calcMeasure') {
 
       // Berechnung für eine Person
-      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.calculateParticipantsNumber();
+      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.mealPart;
 
     } else {
 
@@ -295,44 +340,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
     this.dataSource._updateChangeSubscription();
   }
 
-  /**
-   * Berechnet die Anzahl Teilnehmende dieses Rezeptes für die Berechnung.
-   *
-   * Beachtet dabei lokale Überschreibungen der Teilnehmeranzahl des Lagers im Rezept oder in der Mahlzeit
-   * und berücksichtigt das "Vegi"-Feld...
-   *
-   */
-
-  public calculateParticipantsNumber() {
-
-    // Rezept nur für Vegetarier
-    if (this.specificRecipe.vegi === 'vegiOnly') {
-      return this.camp.vegetarier;
-
-    } else {
-
-      // Anzahl Vegis, die Abgezogen werdem
-      const abzug = this.specificRecipe.vegi !== 'nonVegi' ? 0 : this.camp.vegetarier;
-
-      // Anzahl wurde im Rezept Überschrieben
-      if (this.specificRecipe.overrideParticipants) {
-
-        return this.specificRecipe.participants - abzug;
-
-
-      } else {
-
-        // Anzahl Teilnehmer der Mahlzeit
-        return (this.specificMeal.overrideParticipants ?
-          // Anzahl wurde in der Mahlzeit überschrieben
-          (this.specificMeal.participants - abzug) :
-          // Anzahl wurde nicht überschrieben
-          (this.camp.participants - abzug));
-
-      }
-    }
-
-  }
 
   /**
    * Stellt die Beschreibung für die Anzahl Teilnehmende eines Rezeptes zusammen.
@@ -341,20 +348,14 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit {
    */
   public getPanelDescriptionParticipants() {
 
-    if (this.specificRecipe.vegi === 'all') {
+    this.calcPart();
 
-      return 'für ' + this.calculateParticipantsNumber() + ' Personen';
+    switch (this.specificRecipe.vegi) {
 
-    }
-    if (this.specificRecipe.vegi === 'vegiOnly') {
+      case 'nonVegi': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
+      case 'vegiOnly': return 'nur für Vegis (' + this.mealPart + ' P.)';
+      default: return 'für ' + this.mealPart + ' Personen';
 
-      return 'nur für Vegis (' + this.calculateParticipantsNumber() + ' P.)';
-
-    }
-
-    if (this.specificRecipe.vegi === 'nonVegi') {
-
-      return 'nur für Nicht-Vegis (' + this.calculateParticipantsNumber() + ' P.)';
 
     }
 

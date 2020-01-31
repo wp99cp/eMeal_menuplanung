@@ -7,4 +7,5 @@ export interface FirestoreRecipe {
   description: string;
   access: AccessData;
   notes: string;
+  meals: string[];
 }

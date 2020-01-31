@@ -147,7 +147,7 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
       specificMealId: this.specificId,
       vegi: 'all'
     };
-    const recipePath = 'meals/' + this.firestoreElementId + '/recipes/' + recipeId + '/specificRecipes/' + this.specificId;
+    const recipePath = 'recipes/' + recipeId + '/specificRecipes/' + this.specificId;
     databaseService.addDocument(specificRecipeData, recipePath);
   }
 
