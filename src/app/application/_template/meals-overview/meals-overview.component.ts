@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 import { Day } from '../../_class/day';
 import { MatDialog } from '@angular/material';
 import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
+import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 @Component({
   selector: 'app-meals-overview',
@@ -15,10 +16,11 @@ export class MealsOverviewComponent implements OnChanges {
   @Output() mealDropped = new EventEmitter<any>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day]>();
+  public hidden = false;
 
   public warning: string;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, public swissDateAdapter: SwissDateAdapter) { }
 
 
   ngOnChanges() {
@@ -39,7 +41,17 @@ export class MealsOverviewComponent implements OnChanges {
 
   }
 
+  public visible(specificMealId: string) {
 
+    if (document.getElementById(specificMealId)) {
+
+      return !document.getElementById(specificMealId).classList.contains('hidden');
+
+    }
+
+    return true;
+
+  }
 
   /**
    * Berbeite einen Tag.

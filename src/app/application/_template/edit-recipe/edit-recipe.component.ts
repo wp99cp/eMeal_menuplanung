@@ -52,7 +52,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   constructor(
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -117,20 +118,20 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     // damit beim Wechsel zwischen Rezepten das Menu nicht verschwindet
     setTimeout(() => {
 
-      HeaderNavComponent.remove('Infos zum Rezept');
-      HeaderNavComponent.remove('Rezept löschen');
+      HeaderNavComponent.remove('Rezept Info');
+      HeaderNavComponent.remove('Rezept');
 
       HeaderNavComponent.addToHeaderNav({
         active: true,
         description: 'Informationen zum Rezept',
-        name: 'Infos zum Rezept',
+        name: 'Rezept Info',
         action: (() => this.openRecipeInfo()),
         icon: 'info'
       });
       HeaderNavComponent.addToHeaderNav({
         active: true,
-        description: 'Rezept löschen',
-        name: 'Rezept löschen',
+        description: 'Rezept',
+        name: 'Rezept',
         action: (() => this.deleteRecipe()),
         icon: 'delete'
       });
@@ -159,20 +160,20 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   onClose() {
 
     this.opened.emit(-1);
-    HeaderNavComponent.remove('Infos zum Rezept');
-    HeaderNavComponent.remove('Rezept löschen');
+    HeaderNavComponent.remove('Rezept Info');
+    HeaderNavComponent.remove('Rezept');
 
     HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Wähle zuerst ein Rezept',
-      name: 'Infos zum Rezept',
+      name: 'Rezept Info',
       action: (() => null),
       icon: 'info'
     });
     HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Wähle zuerst ein Rezept',
-      name: 'Rezept löschen',
+      name: 'Rezept',
       action: (() => null),
       icon: 'delete'
     });
@@ -197,7 +198,27 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   public deleteRecipe() {
 
     this.saveOthers.emit(true);
-    this.databaseService.removeRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
+
+
+    document.getElementById(this.specificRecipe.firestoreElementId).classList.add('hidden');
+
+    const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
+
+    let canDelete = true;
+    snackBar.onAction().subscribe(() => {
+      canDelete = false;
+      document.getElementById(this.specificRecipe.firestoreElementId).classList.toggle('hidden');
+
+    });
+    snackBar.afterDismissed().subscribe(() => {
+
+      if (canDelete) {
+        this.databaseService.removeRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
+      }
+
+    });
+
+
 
   }
 

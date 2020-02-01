@@ -56,10 +56,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
+      active: true,
       description: 'Lager exportieren',
       name: 'Export',
-      action: (() => this.router.navigate(['export-2'], { relativeTo: this.route })),
+      action: (() => this.router.navigate(['export'], { relativeTo: this.route })),
       icon: 'cloud_download',
       separatorAfter: true
     });

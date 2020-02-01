@@ -209,9 +209,25 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   public deleteMeal(mealId: string, specificMealId: string) {
 
-    this.camp.removeMeal(specificMealId);
-    this.saveCamp();
-    this.databaseService.deleteSpecificMealAndRecipes(mealId, specificMealId);
+    document.getElementById(specificMealId).classList.add('hidden');
+
+    const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
+
+    let canDelete = true;
+    snackBar.onAction().subscribe(() => {
+      canDelete = false;
+      document.getElementById(specificMealId).classList.toggle('hidden');
+
+    });
+    snackBar.afterDismissed().subscribe(() => {
+
+      if (canDelete) {
+        this.camp.removeMeal(specificMealId);
+        this.saveCamp();
+        this.databaseService.deleteSpecificMealAndRecipes(mealId, specificMealId);
+      }
+
+    });
 
   }
 

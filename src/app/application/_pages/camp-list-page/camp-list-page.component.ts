@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
+import { MatPaginator, MatPaginatorIntl, MatSort, DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
@@ -15,6 +15,7 @@ import { FirestoreCamp } from '../../_interfaces/firestore-camp';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { DeleteCampComponent } from './delete-camp.component';
+import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 export function customPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
@@ -36,8 +37,7 @@ export function customPaginator() {
   templateUrl: './camp-list-page.component.html',
   styleUrls: ['./camp-list-page.component.sass'],
   providers: [
-    { provide: MatPaginatorIntl, useValue: customPaginator() }
-  ]
+    { provide: MatPaginatorIntl, useValue: customPaginator() }]
 })
 export class CampListPageComponent implements AfterViewInit, OnInit {
 

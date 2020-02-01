@@ -1,4 +1,5 @@
-<mat-expansion-panel (closed)="onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel">
+<mat-expansion-panel (closed)="onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel"
+  id="{{specificRecipe.firestoreElementId}}">
 
   <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
 
@@ -39,7 +40,7 @@
       <ng-container matColumnDef="calcMeasure">
         <th mat-header-cell *matHeaderCellDef style="width: 10%"> {{mealPart}} Per. </th>
         <td mat-cell *matCellDef="let ingredient; let i = index">
-          <ingredient [fieldValue]="mealPart * ingredient.measure"
+          <ingredient [fieldValue]="(mealPart * ingredient.measure == 0) ? '': mealPart * ingredient.measure"
             (valueChange)="changeIngredient($event, i, 'calcMeasure')">
           </ingredient>
         </td>

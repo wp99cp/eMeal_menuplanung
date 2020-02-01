@@ -115,14 +115,22 @@ export class EditMealComponent implements OnInit, Saveable {
       description: 'Rezept hinzufügen',
       name: 'Rezepte',
       action: (() => this.newRecipe()),
-      icon: 'menu_book',
+      icon: 'menu_book'
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Kommt bald',
+      name: 'Export',
+      action: (() => null),
+      icon: 'cloud_download',
       separatorAfter: true
     });
 
     HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Wähle zuerst ein Rezept',
-      name: 'Infos zum Rezept',
+      name: 'Rezept Info',
       action: (() => null),
       icon: 'info'
     });
@@ -130,7 +138,7 @@ export class EditMealComponent implements OnInit, Saveable {
     HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Wähle zuerst ein Rezept',
-      name: 'Rezept löschen',
+      name: 'Rezept',
       action: (() => null),
       icon: 'delete'
     });

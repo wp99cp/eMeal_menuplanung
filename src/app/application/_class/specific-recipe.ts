@@ -11,7 +11,7 @@ export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificR
   public participants: number;
   public overrideParticipants = false;
   protected firestorePath: string;
-  protected firestoreElementId: string;
+  public firestoreElementId: string;
   public specificMealId: string;
 
 

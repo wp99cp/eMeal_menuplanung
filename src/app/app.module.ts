@@ -8,12 +8,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { environment } from '../environments/environment';
+import { HeaderNavComponent } from './_template/header-nav/header-nav.component';
 import { MainMenuComponent } from './_template/main-menu/main-menu.component';
 import { TemplateFooterComponent } from './_template/template-footer/template-footer.component';
 import { TemplateHeaderComponent } from './_template/template-header/template-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeaderNavComponent } from './_template/header-nav/header-nav.component';
 
 @NgModule({
   declarations: [

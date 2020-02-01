@@ -2,17 +2,16 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreModule, } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireFunctionsModule, FUNCTIONS_REGION } from '@angular/fire/functions';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -30,6 +29,18 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from 'src/environments/environment';
 
+import { VersionHistoryModule } from '../modules/version-history/version-history.module';
+import { SwissDateAdapter } from '../utils/format-datapicker';
+import { AddMealComponent } from './_dialoges/add-meal/add-meal.component';
+import { AddRecipeComponent } from './_dialoges/add-recipe/add-recipe.component';
+import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
+import { CreateMealComponent } from './_dialoges/create-meal/create-meal.component';
+import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.component';
+import { EditDayComponent } from './_dialoges/edit-day/edit-day.component';
+import { ImportComponent } from './_dialoges/import/import.component';
+import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
+import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.component';
+import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
 import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
 import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { DeleteCampComponent } from './_pages/camp-list-page/delete-camp.component';
@@ -42,25 +53,14 @@ import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component'
 import { AuthenticationService } from './_service/authentication.service';
 import { AutoSaveService } from './_service/auto-save.service';
 import { DatabaseService } from './_service/database.service';
-import { AddMealComponent } from './_dialoges/add-meal/add-meal.component';
-import { CreateMealComponent } from './_dialoges/create-meal/create-meal.component';
-import { EditDayComponent } from './_dialoges/edit-day/edit-day.component';
+import { DownloadComponent } from './_template/download/download.component';
 import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
-import { ImportComponent } from './_dialoges/import/import.component';
 import { IngredientFieldComponent } from './_template/ingredient-field/ingredient-field.component';
 import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.component';
 import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
-import { DownloadComponent } from './_template/download/download.component';
-import { VersionHistoryModule } from '../modules/version-history/version-history.module';
-import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
-import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
-import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
-import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.component';
-import { AddRecipeComponent } from './_dialoges/add-recipe/add-recipe.component';
-import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.component';
 
 
 @NgModule({
@@ -99,7 +99,10 @@ import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.c
     AuthenticationService,
     DatabaseService,
     AutoSaveService,
-    { provide: FUNCTIONS_REGION, useValue: 'europe-west1' }
+    SwissDateAdapter,
+    { provide: FUNCTIONS_REGION, useValue: 'europe-west1' },
+    { provide: DateAdapter, useClass: SwissDateAdapter },
+
   ],
   imports: [
     CommonModule,

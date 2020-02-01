@@ -67,11 +67,8 @@ export class Day implements DayData {
   }
 
 
-  public getDateStr(): string {
-    return SettingsService.toString(this.dateAsTypeDate);
-  }
 
-  public getDiscriptionInBracket(): String {
+  public getDiscriptionInBracket(): string {
 
     if (this.description !== '') {
       return '(' + this.description + ')';

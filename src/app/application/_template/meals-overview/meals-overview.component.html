@@ -1,6 +1,6 @@
 <!-- Header of the day -->
 <mat-grid-tile-header>
-  <h4>{{ day.getDateStr() }} {{ day.getDiscriptionInBracket() }}</h4>
+  <h4>{{swissDateAdapter.formatLong(day.dateAsTypeDate) }} {{ day.getDiscriptionInBracket() }}</h4>
   <mat-icon class="edit-day clickable" (click)="editDay(day)" matTooltip="Tag bearbeiten" *ngIf="!hideIcons">edit
   </mat-icon>
 </mat-grid-tile-header>
@@ -12,7 +12,7 @@
   <ng-container *ngFor="let meal of day.meals; let i = index">
 
     <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.participantsWarning}"
-      matTooltip="{{meal.participantsWarning ? 'Geänderte Teilnehmeranzahl!' : ''}}">
+      matTooltip="{{meal.participantsWarning ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.specificId}}">
 
       <div class=" meal-placeholder" *cdkDragPlaceholder> </div>
 
@@ -25,13 +25,15 @@
           routerLink="meals/{{ meal.firestoreElementId }}/{{meal.specificId}}" matTooltip="Rezept bearbeiten">edit
         </mat-icon>
         <mat-icon class="delete-meal-icon meal-icon clickable" *ngIf="!hideIcons"
-          (click)="mealDeleted.emit([meal.firestoreElementId, meal.specificId])" matTooltip="Rezept löschen"> delete
+          (click)="mealDeleted.emit([meal.firestoreElementId, meal.specificId])" matTooltip="Rezept"> delete
         </mat-icon>
       </div>
 
     </div>
 
-    <span *ngIf="i != day.meals.length - 1" class="meal-separator"> * * * * * </span>
+    <span *ngIf="(i != day.meals.length - 1) && visible(meal.specificId)" class="meal-separator">
+      * * * * *
+    </span>
 
   </ng-container>
 

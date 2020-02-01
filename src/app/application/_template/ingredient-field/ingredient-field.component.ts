@@ -12,8 +12,7 @@ export class IngredientFieldComponent<T> implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   valueChanged(event: Event) {
 

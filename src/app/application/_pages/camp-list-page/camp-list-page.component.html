@@ -135,7 +135,8 @@
         <form [formGroup]="newCampDate">
 
           <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date">
+            <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date"
+              data-date-format="DD MMMM YYYY">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
