@@ -1,8 +1,8 @@
-<h4>Aktuelle Mitarbeiter</h4>
+<h4>Mitarbeiter mit Vollzugriff</h4>
 
 <div *ngFor="let owner of (owners | async)" class="user">
   <span> {{owner.displayName}} </span>
 </div>
 
 
-<p class="info">Zur Zeit können Mitarbeiter nicht <br />vom Lager entfehrnt werden.</p>
+<p class="info">Hinzugefügte Mitarbeiter können <br />nicht mehr entfehrnt werden!</p>

@@ -61,6 +61,8 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
+import { MealPrepareComponent } from './_dialoges/meal-prepare/meal-prepare.component';
+import { HelpPageComponent } from './_pages/help-page/help-page.component';
 
 
 @NgModule({
@@ -91,7 +93,9 @@ import { ApplicationRoutingModule } from './application-routing.module';
     MealInfoComponent,
     RecipeInfoComponent,
     AddRecipeComponent,
-    CreateRecipeComponent
+    CreateRecipeComponent,
+    MealPrepareComponent,
+    HelpPageComponent
   ],
   providers: [
     AngularFirestore,
@@ -158,7 +162,8 @@ import { ApplicationRoutingModule } from './application-routing.module';
     MealInfoComponent,
     RecipeInfoComponent,
     AddRecipeComponent,
-    CreateRecipeComponent
+    CreateRecipeComponent,
+    MealPrepareComponent
   ],
   exports: [
     MatTableModule,

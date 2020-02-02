@@ -10,6 +10,7 @@ import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.co
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
+import { HelpPageComponent } from './_pages/help-page/help-page.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: 'camps',
     component: CampListPageComponent
+  },
+  {
+    path: 'hilfe',
+    component: HelpPageComponent
   },
   {
     path: 'meals',

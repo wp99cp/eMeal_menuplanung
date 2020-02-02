@@ -48,7 +48,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
+      active: true,
       description: 'Mitarbeiter verwalten',
       name: 'Mitarbeiter',
       action: (() => this.shareDialog()),

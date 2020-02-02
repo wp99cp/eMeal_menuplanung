@@ -130,7 +130,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
       });
       HeaderNavComponent.addToHeaderNav({
         active: true,
-        description: 'Rezept',
+        description: 'Rezept löschen',
         name: 'Rezept',
         action: (() => this.deleteRecipe()),
         icon: 'delete'

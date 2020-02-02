@@ -2,6 +2,10 @@
 
   <h4>Nutzer hinzufügen</h4>
 
+  <p class="info share-info"><b>Achtung: </b>Die hinzugefügten Nutzer erhalten vollen Zugriff auf das Lager und alle Mahlzeiten und Rezepte.
+    Dadurch können sie deine Mahlzeiten und Rezepte bearbeiten, verändern und ggf. löschen. Dies hat Auswirkungen auf andern
+    Lager/ Mahlzeiten von dir! Diese Aktion kann nicht Rückgängig gemacht werden.</p>
+
   <mat-form-field class="mat-form-field full-width">
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Nach Nutzer suchen">
   </mat-form-field>
@@ -29,7 +33,6 @@
       <td mat-cell *matCellDef="let element"> {{element.email}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
     </tr>
   </table>

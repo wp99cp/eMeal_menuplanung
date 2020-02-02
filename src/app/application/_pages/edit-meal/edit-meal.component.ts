@@ -19,6 +19,7 @@ import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.compon
 import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
 import { Recipe } from '../../_class/recipe';
 import { SettingsService } from '../../_service/settings.service';
+import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.component';
 
 @Component({
   selector: 'app-edit-meal',
@@ -119,6 +120,15 @@ export class EditMealComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'An einem anderen Tag vorbereiten',
+      name: 'Vorbereiten',
+      action: (() => this.prepare()),
+      icon: 'av_timer'
+    });
+
+
+    HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Kommt bald',
       name: 'Export',
@@ -150,6 +160,16 @@ export class EditMealComponent implements OnInit, Saveable {
 
     HeaderNavComponent.turnOff('Speichern');
     this.save();
+
+  }
+
+  public prepare() {
+
+    this.dialog.open(MealPrepareComponent, {
+      height: '618px',
+      width: '1000px',
+      data: {}
+    }).afterClosed();
 
   }
 

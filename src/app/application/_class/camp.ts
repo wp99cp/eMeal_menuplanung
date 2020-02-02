@@ -36,7 +36,7 @@ export class Camp extends FirebaseObject implements FirestoreCamp {
       coworkers.forEach(coworker => {
         const uid = coworker.uid;
         if (ownerUid !== uid) {
-          uidList[uid] = 'editor';
+          uidList[uid] = 'owner';
         }
       });
     }
