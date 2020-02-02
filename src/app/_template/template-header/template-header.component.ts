@@ -14,8 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class TemplateHeaderComponent implements OnInit {
 
 
-  // Standardtitel: Menuplanung für Lager
-  public static title = 'Menuplanung für Lager';
+  // Standardtitel: Menüplanung für Lager
+  public static title = 'Menüplanung für Lager';
   public static path: string[];
   static TemplateHeaderComponent: {};
 
