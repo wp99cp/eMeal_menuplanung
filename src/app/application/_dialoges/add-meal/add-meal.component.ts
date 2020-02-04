@@ -6,27 +6,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 
 import { Meal } from '../../_class/meal';
-import { AccessData } from '../../_interfaces/accessData';
-import { FirestoreMeal } from '../../_interfaces/firestore-meal';
+
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { CreateMealComponent } from '../../_dialoges/create-meal/create-meal.component';
 import { ImportComponent } from '../import/import.component';
-
-export function CustomPaginator() {
-  const customPaginatorIntl = new MatPaginatorIntl();
-  customPaginatorIntl.itemsPerPageLabel = 'Mahlzeiten pro Seite';
-  customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
-
-    length = Math.max(length, 0);
-    const startIndex = (page * pageSize === 0 && length !== 0) ? 1 : (page * pageSize + 1);
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex = Math.min(startIndex - 1 + pageSize, length);
-    return startIndex + ' bis ' + endIndex + ' von ' + length;
-  });
-
-  return customPaginatorIntl;
-}
+import { FirestoreMeal, MealUsage, AccessData } from '../../_interfaces/firestoreDatatypes';
+import { CustomPaginator } from './CustomPaginator';
 
 @Component({
   selector: 'app-add-meal',
@@ -42,16 +28,16 @@ export class AddMealComponent implements AfterViewInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   // Datasource for the table
-  public mealTableSource = new MatTableDataSource<FirestoreMeal>();
+  public mealTableSource = new MatTableDataSource<Meal>();
 
   // only use for the mat table
   public readonly displayedColumns: string[] = ['select', 'name', 'description', 'useAs'];
 
   // Selected Meals form the table
-  public selectedMeal = new SelectionModel<FirestoreMeal>(true, []);
+  public selectedMeal = new SelectionModel<Meal>(true, []);
 
   /** Constructor */
-  constructor(private databaseService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) {
+  constructor(private dbService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) {
 
     this.mealTableSource = new MatTableDataSource();
 
@@ -71,9 +57,9 @@ export class AddMealComponent implements AfterViewInit {
       }
     };
 
-    this.databaseService.getEditableMeals().subscribe((meals: FirestoreMeal[]) => {
+    this.dbService.getEditableMeals().subscribe((meals: Meal[]) => {
       meals.forEach(meal => meal.usedAs = meal.lastMeal);
-      this.mealTableSource.data = (meals);
+      this.mealTableSource.data = meals;
     });
 
     this.mealTableSource.paginator = this.paginator;
@@ -92,21 +78,21 @@ export class AddMealComponent implements AfterViewInit {
   masterToggle() {
     this.isAllSelected() ?
       this.selectedMeal.clear() :
-      this.mealTableSource.data.forEach(user => this.selectedMeal.select(user));
+      this.mealTableSource.data.forEach(meal => this.selectedMeal.select(meal));
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(user?: FirestoreMeal): string {
-    if (!user) {
+  checkboxLabel(meal?: Meal): string {
+    if (!meal) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selectedMeal.isSelected(user) ? 'deselect' : 'select'} row ${user.name}`;
+    return `${this.selectedMeal.isSelected(meal) ? 'deselect' : 'select'} row ${meal.name}`;
   }
 
   /** Set usedAs parameter to firestoreMeal */
-  selected(firestoreMeal: FirestoreMeal, usedAs: string) {
+  selected(meal: Meal, usedAs: MealUsage) {
 
-    firestoreMeal.usedAs = usedAs;
+    meal.usedAs = usedAs;
 
   }
 
@@ -118,11 +104,12 @@ export class AddMealComponent implements AfterViewInit {
 
     this.mealTableSource.data.forEach(meal => {
 
-      if (meal.usedAs && meal.firestoreElementId) {
-        const mealObj = new Meal(meal, meal.firestoreElementId, null);
-        mealObj.lastMeal = meal.usedAs;
-        this.databaseService.updateDocument(mealObj.extractDataToJSON(), Meal.getPath(meal.firestoreElementId));
+      if (meal.usedAs && meal.documentId) {
+
+        meal.lastMeal = meal.usedAs;
+        this.dbService.updateDocument(meal);
       }
+
     });
 
   }
@@ -139,7 +126,7 @@ export class AddMealComponent implements AfterViewInit {
 
     }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
 
-      meal.subscribe(mealData => this.databaseService.addDocument(mealData, 'meals'));
+      meal.subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
 
       this.setFocusToSeachField();
 
@@ -154,11 +141,11 @@ export class AddMealComponent implements AfterViewInit {
 
 
   applyFilter(filterValue: string) {
-    this.mealTableSource.filterPredicate = (meal: FirestoreMeal, filter: string) =>
+    this.mealTableSource.filterPredicate = (meal: Meal, filter: string) =>
       // Condition for the filter
       meal.name.trim().toLowerCase().includes(filter) ||
       meal.description.trim().toLowerCase().includes(filter) ||
-      (meal.keywords !== undefined && meal.keywords.trim().toLowerCase().includes(filter)) ||
+      (meal.keywords !== undefined && meal.keywords.includes(filter)) ||
       (meal.lastMeal !== undefined && meal.lastMeal.trim().toLowerCase().includes(filter));
 
     // apply filter to the table
@@ -179,18 +166,18 @@ export class AddMealComponent implements AfterViewInit {
 
         this.authService.getCurrentUser().subscribe(user => {
 
-          const document = result.extractDataToJSON();
+          const document = result.toFirestoreDocument();
           const access: AccessData = { [user.uid as string]: 'owner' };
           document.access = access;
-          this.databaseService.addDocument(document, 'meals').then(doc => {
+          this.dbService.addDocument(document, 'meals').then(doc => {
 
             result.recipes.subscribe(recipes => {
 
               recipes.forEach(recipe => {
 
-                const recipeData = recipe.extractDataToJSON();
+                const recipeData = recipe.toFirestoreDocument();
                 recipeData.access = access;
-                this.databaseService.addDocument(recipeData, 'meals/' + doc.id + '/recipes');
+                this.dbService.addDocument(recipeData, 'meals/' + doc.id + '/recipes');
 
               });
             });

@@ -31,6 +31,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     public dialog: MatDialog,
     public snackBar: MatSnackBar) {
 
+    // Ladet das Lager von der URL
     this.camp = this.route.url.pipe(mergeMap(
       url => this.databaseService.getCampById(url[1].path)
     ));
@@ -67,11 +68,15 @@ export class EditCampPageComponent implements OnInit, Saveable {
   }
 
 
-  // save on destroy
   public async save(): Promise<boolean> {
 
     let saved = false;
 
+    // Das Lager selbst hat keine Änderunge zu speichern
+    // Aber in der Wochenübersicht können offene
+    // Änderungen bestehen
+
+    // Speichert die Wochenübersicht
     this.weekViews.forEach(async weekView => {
       saved = await weekView.save();
     });
@@ -110,26 +115,34 @@ export class EditCampPageComponent implements OnInit, Saveable {
   }
 
 
+  /**
+   * Öffnet den Share-Dialog für das Lager
+   *
+   */
   public shareDialog() {
 
-    this.camp
-      .pipe(take(1))
+    this.camp.pipe(take(1))
       .pipe(mergeMap(camp =>
         this.dialog.open(ShareDialogComponent, {
           height: '618px',
           width: '1000px',
           data: { camp }
         }).afterClosed()
-      ))
-      .subscribe((camp) => this.saveCamp(camp));
+
+      )).subscribe((camp) =>
+        this.saveCamp(camp)
+      );
 
   }
 
-  /** Save and reset the form */
+  /**
+   * Save the camp
+   *
+   */
   public saveCamp(camp: Camp) {
 
     this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
-    this.databaseService.updateDocument(camp.extractDataToJSON(), camp.getDocPath());
+    this.databaseService.updateDocument(camp);
 
   }
 

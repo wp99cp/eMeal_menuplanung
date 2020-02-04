@@ -1,11 +1,12 @@
-<ng-container *ngIf="camp | async; let $camp; else: loadingCamps">
+<ng-container *ngIf="(camp | async) as camp; else loadingCamps">
 
-  <span class="big-page-title">{{$camp.name}}</span>
+  <span class="big-page-title">{{camp.name}}</span>
 
-  <p><b>Anzahl Teilnehmende:</b> {{$camp.participants}} Per. (davon Vegis: {{$camp.vegetarier}} Per.)</p>
+  <p><b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
+    {{camp.leaders}} Per.)</p>
 
   <!-- Week Overview -->
-  <app-week-view [camp]="$camp"></app-week-view>
+  <app-week-view [camp]="camp"></app-week-view>
 
 </ng-container>
 
@@ -13,10 +14,4 @@
 <ng-template #loadingCamps>
   <span class="page-title"></span>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-
-
-  <!--
-     <span class="big-page-title loading-green"></span>
-     <span class="loading-gray"></span>
-  -->
 </ng-template>

@@ -4,9 +4,9 @@ import { MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, mergeMap } from 'rxjs/operators';
 
-import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+import { FirestoreUser } from '../../_interfaces/firestoreDatatypes';
 
 
 
@@ -17,11 +17,11 @@ import { DatabaseService } from '../../_service/database.service';
 })
 export class UserListComponent implements OnInit {
 
-  @Output() afterSelection = new EventEmitter<User[]>();
+  @Output() afterSelection = new EventEmitter<FirestoreUser[]>();
 
-  public selection = new SelectionModel<User>(true, []);
+  public selection = new SelectionModel<FirestoreUser>(true, []);
   public displayedColumns: string[] = ['select', 'displayName', 'email'];
-  public userList = new MatTableDataSource<User>();
+  public userList = new MatTableDataSource<FirestoreUser>();
 
   constructor(private dbService: DatabaseService, private authService: AuthenticationService, public snackBar: MatSnackBar) { }
 
@@ -29,9 +29,9 @@ export class UserListComponent implements OnInit {
 
     this.dbService.getVisibleUsers()
       .pipe(this.removeCurrentUser())
-      .subscribe((users: User[]) => {
+      .subscribe((users: FirestoreUser[]) => {
 
-        this.userList = new MatTableDataSource<User>(users);
+        this.userList = new MatTableDataSource<FirestoreUser>(users);
         this.userList.filterPredicate = this.userFilterPredicate();
         this.userList.filter = 'NO-NAME';
 
@@ -41,9 +41,9 @@ export class UserListComponent implements OnInit {
 
 
 
-  private userFilterPredicate(): (data: User, filter: string) => boolean {
+  private userFilterPredicate(): (data: FirestoreUser, filter: string) => boolean {
 
-    return (user: User, filter: string) =>
+    return (user: FirestoreUser, filter: string) =>
       // Condition for the filter
       (filter.trim().length >= 3 && user.displayName.trim().toLowerCase().includes(filter))
       || this.selection.isSelected(user);
@@ -52,7 +52,7 @@ export class UserListComponent implements OnInit {
 
   private removeCurrentUser() {
 
-    return mergeMap((users: User[]) => this.authService.getCurrentUser()
+    return mergeMap((users: FirestoreUser[]) => this.authService.getCurrentUser()
       .pipe(map(currentUser => users.filter(user => user.uid !== currentUser.uid))));
 
   }
@@ -85,7 +85,7 @@ export class UserListComponent implements OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(user?: User): string {
+  checkboxLabel(user?: FirestoreUser): string {
     if (!user) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Meal } from '../../_class/meal';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { DatabaseService } from '../../_service/database.service';
-import { FirestoreMeal } from '../../_interfaces/firestore-meal';
-import { RawMealData, ErrorOnImport } from '../../_interfaces/rawMealData';
-import { Recipe } from '../../_class/recipe';
-import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { of } from 'rxjs';
-import { Ingredient } from '../../_interfaces/ingredient';
+
+import { Meal } from '../../_class/meal';
+import { Recipe } from '../../_class/recipe';
+import { ErrorOnImport, RawMealData } from '../../_interfaces/rawMealData';
+import { DatabaseService } from '../../_service/database.service';
+import { Ingredient, FirestoreRecipe, FirestoreMeal } from '../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-import',
@@ -42,6 +41,7 @@ export class ImportComponent implements OnInit {
 
   createMeal(rawMealData: RawMealData | ErrorOnImport) {
 
+    /*
     if ((rawMealData as ErrorOnImport).error) {
       console.log('Falsche URL');
       return;
@@ -51,11 +51,11 @@ export class ImportComponent implements OnInit {
 
     const mealData: FirestoreMeal = {
 
-      name: newRawMealData.title,
-      description: newRawMealData.notes
+      meal_name: newRawMealData.title,
+      meal_description: newRawMealData.notes
 
     };
-    this.meal = new Meal(mealData, '');
+    this.meal = new Meal(mealData, '', '');
 
     const recipes: Recipe[] = [];
 
@@ -83,18 +83,20 @@ export class ImportComponent implements OnInit {
         meals: []
 
       };
-      const recipe = new Recipe(recipeData, '', '', null);
+      const recipe = new Recipe(recipeData, '', null);
       recipes.push(recipe);
 
     });
 
     this.meal.recipes = of(recipes);
 
-    this.mealStr = JSON.stringify(this.meal.extractDataToJSON());
-    recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.extractDataToJSON()));
+    this.mealStr = JSON.stringify(this.meal.toFirestoreDocument());
+    recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.toFirestoreDocument()));
 
     this.readyForImport = true;
 
+    */
+    console.error('TODO');
   }
 
 }

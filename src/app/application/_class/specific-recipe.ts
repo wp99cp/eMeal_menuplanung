@@ -1,75 +1,57 @@
-import { FirestoreSpecificRecipe, VegiStates } from '../_interfaces/firestore-specific-recipe';
-import { FirebaseObject } from './firebaseObject';
+import { FirestoreSpecificRecipe, UserGroups } from '../_interfaces/firestoreDatatypes';
+import { FirestoreObject, ExportableObject } from './firebaseObject';
 import { Recipe } from './recipe';
 
-export class SpecificRecipe extends FirebaseObject implements FirestoreSpecificRecipe {
+export class SpecificRecipe extends FirestoreObject implements ExportableObject {
 
+  public readonly path: string;
+  public readonly documentId: string;
 
   public campId: string;
 
-  public vegi: VegiStates;
+  public vegi: UserGroups;
   public participants: number;
   public overrideParticipants = false;
-  protected firestorePath: string;
-  public firestoreElementId: string;
-  public specificMealId: string;
 
+  public static createEmptySpecificRecipe(campId: string) {
 
-  public static getCollectionPath(mealId: string, recipeId: string) {
-    return Recipe.getPath(recipeId) + '/specificRecipes/';
-  }
+    const specificRecipe = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificRecipe;
 
-  public static getPath(mealId: string, recipeId: string, specificMealId: string) {
-    return SpecificRecipe.getCollectionPath(mealId, recipeId) + specificMealId;
-  }
-
-  public static createEmptySpecificRecipe(campId: string, specificMealId: string) {
-
-    const specificRecipe: FirestoreSpecificRecipe = {
-      participants: 1,
-      campId,
-      overrideParticipants: false,
-      specificMealId,
-      vegi: 'all'
-    };
+    specificRecipe.recipe_participants = 1;
+    specificRecipe.used_in_camp = campId;
+    specificRecipe.recipe_override_participants = false;
+    specificRecipe.recipe_used_for = 'all';
 
     return specificRecipe;
+
   }
 
   constructor(data: FirestoreSpecificRecipe, path: string) {
 
-    super();
+    super(data);
 
-    this.firestorePath = path.substring(0, path.lastIndexOf('/'));
-    this.firestoreElementId = path.substring(path.lastIndexOf('/'));
+    this.path = path;
+    this.documentId = path.substring(path.lastIndexOf('/') + 1);
 
-    this.specificMealId = data.specificMealId;
+    this.participants = data.recipe_participants;
+    this.campId = data.used_in_camp;
 
-    this.participants = data.participants;
-    this.campId = data.campId;
+    this.vegi = data.recipe_used_for;
+    this.overrideParticipants = data.recipe_override_participants;
 
-    if (data.vegi !== undefined) {
-      this.vegi = data.vegi;
-    } else {
-      this.vegi = 'all';
-    }
-
-    if (data.overrideParticipants !== undefined) {
-      this.overrideParticipants = data.overrideParticipants;
-    }
 
   }
 
-  public extractDataToJSON(): FirestoreSpecificRecipe {
+  public toFirestoreDocument(): FirestoreSpecificRecipe {
 
-    return {
-      participants: this.participants,
-      campId: this.campId,
-      overrideParticipants: this.overrideParticipants,
-      specificMealId: this.specificMealId,
-      vegi: this.vegi
-    };
+    const recipe = super.toFirestoreDocument() as FirestoreSpecificRecipe;
 
+    recipe.recipe_participants = this.participants;
+    recipe.used_in_camp = this.campId;
+    recipe.recipe_override_participants = this.overrideParticipants;
+    recipe.recipe_used_for = this.vegi;
+
+    return recipe;
   }
 
 

@@ -1,3 +1,4 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
@@ -6,20 +7,18 @@ import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
-import { SelectionModel } from '@angular/cdk/collections';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
+import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.component';
 import { MealInfoComponent } from '../../_dialoges/meal-info/meal-info.component';
+import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
-import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
-import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.component';
-import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
-import { Recipe } from '../../_class/recipe';
 import { SettingsService } from '../../_service/settings.service';
-import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.component';
+import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
 
 @Component({
   selector: 'app-edit-meal',
@@ -165,11 +164,22 @@ export class EditMealComponent implements OnInit, Saveable {
 
   public prepare() {
 
-    this.dialog.open(MealPrepareComponent, {
-      height: '618px',
-      width: '1000px',
-      data: {}
-    }).afterClosed();
+    this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal =>
+
+      this.dialog.open(MealPrepareComponent, {
+        height: '618px',
+        width: '1000px',
+        data: { specificMeal }
+      }).afterClosed()
+
+    )).subscribe((specificMeal: SpecificMeal) => {
+
+      if (specificMeal != null) {
+        this.databaseService.updateDocument(specificMeal);
+      }
+
+    });
+
 
   }
 
@@ -183,8 +193,8 @@ export class EditMealComponent implements OnInit, Saveable {
         this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal => {
 
           // Speichern der noch offenen Änderungen
-          this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
-          this.databaseService.updateDocument(specificMeal.extractDataToJSON(), specificMeal.getDocPath());
+          this.databaseService.updateDocument(meal);
+          this.databaseService.updateDocument(specificMeal);
 
           // Dialog öffnen
           return this.dialog.open(MealInfoComponent, {
@@ -198,8 +208,8 @@ export class EditMealComponent implements OnInit, Saveable {
     )).subscribe(([mealResponse, specificMealResponse]: [Meal, SpecificMeal]) => {
 
       // Speichern der geänderten Daten im Dialog-Fenster
-      this.databaseService.updateDocument(mealResponse.extractDataToJSON(), mealResponse.getDocPath());
-      this.databaseService.updateDocument(specificMealResponse.extractDataToJSON(), specificMealResponse.getDocPath());
+      this.databaseService.updateDocument(mealResponse);
+      this.databaseService.updateDocument(specificMealResponse);
 
     });
 
@@ -230,7 +240,7 @@ export class EditMealComponent implements OnInit, Saveable {
     const mealSubs = this.meal.subscribe(meal => {
 
 
-      this.databaseService.updateDocument(meal.extractDataToJSON(), meal.getDocPath());
+      this.databaseService.updateDocument(meal);
 
       // reset: deactivate save button
       mealSubs.unsubscribe();
@@ -270,7 +280,7 @@ export class EditMealComponent implements OnInit, Saveable {
       }).afterClosed().subscribe((results: SelectionModel<Recipe>) => {
 
         if (results) {
-          results.selected.forEach(recipe => this.databaseService.addRecipe(recipe.firestoreElementId, mealId));
+          results.selected.forEach(recipe => this.databaseService.addRecipe(recipe.documentId, mealId));
         }
 
       })

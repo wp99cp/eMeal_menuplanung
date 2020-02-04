@@ -8,7 +8,7 @@ import { DatabaseService } from '../../_service/database.service';
 import { Recipe } from '../../_class/recipe';
 import { CreateRecipeComponent } from '../create-recipe/create-recipe.component';
 import { Observable } from 'rxjs';
-import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
+import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();

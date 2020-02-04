@@ -1,4 +1,4 @@
-import { Ingredient } from './ingredient';
+import { Ingredient } from './firestoreDatatypes';
 
 export interface RawMealData {
 

@@ -25,7 +25,7 @@ export class CampInfoComponent {
       name: this.camp.name,
       description: this.camp.description,
       participants: this.camp.participants,
-      vegetarier: this.camp.vegetarier ? this.camp.vegetarier : 0
+      vegetarier: this.camp.vegetarians ? this.camp.vegetarians : 0
     });
 
   }
@@ -35,7 +35,7 @@ export class CampInfoComponent {
     this.camp.name = this.campInfosForm.value.name;
     this.camp.description = this.campInfosForm.value.description;
     this.camp.participants = this.campInfosForm.value.participants;
-    this.camp.vegetarier = this.campInfosForm.value.vegetarier;
+    this.camp.vegetarians = this.campInfosForm.value.vegetarier;
 
     return this.camp;
   }

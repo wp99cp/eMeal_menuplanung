@@ -1,37 +1,26 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator, MatPaginatorIntl, MatSort, DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
+import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { MatTableDataSource } from '@angular/material/table';
 import { firestore } from 'firebase';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
-import { AccessData } from '../../_interfaces/accessData';
-import { FirestoreCamp } from '../../_interfaces/firestore-camp';
+import { FirestoreObject } from '../../_class/firebaseObject';
+import { DeleteCampComponent } from '../../_dialoges/delete-camp/delete-camp.component';
+import { AccessData, FirestoreCamp } from '../../_interfaces/firestoreDatatypes';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { DeleteCampComponent } from './delete-camp.component';
-import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
+import { customPaginator } from './customPaginator';
 
-export function customPaginator() {
-  const customPaginatorIntl = new MatPaginatorIntl();
-  customPaginatorIntl.itemsPerPageLabel = 'Lager pro Seite';
-  customPaginatorIntl.getRangeLabel = ((page: number, pageSize: number, length: number) => {
-
-    length = Math.max(length, 0);
-    const startIndex = (page * pageSize === 0 && length !== 0) ? 1 : (page * pageSize + 1);
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex = Math.min(startIndex - 1 + pageSize, length);
-    return startIndex + ' bis ' + endIndex + ' von ' + length;
-  });
-
-  return customPaginatorIntl;
-}
-
+/**
+ * CampListPageComponent
+ *
+ * Page with a list of all editableCamps
+ *
+ */
 @Component({
   selector: 'app-camp-list-page',
   templateUrl: './camp-list-page.component.html',
@@ -42,7 +31,6 @@ export function customPaginator() {
 export class CampListPageComponent implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   // Datasource and colums for the table
@@ -66,39 +54,24 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
     this.dataSource = new MatTableDataSource();
 
-
-    // Create new camp; data form form
-    // Here you can defind defaults values for the form fields
-    this.newCampInfos = this.formBuilder.group({
-      name: '',
-      description: '',
-    });
-
-    this.newCampParticipants = this.formBuilder.group({
-      participants: ''
-    });
-
-    this.newCampDate = this.formBuilder.group({
-      date: ''
-    });
-
-    auth.getCurrentUser().pipe(map(user => {
-      const accessData: AccessData = { [user.uid]: 'owner' };
-      return accessData;
-    })).subscribe(access => { this.access = access; });
-
-  }
-
-  ngOnInit() {
-
-    this.setHeaderInfo();
-    this.camps = this.databaseService.getEditableCamps();
+    // create default values for addCampForms
+    this.newCampInfos = this.formBuilder.group({ name: '', description: '', });
+    this.newCampParticipants = this.formBuilder.group({ participants: '' });
+    this.newCampDate = this.formBuilder.group({ date: '' });
 
   }
 
   /**
+   * Loads the editableCamps from the database.
    *
    */
+  ngOnInit() {
+
+    this.camps = this.databaseService.getEditableCamps();
+
+  }
+
+
   ngAfterViewInit() {
 
     // Update MatTableDataSource
@@ -106,7 +79,18 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
 
     // Eigenschaft für die Sortierung
-    this.dataSource.sortingDataAccessor = (item, property) => {
+    this.dataSource.sortingDataAccessor = this.sortingAccessor();
+
+    // updates the dataSource
+    this.camps.subscribe(camps => this.dataSource.data = camps);
+
+  }
+
+
+
+  private sortingAccessor(): (data: Camp, sortHeaderId: string) => string | number {
+
+    return (item, property) => {
       switch (property) {
         case 'name': return item.name.toLowerCase();
         case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
@@ -115,83 +99,57 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
       }
     };
 
-    this.camps.subscribe(camps => {
-      this.dataSource.data = camps;
+  }
+
+  /**
+   * Creates a new Camp
+   *
+   */
+  public createCamp(campCreator: MatStepper) {
+
+    this.auth.getCurrentUser().subscribe(user => {
+
+      const date = new Date(this.newCampDate.value.date);
+
+      // creates empty document
+      const campData = FirestoreObject.exportEmptyDocument(user.uid) as FirestoreCamp;
+
+      campData.camp_name = this.newCampInfos.value.name;
+      campData.camp_description = this.newCampInfos.value.description;
+      campData.camp_year = date.toLocaleDateString('de-CH', { year: 'numeric' });
+      campData.days = [{ day_date: firestore.Timestamp.fromDate(date), day_description: '' }];
+      campData.camp_participants = this.newCampParticipants.value.participants;
+      campData.camp_vegetarians = 0;
+      campData.camp_leaders = 0;
+
+      // Creates a new Camp and resets form
+      this.databaseService.addDocument(campData, 'camps')
+        .then(() => campCreator.reset());
+
     });
 
   }
 
-
-
-  /** setzt die HeaderInfos für die aktuelle Seite */
-  private setHeaderInfo(): void {
-
-    Header.title = 'Meine Lager';
-    Header.path = ['Startseite', 'meine Lager'];
-
-  }
-
   /**
-   * Creats a new Camp
+   * Deletes the selected camp
+   *
    */
-  createCamp(campCreator: MatStepper) {
-
-
-    const date = new Date(this.newCampDate.value.date);
-
-    // combinde data
-    const campData: FirestoreCamp = {
-      name: this.newCampInfos.value.name,
-      description: this.newCampInfos.value.description,
-      access: this.access,
-      year: date.toLocaleDateString('de-CH', { year: 'numeric' }),
-      days: [{
-        date: firestore.Timestamp.fromDate(date),
-        meals: [],
-        description: ''
-      }],
-      participants: this.newCampParticipants.value.participants,
-      vegetarier: 0
-    };
-
-    // Creates a new Camp
-    this.databaseService.addDocument(campData, 'camps')
-
-      // reset form
-      .then(() => campCreator.reset());
-
-
-  }
-
-  /** A user get selected */
-  selectUser(selectedCoworkers) {
-
-    this.auth.getCurrentUser().pipe(map(user => {
-      const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
-      accessData[user.uid] = 'owner';
-      return accessData;
-    })).subscribe(access => { this.access = access; });
-
-  }
-
-  /**
-   * Deletes a selected camp
-   */
-  deleteCamp(camp: Camp) {
+  public deleteCamp(camp: Camp) {
 
     this.dialog.open(DeleteCampComponent, {
       height: '400px',
       width: '560px',
       data: { name: camp.name }
-    }).afterClosed().subscribe(deleteConfirmed => {
+    }).afterClosed()
+      .subscribe(deleteConfirmed => {
 
-      if (deleteConfirmed) {
+        if (deleteConfirmed) {
 
-        this.databaseService.deleteCamp(camp);
+          this.databaseService.deleteDocument(camp);
 
-      }
+        }
 
-    });
+      });
 
   }
 

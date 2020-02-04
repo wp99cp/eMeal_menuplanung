@@ -4,9 +4,29 @@
   <p class="info">Mahlzeiten können an einem anderen Tag vorbereitet werden.<br />
     Die Zutaten werden in diesem Fall bereits am Tag der Vorbereitung aufgeführt.
   </p>
+
+  <p *ngIf="prepareForm.value.hasPrepareDate">Die Mahlzeit wird am
+    {{swissDateAdapter.format(prepareForm.value.prepareDate)}} vorbereitet.
+  </p>
+  <p *ngIf="!prepareForm.value.hasPrepareDate">Die Mahlzeit muss nicht vorbereitet werden.</p>
+
+  <form [formGroup]="prepareForm">
+
+    <mat-checkbox formControlName="hasPrepareDate" class="checkbox">
+      Mahlzeit an einem anderen Tag vorbereiten.
+    </mat-checkbox>
+
+    <mat-form-field class="full-width" *ngIf="prepareForm.value.hasPrepareDate">
+      <input matInput [matDatepicker]="picker" placeholder="Vorbereitungsdatum" formControlName="prepareDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+  </form>
+
 </div>
 
 <div mat-dialog-actions class="mat-buttons">
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="null" color="save">Speichern</button>
+  <button mat-raised-button [mat-dialog-close]="returnsSpecificMeal()" color="save">Speichern</button>
 </div>

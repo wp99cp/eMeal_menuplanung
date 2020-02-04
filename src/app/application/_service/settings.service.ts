@@ -1,4 +1,4 @@
-import { VegiStates } from '../_interfaces/firestore-specific-recipe';
+import { UserGroups } from '../_interfaces/firestoreDatatypes';
 
 
 export class InvalidArgumentException extends Error { }
@@ -41,9 +41,9 @@ export class SettingsService {
     recipePart: number,
     mealOver: boolean,
     recipeOver: boolean,
-    vegiState: VegiStates) {
+    vegiState: UserGroups) {
 
-    if (vegiState === 'vegiOnly') {
+    if (vegiState === 'vegetarians') {
 
       return campVegis;
     }
@@ -51,7 +51,7 @@ export class SettingsService {
     const calcMealPart = SettingsService.calcMealParticipants(campPart, mealPart, mealOver);
     const calcRecipePart = recipeOver ? recipePart : calcMealPart;
 
-    if (vegiState === 'nonVegi') {
+    if (vegiState === 'non-vegetarians') {
 
       return calcRecipePart - campVegis;
 

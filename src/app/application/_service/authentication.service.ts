@@ -5,8 +5,8 @@ import * as firebase from 'firebase';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { User } from '../_interfaces/user';
 import { MainMenuComponent } from 'src/app/_template/main-menu/main-menu.component';
+import { FirestoreUser, AccessData } from '../_interfaces/firestoreDatatypes';
 
 
 @Injectable({
@@ -25,7 +25,22 @@ export class AuthenticationService {
   private signInSubscription: Subscription;
 
 
+  public static generateCoworkersList(ownerUid: string, coworkers: firebase.User[]): AccessData {
 
+    const uidList: AccessData = {};
+
+    if (coworkers !== undefined) {
+      coworkers.forEach(coworker => {
+        const uid = coworker.uid;
+        if (ownerUid !== uid) {
+          uidList[uid] = 'owner';
+        }
+      });
+    }
+
+    return uidList;
+
+  }
 
   constructor(public fireAuth: AngularFireAuth, private router: Router) { }
 
@@ -49,13 +64,9 @@ export class AuthenticationService {
 
 
   /** Returns the current User of the database  */
-  public getCurrentUser(): Observable<User> {
+  public getCurrentUser(): Observable<firebase.User> {
 
-    return this.fireAuth.authState.pipe(
-      map((userData) => {
-        return { displayName: userData.displayName, uid: userData.uid, email: userData.email };
-      })
-    );
+    return this.fireAuth.authState;
 
   }
 

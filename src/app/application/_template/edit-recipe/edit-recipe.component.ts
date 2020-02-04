@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, OnChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,11 +10,10 @@ import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { SpecificRecipe } from '../../_class/specific-recipe';
 import { RecipeInfoComponent } from '../../_dialoges/recipe-info/recipe-info.component';
-import { Ingredient } from '../../_interfaces/ingredient';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
-import { of } from 'rxjs';
 import { SettingsService } from '../../_service/settings.service';
+import { Ingredient } from '../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -85,7 +84,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     this.mealPart = SettingsService.calcRecipeParticipants(
       this.camp.participants,
-      this.camp.vegetarier,
+      this.camp.vegetarians,
       this.specificMeal.participants,
       this.specificRecipe.participants,
       this.specificMeal.overrideParticipants,
@@ -147,8 +146,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
       data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe: this.specificRecipe }
     }).afterClosed().subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
 
-      this.databaseService.updateDocument(recipe.extractDataToJSON(), recipe.getDocPath());
-      this.databaseService.updateDocument(specificRecipe.extractDataToJSON(), specificRecipe.getDocPath());
+      this.databaseService.updateDocument(recipe);
+      this.databaseService.updateDocument(specificRecipe);
 
     });
 
@@ -200,20 +199,20 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     this.saveOthers.emit(true);
 
 
-    document.getElementById(this.specificRecipe.firestoreElementId).classList.add('hidden');
+    document.getElementById(this.specificRecipe.documentId).classList.add('hidden');
 
     const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
 
     let canDelete = true;
     snackBar.onAction().subscribe(() => {
       canDelete = false;
-      document.getElementById(this.specificRecipe.firestoreElementId).classList.toggle('hidden');
+      document.getElementById(this.specificRecipe.documentId).classList.toggle('hidden');
 
     });
     snackBar.afterDismissed().subscribe(() => {
 
       if (canDelete) {
-        this.databaseService.removeRecipe(this.meal.firestoreElementId, this.recipe.firestoreElementId);
+        this.databaseService.removeRecipe(this.meal.documentId, this.recipe.documentId);
       }
 
     });
@@ -373,8 +372,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     switch (this.specificRecipe.vegi) {
 
-      case 'nonVegi': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
-      case 'vegiOnly': return 'nur für Vegis (' + this.mealPart + ' P.)';
+      case 'non-vegetarians': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
+      case 'vegetarians': return 'nur für Vegis (' + this.mealPart + ' P.)';
       default: return 'für ' + this.mealPart + ' Personen';
 
 
@@ -387,8 +386,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     this.recipe.notes = this.recipeForm.value.notes;
 
 
-    this.databaseService.updateDocument(this.recipe.extractDataToJSON(), this.recipe.getDocPath());
-    this.databaseService.updateDocument(this.specificRecipe.extractDataToJSON(), this.specificRecipe.getDocPath());
+    this.databaseService.updateDocument(this.recipe);
+    this.databaseService.updateDocument(this.specificRecipe);
 
     // reset: deactivate save button
     this.recipeForm.markAsUntouched();

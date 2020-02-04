@@ -1,100 +1,86 @@
-import { AccessData } from '../_interfaces/accessData';
-import { FirestoreCamp } from '../_interfaces/firestore-camp';
-import { User } from '../_interfaces/user';
+import { FirestoreCamp } from '../_interfaces/firestoreDatatypes';
+import { DatabaseService } from '../_service/database.service';
 import { Day } from './day';
-import { FirebaseObject } from './firebaseObject';
+import { ExportableObject, FirestoreObject } from './firebaseObject';
 
+/**
+ * Repräsentiert ein Lager.
+ *
+ * Object Typ zu FirestoreCamp
+ *
+ */
+export class Camp extends FirestoreObject implements ExportableObject {
 
-export class Camp extends FirebaseObject implements FirestoreCamp {
-
-  public static readonly CAMPS_DIRECTORY = 'camps/';
-  protected readonly firestorePath = Camp.CAMPS_DIRECTORY;
+  public readonly path: string;
+  public readonly documentId: string;
 
   // fields of a camp
   public name: string;
   public description: string;
   public participants: number;
   public year: string;
-  public access: AccessData;
+  public vegetarians: number;
+  public leaders: number;
+
+  // Data of the days
   public days: Day[] = [];
-  public readonly firestoreElementId: string;
-  public vegetarier: number;
 
-  public static getCollectionPath(): string {
-    return 'camps/';
-  }
+  constructor(firestoreCamp: FirestoreCamp, path: string) {
 
-  public static getPath(campId: string): string {
-    return Camp.getCollectionPath() + campId;
-  }
+    super(firestoreCamp);
 
-  static generateCoworkersList(ownerUid: string, coworkers: User[]): AccessData {
+    // set path and document id
+    this.documentId = path.substring(path.lastIndexOf('/') + 1);
+    this.path = path;
 
-    const uidList: AccessData = {};
+    this.description = firestoreCamp.camp_description;
+    this.name = firestoreCamp.camp_name;
+    this.participants = firestoreCamp.camp_participants;
+    this.year = firestoreCamp.camp_year;
+    this.vegetarians = firestoreCamp.camp_vegetarians;
+    this.leaders = firestoreCamp.camp_leaders;
 
-    if (coworkers !== undefined) {
-      coworkers.forEach(coworker => {
-        const uid = coworker.uid;
-        if (ownerUid !== uid) {
-          uidList[uid] = 'owner';
-        }
-      });
+    // ladet die Daten der Tage
+    for (const dayData of firestoreCamp.days) {
+
+      this.days.push(new Day(dayData, this.documentId));
     }
 
-    return uidList;
+    // Sortiert die Tage aufsetigend
+    this.days.sort((a, b) => a.dateAsTypeDate.getTime() - b.dateAsTypeDate.getTime());
 
   }
 
-  constructor(data: FirestoreCamp, campId: string) {
+  /**
+   * Ladet die Mahlzeiten des Lagers.
+   * Das Lager wird im Normalfall ohne
+   * die Mahlzeitdaten geladen. Diese müssen
+   * mit dieser Funktion nachgeladen werden.
+   *
+   */
+  public loadMeals(dbService: DatabaseService) {
 
-    super();
-
-    this.firestoreElementId = campId;
-    this.description = data.description;
-    this.name = data.name;
-    this.participants = data.participants;
-    this.year = data.year;
-    this.access = data.access;
-    this.vegetarier = data.vegetarier;
-
-    if (data.days) {
-
-      for (const dayData of data.days) {
-        this.days.push(new Day(dayData, this));
-      }
-
-      // Sortiert die Tage aufsetigend
-      this.days.sort((a, b) => a.dateAsTypeDate.getTime() - b.dateAsTypeDate.getTime());
-
-    }
+    this.days.forEach(day => day.loadMeals(dbService));
 
   }
 
-  // doc on mother class
-  public extractDataToJSON(): FirestoreCamp {
+  public toFirestoreDocument(): FirestoreCamp {
 
-    return {
-      name: this.name,
-      description: this.description,
-      year: this.year,
-      participants: (this.participants as number),
-      days: this.days.map(day => day.extractDataToJSON()),
-      access: this.access,
-      vegetarier: (this.vegetarier as number)
-    };
+    const camp = super.toFirestoreDocument() as FirestoreCamp;
 
-  }
+    camp.camp_name = this.name;
+    camp.camp_description = this.description;
+    camp.camp_year = this.year;
 
-  public async removeMeal(specificMealId: string): Promise<void> {
+    camp.camp_participants = this.participants;
+    camp.camp_vegetarians = this.vegetarians;
+    camp.camp_leaders = this.leaders;
 
-    for (const day of this.days) {
-      for (const meal of day.meals) {
-        if (meal.specificId === specificMealId) {
-          await day.meals.splice(day.meals.indexOf(meal), 1);
-        }
-      }
-    }
+    camp.days = this.days.map(day => day.exportDay());
+
+    return camp;
 
   }
+
 
 }

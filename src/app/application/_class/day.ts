@@ -1,73 +1,95 @@
-import { Camp } from './camp';
-import { Meal } from './meal';
 import { firestore } from 'firebase';
-import { DayData } from '../_interfaces/day-data';
-import { FirestoreMeal } from '../_interfaces/firestore-meal';
-import { SettingsService } from '../_service/settings.service';
-import { AccessData } from '../_interfaces/accessData';
+import { Observable } from 'rxjs';
+
+import { DayData } from '../_interfaces/firestoreDatatypes';
+import { DatabaseService } from '../_service/database.service';
+import { SpecificMeal } from './specific-meal';
 
 /**
+ * Day repräsentiert ein Tag im Lager.
  *
  */
-export class Day implements DayData {
+export class Day {
 
-  public date: firestore.Timestamp;
+  private readonly campId: string;
+
   public dateAsTypeDate: Date;
   public description: string;
-  public meals: Meal[];
+
+  // specific meals of this day
+  private meals: Observable<SpecificMeal[]> = undefined;
+
+  constructor(data: DayData, campId: string) {
+
+    this.dateAsTypeDate = data.day_date.toDate();
+    this.description = data.day_description;
+
+    this.campId = campId;
+
+  }
 
 
   /**
+   * Gibt die Mahlzeiten des Tages zurück.
    *
-   * Creates an empty meal. The given user has owner access to the meal.
+   * @returns Die Mahlzeiten des Tages
    *
-   * @param user User with owner access. If missing, no user has access.
    */
-  public static getEmptyMeal(uids?: string[]): FirestoreMeal {
+  public getMeals(): Observable<SpecificMeal[]> | undefined {
 
-    if (uids === undefined) {
-      uids = [];
-    }
+    return this.meals;
 
-    const access: AccessData = Object.assign({}, ...uids.map(uid => ({ [uid]: 'owner' })));
-    const meal: FirestoreMeal = {
-      access,
-      description: '',
-      name: 'Neue Mahlzeit'
+  }
+
+  /**
+   * Ein Tag wird im Normalfall ohne die Mahlzeiten geladen.
+   *
+   * Die Mahlzeiten des Tages können mit dieser Funktion nach-
+   * geladen werden.
+   *
+   */
+  loadMeals(dbService: DatabaseService) {
+
+    this.meals = dbService.getSpecificMeals(this.campId, this.getTimestamp());
+
+  }
+
+  /**
+   * Gibt das Datum als Timestamp zurück.
+   *
+   */
+  public getTimestamp(): firestore.Timestamp {
+
+    return firestore.Timestamp.fromDate(this.dateAsTypeDate);
+
+  }
+
+  /**
+   * Exportiert den Tag.
+   *
+   * Dieser Export wird für das Speichern des
+   * Lagers benötigt.
+   *
+   */
+  public exportDay(): DayData {
+
+    const day = {
+      day_date: this.getTimestamp(),
+      day_description: this.description
     };
 
-    return meal;
+    return day;
 
   }
 
-  constructor(data: DayData, camp: Camp) {
 
-    const date: firestore.Timestamp = data.date;
-    this.dateAsTypeDate = date.toDate();
-
-    // optionale Felder
-    this.description = data.description !== undefined ? data.description : '';
-
-    this.meals = data.meals.map(mealData => new Meal(mealData as FirestoreMeal, mealData.firestoreElementId));
-  }
-
-  extractDataToJSON(): DayData {
-
-    const dayData: DayData = {
-      date: firestore.Timestamp.fromDate(this.dateAsTypeDate),
-      meals: this.meals.map((meal: Meal) => meal.extractDataToJSON())
-    };
-
-    // optionale Felder
-    if (this.description !== '') {
-      dayData.description = this.description;
-    }
-
-    return dayData;
-  }
-
-
-
+  /**
+   * Gibt die Beschriftung in Klammern zurück.
+   *
+   * Falls keine Beschriftung vorhanden, wird
+   * ein leerer String zurückgegeben.
+   *
+   */
   public getDiscriptionInBracket(): string {
 
     if (this.description !== '') {

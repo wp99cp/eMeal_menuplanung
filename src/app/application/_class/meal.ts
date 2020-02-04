@@ -1,124 +1,87 @@
 import { Observable } from 'rxjs';
-import { AccessData } from '../_interfaces/accessData';
-import { FirestoreMeal } from '../_interfaces/firestore-meal';
-import { FirestoreSpecificMeal } from '../_interfaces/firestore-specific-meal-data';
-import { FirestoreSpecificRecipe } from '../_interfaces/firestore-specific-recipe';
+
+import { FirestoreMeal, FirestoreSpecificMeal, FirestoreSpecificRecipe, MealUsage } from '../_interfaces/firestoreDatatypes';
 import { DatabaseService } from '../_service/database.service';
 import { Camp } from './camp';
-import { FirebaseObject } from './firebaseObject';
+import { Day } from './day';
+import { ExportableObject, FirestoreObject } from './firebaseObject';
 import { Recipe } from './recipe';
-import { SpecificMeal } from './specific-meal';
 
-export class Meal extends FirebaseObject implements FirestoreMeal {
+/**
+ *
+ */
+export class Meal extends FirestoreObject implements ExportableObject {
 
+  public readonly path;
+  public readonly documentId;
 
-  public readonly firestorePath = 'meals/';
-
+  // Felder
   public name: string;
   public description: string;
-  public access: AccessData;
-  public recipes: Observable<Recipe[]>;
-  public specificId: string = undefined;
-  public participantsWarning = undefined;
-  public keywords: string;
-  public lastMeal: string;
+  public keywords: string[];
+  public lastMeal: MealUsage;
+  public usedAs: MealUsage;
+  public participantsWarning: boolean;
 
-  /**
-   *
-   * Creates an empty meal. The given user has owner access to the meal.
-   *
-   * @param user User with owner access. If missing, no user has access.
-   */
-  public static getEmptyMeal(uids?: string[]): FirestoreMeal {
+  // Rezepte
+  private recipes: Observable<Recipe[]> = undefined;
 
-    if (uids === undefined) {
-      uids = [];
-    }
+  constructor(meal: FirestoreMeal, path: string) {
 
-    const meal: FirestoreMeal = {
-      access: Object.assign({}, ...uids.map(uid => ({ [uid]: 'owner' }))),
-      description: '',
-      name: 'Neue Mahlzeit'
-    };
+    super(meal);
 
-    return meal;
+    this.documentId = path.substring(path.lastIndexOf('/') + 1);
+    this.path = path;
+
+    this.name = meal.meal_name;
+    this.description = meal.meal_description;
+    this.keywords = meal.meal_keywords;
+    this.lastMeal = meal.meal_last_usage;
+
 
   }
 
-  /**
-   * gibt den Firestore Path zurück
-   */
-  public static getCollectionPath(): string {
-    return 'meals/';
-  }
+  public toFirestoreDocument(): FirestoreMeal {
 
-  public static getPath(mealId: string): string {
-    return Meal.getCollectionPath() + mealId;
-  }
+    const firestoreMeal = super.toFirestoreDocument() as FirestoreMeal;
 
-  constructor(data: FirestoreMeal, public readonly firestoreElementId: string, recipes?: Observable<Recipe[]>) {
-
-    super();
-
-    this.name = data.name;
-    this.description = data.description;
-    this.access = data.access;
-
-    this.recipes = recipes;
-
-    if (data.specificId) {
-      this.specificId = data.specificId;
-    }
-
-    if (data.participantsWarning) {
-      this.participantsWarning = data.participantsWarning;
-    }
-
-    if (data.keywords) {
-      this.keywords = data.keywords;
-    }
-
-    if (data.lastMeal) {
-      this.lastMeal = data.lastMeal;
-    }
-
-  }
-
-  public extractDataToJSON(): FirestoreMeal {
-
-    const firestoreMeal: FirestoreMeal = {
-      name: this.name,
-      description: this.description,
-      access: this.access,
-      firestoreElementId: this.firestoreElementId,
-    };
-
-    // Meals generated out of a day don't contain access and description properties
-    // They are removed if they're undefinded...
-    if (this.specificId !== undefined) {
-      firestoreMeal.specificId = this.specificId;
-    }
-    if (this.keywords !== undefined) {
-      firestoreMeal.keywords = this.keywords;
-    }
-    if (this.lastMeal !== undefined) {
-      firestoreMeal.lastMeal = this.lastMeal;
-    }
-    if (this.participantsWarning !== undefined) {
-      firestoreMeal.participantsWarning = this.participantsWarning;
-    }
-    if (firestoreMeal.access === undefined) {
-      delete firestoreMeal.access;
-    }
-    if (firestoreMeal.description === undefined) {
-      delete firestoreMeal.description;
-    }
+    firestoreMeal.meal_name = this.name;
+    firestoreMeal.meal_description = this.description;
+    firestoreMeal.meal_keywords = this.keywords;
+    firestoreMeal.meal_last_usage = this.lastMeal;
 
     return firestoreMeal;
 
   }
 
+  /**
+   * Ladet die Rezepte der Mahlzeit nach.
+   * Im Normalfall werden die Rezepte nicht mit-
+   * geladen. Mit dieser Funktion werden die
+   * Rezepte nachgeladen.
+   *
+   */
+  public loadRecipes(dbService: DatabaseService) {
 
+    this.recipes = dbService.getRecipes(this.documentId);
+
+  }
+
+  /**
+   * Gibt die Rezepte des Tages zurück.
+   *
+   * @returns Die Rezepte des Tages
+   *
+   */
+  public getRecipes() {
+
+    if (this.recipes === undefined) {
+      throw new Error('Recipes not loaded yet.');
+    }
+
+    return this.recipes;
+
+  }
 
   /**
    *
@@ -127,47 +90,36 @@ export class Meal extends FirebaseObject implements FirestoreMeal {
    * @param camp Releted Camp
    *
    */
-  public createSpecificRecipes(databaseService: DatabaseService, camp: Camp) {
+  public createSpecificRecipes(databaseService: DatabaseService, camp: Camp, specificId: string) {
 
-    if (this.recipes === undefined) {
-      this.recipes = databaseService.getRecipes(this.firestoreElementId, this.specificId, camp.firestoreElementId);
+    if (this.recipes === undefined || this.recipes === null) {
+      this.recipes = databaseService.getRecipes(this.documentId);
     }
 
     this.recipes.subscribe(recipes => recipes.forEach(recipe =>
-      this.createSpecificRecipe(camp, recipe.firestoreElementId, databaseService)
+      recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)
     ));
 
   }
 
-  public createSpecificRecipe(camp: Camp, recipeId: string, databaseService: DatabaseService) {
-    const specificRecipeData: FirestoreSpecificRecipe = {
-      participants: camp.participants,
-      campId: camp.firestoreElementId,
-      overrideParticipants: false,
-      specificMealId: this.specificId,
-      vegi: 'all'
-    };
-    const recipePath = 'recipes/' + recipeId + '/specificRecipes/' + this.specificId;
-    databaseService.addDocument(specificRecipeData, recipePath);
-  }
+  /**
+   * Creates a specificMeal from the current meal
+   *
+   */
+  public async createSpecificMeal(databaseService: DatabaseService, camp: Camp, day: Day, usedAs: MealUsage): Promise<string> {
 
-  public setSpecificMeal(specificId: string) {
+    const specificMealData = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificMeal;
+    specificMealData.meal_participants = camp.participants;
+    specificMealData.used_in_camp = camp.documentId;
+    specificMealData.meal_weekview_name = this.name;
+    specificMealData.meal_override_participants = false;
+    specificMealData.access = this.getAccessData();
+    specificMealData.meal_date = day.getTimestamp();
+    specificMealData.meal_gets_prepared = false;
+    specificMealData.meal_prepare_date = day.getTimestamp();
+    specificMealData.meal_used_as = usedAs;
 
-    this.specificId = specificId;
-
-  }
-
-
-  public async createSpecificMeal(databaseService: DatabaseService, camp: Camp): Promise<string> {
-
-    const specificMealData: FirestoreSpecificMeal = {
-      participants: camp.participants,
-      campId: camp.firestoreElementId,
-      weekTitle: this.description,
-      overrideParticipants: false
-    };
-
-    const mealPath = 'meals/' + this.firestoreElementId + '/specificMeals';
+    const mealPath = 'meals/' + this.documentId + '/specificMeals/';
     const ref = await databaseService.addDocument(specificMealData, mealPath);
 
     return ref.id;

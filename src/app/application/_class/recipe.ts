@@ -1,101 +1,67 @@
-import { Observable } from 'rxjs';
-import { AccessData } from '../_interfaces/accessData';
-import { FirestoreRecipe } from '../_interfaces/firestore-recipe';
-import { Ingredient } from '../_interfaces/ingredient';
-import { FirebaseObject } from './firebaseObject';
-import { SpecificRecipe } from './specific-recipe';
-import { Meal } from './meal';
+import { FirestoreRecipe, Ingredient, FirestoreSpecificRecipe } from '../_interfaces/firestoreDatatypes';
+import { ExportableObject, FirestoreObject } from './firebaseObject';
+import { Camp } from './camp';
+import { DatabaseService } from '../_service/database.service';
 
-export class Recipe extends FirebaseObject implements FirestoreRecipe {
+/**
+ *
+ */
+export class Recipe extends FirestoreObject implements ExportableObject {
 
-  protected firestorePath: string;
-  public firestoreElementId: string;
+  public readonly path: string;
+  public readonly documentId: string;
 
-  public access: AccessData;
+  // Fields
   public ingredients: Ingredient[];
   public name: string;
   public description: string;
   public notes: string;
-  public meals: string[];
+  public usedInMeals: string[];
 
-  public specificRecipe: Observable<SpecificRecipe>;
+  constructor(recipe: FirestoreRecipe, path: string) {
 
-  /**
-   *
-   * Creates a new empty recipe with the given title and access rights.
-   *
-   * @param name Title of the recipe
-   * @param access Access rights for the recipe
-   */
-  public static getEmptyRecipe(mealId: string, name?: string, access?: AccessData): FirestoreRecipe {
+    super(recipe);
 
-    // set undefined variables
-    name = name === undefined ? '' : name;
-    access = access === undefined ? {} : access;
+    this.usedInMeals = recipe.used_in_meals;
 
-    const recipe: FirestoreRecipe = {
-      access,
-      description: '',
-      ingredients: [],
-      name,
-      notes: '',
-      meals: [mealId]
-    };
+    this.documentId = path.substring(path.lastIndexOf('/') + 1);
+    this.path = path;
+
+    this.ingredients = recipe.ingredients;
+    this.name = recipe.recipe_name;
+    this.description = recipe.recipe_description;
+    this.notes = recipe.recipe_notes;
+
+  }
+
+  public toFirestoreDocument(): FirestoreRecipe {
+
+    const recipe = super.toFirestoreDocument() as FirestoreRecipe;
+    recipe.recipe_description = this.description;
+    recipe.recipe_name = this.name;
+    recipe.used_in_meals = this.usedInMeals;
+    recipe.ingredients = this.ingredients;
+    recipe.recipe_notes = this.notes;
 
     return recipe;
 
   }
 
-  /**
-   * gibt den Firestore Path zurück
-   */
-  public static getCollectionPath(): string {
 
-    return 'recipes/';
+  public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService) {
 
-  }
+    const specificRecipeData = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificRecipe;
 
-  /**
-  * gibt den Firestore Path zurück
-  */
-  public static getPath(recipeId: string): string {
 
-    return Recipe.getCollectionPath() + recipeId;
+    specificRecipeData.recipe_participants = camp.participants;
+    specificRecipeData.used_in_camp = camp.documentId;
+    specificRecipeData.recipe_override_participants = false;
+    specificRecipeData.recipe_used_for = 'all';
+    specificRecipeData.access = this.getAccessData();
 
-  }
-
-  constructor(recipeData: FirestoreRecipe, firestoreElementId: string, mealId: string, specificRecipe: Observable<SpecificRecipe>) {
-    super();
-
-    this.meals = recipeData.meals;
-
-    this.firestorePath = 'recipes/';
-    this.firestoreElementId = firestoreElementId;
-
-    this.access = recipeData.access;
-    this.ingredients = recipeData.ingredients;
-    this.name = recipeData.name;
-    this.description = recipeData.description;
-    this.notes = recipeData.notes;
-
-    this.specificRecipe = specificRecipe;
+    const recipePath = 'recipes/' + recipeId + '/specificRecipes/' + specificRecipeId;
+    databaseService.addDocument(specificRecipeData, recipePath);
 
   }
-
-  public extractDataToJSON(): FirestoreRecipe {
-
-    return {
-      meals: this.meals,
-      access: this.access,
-      ingredients: this.ingredients,
-      name: this.name,
-      description: this.description,
-      notes: this.notes
-    };
-
-  }
-
 
 }
-
-

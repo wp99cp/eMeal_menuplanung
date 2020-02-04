@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+import { User } from 'firebase';
 
 /**
  * WelcomPage of the eMeal appliction after signed in.

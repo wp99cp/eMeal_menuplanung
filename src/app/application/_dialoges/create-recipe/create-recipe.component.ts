@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { Observable, empty } from 'rxjs';
-import { FirestoreRecipe } from '../../_interfaces/firestore-recipe';
 import { map } from 'rxjs/operators';
+import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
+import { FirestoreObject } from '../../_class/firebaseObject';
 
 @Component({
   selector: 'app-create-recipe',
@@ -38,14 +39,16 @@ export class CreateRecipeComponent implements OnInit {
   public create(): Observable<FirestoreRecipe> {
 
     return this.authService.getCurrentUser().pipe(map(user => {
-      return {
-        name: this.newRecipeForm.value.title,
-        description: this.newRecipeForm.value.description,
-        access: { [user.uid]: 'owner' },
-        ingredients: [],
-        notes: this.newRecipeForm.value.notes,
-        meals: []
-      };
+
+      const recipe = FirestoreObject.exportEmptyDocument(user.uid) as FirestoreRecipe;
+
+      recipe.recipe_name = this.newRecipeForm.value.title;
+      recipe.recipe_description = this.newRecipeForm.value.description;
+      recipe.ingredients = [];
+      recipe.recipe_notes = this.newRecipeForm.value.notes;
+      recipe.used_in_meals = [];
+
+      return recipe;
     }));
 
 

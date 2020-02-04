@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, AfterViewInit, OnChanges } from '@angular/core';
-import { AccessData } from '../../_interfaces/accessData';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { User } from '../../_class/user';
+import { AccessData } from '../../_interfaces/firestoreDatatypes';
 import { DatabaseService } from '../../_service/database.service';
-import { User } from '../../_interfaces/user';
-import { mergeMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list-of-users',

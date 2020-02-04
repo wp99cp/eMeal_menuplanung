@@ -17,26 +17,26 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header id="name-header"> Name
         </th>
         <td mat-cell *matCellDef="let element" matTooltip="{{element.name}} öffnen"
-          routerLink="{{element.firestoreElementId}}" class="clickable">
+          routerLink="./{{element.documentId}}" class="clickable">
           {{element.name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Beschreibung </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+        <td mat-cell *matCellDef="let element" routerLink="./{{element.documentId}}" class="clickable">
           {{element.description}}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="year">
         <th mat-header-cell *matHeaderCellDef mat-sort-header id="year-header"> Jahr </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable">
+        <td mat-cell *matCellDef="let element" routerLink="./{{element.documentId}}" class="clickable">
           {{element.year}} </td>
       </ng-container>
 
       <ng-container matColumnDef="participants">
         <th mat-header-cell *matHeaderCellDef class="center" id="tn-header"> #TNs </th>
-        <td mat-cell *matCellDef="let element" routerLink="{{element.firestoreElementId}}" class="clickable center">
+        <td mat-cell *matCellDef="let element" routerLink="./{{element.documentId}}" class="clickable center">
           {{element.participants}}
         </td>
       </ng-container>

@@ -1,50 +1,133 @@
+import { FirestoreDocument, AccessData } from '../_interfaces/firestoreDatatypes';
+import { firestore } from 'firebase';
+import { OperatorFunction } from 'rxjs';
+import { DocumentChangeAction, DocumentSnapshot, Action } from '@angular/fire/firestore';
+import { map } from 'rxjs/operators';
+
+export interface ExportableObject {
+
+  /**
+   * Exportes the FirestoreObject as a FirestoreDocument.
+   *
+   */
+  toFirestoreDocument(): FirestoreDocument;
+
+}
+
+
+type ObjectFactory<DocType extends FirestoreDocument, ObjecType extends FirestoreObject> =
+  (new (document: DocType, documentId: string) => ObjecType);
+
+type OpFnObjects<DocType extends FirestoreDocument, ObjecType extends FirestoreObject> =
+  OperatorFunction<DocumentChangeAction<DocType>[], ObjecType[]>;
+
+type OpFnObject<DocType extends FirestoreDocument, ObjecType extends FirestoreObject> =
+  OperatorFunction<Action<DocumentSnapshot<DocType>>, ObjecType>;
+
 /**
- * Add's the ability to push changes of a child object to the FirebaseServer
- *
- * TODO: Problem mit object Struktur, im Moment die metheoden get Path doppelt,
- * einmal static und einmal auf das Object bezogen... wie kann ich dieses Problem lösen????
- *
+ * FirestoreObject is the Object representation of a FirestoreDocument
  */
-export abstract class FirebaseObject {
+export abstract class FirestoreObject implements ExportableObject {
 
-  /** Path in the firestore databse to the collection of this object
-   *  (Note the path mus end with '/', e.g. 'camps/campId/days/')
-   */
-  protected readonly abstract firestorePath: string;
+  public readonly abstract path: string;
+  public readonly abstract documentId: string;
 
-  /** The firestore database element id */
-  protected readonly abstract firestoreElementId: string;
+
+  private access: AccessData;
+  private readonly dateAdded: firestore.Timestamp;
+
 
   /**
    *
-   * Extracts the data form the fields of the database
-   * used for updating the document in the database.
+   * @param objecType Type of the created Object
    *
    */
-  public abstract extractDataToJSON(): Partial<unknown>;
+  public static createObjects<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
+    (objecType: ObjectFactory<DocType, ObjecType>): OpFnObjects<DocType, ObjecType> {
 
-  public getDocPath(): string {
-
-    return this.firestorePath + this.firestoreElementId;
+    return map(docChangeAction =>
+      docChangeAction.map(docData =>
+        new objecType(docData.payload.doc.data() as DocType, docData.payload.doc.ref.path)
+      )
+    );
 
   }
 
   /**
-   * Returns the elementId of the element in the firebase database
+   *
+   * @param objecType Type of the created Object
    */
-  public getElemementId(): string {
+  public static createObject<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
+    (objecType: ObjectFactory<DocType, ObjecType>): OpFnObject<DocType, ObjecType> {
 
-    return this.firestoreElementId;
+    return map(docSnapshot =>
+      new objecType(docSnapshot.payload.data(), docSnapshot.payload.ref.path)
+    );
 
   }
 
   /**
-   * Returns the elementId of the element in the firebase database
+   * creates an empty FirestoreDocument for a given userId
+   * @parms the userId from the user which is the owner of this document
    *
    */
-  public getCollection(): string {
+  public static exportEmptyDocument(ownerUid: string): FirestoreDocument {
 
-    return this.firestorePath;
+    return {
+      date_modified: firestore.FieldValue.serverTimestamp(),
+      date_added: firestore.FieldValue.serverTimestamp(),
+      access: { [ownerUid]: 'owner' }
+    };
+
+  }
+
+  /**
+   * creates a new FirestoreObject from a FirestoreDocument
+   *
+   */
+  constructor(document: FirestoreDocument) {
+
+    this.dateAdded = document.date_added as firestore.Timestamp;
+    this.access = document.access;
+
+  }
+
+  /**
+   * Sets a new accessData for the FirestoreObject.
+   *
+   * @throws a IllegalAccessStateError if the document has no owner
+   * @throws a AccessPermisionError if the current user isn't
+   * a owner or editor of the docuemnt.
+   *
+   */
+  public setAccessData(access: AccessData): void {
+
+    // TODO: add checks for errors
+
+    this.access = access;
+
+  }
+
+
+  /**
+   * Returns the accessData of the FirestoreObject
+   *
+   * @returns the accessData of the FirestoreObject
+   *
+   */
+  public getAccessData(): AccessData {
+
+    return this.access;
+
+  }
+
+  public toFirestoreDocument(): FirestoreDocument {
+
+    return {
+      date_modified: firestore.FieldValue.serverTimestamp(),
+      date_added: this.dateAdded,
+      access: this.access
+    };
 
   }
 

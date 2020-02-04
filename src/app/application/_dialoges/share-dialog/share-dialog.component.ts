@@ -5,10 +5,10 @@ import { map } from 'rxjs/operators';
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
-import { AccessData } from '../../_interfaces/accessData';
-import { User } from '../../_interfaces/user';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+import { AccessData } from '../../_interfaces/firestoreDatatypes';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-share-dialog',
@@ -47,20 +47,20 @@ export class ShareDialogComponent implements OnInit {
       .subscribe((access: AccessData) => {
 
         // merge the old access data with the new one
-        access = this.jsonConcat(access, this.camp.access);
+        access = this.jsonConcat(access, this.camp.getAccessData());
 
-        this.camp.access = access;
+        this.camp.setAccessData(access);
 
-        this.databaseService.updateAccessData(access, Camp.getPath(this.camp.firestoreElementId));
-        this.camp.days.forEach(day => day.meals.forEach(meal => {
-          this.databaseService.updateAccessData(access, Meal.getPath(meal.firestoreElementId));
+        this.databaseService.updateAccessData(access, Camp.getPath(this.camp.documentId));
+        this.camp.days.forEach(day => day.meals.subscribe(meals => meals.forEach(meal => {
+          this.databaseService.updateAccessData(access, Meal.getPath(meal.documentId));
 
-          this.databaseService.getRecipes(meal.firestoreElementId).subscribe(recipes =>
+          this.databaseService.getRecipes(meal.documentId).subscribe(recipes =>
             recipes.forEach(recipe =>
-              this.databaseService.updateAccessData(access, Recipe.getPath(recipe.firestoreElementId))
+              this.databaseService.updateAccessData(access, Recipe.getPath(recipe.documentId))
             ));
 
-        }));
+        })));
 
       });
 

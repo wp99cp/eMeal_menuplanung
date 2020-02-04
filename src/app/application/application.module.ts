@@ -36,18 +36,20 @@ import { AddRecipeComponent } from './_dialoges/add-recipe/add-recipe.component'
 import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
 import { CreateMealComponent } from './_dialoges/create-meal/create-meal.component';
 import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.component';
+import { DeleteCampComponent } from './_dialoges/delete-camp/delete-camp.component';
 import { EditDayComponent } from './_dialoges/edit-day/edit-day.component';
 import { ImportComponent } from './_dialoges/import/import.component';
 import { MealInfoComponent } from './_dialoges/meal-info/meal-info.component';
+import { MealPrepareComponent } from './_dialoges/meal-prepare/meal-prepare.component';
 import { RecipeInfoComponent } from './_dialoges/recipe-info/recipe-info.component';
 import { ShareDialogComponent } from './_dialoges/share-dialog/share-dialog.component';
 import { AppSettingsPageComponent } from './_pages/app-settings-page/app-settings-page.component';
 import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.component';
-import { DeleteCampComponent } from './_pages/camp-list-page/delete-camp.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
+import { HelpPageComponent } from './_pages/help-page/help-page.component';
 import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AuthenticationService } from './_service/authentication.service';
@@ -61,8 +63,6 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
-import { MealPrepareComponent } from './_dialoges/meal-prepare/meal-prepare.component';
-import { HelpPageComponent } from './_pages/help-page/help-page.component';
 
 
 @NgModule({

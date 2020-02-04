@@ -3,6 +3,8 @@ import { Day } from '../../_class/day';
 import { MatDialog } from '@angular/material';
 import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
+import { Meal } from '../../_class/meal';
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-meals-overview',
@@ -12,10 +14,12 @@ import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 export class MealsOverviewComponent implements OnChanges {
 
   @Input() day: Day;
+  @Input() specificMeals: SpecificMeal[];
+
   @Input() hideIcons = false;
   @Output() mealDropped = new EventEmitter<any>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
-  @Output() dayEdited = new EventEmitter<[number, Day]>();
+  @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   public hidden = false;
 
   public warning: string;
@@ -30,14 +34,16 @@ export class MealsOverviewComponent implements OnChanges {
     const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
     const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];
 
-    this.day.meals.sort((a, b) => {
+    if (this.specificMeals) {
+      this.specificMeals.sort((a, b) => {
 
-      if (a.name === b.name) {
-        this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.name)] + '!';
-      }
+        if (a.usedAs === b.usedAs) {
+          this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.usedAs)] + '!';
+        }
 
-      return orderOfMahlzeiten.indexOf(a.name) - orderOfMahlzeiten.indexOf(b.name);
-    });
+        return orderOfMahlzeiten.indexOf(a.usedAs) - orderOfMahlzeiten.indexOf(b.usedAs);
+      });
+    }
 
   }
 
@@ -66,7 +72,7 @@ export class MealsOverviewComponent implements OnChanges {
       .afterClosed()
       .subscribe((save: number) => {
 
-        this.dayEdited.emit([save, this.day]);
+        this.dayEdited.emit([save, this.day, this.specificMeals]);
 
       });
 
