@@ -1,8 +1,7 @@
 import { firestore } from 'firebase';
 
 import { FirestoreSpecificMeal, MealUsage } from '../_interfaces/firestoreDatatypes';
-import { FirestoreObject, ExportableObject } from './firebaseObject';
-import { Meal } from './meal';
+import { ExportableObject, FirestoreObject } from './firebaseObject';
 
 export class SpecificMeal extends FirestoreObject implements ExportableObject {
 
@@ -17,6 +16,7 @@ export class SpecificMeal extends FirestoreObject implements ExportableObject {
 
   public prepareAsDate: Date;
   public prepare: boolean;
+  public date: firestore.Timestamp;
 
   constructor(meal: FirestoreSpecificMeal, path: string) {
 
@@ -31,7 +31,7 @@ export class SpecificMeal extends FirestoreObject implements ExportableObject {
     this.overrideParticipants = meal.meal_override_participants;
     this.prepareAsDate = meal.meal_prepare_date.toDate();
     this.prepare = meal.meal_gets_prepared;
-
+    this.date = meal.meal_date;
     this.usedAs = meal.meal_used_as;
 
 
@@ -56,6 +56,7 @@ export class SpecificMeal extends FirestoreObject implements ExportableObject {
     meal.meal_weekview_name = this.weekTitle;
     meal.meal_override_participants = this.overrideParticipants;
     meal.meal_used_as = this.usedAs;
+    meal.meal_date = this.date;
 
     return meal;
 

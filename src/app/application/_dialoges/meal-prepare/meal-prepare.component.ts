@@ -1,15 +1,16 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { SpecificMeal } from '../../_class/specific-meal';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
-import { FormBuilder, FormGroup } from '@angular/forms';
+
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-meal-prepare',
   templateUrl: './meal-prepare.component.html',
   styleUrls: ['./meal-prepare.component.sass']
 })
-export class MealPrepareComponent implements OnInit {
+export class MealPrepareComponent {
 
   public prepareForm: FormGroup;
   public specificMeal: SpecificMeal;
@@ -24,7 +25,7 @@ export class MealPrepareComponent implements OnInit {
     if (data.specificMeal.prepareAsDate !== undefined) {
 
       this.prepareForm = this.formBuilder.group({
-        hasPrepareDate: true,
+        hasPrepareDate: data.specificMeal.prepare,
         prepareDate: data.specificMeal.prepareAsDate
       });
 
@@ -41,23 +42,24 @@ export class MealPrepareComponent implements OnInit {
 
   }
 
+  /**
+   * Returns the updatetd specificMeal
+   */
   public returnsSpecificMeal() {
+
+    // standardmässig wird eine Mahlzeit nicht vorbereitet
+    this.specificMeal.prepare = false;
 
     if (this.prepareForm.value.hasPrepareDate) {
 
       this.specificMeal.prepareAsDate = this.prepareForm.value.prepareDate;
-      
-    } else {
-
-      this.specificMeal.prepareAsDate = null;
+      this.specificMeal.prepare = true;
 
     }
-
 
     return this.specificMeal;
 
   }
 
-  ngOnInit() { }
 
 }

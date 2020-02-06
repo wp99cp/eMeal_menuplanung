@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 import { Day } from '../../_class/day';
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-edit-day',
@@ -12,7 +14,7 @@ export class EditDayComponent implements OnInit {
 
   public dayInfo: FormGroup;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { day: Day }, private formBuilder: FormBuilder) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[] }, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
 

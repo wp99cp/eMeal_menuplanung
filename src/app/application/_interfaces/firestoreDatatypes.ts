@@ -121,6 +121,7 @@ export interface FirestoreSpecificRecipe extends FirestoreDocument {
   recipe_override_participants: boolean;
   recipe_used_for: UserGroups;
 
+  recipe_specificId: string;
   used_in_camp: string;
 
 }

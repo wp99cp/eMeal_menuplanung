@@ -1,17 +1,16 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { SpecificRecipe } from '../../_class/specific-recipe';
 import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.component';
 import { MealInfoComponent } from '../../_dialoges/meal-info/meal-info.component';
 import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.component';
@@ -27,23 +26,27 @@ import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.com
 })
 export class EditMealComponent implements OnInit, Saveable {
 
-  public indexOfOpenedPanel = -1;
-  public specificMeal: Observable<SpecificMeal>;
-  public meal: Observable<Meal>;
-  public camp: Observable<Camp>;
   private campId: Observable<string>;
   private mealId: Observable<string>;
   private specificMealId: Observable<string>;
+
+  public camp: Observable<Camp>;
+
+  public meal: Observable<Meal>;
+  public specificMeal: Observable<SpecificMeal>;
+  public recipes: Observable<Recipe[]>;
+  public specificRecipes: Observable<SpecificRecipe[]>;
+
+
+  public indexOfOpenedPanel = -1;
 
   public calcMealPart = SettingsService.calcMealParticipants;
 
   @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
 
-
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private databaseService: DatabaseService,
+    public dbService: DatabaseService,
     public dialog: MatDialog,
     private router: Router) { }
 
@@ -56,30 +59,18 @@ export class EditMealComponent implements OnInit, Saveable {
   ngOnInit() {
 
 
-    // Objecte definieren
+    // load ids from the url
     this.campId = this.route.url.pipe(map(url => url[url.length - 4].path));
     this.mealId = this.route.url.pipe(map(url => url[url.length - 2].path));
     this.specificMealId = this.route.url.pipe(map(url => url[url.length - 1].path));
-    this.camp = this.campId.pipe(mergeMap(id => this.databaseService.getCampById(id)));
-    this.meal = this.campId.pipe(mergeMap(campId =>
-      this.mealId.pipe(mergeMap(mealId =>
-        this.specificMealId.pipe(mergeMap(specificMealId =>
-          this.databaseService.getMealById(mealId, specificMealId, campId)
-        ))
-      ))
-    ));
 
-    this.specificMeal = this.campId.pipe(mergeMap(campId =>
-      this.mealId.pipe(mergeMap(mealId => this.specificMealId.pipe(mergeMap(specificMealId =>
-        this.databaseService.getSpecificMeal(mealId, specificMealId, campId)
-      ))))));
-
-
-
-    // set header Info
-    this.meal.subscribe(meal => this.camp.subscribe(camp => this.setHeaderInfo(camp, meal)));
-
-
+    // Ladet die benötigten Dokumente
+    this.camp = this.campId.pipe(mergeMap(id => this.dbService.getCampById(id)));
+    this.meal = this.mealId.pipe(mergeMap(mealId => this.dbService.getMealById(mealId)));
+    this.specificMeal = this.mealId.pipe(mergeMap(mealId => this.specificMealId.pipe(mergeMap(specificMealId =>
+      this.dbService.getSpecificMeal(mealId, specificMealId)
+    ))));
+    this.recipes = this.mealId.pipe(mergeMap(mealId => this.dbService.getRecipes(mealId)));
 
     this.camp.pipe(take(1)).subscribe(camp =>
 
@@ -155,6 +146,8 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+
+
   private saveButton() {
 
     HeaderNavComponent.turnOff('Speichern');
@@ -162,6 +155,11 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+  /**
+   *
+   * Öffnet den Dialog zur Vorbereitung einer Mahlzeit.
+   *
+   */
   public prepare() {
 
     this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal =>
@@ -175,7 +173,7 @@ export class EditMealComponent implements OnInit, Saveable {
     )).subscribe((specificMeal: SpecificMeal) => {
 
       if (specificMeal != null) {
-        this.databaseService.updateDocument(specificMeal);
+        this.dbService.updateDocument(specificMeal);
       }
 
     });
@@ -184,6 +182,7 @@ export class EditMealComponent implements OnInit, Saveable {
   }
 
   /**
+   * Öffnet den Dialog zu den Informationen der Mahlzeit.
    *
    */
   public mealInfoDialog() {
@@ -193,8 +192,8 @@ export class EditMealComponent implements OnInit, Saveable {
         this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal => {
 
           // Speichern der noch offenen Änderungen
-          this.databaseService.updateDocument(meal);
-          this.databaseService.updateDocument(specificMeal);
+          this.dbService.updateDocument(meal);
+          this.dbService.updateDocument(specificMeal);
 
           // Dialog öffnen
           return this.dialog.open(MealInfoComponent, {
@@ -208,8 +207,8 @@ export class EditMealComponent implements OnInit, Saveable {
     )).subscribe(([mealResponse, specificMealResponse]: [Meal, SpecificMeal]) => {
 
       // Speichern der geänderten Daten im Dialog-Fenster
-      this.databaseService.updateDocument(mealResponse);
-      this.databaseService.updateDocument(specificMealResponse);
+      this.dbService.updateDocument(mealResponse);
+      this.dbService.updateDocument(specificMealResponse);
 
     });
 
@@ -240,7 +239,7 @@ export class EditMealComponent implements OnInit, Saveable {
     const mealSubs = this.meal.subscribe(meal => {
 
 
-      this.databaseService.updateDocument(meal);
+      this.dbService.updateDocument(meal);
 
       // reset: deactivate save button
       mealSubs.unsubscribe();
@@ -251,13 +250,6 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
-  /** setzt die HeaderInfos für die aktuelle Seite */
-  private setHeaderInfo(camp, meal): void {
-
-    Header.title = meal.name;
-    Header.path = ['Startseite', 'meine Lager', camp.name, '', '', meal.name];
-
-  }
 
   /**
    * Erstellt ein neues Rezept.
@@ -280,7 +272,11 @@ export class EditMealComponent implements OnInit, Saveable {
       }).afterClosed().subscribe((results: SelectionModel<Recipe>) => {
 
         if (results) {
-          results.selected.forEach(recipe => this.databaseService.addRecipe(recipe.documentId, mealId));
+
+          this.camp.pipe(take(1)).subscribe(camp => this.specificMealId.pipe(take(1)).subscribe(specificMealId =>
+            results.selected.forEach(recipe => this.dbService.addRecipe(recipe, specificMealId, mealId, camp))
+          ));
+
         }
 
       })

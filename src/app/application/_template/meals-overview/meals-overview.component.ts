@@ -5,6 +5,7 @@ import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 import { Meal } from '../../_class/meal';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-meals-overview',
@@ -17,7 +18,7 @@ export class MealsOverviewComponent implements OnChanges {
   @Input() specificMeals: SpecificMeal[];
 
   @Input() hideIcons = false;
-  @Output() mealDropped = new EventEmitter<any>();
+  @Output() mealDropped = new EventEmitter<[SpecificMeal, CdkDragDrop<any, any>]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   public hidden = false;
@@ -26,6 +27,9 @@ export class MealsOverviewComponent implements OnChanges {
 
   constructor(public dialog: MatDialog, public swissDateAdapter: SwissDateAdapter) { }
 
+  log(str) {
+    console.log(str);
+  }
 
   ngOnChanges() {
 
@@ -67,8 +71,9 @@ export class MealsOverviewComponent implements OnChanges {
    */
   editDay(day: Day) {
 
+
     this.dialog
-      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day } })
+      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day, specificMeals: this.specificMeals } })
       .afterClosed()
       .subscribe((save: number) => {
 

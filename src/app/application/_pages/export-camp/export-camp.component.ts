@@ -27,9 +27,6 @@ export class ExportCampComponent implements OnInit {
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
     this.exports.subscribe(console.log);
 
-    this.campId.pipe(mergeMap(campId => dbService.getCampById(campId))).subscribe(camp => this.setHeaderInfo(camp.name));
-
-
 
   }
 
@@ -92,12 +89,5 @@ export class ExportCampComponent implements OnInit {
 
   }
 
-  /** setzt die HeaderInfos für die aktuelle Seite */
-  private setHeaderInfo(campName): void {
-
-    Header.title = 'Zusammenfassung ' + campName;
-    Header.path = ['Startseite', 'meine Lager', campName, 'Zusammenfassung'];
-
-  }
 
 }

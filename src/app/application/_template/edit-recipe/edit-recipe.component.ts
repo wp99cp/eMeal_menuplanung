@@ -2,6 +2,8 @@ import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Outpu
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
+import { Observable } from 'rxjs';
+import { take, mergeMap } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { Camp } from '../../_class/camp';
@@ -10,10 +12,10 @@ import { Recipe } from '../../_class/recipe';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { SpecificRecipe } from '../../_class/specific-recipe';
 import { RecipeInfoComponent } from '../../_dialoges/recipe-info/recipe-info.component';
+import { Ingredient } from '../../_interfaces/firestoreDatatypes';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
-import { Ingredient } from '../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -21,10 +23,6 @@ import { Ingredient } from '../../_interfaces/firestoreDatatypes';
   styleUrls: ['./edit-recipe.component.sass']
 })
 
-// TODO: überschreiben von MasterDocument (Recipe) mit Daten (vorallem bei den Zutaten),.
-// die im specificrecipe gespeichert werden... Überschreibungen farbig markieren.
-// toggle zwischen den Modi: dieses Rezept bearbeiten || Vorlage bearbeiten
-//
 export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnChanges {
 
 
@@ -36,11 +34,14 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   private keyListnerEnter: EventListenerOrEventListenerObject;
 
   //  fields given by the parent element
-  @Input() meal: Meal;
-  @Input() public specificMeal: SpecificMeal;
-  @Input() recipe: Recipe;
-  @Input() public specificRecipe: SpecificRecipe;
   @Input() public camp: Camp;
+
+  @Input() public meal: Meal;
+  @Input() public specificMeal: SpecificMeal;
+
+  @Input() public recipe: Recipe;
+  public specificRecipe: Observable<SpecificRecipe>;
+
   @Input() index: number;
   @Input() isOpen: boolean;
   @Output() opened = new EventEmitter<number>();
@@ -57,14 +58,14 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   ngOnInit() {
 
     this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
-
-    this.recipeForm = this.formBuilder.group({
-      notes: this.recipe.notes,
-    });
+    this.recipeForm = this.formBuilder.group({ notes: this.recipe.notes });
 
     this.ingredientFieldNodes = this.getNodes();
 
-    this.calcPart();
+
+    // Ladet das specifische Rezept nach
+    this.specificRecipe = this.databaseService.getSpecificRecipe(this.specificMeal.documentId, this.recipe, this.camp).pipe(take(1));
+    this.specificRecipe.subscribe(specificRecipe => this.calcPart(specificRecipe));
 
   }
 
@@ -80,16 +81,18 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
-  private calcPart() {
+  private calcPart(specificRecipe: SpecificRecipe) {
 
-    this.mealPart = SettingsService.calcRecipeParticipants(
-      this.camp.participants,
-      this.camp.vegetarians,
-      this.specificMeal.participants,
-      this.specificRecipe.participants,
-      this.specificMeal.overrideParticipants,
-      this.specificRecipe.overrideParticipants,
-      this.specificRecipe.vegi);
+    if (specificRecipe !== undefined && specificRecipe !== null) {
+      this.mealPart = SettingsService.calcRecipeParticipants(
+        this.camp.participants,
+        this.camp.vegetarians,
+        this.specificMeal.participants,
+        specificRecipe.participants,
+        this.specificMeal.overrideParticipants,
+        specificRecipe.overrideParticipants,
+        specificRecipe.vegi);
+    }
 
   }
 
@@ -140,15 +143,18 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   private openRecipeInfo() {
 
-    this.dialog.open(RecipeInfoComponent, {
-      height: '618px',
-      width: '1000px',
-      data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe: this.specificRecipe }
-    }).afterClosed().subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
+    this.specificRecipe.pipe(mergeMap(specificRecipe =>
+
+      this.dialog.open(RecipeInfoComponent, {
+        height: '618px',
+        width: '1000px',
+        data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe }
+      }).afterClosed()
+
+    )).subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
 
       this.databaseService.updateDocument(recipe);
       this.databaseService.updateDocument(specificRecipe);
-
     });
 
   }
@@ -198,26 +204,27 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     this.saveOthers.emit(true);
 
+    this.specificRecipe.subscribe(specificRecipe => {
 
-    document.getElementById(this.specificRecipe.documentId).classList.add('hidden');
+      document.getElementById(specificRecipe.documentId).classList.add('hidden');
 
-    const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
+      const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
 
-    let canDelete = true;
-    snackBar.onAction().subscribe(() => {
-      canDelete = false;
-      document.getElementById(this.specificRecipe.documentId).classList.toggle('hidden');
+      let canDelete = true;
+      snackBar.onAction().subscribe(() => {
+        canDelete = false;
+        document.getElementById(specificRecipe.documentId).classList.toggle('hidden');
+
+      });
+      snackBar.afterDismissed().subscribe(() => {
+
+        if (canDelete) {
+          this.databaseService.removeRecipe(this.meal.documentId, this.recipe.documentId);
+        }
+
+      });
 
     });
-    snackBar.afterDismissed().subscribe(() => {
-
-      if (canDelete) {
-        this.databaseService.removeRecipe(this.meal.documentId, this.recipe.documentId);
-      }
-
-    });
-
-
 
   }
 
@@ -262,15 +269,27 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   // save on destroy
   public async save(): Promise<boolean> {
 
-    this.calcPart();
 
-    if (this.recipeForm.touched) {
-      console.log('Autosave Recipe');
-      await this.saveRecipe();
-      return true;
-    }
+    return new Promise((resolve) => {
 
-    return false;
+
+      this.specificRecipe.subscribe(specificRecipe => {
+
+
+        this.calcPart(specificRecipe);
+
+        if (this.recipeForm.touched) {
+
+          console.log('Autosave Recipe');
+          this.saveRecipe(specificRecipe);
+          resolve(true);
+
+        }
+
+        resolve(false);
+
+      });
+    });
 
   }
 
@@ -366,28 +385,33 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
    * inkl. Anzeige Vegi oder nicht usw.
    *
    */
-  public getPanelDescriptionParticipants() {
+  public getPanelDescriptionParticipants(specificRecipe: SpecificRecipe) {
 
-    this.calcPart();
 
-    switch (this.specificRecipe.vegi) {
+    if (specificRecipe !== undefined && specificRecipe !== null) {
 
-      case 'non-vegetarians': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
-      case 'vegetarians': return 'nur für Vegis (' + this.mealPart + ' P.)';
-      default: return 'für ' + this.mealPart + ' Personen';
+      this.calcPart(specificRecipe);
 
+      switch (specificRecipe.vegi) {
+
+        case 'non-vegetarians': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
+        case 'vegetarians': return 'nur für Vegis (' + this.mealPart + ' P.)';
+        case 'leaders': return 'nur für Leiter (' + this.mealPart + ' P.)';
+        default: return 'für ' + this.mealPart + ' Personen';
+
+      }
 
     }
 
   }
 
-  async saveRecipe() {
+  async saveRecipe(specificRecipe: SpecificRecipe) {
 
     this.recipe.notes = this.recipeForm.value.notes;
 
 
     this.databaseService.updateDocument(this.recipe);
-    this.databaseService.updateDocument(this.specificRecipe);
+    this.databaseService.updateDocument(specificRecipe);
 
     // reset: deactivate save button
     this.recipeForm.markAsUntouched();

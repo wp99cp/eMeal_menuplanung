@@ -2,6 +2,8 @@ import { FirestoreRecipe, Ingredient, FirestoreSpecificRecipe } from '../_interf
 import { ExportableObject, FirestoreObject } from './firebaseObject';
 import { Camp } from './camp';
 import { DatabaseService } from '../_service/database.service';
+import { Observable } from 'rxjs';
+import { SpecificRecipe } from './specific-recipe';
 
 /**
  *
@@ -48,19 +50,20 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   }
 
 
-  public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService) {
+  public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService):
+    Promise<firebase.firestore.DocumentReference> {
 
     const specificRecipeData = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificRecipe;
-
 
     specificRecipeData.recipe_participants = camp.participants;
     specificRecipeData.used_in_camp = camp.documentId;
     specificRecipeData.recipe_override_participants = false;
     specificRecipeData.recipe_used_for = 'all';
     specificRecipeData.access = this.getAccessData();
+    specificRecipeData.recipe_specificId = specificRecipeId;
 
-    const recipePath = 'recipes/' + recipeId + '/specificRecipes/' + specificRecipeId;
-    databaseService.addDocument(specificRecipeData, recipePath);
+    const recipePath = 'recipes/' + recipeId + '/specificRecipes';
+    return databaseService.addDocument(specificRecipeData, recipePath, specificRecipeId);
 
   }
 

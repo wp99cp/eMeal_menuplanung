@@ -1,14 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { User } from 'firebase';
 import { map } from 'rxjs/operators';
 
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
+import { AccessData } from '../../_interfaces/firestoreDatatypes';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { AccessData } from '../../_interfaces/firestoreDatatypes';
-import { User } from 'firebase';
 
 @Component({
   selector: 'app-share-dialog',
@@ -41,7 +41,9 @@ export class ShareDialogComponent implements OnInit {
   /** A user get selected */
   selectUser(selectedCoworkers) {
 
+    throw new Error('Not yet implemented!');
 
+    /*
     this.auth.getCurrentUser()
       .pipe(this.createCoworkerList(selectedCoworkers))
       .subscribe((access: AccessData) => {
@@ -64,16 +66,22 @@ export class ShareDialogComponent implements OnInit {
 
       });
 
+      */
   }
 
 
   private createCoworkerList(selectedCoworkers: any) {
 
+    throw new Error('Not yet implemented!');
+
+    /*
     return map((user: User) => {
       const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
       accessData[user.uid] = 'owner';
       return accessData;
     });
+
+    */
 
   }
 }

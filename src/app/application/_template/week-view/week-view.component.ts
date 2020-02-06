@@ -10,6 +10,7 @@ import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.comp
 import { Camp } from '../../_class/camp';
 import { Day } from '../../_class/day';
 import { Meal } from '../../_class/meal';
+import { SpecificMeal } from '../../_class/specific-meal';
 import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
@@ -30,9 +31,8 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
 
   public colCounter = this.calculateCols();
-  public mealsChanged = false;
   public showParticipantsWarning = false;
-
+  public specificMealsToSave: SpecificMeal[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -94,8 +94,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   public async save() {
 
+    // Speichert das Lager
+    this.dbService.updateDocument(this.camp);
+
     // Prüft, ob etwas gespeichert werden muss
-    if (this.mealsChanged) {
+    if (this.specificMealsToSave.length > 0) {
 
       HeaderNavComponent.turnOff('Speichern');
 
@@ -110,18 +113,30 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   }
 
   /**
-   * Drop a Meal
+   * Wir bei einem Drop eines Meals ausgelöst.
+   *
+   *
+   *
    */
-  public drop(event: CdkDragDrop<string[]>) {
+  public drop([specificMeal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
-    if (!this.mealsChanged) {
-      HeaderNavComponent.toggle('Speichern');
+    // aktiviert das Speichern
+    HeaderNavComponent.turnOn('Speichern');
+
+    // updatet das Datum
+    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(event.container.id, 10));
+
+    // markiert die Mahlzeit als geändert
+    if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
+      this.specificMealsToSave.push(specificMeal);
+
     }
 
-    this.mealsChanged = true;
 
+    // Updatet das GUI: verschiebt das Lager in den neuen Container
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -129,6 +144,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
         event.previousIndex,
         event.currentIndex);
     }
+
   }
 
   /**
@@ -137,15 +153,16 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   saveMeals() {
 
-    this.saveCamp();
-    // TODO: save specificMeals
-    this.mealsChanged = false;
+    this.specificMealsToSave.forEach(meal =>
+      this.dbService.updateDocument(meal));
+
+    this.specificMealsToSave = [];
 
   }
 
 
   /**
-   * Fügt einen neuen Tag zum Lager hinzu
+   * Fügt einen neuen Tag zum Lager hinzu.
    *
    */
   addNewDay() {
@@ -178,7 +195,9 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     } else {
 
       // if camp is empty add a day with the date of today
-      return new Date();
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      return date;
 
     }
   }
@@ -186,14 +205,17 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   /**
    * Speichert das Lager
    */
-  public saveCamp() {
+  public saveCamp(): Observable<Camp> {
 
     this.dbService.updateDocument(this.camp);
+
+    return of(this.camp);
 
   }
 
   /**
    * Fügt eine neue Mahlzeit hinzu.
+   *
    */
   public addMeal() {
 
@@ -229,15 +251,19 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   }
 
 
-
-
-
+  /**
+   * Löscht die ausgewählt Mahlzeit.
+   *
+   */
   public deleteMeal(mealId: string, specificMealId: string) {
 
+    // versteckt das Element aus dem GUi
     document.getElementById(specificMealId).classList.add('hidden');
 
+    // shown delete Meassage
     const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
 
+    // Löscht das Rezept oder breicht den Vorgang ab, je nach Aktion der snackBar...
     let canDelete = true;
     snackBar.onAction().subscribe(() => {
       canDelete = false;
@@ -247,8 +273,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     snackBar.afterDismissed().subscribe(() => {
 
       if (canDelete) {
-
-        this.saveCamp();
         this.dbService.deleteSpecificMealAndRecipes(mealId, specificMealId);
       }
 
@@ -256,29 +280,41 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
-  public editDay(save: number, day: Day, meals: Meal[]) {
+  /**
+   * Bearbeitet den Tag.
+   *
+   */
+  public editDay(save: number, day: Day, meals: SpecificMeal[]) {
 
 
-    if (save === 1) {
-      this.mealsChanged = true;
-
-    } else if (save === -1) {
+    if (save === -1) {
 
       this.camp.days.splice(this.camp.days.indexOf(day), 1);
 
-      if (meals !== undefined) {
-        meals.forEach(meal => {
-          this.dbService.deleteSpecificMealAndRecipes(meal.documentId, meal.specificId);
-        });
-      }
 
-      this.mealsChanged = true;
-      this.save();
+      // löscht die specifischen Rezepte und Mahlzeiten des Tages
+      meals.forEach(specificMeal => {
+        this.dbService.deleteSpecificMealAndRecipes(specificMeal.getMealId(), specificMeal.documentId);
+      });
+
 
     }
 
+    // Ändert das Datum aller Mahlzeiten
+    meals.forEach(specificMeal => {
+      specificMeal.date = day.getTimestamp();
+      this.dbService.updateDocument(specificMeal);
+    });
+
+    // Speichert die Änderungen
+    this.save();
+
   }
 
+  /**
+   * Berechnet die Anzhal Tage pro Zeile gemäss der Bildschirmbreite
+   *
+   */
   private calculateCols() {
 
     return Math.floor(document.body.scrollWidth / 340);

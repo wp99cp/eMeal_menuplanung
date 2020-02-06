@@ -50,6 +50,7 @@ export class SpecificRecipe extends FirestoreObject implements ExportableObject 
     recipe.used_in_camp = this.campId;
     recipe.recipe_override_participants = this.overrideParticipants;
     recipe.recipe_used_for = this.vegi;
+    recipe.recipe_specificId = this.documentId;
 
     return recipe;
   }

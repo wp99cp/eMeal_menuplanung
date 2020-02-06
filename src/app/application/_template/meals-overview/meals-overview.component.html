@@ -6,12 +6,13 @@
 </mat-grid-tile-header>
 
 <!-- Meal List for one day-->
-<div class="meal-list" cdkDropList (cdkDropListDropped)="mealDropped.emit($event)" [cdkDropListData]="specificMeals">
+<div class="meal-list" cdkDropList [cdkDropListData]="specificMeals" id="{{day.getTimestamp().toMillis()}}">
 
   <!-- Meal Element-->
   <ng-container *ngFor="let meal of specificMeals; let i = index">
 
-    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.overrideParticipants}"
+    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
+      (cdkDragDropped)="mealDropped.emit([meal, $event])"
       matTooltip="{{meal.overrideParticipants ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.documentId}}">
 
       <div class=" meal-placeholder" *cdkDragPlaceholder> </div>

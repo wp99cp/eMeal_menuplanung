@@ -6,12 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 
 import { Meal } from '../../_class/meal';
-
+import { CreateMealComponent } from '../../_dialoges/create-meal/create-meal.component';
+import { FirestoreMeal, MealUsage } from '../../_interfaces/firestoreDatatypes';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
-import { CreateMealComponent } from '../../_dialoges/create-meal/create-meal.component';
-import { ImportComponent } from '../import/import.component';
-import { FirestoreMeal, MealUsage, AccessData } from '../../_interfaces/firestoreDatatypes';
 import { CustomPaginator } from './CustomPaginator';
 
 @Component({
@@ -102,13 +100,10 @@ export class AddMealComponent implements AfterViewInit {
    */
   addLastMeal() {
 
-    this.mealTableSource.data.forEach(meal => {
+    this.selectedMeal.selected.forEach(meal => {
 
-      if (meal.usedAs && meal.documentId) {
-
-        meal.lastMeal = meal.usedAs;
-        this.dbService.updateDocument(meal);
-      }
+      meal.lastMeal = meal.usedAs;
+      this.dbService.updateDocument(meal);
 
     });
 
@@ -157,6 +152,10 @@ export class AddMealComponent implements AfterViewInit {
    */
   public import() {
 
+    throw new Error('Not yet implemented!');
+
+    /*
+
     this.dialog.open(ImportComponent, {
       height: '640px',
       width: '900px',
@@ -190,6 +189,7 @@ export class AddMealComponent implements AfterViewInit {
 
       });
 
+      */
   }
 
 }

@@ -23,9 +23,6 @@ export class Meal extends FirestoreObject implements ExportableObject {
   public usedAs: MealUsage;
   public participantsWarning: boolean;
 
-  // Rezepte
-  private recipes: Observable<Recipe[]> = undefined;
-
   constructor(meal: FirestoreMeal, path: string) {
 
     super(meal);
@@ -55,35 +52,6 @@ export class Meal extends FirestoreObject implements ExportableObject {
   }
 
   /**
-   * Ladet die Rezepte der Mahlzeit nach.
-   * Im Normalfall werden die Rezepte nicht mit-
-   * geladen. Mit dieser Funktion werden die
-   * Rezepte nachgeladen.
-   *
-   */
-  public loadRecipes(dbService: DatabaseService) {
-
-    this.recipes = dbService.getRecipes(this.documentId);
-
-  }
-
-  /**
-   * Gibt die Rezepte des Tages zurück.
-   *
-   * @returns Die Rezepte des Tages
-   *
-   */
-  public getRecipes() {
-
-    if (this.recipes === undefined) {
-      throw new Error('Recipes not loaded yet.');
-    }
-
-    return this.recipes;
-
-  }
-
-  /**
    *
    * Creates specific meal and recipe documents in the database for a related camp
    *
@@ -92,13 +60,10 @@ export class Meal extends FirestoreObject implements ExportableObject {
    */
   public createSpecificRecipes(databaseService: DatabaseService, camp: Camp, specificId: string) {
 
-    if (this.recipes === undefined || this.recipes === null) {
-      this.recipes = databaseService.getRecipes(this.documentId);
-    }
-
-    this.recipes.subscribe(recipes => recipes.forEach(recipe =>
-      recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)
-    ));
+    databaseService.getRecipes(this.documentId)
+      .subscribe(recipes => recipes.forEach(recipe =>
+        recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)
+      ));
 
   }
 

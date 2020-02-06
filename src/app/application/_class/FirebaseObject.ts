@@ -45,6 +45,8 @@ export abstract class FirestoreObject implements ExportableObject {
   public static createObjects<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
     (objecType: ObjectFactory<DocType, ObjecType>): OpFnObjects<DocType, ObjecType> {
 
+    console.log('createObjects');
+
     return map(docChangeAction =>
       docChangeAction.map(docData =>
         new objecType(docData.payload.doc.data() as DocType, docData.payload.doc.ref.path)
@@ -59,6 +61,8 @@ export abstract class FirestoreObject implements ExportableObject {
    */
   public static createObject<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
     (objecType: ObjectFactory<DocType, ObjecType>): OpFnObject<DocType, ObjecType> {
+
+    console.log('createObject');
 
     return map(docSnapshot =>
       new objecType(docSnapshot.payload.data(), docSnapshot.payload.ref.path)
@@ -86,6 +90,10 @@ export abstract class FirestoreObject implements ExportableObject {
    *
    */
   constructor(document: FirestoreDocument) {
+
+    if (document === undefined) {
+      throw new Error('Invalid firestore document!');
+    }
 
     this.dateAdded = document.date_added as firestore.Timestamp;
     this.access = document.access;

@@ -19,14 +19,15 @@
 
   <mat-radio-group formControlName="vegi">
     <mat-radio-button value="all"> Rezept für alle </mat-radio-button>
-    <mat-radio-button value="vegiOnly"> Nur für Vegetarier </mat-radio-button>
-    <mat-radio-button value="nonVegi"> Nur für Nicht-Vegetarier </mat-radio-button>
+    <mat-radio-button value="vegetarians"> Nur für Vegetarier </mat-radio-button>
+    <mat-radio-button value="non-vegetarians"> Nur für Nicht-Vegetarier </mat-radio-button>
+    <mat-radio-button value="leaders"> Nur für Leiter </mat-radio-button>
   </mat-radio-group>
 
   <p>Das Rezept wird für
     {{calcRecipeParticipants(
       camp.participants,
-      camp.vegetarier,
+      camp.vegetarians,
       specificMeal.participants,
       specificRecipe.participants,
       specificMeal.overrideParticipants,

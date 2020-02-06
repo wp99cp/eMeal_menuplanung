@@ -1,25 +1,22 @@
-<ng-container *ngIf="(camp | async) as $camp; else loadingMeal">
-  <ng-container *ngIf="(meal | async) as $meal; else loadingMeal">
-    <ng-container *ngIf="(specificMeal | async) as $specificMeal; else loadingMeal">
+<ng-container *ngIf="(camp | async) as camp; else loadingMeal">
+  <ng-container *ngIf="(meal | async) as meal; else loadingMeal">
+    <ng-container *ngIf="(specificMeal | async) as specificMeal; else loadingMeal">
 
-      <span class="big-page-title">{{$meal.name}}</span>
+      <span class="big-page-title">{{meal.name}}</span>
 
       <p><b>Anzahl Teilnehmende:</b>
-        {{calcMealPart($camp.participants, $specificMeal.participants, $specificMeal.overrideParticipants )}} Per.
+        {{calcMealPart(camp.participants, specificMeal.participants, specificMeal.overrideParticipants )}} Per.
         (Vegis im Lager:
-        {{$camp.vegetarier}} Per.) </p>
+        {{camp.vegetarians}} Per.) </p>
 
 
-      <mat-accordion *ngIf="($meal.recipes | async) as recipes; else loadingMeal">
+      <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
-          <ng-container *ngIf="(recipe.specificRecipe | async) as $specificRecipe">
-            <!-- display recipe -->
-            <app-edit-recipe [recipe]="recipe" [specificRecipe]="$specificRecipe" [specificMeal]="$specificMeal"
-              [camp]="$camp" [index]="i" [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="$meal"
-              (saveOthers)="save(); indexOfOpenedPanel = -1">
-            </app-edit-recipe>
-          </ng-container>
+          <app-edit-recipe [recipe]="recipe" [specificMeal]="specificMeal" [camp]="camp" [index]="i"
+            [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="meal"
+            (saveOthers)="save(); indexOfOpenedPanel = -1">
+          </app-edit-recipe>
         </ng-container>
 
         <p *ngIf="recipes?.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
@@ -28,7 +25,7 @@
 
       </mat-accordion>
 
-      <p class="info" id="change-warning" *ngIf="($meal.recipes | async)?.length != 0"><b>Achtung: </b>
+      <p class="info" id="change-warning" *ngIf="(recipes | async)?.length != 0"><b>Achtung: </b>
         Das Bearbeiten der Zutaten eines Rezeptes hat Auswirkungen auf alle
         identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
 
