@@ -229,6 +229,8 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   public addMeal() {
 
+    this.save();
+
     this.dialog.open(AddMealComponent, {
       height: '618px',
       width: '1000px',
