@@ -53,6 +53,22 @@ export class ExportCampComponent implements OnInit {
       icon: 'create_new_folder'
     });
 
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Löscht alle Exporte des Lagers',
+      name: 'Exporte löschen',
+      action: (() => this.deleteExports()),
+      icon: 'delete'
+    });
+
+
+  }
+
+
+  deleteExports() {
+
+    this.campId.subscribe(campId => this.dbService.deleteExports(campId));
+
   }
 
   /**

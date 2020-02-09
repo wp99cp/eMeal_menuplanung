@@ -346,6 +346,20 @@ export class DatabaseService {
 
   /**
    *
+   * @param campId
+   */
+  public deleteExports(campId: string) {
+
+    this.db.collection('camps/' + campId + '/exports').get().subscribe(refs =>
+      refs.docs.forEach(docRef =>
+        docRef.ref.delete()
+      )
+    );
+
+  }
+
+  /**
+   *
    * Löscht alle Rezepte und Mahlzeiten eines Lagers
    *
    * @param campId

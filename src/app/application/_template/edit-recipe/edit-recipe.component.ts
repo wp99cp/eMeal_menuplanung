@@ -143,7 +143,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   private openRecipeInfo() {
 
-    this.specificRecipe.pipe(mergeMap(specificRecipe =>
+    this.specificRecipe.pipe(take(1)).pipe(mergeMap(specificRecipe =>
 
       this.dialog.open(RecipeInfoComponent, {
         height: '618px',
@@ -155,6 +155,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
       this.databaseService.updateDocument(recipe);
       this.databaseService.updateDocument(specificRecipe);
+
     });
 
   }

@@ -55,6 +55,9 @@ export class SettingsService {
 
       return calcRecipePart - campVegis;
 
+    } else if (vegiState === 'leaders') {
+
+      return 0;
     }
 
     return calcRecipePart;
