@@ -177,6 +177,8 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   addNewDay() {
 
+    this.save();
+
     const date = this.getDateOfLastDay();
     date.setDate(date.getDate() + 1);
 
