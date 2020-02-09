@@ -11,7 +11,8 @@
   <!-- Meal Element-->
   <ng-container *ngFor="let meal of specificMeals; let i = index">
 
-    <div class="meal-card" cdkDrag [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
+    <div class="meal-card" cdkDrag
+      [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
       (cdkDragDropped)="mealDropped.emit([meal, $event])"
       matTooltip="{{meal.overrideParticipants ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.documentId}}">
 
@@ -40,4 +41,4 @@
 
 </div>
 
-<p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Wird beim Export nicht unterstützt!">{{warning}}</p>
+<p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Beim Export werden beide Mahlzeiten angezeigt.">{{warning}}</p>

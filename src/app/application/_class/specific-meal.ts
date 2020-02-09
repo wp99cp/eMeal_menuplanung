@@ -47,6 +47,7 @@ export class SpecificMeal extends FirestoreObject implements ExportableObject {
 
   }
 
+
   public toFirestoreDocument(): FirestoreSpecificMeal {
 
     const meal = super.toFirestoreDocument() as FirestoreSpecificMeal;

@@ -174,11 +174,7 @@ export class DatabaseService {
     // this is a bug in the firestore api...
     this.db.collectionGroup('specificRecipes',
       query => query.where('recipe_specificId', '==', specificMealId))
-      .get().subscribe(docRefs => docRefs.forEach(docRef => {
-        console.log(docRef)
-        docRef.ref.delete()
-      }
-      ));
+      .get().subscribe(docRefs => docRefs.forEach(docRef => docRef.ref.delete()));
 
   }
 
@@ -348,7 +344,23 @@ export class DatabaseService {
 
   }
 
-  /** deletes a Camp form the database */
+  /**
+   *
+   * Löscht alle Rezepte und Mahlzeiten eines Lagers
+   *
+   * @param campId
+   *
+   */
+  public deleteAllMealsAndRecipes(campId: string) {
+
+    this.db.collectionGroup('specificMeals', this.createQuery(['used_in_camp', '==', campId])).get()
+      .subscribe(mealsRefs => mealsRefs.docs.forEach(docRef => docRef.ref.delete()));
+
+    this.db.collectionGroup('specificRecipes', this.createQuery(['used_in_camp', '==', campId])).get()
+      .subscribe(mealsRefs => mealsRefs.docs.forEach(docRef => docRef.ref.delete()));
+
+  }
+
   public deleteDocument(obj: FirestoreObject) {
 
     return this.db.doc(obj.path).delete();

@@ -126,8 +126,18 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     // updatet das Datum
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(event.container.id, 10));
 
+    // prüft das Vorbereitsungsdatum
+    if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime()) {
+
+      // Vorbereitungsdatum nach oder am Tag der Mahlzeit...
+      specificMeal.prepare = false;
+      this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', { duration: 2000 });
+
+    }
+
     // markiert die Mahlzeit als geändert
     if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
+
       this.specificMealsToSave.push(specificMeal);
 
     }

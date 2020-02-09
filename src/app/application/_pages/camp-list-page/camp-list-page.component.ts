@@ -146,7 +146,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
         if (deleteConfirmed) {
 
           this.databaseService.deleteDocument(camp);
-
+          this.databaseService.deleteAllMealsAndRecipes(camp.documentId);
         }
 
       });

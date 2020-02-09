@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, mergeMap, take } from 'rxjs/operators';
-import { TemplateHeaderComponent as Header } from 'src/app/_template/template-header/template-header.component';
+import { delay, map, mergeMap, take } from 'rxjs/operators';
+import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { DatabaseService } from '../../_service/database.service';
-import { SettingsService } from '../../_service/settings.service';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 @Component({
   selector: 'app-export-camp',
@@ -65,7 +63,10 @@ export class ExportCampComponent implements OnInit {
     this.pending = true;
     this.campId
       .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
-      .subscribe(() => { this.pending = false; },
+      .pipe(delay(250))
+      .subscribe(() => {
+        this.pending = false;
+      },
 
         // bug report on error
         (err) => {

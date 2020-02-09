@@ -43,6 +43,16 @@ export class MealPrepareComponent {
   }
 
   /**
+   * Mahlzeiten können nur mind. ein Tag vorhher vorbereitet werden.
+   *
+   */
+  public dateFilter = (d: Date | null): boolean => {
+
+    return d.getTime() < this.specificMeal.date.toDate().getTime();
+
+  }
+
+  /**
    * Returns the updatetd specificMeal
    */
   public returnsSpecificMeal() {

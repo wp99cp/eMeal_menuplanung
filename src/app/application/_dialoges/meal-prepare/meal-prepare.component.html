@@ -17,7 +17,8 @@
     </mat-checkbox>
 
     <mat-form-field class="full-width" *ngIf="prepareForm.value.hasPrepareDate">
-      <input matInput [matDatepicker]="picker" placeholder="Vorbereitungsdatum" formControlName="prepareDate">
+      <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" placeholder="Vorbereitungsdatum"
+        formControlName="prepareDate">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
