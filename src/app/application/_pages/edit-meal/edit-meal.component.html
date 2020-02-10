@@ -4,11 +4,14 @@
 
       <span class="big-page-title">{{meal.name}}</span>
 
-      <p><b>Anzahl Teilnehmende:</b>
-        {{calcMealPart(camp.participants, specificMeal.participants, specificMeal.overrideParticipants )}} Per.
-        (Vegis im Lager:
-        {{camp.vegetarians}} Per.) </p>
-
+      <div class="meal-infos">
+        <p><b>Anzahl Personen:</b>
+          {{calcMealPart(camp.participants, specificMeal.participants, specificMeal.overrideParticipants )}} Per.
+          (Vegis im Lager:
+          {{camp.vegetarians}} Per.) </p>
+        <p><b>Verwendung:</b> {{swissDateAdapter.formatLong(specificMeal.date.toDate())}} /
+          {{specificMeal.usedAs}} </p>
+      </div>
 
       <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
