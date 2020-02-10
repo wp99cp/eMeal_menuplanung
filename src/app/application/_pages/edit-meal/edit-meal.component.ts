@@ -114,17 +114,9 @@ export class EditMealComponent implements OnInit, Saveable {
       description: 'An einem anderen Tag vorbereiten',
       name: 'Vorbereiten',
       action: (() => this.prepare()),
-      icon: 'av_timer'
-    });
-
-
-    HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Kommt bald',
-      name: 'Export',
-      action: (() => null),
-      icon: 'cloud_download',
+      icon: 'av_timer',
       separatorAfter: true
+
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -145,7 +137,6 @@ export class EditMealComponent implements OnInit, Saveable {
 
 
   }
-
 
 
   private saveButton() {
