@@ -54,5 +54,5 @@
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="selectedRecipes" color="save"
     [disabled]="!selectedRecipes.hasValue()">Rezepte hinzufügen</button>
-  <button mat-raised-button (click)="newRecipe()">Rezept erstellen</button>
+  <button mat-raised-button (click)="newRecipe()" id="add-recipe">Rezept erstellen</button>
 </div>

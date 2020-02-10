@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -6,10 +6,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { empty } from 'rxjs';
 import { FirestoreMeal } from '../../_interfaces/firestoreDatatypes';
 import { FirestoreObject } from '../../_class/firebaseObject';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
-/**
- * TODO: Hier können später direkt Rezepte ausgewählt werden.
- */
 @Component({
   selector: 'app-create-meal',
   templateUrl: './create-meal.component.html',
@@ -19,11 +17,14 @@ export class CreateMealComponent implements OnInit {
 
   public newMealForm: FormGroup;
 
-  constructor(private authService: AuthenticationService, private formBuilder: FormBuilder) {
+  constructor(
+    private authService: AuthenticationService,
+    formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: { mealName: string }) {
 
     this.newMealForm = formBuilder.group({
 
-      title: '',
+      title: data.mealName,
       description: ''
 
     });

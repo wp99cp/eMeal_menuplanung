@@ -18,6 +18,7 @@ import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
+import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 @Component({
   selector: 'app-edit-meal',
@@ -48,7 +49,8 @@ export class EditMealComponent implements OnInit, Saveable {
     private route: ActivatedRoute,
     public dbService: DatabaseService,
     public dialog: MatDialog,
-    private router: Router) { }
+    private router: Router,
+    public swissDateAdapter: SwissDateAdapter) { }
 
   public newOpened(index: number) {
 

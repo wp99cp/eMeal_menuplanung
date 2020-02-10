@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { Observable, empty } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
 import { FirestoreObject } from '../../_class/firebaseObject';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-create-recipe',
@@ -15,11 +16,14 @@ export class CreateRecipeComponent implements OnInit {
 
   public newRecipeForm: FormGroup;
 
-  constructor(private authService: AuthenticationService, private formBuilder: FormBuilder) {
+  constructor(
+    private authService: AuthenticationService,
+    private formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) public data: { recipeName: string }) {
 
     this.newRecipeForm = formBuilder.group({
 
-      title: '',
+      title: data.recipeName,
       description: '',
       notes: ''
 

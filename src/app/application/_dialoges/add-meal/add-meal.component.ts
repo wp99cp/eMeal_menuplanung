@@ -117,7 +117,7 @@ export class AddMealComponent implements AfterViewInit {
     this.dialog.open(CreateMealComponent, {
       height: '640px',
       width: '900px',
-      data: null
+      data: { mealName: (document.getElementById('search-field') as HTMLInputElement).value }
 
     }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
 
@@ -136,6 +136,9 @@ export class AddMealComponent implements AfterViewInit {
 
 
   applyFilter(filterValue: string) {
+
+    document.getElementById('add-meal').classList.remove('mat-save');
+
     this.mealTableSource.filterPredicate = (meal: Meal, filter: string) =>
       // Condition for the filter
       meal.name.trim().toLowerCase().includes(filter) ||
@@ -145,6 +148,12 @@ export class AddMealComponent implements AfterViewInit {
 
     // apply filter to the table
     this.mealTableSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.mealTableSource.filteredData.length === 0) {
+
+      document.getElementById('add-meal').classList.add('mat-save');
+
+    }
   }
 
   /**
