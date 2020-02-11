@@ -27,7 +27,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
 
   public recipeForm: FormGroup;
-  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'delete'];
+  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'fresh-product', 'delete'];
   public dataSource: MatTableDataSource<Ingredient>;
 
   private ingredientFieldNodes: Element[];
@@ -229,6 +229,18 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
+  public toggleFresh(ingredient: Ingredient) {
+
+
+    ingredient.fresh = !ingredient.fresh;
+    this.recipeForm.markAsTouched();
+    this.dataSource._updateChangeSubscription();
+
+    HeaderNavComponent.turnOn('Speichern');
+
+
+  }
+
 
   private setFocusChanges() {
 
@@ -314,7 +326,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   addIngredientField() {
 
     // generiert leere Daten für ein neues Ingredient
-    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null, comment: '' };
+    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null, comment: '', fresh: false };
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
@@ -371,7 +383,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
         food: ingredientAsArray[2],
         unit: ingredientAsArray[1],
         measure: Number.parseFloat(ingredientAsArray[0]),
-        comment: ''
+        comment: '',
+        fresh: false,
       });
 
       i++;

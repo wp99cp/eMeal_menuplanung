@@ -97,6 +97,7 @@ export interface Ingredient {
   measure: number;
   unit: string;
   comment: string;
+  fresh: boolean;
 
 }
 
