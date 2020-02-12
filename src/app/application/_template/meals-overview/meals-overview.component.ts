@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { Day } from '../../_class/day';
-import { MatDialog } from '@angular/material';
-import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
-import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
-import { Meal } from '../../_class/meal';
-import { SpecificMeal } from '../../_class/specific-meal';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
+
+import { Day } from '../../_class/day';
+import { SpecificMeal } from '../../_class/specific-meal';
+import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
+import { Meal } from '../../_class/meal';
 
 @Component({
   selector: 'app-meals-overview',
@@ -14,8 +15,10 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 })
 export class MealsOverviewComponent implements OnChanges {
 
+
   @Input() day: Day;
   @Input() specificMeals: SpecificMeal[];
+  @Input() days: Day[];
 
   @Input() hideIcons = false;
   @Output() mealDropped = new EventEmitter<[SpecificMeal, CdkDragDrop<any, any>]>();
@@ -73,7 +76,7 @@ export class MealsOverviewComponent implements OnChanges {
 
 
     this.dialog
-      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day, specificMeals: this.specificMeals } })
+      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day, specificMeals: this.specificMeals, days: this.days } })
       .afterClosed()
       .subscribe((save: number) => {
 

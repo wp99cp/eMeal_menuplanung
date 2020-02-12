@@ -60,11 +60,10 @@ export class EditMealComponent implements OnInit, Saveable {
 
   ngOnInit() {
 
-
-    // load ids from the url
-    this.campId = this.route.url.pipe(map(url => url[url.length - 4].path));
-    this.mealId = this.route.url.pipe(map(url => url[url.length - 2].path));
-    this.specificMealId = this.route.url.pipe(map(url => url[url.length - 1].path));
+    // Ladet die Ids von der URL
+    this.campId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 4].path));
+    this.mealId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 2].path));
+    this.specificMealId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 1].path));
 
     // Ladet die benötigten Dokumente
     this.camp = this.campId.pipe(mergeMap(id => this.dbService.getCampById(id)));
@@ -182,26 +181,28 @@ export class EditMealComponent implements OnInit, Saveable {
 
     this.camp.pipe(take(1)).pipe(mergeMap(camp =>
       this.meal.pipe(take(1)).pipe(mergeMap(meal =>
-        this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal => {
-
-          // Speichern der noch offenen Änderungen
-          this.dbService.updateDocument(meal);
-          this.dbService.updateDocument(specificMeal);
+        this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal =>
 
           // Dialog öffnen
-          return this.dialog.open(MealInfoComponent, {
+          this.dialog.open(MealInfoComponent, {
             height: '618px',
             width: '1000px',
             data: { camp, meal, specificMeal }
-          }).afterClosed();
+          }).afterClosed()
 
-        }))
+        ))
       ))
-    )).subscribe(([mealResponse, specificMealResponse]: [Meal, SpecificMeal]) => {
+    )).subscribe((resp: ([Meal, SpecificMeal] | null)) => {
+
+      if (resp === null || resp === undefined) {
+
+        return;
+
+      }
 
       // Speichern der geänderten Daten im Dialog-Fenster
-      this.dbService.updateDocument(mealResponse);
-      this.dbService.updateDocument(specificMealResponse);
+      this.dbService.updateDocument(resp[0]);
+      this.dbService.updateDocument(resp[1]);
 
     });
 

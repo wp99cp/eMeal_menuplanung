@@ -62,8 +62,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     this.ingredientFieldNodes = this.getNodes();
 
-
-    // Ladet das specifische Rezept nach
+    // Ladet das specifische Rezept.
     this.specificRecipe = this.databaseService.getSpecificRecipe(this.specificMeal.documentId, this.recipe, this.camp).pipe(take(1));
     this.specificRecipe.subscribe(specificRecipe => this.calcPart(specificRecipe));
 
@@ -141,6 +140,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     }, 150);
   }
 
+  /**
+   *
+   */
   private openRecipeInfo() {
 
     this.specificRecipe.pipe(take(1)).pipe(mergeMap(specificRecipe =>
@@ -187,6 +189,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
+  /**
+   *
+   */
   ngAfterViewInit() {
 
     this.setFocusChanges();
@@ -229,6 +234,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
+  /**
+   *
+   */
   public toggleFresh(ingredient: Ingredient) {
 
 
@@ -241,7 +249,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
-
+  /**
+   *
+   */
   private setFocusChanges() {
 
     // delete old listeners
@@ -257,6 +267,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
+  /**
+   *
+   */
   private keyListner(i: number): EventListenerOrEventListenerObject {
 
     return (event: any) => {
@@ -278,8 +291,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   }
 
 
-
-  // save on destroy
   public async save(): Promise<boolean> {
 
 

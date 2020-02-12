@@ -109,8 +109,10 @@ export class AddRecipeComponent implements AfterViewInit {
     }).afterClosed().subscribe((recipe: Observable<FirestoreRecipe>) => {
 
       recipe.subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
-
       this.setFocusToSeachField();
+
+      // Remove Color
+      document.getElementById('add-recipe').classList.remove('mat-save');
 
     });
 

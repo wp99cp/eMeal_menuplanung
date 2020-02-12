@@ -122,8 +122,10 @@ export class AddMealComponent implements AfterViewInit {
     }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
 
       meal.subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
-
       this.setFocusToSeachField();
+
+      // Remove Color
+      document.getElementById('add-meal').classList.remove('mat-save');
 
     });
   }

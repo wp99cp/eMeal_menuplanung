@@ -13,10 +13,15 @@ import { SpecificMeal } from '../../_class/specific-meal';
 export class EditDayComponent implements OnInit {
 
   public dayInfo: FormGroup;
+  private currentDate;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[] }, private formBuilder: FormBuilder) { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[], days: Day[] },
+    private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+
+    this.currentDate = this.data.day.dateAsTypeDate;
 
     this.dayInfo = this.formBuilder.group({
 
@@ -26,6 +31,18 @@ export class EditDayComponent implements OnInit {
     });
 
   }
+
+  /**
+   * Mahlzeiten können nur mind. ein Tag vorhher vorbereitet werden.
+   *
+   */
+  public dateFilter = (d: Date | null): boolean => {
+
+    const withSameDate = this.data.days.filter(day => day.dateAsTypeDate.getTime() === d.getTime());
+    return withSameDate.length === 0 || d.getTime() === this.currentDate.getTime();
+
+  }
+
 
   saveDayData() {
 

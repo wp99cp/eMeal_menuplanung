@@ -47,8 +47,17 @@ export class Camp extends FirestoreObject implements ExportableObject {
     }
 
     // Sortiert die Tage aufsetigend
-    this.days.sort((a, b) => a.dateAsTypeDate.getTime() - b.dateAsTypeDate.getTime());
+    this.sortDays();
 
+  }
+
+  /**
+   * Sortiert die Tage des Lagers
+   *
+   */
+  public sortDays() {
+
+    this.days.sort((a, b) => a.dateAsTypeDate.getTime() - b.dateAsTypeDate.getTime());
   }
 
   /**
@@ -60,7 +69,9 @@ export class Camp extends FirestoreObject implements ExportableObject {
    */
   public loadMeals(dbService: DatabaseService) {
 
-    this.days.forEach(day => day.loadMeals(dbService));
+    this.days.forEach(day =>
+      day.loadMeals(dbService)
+    );
 
   }
 

@@ -11,6 +11,8 @@ import { SpecificMeal } from './specific-meal';
  */
 export class Day {
 
+  private static loadedMealsOfDays = {};
+
   private readonly campId: string;
 
   public dateAsTypeDate: Date;
@@ -41,16 +43,25 @@ export class Day {
 
   }
 
+
+
   /**
    * Ein Tag wird im Normalfall ohne die Mahlzeiten geladen.
    *
    * Die Mahlzeiten des Tages können mit dieser Funktion nach-
    * geladen werden.
    *
+
    */
   loadMeals(dbService: DatabaseService) {
 
-    this.meals = dbService.getSpecificMeals(this.campId, this.getTimestamp());
+    if (Day.loadedMealsOfDays[this.campId + this.getTimestamp()]) {
+      this.meals = Day.loadedMealsOfDays[this.campId + this.getTimestamp()];
+
+    } else {
+      this.meals = dbService.getSpecificMeals(this.campId, this.getTimestamp());
+      Day.loadedMealsOfDays[this.campId + this.getTimestamp()] = this.meals;
+    }
 
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { mergeMap, take, map } from 'rxjs/operators';
+import { mergeMap, take, tap } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { Camp } from '../../_class/camp';
@@ -26,15 +26,15 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   constructor(
     private route: ActivatedRoute,
-    private databaseService: DatabaseService,
+    private dbService: DatabaseService,
     private router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar) {
 
     // Ladet das Lager von der URL
     this.camp = this.route.url.pipe(mergeMap(
-      url => this.databaseService.getCampById(url[1].path)
-    ));
+      url => this.dbService.getCampById(url[1].path)
+    )).pipe(tap(camp => camp.loadMeals(this.dbService))).pipe(take(1));
 
   }
 
@@ -89,8 +89,12 @@ export class EditCampPageComponent implements OnInit, Saveable {
   /**
    * Opens the dialog for the camp infos
    *
+   * TODO: Im Moment wird das Lager hiermit zweimal gespeichert!
+   *
    */
   public campInfoDialog() {
+
+    this.save();
 
     // Takes the unsaved changes form the weekview and puts the
     // changes from the dialog on top of this...
@@ -142,7 +146,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
   public saveCamp(camp: Camp) {
 
     this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
-    this.databaseService.updateDocument(camp);
+    this.dbService.updateDocument(camp);
 
   }
 

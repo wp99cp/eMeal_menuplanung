@@ -3,6 +3,7 @@ import { firestore } from 'firebase';
 import { OperatorFunction } from 'rxjs';
 import { DocumentChangeAction, DocumentSnapshot, Action } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
+import { isDevMode } from '@angular/core';
 
 export interface ExportableObject {
 
@@ -45,7 +46,9 @@ export abstract class FirestoreObject implements ExportableObject {
   public static createObjects<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
     (objecType: ObjectFactory<DocType, ObjecType>): OpFnObjects<DocType, ObjecType> {
 
-    console.log('createObjects');
+    if (isDevMode()) {
+      console.log('createObjects: ' + objecType.name + '[]');
+    }
 
     return map(docChangeAction =>
       docChangeAction.map(docData =>
@@ -62,7 +65,9 @@ export abstract class FirestoreObject implements ExportableObject {
   public static createObject<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
     (objecType: ObjectFactory<DocType, ObjecType>): OpFnObject<DocType, ObjecType> {
 
-    console.log('createObject');
+    if (isDevMode()) {
+      console.log('createObject: ' + objecType.name);
+    }
 
     return map(docSnapshot =>
       new objecType(docSnapshot.payload.data(), docSnapshot.payload.ref.path)

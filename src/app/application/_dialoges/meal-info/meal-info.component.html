@@ -20,7 +20,7 @@
   <p *ngIf="!mealInfo.value.overrideParticipants || camp.participants == specificMeal.participants">
     Diese Mahlzeit wird für {{camp.participants}} Teilnehmende berechnet.
   </p>
-  <!-- TODO: muss noch angepasst werden!!!! Stimmt so nicht wirklich. -->
+
   <p class="warning" *ngIf="camp.participants != specificMeal.participants && mealInfo.value.overrideParticipants">
     <b>Achtung: </b> Abweichende Teilnehmeranzahl! Das Lager hat {{camp.participants}} Teilnehmende,
     diese Mahlzeit wird aber für {{specificMeal.participants}} Personen berechnet.
@@ -41,7 +41,7 @@
 
 
 <div mat-dialog-actions class="mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="">Abbrechen</button>
   <button mat-raised-button [disabled]="!mealInfo.touched" [mat-dialog-close]="saveValueChanges()"
     color="save">Speichern</button>
 </div>
