@@ -154,21 +154,22 @@ export class EditMealComponent implements OnInit, Saveable {
    */
   public prepare() {
 
-    this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal =>
+    this.camp.pipe(take(1)).pipe(mergeMap(camp =>
+      this.specificMeal.pipe(take(1)).pipe(mergeMap(specificMeal =>
 
-      this.dialog.open(MealPrepareComponent, {
-        height: '618px',
-        width: '1000px',
-        data: { specificMeal }
-      }).afterClosed()
+        this.dialog.open(MealPrepareComponent, {
+          height: '618px',
+          width: '1000px',
+          data: { specificMeal, days: camp.days }
+        }).afterClosed()
 
-    )).subscribe((specificMeal: SpecificMeal) => {
+      )))).subscribe((specificMeal: SpecificMeal) => {
 
-      if (specificMeal != null) {
-        this.dbService.updateDocument(specificMeal);
-      }
+        if (specificMeal != null) {
+          this.dbService.updateDocument(specificMeal);
+        }
 
-    });
+      });
 
 
   }
