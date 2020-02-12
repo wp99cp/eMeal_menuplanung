@@ -65,18 +65,26 @@ export class AddMealComponent implements AfterViewInit {
 
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
+  /**
+   * Whether the number of selected elements matches the total number of rows.
+   * Since you only can select meals with a setted useage, we only need to count them...
+   *
+   */
   isAllSelected() {
     const numSelected = this.selectedMeal.selected.length;
-    const numRows = this.mealTableSource.data.length;
+    const numRows = this.mealTableSource.data.filter(meal => meal.usedAs != null).length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   * only meals with a set usage gets selected
+   *
+   */
   masterToggle() {
     this.isAllSelected() ?
       this.selectedMeal.clear() :
-      this.mealTableSource.data.forEach(meal => this.selectedMeal.select(meal));
+      this.mealTableSource.data.filter(meal => meal.usedAs != null).forEach(meal => this.selectedMeal.select(meal));
   }
 
   /** The label for the checkbox on the passed row */
