@@ -71,9 +71,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   ngOnChanges() {
 
-    // Ladte die Mahlzeiten des Lagers
-    this.camp.loadMeals(this.dbService);
-
     this.showParticipantsWarning = false;
 
     this.camp.days.forEach(day => {
@@ -127,7 +124,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(event.container.id, 10));
 
     // prüft das Vorbereitsungsdatum
-    if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime()) {
+    if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
 
       // Vorbereitungsdatum nach oder am Tag der Mahlzeit...
       specificMeal.prepare = false;
@@ -188,6 +185,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
       day_description: '',
     }, this.camp.documentId);
     this.camp.days.push(day);
+
+    // Ladet die Mahlzeiten neu, damit auch der neue Tag sein Array zugesprochen bekommt.
+    // Anstonsten führt das verschieben von Mahlzeitn zu einem Fehler
+    this.camp.loadMeals(this.dbService);
+    this.camp.sortDays();
 
     this.saveCamp();
 
@@ -319,6 +321,11 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
       specificMeal.date = day.getTimestamp();
       this.dbService.updateDocument(specificMeal);
     });
+
+    // Ladet die Mahlzeiten neu, anstonsten führt das verschieben von Mahlzeitn zu einem Fehler
+    this.camp.loadMeals(this.dbService);
+    this.camp.sortDays();
+
 
     // Speichert die Änderungen
     this.save();
