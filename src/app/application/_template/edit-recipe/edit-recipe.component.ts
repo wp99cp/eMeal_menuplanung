@@ -153,7 +153,9 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
         data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe }
       }).afterClosed()
 
-    )).subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
+      // This second take(1) is necessary, since otherwise there is a bug... where you can't save the usergroup
+      // after adding a new recipe without reloading the page inbetween
+    )).pipe(take(1)).subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
 
       this.databaseService.updateDocument(recipe);
       this.databaseService.updateDocument(specificRecipe);
@@ -329,6 +331,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
+    HeaderNavComponent.turnOn('Speichern');
+
   }
 
   /**
@@ -345,6 +349,8 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     this.setFocusChanges();
     this.ingredientFieldNodes = this.getNodes();
     (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
+
+    HeaderNavComponent.turnOn('Speichern');
 
   }
 
