@@ -37,6 +37,7 @@ export abstract class FirestoreObject implements ExportableObject {
   private access: AccessData;
   private readonly dateAdded: firestore.Timestamp;
 
+  public lastChange: Date;
 
   /**
    *
@@ -100,6 +101,8 @@ export abstract class FirestoreObject implements ExportableObject {
       throw new Error('Invalid firestore document!');
     }
 
+    this.lastChange = document.date_modified !== null ? (document.date_modified as firestore.Timestamp).toDate() : new Date();
+
     this.dateAdded = document.date_added as firestore.Timestamp;
     this.access = document.access;
 
@@ -133,6 +136,7 @@ export abstract class FirestoreObject implements ExportableObject {
     return this.access;
 
   }
+
 
   public toFirestoreDocument(): FirestoreDocument {
 

@@ -4,7 +4,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
-import { Observable, of } from 'rxjs';
+import { Observable, of, merge } from 'rxjs';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
 
 import { Camp } from '../../_class/camp';
@@ -14,6 +14,7 @@ import { SpecificMeal } from '../../_class/specific-meal';
 import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
+import { mergeMap, take } from 'rxjs/operators';
 
 /**
  * Wochenübersicht eines Lagers
@@ -233,13 +234,25 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   public addMeal() {
 
-    this.save();
 
-    this.dialog.open(AddMealComponent, {
-      height: '618px',
-      width: '1000px',
-      data: null
-    }).afterClosed().subscribe((result: SelectionModel<Meal>) => {
+    // Testversuch für die Sortierung der Mahlzeiten
+    const mealsOb: Observable<SpecificMeal[]>[] = [];
+    this.camp.days.forEach(day => mealsOb.push(day.getMeals()));
+    merge(...mealsOb).pipe(take(1)).pipe(mergeMap((meal: SpecificMeal[]) => {
+
+      const mealNames = [];
+      meal.forEach(m => mealNames.push(m.weekTitle));
+
+      this.save();
+
+      return this.dialog.open(AddMealComponent, {
+        height: '618px',
+        width: '1000px',
+        data: { mealNames }
+      }).afterClosed();
+
+
+    })).subscribe((result: SelectionModel<Meal>) => {
 
       if (result != null) {
 

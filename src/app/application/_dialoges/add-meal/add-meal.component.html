@@ -72,7 +72,7 @@
 <div mat-dialog-actions class=" mat-buttons">
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="selectedMeal" color="save" [disabled]="!selectedMeal.hasValue()"
-    (click)="addLastMeal()">Mahlzeiten hinzufügen</button>
+    (click)="addLastMeal()">Mahlzeiten hinzufügen ({{selectedMeal.selected.length}})</button>
   <button mat-raised-button (click)="newMeal()" id="add-meal">Mahlzeit erstellen</button>
   <button mat-raised-button (click)="import()" matTooltip="Importieren von Swissmilk.ch"
     [disabled]="true">Importieren</button>

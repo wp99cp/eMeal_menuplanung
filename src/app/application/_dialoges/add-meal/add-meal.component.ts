@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, Inject } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 
@@ -35,7 +35,11 @@ export class AddMealComponent implements AfterViewInit {
   public selectedMeal = new SelectionModel<Meal>(true, []);
 
   /** Constructor */
-  constructor(private dbService: DatabaseService, public dialog: MatDialog, private authService: AuthenticationService) {
+  constructor(
+    private dbService: DatabaseService,
+    public dialog: MatDialog,
+    private authService: AuthenticationService,
+    @Inject(MAT_DIALOG_DATA) public data: { mealNames: string[] }) {
 
     this.mealTableSource = new MatTableDataSource();
 
@@ -46,12 +50,13 @@ export class AddMealComponent implements AfterViewInit {
 
     // Eigenschaft für die Sortierung
     this.mealTableSource.sort = this.sort;
+
     this.mealTableSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'name': return item.name.toLowerCase();
+        case 'name': return item.name.toLowerCase() + this.defaultSort(item);
         case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
         case 'useAs': return (item.lastMeal !== undefined) ? item.lastMeal.toLowerCase() : '';
-        default: return item[property];
+        default: return this.defaultSort(item);
       }
     };
 
@@ -62,6 +67,27 @@ export class AddMealComponent implements AfterViewInit {
 
     this.mealTableSource.paginator = this.paginator;
 
+
+  }
+
+  /**
+   * Defines the default sorting order of the meals.
+   * Hierfür bekommt jede Mahlzeit eine Zahl zugeordnet.
+   *
+   * @param item meal to order
+   */
+  private defaultSort(meal: Meal): string | number {
+
+    // Bereits verwendete Mahlzeiten werden ganz nach hinten verschoben. Ausser
+    // es handelt sich dabei um einem Zmorgen, Zvieri oder Znüni
+    if (this.data.mealNames.includes(meal.name)
+      && meal.usedAs !== 'Zmorgen' && meal.usedAs !== 'Zvieri' && meal.usedAs !== 'Znüni') {
+      return 0;
+    }
+
+    // ansonsten werden die Mahlzeiten nach dem Datum sortiert,
+    // so dass das zuletzt verwendete zuoberst ist.
+    return -meal.lastChange.getTime();
 
   }
 
@@ -134,6 +160,12 @@ export class AddMealComponent implements AfterViewInit {
 
       // Remove Color
       document.getElementById('add-meal').classList.remove('mat-save');
+
+      if (this.sort.active === 'title') {
+
+        (document.getElementById('search-field') as HTMLInputElement).value = '';
+        this.applyFilter('');
+      }
 
     });
   }
