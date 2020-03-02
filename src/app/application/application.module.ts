@@ -50,7 +50,6 @@ import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { HelpPageComponent } from './_pages/help-page/help-page.component';
-import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AuthenticationService } from './_service/authentication.service';
 import { AutoSaveService } from './_service/auto-save.service';
@@ -63,13 +62,16 @@ import { MealsOverviewComponent } from './_template/meals-overview/meals-overvie
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
 import { ApplicationRoutingModule } from './application-routing.module';
+import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component';
+import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
+import { MealListComponent } from './_pages/meal-list/meal-list.component';
 
 
 @NgModule({
   declarations: [
     WelcomPageComponent,
     CampListPageComponent,
-    MealListPageComponent,
+
     EditCampPageComponent,
     UserListComponent,
     DeleteCampComponent,
@@ -95,7 +97,10 @@ import { ApplicationRoutingModule } from './application-routing.module';
     AddRecipeComponent,
     CreateRecipeComponent,
     MealPrepareComponent,
-    HelpPageComponent
+    HelpPageComponent,
+    RecipeListComponent,
+    EditSingleRecipeComponent,
+    MealListComponent
   ],
   providers: [
     AngularFirestore,

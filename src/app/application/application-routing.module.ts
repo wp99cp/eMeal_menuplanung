@@ -6,11 +6,13 @@ import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.co
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
-import { MealListPageComponent } from './_pages/meal-list-page/meal-list-page.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AutoSaveService } from './_service/auto-save.service';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
 import { HelpPageComponent } from './_pages/help-page/help-page.component';
+import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component';
+import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
+import { MealListComponent } from './_pages/meal-list/meal-list.component';
 
 
 const routes: Routes = [
@@ -37,7 +39,15 @@ const routes: Routes = [
   },
   {
     path: 'meals',
-    component: MealListPageComponent
+    component: MealListComponent
+  },
+  {
+    path: 'recipes',
+    component: RecipeListComponent
+  },
+  {
+    path: 'recipes/:id',
+    component: EditSingleRecipeComponent
   },
   {
     path: 'camps/:id',

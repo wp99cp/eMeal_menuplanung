@@ -1,0 +1,25 @@
+.meal
+  display: grid
+  width: 200px
+  margin: 10px
+  padding: 10px
+  text-align: center
+  float: left
+  height: 60px
+  grid-template-areas:  "null name icon"  "desc desc desc"
+
+  h3
+    margin-top: 0
+    grid-area: name
+
+  
+  .delete_meal
+    grid-area: icon
+
+  .description
+      grid-area: desc
+
+.hidden
+  display: none
+
+

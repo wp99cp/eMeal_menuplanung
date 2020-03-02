@@ -90,7 +90,6 @@ export interface FirestoreMeal extends FirestoreDocument {
 
 }
 
-
 export interface Ingredient {
 
   food: string;
@@ -139,7 +138,7 @@ export interface FirestoreSpecificMeal extends FirestoreDocument {
   meal_date: firestore.Timestamp;
 
   used_in_camp: string;
-
+  meal_id: string;
 
 }
 

@@ -23,6 +23,8 @@ export class Meal extends FirestoreObject implements ExportableObject {
   public usedAs: MealUsage;
   public participantsWarning: boolean;
 
+  public usedInCamps: string[];
+
   constructor(meal: FirestoreMeal, path: string) {
 
     super(meal);
@@ -34,7 +36,6 @@ export class Meal extends FirestoreObject implements ExportableObject {
     this.description = meal.meal_description;
     this.keywords = meal.meal_keywords;
     this.lastMeal = meal.meal_last_usage;
-
 
   }
 
@@ -83,6 +84,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     specificMealData.meal_gets_prepared = false;
     specificMealData.meal_prepare_date = day.getTimestamp();
     specificMealData.meal_used_as = usedAs;
+    specificMealData.meal_id = this.documentId;
 
     const mealPath = 'meals/' + this.documentId + '/specificMeals/';
     const ref = await databaseService.addDocument(specificMealData, mealPath);

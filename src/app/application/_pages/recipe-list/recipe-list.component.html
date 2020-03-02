@@ -1,0 +1,19 @@
+<span class="big-page-title">Meine Rezepte</span>
+
+
+<mat-form-field class="mat-form-field full-width">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field">
+</mat-form-field>
+
+<div id="recipesList" *ngIf="filteredRecipes  as recipes">
+
+  <div class="recipe mat-elevation-z1" *ngFor="let recipe of recipes" id="{{recipe.documentId}}">
+
+    <h3>{{recipe.name}}</h3>
+    <span class="description">{{recipe.description}}</span>
+    <span class="usedIn">verwendet in {{recipe.usedInMeals.length}} Mahlzeiten</span>
+    <mat-icon class="delete_recipe" matTooltip="Recipe löschen" (click)="delete(recipe)"> delete </mat-icon>
+
+  </div>
+
+</div>

@@ -31,29 +31,47 @@ export class MealsOverviewComponent implements OnChanges {
   constructor(public dialog: MatDialog, public swissDateAdapter: SwissDateAdapter) { }
 
   log(str) {
+
     console.log(str);
+
   }
 
   ngOnChanges() {
 
     // Sortiert die Mahlzeiten
     this.warning = '';
-    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
-    const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];
 
     if (this.specificMeals) {
-      this.specificMeals.sort((a, b) => {
-
-        if (a.usedAs === b.usedAs) {
-          this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.usedAs)] + '!';
-        }
-
-        return orderOfMahlzeiten.indexOf(a.usedAs) - orderOfMahlzeiten.indexOf(b.usedAs);
-      });
+      this.sortMeals();
     }
 
   }
 
+  /**
+   * Sortiert die Mahlzeiten
+   *
+   * @param pluralOfMahlzeiten
+   * @param orderOfMahlzeiten
+   */
+  private sortMeals() {
+
+    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
+    const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];
+
+    this.specificMeals.sort((a, b) => {
+
+      if (a.usedAs === b.usedAs) {
+        this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.usedAs)] + '!';
+      }
+      return orderOfMahlzeiten.indexOf(a.usedAs) - orderOfMahlzeiten.indexOf(b.usedAs);
+
+    });
+
+  }
+
+  /**
+   *
+   */
   public visible(specificMealId: string) {
 
     if (document.getElementById(specificMealId)) {

@@ -1,0 +1,17 @@
+<span class="big-page-title">Meine Mahlzeiten</span>
+
+<mat-form-field class="mat-form-field full-width">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
+</mat-form-field>
+
+<div id="mealsList" *ngIf="filteredMeals as meals">
+
+  <div class="meal mat-elevation-z1" *ngFor="let meal of meals" id="{{meal.documentId}}">
+
+    <h3>{{meal.name}}</h3>
+    <span class="description">{{meal.description}}</span>
+    <mat-icon class="delete_meal" matTooltip="Mahlzeit löschen" (click)="delete(meal)"> delete </mat-icon>
+
+  </div>
+
+</div>

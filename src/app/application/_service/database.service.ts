@@ -37,6 +37,8 @@ import { AuthenticationService } from './authentication.service';
 })
 export class DatabaseService {
 
+
+
   /**
    * An angular service to provide data form the AngularFirestore database.
    * This service includes methodes to fetch all kind of firebaseObjects form
@@ -167,8 +169,6 @@ export class DatabaseService {
   public deleteSpecificMealAndRecipes(mealId: string, specificMealId: string) {
 
     this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
-
-    console.log(mealId, specificMealId);
 
     // https://stackoverflow.com/questions/56149601/firestore-collection-group-query-on-documentid
     // this is a bug in the firestore api...
@@ -393,6 +393,22 @@ export class DatabaseService {
 
   }
 
+  public getNumberOfUses(mealId: string): Observable<number> {
+
+    return this.db.collectionGroup('specificMeals', this.createQuery(['meal_id', '==', mealId])).get()
+      .pipe(map(refs => refs.docs.length));
+
+  }
+
+  public deleteRecipesRefs(mealId: string) {
+    this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId]).pipe(mergeMap(query =>
+      this.db.collection('recipes', query).get()
+    )).subscribe(docRefs => docRefs.docs.forEach(doc =>
+      doc.ref.update({ used_in_meals: firestore.FieldValue.arrayRemove(mealId) })
+    ));
+
+  }
+
 
   // *********************************************************************************************
   // private methodes
@@ -434,6 +450,8 @@ export class DatabaseService {
 
     return query;
   }
+
+
 
   private getPathsToCloudDocuments(): OperatorFunction<DocumentChangeAction<ExportDocData>[], ExportData[]> {
 
