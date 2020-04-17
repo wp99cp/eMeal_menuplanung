@@ -60,7 +60,7 @@ export class RecipeListComponent implements OnInit {
     });
     } else{
 
-        this.snackBar.open('Das Rezept kann nicht gelöscht werden, da es noch verwendet wird!', '', { duration: 2000 });
+        this.snackBar.open('Das Rezept kann nicht gelöscht werden, da es verwendet wird!', '', { duration: 2000 });
 
     }
 

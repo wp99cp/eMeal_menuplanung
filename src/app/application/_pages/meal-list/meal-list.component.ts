@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./meal-list.component.sass']
 })
 export class MealListComponent implements OnInit {
+
   public meals: Observable<Meal[]>;
   public filteredMeals: Meal[];
 

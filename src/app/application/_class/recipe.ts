@@ -25,7 +25,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     super(recipe);
 
     this.usedInMeals = recipe.used_in_meals;
-
+   
     this.documentId = path.substring(path.lastIndexOf('/') + 1);
     this.path = path;
 

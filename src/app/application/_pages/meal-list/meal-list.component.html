@@ -6,11 +6,21 @@
 
 <div id="mealsList" *ngIf="filteredMeals as meals">
 
-  <div class="meal mat-elevation-z1" *ngFor="let meal of meals" id="{{meal.documentId}}">
+  <div class="meal mat-elevation-z3" *ngFor="let meal of meals" id="{{meal.documentId}}">
 
+    <div class="title">
+    <mat-icon>fastfood</mat-icon>
     <h3>{{meal.name}}</h3>
-    <span class="description">{{meal.description}}</span>
-    <mat-icon class="delete_meal" matTooltip="Mahlzeit löschen" (click)="delete(meal)"> delete </mat-icon>
+    </div>
+
+    <span class="usedIn">Wird verwendet in (...) Lager/-n.</span>
+  
+    <span class="description">{{meal.description == "" ? "Keine Beschreibung zu diesem Rezept." : meal.description}}</span>
+   
+    <div class="icons">
+      <mat-icon class="edit_meal deactive"  matTooltip="Mahlzeit bearbeiten (zur Zeit noch nicht verfügbar)"> edit </mat-icon>
+      <mat-icon class="delete_meal"  matTooltip="Mahlzeit löschen" (click)="delete(meal)"> delete </mat-icon>
+    </div>
 
   </div>
 

@@ -14,6 +14,7 @@ import { AccessData, FirestoreCamp } from '../../_interfaces/firestoreDatatypes'
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { customPaginator } from './customPaginator';
+import { take } from 'rxjs/operators';
 
 /**
  * CampListPageComponent
@@ -39,6 +40,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
   // Camp Data
   public camps: Observable<Camp[]>;
+  public filteredCamps: Camp[];
 
   // Form data to create new Camp
   public newCampInfos: FormGroup;
@@ -68,9 +70,20 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
   ngOnInit() {
 
     this.camps = this.databaseService.getEditableCamps();
+    this.camps.subscribe(camps => {
+      this.filteredCamps = camps;
+    });
 
   }
 
+  applyFilter(event: any) {
+
+    this.camps.pipe(take(1)).subscribe(camps => {
+      this.filteredCamps = camps.filter(camp => camp.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) || 
+      camp.year.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
+    });
+
+  }
 
   ngAfterViewInit() {
 

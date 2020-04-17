@@ -7,12 +7,19 @@
 
 <div id="recipesList" *ngIf="filteredRecipes  as recipes">
 
-  <div class="recipe mat-elevation-z1" *ngFor="let recipe of recipes" id="{{recipe.documentId}}">
+  <div class="recipe mat-elevation-z3" *ngFor="let recipe of recipes" id="{{recipe.documentId}}">
 
-    <h3>{{recipe.name}}</h3>
-    <span class="description">{{recipe.description}}</span>
-    <span class="usedIn">verwendet in {{recipe.usedInMeals.length}} Mahlzeiten</span>
-    <mat-icon class="delete_recipe" matTooltip="Recipe löschen" (click)="delete(recipe)"> delete </mat-icon>
+    <div class="title">
+      <mat-icon> menu_book </mat-icon>
+      <h3>{{recipe.name}}</h3>
+    </div>
+    <span class="description">{{recipe.description == "" ? "Keine Beschreibung zu diesem Rezept." : recipe.description}}</span>
+    <span class="usedIn">Wird verwendet in {{recipe.usedInMeals.length}} Mahlzeit/-en.</span>
+
+    <div class="icons">
+      <mat-icon class="edit_recipe deactive"  matTooltip="Recipe bearbeiten (zur Zeit noch nicht verfügbar)"> edit </mat-icon>
+      <mat-icon class="delete_recipe" [ngClass]="{'deactive': recipe.usedInMeals.length > 0}"  matTooltip="Recipe löschen" (click)="delete(recipe)"> delete </mat-icon>
+    </div>
 
   </div>
 
