@@ -20,6 +20,7 @@ import { firestore } from 'firebase';
  * - **viewer**: Ein viewer hat nur Lese-Berechtigungen.
  *
  */
+export type accessLevel = 'owner' | 'editor' | 'collaborator' | 'viewer';
 export interface AccessData {
 
   [uid: string]: 'owner' | 'editor' | 'collaborator' | 'viewer';
@@ -48,6 +49,7 @@ export interface DayData {
 
   day_date: firestore.Timestamp;
   day_description: string;
+  day_notes: string;
 
 }
 
@@ -87,7 +89,8 @@ export interface FirestoreMeal extends FirestoreDocument {
 
   meal_last_usage?: MealUsage;
   meal_keywords: string[];
-
+  used_in_camps: string[];
+  
 }
 
 export interface Ingredient {

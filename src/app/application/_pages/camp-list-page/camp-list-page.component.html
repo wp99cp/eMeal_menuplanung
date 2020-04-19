@@ -17,12 +17,12 @@
     </div>
 
     <span class="description">{{camp.description == "" ? "Keine Beschreibung zu diesem Lager." : camp.description}}
-      <br> <br> {{camp.year}} <br><br> {{camp.participants}} Teilnehmende
+      <br> <br> Jahr: {{camp.year}} <br><br> {{camp.participants}} Teilnehmende
     </span>
   
-    <div class="icons">
+    <div class="icons"> 
       <mat-icon class="edit_camp"  matTooltip="Lager bearbeiten"  routerLink="./{{camp.documentId}}"> edit </mat-icon>
-      <mat-icon class="delete_camp" (click)='deleteCamp(camp)'> delete </mat-icon>
+      <mat-icon class="delete_camp" (click)='deleteCamp(camp)'> delete </mat-icon> <!-- TODO: deactivate delete button if you can't edit the camp-->
     </div>
 
   </div>

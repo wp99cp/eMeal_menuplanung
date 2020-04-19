@@ -1,5 +1,5 @@
 import { FirestoreObject, ExportableObject } from './firebaseObject';
-import { FirestoreUser, UserVisibily } from '../_interfaces/firestoreDatatypes';
+import { FirestoreUser, UserVisibily, accessLevel } from '../_interfaces/firestoreDatatypes';
 
 export class User extends FirestoreObject implements ExportableObject {
 

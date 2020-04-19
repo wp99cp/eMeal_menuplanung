@@ -15,20 +15,26 @@
 
   <h3>Anzahl Teilnehmende</h3>
 
-  <mat-form-field class="half-left">
-    <input matInput placeholder="Anzahl Teilnehmende" formControlName="participants" type="number" />
+  <p class="info">Deine Mahlzeiten und Rezepte werden automatisch auf die festgelegte Teilnehmeranzahl angepasst.</p>
+  <br>
+
+  <mat-form-field class="thirds">
+    <input matInput placeholder="Anzahl Teilnehmende (inkl. Leiter und Vegetarier)" formControlName="participants" type="number" />
   </mat-form-field>
 
-  <mat-form-field class="half-right">
+  <mat-form-field class="thirds">
     <input matInput placeholder="Davon Vegetarier" formControlName="vegetarier" type="number" />
   </mat-form-field>
 
-  <p class="info">Deine Mahlzeiten und Rezepte werden automatisch auf die festgelegte Teilnehmeranzahl angepasst.</p>
+  <mat-form-field class="thirds">
+    <input matInput placeholder="Davon Leiter/-innen" formControlName="leaders" type="number" />
+  </mat-form-field>
+
 
 </form>
 
-<div mat-dialog-actions class="mat-buttons">
+<div mat-dialog-actions class="mat-buttons" *ngIf="hasAccess">
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [disabled]="!campInfosForm.touched" [mat-dialog-close]="saveValueChanges()"
+  <button mat-raised-button [disabled]="!campInfosForm.touched || !(hasAccess | async)" [mat-dialog-close]="saveValueChanges()"
     color="save">Speichern</button>
 </div>

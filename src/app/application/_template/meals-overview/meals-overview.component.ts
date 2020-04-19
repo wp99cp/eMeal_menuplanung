@@ -15,7 +15,7 @@ import { Meal } from '../../_class/meal';
 })
 export class MealsOverviewComponent implements OnChanges {
 
-
+  @Input() access: boolean;
   @Input() day: Day;
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
@@ -94,7 +94,7 @@ export class MealsOverviewComponent implements OnChanges {
 
 
     this.dialog
-      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day, specificMeals: this.specificMeals, days: this.days } })
+      .open(EditDayComponent, { height: '618px', width: '1000px', data: { day, specificMeals: this.specificMeals, days: this.days , access: this.access} })
       .afterClosed()
       .subscribe((save: number) => {
 

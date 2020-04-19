@@ -1,21 +1,14 @@
 <div>
-
   <h4>Nutzer hinzufügen</h4>
 
-  <p class="info share-info"><b>Achtung: </b>Die hinzugefügten Nutzer erhalten vollen Zugriff auf das Lager und alle
-    Mahlzeiten und Rezepte.
-    Dadurch können sie deine Mahlzeiten und Rezepte bearbeiten, verändern und ggf. löschen. Dies hat Auswirkungen auf
-    andern
-    Lager/ Mahlzeiten von dir! Diese Aktion kann nicht rückgängig gemacht werden.</p>
-
   <mat-form-field class="mat-form-field full-width">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Nach Nutzer suchen">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Nach Nutzer suchen" />
   </mat-form-field>
 
   <table mat-table [dataSource]="userList">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef class="selector"> </th>
+      <th mat-header-cell *matHeaderCellDef class="selector"></th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
           [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
@@ -25,29 +18,45 @@
 
     <!-- firstName Column -->
     <ng-container matColumnDef="displayName">
-      <th mat-header-cell *matHeaderCellDef class="name"> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.displayName}} </td>
+      <th mat-header-cell *matHeaderCellDef class="name">Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.displayName }}</td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef class="mailadresse"> Mailadresse </th>
-      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      <th mat-header-cell *matHeaderCellDef class="mailadresse">Mailadresse</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
     </ng-container>
 
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
-    </tr>
+    <ng-container matColumnDef="accessLevel">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="access-level-header">
+        Zugriffsrechte
+      </th>
+
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field matTooltip="wähle Verwendung">
+          <select matNativeControl #select [value]="element.accessLevel" (input)="element.accessLevel = select.value">
+            <option value="owner"> Besitzer </option>
+            <option value="editor"> Administrator </option>
+            <option value="collaborator"> Mitarbeiter </option>
+            <option value="viewer"> Leser </option>
+          </select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
   <p class="info" *ngIf="userList.filteredData.length == 0">
-    Aus Gründen des Datenschutzes werden Benutzer erst nach einer Suche angezeigt.
+    Aus Gründen des Datenschutzes werden Benutzer erst nach einer Suche
+    angezeigt.
   </p>
 
-
   <!-- !selection.hasValue() -->
-  <div matTooltip="Noch nicht verfügbar!">
-    <button mat-raised-button (click)='coworkersSelected()' color="save" [disabled]="true"> Lager teilen
+  <div matTooltip="Lager mit den ausgewählten Benutzer teilen!">
+    <button mat-raised-button (click)="coworkersSelected()" [disabled]="true" color="save">
+      Lager teilen
     </button>
   </div>
-
 </div>

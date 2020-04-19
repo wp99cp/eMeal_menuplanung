@@ -16,8 +16,9 @@ export class EditDayComponent implements OnInit {
   private currentDate;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[], days: Day[] },
-    private formBuilder: FormBuilder) { }
+    @Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[], days: Day[], access: boolean },
+    private formBuilder: FormBuilder) { 
+    }
 
   ngOnInit() {
 
@@ -26,9 +27,12 @@ export class EditDayComponent implements OnInit {
     this.dayInfo = this.formBuilder.group({
 
       description: this.data.day.description,
-      date: this.data.day.dateAsTypeDate
+      date: this.data.day.dateAsTypeDate,
+      notes: this.data.day.notes
 
     });
+
+    if(!this.data.access) this.dayInfo.disable();
 
   }
 
@@ -48,6 +52,7 @@ export class EditDayComponent implements OnInit {
 
     this.data.day.dateAsTypeDate = this.dayInfo.value.date;
     this.data.day.description = this.dayInfo.value.description;
+    this.data.day.notes = this.dayInfo.value.notes;
 
   }
 

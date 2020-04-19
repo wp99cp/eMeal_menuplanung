@@ -4,6 +4,7 @@ import { Meal } from '../../_class/meal';
 import { DatabaseService } from '../../_service/database.service';
 import { take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-meal-list',
@@ -16,7 +17,7 @@ export class MealListComponent implements OnInit {
   public filteredMeals: Meal[];
 
   constructor(private dbService: DatabaseService,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
 
   ngOnInit() {
@@ -27,13 +28,39 @@ export class MealListComponent implements OnInit {
       this.filteredMeals = meals;
     });
 
+
+    this.route.queryParams.subscribe(params => {
+
+      const usesParameter = params['includes'];
+
+      if (usesParameter) {
+        (document.getElementById('search-field') as HTMLFormElement).value = 'includes: ' + usesParameter;
+        this.applyFilter('includes: ' + usesParameter);
+
+      }
+
+    });
+
+
   }
 
-  applyFilter(event: any) {
+  applyFilter(event: string) {
+
+    if (event.includes('includes:')) {
+
+      let recipeId = event.substr(event.indexOf(':') + 1).trim();
+      this.dbService.getMealsThatIncludes(recipeId).pipe(take(1))
+        .subscribe(meals => this.filteredMeals = meals);
+
+
+    } else {
+
 
     this.meals.pipe(take(1)).subscribe(meals => {
       this.filteredMeals = meals.filter(meal => meal.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
     });
+
+  }
 
   }
 

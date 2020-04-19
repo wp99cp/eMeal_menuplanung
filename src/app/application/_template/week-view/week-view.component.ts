@@ -35,6 +35,8 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
   public showParticipantsWarning = false;
   public specificMealsToSave: SpecificMeal[] = [];
 
+  public hasAccess: boolean = false;
+
   constructor(
     public dialog: MatDialog,
     public dbService: DatabaseService,
@@ -47,20 +49,27 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   ngOnInit() {
 
-    HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Änderungen Speichern',
-      name: 'Speichern',
-      action: (() => this.save()),
-      icon: 'save'
-    }, 0);
+    this.dbService.canWrite(this.camp).then(hasAccess => {
 
-    HeaderNavComponent.addToHeaderNav({
-      active: true,
-      description: 'Mahlzeiten hinzufügen',
-      name: 'Mahlzeiten',
-      action: (() => this.addMeal()),
-      icon: 'fastfood'
+      this.hasAccess = hasAccess;
+
+      HeaderNavComponent.addToHeaderNav({
+        active: false,
+        description: 'Änderungen Speichern',
+        name: 'Speichern',
+        action: (() => this.save()),
+        icon: 'save'
+      }, 0);
+
+      HeaderNavComponent.addToHeaderNav({
+        active: true && this.hasAccess,
+        description: 'Mahlzeiten hinzufügen',
+        name: 'Mahlzeiten',
+        action: (() => this.addMeal()),
+        icon: 'fastfood'
+      });
+
+
     });
 
   }
@@ -117,6 +126,9 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    *
    */
   public drop([specificMeal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
+
+    if (!this.hasAccess)
+      return;
 
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
@@ -184,6 +196,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     const day = new Day({
       day_date: firestore.Timestamp.fromDate(date),
       day_description: '',
+      day_notes: ''
     }, this.camp.documentId);
     this.camp.days.push(day);
 
@@ -261,10 +274,52 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
           // falls keine Verwendung gestzt, dann als 'Zmorgen'
           const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
 
-          // update AccessData of the meal and the recipes
-          this.dbService.updateAccessData(this.camp.getAccessData(), meal.path);
+          // add campId to usedInCamps
+          if (!meal.usedInCamps.includes(this.camp.documentId)) {
+            meal.usedInCamps.push(this.camp.documentId);
+            this.dbService.updateDocument(meal);
+          }
+
+          /* 
+           * TODO: Berechtigungen sind heikel, daher soll diese Funktion in Zukunft
+           * in einer Cloud-Function geregelt werden. Der Client darf und soll nichts
+           * mehr an der Berechtigungen verändern dürfen.
+           * 
+           * Grundsätzlich gilt:
+           * Der aktuelle Nutzer hat auf das hinzugefügte Rezept mind. Administrator Rechte,
+           * ansonsten kann er es gar nicht erst zum Lager hinzufügen. 
+           * 
+           * Für ein Administrator und für den Owner der Mahlzeit gilt: Fügt er eine Mahlzeit hinzu
+           * so bleibt seine eigene Rolle unverändert, d.h. hat er die Inhaberschaft (owner) der
+           * Mahlzeit, so behält er diese; hat er nur Administratorrechte ist aber der Besitzer 
+           * des Lagers so ändern sich seine Rechte an der Mahlzeit nicht.
+           * 
+           * Für die anderen Nutzer des Lagers gilt:
+           * Alle Nutzer erhalten automatisch max. Mitarbeiter (collaborator) Berechtigung.
+           * D.h. sie können die Mahlzeit nur in diesem Lager bearbeiten. Nicht aber die globale 
+           * Vorlage für die anderen Lagern. Hat ein Nutzer bereits höhere Rechte für die hinzu-
+           * gefügte Mahlzeit, so bleiben diese natürlich erhalten.
+           * Ein Leser (viewer) erhält ebenfalls Leseberechtigung für die Mahlzeit.
+           * 
+           * Die Rechte können für die einzelnen Mahlzeiten beliebig erhöht werden. Bzw. bis maximal
+           * zum Leser abgestuft werden.
+           * 
+           * 
+           * Analog werden die Rechte für die Rezepte vergeben.
+           * 
+           * 
+           * Achtung: Collaborator Rollen werden auf Viewer Rollen abgestuft, sobald eine Mahlzeit oder
+           * ein Rezept aus dem Lager gelöscht wird. Viewer Rollen können (zur Zeit noch nicht) manuell
+           * wieder entfehrnt weren, sofern das Rezept oder die Mahlzeit niergens sonst Benutzt wird, wo 
+           * Lesezugriff vergeben wurde.
+           * 
+           */
+
+
+          // TODO: Implementation
+          this.dbService.upgradeAccessData(this.camp.getAccessData(), meal.getAccessData(), meal.path);
           this.dbService.getRecipes(meal.documentId).subscribe(recipes => recipes.forEach(
-            recipe => this.dbService.updateAccessData(this.camp.getAccessData(), recipe.path)
+            recipe => this.dbService.upgradeAccessData(this.camp.getAccessData(), recipe.getAccessData(), recipe.path)
           ));
 
           // erstellt die specifischen Rezepte und Mahlzeiten

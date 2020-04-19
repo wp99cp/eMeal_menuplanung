@@ -38,25 +38,32 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   }
 
-  ngOnInit() {
+ async ngOnInit() {
 
-    HeaderNavComponent.addToHeaderNav({
-      active: true,
-      description: 'Informationen zum Lager',
-      name: 'Info',
-      action: (() => this.campInfoDialog()),
-      icon: 'info'
-    });
+  // check for write access
+  this.camp.subscribe(async camp => {
+    const access = await this.dbService.canWrite(camp);
+    if(access)
+      HeaderNavComponent.turnOn("Mitarbeiter");
+  });
 
-    HeaderNavComponent.addToHeaderNav({
-      active: true,
-      description: 'Mitarbeiter verwalten',
-      name: 'Mitarbeiter',
-      action: (() => this.shareDialog()),
-      icon: 'group_add'
-    });
+  HeaderNavComponent.addToHeaderNav({
+    active: true,
+    description: 'Informationen zum Lager',
+    name: 'Info',
+    action: (() => this.campInfoDialog()),
+    icon: 'info'
+   });
 
-    HeaderNavComponent.addToHeaderNav({
+  HeaderNavComponent.addToHeaderNav({
+    active: false,
+    description: 'Mitarbeiter verwalten',
+    name: 'Mitarbeiter',
+    action: (() => this.shareDialog()),
+    icon: 'group_add'
+  });
+
+  HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Lager exportieren',
       name: 'Export',
@@ -134,6 +141,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
         }).afterClosed()
 
       )).subscribe((camp) =>
+
+        // TODO: upgrade rigths for all meals and recipes
+        // if necessary...
+
         this.saveCamp(camp)
       );
 

@@ -17,6 +17,7 @@ export class Day {
 
   public dateAsTypeDate: Date;
   public description: string;
+  public notes: string;
 
   // specific meals of this day
   private meals: Observable<SpecificMeal[]> = undefined;
@@ -25,6 +26,7 @@ export class Day {
 
     this.dateAsTypeDate = data.day_date.toDate();
     this.description = data.day_description;
+    this.notes = data.day_notes ? data.day_notes : '';
 
     this.campId = campId;
 
@@ -86,7 +88,8 @@ export class Day {
 
     const day = {
       day_date: this.getTimestamp(),
-      day_description: this.description
+      day_description: this.description,
+      day_notes: this.notes 
     };
 
     return day;

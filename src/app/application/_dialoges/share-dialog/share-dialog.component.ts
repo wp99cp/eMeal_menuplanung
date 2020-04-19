@@ -1,14 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { User } from 'firebase';
-import { map } from 'rxjs/operators';
 
 import { Camp } from '../../_class/camp';
-import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
-import { AccessData } from '../../_interfaces/firestoreDatatypes';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+import { userWithAccess } from '../../_template/user-list/user-list.component';
+import { AccessData } from '../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-share-dialog',
@@ -39,49 +36,40 @@ export class ShareDialogComponent implements OnInit {
   }
 
   /** A user get selected */
-  selectUser(selectedCoworkers) {
+  selectUser(selectedCoworkers: userWithAccess[]) {
 
-    throw new Error('Not yet implemented!');
+    let newAccess: AccessData = this.camp.getAccessData();
+    
+    selectedCoworkers.forEach(user => {
+      console.log(user.displayName + " " + user.accessLevel);
 
-    /*
-    this.auth.getCurrentUser()
-      .pipe(this.createCoworkerList(selectedCoworkers))
-      .subscribe((access: AccessData) => {
+      const oldAccessLevel = newAccess[user.uid];
 
-        // merge the old access data with the new one
-        access = this.jsonConcat(access, this.camp.getAccessData());
+      // upgrade level if possible
+      if(oldAccessLevel){
 
-        this.camp.setAccessData(access);
+        if(oldAccessLevel == 'editor' && user.accessLevel == 'owner'){
+          newAccess[user.uid] = user.accessLevel; 
+        }
+        
+        if(oldAccessLevel == 'collaborator' && (user.accessLevel == 'owner' || user.accessLevel == 'editor')){
+          newAccess[user.uid] = user.accessLevel; 
+        }
 
-        this.databaseService.updateAccessData(access, Camp.getPath(this.camp.documentId));
-        this.camp.days.forEach(day => day.meals.subscribe(meals => meals.forEach(meal => {
-          this.databaseService.updateAccessData(access, Meal.getPath(meal.documentId));
+        if(oldAccessLevel == 'viewer' && (user.accessLevel == 'collaborator' || user.accessLevel == 'editor' ||  user.accessLevel == 'owner')){
+          newAccess[user.uid] = user.accessLevel; 
+        }
 
-          this.databaseService.getRecipes(meal.documentId).subscribe(recipes =>
-            recipes.forEach(recipe =>
-              this.databaseService.updateAccessData(access, Recipe.getPath(recipe.documentId))
-            ));
+      }
+      // add access
+      else{
+        newAccess[user.uid] = user.accessLevel; 
+      }
 
-        })));
-
-      });
-
-      */
-  }
-
-
-  private createCoworkerList(selectedCoworkers: any) {
-
-    throw new Error('Not yet implemented!');
-
-    /*
-    return map((user: User) => {
-      const accessData = Camp.generateCoworkersList(user.uid, selectedCoworkers);
-      accessData[user.uid] = 'owner';
-      return accessData;
     });
 
-    */
-
+    this.databaseService.updateAccessData(newAccess, this.camp.path)
+    
   }
+
 }

@@ -15,17 +15,21 @@
   </mat-form-field>
 
   <mat-form-field class="full-width">
+    <textarea matInput placeholder="Notizen / Anmerkungen zum Programm" formControlName="notes"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
     <input matInput [matDatepicker]="picker" placeholder="Datum" formControlName="date"
       [matDatepickerFilter]="dateFilter">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="warn" class="delete-day-button" [mat-dialog-close]="-1">Tag löschen</button>
+  <button mat-raised-button color="warn" class="delete-day-button" [mat-dialog-close]="-1" [disabled]="!data.access">Tag löschen</button>
 
 </form>
 
 <div mat-dialog-actions class="mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="0">Abbrechen</button>
-  <button mat-raised-button color="save" (click)="saveDayData()" [mat-dialog-close]="1">Übernehmen</button>
+  <button mat-raised-button [mat-dialog-close]="0"> Schliessen </button>
+  <button mat-raised-button color="save" (click)="saveDayData()" [mat-dialog-close]="1" [disabled]="!data.access"> Speichern </button>
 </div>

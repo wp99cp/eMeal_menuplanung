@@ -1,7 +1,7 @@
-<h4>Mitarbeiter mit Vollzugriff</h4>
+<h4>Mitarbeiter mit Zugriff</h4>
 
 <div *ngFor="let owner of (owners | async)" class="user">
-  <span> {{owner.displayName}} </span>
+  <span> {{owner.displayName}} ({{userList[owner.uid]}})</span>
 </div>
 
 

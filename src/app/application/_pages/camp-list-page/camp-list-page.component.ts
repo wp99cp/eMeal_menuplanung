@@ -15,6 +15,7 @@ import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { customPaginator } from './customPaginator';
 import { take } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * CampListPageComponent
@@ -50,9 +51,10 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private databaseService: DatabaseService,
+    public databaseService: DatabaseService,
     private auth: AuthenticationService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute) {
 
     this.dataSource = new MatTableDataSource();
 
@@ -69,19 +71,44 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
    */
   ngOnInit() {
 
-    this.camps = this.databaseService.getEditableCamps();
+    this.camps = this.databaseService.getCampsWithAccess();
     this.camps.subscribe(camps => {
       this.filteredCamps = camps;
+      console.log(camps)
     });
+
+    this.route.queryParams.subscribe(params => {
+
+      const usesParameter = params['includes'];
+
+      if (usesParameter) {
+        (document.getElementById('searchForCamp') as HTMLFormElement).value = 'includes: ' + usesParameter;
+        this.applyFilter('includes: ' + usesParameter);
+
+      }
+
+    });
+
 
   }
 
-  applyFilter(event: any) {
+  applyFilter(event: string) {
 
-    this.camps.pipe(take(1)).subscribe(camps => {
-      this.filteredCamps = camps.filter(camp => camp.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) || 
-      camp.year.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
-    });
+    if (event.includes('includes:')) {
+
+      let mealId = event.substr(event.indexOf(':') + 1).trim();
+      this.databaseService.getCampsThatIncludes(mealId).pipe(take(1))
+        .subscribe(camps => this.filteredCamps = camps);
+
+
+    } else {
+
+      this.camps.pipe(take(1)).subscribe(camps => {
+        this.filteredCamps = camps.filter(camp => camp.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) ||
+          camp.year.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
+      });
+
+    }
 
   }
 
@@ -130,7 +157,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
       campData.camp_name = this.newCampInfos.value.name;
       campData.camp_description = this.newCampInfos.value.description;
       campData.camp_year = date.toLocaleDateString('de-CH', { year: 'numeric' });
-      campData.days = [{ day_date: firestore.Timestamp.fromDate(date), day_description: '' }];
+      campData.days = [{ day_date: firestore.Timestamp.fromDate(date), day_description: '', day_notes: '' }];
       campData.camp_participants = this.newCampParticipants.value.participants;
       campData.camp_vegetarians = 0;
       campData.camp_leaders = 0;
@@ -147,7 +174,10 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
    * Deletes the selected camp
    *
    */
-  public deleteCamp(camp: Camp) {
+  public async deleteCamp(camp: Camp) {
+
+    if (! await this.databaseService.canWrite(camp))
+      return;
 
     this.dialog.open(DeleteCampComponent, {
       height: '400px',

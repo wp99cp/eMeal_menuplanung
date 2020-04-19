@@ -37,8 +37,6 @@ import { AuthenticationService } from './authentication.service';
 })
 export class DatabaseService {
 
-
-
   /**
    * An angular service to provide data form the AngularFirestore database.
    * This service includes methodes to fetch all kind of firebaseObjects form
@@ -60,6 +58,33 @@ export class DatabaseService {
   }
 
 
+  public upgradeAccessData(requestedAccess: AccessData, access: AccessData, docPath: string) {
+
+
+    for (let uid of Object.keys(requestedAccess)) {
+
+      // has already access
+      if (access[uid]) {
+
+        // keeps the access level
+        // unless it's ownly viewer access
+        if (access[uid] == 'viewer' && requestedAccess[uid] != 'viewer')
+          access[uid] = 'collaborator';
+
+      } else {
+
+        // hasn't access yet, gets viewer or collaborator access
+        access[uid] = requestedAccess[uid] == 'viewer' ? 'viewer' : 'collaborator';
+
+      }
+
+    }
+
+    this.db.doc(docPath).set({ access }, { merge: true });
+
+  }
+
+
   /**
    * gets the last 5 Elements
    */
@@ -75,7 +100,7 @@ export class DatabaseService {
     return this.db.collection('users', collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges().pipe(take(2))
       // Create new Users out of the data
       .pipe(map(docActions => docActions.map(docRef =>
-        docRef.payload.doc.data() as FirestoreUser
+        new User(docRef.payload.doc.data() as FirestoreUser, docRef.payload.doc.id)
       )));
 
   }
@@ -241,14 +266,26 @@ export class DatabaseService {
       }));
   }
 
-  /** @returns a Observable of the camps the currentUser can eddit */
-  public getEditableCamps(): Observable<Camp[]> {
+  /** @returns a Observable of the camps the currentUser has access */
+  public getCampsWithAccess(): Observable<Camp[]> {
 
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
         this.requestCollection('camps/', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
       ));
+
+  }
+
+  public getCampsThatIncludes(mealId: string) {
+
+    return this.getMealById(mealId).pipe(mergeMap(meal =>
+
+      this.requestCollection('camps/',
+        this.createQuery([firestore.FieldPath.documentId(), 'in', meal.usedInCamps]))
+        .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
+
+    ));
 
   }
 
@@ -260,6 +297,17 @@ export class DatabaseService {
       ));
   }
 
+  public getMealsThatIncludes(recipeId: string) {
+
+    return this.getRecipeById(recipeId).pipe(mergeMap(recipe =>
+
+      this.requestCollection('meals/',
+        this.createQuery([firestore.FieldPath.documentId(), 'in', recipe.usedInMeals]))
+        .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal))
+
+    ));
+
+  }
 
   public createPDF(id: string): Observable<any> {
 
@@ -300,11 +348,21 @@ export class DatabaseService {
 
   }
 
+  public getRecipeById(recipeId: string): Observable<Recipe> {
+
+    return this.requestDocument('recipes/' + recipeId).pipe(
+      FirestoreObject.createObject<FirestoreRecipe, Recipe>(Recipe)
+    );
+
+  }
+
   public getCampById(campId: string): Observable<Camp> {
 
     return this.requestDocument('camps/' + campId).pipe(FirestoreObject.createObject<FirestoreCamp, Camp>(Camp));
 
   }
+
+
 
   public getMealById(mealId: string): Observable<Meal> {
 
@@ -318,7 +376,12 @@ export class DatabaseService {
    * Updates an element in the database.
    *
    */
-  public updateDocument(firebaseObject: FirestoreObject) {
+  public async updateDocument(firebaseObject: FirestoreObject) {
+
+    if (! await this.canWrite(firebaseObject)) {
+      console.log('No Access!');
+      return null;
+    }
 
     console.log('Update document: ' + firebaseObject.path);
     console.log(firebaseObject.toFirestoreDocument());
@@ -409,6 +472,17 @@ export class DatabaseService {
 
   }
 
+  public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
+
+    return new Promise(resolve => this.authService.getCurrentUser().subscribe(user =>
+      resolve(
+        firebaseObject.getAccessData()[user.uid] !== null &&  // user isn't listed
+        firebaseObject.getAccessData()[user.uid] !== 'viewer' // if user is listed, user isn't a viewer
+      )
+    ));
+
+  }
+
 
   // *********************************************************************************************
   // private methodes
@@ -422,7 +496,7 @@ export class DatabaseService {
 
       (collRef => {
 
-        let query = collRef.where('access.' + user.uid, 'in', ['editor', 'owner']);
+        let query = collRef.where('access.' + user.uid, 'in', ['editor', 'owner', 'collaborator', 'viewer']);
         query = this.createQueryFn(query, ...querys);
         return query;
 

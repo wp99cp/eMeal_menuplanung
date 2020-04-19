@@ -36,6 +36,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     this.description = meal.meal_description;
     this.keywords = meal.meal_keywords;
     this.lastMeal = meal.meal_last_usage;
+    this.usedInCamps = meal.used_in_camps ? meal.used_in_camps : [];
 
   }
 
@@ -47,6 +48,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     firestoreMeal.meal_description = this.description;
     firestoreMeal.meal_keywords = this.keywords;
     firestoreMeal.meal_last_usage = this.lastMeal;
+    firestoreMeal.used_in_camps = this.usedInCamps;
 
     return firestoreMeal;
 
