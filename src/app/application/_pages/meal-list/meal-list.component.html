@@ -13,7 +13,7 @@
     <h3>{{meal.name}}</h3>
     </div>
 
-    <span class="usedIn">Wird verwendet in {{meal.usedInCamps.length}} Lager/-n <a routerLink="/app/camps" [queryParams]="{ includes: meal.documentId }">(Lager anzeigen).</a> </span>
+    <span class="usedIn">Wird verwendet in {{meal.usedInCamps.length}} Lager/-n <a *ngIf="meal.usedInCamps.length > 0"  routerLink="/app/camps" [queryParams]="{ includes: meal.documentId }">(Lager anzeigen)</a>. </span>
   
     <span class="description">{{meal.description == "" ? "Keine Beschreibung zu diesem Rezept." : meal.description}}</span>
    

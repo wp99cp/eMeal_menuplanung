@@ -14,7 +14,7 @@
       <h3>{{recipe.name}}</h3>
     </div>
     <span class="description">{{recipe.description == "" ? "Keine Beschreibung zu diesem Rezept." : recipe.description}}</span>
-    <span class="usedIn">Wird verwendet in {{recipe.usedInMeals.length}} Mahlzeit/-en <a routerLink="/app/meals" [queryParams]="{ includes: recipe.documentId }">(Mahlzeiten anzeigen)</a>.</span>
+    <span class="usedIn">Wird verwendet in {{recipe.usedInMeals.length}} Mahlzeit/-en <a *ngIf="recipe.usedInMeals.length > 0" routerLink="/app/meals" [queryParams]="{ includes: recipe.documentId }">(Mahlzeiten anzeigen)</a>.</span>
 
     <div class="icons">
       <mat-icon class="edit_recipe deactive"  matTooltip="Recipe bearbeiten (zur Zeit noch nicht verfügbar)"> edit </mat-icon>
