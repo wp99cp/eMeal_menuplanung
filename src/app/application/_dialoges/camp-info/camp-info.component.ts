@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Camp } from '../../_class/camp';
-import { MAT_DIALOG_DATA } from '@angular/material';
 import { DatabaseService } from '../../_service/database.service';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 /**
  * CampInfoComponent ist ein Dialog zum bearbeiten der Camp-Infos
@@ -21,7 +21,7 @@ export class CampInfoComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp },
-    formBuilder: FormBuilder, 
+    formBuilder: FormBuilder,
     dbService: DatabaseService) {
 
     this.camp = data.camp;
@@ -34,7 +34,7 @@ export class CampInfoComponent {
     });
 
     this.hasAccess = dbService.canWrite(this.camp);
-    this.hasAccess.then(access => { if(!access) this.campInfosForm.disable() });
+    this.hasAccess.then(access => { if (!access) this.campInfosForm.disable() });
 
   }
 
@@ -45,7 +45,7 @@ export class CampInfoComponent {
     this.camp.participants = this.campInfosForm.value.participants;
     this.camp.vegetarians = this.campInfosForm.value.vegetarier;
     this.camp.leaders = this.campInfosForm.value.leaders;
-    
+
     return this.camp;
   }
 

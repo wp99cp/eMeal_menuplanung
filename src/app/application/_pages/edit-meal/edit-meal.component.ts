@@ -1,6 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
@@ -19,6 +18,7 @@ import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
 import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-meal',

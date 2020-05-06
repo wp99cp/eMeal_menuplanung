@@ -1,12 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { firestore } from 'firebase';
-import { Observable, of, merge, forkJoin } from 'rxjs';
+import { merge, Observable, of } from 'rxjs';
+import { mergeMap, take } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-
 import { Camp } from '../../_class/camp';
 import { Day } from '../../_class/day';
 import { Meal } from '../../_class/meal';
@@ -14,7 +13,8 @@ import { SpecificMeal } from '../../_class/specific-meal';
 import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
-import { mergeMap, take, map, flatMap, filter } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 /**
  * Wochenübersicht eines Lagers
@@ -27,9 +27,11 @@ import { mergeMap, take, map, flatMap, filter } from 'rxjs/operators';
 })
 export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
+  // TODO: add short-cut for adding meal (shift + M)
+  // TODO: add short-cut for adding day (shift + D)
+
   // inputed fields
   @Input() camp: Camp;
-
 
   public colCounter = this.calculateCols();
   public showParticipantsWarning = false;

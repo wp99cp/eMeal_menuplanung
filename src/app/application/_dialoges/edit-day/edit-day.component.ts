@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Day } from '../../_class/day';
 import { SpecificMeal } from '../../_class/specific-meal';
+import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 @Component({
   selector: 'app-edit-day',
@@ -17,7 +18,8 @@ export class EditDayComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[], days: Day[], access: boolean },
-    private formBuilder: FormBuilder) { 
+    private formBuilder: FormBuilder,
+    public swissDateAdapter: SwissDateAdapter) { 
     }
 
   ngOnInit() {

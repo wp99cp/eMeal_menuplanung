@@ -15,7 +15,6 @@ import { User } from 'firebase';
 })
 export class WelcomPageComponent implements OnInit {
 
-
   public currentUser: Observable<User>;
   public title: string;
 

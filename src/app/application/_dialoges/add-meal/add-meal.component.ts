@@ -1,6 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild, Inject } from '@angular/core';
-import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
@@ -11,6 +10,8 @@ import { FirestoreMeal, MealUsage } from '../../_interfaces/firestoreDatatypes';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { CustomPaginator } from './CustomPaginator';
+import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-add-meal',

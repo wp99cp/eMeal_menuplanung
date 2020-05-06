@@ -33,7 +33,6 @@ export abstract class FirestoreObject implements ExportableObject {
   public readonly abstract path: string;
   public readonly abstract documentId: string;
 
-
   private access: AccessData;
   private readonly dateAdded: firestore.Timestamp;
 
@@ -119,13 +118,13 @@ export abstract class FirestoreObject implements ExportableObject {
   public setAccessData(access: AccessData): void {
 
     // TODO: add checks for errors
-
+    // und prüft auf erlaubte Veränderungen...
     this.access = access;
 
   }
 
-
   /**
+   * 
    * Returns the accessData of the FirestoreObject
    *
    * @returns the accessData of the FirestoreObject
@@ -136,7 +135,6 @@ export abstract class FirestoreObject implements ExportableObject {
     return this.access;
 
   }
-
 
   public toFirestoreDocument(): FirestoreDocument {
 

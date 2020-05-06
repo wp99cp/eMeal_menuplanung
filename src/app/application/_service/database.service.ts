@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { firestore } from 'firebase';
-import { combineLatest, forkJoin, Observable, OperatorFunction, of } from 'rxjs';
+import { firestore } from 'firebase/app';
+import { combineLatest, forkJoin, Observable, of, OperatorFunction } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
-
 import { Camp } from '../_class/camp';
 import { FirestoreObject } from '../_class/firebaseObject';
 import { Meal } from '../_class/meal';
@@ -13,18 +12,10 @@ import { Recipe } from '../_class/recipe';
 import { SpecificMeal } from '../_class/specific-meal';
 import { SpecificRecipe } from '../_class/specific-recipe';
 import { User } from '../_class/user';
-import {
-  AccessData,
-  FirestoreCamp,
-  FirestoreDocument,
-  FirestoreMeal,
-  FirestoreRecipe,
-  FirestoreSpecificMeal,
-  FirestoreSpecificRecipe,
-  FirestoreUser,
-} from '../_interfaces/firestoreDatatypes';
+import { AccessData, FirestoreCamp, FirestoreDocument, FirestoreMeal, FirestoreRecipe, FirestoreSpecificMeal, FirestoreSpecificRecipe, FirestoreUser } from '../_interfaces/firestoreDatatypes';
 import { ErrorOnImport, RawMealData } from '../_interfaces/rawMealData';
 import { AuthenticationService } from './authentication.service';
+
 
 /**
  * An angular service to provide data form the AngularFirestore database.
@@ -36,6 +27,11 @@ import { AuthenticationService } from './authentication.service';
   providedIn: 'root'
 })
 export class DatabaseService {
+
+  // TODO: allgemein besseres Error-Handeling
+  // als erste Idee kann jeder Fehler einfach als Banner
+  // angezeit werden, dies lässt sich direkt aus dieser Klasse heraus 
+  // realisieren....
 
   /**
    * An angular service to provide data form the AngularFirestore database.
@@ -58,6 +54,14 @@ export class DatabaseService {
   }
 
 
+  /**
+   * 
+   * TODO: In eine Cloud-Funktion auslagern und unbedingt durch für alle Elemente .rules blockieren...
+   * 
+   * @param requestedAccess 
+   * @param access 
+   * @param docPath 
+   */
   public upgradeAccessData(requestedAccess: AccessData, access: AccessData, docPath: string) {
 
 
@@ -86,7 +90,12 @@ export class DatabaseService {
 
 
   /**
-   * gets the last 5 Elements
+   * Gets the last 5 Elements
+   * 
+   * TODO: add Python-Skrip, das alte Exports automatisch löscht,
+   * eine Cloud-Funktion gibt es hierfür teilweise sogar...
+   * 
+   * 
    */
   public getExports(campId: string): Observable<ExportData[]> {
 
@@ -95,6 +104,19 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * TODO: Hier gibt es ein Information-Leeking...
+   * Zur Zeit können somit alle User ausgelesen werden inkl. ihre E-Mail-Adressen.
+   * (Es gibt zwar die Möglichkeit, sein eigenes Konto zu verstecken, aber dann
+   * kann man auch nicht mehr mit anderen Zusammenarbeiten).
+   * 
+   * Idee neue Freigabe nur über E-Mailadresse möglich, eine Cloud-Funktion gibt dann
+   * den entsprechenden Namen zurück und fügt den User hinzu...
+   * Oder aber das ganze muss zumindestens in den AGBs/Datenschutzbestimmungen stehen
+   * diese müssen umbedingt mal angepasst werden.
+   * 
+   */
   public getVisibleUsers() {
 
     return this.db.collection('users', collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges().pipe(take(2))
@@ -108,6 +130,7 @@ export class DatabaseService {
 
   /**
    *
+   * 
    * @param userIDs
    */
   public getUsers(access: AccessData): Observable<User[]> {
@@ -117,9 +140,12 @@ export class DatabaseService {
 
   }
 
-
   /**
-   *
+   * 
+   * In der User-Collection haben grundsätzlich alle Lese-Berechtigung:
+   * ausser der Benutzer ist versteckt. 
+   * 
+   * @param userId 
    */
   public getUserById(userId: string): Observable<User> {
 
@@ -131,6 +157,9 @@ export class DatabaseService {
 
   /**
    * Löscht ein Rezept und seine SpecificRecipes
+   * 
+   * TODO: muss als "Transaction" geschehen, damit ein fehlerhafter 
+   * Status in der Datenbank ausgeschlossen werden könne.
    *
    */
   public removeRecipe(mealId: string, recipeId: string) {
@@ -173,6 +202,13 @@ export class DatabaseService {
   }
 
 
+  /**
+   * 
+   * Sends the Feedback to the administrator.
+   * 
+   * @param feedback 
+   * 
+   */
   public addFeedback(feedback: any) {
 
     const xhr = new XMLHttpRequest();
@@ -186,11 +222,20 @@ export class DatabaseService {
         // Request finished. Do processing here.
       }
     }
+
     xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
 
   }
 
 
+  /**
+   * 
+   * TODO: Besser als Cloud Funktion, damit auch wirklich alles gelöscht wird
+   * und nicht fehlerhafte Zustände in der Datenbank entstehen...
+   * 
+   * @param mealId 
+   * @param specificMealId 
+   */
   public deleteSpecificMealAndRecipes(mealId: string, specificMealId: string) {
 
     this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
@@ -218,9 +263,30 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param mealId 
+   * @param idToAdd 
+   */
+  public addIdToRecipes(mealId: any, idToAdd: any) {
 
+    this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId])
+      .pipe(mergeMap(query =>
+        this.db.collection('recipes', query).get()
+      )).subscribe(docRefs => docRefs.docs.forEach(doc =>
+        doc.ref.update({ 'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd) })
+      ));
+
+  }
+
+  /**
+   * 
+   * @param recipe 
+   * @param specificId 
+   * @param mealId 
+   * @param camp 
+   */
   public addRecipe(recipe: Recipe, specificId: string, mealId: string, camp: Camp) {
-
 
     recipe.createSpecificRecipe(camp, recipe.documentId, specificId, this);
 
@@ -231,6 +297,7 @@ export class DatabaseService {
 
 
   /**
+   * 
    * @return loads the specific meal
    */
   public getSpecificMeal(mealId: string, specificMealId: string): Observable<SpecificMeal> {
@@ -240,7 +307,10 @@ export class DatabaseService {
 
   }
 
-  /** @return loads the specific recipe */
+  /** 
+   * @return loads the specific recipe 
+   * 
+   */
   public getSpecificRecipe(specificMealId: string, recipe: Recipe, camp: Camp): Observable<SpecificRecipe> {
 
     return this.loadSpecificRecipe(recipe, specificMealId, camp)
@@ -248,6 +318,12 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param recipe 
+   * @param specificMealId 
+   * @param camp 
+   */
   private loadSpecificRecipe(recipe: Recipe, specificMealId: string, camp: Camp) {
 
     return this.requestDocument('recipes/' + recipe.documentId + '/specificRecipes/' + specificMealId)
@@ -266,7 +342,11 @@ export class DatabaseService {
       }));
   }
 
-  /** @returns a Observable of the camps the currentUser has access */
+  /** 
+   * 
+   * @returns a Observable of the camps the currentUser has access
+   * 
+   */
   public getCampsWithAccess(): Observable<Camp[]> {
 
     return this.createAccessQueryFn()
@@ -277,6 +357,10 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param mealId 
+   */
   public getCampsThatIncludes(mealId: string) {
 
     return this.getMealById(mealId).pipe(mergeMap(meal =>
@@ -289,6 +373,9 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   */
   public getEditableMeals(): Observable<Meal[]> {
     return this.createAccessQueryFn()
       .pipe(mergeMap(queryFn =>
@@ -297,6 +384,10 @@ export class DatabaseService {
       ));
   }
 
+  /**
+   * 
+   * @param recipeId 
+   */
   public getMealsThatIncludes(recipeId: string) {
 
     return this.getRecipeById(recipeId).pipe(mergeMap(recipe =>
@@ -309,6 +400,10 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param id 
+   */
   public createPDF(id: string): Observable<any> {
 
     return this.functions.httpsCallable('createPDF')({ campId: id });
@@ -348,6 +443,10 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param recipeId 
+   */
   public getRecipeById(recipeId: string): Observable<Recipe> {
 
     return this.requestDocument('recipes/' + recipeId).pipe(
@@ -356,14 +455,20 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param campId 
+   */
   public getCampById(campId: string): Observable<Camp> {
 
     return this.requestDocument('camps/' + campId).pipe(FirestoreObject.createObject<FirestoreCamp, Camp>(Camp));
 
   }
 
-
-
+  /**
+   * 
+   * @param mealId 
+   */
   public getMealById(mealId: string): Observable<Meal> {
 
     return this.requestDocument('meals/' + mealId).pipe(
@@ -373,6 +478,7 @@ export class DatabaseService {
   }
 
   /**
+   * 
    * Updates an element in the database.
    *
    */
@@ -391,8 +497,48 @@ export class DatabaseService {
   }
 
   /**
+   * Creates of an element. And clears all access data.
+   *
+   */
+  public createCopy(firebaseObject: FirestoreObject, id?: string): Promise<firestore.DocumentReference> {
+
+    return new Promise((resolve) =>
+      this.authService.getCurrentUser().subscribe(async user => {
+
+        // set current user as owner of the document
+        firebaseObject.setAccessData({ [user.uid]: 'owner' });
+
+        // deletes specific data
+        if (firebaseObject instanceof Recipe) {
+
+          firebaseObject.usedInMeals = [];
+
+          if (id !== undefined) {
+            firebaseObject.usedInMeals.push(id);
+          }
+
+        }
+
+        // deletes specific data
+        if (firebaseObject instanceof Meal) {
+          firebaseObject.usedInCamps = [];
+        }
+
+
+        console.log('Copyed document: ');
+        console.log(firebaseObject.toFirestoreDocument());
+
+        const collPath = firebaseObject.path.substring(0, firebaseObject.path.indexOf('/'));
+        resolve(await this.db.collection(collPath).add(firebaseObject.toFirestoreDocument()));
+
+      }));
+  }
+
+  /**
+   * 
    * adds any Partial to the database
    * @param collectionPath the path can be a document path or a collection path
+   * 
    */
   public async addDocument(firebaseDocument: FirestoreDocument, collectionPath: string, documentId?: string):
     Promise<firebase.firestore.DocumentReference> {
@@ -413,17 +559,22 @@ export class DatabaseService {
    */
   public deleteExports(campId: string) {
 
-    this.db.collection('camps/' + campId + '/exports').get().subscribe(refs =>
-      refs.docs.forEach(docRef =>
-        docRef.ref.delete()
-      )
-    );
+    this.db.collection('camps/' + campId + '/exports').get()
+      .pipe(take(1))
+      .subscribe(refs =>
+        refs.docs.forEach(docRef =>
+          docRef.ref.delete()
+        )
+      );
 
   }
 
   /**
    *
    * Löscht alle Rezepte und Mahlzeiten eines Lagers
+   * 
+   * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
+   * in der Datenbank vermieden werden könne.
    *
    * @param campId
    *
@@ -438,24 +589,41 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param obj 
+   */
   public deleteDocument(obj: FirestoreObject) {
 
     return this.db.doc(obj.path).delete();
 
   }
 
+  /**
+   * 
+   * @param path 
+   */
   public requestDocument(path: string): Observable<Action<DocumentSnapshot<unknown>>> {
 
     return this.db.doc(path).snapshotChanges();
 
   }
 
+  /**
+   * 
+   * @param path 
+   * @param queryFn 
+   */
   public requestCollection(path: string, queryFn?: QueryFn): Observable<DocumentChangeAction<unknown>[]> {
 
     return this.db.collection(path, queryFn).snapshotChanges();
 
   }
 
+  /**
+   * 
+   * @param mealId 
+   */
   public getNumberOfUses(mealId: string): Observable<number> {
 
     return this.db.collectionGroup('specificMeals', this.createQuery(['meal_id', '==', mealId])).get()
@@ -463,15 +631,27 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
+   * in der Datenbank vermieden werden könne.
+   * 
+   * @param mealId 
+   */
   public deleteRecipesRefs(mealId: string) {
     this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId]).pipe(mergeMap(query =>
-      this.db.collection('recipes', query).get()
-    )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-      doc.ref.update({ used_in_meals: firestore.FieldValue.arrayRemove(mealId) })
-    ));
+      this.db.collection('recipes', query).get()))
+      .pipe(take(1))
+      .subscribe(docRefs => docRefs.docs.forEach(doc =>
+        doc.ref.update({ used_in_meals: firestore.FieldValue.arrayRemove(mealId) })
+      ));
 
   }
 
+  /**
+   * 
+   * @param firebaseObject 
+   */
   public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
 
     return new Promise(resolve => this.authService.getCurrentUser().subscribe(user =>
@@ -483,9 +663,24 @@ export class DatabaseService {
 
   }
 
+  /**
+   * 
+   * @param firebaseObject 
+   */
+  public isOwner(firebaseObject: FirestoreObject): Promise<boolean> {
+
+    return new Promise(resolve => this.authService.getCurrentUser().subscribe(user =>
+      resolve(firebaseObject.getAccessData()[user.uid] === 'owner')
+    ));
+
+  }
+
 
   // *********************************************************************************************
   // private methodes
+  // 
+  // TODO: Alle query funktions in eine eigene Klasse auslagern
+  //
   // *********************************************************************************************
 
 
@@ -524,7 +719,6 @@ export class DatabaseService {
 
     return query;
   }
-
 
 
   private getPathsToCloudDocuments(): OperatorFunction<DocumentChangeAction<ExportDocData>[], ExportData[]> {

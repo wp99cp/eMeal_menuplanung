@@ -4,24 +4,8 @@
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
 </mat-form-field>
 
-<div id="mealsList" *ngIf="filteredMeals as meals">
+<div id="mealsList" *ngIf="filteredElements as meals">
 
-  <div class="meal mat-elevation-z3" *ngFor="let meal of meals" id="{{meal.documentId}}">
-
-    <div class="title">
-    <mat-icon>fastfood</mat-icon>
-    <h3>{{meal.name}}</h3>
-    </div>
-
-    <span class="usedIn">Wird verwendet in {{meal.usedInCamps.length}} Lager/-n <a *ngIf="meal.usedInCamps.length > 0"  routerLink="/app/camps" [queryParams]="{ includes: meal.documentId }">(Lager anzeigen)</a>. </span>
-  
-    <span class="description">{{meal.description == "" ? "Keine Beschreibung zu diesem Rezept." : meal.description}}</span>
-   
-    <div class="icons">
-      <mat-icon class="edit_meal deactive"  matTooltip="Mahlzeit bearbeiten (zur Zeit noch nicht verfügbar)"> edit </mat-icon>
-      <mat-icon class="delete_meal"  matTooltip="Mahlzeit löschen" (click)="delete(meal)"> delete </mat-icon>
-    </div>
-
-  </div>
+    <app-list-card *ngFor="let meal of meals" [cardElement]="meal" [access]="access[meal.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
 
 </div>

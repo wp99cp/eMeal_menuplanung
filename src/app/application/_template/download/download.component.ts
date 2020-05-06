@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { SettingsService } from '../../_service/settings.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 @Component({

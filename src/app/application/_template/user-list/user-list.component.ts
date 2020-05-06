@@ -1,6 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { map, mergeMap } from 'rxjs/operators';
 
@@ -8,6 +7,7 @@ import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { FirestoreUser, accessLevel } from '../../_interfaces/firestoreDatatypes';
 import { User } from '../../_class/user';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface userWithAccess extends User{
   accessLevel: accessLevel;

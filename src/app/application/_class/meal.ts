@@ -1,16 +1,16 @@
-import { Observable } from 'rxjs';
-
-import { FirestoreMeal, FirestoreSpecificMeal, FirestoreSpecificRecipe, MealUsage } from '../_interfaces/firestoreDatatypes';
+import { FirestoreMeal, FirestoreSpecificMeal, MealUsage } from '../_interfaces/firestoreDatatypes';
 import { DatabaseService } from '../_service/database.service';
 import { Camp } from './camp';
 import { Day } from './day';
 import { ExportableObject, FirestoreObject } from './firebaseObject';
-import { Recipe } from './recipe';
+
 
 /**
  *
  */
 export class Meal extends FirestoreObject implements ExportableObject {
+
+  // TODO: add camp sepcific data handeling
 
   public readonly path;
   public readonly documentId;

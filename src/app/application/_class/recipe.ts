@@ -1,14 +1,14 @@
-import { FirestoreRecipe, Ingredient, FirestoreSpecificRecipe } from '../_interfaces/firestoreDatatypes';
-import { ExportableObject, FirestoreObject } from './firebaseObject';
-import { Camp } from './camp';
+import { FirestoreRecipe, FirestoreSpecificRecipe, Ingredient } from '../_interfaces/firestoreDatatypes';
 import { DatabaseService } from '../_service/database.service';
-import { Observable } from 'rxjs';
-import { SpecificRecipe } from './specific-recipe';
+import { Camp } from './camp';
+import { ExportableObject, FirestoreObject } from './firebaseObject';
 
 /**
  *
  */
 export class Recipe extends FirestoreObject implements ExportableObject {
+
+  // TODO: add camp sepcific data handeling
 
   public readonly path: string;
   public readonly documentId: string;

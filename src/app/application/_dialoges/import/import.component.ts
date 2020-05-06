@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { of } from 'rxjs';
-
 import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
 import { ErrorOnImport, RawMealData } from '../../_interfaces/rawMealData';
 import { DatabaseService } from '../../_service/database.service';
-import { Ingredient, FirestoreRecipe, FirestoreMeal } from '../../_interfaces/firestoreDatatypes';
 
+
+/**
+ * TODO: neue Import Möglichkeiten mit Import von Swissmilk oder aus einer Excel-Vorlage..
+ * Import auch in der Rezept-Übersicht anbieten.
+ * 
+ * Import Möglichkeiten auch für Lager und Mahlzeiten erweitern, ermöglichen, dass Lager als
+ * Excel exportert werden können? (eher langfristig...). Aber sicher als JSON heruntergeladen und
+ * wieder hochgeladen werden können.
+ * 
+ */
 @Component({
   selector: 'app-import',
   templateUrl: './import.component.html',
@@ -20,6 +26,7 @@ export class ImportComponent implements OnInit {
   public meal: Meal;
 
   public mealStr = '';
+
 
   constructor(private formBuilder: FormBuilder, private dbService: DatabaseService) {
 

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { mergeMap, take, tap } from 'rxjs/operators';
-
+import { mergeMap, take } from 'rxjs/operators';
 import { copyrights, version as softwareVersion } from '../../../../../package.json';
 import { User } from '../../_class/user.js';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
+
 
 
 @Component({
@@ -75,6 +75,7 @@ export class AppSettingsPageComponent {
         user.displayName = this.userDataForm.value.displayName;
         user.visibility = this.userDataForm.value.visibility;
 
+        // TODO: gibt einen Fehler... Was stimmt ihr mit dem Pfad nicht?
         this.dbService.updateDocument(user);
 
       });

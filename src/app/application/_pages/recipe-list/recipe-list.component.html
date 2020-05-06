@@ -5,22 +5,9 @@
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field">
 </mat-form-field>
 
-<div id="recipesList" *ngIf="filteredRecipes  as recipes">
+<div id="recipesList" *ngIf="filteredElements as recipes">
 
-  <div class="recipe mat-elevation-z3" *ngFor="let recipe of recipes" id="{{recipe.documentId}}">
-
-    <div class="title">
-      <mat-icon> menu_book </mat-icon>
-      <h3>{{recipe.name}}</h3>
-    </div>
-    <span class="description">{{recipe.description == "" ? "Keine Beschreibung zu diesem Rezept." : recipe.description}}</span>
-    <span class="usedIn">Wird verwendet in {{recipe.usedInMeals.length}} Mahlzeit/-en <a *ngIf="recipe.usedInMeals.length > 0" routerLink="/app/meals" [queryParams]="{ includes: recipe.documentId }">(Mahlzeiten anzeigen)</a>.</span>
-
-    <div class="icons">
-      <mat-icon class="edit_recipe deactive"  matTooltip="Recipe bearbeiten (zur Zeit noch nicht verfügbar)"> edit </mat-icon>
-      <mat-icon class="delete_recipe" [ngClass]="{'deactive': recipe.usedInMeals.length > 0}"  matTooltip="Recipe löschen" (click)="delete(recipe)"> delete </mat-icon>
-    </div>
-
-  </div>
+  <app-list-card *ngFor="let recipe of recipes" [cardElement]="recipe"
+    [access]="access[recipe.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
 
 </div>

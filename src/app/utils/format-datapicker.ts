@@ -1,4 +1,4 @@
-import { NativeDateAdapter } from '@angular/material';
+import { NativeDateAdapter } from '@angular/material/core';
 
 /**
  * Converts a Date to a SwissDateString
@@ -19,6 +19,11 @@ export class SwissDateAdapter extends NativeDateAdapter {
   public formatLong(date: Date): string {
     return date.toLocaleDateString('de-CH',
       { weekday: 'long', year: 'numeric', month: 'short', day: '2-digit' });
+  }
+
+  public weekday(date: Date): string {
+    return date.toLocaleDateString('de-CH',
+      { weekday: 'long' });
   }
 
 }

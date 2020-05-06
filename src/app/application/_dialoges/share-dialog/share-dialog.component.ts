@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
 
 import { Camp } from '../../_class/camp';
 import { AuthenticationService } from '../../_service/authentication.service';
 import { DatabaseService } from '../../_service/database.service';
 import { userWithAccess } from '../../_template/user-list/user-list.component';
 import { AccessData } from '../../_interfaces/firestoreDatatypes';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-share-dialog',

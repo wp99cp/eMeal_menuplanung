@@ -1,5 +1,4 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { mergeMap, take, tap } from 'rxjs/operators';
@@ -11,6 +10,8 @@ import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { WeekViewComponent } from '../../_template/week-view/week-view.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -18,6 +19,14 @@ import { WeekViewComponent } from '../../_template/week-view/week-view.component
   styleUrls: ['./edit-camp-page.component.sass']
 })
 export class EditCampPageComponent implements OnInit, Saveable {
+
+  // TODO: neue Funktion erstellen: 'automatisch Zusammenstellen'
+  // diese Funktion erstellt automatisch eine Wochenübersicht
+  // basierend auf deinen Rezepten und Mahlzeiten und dem
+  // verwendungszweck in den vergangenen Lagern.
+  // schaut darauf, dass Beilagen nicht zweimal pro Tag verwendet werden 
+  // und auch nicht am vorherigen oder nächsten und schaut
+  // das nur einmal pro Tag Fleisch verwendet wird.
 
   @ViewChildren(WeekViewComponent) weekViews: QueryList<WeekViewComponent>;
 

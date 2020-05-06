@@ -1,11 +1,9 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
-import { take, mergeMap } from 'rxjs/operators';
+import { mergeMap, take } from 'rxjs/operators';
 import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-
 import { Camp } from '../../_class/camp';
 import { Meal } from '../../_class/meal';
 import { Recipe } from '../../_class/recipe';
@@ -16,6 +14,9 @@ import { Ingredient } from '../../_interfaces/firestoreDatatypes';
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-edit-recipe',

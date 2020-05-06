@@ -5,7 +5,7 @@ import { Observable, empty } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
 import { FirestoreObject } from '../../_class/firebaseObject';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-recipe',
@@ -18,7 +18,7 @@ export class CreateRecipeComponent implements OnInit {
 
   constructor(
     private authService: AuthenticationService,
-    private formBuilder: FormBuilder,
+    formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: { recipeName: string }) {
 
     this.newRecipeForm = formBuilder.group({

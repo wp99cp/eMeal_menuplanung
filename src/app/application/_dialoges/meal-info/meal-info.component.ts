@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Camp } from '../../_class/camp';
-import { SpecificMeal } from '../../_class/specific-meal';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { Meal } from '../../_class/meal';
+import { SpecificMeal } from '../../_class/specific-meal';
 
 @Component({
   selector: 'app-meal-info',

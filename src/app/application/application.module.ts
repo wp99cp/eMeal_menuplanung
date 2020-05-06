@@ -7,7 +7,6 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 import { AngularFireFunctionsModule, FUNCTIONS_REGION } from '@angular/fire/functions';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -28,14 +27,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from 'src/environments/environment';
-
 import { VersionHistoryModule } from '../modules/version-history/version-history.module';
 import { SwissDateAdapter } from '../utils/format-datapicker';
+import { ApplicationRoutingModule } from './application-routing.module';
 import { AddMealComponent } from './_dialoges/add-meal/add-meal.component';
 import { AddRecipeComponent } from './_dialoges/add-recipe/add-recipe.component';
 import { CampInfoComponent } from './_dialoges/camp-info/camp-info.component';
+import { CreateCampComponent } from './_dialoges/create-camp/create-camp.component';
 import { CreateMealComponent } from './_dialoges/create-meal/create-meal.component';
 import { CreateRecipeComponent } from './_dialoges/create-recipe/create-recipe.component';
+import { DeepCopyMealComponent } from './_dialoges/deep-copy-meal/deep-copy-meal.component';
 import { DeleteCampComponent } from './_dialoges/delete-camp/delete-camp.component';
 import { EditDayComponent } from './_dialoges/edit-day/edit-day.component';
 import { ImportComponent } from './_dialoges/import/import.component';
@@ -47,9 +48,12 @@ import { AppSettingsPageComponent } from './_pages/app-settings-page/app-setting
 import { CampListPageComponent } from './_pages/camp-list-page/camp-list-page.component';
 import { EditCampPageComponent } from './_pages/edit-camp-page/edit-camp-page.component';
 import { EditMealComponent } from './_pages/edit-meal/edit-meal.component';
+import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
 import { ExportCampComponent } from './_pages/export-camp/export-camp.component';
 import { FeedbackPageComponent } from './_pages/feedback-page/feedback-page.component';
 import { HelpPageComponent } from './_pages/help-page/help-page.component';
+import { MealListComponent } from './_pages/meal-list/meal-list.component';
+import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component';
 import { WelcomPageComponent } from './_pages/welcom-page/welcom-page.component';
 import { AuthenticationService } from './_service/authentication.service';
 import { AutoSaveService } from './_service/auto-save.service';
@@ -61,11 +65,12 @@ import { ListOfUsersComponent } from './_template/list-of-users/list-of-users.co
 import { MealsOverviewComponent } from './_template/meals-overview/meals-overview.component';
 import { UserListComponent } from './_template/user-list/user-list.component';
 import { WeekViewComponent } from './_template/week-view/week-view.component';
-import { ApplicationRoutingModule } from './application-routing.module';
-import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component';
-import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
-import { MealListComponent } from './_pages/meal-list/meal-list.component';
-
+import { CopyRecipeComponent } from './_dialoges/copy-recipe/copy-recipe.component';
+import { ListCardComponent } from './_template/list-card/list-card.component';
+import { CopyCampComponent } from './_dialoges/copy-camp/copy-camp.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -100,7 +105,12 @@ import { MealListComponent } from './_pages/meal-list/meal-list.component';
     HelpPageComponent,
     RecipeListComponent,
     EditSingleRecipeComponent,
-    MealListComponent
+    MealListComponent,
+    DeepCopyMealComponent,
+    CreateCampComponent,
+    CopyRecipeComponent,
+    ListCardComponent,
+    CopyCampComponent
   ],
   providers: [
     AngularFirestore,
@@ -150,8 +160,7 @@ import { MealListComponent } from './_pages/meal-list/meal-list.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatRadioModule,
-    MatSelectModule
+    MatRadioModule
   ],
 
   entryComponents: [
@@ -161,6 +170,7 @@ import { MealListComponent } from './_pages/meal-list/meal-list.component';
     EditDayComponent,
     ImportComponent,
     CreateMealComponent,
+    DeepCopyMealComponent,
     MealsOverviewComponent,
     ShareDialogComponent,
     CampInfoComponent,
@@ -168,7 +178,10 @@ import { MealListComponent } from './_pages/meal-list/meal-list.component';
     RecipeInfoComponent,
     AddRecipeComponent,
     CreateRecipeComponent,
-    MealPrepareComponent
+    CreateCampComponent,
+    MealPrepareComponent,
+    CopyRecipeComponent,
+    CopyCampComponent
   ],
   exports: [
     MatTableModule,

@@ -30,6 +30,7 @@ export class AutoSaveService implements CanDeactivate<Saveable> {
 
   /**
    * Wird beim Wechsel der Seiten aufgerufen.
+   * 
    */
   canDeactivate(component: Saveable) {
 

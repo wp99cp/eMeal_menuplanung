@@ -1,6 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -9,6 +8,8 @@ import { Recipe } from '../../_class/recipe';
 import { CreateRecipeComponent } from '../create-recipe/create-recipe.component';
 import { Observable } from 'rxjs';
 import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
+import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();

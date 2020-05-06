@@ -1,10 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 import { SpecificMeal } from '../../_class/specific-meal';
 import { Day } from '../../_class/day';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-meal-prepare',

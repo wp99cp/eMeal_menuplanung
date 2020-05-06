@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatIconModule, MatTooltipModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -14,6 +13,9 @@ import { TemplateFooterComponent } from './_template/template-footer/template-fo
 import { TemplateHeaderComponent } from './_template/template-header/template-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { AppComponent } from './app.component';
     HeaderNavComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

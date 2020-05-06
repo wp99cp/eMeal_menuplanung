@@ -1,21 +1,16 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatPaginator, MatPaginatorIntl, MatSort } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
-import { MatTableDataSource } from '@angular/material/table';
-import { firestore } from 'firebase';
-import { Observable } from 'rxjs';
-
-import { Camp } from '../../_class/camp';
-import { FirestoreObject } from '../../_class/firebaseObject';
-import { DeleteCampComponent } from '../../_dialoges/delete-camp/delete-camp.component';
-import { AccessData, FirestoreCamp } from '../../_interfaces/firestoreDatatypes';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { DatabaseService } from '../../_service/database.service';
-import { customPaginator } from './customPaginator';
-import { take } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { mergeMap, take } from 'rxjs/operators';
+import { Camp } from '../../_class/camp';
+import { CopyCampComponent } from '../../_dialoges/copy-camp/copy-camp.component';
+import { CreateCampComponent } from '../../_dialoges/create-camp/create-camp.component';
+import { DeleteCampComponent } from '../../_dialoges/delete-camp/delete-camp.component';
+import { FirestoreCamp } from '../../_interfaces/firestoreDatatypes';
+import { DatabaseService } from '../../_service/database.service';
+import { TileListPage } from '../tile_page';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * CampListPageComponent
@@ -26,42 +21,78 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-camp-list-page',
   templateUrl: './camp-list-page.component.html',
-  styleUrls: ['./camp-list-page.component.sass'],
-  providers: [
-    { provide: MatPaginatorIntl, useValue: customPaginator() }]
+  styleUrls: ['./camp-list-page.component.sass']
 })
-export class CampListPageComponent implements AfterViewInit, OnInit {
-
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-  // Datasource and colums for the table
-  public displayedColumns: string[] = ['name', 'description', 'year', 'participants', 'menu'];
-  public dataSource: MatTableDataSource<Camp>;
-
-  // Camp Data
-  public camps: Observable<Camp[]>;
-  public filteredCamps: Camp[];
-
-  // Form data to create new Camp
-  public newCampInfos: FormGroup;
-  public newCampParticipants: FormGroup;
-  public newCampDate: FormGroup;
-  public access: AccessData;
+export class CampListPageComponent extends TileListPage<Camp> implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public databaseService: DatabaseService,
-    private auth: AuthenticationService,
-    private formBuilder: FormBuilder,
+    public dbService: DatabaseService,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute) {
 
-    this.dataSource = new MatTableDataSource();
+    super(dbService, snackBar, dbService.getCampsWithAccess(), dialog);
 
-    // create default values for addCampForms
-    this.newCampInfos = this.formBuilder.group({ name: '', description: '', });
-    this.newCampParticipants = this.formBuilder.group({ participants: '' });
-    this.newCampDate = this.formBuilder.group({ date: '' });
+    // set filter for searching
+    this.filterFn = (camp: Camp) =>
+      camp.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()) ||
+      camp.year.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
+
+    // set name of Type
+    this.dbElementName = 'Lager';
+
+  }
+
+  newElement() {
+
+    this.dialog.open(CreateCampComponent, {
+      height: '640px',
+      width: '900px',
+      data: { campName: '' }
+    }).afterClosed()
+      .pipe(mergeMap((camp: Observable<FirestoreCamp>) => camp))
+      .subscribe(campData => this.dbService.addDocument(campData, 'camps'));
+
+  }
+
+  copy(event: any) {
+
+    this.dialog.open(CopyCampComponent, {
+      width: '530px',
+      height: '250px',
+    }).afterClosed().pipe(take(1))
+      .subscribe(async () => {
+
+
+      });
+
+
+  }
+
+  // no special condition
+  async deleteConditions(camp: Camp): Promise<boolean> {
+
+    if (! await this.dbService.isOwner(camp))
+      return false;
+
+    return new Promise(resolve =>
+      this.dialog.open(DeleteCampComponent, {
+        width: '530px',
+        height: '250px',
+        data: { name: camp.name }
+      }).afterClosed()
+        .pipe(take(1))
+        .subscribe((deleteConfirmed: boolean) => resolve(deleteConfirmed))
+    );
+
+  }
+
+
+  deleteElement(camp: Camp) {
+
+
+    this.dbService.deleteDocument(camp);
+    this.dbService.deleteAllMealsAndRecipes(camp.documentId);
 
   }
 
@@ -71,18 +102,14 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
    */
   ngOnInit() {
 
-    this.camps = this.databaseService.getCampsWithAccess();
-    this.camps.subscribe(camps => {
-      this.filteredCamps = camps;
-      console.log(camps)
-    });
+    this.addButtonNew();
 
     this.route.queryParams.subscribe(params => {
 
       const usesParameter = params['includes'];
 
       if (usesParameter) {
-        (document.getElementById('searchForCamp') as HTMLFormElement).value = 'includes: ' + usesParameter;
+        (document.getElementById('search-field') as HTMLFormElement).value = 'includes: ' + usesParameter;
         this.applyFilter('includes: ' + usesParameter);
 
       }
@@ -92,7 +119,7 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
 
   }
 
-  applyFilter(event: string) {
+  /*
 
     if (event.includes('includes:')) {
 
@@ -100,101 +127,9 @@ export class CampListPageComponent implements AfterViewInit, OnInit {
       this.databaseService.getCampsThatIncludes(mealId).pipe(take(1))
         .subscribe(camps => this.filteredCamps = camps);
 
-
-    } else {
-
-      this.camps.pipe(take(1)).subscribe(camps => {
-        this.filteredCamps = camps.filter(camp => camp.name.toLocaleLowerCase().includes(event.toLocaleLowerCase()) ||
-          camp.year.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
-      });
-
-    }
-
-  }
-
-  ngAfterViewInit() {
-
-    // Update MatTableDataSource
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-
-    // Eigenschaft für die Sortierung
-    this.dataSource.sortingDataAccessor = this.sortingAccessor();
-
-    // updates the dataSource
-    this.camps.subscribe(camps => this.dataSource.data = camps);
-
-  }
+ */
 
 
-
-  private sortingAccessor(): (data: Camp, sortHeaderId: string) => string | number {
-
-    return (item, property) => {
-      switch (property) {
-        case 'name': return item.name.toLowerCase();
-        case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
-        case 'year': return item.year;
-        default: return item[property];
-      }
-    };
-
-  }
-
-  /**
-   * Creates a new Camp
-   *
-   */
-  public createCamp(campCreator: MatStepper) {
-
-    this.auth.getCurrentUser().subscribe(user => {
-
-      const date = new Date(this.newCampDate.value.date);
-
-      // creates empty document
-      const campData = FirestoreObject.exportEmptyDocument(user.uid) as FirestoreCamp;
-
-      campData.camp_name = this.newCampInfos.value.name;
-      campData.camp_description = this.newCampInfos.value.description;
-      campData.camp_year = date.toLocaleDateString('de-CH', { year: 'numeric' });
-      campData.days = [{ day_date: firestore.Timestamp.fromDate(date), day_description: '', day_notes: '' }];
-      campData.camp_participants = this.newCampParticipants.value.participants;
-      campData.camp_vegetarians = 0;
-      campData.camp_leaders = 0;
-
-      // Creates a new Camp and resets form
-      this.databaseService.addDocument(campData, 'camps')
-        .then(() => campCreator.reset());
-
-    });
-
-  }
-
-  /**
-   * Deletes the selected camp
-   *
-   */
-  public async deleteCamp(camp: Camp) {
-
-    if (! await this.databaseService.canWrite(camp))
-      return;
-
-    this.dialog.open(DeleteCampComponent, {
-      height: '400px',
-      width: '560px',
-      data: { name: camp.name }
-    }).afterClosed()
-      .subscribe(deleteConfirmed => {
-
-        if (deleteConfirmed) {
-
-          this.databaseService.deleteDocument(camp);
-          this.databaseService.deleteAllMealsAndRecipes(camp.documentId);
-        }
-
-      });
-
-  }
 
 
 }

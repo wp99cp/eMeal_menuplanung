@@ -1,118 +1,15 @@
 
 <span class="big-page-title">Meine Lager</span>
 
-
-
 <mat-form-field class="mat-form-field full-width">
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Lager suchen..." id="searchForCamp">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Lager suchen..." id="search-field">
 </mat-form-field>
 
-<div id="lagerList" *ngIf="filteredCamps as camps">
-
-  <div class="camp mat-elevation-z3" *ngFor="let camp of camps" id="{{camp.documentId}}">
-
-    <div class="title">
-      <mat-icon> nature_people </mat-icon>
-      <h3>{{camp.name}}</h3>
-    </div>
-
-    <span class="description">{{camp.description == "" ? "Keine Beschreibung zu diesem Lager." : camp.description}}
-      <br> <br> Jahr: {{camp.year}} <br><br> {{camp.participants}} Teilnehmende
-    </span>
   
-    <div class="icons"> 
-      <mat-icon class="edit_camp"  matTooltip="Lager bearbeiten"  routerLink="./{{camp.documentId}}"> edit </mat-icon>
-      <mat-icon class="delete_camp" (click)='deleteCamp(camp)'> delete </mat-icon> <!-- TODO: deactivate delete button if you can't edit the camp-->
-    </div>
+<div id="lagerList" *ngIf="filteredElements as camps">
 
-  </div>
+  <app-list-card *ngFor="let camp of camps" [cardElement]="camp" [access]="access[camp.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
 
 </div>
-
-  <!-- Create a new Camp -->
-  <div *ngIf="camps" class="newCampDiaglog" style="float: left; clear: both;">
-
-    <mat-vertical-stepper #campCreator [linear]="true">
-
-      <mat-step label="Lager erstellen.">
-
-        <h2 class="mat-h2">Mit Planen beginnen.</h2>
-        <p>Erstelle ein neues Lager und beginne sofort mit dem Planen.</p>
-        <button mat-raised-button matStepperNext>Lager erstellen</button>
-
-      </mat-step>
-
-      <!-- Allgemeine Infos -->
-      <mat-step label="Allgemeine Infos zum Lager." [stepControl]="newCampInfos">
-
-        <form [formGroup]="newCampInfos">
-
-          <mat-form-field>
-            <input matInput placeholder="Name" required formControlName="name" #name maxlength="32" autocomplete="off">
-            <mat-hint align="start"><strong>Name des Lagers</strong></mat-hint>
-            <mat-hint align="end">{{name.value?.length}} / 32</mat-hint>
-          </mat-form-field>
-
-          <br />
-
-          <mat-form-field>
-            <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
-          </mat-form-field>
-
-        </form>
-
-        <br />
-
-        <button mat-raised-button matStepperNext>Weiter</button>
-      </mat-step>
-
-      <!-- Anzahl Teilnehmende -->
-      <mat-step label="Anzahl Teilnehmer." [stepControl]="newCampParticipants">
-
-        <form [formGroup]="newCampParticipants">
-
-          <mat-form-field>
-            <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'>
-          </mat-form-field>
-
-        </form>
-
-        <p class="info">
-          Bitte gib die voraussichtliche Anzahl Teilnehmende an. Du kannst die Teilnehmer-Anzahl später jederzeit
-          anpassen.
-        </p>
-
-        <br />
-
-        <button mat-raised-button matStepperNext>Weiter</button>
-
-      </mat-step>
-
-
-      <!-- Mit Planen beginnen -->
-      <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">
-
-        <p>Füge einen ersten Tag hinzu.</p>
-
-        <form [formGroup]="newCampDate">
-
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date"
-              data-date-format="DD MMMM YYYY">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-        </form>
-
-        <br />
-
-        <button mat-raised-button matStepperNext (click)="createCamp(campCreator)" type="submit">
-          Lager erstellen
-        </button>
-
-      </mat-step>
-    </mat-vertical-stepper>
-
-  </div>
 
 

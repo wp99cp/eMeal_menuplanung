@@ -13,6 +13,10 @@ import { DatabaseService } from '../../_service/database.service';
 })
 export class ExportCampComponent implements OnInit {
 
+  // TODO: Möglichkeit die Einkaufsliste in ein Trelloboard zu exportieren
+  // dies ermöglicht anschliessend, dass gemeinsame EInkaufen mit synch.
+  // Abhacken der Lebensmitteln.
+
   private campId: Observable<string>;
 
   public pending = false;
@@ -24,7 +28,6 @@ export class ExportCampComponent implements OnInit {
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
     this.exports.subscribe(console.log);
-
 
   }
 

@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { MainMenuComponent } from 'src/app/_template/main-menu/main-menu.component';
-import { FirestoreUser, AccessData } from '../_interfaces/firestoreDatatypes';
+import { AccessData } from '../_interfaces/firestoreDatatypes';
+
 
 
 @Injectable({
@@ -20,10 +20,8 @@ import { FirestoreUser, AccessData } from '../_interfaces/firestoreDatatypes';
  */
 export class AuthenticationService {
 
-
   // needs for stop automatic resignin
   private signInSubscription: Subscription;
-
 
   public static generateCoworkersList(ownerUid: string, coworkers: firebase.User[]): AccessData {
 
@@ -43,7 +41,6 @@ export class AuthenticationService {
   }
 
   constructor(public fireAuth: AngularFireAuth, private router: Router) { }
-
 
 
   /**

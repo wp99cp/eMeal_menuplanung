@@ -12,6 +12,9 @@ export class MainMenuComponent implements OnInit {
 
   public static authServ: AuthenticationService;
 
+  // TODO: mark current menu item
+  // Markiere die aktuell offene Seite
+
   constructor(private router: Router) { }
 
   ngOnInit() {

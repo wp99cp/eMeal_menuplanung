@@ -1,12 +1,12 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 
 import { Day } from '../../_class/day';
 import { SpecificMeal } from '../../_class/specific-meal';
 import { EditDayComponent } from '../../_dialoges/edit-day/edit-day.component';
 import { Meal } from '../../_class/meal';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-meals-overview',
@@ -14,6 +14,9 @@ import { Meal } from '../../_class/meal';
   styleUrls: ['./meals-overview.component.sass']
 })
 export class MealsOverviewComponent implements OnChanges {
+
+  // TODO: z.T. beim Löschen doppelte Mahlzeiten (sie tauchen wieder auf, falls eine zweite Mahlzeit
+  // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
 
   @Input() access: boolean;
   @Input() day: Day;
