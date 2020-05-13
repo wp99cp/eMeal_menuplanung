@@ -90,16 +90,16 @@ export interface FirestoreMeal extends FirestoreDocument {
   meal_last_usage?: MealUsage;
   meal_keywords: string[];
   used_in_camps: string[];
-  
+
 }
 
 export interface Ingredient {
 
-  // TODO: add unique-id 
+  // TODO: add unique-id
   // the unique id is needed to overwrite the informations
-  // of this ingredient with the informations of the meal 
+  // of this ingredient with the informations of the meal
   // specific ingredients
-  
+
   food: string;
   measure: number;
   unit: string;
@@ -119,7 +119,6 @@ export interface FirestoreRecipe extends FirestoreDocument {
   used_in_meals: string[];
 
 }
-
 
 export type UserGroups = 'all' | 'vegetarians' | 'non-vegetarians' | 'leaders';
 

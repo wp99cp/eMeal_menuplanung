@@ -162,9 +162,8 @@ export class DatabaseService {
    */
   public getUserById(userId: string): Observable<User> {
 
-    return this.requestDocument('users/' + userId).pipe(map((docRef: any) =>
-      new User(docRef.payload.data() as FirestoreUser, userId)
-    ));
+    return this.requestDocument('users/' + userId)
+      .pipe(FirestoreObject.createObject<FirestoreUser, User>(User));
 
   }
 
@@ -230,7 +229,7 @@ export class DatabaseService {
     // Send the proper header information along with the request
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    xhr.onreadystatechange = function() { // Call a function when the state changes.
+    xhr.onreadystatechange = function () { // Call a function when the state changes.
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         // Request finished. Do processing here.
       }
