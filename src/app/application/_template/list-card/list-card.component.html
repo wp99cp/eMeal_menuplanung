@@ -1,31 +1,33 @@
 <div class="card mat-elevation-z3" id="{{cardElement.documentId}}" [ngClass]="{'read-only': !access}">
 
-    <div class="title">
-        <mat-icon> menu_book </mat-icon>
-        <h3 [attr.contenteditable]="access" id="{{cardElement.documentId}}-title" (input)="typesName(cardElement)"
-            matTooltip="{{access ? 'Unbenennen durch Klicken' : ''}}">
-            {{cardElement.name}}
-        </h3>
-        <mat-icon (click)="changeName(cardElement)" id="{{cardElement.documentId}}-accept" class="accept-changes"
-            matTooltip="neuer Name speichern"> done </mat-icon>
-    </div>
+  <div class="title">
+    <mat-icon> menu_book</mat-icon>
+    <h3 [attr.contenteditable]="access" id="{{cardElement.documentId}}-title" (input)="typesName(cardElement)"
+        matTooltip="{{access ? 'Unbenennen durch Klicken' : ''}}" class="showDots" (click)="removeDots(cardElement)">
+      {{cardElement.name}}
+    </h3>
+    <mat-icon (click)="changeName(cardElement)" id="{{cardElement.documentId}}-accept" class="accept-changes"
+              matTooltip="neuer Name speichern"> done
+    </mat-icon>
+  </div>
 
-    <span
-        class="description">{{cardElement.description == "" ? "Keine Beschreibung zu diesem " + elementName + "." : cardElement.description}}</span>
+  <span
+    class="description">{{cardElement.description == "" ? "Keine Beschreibung zu diesem " + elementName + "." : cardElement.description}}</span>
 
-    <span class="usedIn" *ngIf="topCategorieName != ''">Wird verwendet in {{usage}} {{topCategorieName}}
-        <a *ngIf="usage > 0" routerLink="/app/{{topCategoriePath}}"
-            [queryParams]="{ includes: cardElement.documentId }">({{topCategorieName}} anzeigen)</a>.</span>
+  <span class="usedIn" *ngIf="topCategorieName != ''">Wird verwendet in {{usage}} {{topCategorieName}}
+    <a *ngIf="usage > 0" routerLink="/app/{{topCategoriePath}}"
+       [queryParams]="{ includes: cardElement.documentId }">({{topCategorieName}} anzeigen)</a>.</span>
 
-    <div class="icons">
-        <mat-icon class="edit_recipe" routerLink="/app/{{categoriePath}}/{{cardElement.documentId}}"
-            matTooltip="{{ access ? elementName + ' bearbeiten' : elementName +' anschauen'}}">
-            {{access ? 'edit' : 'remove_red_eye'}}
-        </mat-icon>
-        <mat-icon class="copy_recipe" matTooltip="Kopie erstellen" (click)="copy.emit(cardElement)"> file_copy </mat-icon>
-        <mat-icon class="delete_recipe" [ngClass]="{'deactive': usage > 0 || !access}"
-            matTooltip="{{!access ? 'Nur Lesezugriff' : usage > 0 ? elementName + ' wird verwendet' : elementName + ' löschen'}}"
-            (click)="delete.emit(cardElement)"> delete </mat-icon>
-    </div>
+  <div class="icons">
+    <mat-icon class="edit_recipe" routerLink="/app/{{categoriePath}}/{{cardElement.documentId}}"
+              matTooltip="{{ access ? elementName + ' bearbeiten' : elementName +' anschauen'}}">
+      {{access ? 'edit' : 'remove_red_eye'}}
+    </mat-icon>
+    <mat-icon class="copy_recipe" matTooltip="Kopie erstellen" (click)="copy.emit(cardElement)"> file_copy</mat-icon>
+    <mat-icon class="delete_recipe" [ngClass]="{'deactive': usage > 0 || !access}"
+              matTooltip="{{!access ? 'Nur Lesezugriff' : usage > 0 ? elementName + ' wird verwendet' : elementName + ' löschen'}}"
+              (click)="delete.emit(cardElement)"> delete
+    </mat-icon>
+  </div>
 
 </div>

@@ -71,6 +71,7 @@ import { CopyCampComponent } from './_dialoges/copy-camp/copy-camp.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatRadioModule } from '@angular/material/radio';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -160,7 +161,9 @@ import { MatRadioModule } from '@angular/material/radio';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatRadioModule
+    MatRadioModule,
+
+    MarkdownModule
   ],
 
   entryComponents: [

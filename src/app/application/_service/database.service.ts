@@ -1,20 +1,29 @@
-import { Injectable } from '@angular/core';
-import { Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn } from '@angular/fire/firestore';
-import { AngularFireFunctions } from '@angular/fire/functions';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { firestore } from 'firebase/app';
-import { combineLatest, forkJoin, Observable, of, OperatorFunction } from 'rxjs';
-import { map, mergeMap, take } from 'rxjs/operators';
-import { Camp } from '../_class/camp';
-import { FirestoreObject } from '../_class/firebaseObject';
-import { Meal } from '../_class/meal';
-import { Recipe } from '../_class/recipe';
-import { SpecificMeal } from '../_class/specific-meal';
-import { SpecificRecipe } from '../_class/specific-recipe';
-import { User } from '../_class/user';
-import { AccessData, FirestoreCamp, FirestoreDocument, FirestoreMeal, FirestoreRecipe, FirestoreSpecificMeal, FirestoreSpecificRecipe, FirestoreUser } from '../_interfaces/firestoreDatatypes';
-import { ErrorOnImport, RawMealData } from '../_interfaces/rawMealData';
-import { AuthenticationService } from './authentication.service';
+import {Injectable} from '@angular/core';
+import {Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn} from '@angular/fire/firestore';
+import {AngularFireFunctions} from '@angular/fire/functions';
+import {AngularFireStorage} from '@angular/fire/storage';
+import {firestore} from 'firebase/app';
+import {combineLatest, forkJoin, Observable, of, OperatorFunction} from 'rxjs';
+import {map, mergeMap, take} from 'rxjs/operators';
+import {Camp} from '../_class/camp';
+import {FirestoreObject} from '../_class/firebaseObject';
+import {Meal} from '../_class/meal';
+import {Recipe} from '../_class/recipe';
+import {SpecificMeal} from '../_class/specific-meal';
+import {SpecificRecipe} from '../_class/specific-recipe';
+import {User} from '../_class/user';
+import {
+  AccessData,
+  FirestoreCamp,
+  FirestoreDocument,
+  FirestoreMeal,
+  FirestoreRecipe,
+  FirestoreSpecificMeal,
+  FirestoreSpecificRecipe,
+  FirestoreUser
+} from '../_interfaces/firestoreDatatypes';
+import {ErrorOnImport, RawMealData} from '../_interfaces/rawMealData';
+import {AuthenticationService} from './authentication.service';
 
 
 /**
@@ -30,7 +39,7 @@ export class DatabaseService {
 
   // TODO: allgemein besseres Error-Handeling
   // als erste Idee kann jeder Fehler einfach als Banner
-  // angezeit werden, dies lässt sich direkt aus dieser Klasse heraus 
+  // angezeigt werden, dies lässt sich direkt aus dieser Klasse heraus
   // realisieren....
 
   /**
@@ -39,63 +48,67 @@ export class DatabaseService {
    * the database.
    *
    * @param db AngularFirestore: the database
-   * @param auth AngularFireAuth
+   * @param authService
+   * @param functions
+   * @param cloud
    */
   constructor(
     private db: AngularFirestore,
     private authService: AuthenticationService,
     private functions: AngularFireFunctions,
-    private cloud: AngularFireStorage) { }
+    private cloud: AngularFireStorage) {
+  }
 
   public updateAccessData(access: AccessData, path: string) {
 
-    this.db.doc(path).set({ access }, { merge: true });
+    this.db.doc(path).set({access}, {merge: true});
 
   }
 
 
   /**
-   * 
+   *
    * TODO: In eine Cloud-Funktion auslagern und unbedingt durch für alle Elemente .rules blockieren...
-   * 
-   * @param requestedAccess 
-   * @param access 
-   * @param docPath 
+   *
+   * @param requestedAccess
+   * @param access
+   * @param docPath
    */
   public upgradeAccessData(requestedAccess: AccessData, access: AccessData, docPath: string) {
 
 
-    for (let uid of Object.keys(requestedAccess)) {
+    for (const uid of Object.keys(requestedAccess)) {
 
       // has already access
       if (access[uid]) {
 
         // keeps the access level
         // unless it's ownly viewer access
-        if (access[uid] == 'viewer' && requestedAccess[uid] != 'viewer')
+        if (access[uid] === 'viewer' && requestedAccess[uid] !== 'viewer') {
           access[uid] = 'collaborator';
+        }
 
       } else {
 
         // hasn't access yet, gets viewer or collaborator access
-        access[uid] = requestedAccess[uid] == 'viewer' ? 'viewer' : 'collaborator';
+        access[uid] = requestedAccess[uid] === 'viewer' ? 'viewer' : 'collaborator';
 
       }
 
     }
 
-    this.db.doc(docPath).set({ access }, { merge: true });
+    this.db.doc(docPath).set({access}, {merge: true});
 
   }
 
 
   /**
    * Gets the last 5 Elements
-   * 
+   *
    * TODO: add Python-Skrip, das alte Exports automatisch löscht,
    * eine Cloud-Funktion gibt es hierfür teilweise sogar...
-   * 
-   * 
+   *
+   *
    */
   public getExports(campId: string): Observable<ExportData[]> {
 
@@ -105,17 +118,17 @@ export class DatabaseService {
   }
 
   /**
-   * 
+   *
    * TODO: Hier gibt es ein Information-Leeking...
    * Zur Zeit können somit alle User ausgelesen werden inkl. ihre E-Mail-Adressen.
    * (Es gibt zwar die Möglichkeit, sein eigenes Konto zu verstecken, aber dann
    * kann man auch nicht mehr mit anderen Zusammenarbeiten).
-   * 
+   *
    * Idee neue Freigabe nur über E-Mailadresse möglich, eine Cloud-Funktion gibt dann
    * den entsprechenden Namen zurück und fügt den User hinzu...
    * Oder aber das ganze muss zumindestens in den AGBs/Datenschutzbestimmungen stehen
    * diese müssen umbedingt mal angepasst werden.
-   * 
+   *
    */
   public getVisibleUsers() {
 
@@ -130,7 +143,7 @@ export class DatabaseService {
 
   /**
    *
-   * 
+   *
    * @param userIDs
    */
   public getUsers(access: AccessData): Observable<User[]> {
@@ -141,11 +154,11 @@ export class DatabaseService {
   }
 
   /**
-   * 
+   *
    * In der User-Collection haben grundsätzlich alle Lese-Berechtigung:
-   * ausser der Benutzer ist versteckt. 
-   * 
-   * @param userId 
+   * ausser der Benutzer ist versteckt.
+   *
+   * @param userId
    */
   public getUserById(userId: string): Observable<User> {
 
@@ -157,8 +170,8 @@ export class DatabaseService {
 
   /**
    * Löscht ein Rezept und seine SpecificRecipes
-   * 
-   * TODO: muss als "Transaction" geschehen, damit ein fehlerhafter 
+   *
+   * TODO: muss als "Transaction" geschehen, damit ein fehlerhafter
    * Status in der Datenbank ausgeschlossen werden könne.
    *
    */
@@ -203,11 +216,11 @@ export class DatabaseService {
 
 
   /**
-   * 
+   *
    * Sends the Feedback to the administrator.
-   * 
-   * @param feedback 
-   * 
+   *
+   * @param feedback
+   *
    */
   public addFeedback(feedback: any) {
 
@@ -217,11 +230,11 @@ export class DatabaseService {
     // Send the proper header information along with the request
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-    xhr.onreadystatechange = function () { // Call a function when the state changes.
+    xhr.onreadystatechange = function() { // Call a function when the state changes.
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         // Request finished. Do processing here.
       }
-    }
+    };
 
     xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
 
@@ -229,12 +242,12 @@ export class DatabaseService {
 
 
   /**
-   * 
+   *
    * TODO: Besser als Cloud Funktion, damit auch wirklich alles gelöscht wird
    * und nicht fehlerhafte Zustände in der Datenbank entstehen...
-   * 
-   * @param mealId 
-   * @param specificMealId 
+   *
+   * @param mealId
+   * @param specificMealId
    */
   public deleteSpecificMealAndRecipes(mealId: string, specificMealId: string) {
 
@@ -264,9 +277,9 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param mealId 
-   * @param idToAdd 
+   *
+   * @param mealId
+   * @param idToAdd
    */
   public addIdToRecipes(mealId: any, idToAdd: any) {
 
@@ -274,30 +287,30 @@ export class DatabaseService {
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-        doc.ref.update({ 'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd) })
-      ));
+      doc.ref.update({'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd)})
+    ));
 
   }
 
   /**
-   * 
-   * @param recipe 
-   * @param specificId 
-   * @param mealId 
-   * @param camp 
+   *
+   * @param recipe
+   * @param specificId
+   * @param mealId
+   * @param camp
    */
   public addRecipe(recipe: Recipe, specificId: string, mealId: string, camp: Camp) {
 
     recipe.createSpecificRecipe(camp, recipe.documentId, specificId, this);
 
     return this.db.doc('recipes/' + recipe.documentId)
-      .update({ used_in_meals: firestore.FieldValue.arrayUnion(mealId) });
+      .update({used_in_meals: firestore.FieldValue.arrayUnion(mealId)});
 
   }
 
 
   /**
-   * 
+   *
    * @return loads the specific meal
    */
   public getSpecificMeal(mealId: string, specificMealId: string): Observable<SpecificMeal> {
@@ -307,9 +320,9 @@ export class DatabaseService {
 
   }
 
-  /** 
-   * @return loads the specific recipe 
-   * 
+  /**
+   * @return loads the specific recipe
+   *
    */
   public getSpecificRecipe(specificMealId: string, recipe: Recipe, camp: Camp): Observable<SpecificRecipe> {
 
@@ -319,33 +332,9 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param recipe 
-   * @param specificMealId 
-   * @param camp 
-   */
-  private loadSpecificRecipe(recipe: Recipe, specificMealId: string, camp: Camp) {
-
-    return this.requestDocument('recipes/' + recipe.documentId + '/specificRecipes/' + specificMealId)
-
-      // nicht die schönste Lösung, um die specifischen Rezepte
-      // dynamisch zu erzeugen, falls diese nicht existieren.
-      .pipe(mergeMap(ref => {
-
-        if (ref.payload.exists) {
-          return of(ref);
-        }
-
-        recipe.createSpecificRecipe(camp, recipe.documentId, specificMealId, this);
-        return this.loadSpecificRecipe(recipe, specificMealId, camp);
-
-      }));
-  }
-
-  /** 
-   * 
+   *
    * @returns a Observable of the camps the currentUser has access
-   * 
+   *
    */
   public getCampsWithAccess(): Observable<Camp[]> {
 
@@ -358,8 +347,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param mealId 
+   *
+   * @param mealId
    */
   public getCampsThatIncludes(mealId: string) {
 
@@ -368,13 +357,12 @@ export class DatabaseService {
       this.requestCollection('camps/',
         this.createQuery([firestore.FieldPath.documentId(), 'in', meal.usedInCamps]))
         .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
-
     ));
 
   }
 
   /**
-   * 
+   *
    */
   public getEditableMeals(): Observable<Meal[]> {
     return this.createAccessQueryFn()
@@ -385,8 +373,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param recipeId 
+   *
+   * @param recipeId
    */
   public getMealsThatIncludes(recipeId: string) {
 
@@ -395,18 +383,17 @@ export class DatabaseService {
       this.requestCollection('meals/',
         this.createQuery([firestore.FieldPath.documentId(), 'in', recipe.usedInMeals]))
         .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal))
-
     ));
 
   }
 
   /**
-   * 
-   * @param id 
+   *
+   * @param id
    */
   public createPDF(id: string): Observable<any> {
 
-    return this.functions.httpsCallable('createPDF')({ campId: id });
+    return this.functions.httpsCallable('createPDF')({campId: id});
 
   }
 
@@ -444,8 +431,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param recipeId 
+   *
+   * @param recipeId
    */
   public getRecipeById(recipeId: string): Observable<Recipe> {
 
@@ -456,8 +443,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param campId 
+   *
+   * @param campId
    */
   public getCampById(campId: string): Observable<Camp> {
 
@@ -466,8 +453,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param mealId 
+   *
+   * @param mealId
    */
   public getMealById(mealId: string): Observable<Meal> {
 
@@ -478,13 +465,13 @@ export class DatabaseService {
   }
 
   /**
-   * 
+   *
    * Updates an element in the database.
    *
    */
   public async updateDocument(firebaseObject: FirestoreObject) {
 
-    if (! await this.canWrite(firebaseObject)) {
+    if (!await this.canWrite(firebaseObject)) {
       console.log('No Access!');
       return null;
     }
@@ -506,7 +493,7 @@ export class DatabaseService {
       this.authService.getCurrentUser().subscribe(async user => {
 
         // set current user as owner of the document
-        firebaseObject.setAccessData({ [user.uid]: 'owner' });
+        firebaseObject.setAccessData({[user.uid]: 'owner'});
 
         // deletes specific data
         if (firebaseObject instanceof Recipe) {
@@ -535,10 +522,10 @@ export class DatabaseService {
   }
 
   /**
-   * 
+   *
    * adds any Partial to the database
    * @param collectionPath the path can be a document path or a collection path
-   * 
+   *
    */
   public async addDocument(firebaseDocument: FirestoreDocument, collectionPath: string, documentId?: string):
     Promise<firebase.firestore.DocumentReference> {
@@ -572,7 +559,7 @@ export class DatabaseService {
   /**
    *
    * Löscht alle Rezepte und Mahlzeiten eines Lagers
-   * 
+   *
    * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
    * in der Datenbank vermieden werden könne.
    *
@@ -590,8 +577,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param obj 
+   *
+   * @param obj
    */
   public deleteDocument(obj: FirestoreObject) {
 
@@ -600,8 +587,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param path 
+   *
+   * @param path
    */
   public requestDocument(path: string): Observable<Action<DocumentSnapshot<unknown>>> {
 
@@ -610,9 +597,9 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param path 
-   * @param queryFn 
+   *
+   * @param path
+   * @param queryFn
    */
   public requestCollection(path: string, queryFn?: QueryFn): Observable<DocumentChangeAction<unknown>[]> {
 
@@ -621,8 +608,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param mealId 
+   *
+   * @param mealId
    */
   public getNumberOfUses(mealId: string): Observable<number> {
 
@@ -632,25 +619,25 @@ export class DatabaseService {
   }
 
   /**
-   * 
+   *
    * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
    * in der Datenbank vermieden werden könne.
-   * 
-   * @param mealId 
+   *
+   * @param mealId
    */
   public deleteRecipesRefs(mealId: string) {
     this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId]).pipe(mergeMap(query =>
       this.db.collection('recipes', query).get()))
       .pipe(take(1))
       .subscribe(docRefs => docRefs.docs.forEach(doc =>
-        doc.ref.update({ used_in_meals: firestore.FieldValue.arrayRemove(mealId) })
+        doc.ref.update({used_in_meals: firestore.FieldValue.arrayRemove(mealId)})
       ));
 
   }
 
   /**
-   * 
-   * @param firebaseObject 
+   *
+   * @param firebaseObject
    */
   public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
 
@@ -664,8 +651,8 @@ export class DatabaseService {
   }
 
   /**
-   * 
-   * @param firebaseObject 
+   *
+   * @param firebaseObject
    */
   public isOwner(firebaseObject: FirestoreObject): Promise<boolean> {
 
@@ -675,14 +662,37 @@ export class DatabaseService {
 
   }
 
+  /**
+   *
+   * @param recipe
+   * @param specificMealId
+   * @param camp
+   */
+  private loadSpecificRecipe(recipe: Recipe, specificMealId: string, camp: Camp) {
+
+    return this.requestDocument('recipes/' + recipe.documentId + '/specificRecipes/' + specificMealId)
+
+      // nicht die schönste Lösung, um die specifischen Rezepte
+      // dynamisch zu erzeugen, falls diese nicht existieren.
+      .pipe(mergeMap(ref => {
+
+        if (ref.payload.exists) {
+          return of(ref);
+        }
+
+        recipe.createSpecificRecipe(camp, recipe.documentId, specificMealId, this);
+        return this.loadSpecificRecipe(recipe, specificMealId, camp);
+
+      }));
+  }
+
 
   // *********************************************************************************************
   // private methodes
-  // 
+  //
   // TODO: Alle query funktions in eine eigene Klasse auslagern
   //
   // *********************************************************************************************
-
 
   /** creates a query function for access restriction (using the currentUser) */
   private createAccessQueryFn(...querys: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
@@ -696,7 +706,6 @@ export class DatabaseService {
         return query;
 
       })
-
     ));
 
   }
@@ -732,7 +741,7 @@ export class DatabaseService {
           this.cloud.ref(exportDocData.path + '.' + docType).getDownloadURL() as Observable<string>)
         );
 
-        return pathsObservables.pipe(map(paths => ({ exportDate: exportDocData.exportDate, paths })));
+        return pathsObservables.pipe(map(paths => ({exportDate: exportDocData.exportDate, paths})));
 
       }))
     );
@@ -741,8 +750,16 @@ export class DatabaseService {
 }
 
 
-interface ExportDocData { path: string; docs: string[]; exportDate: any; }
-interface ExportData { paths: string[]; exportDate: any; }
+interface ExportDocData {
+  path: string;
+  docs: string[];
+  exportDate: any;
+}
+
+interface ExportData {
+  paths: string[];
+  exportDate: any;
+}
 
 
 

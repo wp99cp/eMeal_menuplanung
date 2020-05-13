@@ -5,20 +5,22 @@ import { MatCardModule } from '@angular/material/card';
 import { MarkdownModule } from 'ngx-markdown';
 import { VersionHistoryModule } from '../modules/version-history/version-history.module';
 import { DatenschutzComponent } from './datenschutz/datenschutz.component';
-import { InformationspageComponent } from './help-page/informations-page.component';
+import { InformationspageComponent } from './informations-page/informations-page.component';
 import { ImpressumComponent } from './impressum/impressum.component';
-import { InfoPageComponent } from './info-page/info-page.component';
 import { InformationsRoutingModule } from './informations-routing.module';
 import { KontaktComponent } from './kontakt/kontakt.component';
+import { ChangeLogComponent } from './change-log/change-log.component';
+import { HelpComponent } from './help/help.component';
 
 
 @NgModule({
   declarations: [
-    InfoPageComponent,
     InformationspageComponent,
     ImpressumComponent,
     DatenschutzComponent,
-    KontaktComponent
+    KontaktComponent,
+    ChangeLogComponent,
+    HelpComponent
   ],
   imports: [
     CommonModule,

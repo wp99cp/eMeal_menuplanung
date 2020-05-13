@@ -13,6 +13,7 @@ import { HelpPageComponent } from './_pages/help-page/help-page.component';
 import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component';
 import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
 import { MealListComponent } from './_pages/meal-list/meal-list.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 const routes: Routes = [
@@ -69,7 +70,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes),     MarkdownModule.forChild()  ],
   exports: [RouterModule]
 })
 export class ApplicationRoutingModule {

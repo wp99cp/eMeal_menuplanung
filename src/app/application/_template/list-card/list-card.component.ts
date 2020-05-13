@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
-import { Camp } from '../../_class/camp';
-import { DatabaseService } from '../../_service/database.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Meal} from '../../_class/meal';
+import {Recipe} from '../../_class/recipe';
+import {Camp} from '../../_class/camp';
+import {DatabaseService} from '../../_service/database.service';
 
 @Component({
   selector: 'app-list-card',
@@ -59,6 +59,12 @@ export class ListCardComponent implements OnInit {
 
   }
 
+  removeDots(element: Recipe){
+
+    document.getElementById(element.documentId + '-title').classList.remove('showDots');
+
+  }
+
   changeName(element: Recipe) {
 
     const newName = document.getElementById(element.documentId + '-title').innerText;
@@ -68,6 +74,7 @@ export class ListCardComponent implements OnInit {
     this.databaseServcie.updateDocument(element);
 
     document.getElementById(element.documentId + '-accept').classList.remove('changed');
+    document.getElementById(element.documentId + '-title').classList.add('showDots');
 
   }
 

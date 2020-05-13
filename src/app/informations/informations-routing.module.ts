@@ -2,20 +2,21 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { DatenschutzComponent } from './datenschutz/datenschutz.component';
-import { InformationspageComponent } from './help-page/informations-page.component';
+import { InformationspageComponent } from './informations-page/informations-page.component';
 import { ImpressumComponent } from './impressum/impressum.component';
-import { InfoPageComponent } from './info-page/info-page.component';
 import { KontaktComponent } from './kontakt/kontakt.component';
+import { ChangeLogComponent } from './change-log/change-log.component';
+import { HelpComponent } from './help/help.component';
 
 const routes: Routes = [
 
   {
     path: '',
-    component: InfoPageComponent
+    component: InformationspageComponent
   },
   {
-    path: 'infos',
-    component: InformationspageComponent
+    path: 'changeLog',
+    component: ChangeLogComponent
   },
   {
     path: 'impressum',
@@ -28,14 +29,20 @@ const routes: Routes = [
   {
     path: 'kontakt',
     component: KontaktComponent
+  },
+  {
+    path: 'hilfe',
+    component: HelpComponent
   }
+
 
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forChild(routes),
-  MarkdownModule.forChild()
+  imports: [
+    RouterModule.forChild(routes),
+    MarkdownModule.forChild()
   ],
   exports: [RouterModule]
 })

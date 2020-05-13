@@ -16,6 +16,8 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { LandingPage } from './landingPage/landingPage.component';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
     TemplateHeaderComponent,
     TemplateFooterComponent,
     MainMenuComponent,
-    HeaderNavComponent
+    HeaderNavComponent,
+    LandingPage
   ],
   imports: [
     HttpClientModule,
@@ -37,7 +40,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatTooltipModule,
     MatButtonModule,
     MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    MarkdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
