@@ -1,18 +1,17 @@
-import { FirestoreRecipe, FirestoreSpecificRecipe, Ingredient } from '../_interfaces/firestoreDatatypes';
-import { DatabaseService } from '../_service/database.service';
-import { Camp } from './camp';
-import { ExportableObject, FirestoreObject } from './firebaseObject';
+import {FirestoreRecipe, FirestoreSpecificRecipe, Ingredient} from '../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../_service/database.service';
+import {Camp} from './camp';
+import {ExportableObject, FirestoreObject} from './firebaseObject';
 
 /**
  *
  */
 export class Recipe extends FirestoreObject implements ExportableObject {
 
-  // TODO: add camp sepcific data handeling
-
   public readonly path: string;
-  public readonly documentId: string;
 
+  // TODO: add camp sepcific data handeling
+  public readonly documentId: string;
   // Fields
   public ingredients: Ingredient[];
   public name: string;
@@ -20,20 +19,45 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   public notes: string;
   public usedInMeals: string[];
 
+
   constructor(recipe: FirestoreRecipe, path: string) {
 
     super(recipe);
 
     this.usedInMeals = recipe.used_in_meals;
-   
+
     this.documentId = path.substring(path.lastIndexOf('/') + 1);
     this.path = path;
 
     this.ingredients = recipe.ingredients;
+
+    // check if every ingredient has a unique identifier
+    // if missing it adds one
+    this.ingredients.forEach(ing => {
+      if (ing.unique_id === null || ing.unique_id === undefined) {
+        ing.unique_id = Recipe.createIngredientId(this.documentId);
+      }
+    });
+
     this.name = recipe.recipe_name;
     this.description = recipe.recipe_description;
     this.notes = recipe.recipe_notes;
 
+  }
+
+  /**
+   * Creates a new unique id for a ingredient.
+   *
+   */
+  public static createIngredientId(docId) {
+
+    return `${docId.substr(0, 6)}-${this.randomStr(6)}`;
+
+  }
+
+  private static randomStr(strLength) {
+    const chars = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678'];
+    return [...Array(strLength)].map(() => chars[Math.trunc(Math.random() * chars.length)]).join('');
   }
 
   public toFirestoreDocument(): FirestoreRecipe {

@@ -95,11 +95,7 @@ export interface FirestoreMeal extends FirestoreDocument {
 
 export interface Ingredient {
 
-  // TODO: add unique-id
-  // the unique id is needed to overwrite the informations
-  // of this ingredient with the informations of the meal
-  // specific ingredients
-
+  unique_id: string;
   food: string;
   measure: number;
   unit: string;

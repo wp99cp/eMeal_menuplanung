@@ -1,21 +1,21 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-import { Camp } from '../../_class/camp';
-import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
-import { SpecificMeal } from '../../_class/specific-meal';
-import { SpecificRecipe } from '../../_class/specific-recipe';
-import { RecipeInfoComponent } from '../../_dialoges/recipe-info/recipe-info.component';
-import { Ingredient } from '../../_interfaces/firestoreDatatypes';
-import { Saveable } from '../../_service/auto-save.service';
-import { DatabaseService } from '../../_service/database.service';
-import { SettingsService } from '../../_service/settings.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
+import {Observable} from 'rxjs';
+import {mergeMap, take} from 'rxjs/operators';
+import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
+import {Camp} from '../../_class/camp';
+import {Meal} from '../../_class/meal';
+import {Recipe} from '../../_class/recipe';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {SpecificRecipe} from '../../_class/specific-recipe';
+import {RecipeInfoComponent} from '../../_dialoges/recipe-info/recipe-info.component';
+import {Ingredient} from '../../_interfaces/firestoreDatatypes';
+import {Saveable} from '../../_service/auto-save.service';
+import {DatabaseService} from '../../_service/database.service';
+import {SettingsService} from '../../_service/settings.service';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -30,36 +30,31 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
   public recipeForm: FormGroup;
   public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'fresh-product', 'delete'];
   public dataSource: MatTableDataSource<Ingredient>;
-
-  private ingredientFieldNodes: Element[];
-  private keyListnerEnter: EventListenerOrEventListenerObject;
-
   //  fields given by the parent element
   @Input() public camp: Camp;
-
   @Input() public meal: Meal;
   @Input() public specificMeal: SpecificMeal;
-
   @Input() public recipe: Recipe;
   public specificRecipe: Observable<SpecificRecipe>;
-
   @Input() index: number;
   @Input() isOpen: boolean;
   @Output() opened = new EventEmitter<number>();
   @Output() saveOthers = new EventEmitter<boolean>();
-
   public mealPart: number;
+  private ingredientFieldNodes: Element[];
+  private keyListnerEnter: EventListenerOrEventListenerObject;
 
   constructor(
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar) {
+  }
 
   ngOnInit() {
 
     this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
-    this.recipeForm = this.formBuilder.group({ notes: this.recipe.notes });
+    this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     this.ingredientFieldNodes = this.getNodes();
 
@@ -79,35 +74,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     }, 500);
 
-  }
-
-  private calcPart(specificRecipe: SpecificRecipe) {
-
-    if (specificRecipe !== undefined && specificRecipe !== null) {
-      this.mealPart = SettingsService.calcRecipeParticipants(
-        this.camp.participants,
-        this.camp.vegetarians,
-        this.specificMeal.participants,
-        specificRecipe.participants,
-        this.specificMeal.overrideParticipants,
-        specificRecipe.overrideParticipants,
-        specificRecipe.vegi);
-    }
-
-  }
-
-  /**
-   * @returns all nodes of an ingredient-field in this recipe-panel
-   */
-  private getNodes(): any {
-
-
-    if (document.getElementsByClassName('mat-expansion-panel')[this.index]) {
-
-      return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
-    }
-
-    return [];
   }
 
   /**
@@ -139,30 +105,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
       });
 
     }, 150);
-  }
-
-  /**
-   *
-   */
-  private openRecipeInfo() {
-
-    this.specificRecipe.pipe(take(1)).pipe(mergeMap(specificRecipe =>
-
-      this.dialog.open(RecipeInfoComponent, {
-        height: '618px',
-        width: '1000px',
-        data: { camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe }
-      }).afterClosed()
-
-      // This second take(1) is necessary, since otherwise there is a bug... where you can't save the usergroup
-      // after adding a new recipe without reloading the page inbetween
-    )).pipe(take(1)).subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
-
-      this.databaseService.updateDocument(recipe);
-      this.databaseService.updateDocument(specificRecipe);
-
-    });
-
   }
 
   /**
@@ -201,7 +143,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
   }
 
-
   /**
    * Löscht ein Rezept.
    *
@@ -217,7 +158,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
       document.getElementById(specificRecipe.documentId).classList.add('hidden');
 
-      const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
+      const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', {duration: 4000});
 
       let canDelete = true;
       snackBar.onAction().subscribe(() => {
@@ -249,6 +190,192 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
 
     HeaderNavComponent.turnOn('Speichern');
 
+
+  }
+
+  public async save(): Promise<boolean> {
+
+
+    return new Promise((resolve) => {
+
+
+      this.specificRecipe.subscribe(specificRecipe => {
+
+
+        this.calcPart(specificRecipe);
+
+        if (this.recipeForm.touched) {
+
+          console.log('Autosave Recipe');
+          this.saveRecipe(specificRecipe);
+          resolve(true);
+
+        }
+
+        resolve(false);
+
+      });
+    });
+
+  }
+
+  /**
+   * Löscht ein Ingredient aus dem Rezept
+   *
+   * @param index Index des Ingredient = Zeile in der Tabelle
+   */
+  deleteIngredient(index: number) {
+
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription();
+    this.recipeForm.markAsTouched();
+
+    HeaderNavComponent.turnOn('Speichern');
+
+  }
+
+  /**
+   * Fügt ein leeres Ingredient-Field am Ende der Tabelle hinzu.
+   */
+  addIngredientField() {
+
+    // generiert leere Daten für ein neues Ingredient
+    this.dataSource.data[this.dataSource.data.length] = {
+      food: '',
+      unit: '',
+      measure: null,
+      comment: '',
+      fresh: false,
+      unique_id: Recipe.createIngredientId(this.recipe.documentId)
+    };
+    this.dataSource._updateChangeSubscription();
+    this.recipeForm.markAsTouched();
+
+    // set focus to new Element
+    this.setFocusChanges();
+    this.ingredientFieldNodes = this.getNodes();
+    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
+
+    HeaderNavComponent.turnOn('Speichern');
+
+  }
+
+  /**
+   * Aktion bei einer Veränderung eines Ingreident-Feldes
+   */
+  changeIngredient(value: string, index: number, element: string) {
+
+    // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
+    if (element === 'measure' && value.includes('\t')) {
+      this.parseTableInput(index, value);
+
+    } else if (element === 'calcMeasure') {
+
+      // Berechnung für eine Person
+      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.mealPart;
+
+    } else {
+
+      // übernahme ins Object Recipe
+      this.recipe.ingredients[index][element] = value;
+    }
+
+    this.recipeForm.markAsTouched();
+
+  }
+
+  /**
+   * Stellt die Beschreibung für die Anzahl Teilnehmende eines Rezeptes zusammen.
+   * inkl. Anzeige Vegi oder nicht usw.
+   *
+   */
+  public getPanelDescriptionParticipants(specificRecipe: SpecificRecipe) {
+
+
+    if (specificRecipe !== undefined && specificRecipe !== null) {
+
+      this.calcPart(specificRecipe);
+
+      switch (specificRecipe.vegi) {
+
+        case 'non-vegetarians':
+          return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
+        case 'vegetarians':
+          return 'nur für Vegis (' + this.mealPart + ' P.)';
+        case 'leaders':
+          return 'nur für Leiter (' + this.mealPart + ' P.)';
+        default:
+          return 'für ' + this.mealPart + ' Personen';
+
+      }
+
+    }
+
+  }
+
+  async saveRecipe(specificRecipe: SpecificRecipe) {
+
+    this.recipe.notes = this.recipeForm.value.notes;
+
+
+    this.databaseService.updateDocument(this.recipe);
+    this.databaseService.updateDocument(specificRecipe);
+
+    // reset: deactivate save button
+    this.recipeForm.markAsUntouched();
+
+  }
+
+  private calcPart(specificRecipe: SpecificRecipe) {
+
+    if (specificRecipe !== undefined && specificRecipe !== null) {
+      this.mealPart = SettingsService.calcRecipeParticipants(
+        this.camp.participants,
+        this.camp.vegetarians,
+        this.specificMeal.participants,
+        specificRecipe.participants,
+        this.specificMeal.overrideParticipants,
+        specificRecipe.overrideParticipants,
+        specificRecipe.vegi);
+    }
+
+  }
+
+  /**
+   * @returns all nodes of an ingredient-field in this recipe-panel
+   */
+  private getNodes(): any {
+
+
+    if (document.getElementsByClassName('mat-expansion-panel')[this.index]) {
+
+      return document.getElementsByClassName('mat-expansion-panel')[this.index].getElementsByClassName('ingredient-field');
+    }
+
+    return [];
+  }
+
+  /**
+   *
+   */
+  private openRecipeInfo() {
+
+    this.specificRecipe.pipe(take(1)).pipe(mergeMap(specificRecipe =>
+
+        this.dialog.open(RecipeInfoComponent, {
+          height: '618px',
+          width: '1000px',
+          data: {camp: this.camp, specificMeal: this.specificMeal, recipe: this.recipe, specificRecipe}
+        }).afterClosed()
+
+      // This second take(1) is necessary, since otherwise there is a bug... where you can't save the usergroup
+      // after adding a new recipe without reloading the page inbetween
+    )).pipe(take(1)).subscribe(([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
+
+      this.databaseService.updateDocument(recipe);
+      this.databaseService.updateDocument(specificRecipe);
+
+    });
 
   }
 
@@ -293,92 +420,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     };
   }
 
-
-  public async save(): Promise<boolean> {
-
-
-    return new Promise((resolve) => {
-
-
-      this.specificRecipe.subscribe(specificRecipe => {
-
-
-        this.calcPart(specificRecipe);
-
-        if (this.recipeForm.touched) {
-
-          console.log('Autosave Recipe');
-          this.saveRecipe(specificRecipe);
-          resolve(true);
-
-        }
-
-        resolve(false);
-
-      });
-    });
-
-  }
-
-
-  /**
-   * Löscht ein Ingredient aus dem Rezept
-   *
-   * @param index Index des Ingredient = Zeile in der Tabelle
-   */
-  deleteIngredient(index: number) {
-
-    this.dataSource.data.splice(index, 1);
-    this.dataSource._updateChangeSubscription();
-    this.recipeForm.markAsTouched();
-
-    HeaderNavComponent.turnOn('Speichern');
-
-  }
-
-  /**
-   * Fügt ein leeres Ingredient-Field am Ende der Tabelle hinzu.
-   */
-  addIngredientField() {
-
-    // generiert leere Daten für ein neues Ingredient
-    this.dataSource.data[this.dataSource.data.length] = { food: '', unit: '', measure: null, comment: '', fresh: false };
-    this.dataSource._updateChangeSubscription();
-    this.recipeForm.markAsTouched();
-
-    // set focus to new Element
-    this.setFocusChanges();
-    this.ingredientFieldNodes = this.getNodes();
-    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
-
-    HeaderNavComponent.turnOn('Speichern');
-
-  }
-
-  /**
-   * Aktion bei einer Veränderung eines Ingreident-Feldes
-   */
-  changeIngredient(value: string, index: number, element: string) {
-
-    // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
-    if (element === 'measure' && value.includes('\t')) {
-      this.parseTableInput(index, value);
-
-    } else if (element === 'calcMeasure') {
-
-      // Berechnung für eine Person
-      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.mealPart;
-
-    } else {
-
-      // übernahme ins Object Recipe
-      this.recipe.ingredients[index][element] = value;
-    }
-
-    this.recipeForm.markAsTouched();
-
-  }
-
   /**
    * Parst einen Input als Tabelle
    */
@@ -398,6 +439,7 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
       const ingredientAsArray = ing.split('\t');
 
       this.recipe.ingredients.push({
+        unique_id: Recipe.createIngredientId(this.recipe.documentId),
         food: ingredientAsArray[2],
         unit: ingredientAsArray[1],
         measure: Number.parseFloat(ingredientAsArray[0]),
@@ -409,45 +451,6 @@ export class EditRecipeComponent implements OnInit, Saveable, AfterViewInit, OnC
     }
 
     this.dataSource._updateChangeSubscription();
-  }
-
-
-  /**
-   * Stellt die Beschreibung für die Anzahl Teilnehmende eines Rezeptes zusammen.
-   * inkl. Anzeige Vegi oder nicht usw.
-   *
-   */
-  public getPanelDescriptionParticipants(specificRecipe: SpecificRecipe) {
-
-
-    if (specificRecipe !== undefined && specificRecipe !== null) {
-
-      this.calcPart(specificRecipe);
-
-      switch (specificRecipe.vegi) {
-
-        case 'non-vegetarians': return 'nur für Nicht-Vegis (' + this.mealPart + ' P.)';
-        case 'vegetarians': return 'nur für Vegis (' + this.mealPart + ' P.)';
-        case 'leaders': return 'nur für Leiter (' + this.mealPart + ' P.)';
-        default: return 'für ' + this.mealPart + ' Personen';
-
-      }
-
-    }
-
-  }
-
-  async saveRecipe(specificRecipe: SpecificRecipe) {
-
-    this.recipe.notes = this.recipeForm.value.notes;
-
-
-    this.databaseService.updateDocument(this.recipe);
-    this.databaseService.updateDocument(specificRecipe);
-
-    // reset: deactivate save button
-    this.recipeForm.markAsUntouched();
-
   }
 
 }
