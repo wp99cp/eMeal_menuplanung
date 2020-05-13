@@ -7,6 +7,7 @@ import { ImpressumComponent } from './impressum/impressum.component';
 import { KontaktComponent } from './kontakt/kontakt.component';
 import { ChangeLogComponent } from './change-log/change-log.component';
 import { HelpComponent } from './help/help.component';
+import {SignInComponent} from "../sign-in/sign-in.component";
 
 const routes: Routes = [
 
@@ -14,6 +15,7 @@ const routes: Routes = [
     path: '',
     component: InformationspageComponent
   },
+
   {
     path: 'changeLog',
     component: ChangeLogComponent

@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MarkdownModule } from 'ngx-markdown';
-import { HttpClient } from '@angular/common/http';
-import { LandingPage } from './landingPage/landingPage.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {MarkdownModule} from 'ngx-markdown';
+import {HttpClient} from '@angular/common/http';
+import {LandingPage} from './landingPage/landingPage.component';
+import {SignInComponent} from './sign-in/sign-in.component';
 
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
     path: '',
     component: LandingPage
 
+  },
+  {
+    path: 'login',
+    component: SignInComponent
   },
   {
     path: 'infos',
@@ -25,9 +30,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes),
-  MarkdownModule.forRoot({ loader: HttpClient }),
-  MarkdownModule.forChild()
+    MarkdownModule.forRoot({loader: HttpClient}),
+    MarkdownModule.forChild()
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

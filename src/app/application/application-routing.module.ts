@@ -14,6 +14,7 @@ import { RecipeListComponent } from './_pages/recipe-list/recipe-list.component'
 import { EditSingleRecipeComponent } from './_pages/edit-single-recipe/edit-single-recipe.component';
 import { MealListComponent } from './_pages/meal-list/meal-list.component';
 import { MarkdownModule } from 'ngx-markdown';
+import {SignInComponent} from '../sign-in/sign-in.component';
 
 
 const routes: Routes = [
@@ -70,7 +71,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes),     MarkdownModule.forChild()  ],
+  imports: [RouterModule.forChild(routes), MarkdownModule.forChild()],
   exports: [RouterModule]
 })
 export class ApplicationRoutingModule {
