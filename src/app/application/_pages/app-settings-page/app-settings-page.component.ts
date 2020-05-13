@@ -75,7 +75,6 @@ export class AppSettingsPageComponent {
         user.displayName = this.userDataForm.value.displayName;
         user.visibility = this.userDataForm.value.visibility;
 
-        // TODO: gibt einen Fehler... Was stimmt ihr mit dem Pfad nicht?
         this.dbService.updateDocument(user);
 
       });
