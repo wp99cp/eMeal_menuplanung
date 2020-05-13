@@ -12,12 +12,6 @@ import {MainMenuComponent} from '../../_template/main-menu/main-menu.component';
 @Injectable({
   providedIn: 'root',
 })
-/**
- * This service handels the authentication process.
- * AuthenticationService is singleton. The active instance can be globaly access over
- * AuthenticationService.service
- *
- */
 export class AuthenticationService {
 
   constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location) {
@@ -40,6 +34,12 @@ export class AuthenticationService {
 
   }
 
+  /**
+   * Tracks the authState of the fireAuth Object.
+   * If the authState changes this checks if the user is signed in or not.
+   *
+   * If the user isn't signed in, the user gets redirected to the signIn page.
+   */
   public trackCredentials() {
 
     this.fireAuth.authState.subscribe(user => {
@@ -63,6 +63,45 @@ export class AuthenticationService {
   }
 
   /**
+   * Authenticates a Firebase client using a full-page redirect flow with the GoogleAuthProvider
+   *
+   */
+  signInWithGoogle() {
+
+    this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+
+  }
+
+  /**
+   * returns the current user of the fireAuth.authState
+   */
+  getCurrentUser(): Observable<firebase.User> {
+
+    return this.fireAuth.authState;
+
+  }
+
+  /**
+   * Checks if the user is signed in
+   *
+   */
+  isSignedIn(): Observable<boolean> {
+
+    return this.fireAuth.authState.pipe(map(userData => (userData != null)));
+
+  }
+
+  /**
+   * signOut the current user
+   */
+  signOut() {
+
+    this.fireAuth.auth.signOut()
+      .then(() => console.log('User signed out!'));
+
+  }
+
+  /**
    * Test the credentials
    *
    */
@@ -81,31 +120,6 @@ export class AuthenticationService {
     if (this.location.path().includes('/login')) {
       this.router.navigate(['/app']);
     }
-
-  }
-
-  signInWithGoogle() {
-
-    this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-
-  }
-
-  getCurrentUser(): Observable<firebase.User> {
-
-    return this.fireAuth.authState;
-
-  }
-
-  isSignedIn(): Observable<boolean> {
-
-    return this.fireAuth.authState.pipe(map(userData => (userData != null)));
-
-  }
-
-  signOut() {
-
-    this.fireAuth.auth.signOut()
-      .then(() => console.log('User signed out!'));
 
   }
 
