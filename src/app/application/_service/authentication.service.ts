@@ -72,6 +72,12 @@ export class AuthenticationService {
 
   }
 
+  signIn(email: string, password: string) {
+
+      this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+
+  }
+
   /**
    * returns the current user of the fireAuth.authState
    */

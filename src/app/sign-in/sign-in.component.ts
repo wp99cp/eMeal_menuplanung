@@ -9,6 +9,8 @@ import {AuthenticationService} from '../application/_service/authentication.serv
 export class SignInComponent {
 
   constructor(public auth: AuthenticationService) {
+
   }
+
 
 }

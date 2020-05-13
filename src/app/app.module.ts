@@ -22,6 +22,7 @@ import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AuthenticationService} from './application/_service/authentication.service';
 import {AngularFireModule} from '@angular/fire';
 import {SignInComponent} from "./sign-in/sign-in.component";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {SignInComponent} from "./sign-in/sign-in.component";
     MatButtonModule,
     MatIconModule,
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-    MarkdownModule
+    MarkdownModule,
+    MatInputModule
   ],
   providers: [
     AngularFireAuth,
