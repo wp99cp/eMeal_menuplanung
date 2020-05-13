@@ -9,9 +9,6 @@ import { copyrights } from '../../../../package.json';
 })
 export class TemplateFooterComponent implements OnInit {
 
-  // TODO: add link to impressum
-  // --> eigenes Impressum/ Datenschutz-Seite für eMeal
-
   public version: string = version;
   public copyrights: string = copyrights;
 
