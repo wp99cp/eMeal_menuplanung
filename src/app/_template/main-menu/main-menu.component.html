@@ -5,33 +5,43 @@
 </a>
 
 
-<hr />
+<hr/>
 <div *ngIf="isSignedIn() else notSignedIn" class="nav" (click)="closeMenu()">
 
   <ul class="top">
-    <li>
+    <li routerLink="/app/camps" routerLinkActive="active-link">
       <mat-icon class="nav-icon">nature_people</mat-icon>
-      <a routerLink="/app/camps" matTooltip="Meine Lager"> Meine Lager </a>
+      <a matTooltip="Meine Lager"> Meine Lager </a>
     </li>
-    <li>
+    <li routerLink="/app/meals" routerLinkActive="active-link">
       <mat-icon class="nav-icon">fastfood</mat-icon>
-      <a routerLink="/app/meals" matTooltip="Übersicht aller Mahlzeiten"> Mahlzeiten </a>
+      <a matTooltip="Übersicht aller Mahlzeiten"> Mahlzeiten </a>
     </li>
-    <li>
-      <mat-icon class="nav-icon"> menu_book </mat-icon>
-      <a routerLink="/app/recipes" matTooltip="Übersicht aller Rezepte"> Rezepte </a>
+    <li routerLink="/app/recipes" routerLinkActive="active-link">
+      <mat-icon class="nav-icon"> menu_book</mat-icon>
+      <a matTooltip="Übersicht aller Rezepte"> Rezepte </a>
     </li>
   </ul>
 
 
   <ul class="bottom">
-    <hr />
-    <li> <a routerLink="/app" m> Startseite </a> </li>
-    <li routerLink="/app/hilfe"><a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a></li>
-    <li> <a routerLink="/app/feedback" matTooltip="Melde einen Fehler">Fehler melden</a> </li>
-    <hr />
-    <li><a routerLink="/app/settings" matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a></li>
-    <li><a routerLink="/" matTooltip="Von eMeal abmelden" (click)="signOut()">Abmelden</a></li>
+    <hr/>
+    <li routerLink="/app">
+      <a> Startseite </a>
+    </li>
+    <li routerLink="/app/hilfe" routerLinkActive="active-link">
+      <a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a>
+    </li>
+    <li routerLink="/app/feedback" routerLinkActive="active-link">
+      <a matTooltip="Melde einen Fehler">Fehler melden</a>
+    </li>
+    <hr/>
+    <li routerLink="/app/settings" routerLinkActive="active-link">
+      <a matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a>
+    </li>
+    <li routerLink="/">
+      <a matTooltip="Von eMeal abmelden" (click)="signOut()">Abmelden</a>
+    </li>
   </ul>
 
 </div>
@@ -40,17 +50,31 @@
   <div class="nav" (click)="closeMenu()">
 
     <ul class="top">
-      <li><a routerLink="/" matTooltip="Über eMeal">Startseite</a></li>
-      <li><a routerLink="/infos" matTooltip="Weitere Informationen">Informationen</a></li>
-      <li routerLink="/infos/hilfe"><a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a></li>
+      <li routerLink="/">
+        <a matTooltip="Über eMeal">Startseite</a>
+      </li>
+      <li routerLink="/infos/eMeal" routerLinkActive="active-link">
+        <a matTooltip="Weitere Informationen">Informationen</a>
+      </li>
+      <li routerLink="/infos/hilfe" routerLinkActive="active-link">
+        <a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a>
+      </li>
     </ul>
 
     <ul class="bottom">
-      <li><a routerLink="/infos/changeLog" matTooltip="Neue Funktionen">Neue Funktionen</a></li>
-      <li><a routerLink="/infos/kontakt" matTooltip="Kontakt aufnehmen">Kontakt</a></li>
-      <hr />
-      <li><a class="deactive" matTooltip="Kommt bald">Registrieren</a></li>
-      <li><a routerLink="/login" matTooltip="Anmelden und loslegen!">Anmelden</a></li>
+      <li routerLink="/infos/changeLog" routerLinkActive="active-link">
+        <a matTooltip="Neue Funktionen">Neue Funktionen</a>
+      </li>
+      <li routerLink="/infos/kontakt" routerLinkActive="active-link">
+        <a matTooltip="Kontakt aufnehmen">Kontakt</a>
+      </li>
+      <hr/>
+      <li routerLinkActive="active-link">
+        <a class="deactive" matTooltip="Kommt bald">Registrieren</a>
+      </li>
+      <li routerLink="/login" routerLinkActive="active-link">
+        <a matTooltip="Anmelden und loslegen!">Anmelden</a>
+      </li>
     </ul>
 
   </div>

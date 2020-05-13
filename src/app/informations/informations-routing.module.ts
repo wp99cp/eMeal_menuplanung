@@ -1,21 +1,24 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MarkdownModule } from 'ngx-markdown';
-import { DatenschutzComponent } from './datenschutz/datenschutz.component';
-import { InformationspageComponent } from './informations-page/informations-page.component';
-import { ImpressumComponent } from './impressum/impressum.component';
-import { KontaktComponent } from './kontakt/kontakt.component';
-import { ChangeLogComponent } from './change-log/change-log.component';
-import { HelpComponent } from './help/help.component';
-import {SignInComponent} from "../sign-in/sign-in.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {MarkdownModule} from 'ngx-markdown';
+import {DatenschutzComponent} from './datenschutz/datenschutz.component';
+import {InformationspageComponent} from './informations-page/informations-page.component';
+import {ImpressumComponent} from './impressum/impressum.component';
+import {KontaktComponent} from './kontakt/kontakt.component';
+import {ChangeLogComponent} from './change-log/change-log.component';
+import {HelpComponent} from './help/help.component';
 
 const routes: Routes = [
 
   {
     path: '',
+    redirectTo: 'eMeal',
+    pathMatch: 'full'
+  },
+  {
+    path: 'eMeal',
     component: InformationspageComponent
   },
-
   {
     path: 'changeLog',
     component: ChangeLogComponent
@@ -49,7 +52,6 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class InformationsRoutingModule {
-
 
 
 }
