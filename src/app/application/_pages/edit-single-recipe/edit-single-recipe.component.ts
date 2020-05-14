@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../../_class/recipe';
 import {Observable} from 'rxjs';
-import {mergeMap} from 'rxjs/operators';
+import {mergeMap, take} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {DatabaseService} from '../../_service/database.service';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
@@ -20,10 +20,16 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
 
   constructor(private route: ActivatedRoute, private dbService: DatabaseService) {
 
-    // load recipe...
-    // Ladet das Lager von der URL
+    // Ladet das Rezept von der URL
     this.recipe = this.route.url.pipe(mergeMap(
-      url => this.dbService.getRecipeById(url[1].path)));
+      url => this.dbService.getRecipeById(url[1].path).pipe(take(1))));
+
+    /*
+      TODO: Zur Zeit werden die Änderungen nicht in realtime synchronisiert, da die Pipeline
+       auf ein Element beschnitten wird... Das Problem ist aber, dass ansonsten die Änderungen
+       nicht korrekt gespeichert werden, nach dem diese bereits einmal gespeichert wurden
+       (d.h. nur ein Speichervorgang funktioniert).
+     */
 
   }
 
@@ -41,6 +47,8 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
 
   save(): Promise<boolean> {
 
+    HeaderNavComponent.turnOff('Speichern');
+
     return new Promise<boolean>(async resolve => {
 
       if (this.unsavedChanges) {
@@ -53,8 +61,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
       resolve(false);
 
     });
-
-
+    
   }
 
   newUnsavedChanges(recipe: Recipe) {

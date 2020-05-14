@@ -80,6 +80,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     this.dataSource._updateChangeSubscription();
 
     HeaderNavComponent.turnOn('Speichern');
+    this.newUnsavedChanges.emit();
 
   }
 
