@@ -137,7 +137,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
 
       document.getElementById(specificRecipe.documentId).classList.add('hidden');
 
-      const snackBar = this.snackBar.open('Rezept wurde entfehrnt.', 'Rückgängig', {duration: 4000});
+      const snackBar = this.snackBar.open('Rezept wurde entfernt.', 'Rückgängig', {duration: 4000});
 
       let canDelete = true;
       snackBar.onAction().subscribe(() => {

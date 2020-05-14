@@ -1,3 +1,7 @@
-<span class="big-page-title">Rezept bearbeiten</span>
 
-<p>Es ist ein Fehler aufgetreten, versuche es später erneut.</p>
+<ng-container *ngIf="(recipe | async) as recipe">
+  <span class="big-page-title">{{recipe.name}} bearbeiten</span>
+  <p><b>Beschreibung: </b>{{recipe.description}}</p>
+  <app-edit-recipe [recipe]="recipe" [participants]="1" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+</ng-container>
+

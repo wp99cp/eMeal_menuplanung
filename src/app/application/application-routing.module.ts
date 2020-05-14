@@ -49,7 +49,8 @@ const routes: Routes = [
   },
   {
     path: 'recipes/:id',
-    component: EditSingleRecipeComponent
+    component: EditSingleRecipeComponent,
+    canDeactivate: [AutoSaveService]
   },
   {
     path: 'camps/:id',

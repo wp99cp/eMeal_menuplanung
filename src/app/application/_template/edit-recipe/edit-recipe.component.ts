@@ -48,6 +48,13 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges() {
 
+    if (this.participants <= 1) {
+      this.displayedColumns = this.displayedColumns.filter(el => el !== 'calcMeasure');
+    } else {
+      this.displayedColumns.splice(1, 0, 'calcMeasure');
+
+    }
+
     // reactivates the save button
     setTimeout(() => {
 
