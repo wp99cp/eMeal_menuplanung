@@ -16,7 +16,7 @@ import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.
 import { Saveable } from '../../_service/auto-save.service';
 import { DatabaseService } from '../../_service/database.service';
 import { SettingsService } from '../../_service/settings.service';
-import { EditRecipeComponent } from '../../_template/edit-recipe/edit-recipe.component';
+import { EditRecipeInCampComponent } from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -43,7 +43,7 @@ export class EditMealComponent implements OnInit, Saveable {
 
   public calcMealPart = SettingsService.calcMealParticipants;
 
-  @ViewChildren(EditRecipeComponent) editRecipes: QueryList<EditRecipeComponent>;
+  @ViewChildren(EditRecipeInCampComponent) editRecipes: QueryList<EditRecipeInCampComponent>;
 
   constructor(
     private route: ActivatedRoute,

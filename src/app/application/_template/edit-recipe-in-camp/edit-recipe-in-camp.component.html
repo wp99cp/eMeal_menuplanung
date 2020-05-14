@@ -1,0 +1,24 @@
+<ng-container *ngIf="(specificRecipe | async) as specificRecipe">
+  <mat-expansion-panel (closed)=" onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel"
+    id="{{specificRecipe.documentId}}">
+
+    <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
+
+      <mat-panel-title>
+        <b>{{recipe.name}}</b>
+      </mat-panel-title>
+      <mat-panel-description class="header-description">
+        {{recipe.description}}
+      </mat-panel-description>
+
+      <mat-panel-description class="header-participants"
+        [ngClass]="{'participantsWarning': specificRecipe.overrideParticipants || specificRecipe.vegi !== 'all'}"
+        matTooltip="{{(specificRecipe.overrideParticipants || specificRecipe.vegi !== 'all') ? 'Geänderte Teilnehmeranzahl!': ''}}">
+        {{ getPanelDescriptionParticipants(specificRecipe) }} </mat-panel-description>
+
+    </mat-expansion-panel-header>
+
+    <app-edit-recipe [recipe]="recipe" [participants]="mealPart" (newUnsavedChanges)="newUnsavedChanges()"></app-edit-recipe>
+
+  </mat-expansion-panel>
+</ng-container>

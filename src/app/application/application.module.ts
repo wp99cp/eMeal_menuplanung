@@ -59,7 +59,7 @@ import {AuthenticationService} from './_service/authentication.service';
 import {AutoSaveService} from './_service/auto-save.service';
 import {DatabaseService} from './_service/database.service';
 import {DownloadComponent} from './_template/download/download.component';
-import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component';
+import {EditRecipeInCampComponent} from './_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {IngredientFieldComponent} from './_template/ingredient-field/ingredient-field.component';
 import {ListOfUsersComponent} from './_template/list-of-users/list-of-users.component';
 import {MealsOverviewComponent} from './_template/meals-overview/meals-overview.component';
@@ -72,6 +72,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
 import {MarkdownModule} from 'ngx-markdown';
+import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,7 @@ import {MarkdownModule} from 'ngx-markdown';
     EditDayComponent,
     WeekViewComponent,
     EditMealComponent,
-    EditRecipeComponent,
+    EditRecipeInCampComponent,
     IngredientFieldComponent,
     AddMealComponent,
     ExportCampComponent,
@@ -111,7 +112,8 @@ import {MarkdownModule} from 'ngx-markdown';
     CreateCampComponent,
     CopyRecipeComponent,
     ListCardComponent,
-    CopyCampComponent
+    CopyCampComponent,
+    EditRecipeComponent
   ],
   providers: [
     AngularFirestore,
