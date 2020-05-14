@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import {firestore} from 'firebase';
 
 /**
  * Das AccessData Object regelt die Zugriffsberechtigung auf ein
@@ -21,10 +21,9 @@ import { firestore } from 'firebase';
  *
  */
 export type accessLevel = 'owner' | 'editor' | 'collaborator' | 'viewer';
+
 export interface AccessData {
-
-  [uid: string]: 'owner' | 'editor' | 'collaborator' | 'viewer';
-
+  [uid: string]: accessLevel;
 }
 
 /**
