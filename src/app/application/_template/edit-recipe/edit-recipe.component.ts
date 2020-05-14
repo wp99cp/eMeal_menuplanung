@@ -21,7 +21,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public recipe: Recipe;
   @Input() public participants: number;
   @Output() newUnsavedChanges = new EventEmitter();
-
+  public hasAccess = false;
   private keyListenerEnter: EventListenerOrEventListenerObject;
   private ingredientFieldNodes: Element[];
 
@@ -31,12 +31,14 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     private hostElement: ElementRef) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
 
     this.ingredientFieldNodes = this.getNodes();
-
     this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
+
+    // check if the current user has access
+    this.hasAccess = await this.databaseService.canWrite(this.recipe);
 
     this.recipeForm.statusChanges.subscribe(() => {
       this.newUnsavedChanges.emit();
@@ -48,11 +50,11 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges() {
 
+    // add back the calcMeasure field
     if (this.participants <= 1) {
       this.displayedColumns = this.displayedColumns.filter(el => el !== 'calcMeasure');
-    } else {
+    } else if (!this.displayedColumns.includes('calcMeasure')) {
       this.displayedColumns.splice(1, 0, 'calcMeasure');
-
     }
 
     // reactivates the save button
@@ -75,6 +77,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
   public toggleFresh(ingredient: Ingredient) {
 
+    if (!this.hasAccess) {
+      return;
+    }
+
     ingredient.fresh = !ingredient.fresh;
     this.recipeForm.markAsTouched();
     this.dataSource._updateChangeSubscription();
@@ -91,6 +97,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    */
   deleteIngredient(index: number) {
 
+    if (!this.hasAccess) {
+      return;
+    }
+
     this.dataSource.data.splice(index, 1);
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
@@ -103,6 +113,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    * Fügt ein leeres Ingredient-Field am Ende der Tabelle hinzu.
    */
   addIngredientField() {
+
+    if (!this.hasAccess) {
+      return;
+    }
 
     // generiert leere Daten für ein neues Ingredient
     this.dataSource.data[this.dataSource.data.length] = {

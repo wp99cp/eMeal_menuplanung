@@ -61,7 +61,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
       resolve(false);
 
     });
-    
+
   }
 
   newUnsavedChanges(recipe: Recipe) {

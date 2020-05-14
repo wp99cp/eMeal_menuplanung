@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class IngredientFieldComponent<T> implements OnInit {
 
   @Input() fieldValue: T;
+  @Input() editable: boolean;
   @Output() valueChange = new EventEmitter<T>();
 
   constructor() { }
