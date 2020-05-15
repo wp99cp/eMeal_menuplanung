@@ -120,7 +120,7 @@ export class AuthenticationService {
 
   }
 
-  private redirectToApplication() {
+  redirectToApplication() {
 
     // redirect to application page if still on signIn page
     if (this.location.path().includes('/login')) {

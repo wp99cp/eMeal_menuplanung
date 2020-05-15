@@ -10,7 +10,11 @@ export class SignInComponent {
 
   constructor(public auth: AuthenticationService) {
 
-  }
+    // user already sign in
+    if (auth.fireAuth.auth.currentUser !== null) {
+      auth.redirectToApplication();
+    }
 
+  }
 
 }
