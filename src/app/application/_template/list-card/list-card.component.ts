@@ -4,6 +4,12 @@ import {Recipe} from '../../_class/recipe';
 import {Camp} from '../../_class/camp';
 import {DatabaseService} from '../../_service/database.service';
 
+/*
+  TODO: Bearbeitung der Namen ist visuell schlecht sichtbar. Evtl. outline wieder hinzufügen....
+  oder Hintergrundfarbe anpassen....
+ */
+
+
 @Component({
   selector: 'app-list-card',
   templateUrl: './list-card.component.html',
@@ -23,7 +29,8 @@ export class ListCardComponent implements OnInit {
   public categoriePath;
   public usage;
 
-  constructor(private databaseServcie: DatabaseService){}
+  constructor(private databaseServcie: DatabaseService) {
+  }
 
   ngOnInit(): void {
 
@@ -59,7 +66,7 @@ export class ListCardComponent implements OnInit {
 
   }
 
-  removeDots(element: Recipe){
+  removeDots(element: Recipe) {
 
     document.getElementById(element.documentId + '-title').classList.remove('showDots');
 
