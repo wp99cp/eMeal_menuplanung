@@ -34,7 +34,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   async ngOnInit() {
 
     this.ingredientFieldNodes = this.getNodes();
-    this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.ingredients);
+    this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.getIngredients());
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     // check if the current user has access
@@ -118,8 +118,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
 
-    // generiert leere Daten für ein neues Ingredient
-    this.dataSource.data[this.dataSource.data.length] = {
+    const ingredient = {
       food: '',
       unit: '',
       measure: null,
@@ -127,6 +126,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
       fresh: false,
       unique_id: Recipe.createIngredientId(this.recipe.documentId)
     };
+    // generiert leere Daten für ein neues Ingredient
+    this.dataSource.data[this.dataSource.data.length] = ingredient;
+    this.recipe.addIngredient(ingredient); // fügt es in der Datenstruktur ein
+
     this.dataSource._updateChangeSubscription();
     this.recipeForm.markAsTouched();
 
@@ -154,12 +157,12 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     } else if (element === 'calcMeasure') {
 
       // Berechnung für eine Person
-      this.recipe.ingredients[index].measure = Number.parseFloat(value) / this.participants;
+      this.recipe.getIngredients()[index].measure = Number.parseFloat(value) / this.participants;
 
     } else {
 
       // übernahme ins Object Recipe
-      this.recipe.ingredients[index][element] = value;
+      this.recipe.getIngredients()[index][element] = value;
     }
 
     this.newUnsavedChanges.emit();
@@ -195,7 +198,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private parseTableInput(index: number, value: string) {
 
-    this.recipe.ingredients.splice(index, 1);
+    this.recipe.getIngredients().splice(index, 1);
 
     // Regulärer Ausdruck für das Parsing des Inputs
     const ex = /([0-9]|[.][0-9])+\t([a-z]|[ä]|[ü]|[ö]|[.])+\t([a-z]|[ä]|[ü]|[ö]|[0-9]|[ ](?!([0-9]|[.])+\t))+/gi;
@@ -208,7 +211,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
       const ingredientAsArray = ing.split('\t');
 
-      this.recipe.ingredients.push({
+      this.recipe.addIngredient({
         unique_id: Recipe.createIngredientId(this.recipe.documentId),
         food: ingredientAsArray[2],
         unit: ingredientAsArray[1],
