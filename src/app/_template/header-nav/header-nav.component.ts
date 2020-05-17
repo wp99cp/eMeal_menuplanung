@@ -10,6 +10,8 @@ export interface HeaderNav {
   action: () => any;
   icon?: string;
   separatorAfter?: true;
+  type?: 'toggle' | 'icon';
+  values?: string[];
 
 }
 

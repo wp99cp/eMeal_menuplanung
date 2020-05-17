@@ -34,7 +34,12 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   async ngOnInit() {
 
     this.ingredientFieldNodes = this.getNodes();
-    this.recipe.getIngredients().subscribe(ings => this.dataSource = new MatTableDataSource<Ingredient>(ings));
+    this.recipe.getIngredients().subscribe(ings => {
+      this.dataSource = new MatTableDataSource<Ingredient>(ings);
+      console.log(ings);
+      console.log('loaded');
+
+    });
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     // check if the current user has access
@@ -82,7 +87,6 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     ingredient.fresh = !ingredient.fresh;
-    this.recipeForm.markAsTouched();
     this.dataSource._updateChangeSubscription();
 
     HeaderNavComponent.turnOn('Speichern');
@@ -95,17 +99,16 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    *
    * @param index Index des Ingredient = Zeile in der Tabelle
    */
-  deleteIngredient(index: number) {
+  deleteIngredient(uniqueId: string) {
 
     if (!this.hasAccess) {
       return;
     }
 
-    this.dataSource.data.splice(index, 1);
-    this.dataSource._updateChangeSubscription();
-    this.recipeForm.markAsTouched();
-
+    this.recipe.removeIngredient(uniqueId, 'a_unique_id');
     HeaderNavComponent.turnOn('Speichern');
+
+    this.newUnsavedChanges.emit();
 
   }
 
@@ -127,17 +130,15 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
       unique_id: Recipe.createIngredientId(this.recipe.documentId)
     };
     // generiert leere Daten für ein neues Ingredient
-    this.dataSource.data[this.dataSource.data.length] = ingredient;
     this.recipe.addIngredient(ingredient); // fügt es in der Datenstruktur ein
 
-    this.dataSource._updateChangeSubscription();
-    this.recipeForm.markAsTouched();
 
     // set focus to new Element
     this.setFocusChanges();
     this.ingredientFieldNodes = this.getNodes();
     (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
 
+    this.newUnsavedChanges.emit();
     HeaderNavComponent.turnOn('Speichern');
 
   }
@@ -148,8 +149,6 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    */
   changeIngredient(value: string, index: number, element: string) {
 
-    console.log(value);
-
     // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
     if (element === 'measure' && value.includes('\t')) {
       this.parseTableInput(index, value);
@@ -157,12 +156,12 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     } else if (element === 'calcMeasure') {
 
       // Berechnung für eine Person
-      this.recipe.getIngredients()[index].measure = Number.parseFloat(value) / this.participants;
+      this.dataSource.data[index].measure = Number.parseFloat(value) / this.participants;
 
     } else {
 
       // übernahme ins Object Recipe
-      this.recipe.getIngredients()[index][element] = value;
+      this.dataSource.data[index][element] = value;
     }
 
     this.newUnsavedChanges.emit();

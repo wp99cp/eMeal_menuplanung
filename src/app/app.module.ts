@@ -23,6 +23,7 @@ import {AuthenticationService} from './application/_service/authentication.servi
 import {AngularFireModule} from '@angular/fire';
 import {SignInComponent} from "./sign-in/sign-in.component";
 import {MatInputModule} from "@angular/material/input";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -34,25 +35,26 @@ import {MatInputModule} from "@angular/material/input";
     LandingPage,
     SignInComponent
   ],
-  imports: [
+    imports: [
 
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-    AngularFireAuthModule,
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+        AngularFireAuthModule,
+        HttpClientModule,
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
 
-    // Material Design for the entire app
-    MatToolbarModule,
-    MatMenuModule,
-    MatTooltipModule,
-    MatButtonModule,
-    MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-    MarkdownModule,
-    MatInputModule
-  ],
+        // Material Design for the entire app
+        MatToolbarModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatIconModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+        MarkdownModule,
+        MatInputModule,
+        MatSlideToggleModule
+    ],
   providers: [
     AngularFireAuth,
     AuthenticationService

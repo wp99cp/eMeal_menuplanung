@@ -1,24 +1,24 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, mergeMap, take } from 'rxjs/operators';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
+import {SelectionModel} from '@angular/cdk/collections';
+import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {map, mergeMap, take} from 'rxjs/operators';
+import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
-import { Camp } from '../../_class/camp';
-import { Meal } from '../../_class/meal';
-import { Recipe } from '../../_class/recipe';
-import { SpecificMeal } from '../../_class/specific-meal';
-import { SpecificRecipe } from '../../_class/specific-recipe';
-import { AddRecipeComponent } from '../../_dialoges/add-recipe/add-recipe.component';
-import { MealInfoComponent } from '../../_dialoges/meal-info/meal-info.component';
-import { MealPrepareComponent } from '../../_dialoges/meal-prepare/meal-prepare.component';
-import { Saveable } from '../../_service/auto-save.service';
-import { DatabaseService } from '../../_service/database.service';
-import { SettingsService } from '../../_service/settings.service';
-import { EditRecipeInCampComponent } from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
-import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
-import { MatDialog } from '@angular/material/dialog';
+import {Camp} from '../../_class/camp';
+import {Meal} from '../../_class/meal';
+import {Recipe} from '../../_class/recipe';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {SpecificRecipe} from '../../_class/specific-recipe';
+import {AddRecipeComponent} from '../../_dialoges/add-recipe/add-recipe.component';
+import {MealInfoComponent} from '../../_dialoges/meal-info/meal-info.component';
+import {MealPrepareComponent} from '../../_dialoges/meal-prepare/meal-prepare.component';
+import {Saveable} from '../../_service/auto-save.service';
+import {DatabaseService} from '../../_service/database.service';
+import {SettingsService} from '../../_service/settings.service';
+import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
+import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-meal',
@@ -27,30 +27,25 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class EditMealComponent implements OnInit, Saveable {
 
-  private campId: Observable<string>;
-  private mealId: Observable<string>;
-  private specificMealId: Observable<string>;
-
   public camp: Observable<Camp>;
-
   public meal: Observable<Meal>;
   public specificMeal: Observable<SpecificMeal>;
   public recipes: Observable<Recipe[]>;
   public specificRecipes: Observable<SpecificRecipe[]>;
-
-
   public indexOfOpenedPanel = -1;
-
   public calcMealPart = SettingsService.calcMealParticipants;
-
   @ViewChildren(EditRecipeInCampComponent) editRecipes: QueryList<EditRecipeInCampComponent>;
+  private campId: Observable<string>;
+  private mealId: Observable<string>;
+  private specificMealId: Observable<string>;
 
   constructor(
     private route: ActivatedRoute,
     public dbService: DatabaseService,
     public dialog: MatDialog,
     private router: Router,
-    public swissDateAdapter: SwissDateAdapter) { }
+    public swissDateAdapter: SwissDateAdapter) {
+  }
 
   public newOpened(index: number) {
 
@@ -79,11 +74,10 @@ export class EditMealComponent implements OnInit, Saveable {
         active: true,
         description: 'Zurück zum ' + camp.name,
         name: camp.name,
-        action: (() => this.router.navigate(['../../..'], { relativeTo: this.route })),
+        action: (() => this.router.navigate(['../../..'], {relativeTo: this.route})),
         icon: 'nature_people',
         separatorAfter: true
       }, 0)
-
     );
 
     HeaderNavComponent.addToHeaderNav({
@@ -117,7 +111,15 @@ export class EditMealComponent implements OnInit, Saveable {
       action: (() => this.prepare()),
       icon: 'av_timer',
       separatorAfter: true
+    });
 
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Globale oder lokale Änderungen',
+      name: 'Änderungen',
+      action: (() => this.toggleChanges()),
+      type: 'toggle',
+      values: ['Nur dieses Lager', 'Vorlage']
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -137,13 +139,6 @@ export class EditMealComponent implements OnInit, Saveable {
     });
 
 
-  }
-
-
-  private saveButton() {
-
-    HeaderNavComponent.turnOff('Speichern');
-    this.save();
 
   }
 
@@ -160,16 +155,15 @@ export class EditMealComponent implements OnInit, Saveable {
         this.dialog.open(MealPrepareComponent, {
           height: '618px',
           width: '1000px',
-          data: { specificMeal, days: camp.days }
+          data: {specificMeal, days: camp.days}
         }).afterClosed()
-
       )))).subscribe((specificMeal: SpecificMeal) => {
 
-        if (specificMeal != null) {
-          this.dbService.updateDocument(specificMeal);
-        }
+      if (specificMeal != null) {
+        this.dbService.updateDocument(specificMeal);
+      }
 
-      });
+    });
 
 
   }
@@ -188,9 +182,8 @@ export class EditMealComponent implements OnInit, Saveable {
           this.dialog.open(MealInfoComponent, {
             height: '618px',
             width: '1000px',
-            data: { camp, meal, specificMeal }
+            data: {camp, meal, specificMeal}
           }).afterClosed()
-
         ))
       ))
     )).subscribe((resp: ([Meal, SpecificMeal] | null)) => {
@@ -209,7 +202,6 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
-
   /**
    * save on destroy (only if changed)
    *
@@ -220,13 +212,14 @@ export class EditMealComponent implements OnInit, Saveable {
 
     // save childs
     await this.editRecipes.forEach(async editRecipe => {
-      editRecipe.save().then(changes => { hasChanges = hasChanges || changes; });
+      editRecipe.save().then(changes => {
+        hasChanges = hasChanges || changes;
+      });
     });
 
     return hasChanges;
 
   }
-
 
   public async saveMeal() {
 
@@ -242,9 +235,7 @@ export class EditMealComponent implements OnInit, Saveable {
     });
 
 
-
   }
-
 
   /**
    * Erstellt ein neues Rezept.
@@ -275,8 +266,18 @@ export class EditMealComponent implements OnInit, Saveable {
         }
 
       })
-
     );
+
+  }
+
+  private toggleChanges() {
+    console.log('Toggle Changes');
+  }
+
+  private saveButton() {
+
+    HeaderNavComponent.turnOff('Speichern');
+    this.save();
 
   }
 

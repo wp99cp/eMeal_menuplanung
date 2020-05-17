@@ -72,7 +72,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
 import {MarkdownModule} from 'ngx-markdown';
-import { EditRecipeComponent } from './_template/edit-recipe/edit-recipe.component';
+import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component';
 
 @NgModule({
   declarations: [

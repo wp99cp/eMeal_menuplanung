@@ -2,14 +2,24 @@
 
   <ng-container *ngFor="let navElem of getHeaderNav(); let index = index">
 
-    <div class="clickable nav-elem {{navElem.active ? '': 'deactive'}}" matTooltip="{{navElem.description}}"
-      (click)="navElem.active ? navElem.action(): null">
+    <ng-container *ngIf="navElem.type == 'toggle'; else defaultIcon">
+      <div class="clickable nav-elem {{navElem.active ? '': 'deactive'}}" matTooltip="{{navElem.description}}">
+        <mat-slide-toggle class="slider" (click)="navElem.active ? navElem.action(): null"></mat-slide-toggle>
+      </div>
 
-      <mat-icon *ngIf="navElem.icon !== undefined" class="nav-icon">{{navElem.icon}}</mat-icon>
-      <span class="nav-icon-description"> {{navElem.name}} </span>
-    </div>
+      <hr *ngIf="navElem.separatorAfter == true && (index != getHeaderNav().length -1 )"/>
+    </ng-container>
 
-    <hr *ngIf="navElem.separatorAfter == true && (index != getHeaderNav().length -1 )" />
+    <ng-template #defaultIcon>
+      <div class="clickable nav-elem {{navElem.active ? '': 'deactive'}}" matTooltip="{{navElem.description}}"
+           (click)="navElem.active ? navElem.action(): null">
+
+        <mat-icon *ngIf="navElem.icon !== undefined" class="nav-icon">{{navElem.icon}}</mat-icon>
+        <span class="nav-icon-description"> {{navElem.name}} </span>
+      </div>
+
+      <hr *ngIf="navElem.separatorAfter == true && (index != getHeaderNav().length -1 )"/>
+    </ng-template>
 
   </ng-container>
 </div>

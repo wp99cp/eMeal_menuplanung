@@ -4,7 +4,7 @@ import {Camp} from './camp';
 import {ExportableObject, FirestoreObject} from './firebaseObject';
 import {OverwritableIngredient} from './overwritableIngredient';
 import {DocumentReference} from '@angular/fire/firestore';
-import {Observable, Subject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 export class Recipe extends FirestoreObject implements ExportableObject {
 
@@ -19,7 +19,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   private readonly ingredients: { [id: string]: OverwritableIngredient };
   private currentWriter: string;
 
-  private readonly ingredientObservable: Subject<Ingredient[]>;
+  private readonly ingredientObservable: BehaviorSubject<Ingredient[]>;
 
   constructor(recipe: FirestoreRecipe, path: string) {
 
@@ -50,8 +50,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     this.notes = recipe.recipe_notes;
 
 
-    this.ingredientObservable = new Subject<Ingredient[]>();
-    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
+    this.ingredientObservable = new BehaviorSubject<Ingredient[]>(this.getIngredientsFormOverridableIngredients());
 
   }
 
@@ -188,6 +187,19 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
     const recipePath = 'recipes/' + recipeId + '/specificRecipes';
     return databaseService.addDocument(specificRecipeData, recipePath, specificRecipeId);
+
+  }
+
+  /**
+   *
+   * Löscht eine Zutat
+   *
+   * @param uniqueId of the ingredient
+   */
+  public removeIngredient(uniqueId: string, currentDocument: string) {
+
+    delete this.ingredients[uniqueId];
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
 
   }
 

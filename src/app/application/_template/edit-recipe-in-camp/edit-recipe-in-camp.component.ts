@@ -128,7 +128,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
       description: 'Wähle zuerst ein Rezept',
       name: 'Rezept',
       action: (() => null),
-      icon: 'delete'
+      type: 'toggle'
     });
 
 
@@ -194,7 +194,6 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
   }
 
   async saveRecipe(specificRecipe: SpecificRecipe) {
-
 
     await this.databaseService.updateDocument(this.recipe);
     await this.databaseService.updateDocument(specificRecipe);
@@ -274,6 +273,8 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
     });
 
   }
+
+
 
 
 }
