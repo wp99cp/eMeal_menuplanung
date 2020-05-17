@@ -1,7 +1,7 @@
-import { firestore } from 'firebase';
+import {firestore} from 'firebase/app';
 
-import { FirestoreSpecificMeal, MealUsage } from '../_interfaces/firestoreDatatypes';
-import { ExportableObject, FirestoreObject } from './firebaseObject';
+import {FirestoreSpecificMeal, MealUsage} from '../_interfaces/firestoreDatatypes';
+import {ExportableObject, FirestoreObject} from './firebaseObject';
 
 export class SpecificMeal extends FirestoreObject implements ExportableObject {
 

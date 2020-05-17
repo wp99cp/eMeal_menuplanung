@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {Router} from '@angular/router';
-import * as firebase from 'firebase';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AccessData} from '../_interfaces/firestoreDatatypes';
 import {Location} from '@angular/common';
 import {MainMenuComponent} from '../../_template/main-menu/main-menu.component';
+import {auth, User} from 'firebase/app';
 
 
 @Injectable({
@@ -17,7 +17,7 @@ export class AuthenticationService {
   constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location) {
   }
 
-  public static generateCoworkersList(ownerUid: string, coworkers: firebase.User[]): AccessData {
+  public static generateCoworkersList(ownerUid: string, coworkers: User[]): AccessData {
 
     const uidList: AccessData = {};
 
@@ -68,7 +68,7 @@ export class AuthenticationService {
    */
   signInWithGoogle() {
 
-    this.fireAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    this.fireAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
 
   }
 
@@ -81,7 +81,7 @@ export class AuthenticationService {
   /**
    * returns the current user of the fireAuth.authState
    */
-  getCurrentUser(): Observable<firebase.User> {
+  getCurrentUser(): Observable<User> {
 
     return this.fireAuth.authState;
 

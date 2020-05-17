@@ -1,19 +1,19 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { firestore } from 'firebase';
-import { merge, Observable, of } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
-import { Camp } from '../../_class/camp';
-import { Day } from '../../_class/day';
-import { Meal } from '../../_class/meal';
-import { SpecificMeal } from '../../_class/specific-meal';
-import { AddMealComponent } from '../../_dialoges/add-meal/add-meal.component';
-import { Saveable } from '../../_service/auto-save.service';
-import { DatabaseService } from '../../_service/database.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {SelectionModel} from '@angular/cdk/collections';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {firestore} from 'firebase/app';
+import {merge, Observable, of} from 'rxjs';
+import {mergeMap, take} from 'rxjs/operators';
+import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
+import {Camp} from '../../_class/camp';
+import {Day} from '../../_class/day';
+import {Meal} from '../../_class/meal';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {AddMealComponent} from '../../_dialoges/add-meal/add-meal.component';
+import {Saveable} from '../../_service/auto-save.service';
+import {DatabaseService} from '../../_service/database.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 /**
@@ -282,39 +282,39 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
             this.dbService.updateDocument(meal);
           }
 
-          /* 
+          /*
            * TODO: Berechtigungen sind heikel, daher soll diese Funktion in Zukunft
            * in einer Cloud-Function geregelt werden. Der Client darf und soll nichts
            * mehr an der Berechtigungen verändern dürfen.
-           * 
+           *
            * Grundsätzlich gilt:
            * Der aktuelle Nutzer hat auf das hinzugefügte Rezept mind. Administrator Rechte,
-           * ansonsten kann er es gar nicht erst zum Lager hinzufügen. 
-           * 
+           * ansonsten kann er es gar nicht erst zum Lager hinzufügen.
+           *
            * Für ein Administrator und für den Owner der Mahlzeit gilt: Fügt er eine Mahlzeit hinzu
            * so bleibt seine eigene Rolle unverändert, d.h. hat er die Inhaberschaft (owner) der
-           * Mahlzeit, so behält er diese; hat er nur Administratorrechte ist aber der Besitzer 
+           * Mahlzeit, so behält er diese; hat er nur Administratorrechte ist aber der Besitzer
            * des Lagers so ändern sich seine Rechte an der Mahlzeit nicht.
-           * 
+           *
            * Für die anderen Nutzer des Lagers gilt:
            * Alle Nutzer erhalten automatisch max. Mitarbeiter (collaborator) Berechtigung.
-           * D.h. sie können die Mahlzeit nur in diesem Lager bearbeiten. Nicht aber die globale 
+           * D.h. sie können die Mahlzeit nur in diesem Lager bearbeiten. Nicht aber die globale
            * Vorlage für die anderen Lagern. Hat ein Nutzer bereits höhere Rechte für die hinzu-
            * gefügte Mahlzeit, so bleiben diese natürlich erhalten.
            * Ein Leser (viewer) erhält ebenfalls Leseberechtigung für die Mahlzeit.
-           * 
+           *
            * Die Rechte können für die einzelnen Mahlzeiten beliebig erhöht werden. Bzw. bis maximal
            * zum Leser abgestuft werden.
-           * 
-           * 
+           *
+           *
            * Analog werden die Rechte für die Rezepte vergeben.
-           * 
-           * 
+           *
+           *
            * Achtung: Collaborator Rollen werden auf Viewer Rollen abgestuft, sobald eine Mahlzeit oder
            * ein Rezept aus dem Lager gelöscht wird. Viewer Rollen können (zur Zeit noch nicht) manuell
-           * wieder entfehrnt weren, sofern das Rezept oder die Mahlzeit niergens sonst Benutzt wird, wo 
+           * wieder entfehrnt weren, sofern das Rezept oder die Mahlzeit niergens sonst Benutzt wird, wo
            * Lesezugriff vergeben wurde.
-           * 
+           *
            */
 
 

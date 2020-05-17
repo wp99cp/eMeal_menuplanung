@@ -1,9 +1,9 @@
-import { FirestoreDocument, AccessData } from '../_interfaces/firestoreDatatypes';
-import { firestore } from 'firebase';
-import { OperatorFunction } from 'rxjs';
-import { DocumentChangeAction, DocumentSnapshot, Action } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
-import { isDevMode } from '@angular/core';
+import {AccessData, FirestoreDocument} from '../_interfaces/firestoreDatatypes';
+import {OperatorFunction} from 'rxjs';
+import {Action, DocumentChangeAction, DocumentSnapshot} from '@angular/fire/firestore';
+import {map} from 'rxjs/operators';
+import {isDevMode} from '@angular/core';
+import {firestore} from 'firebase/app';
 
 export interface ExportableObject {
 
@@ -32,11 +32,26 @@ export abstract class FirestoreObject implements ExportableObject {
 
   public readonly abstract path: string;
   public readonly abstract documentId: string;
-
+  public lastChange: Date;
   private access: AccessData;
   private readonly dateAdded: firestore.Timestamp;
 
-  public lastChange: Date;
+  /**
+   * creates a new FirestoreObject from a FirestoreDocument
+   *
+   */
+  constructor(document: FirestoreDocument) {
+
+    if (document === undefined) {
+      throw new Error('Invalid firestore document!');
+    }
+
+    this.lastChange = document.date_modified !== null ? (document.date_modified as firestore.Timestamp).toDate() : new Date();
+
+    this.dateAdded = document.date_added as firestore.Timestamp;
+    this.access = document.access;
+
+  }
 
   /**
    *
@@ -44,7 +59,7 @@ export abstract class FirestoreObject implements ExportableObject {
    *
    */
   public static createObjects<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
-    (objecType: ObjectFactory<DocType, ObjecType>): OpFnObjects<DocType, ObjecType> {
+  (objecType: ObjectFactory<DocType, ObjecType>): OpFnObjects<DocType, ObjecType> {
 
     if (isDevMode()) {
       console.log('createObjects: ' + objecType.name + '[]');
@@ -63,7 +78,7 @@ export abstract class FirestoreObject implements ExportableObject {
    * @param objecType Type of the created Object
    */
   public static createObject<DocType extends FirestoreDocument, ObjecType extends FirestoreObject>
-    (objecType: ObjectFactory<DocType, ObjecType>): OpFnObject<DocType, ObjecType> {
+  (objecType: ObjectFactory<DocType, ObjecType>): OpFnObject<DocType, ObjecType> {
 
     if (isDevMode()) {
       console.log('createObject: ' + objecType.name);
@@ -85,25 +100,8 @@ export abstract class FirestoreObject implements ExportableObject {
     return {
       date_modified: firestore.FieldValue.serverTimestamp(),
       date_added: firestore.FieldValue.serverTimestamp(),
-      access: { [ownerUid]: 'owner' }
+      access: {[ownerUid]: 'owner'}
     };
-
-  }
-
-  /**
-   * creates a new FirestoreObject from a FirestoreDocument
-   *
-   */
-  constructor(document: FirestoreDocument) {
-
-    if (document === undefined) {
-      throw new Error('Invalid firestore document!');
-    }
-
-    this.lastChange = document.date_modified !== null ? (document.date_modified as firestore.Timestamp).toDate() : new Date();
-
-    this.dateAdded = document.date_added as firestore.Timestamp;
-    this.access = document.access;
 
   }
 
@@ -124,7 +122,7 @@ export abstract class FirestoreObject implements ExportableObject {
   }
 
   /**
-   * 
+   *
    * Returns the accessData of the FirestoreObject
    *
    * @returns the accessData of the FirestoreObject

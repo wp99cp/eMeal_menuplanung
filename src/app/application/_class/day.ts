@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import { firestore } from 'firebase/app';
 import { Observable } from 'rxjs';
 
 import { DayData } from '../_interfaces/firestoreDatatypes';
@@ -89,7 +89,7 @@ export class Day {
     const day = {
       day_date: this.getTimestamp(),
       day_description: this.description,
-      day_notes: this.notes 
+      day_notes: this.notes
     };
 
     return day;

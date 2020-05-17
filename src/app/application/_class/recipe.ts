@@ -3,11 +3,8 @@ import {DatabaseService} from '../_service/database.service';
 import {Camp} from './camp';
 import {ExportableObject, FirestoreObject} from './firebaseObject';
 import {OverwritableIngredient} from './overwritableIngredient';
-import * as firebase from 'firebase';
+import {DocumentReference} from '@angular/fire/firestore';
 
-/**
- *
- */
 export class Recipe extends FirestoreObject implements ExportableObject {
 
   public readonly path: string;
@@ -167,7 +164,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
 
   public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService):
-    Promise<firebase.firestore.DocumentReference> {
+    Promise<DocumentReference> {
 
     const specificRecipeData = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificRecipe;
 

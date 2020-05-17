@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { firestore } from 'firebase';
-import { map } from 'rxjs/operators';
-import { FirestoreObject } from '../../_class/firebaseObject';
-import { FirestoreCamp } from '../../_interfaces/firestoreDatatypes';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { DatabaseService } from '../../_service/database.service';
+import {Component} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {firestore} from 'firebase/app';
+import {map} from 'rxjs/operators';
+import {FirestoreObject} from '../../_class/firebaseObject';
+import {FirestoreCamp} from '../../_interfaces/firestoreDatatypes';
+import {AuthenticationService} from '../../_service/authentication.service';
+import {DatabaseService} from '../../_service/database.service';
 
 @Component({
   selector: 'app-create-camp',
