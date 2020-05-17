@@ -1,8 +1,10 @@
 import { NativeDateAdapter } from '@angular/material/core';
+import {Injectable} from '@angular/core';
 
 /**
  * Converts a Date to a SwissDateString
  */
+@Injectable()
 export class SwissDateAdapter extends NativeDateAdapter {
 
   /**
