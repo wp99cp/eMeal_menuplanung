@@ -4,6 +4,7 @@ import {Camp} from './camp';
 import {ExportableObject, FirestoreObject} from './firebaseObject';
 import {OverwritableIngredient} from './overwritableIngredient';
 import {DocumentReference} from '@angular/fire/firestore';
+import {Observable, Subject} from 'rxjs';
 
 export class Recipe extends FirestoreObject implements ExportableObject {
 
@@ -15,8 +16,10 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   public notes: string;
   public usedInMeals: string[];
 
-  private ingredients: { [id: string]: OverwritableIngredient };
+  private readonly ingredients: { [id: string]: OverwritableIngredient };
   private currentWriter: string;
+
+  private readonly ingredientObservable: Subject<Ingredient[]>;
 
   constructor(recipe: FirestoreRecipe, path: string) {
 
@@ -45,6 +48,10 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     this.name = recipe.recipe_name;
     this.description = recipe.recipe_description;
     this.notes = recipe.recipe_notes;
+
+
+    this.ingredientObservable = new Subject<Ingredient[]>();
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
 
   }
 
@@ -84,6 +91,8 @@ export class Recipe extends FirestoreObject implements ExportableObject {
       }
     });
 
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
+
   }
 
   /**
@@ -101,6 +110,8 @@ export class Recipe extends FirestoreObject implements ExportableObject {
       }
     }
 
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
+
   }
 
   /**
@@ -113,6 +124,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   public addIngredient(ingredient: Ingredient) {
 
     this.ingredients[ingredient.unique_id] = new OverwritableIngredient(ingredient, this.currentWriter);
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
 
   }
 
@@ -143,9 +155,9 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    * Returns the ingredients of the recipe with all overwriting
    *
    */
-  public getIngredients() {
+  public getIngredients(): Observable<Ingredient[]> {
 
-    return Object.values(this.ingredients).map(ing => ing.getOverwriten());
+    return this.ingredientObservable;
 
   }
 
@@ -161,7 +173,6 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     return recipe;
 
   }
-
 
   public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService):
     Promise<DocumentReference> {
@@ -180,5 +191,10 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
   }
 
+  private getIngredientsFormOverridableIngredients() {
+
+    return Object.values(this.ingredients).map(ing => ing.getOverwriten());
+
+  }
 
 }

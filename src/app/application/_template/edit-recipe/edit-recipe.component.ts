@@ -34,7 +34,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   async ngOnInit() {
 
     this.ingredientFieldNodes = this.getNodes();
-    this.dataSource = new MatTableDataSource<Ingredient>(this.recipe.getIngredients());
+    this.recipe.getIngredients().subscribe(ings => this.dataSource = new MatTableDataSource<Ingredient>(ings));
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     // check if the current user has access
@@ -198,6 +198,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private parseTableInput(index: number, value: string) {
 
+    // TODO: Fix...
+    throw new Error('Not working');
+
+    /*
     this.recipe.getIngredients().splice(index, 1);
 
     // Regulärer Ausdruck für das Parsing des Inputs
@@ -224,6 +228,10 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     this.dataSource._updateChangeSubscription();
+
+
+     */
+
   }
 
   /**

@@ -746,6 +746,11 @@ export class DatabaseService {
     );
   }
 
+  public loadRecipeOverwrites(recipeId: string, overwriteId: string) {
+
+    return this.db.doc('recipes/' + recipeId + '/overwrites/' + overwriteId).get();
+
+  }
 }
 
 
