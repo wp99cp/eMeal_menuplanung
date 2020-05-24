@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
@@ -22,7 +22,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./edit-recipe-in-camp.component.sass']
 })
 
-export class EditRecipeInCampComponent implements OnInit, Saveable {
+export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
 
   //  fields given by the parent element
   @Input() public camp: Camp;
@@ -31,6 +31,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
   @Input() public recipe: Recipe;
   @Input() index: number;
   @Input() isOpen: boolean;
+  @Input() showOverwrites: boolean;
 
   @Output() opened = new EventEmitter<number>();
   @Output() saveOthers = new EventEmitter<boolean>();
@@ -233,6 +234,11 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
 
   }
 
+  ngOnChanges() {
+
+    this.recipe.showOverwrites(this.showOverwrites);
+
+  }
 
   private calcPart(specificRecipe: SpecificRecipe) {
 
@@ -248,7 +254,6 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
     }
 
   }
-
 
   /**
    *
@@ -273,8 +278,6 @@ export class EditRecipeInCampComponent implements OnInit, Saveable {
     });
 
   }
-
-
 
 
 }

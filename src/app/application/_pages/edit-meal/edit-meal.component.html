@@ -18,7 +18,7 @@
         <ng-container *ngFor="let recipe of recipes; let i = index">
           <app-edit-recipe-in-camp [recipe]="recipe" [specificMeal]="specificMeal" [camp]="camp" [index]="i"
             [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="meal"
-            (saveOthers)="save(); indexOfOpenedPanel = -1">
+            (saveOthers)="save(); indexOfOpenedPanel = -1" [showOverwrites]="showOverwirtes">
           </app-edit-recipe-in-camp>
         </ng-container>
 
@@ -27,11 +27,6 @@
         </p>
 
       </mat-accordion>
-
-      <p class="info" id="change-warning" *ngIf="(recipes | async)?.length != 0"><b>Achtung: </b>
-        Das Bearbeiten der Zutaten eines Rezeptes hat Auswirkungen auf alle
-        identischen Rezepte in diesem und auch in allen anderen Lagern! </p>
-
 
     </ng-container>
   </ng-container>

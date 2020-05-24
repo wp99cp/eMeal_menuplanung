@@ -20,6 +20,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   private currentWriter: string;
 
   private readonly ingredientObservable: BehaviorSubject<Ingredient[]>;
+  private includeOverwrites = true;
 
   constructor(recipe: FirestoreRecipe, path: string) {
 
@@ -191,6 +192,29 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   }
 
   /**
+   * Shows or hiddes its overwritings.
+   * This action triggers a new Element in the ingredientObservable.
+   *
+   * @param show should include the overwritings in the ingredientObservable or not
+   *
+   */
+  public showOverwrites(show: boolean) {
+
+    this.includeOverwrites = show;
+    this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
+
+  }
+
+  /**
+   * Returns whether the current recipe shows the its overwritings or not.
+   */
+  public getShowOverwrites() {
+
+    return this.includeOverwrites;
+
+  }
+
+  /**
    *
    * Löscht eine Zutat
    *
@@ -205,7 +229,11 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
   private getIngredientsFormOverridableIngredients() {
 
-    return Object.values(this.ingredients).map(ing => ing.getOverwriten());
+    if (this.includeOverwrites) {
+      return Object.values(this.ingredients).map(ing => ing.getOverwriten());
+    }
+
+    return Object.values(this.ingredients).map(ing => ing.getDefault());
 
   }
 

@@ -68,7 +68,7 @@ export class DatabaseService {
 
   /**
    *
-   * TODO: In eine Cloud-Funktion auslagern und unbedingt durch für alle Elemente .rules blockieren...
+   * TODO: In eine Cloud-Funktion auslagern und unbedingt durch für alle Elemente firestore.rules blockieren...
    *
    * @param requestedAccess
    * @param access

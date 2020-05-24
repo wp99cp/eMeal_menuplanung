@@ -35,6 +35,7 @@ export class EditMealComponent implements OnInit, Saveable {
   public indexOfOpenedPanel = -1;
   public calcMealPart = SettingsService.calcMealParticipants;
   @ViewChildren(EditRecipeInCampComponent) editRecipes: QueryList<EditRecipeInCampComponent>;
+  public showOverwirtes = true;
   private campId: Observable<string>;
   private mealId: Observable<string>;
   private specificMealId: Observable<string>;
@@ -137,7 +138,6 @@ export class EditMealComponent implements OnInit, Saveable {
       action: (() => null),
       icon: 'delete'
     });
-
 
 
   }
@@ -271,7 +271,9 @@ export class EditMealComponent implements OnInit, Saveable {
   }
 
   private toggleChanges() {
-    console.log('Toggle Changes');
+
+    this.showOverwirtes = !this.showOverwirtes;
+
   }
 
   private saveButton() {
