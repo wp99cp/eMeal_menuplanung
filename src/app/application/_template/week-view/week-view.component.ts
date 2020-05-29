@@ -247,7 +247,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    * Fügt eine neue Mahlzeit hinzu.
    *
    */
-  public addMeal() {
+  public addMeal(dayIndex: number = 0) {
 
 
     // Testversuch für die Sortierung der Mahlzeiten
@@ -325,7 +325,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
           ));
 
           // erstellt die specifischen Rezepte und Mahlzeiten
-          const specificMealId = await meal.createSpecificMeal(this.dbService, this.camp, this.camp.days[0], usedAs);
+          const specificMealId = await meal.createSpecificMeal(this.dbService, this.camp, this.camp.days[dayIndex], usedAs);
           meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
 
         });

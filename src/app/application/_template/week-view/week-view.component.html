@@ -3,12 +3,12 @@
   <mat-grid-tile class="mat-elevation-z3" *ngFor="let day of camp.days; let i = index">
     <app-meals-overview [day]="day" [days]="camp.days" [specificMeals]="(day.getMeals() | async)"
       (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
-      (dayEdited)="editDay($event[0], $event[1],  $event[2])">
+      (dayEdited)="editDay($event[0], $event[1],  $event[2])" (addMeal)="addMeal(camp.days.indexOf($event))">
     </app-meals-overview>
   </mat-grid-tile>
 
   <!-- Add new day-->
-  <mat-grid-tile class="mat-elevation-z3" *ngIf="hasAccess">
+  <mat-grid-tile class="mat-elevation-z3 add-day-box dotted-box" *ngIf="hasAccess">
     <mat-icon class="add-day-icon clickable" matTooltip="Tag hinzufügen" (click)="addNewDay()"> add_circle_outline
     </mat-icon>
   </mat-grid-tile>
