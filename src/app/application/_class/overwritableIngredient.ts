@@ -1,6 +1,16 @@
 import {Ingredient} from '../_interfaces/firestoreDatatypes';
 
+/**
+ *
+ */
+export interface OverwritenIngredient extends Ingredient {
+  isAnOverwriting: boolean;
+}
 
+
+/**
+ *
+ */
 export class OverwritableIngredient {
 
   private ingStack: Ingredient[] = [];
@@ -10,6 +20,17 @@ export class OverwritableIngredient {
 
     this.ingStack.push(ing);
     this.sourceIdStack.push(id);
+
+  }
+
+  private static compare(ing1: Ingredient, ing2: Ingredient) {
+
+    return ing1.food === ing2.food
+      && ing1.unique_id === ing2.unique_id
+      && ing1.comment === ing2.comment
+      && ing1.fresh === ing2.fresh
+      && ing1.measure === ing2.measure
+      && ing1.unit === ing2.unit;
 
   }
 
@@ -33,7 +54,9 @@ export class OverwritableIngredient {
    */
   public getOverwriten() {
 
-    return this.ingStack[this.ingStack.length - 1];
+    const ing = this.ingStack[this.ingStack.length - 1] as OverwritenIngredient;
+    ing.isAnOverwriting = (this.ingStack.length > 1);
+    return ing;
 
   }
 
@@ -41,7 +64,7 @@ export class OverwritableIngredient {
    *
    * @param documentId id of the document
    */
-  public removeOverwiting(documentId) {
+  public removeOverwiting(documentId): Ingredient {
 
     if (this.sourceIdStack.includes(documentId)) {
 
@@ -51,10 +74,15 @@ export class OverwritableIngredient {
         throw new Error(`Can't delete original`);
       }
 
+      const ing = this.ingStack[index];
+
       this.sourceIdStack.splice(index, 1);
       this.ingStack.splice(index, 1);
 
+      return ing;
     }
+
+    return null;
 
   }
 
@@ -65,12 +93,21 @@ export class OverwritableIngredient {
   public addOverwite(ing: Ingredient, id: string) {
 
     if (this.sourceIdStack.includes(id)) {
-      throw new Error('Already overwitten by this document.');
+      this.ingStack[this.sourceIdStack.indexOf(id)] = ing;
     }
 
     this.ingStack.push(ing);
     this.sourceIdStack.push(id);
 
+  }
+
+  public checkForTrivials() {
+    this.sourceIdStack.filter(id => id !== this.sourceIdStack[0]).forEach(id => {
+      if (OverwritableIngredient.compare(this.ingStack[this.sourceIdStack.indexOf(id)], this.getDefault())) {
+        this.removeOverwiting(id);
+        console.log('Trivial overwriting removed');
+      }
+    });
   }
 
 }

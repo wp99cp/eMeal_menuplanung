@@ -17,7 +17,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   public usedInMeals: string[];
 
   private readonly ingredients: { [id: string]: OverwritableIngredient };
-  private currentWriter: string;
+  private currentWriter: string[] = [];
 
   private readonly ingredientObservable: BehaviorSubject<Ingredient[]>;
   private includeOverwrites = true;
@@ -31,7 +31,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     this.documentId = path.substring(path.lastIndexOf('/') + 1);
     this.path = path;
 
-    this.currentWriter = this.documentId;
+    this.currentWriter.push(this.documentId);
     this.ingredients = {};
 
     // check if every ingredient has a unique identifier
@@ -42,7 +42,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
         ing.unique_id = Recipe.createIngredientId(this.documentId);
       }
 
-      this.ingredients[ing.unique_id] = new OverwritableIngredient(ing, this.currentWriter);
+      this.ingredients[ing.unique_id] = new OverwritableIngredient(ing, this.currentWriter[this.currentWriter.length - 1]);
 
     });
 
@@ -71,23 +71,32 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   }
 
   /**
+   * Get's the ide of the document which has overwritten the ingredients last.
+   */
+  public getCurrentWriter(): string {
+
+    return this.currentWriter[this.currentWriter.length - 1];
+
+  }
+
+  /**
    * Adds a set of ingredients to this recipe.
    * The ingredients gets merged such that the ingredients with the same
    * unique_id gets overwritten.
    *
    * @param ingredients ingredients to add to this recipe
-   * @param name of the source of this overwriting
+   * @param documentId name of the source of this overwriting
    *
    */
   public overwriteIngredients(ingredients: Ingredient[], documentId: string) {
 
-    this.currentWriter = documentId;
+    this.currentWriter.push(documentId);
 
     ingredients.forEach(ing => {
       if (this.ingredients[ing.unique_id] == null) {
-        this.ingredients[ing.unique_id] = new OverwritableIngredient(ing, this.currentWriter);
+        this.ingredients[ing.unique_id] = new OverwritableIngredient(ing, this.currentWriter[this.currentWriter.length - 1]);
       } else {
-        this.ingredients[ing.unique_id].addOverwite(ing, this.currentWriter);
+        this.ingredients[ing.unique_id].addOverwite(ing, this.currentWriter[this.currentWriter.length - 1]);
       }
     });
 
@@ -99,18 +108,29 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    * Removes all overwriting ingredients form a specificDocument. If no documentId gets passed,
    * this function removes all overwriting ingredients form the current recipe.
    *
+   * TODO: Diese Funktion stimmt nicht ganz mit der Beschreibung überein!
+   *
    * @param documentId Id of the document whose overwriting ingredients should be removed
    *
    */
-  public removeOverwritingIngredients(documentId: string = this.documentId) {
+  public removeOverwritingIngredients(documentId: string = this.documentId): Ingredient[] {
+
+    const ingredients: Ingredient[] = [];
+    this.currentWriter = this.currentWriter.filter(str => str !== documentId);
 
     for (const ing in this.ingredients) {
       if (this.ingredients.hasOwnProperty(ing)) {
-        this.ingredients[ing].removeOverwiting(documentId);
+        const removedIng = this.ingredients[ing].removeOverwiting(documentId);
+        if (removedIng !== null) {
+          ingredients.push(removedIng);
+        }
+
       }
     }
 
     this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
+
+    return ingredients;
 
   }
 
@@ -123,21 +143,8 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    */
   public addIngredient(ingredient: Ingredient) {
 
-    this.ingredients[ingredient.unique_id] = new OverwritableIngredient(ingredient, this.currentWriter);
+    this.ingredients[ingredient.unique_id] = new OverwritableIngredient(ingredient, this.currentWriter[this.currentWriter.length - 1]);
     this.ingredientObservable.next(this.getIngredientsFormOverridableIngredients());
-
-  }
-
-  /**
-   * TODO: Gets all overwriting ingredients form a specificDocument. If no documentId gets passed,
-   * this function gets all overwriting ingredients form the current recipe.
-   *
-   * @param documentId Id of the document whose overwriting ingredients should be returned
-   *
-   */
-  public getOverwritingIngredients(documentId?: string) {
-
-    return [];
 
   }
 
@@ -219,6 +226,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    * Löscht eine Zutat
    *
    * @param uniqueId of the ingredient
+   * @param currentDocument id of the currentDocument
    */
   public removeIngredient(uniqueId: string, currentDocument: string) {
 
@@ -227,6 +235,15 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
   }
 
+  checkForTrivials() {
+
+    Object.values(this.ingredients).forEach(ing => ing.checkForTrivials());
+
+  }
+
+  /**
+   *
+   */
   private getIngredientsFormOverridableIngredients() {
 
     if (this.includeOverwrites) {
@@ -236,5 +253,4 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     return Object.values(this.ingredients).map(ing => ing.getDefault());
 
   }
-
 }

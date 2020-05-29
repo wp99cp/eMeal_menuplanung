@@ -5,6 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
 import {DatabaseService} from '../../_service/database.service';
+import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -13,10 +14,10 @@ import {DatabaseService} from '../../_service/database.service';
 })
 export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
-  public displayedColumns: string[] = ['measure', 'calcMeasure', 'unit', 'food', 'comment', 'fresh-product', 'delete'];
+  public displayedColumns: string[] = ['overwritings', 'measure', 'calcMeasure', 'unit', 'food', 'comment', 'fresh-product', 'delete'];
 
   public recipeForm: FormGroup;
-  public dataSource: MatTableDataSource<Ingredient>;
+  public dataSource: MatTableDataSource<OverwritenIngredient>;
 
   @Input() public recipe: Recipe;
   @Input() public participants: number;
@@ -34,12 +35,8 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   async ngOnInit() {
 
     this.ingredientFieldNodes = this.getNodes();
-    this.recipe.getIngredients().subscribe(ings => {
-      this.dataSource = new MatTableDataSource<Ingredient>(ings);
-      console.log(ings);
-      console.log('loaded');
-
-    });
+    this.recipe.getIngredients().subscribe(ings =>
+      this.dataSource = new MatTableDataSource<OverwritenIngredient>(ings as OverwritenIngredient[]));
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     // check if the current user has access
@@ -145,9 +142,17 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
 
   /**
-   * Aktion bei einer Veränderung eines Ingredient-Feldes
+   * Aktion bei einer Veränderung eines Ingredient-Feldes.
    */
   changeIngredient(value: string, index: number, element: string) {
+
+    // Gets Overwritten and it's not overwritten
+    if (this.recipe.getShowOverwrites() && !this.dataSource.data[index].isAnOverwriting) {
+
+      const ing = Object.assign({}, this.dataSource.data[index]) as Ingredient;
+      this.recipe.overwriteIngredients([ing], this.recipe.getCurrentWriter());
+
+    }
 
     // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
     if (element === 'measure' && value.includes('\t')) {
@@ -165,6 +170,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     this.newUnsavedChanges.emit();
+    HeaderNavComponent.turnOn('Speichern');
 
   }
 
@@ -177,6 +183,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     return (event: any) => {
 
       HeaderNavComponent.turnOn('Speichern');
+      this.newUnsavedChanges.emit();
 
       if (event.key === 'Enter') {
 

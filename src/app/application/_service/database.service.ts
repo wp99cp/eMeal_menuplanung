@@ -20,7 +20,8 @@ import {
   FirestoreRecipe,
   FirestoreSpecificMeal,
   FirestoreSpecificRecipe,
-  FirestoreUser
+  FirestoreUser,
+  Ingredient
 } from '../_interfaces/firestoreDatatypes';
 import {ErrorOnImport, RawMealData} from '../_interfaces/rawMealData';
 import {AuthenticationService} from './authentication.service';
@@ -663,6 +664,45 @@ export class DatabaseService {
 
   /**
    *
+   * Loades the ingredients of an overwriting of a recipe
+   *
+   * @param recipeId id of the recipe
+   * @param overwriteId documentId of the overwriting
+   *
+   */
+  public loadRecipeOverwrites(recipeId: string, overwriteId: string) {
+
+    return this.db.doc('recipes/' + recipeId + '/overwrites/' + overwriteId).get();
+
+  }
+
+  /**
+   * Saves the overwritings of a recipe
+   *
+   * @param ingredients overwritings of to be saved
+   * @param recipeId id of the recipe
+   * @param writer documentId of the overwriting
+   */
+  async saveOverwrites(ingredients: Ingredient[], recipeId: string, writer: string) {
+
+    await this.db.doc('recipes/' + recipeId + '/overwrites/' + writer)
+      .update({
+        ingredients
+      });
+
+  }
+
+
+  // *********************************************************************************************
+  // private methodes
+  //
+  // TODO: Alle query funktions in eine eigene Klasse auslagern
+  //
+  // *********************************************************************************************
+
+
+  /**
+   *
    * @param recipe
    * @param specificMealId
    * @param camp
@@ -684,14 +724,6 @@ export class DatabaseService {
 
       }));
   }
-
-
-  // *********************************************************************************************
-  // private methodes
-  //
-  // TODO: Alle query funktions in eine eigene Klasse auslagern
-  //
-  // *********************************************************************************************
 
   /** creates a query function for access restriction (using the currentUser) */
   private createAccessQueryFn(...querys: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
@@ -728,7 +760,6 @@ export class DatabaseService {
     return query;
   }
 
-
   private getPathsToCloudDocuments(): OperatorFunction<DocumentChangeAction<ExportDocData>[], ExportData[]> {
 
     return mergeMap(docChangeAction =>
@@ -744,12 +775,6 @@ export class DatabaseService {
 
       }))
     );
-  }
-
-  public loadRecipeOverwrites(recipeId: string, overwriteId: string) {
-
-    return this.db.doc('recipes/' + recipeId + '/overwrites/' + overwriteId).get();
-
   }
 }
 

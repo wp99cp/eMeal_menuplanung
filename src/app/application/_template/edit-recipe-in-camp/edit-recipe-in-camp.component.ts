@@ -194,12 +194,37 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
 
   }
 
+  /**
+   *
+   * Speichert das Rezept ab!
+   *
+   * @param specificRecipe id of the specific Recipe
+   */
   async saveRecipe(specificRecipe: SpecificRecipe) {
+
+    // Remove trivial overwritings
+    this.recipe.checkForTrivials();
 
     await this.databaseService.updateDocument(this.recipe);
     await this.databaseService.updateDocument(specificRecipe);
 
-    // reset: deactivate save button
+    let infiniteLoopCounter = 0;
+
+    while (this.recipe.getCurrentWriter() !== this.recipe.documentId) {
+
+      if (infiniteLoopCounter > 25) {
+        throw new Error('Prevent execution of an infinite Loop! Recipe can\'t be saved');
+      }
+
+      const writer = this.recipe.getCurrentWriter();
+
+      const ingredients = this.recipe.removeOverwritingIngredients(writer);
+      await this.databaseService.saveOverwrites(ingredients, this.recipe.documentId, writer);
+
+      infiniteLoopCounter++;
+
+    }
+
     this.recipeChanged = false;
 
   }
