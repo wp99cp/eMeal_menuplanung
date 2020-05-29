@@ -90,7 +90,10 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    */
   public overwriteIngredients(ingredients: Ingredient[], documentId: string) {
 
-    this.currentWriter.push(documentId);
+    // if writer differs from current writer
+    if (this.currentWriter[this.currentWriter.length - 1] !== documentId) {
+      this.currentWriter.push(documentId);
+    }
 
     ingredients.forEach(ing => {
       if (this.ingredients[ing.unique_id] == null) {
@@ -217,7 +220,9 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    */
   public getShowOverwrites() {
 
-    return this.includeOverwrites;
+    console.log(this.currentWriter);
+
+    return this.includeOverwrites && this.currentWriter.length !== 1;
 
   }
 
