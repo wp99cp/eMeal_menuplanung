@@ -50,10 +50,10 @@ export class EditRecipeComponent implements OnInit {
       this.recipe.notes = this.recipeForm.value.notes;
     });
 
-    this.screenSize = window.screen.width;
+    this.screenSize = window.innerWidth;
 
     window.addEventListener('resize', () => {
-      this.screenSize = window.screen.width;
+      this.screenSize = window.innerWidth;
       this.setOverlySize(this.lastElement);
     });
 

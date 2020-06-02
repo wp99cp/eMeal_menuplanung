@@ -1,12 +1,12 @@
 @import '../../../sass/colors'
 @import '../../../sass/fonts'
 
-.footer-menu-area 
+.footer-menu-area
   background-color: #1c3964
   padding: 75px 25px 50px 25px
   display: grid
 
-  hr 
+  hr
     border: none
     border-left: solid 2px #203f6d
 
@@ -14,12 +14,17 @@
     display: flex
     margin: auto
 
-  .submenu 
+  @media screen and (max-width: 850px)
+   .footer-menu
+     flex-direction: column
+     text-align: center
+
+  .submenu
     width: 200px
     height: 200px
     margin: 30px
 
-  h4 
+  h4
     color: #637CA1
     font: $footer-font
     font-weight: 800

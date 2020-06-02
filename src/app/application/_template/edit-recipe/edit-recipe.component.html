@@ -3,7 +3,7 @@
   <div class="recipe-header">
     <h3 class="recipe-name">{{recipe.name}}</h3>
     <span class="recipe-info">{{recipe.description}}</span>
-    <span class="recipe-participants-info">für {{participants}} Personen</span>
+    <span class="recipe-participants-info" *ngIf="screenSize > 500">für {{participants}} Personen</span>
   </div>
 
   <div class="recipe-table-area">
@@ -13,13 +13,13 @@
         <th class="recipe-table-header ingredient-number-column" *ngIf="screenSize > 500"></th>
         <th class="recipe-table-header ingredient-measure-column" *ngIf="screenSize > 800">1 Person</th>
         <th class="recipe-table-header ingredient-measure-column ingredient-measure-column-calc">{{participants}}
-          Personen
+          {{screenSize > 800 ? 'Personen' : 'Per.'}}
         </th>
         <th class="recipe-table-header ingredient-unit-column">Einheit</th>
         <th class="recipe-table-header ingredient-fresh-column" *ngIf="screenSize > 500">Frisch</th>
         <th class="recipe-table-header ingredient-food-column">Lebensmittel</th>
         <th class="recipe-table-header ingredient-comment-column" *ngIf="screenSize > 600">Kommentar</th>
-        <th class="recipe-table-header ingredient-delete-column"></th>
+        <th class="recipe-table-header ingredient-delete-column" *ngIf="screenSize > 500"></th>
       </tr>
 
       <tbody id="{{ingredient.unique_id}}" *ngFor="let ingredient of ingredients; let i = index">
@@ -46,7 +46,7 @@
         <td class="ingredient-comment-column" *ngIf="screenSize > 600" (click)="setFocus($event.target)">
           <data value="comment">{{ingredient.comment}}</data>
         </td>
-        <td class="ingredient-delete-column" (click)="deleteIngredient(ingredient.unique_id)">
+        <td class="ingredient-delete-column" *ngIf="screenSize > 500" (click)="deleteIngredient(ingredient.unique_id)">
           <mat-icon>delete</mat-icon>
         </td>
       </tr>
@@ -66,7 +66,7 @@
         </td>
         <td class="ingredient-food-column"></td>
         <td class="ingredient-comment-column" *ngIf="screenSize > 600"></td>
-        <td class="ingredient-delete-column">
+        <td class="ingredient-delete-column" *ngIf="screenSize > 500">
           <mat-icon>delete</mat-icon>
         </td>
       </tr>
