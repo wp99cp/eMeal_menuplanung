@@ -1,42 +1,44 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Recipe} from '../../_class/recipe';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {MatTableDataSource} from '@angular/material/table';
-import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
 import {DatabaseService} from '../../_service/database.service';
 import {OverwritenIngredient} from '../../_class/overwritableIngredient';
+import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-edit-recipe',
   templateUrl: './edit-recipe.component.html',
   styleUrls: ['./edit-recipe.component.sass']
 })
-export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
+export class EditRecipeComponent implements OnInit {
 
-  public displayedColumns: string[] = ['overwritings', 'measure', 'calcMeasure', 'unit', 'food', 'comment', 'fresh-product', 'delete'];
+  Arr = Array; // Array type captured in a variable
+  Math = Math;
 
   public recipeForm: FormGroup;
-  public dataSource: MatTableDataSource<OverwritenIngredient>;
+  public ingredients: OverwritenIngredient[];
 
   @Input() public recipe: Recipe;
   @Input() public participants: number;
   @Output() newUnsavedChanges = new EventEmitter();
   public hasAccess = false;
-  private keyListenerEnter: EventListenerOrEventListenerObject;
+  public lastElement = null;
+  public currentEditedField = null;
   private ingredientFieldNodes: Element[];
+  private oldValue;
+  private isEditable = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private databaseService: DatabaseService,
-    private hostElement: ElementRef) {
+    private databaseService: DatabaseService) {
   }
+
+  public screenSize = 0;
 
   async ngOnInit() {
 
-    this.ingredientFieldNodes = this.getNodes();
-    this.recipe.getIngredients().subscribe(ings =>
-      this.dataSource = new MatTableDataSource<OverwritenIngredient>(ings as OverwritenIngredient[]));
+    this.recipe.getIngredients().subscribe(ings => this.ingredients = ings as OverwritenIngredient[]);
     this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
 
     // check if the current user has access
@@ -48,46 +50,13 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
       this.recipe.notes = this.recipeForm.value.notes;
     });
 
-  }
+    this.screenSize = window.screen.width;
 
-  ngOnChanges() {
+    window.addEventListener('resize', () => {
+      this.screenSize = window.screen.width;
+      this.setOverlySize(this.lastElement);
+    });
 
-    // add back the calcMeasure field
-    if (this.participants <= 1) {
-      this.displayedColumns = this.displayedColumns.filter(el => el !== 'calcMeasure');
-    } else if (!this.displayedColumns.includes('calcMeasure')) {
-      this.displayedColumns.splice(1, 0, 'calcMeasure');
-    }
-
-    // reactivates the save button
-    setTimeout(() => {
-
-      this.ingredientFieldNodes = this.getNodes();
-      this.setFocusChanges();
-
-    }, 500);
-
-  }
-
-
-  ngAfterViewInit() {
-
-    this.setFocusChanges();
-
-  }
-
-
-  public toggleFresh(ingredient: Ingredient) {
-
-    if (!this.hasAccess) {
-      return;
-    }
-
-    ingredient.fresh = !ingredient.fresh;
-    this.dataSource._updateChangeSubscription();
-
-    HeaderNavComponent.turnOn('Speichern');
-    this.newUnsavedChanges.emit();
 
   }
 
@@ -112,7 +81,7 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
   /**
    * Fügt ein leeres Ingredient-Field am Ende der Tabelle hinzu.
    */
-  addIngredientField() {
+  addIngredientField(target) {
 
     if (!this.hasAccess) {
       return;
@@ -129,74 +98,348 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
     // generiert leere Daten für ein neues Ingredient
     this.recipe.addIngredient(ingredient); // fügt es in der Datenstruktur ein
 
-
-    // set focus to new Element
-    this.setFocusChanges();
-    this.ingredientFieldNodes = this.getNodes();
-    (this.ingredientFieldNodes[this.ingredientFieldNodes.length - 5] as HTMLElement).focus();
-
-    this.newUnsavedChanges.emit();
-    HeaderNavComponent.turnOn('Speichern');
-
-  }
-
-
-  /**
-   * Aktion bei einer Veränderung eines Ingredient-Feldes.
-   */
-  changeIngredient(value: string, index: number, element: string) {
-
-    // Gets Overwritten and it's not overwritten
-    if (this.recipe.getShowOverwrites() && !this.dataSource.data[index].isAnOverwriting) {
-
-      const ing = Object.assign({}, this.dataSource.data[index]) as Ingredient;
-      this.recipe.overwriteIngredients([ing], this.recipe.getCurrentWriter());
-
-    }
-
-    // Eingabe von mehreren durch Tabs geteilte Zellen (z.B. Copy-Past aus Excel)
-    if (element === 'measure' && value.includes('\t')) {
-      this.parseTableInput(index, value);
-
-    } else if (element === 'calcMeasure') {
-
-      // Berechnung für eine Person
-      this.dataSource.data[index].measure = Number.parseFloat(value) / this.participants;
-
-    } else {
-
-      // übernahme ins Object Recipe
-      this.dataSource.data[index][element] = value;
-    }
+    setTimeout(() => {
+      let str = '';
+      target.classList.forEach(classStr => str += '.' + classStr);
+      this.setFocus(target.parentElement.parentElement.previousElementSibling.firstElementChild.querySelector(str));
+    }, 20);
 
     this.newUnsavedChanges.emit();
     HeaderNavComponent.turnOn('Speichern');
 
   }
 
+  public async copyContent(event: ClipboardEvent) {
 
-  /**
-   *
-   */
-  private keyListner(i: number): EventListenerOrEventListenerObject {
+    if (this.isEditable) {
+      return;
+    }
 
-    return (event: any) => {
+    await navigator.clipboard.writeText(this.lastElement.innerText);
+    event.preventDefault();
 
-      HeaderNavComponent.turnOn('Speichern');
-      this.newUnsavedChanges.emit();
+  }
 
-      if (event.key === 'Enter') {
+  public async pastContent(event: ClipboardEvent) {
 
-        if (i + 1 < this.ingredientFieldNodes.length) {
+    if (this.isEditable) {
+      return;
+    }
 
-          const nextFocus = i % 5 === 0 ? i + 2 : i + 1;
-          (this.ingredientFieldNodes[nextFocus] as HTMLElement).focus();
-        } else {
+    const inputField = (document.querySelector('.input-field') as HTMLInputElement);
 
-          this.addIngredientField();
-        }
+    if (inputField) {
+      const value = event.clipboardData.getData('Text');
+      inputField.value = value;
+    }
+    this.newValue(inputField);
+    event.preventDefault();
+
+    this.newUnsavedChanges.emit();
+    HeaderNavComponent.turnOn('Speichern');
+
+
+  }
+
+  public async cutContent(event: ClipboardEvent) {
+
+    if (this.isEditable) {
+      return;
+    }
+
+    event.preventDefault();
+
+    await navigator.clipboard.writeText(this.lastElement.innerText);
+
+    if (!this.isEditable) {
+      this.clearField();
+    }
+
+    // is needed to cover up the cutted text
+    const overlay = document.getElementById('focus-overlay');
+    overlay.style.backgroundColor = 'white';
+
+  }
+
+  public setFocus(target: EventTarget) {
+
+    const overlay = document.getElementById('focus-overlay');
+    overlay.style.backgroundColor = 'transparent';
+    overlay.style.visibility = 'visible';
+    this.lastElement = target as HTMLElement;
+
+    this.setOverlySize(target as HTMLElement);
+
+    const inputField = overlay.querySelector('.input-field') as HTMLInputElement;
+
+    inputField.style.cursor = 'default';
+    inputField.value = '';
+    inputField.style.visibility = 'visible';
+    inputField.style.opacity = '0';
+    inputField.focus();
+
+  }
+
+  public pressKey(event: KeyboardEvent) {
+
+    if ('Enter' === event.key) {
+
+      this.selectNextElement(this.lastElement);
+      event.preventDefault();
+
+    } else if ('ArrowRight' === event.key && !this.isEditable) {
+
+      this.selectNextElement(this.lastElement);
+      event.preventDefault();
+
+    } else if (['Tab'].includes(event.key)) {
+
+      if (event.shiftKey) {
+        this.selectPreviousElement(this.lastElement);
+      } else {
+        this.selectNextElement(this.lastElement);
       }
-    };
+
+      event.preventDefault();
+
+    } else if ('ArrowLeft' === event.key && !this.isEditable) {
+
+      this.selectPreviousElement(this.lastElement);
+      event.preventDefault();
+
+    } else if (['Escape'].includes(event.key)) {
+
+      this.currentEditedField.value = this.oldValue;
+      this.newValue(this.currentEditedField);
+      this.disableEdit();
+      event.preventDefault();
+
+    } else if (['Home'].includes(event.key)) {
+
+      this.setFocus(this.lastElement.parentElement.firstElementChild.nextElementSibling);
+
+    } else if (['End'].includes(event.key)) {
+
+      this.setFocus(this.lastElement.parentElement.lastElementChild.previousElementSibling);
+
+    } else if (['Delete', 'Backspace'].includes(event.key)) {
+
+      if (!this.isEditable) {
+
+        this.clearField();
+        event.preventDefault();
+
+
+      }
+
+    } else if ('ArrowUp' === event.key && !this.isEditable) {
+
+      let str = '';
+      this.lastElement.classList.forEach(classStr => str += '.' + classStr);
+
+      const node = this.lastElement.parentElement.parentElement.previousElementSibling?.firstElementChild?.querySelector(str);
+      // Jump over delete and fresh
+      if (!node.querySelector('data')) {
+        return;
+      }
+
+      if (node) {
+        this.setFocus(node);
+      }
+
+    } else if ('ArrowDown' === event.key && !this.isEditable) {
+
+      let str = '';
+      this.lastElement.classList.forEach(classStr => str += '.' + classStr);
+
+      const node = this.lastElement.parentElement.parentElement.nextElementSibling?.firstElementChild?.querySelector(str);
+      // Jump over delete and fresh
+      if (!node.querySelector('data')) {
+        return;
+      }
+
+      if (node) {
+        this.setFocus(node);
+      }
+
+
+    } else if (event.key.length === 1) {
+
+      if (event.altKey || event.ctrlKey) {
+        return;
+      }
+
+      if (!this.isEditable) {
+
+        this.enableEdit();
+        this.clearField();
+
+      }
+
+    }
+
+  }
+
+  public selectPreviousElement(currentElement: Element) {
+
+    this.disableEdit();
+
+    if (currentElement.previousElementSibling == null) {
+      currentElement = currentElement.parentElement.parentElement.previousElementSibling?.lastElementChild?.lastElementChild;
+    }
+
+    // End of Table
+    if (currentElement == null) {
+      return;
+    }
+
+    currentElement = currentElement.previousElementSibling;
+
+    // Jump over delete and fresh
+    if (!currentElement.querySelector('data')) {
+      this.selectPreviousElement(currentElement);
+      return;
+    }
+
+    this.setFocus(currentElement);
+
+  }
+
+  public selectNextElement(currentElement: Element) {
+
+    this.disableEdit();
+
+    if (currentElement.nextElementSibling == null) {
+      currentElement = currentElement.parentElement.parentElement.nextElementSibling?.firstElementChild?.firstElementChild;
+    }
+
+    // End of Table
+    if (currentElement == null) {
+      return;
+    }
+
+    currentElement = currentElement.nextElementSibling;
+
+    // Jump over delete and fresh
+    if (!currentElement.querySelector('data')) {
+      this.selectNextElement(currentElement);
+      return;
+    }
+
+    this.setFocus(currentElement);
+
+  }
+
+  public newValue(event: EventTarget) {
+
+    const ingredientId = this.lastElement.parentElement.parentElement.id;
+    this.updateValue((event as HTMLInputElement).value, ingredientId);
+
+    HeaderNavComponent.turnOn('Speichern');
+    this.newUnsavedChanges.emit();
+
+  }
+
+  public toggleFresh(ingredient: Ingredient) {
+
+    ingredient.fresh = !ingredient.fresh;
+
+    HeaderNavComponent.turnOn('Speichern');
+    this.newUnsavedChanges.emit();
+
+  }
+
+  public enableEdit() {
+
+    if (this.isEditable) {
+      return;
+    }
+
+    this.isEditable = true;
+
+
+    const overlay = document.getElementById('focus-overlay');
+    this.currentEditedField = this.lastElement;
+    const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
+    inputField.value = this.lastElement.innerText;
+    this.oldValue = this.lastElement.innerText;
+    inputField.style.opacity = '1';
+    inputField.focus();
+    inputField.style.cursor = 'text';
+
+  }
+
+  public disableEdit() {
+
+    this.isEditable = false;
+
+    if (this.currentEditedField == null) {
+      return;
+    }
+
+    const overlay = document.getElementById('focus-overlay');
+    const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
+    inputField.style.opacity = '0';
+    this.currentEditedField = null;
+
+    overlay.style.visibility = 'hidden';
+    window.blur();
+
+  }
+
+  private updateValue(value, ingredientId) {
+
+
+    const ingredient = this.ingredients.filter(ing => ing.unique_id === ingredientId)[0];
+
+    let field: string = this.lastElement.querySelector('data').value;
+
+    if (value === undefined) {
+      value = '';
+    }
+
+    if (field.includes('measure')) {
+      value = parseFloat(value);
+
+      if (field === 'measure_calc') {
+        field = 'measure';
+        value = value / this.participants;
+      }
+
+    }
+
+    ingredient[field] = value;
+
+  }
+
+  private setOverlySize(target: HTMLElement) {
+
+    const overlay = document.getElementById('focus-overlay');
+    const parent = overlay.parentElement;
+    const tableElem = target;
+    overlay.style.top = (tableElem.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';
+    overlay.style.left = (tableElem.getBoundingClientRect().left - parent.getBoundingClientRect().left) + 'px';
+    overlay.style.width = (tableElem.getBoundingClientRect().right - tableElem.getBoundingClientRect().left - 3) + 'px';
+    overlay.style.height = (tableElem.getBoundingClientRect().bottom - tableElem.getBoundingClientRect().top - 4) + 'px';
+
+    const inputField = overlay.querySelector('.input-field') as HTMLInputElement;
+    inputField.style.top = (tableElem.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';
+    inputField.style.left = (tableElem.getBoundingClientRect().left - parent.getBoundingClientRect().left) + 'px';
+    inputField.style.width = (tableElem.getBoundingClientRect().right - tableElem.getBoundingClientRect().left - 10) + 'px';
+    inputField.style.height = (tableElem.getBoundingClientRect().bottom - tableElem.getBoundingClientRect().top - 10) + 'px';
+
+  }
+
+  private clearField() {
+
+    const overlay = document.getElementById('focus-overlay');
+    const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
+    inputField.value = '';
+    this.newValue(this.lastElement);
+
+    this.newUnsavedChanges.emit();
+    HeaderNavComponent.turnOn('Speichern');
+
   }
 
   /**
@@ -237,33 +480,6 @@ export class EditRecipeComponent implements OnInit, AfterViewInit, OnChanges {
 
 
      */
-
-  }
-
-  /**
-   *
-   */
-  private setFocusChanges() {
-
-    // delete old listeners
-    for (const node of this.ingredientFieldNodes) {
-      node.removeEventListener('keydown', this.keyListenerEnter);
-    }
-
-    // add new listeners
-    for (let i = 0; i < this.ingredientFieldNodes.length; i++) {
-      this.keyListenerEnter = this.keyListner(i);
-      this.ingredientFieldNodes[i].addEventListener('keydown', this.keyListenerEnter);
-    }
-
-  }
-
-  /**
-   * @returns all nodes of an ingredient-field in this recipe-panel
-   */
-  private getNodes(): any {
-
-    return this.hostElement.nativeElement.getElementsByClassName('ingredient-field');
 
   }
 

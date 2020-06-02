@@ -1,1 +1,13 @@
-<input [disabled]="!editable" class="ingredient-field" (change)="valueChanged($event)" matInput value="{{fieldValue}}">
+<div class="ingredient-cell" [ngClass]="{selected: isSelected}" (dblclick)="makeEditable()"
+     (click)="selectField($event)" (focusout)="deselectField($event)" tabindex="-1">
+
+  <span *ngIf="!isEditable" class="place-holder">
+    {{fieldValue}}
+  </span>
+
+  <input #field *ngIf="isEditable" [disabled]="!editable" class="ingredient-field" (change)="valueChanged(field.value)"
+         matInput (focusout)="deselectField($event, true)"
+         value="{{fieldValue}}">
+
+
+</div>

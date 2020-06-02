@@ -1,7 +1,6 @@
 
 <ng-container *ngIf="(recipe | async) as recipe">
-  <span class="big-page-title">{{recipe.name}}</span>
-  <p><b>Beschreibung: </b>{{recipe.description}}</p>
+  <span class="big-page-title">Rezept bearbeiten</span>
   <app-edit-recipe [recipe]="recipe" [participants]="4" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
 </ng-container>
 

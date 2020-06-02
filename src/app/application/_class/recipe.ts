@@ -219,7 +219,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
    * Returns whether the current recipe shows the its overwritings or not.
    */
   public getShowOverwrites() {
-    
+
     return this.includeOverwrites && this.currentWriter.length !== 1;
 
   }
