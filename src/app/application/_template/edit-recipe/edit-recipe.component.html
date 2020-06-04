@@ -6,8 +6,8 @@
     <span class="recipe-participants-info" *ngIf="screenSize > 500">für {{participants}} Personen</span>
   </div>
 
-  <div class="recipe-table-area">
-    <table class="recipe-table" id="recipe_id" *ngIf="(recipe.getIngredients() | async) as ingredients">
+  <div class="recipe-table-area" (contextmenu)="contextMenu($event)">
+    <table class="recipe-table" [ngClass]="{'not-editable': !hasAccess}" id="{{recipe.documentId}}" *ngIf="(recipe.getIngredients() | async) as ingredients">
 
       <tr class="recipe-table-index-bar">
         <th class="recipe-table-header ingredient-number-column" *ngIf="screenSize > 500"></th>
@@ -24,12 +24,14 @@
 
       <tbody id="{{ingredient.unique_id}}" *ngFor="let ingredient of ingredients; let i = index">
       <tr class="ingredient">
-        <td class="recipe-table-index-bar ingredient-number" *ngIf="screenSize > 500">{{i + 1}}</td>
+        <td class="recipe-table-index-bar ingredient-number" *ngIf="screenSize > 500"
+            (click)="markIngredient(ingredient.unique_id)">{{i + 1}}</td>
         <td class="ingredient-measure-column" *ngIf="screenSize > 800" (click)="setFocus($event.target)">
-          <data value="measure">{{ingredient.measure ? ingredient.measure : ''}}</data>
+          <data value="measure">{{ingredient.measure ? Number(ingredient.measure).toFixed(2) : ''}}</data>
         </td>
         <td class="ingredient-measure-column ingredient-measure-column-calc" (click)="setFocus($event.target)">
-          <data value="measure_calc">{{ingredient.measure ? ingredient.measure * participants : '' }}</data>
+          <data
+            value="measure_calc">{{ingredient.measure ? Number(ingredient.measure * participants).toFixed(2) : '' }}</data>
         </td>
         <td class="ingredient-unit-column" (click)="setFocus($event.target)">
           <data value="unit">{{ingredient.unit}}</data>
@@ -53,7 +55,7 @@
 
       </tbody>
 
-      <tbody id="template" (click)="addIngredientField($event.target)"
+      <tbody class="ingredient-template-cell" (click)="addIngredientField($event.target)"
              *ngFor="let n of Arr(Math.max(3 - ingredients.length, 1)).fill(1); let i = index">
       <tr class="ingredient ingredient-template">
         <td class="recipe-table-index-bar ingredient-number"
@@ -74,10 +76,15 @@
 
     </table>
 
-    <div tabindex="-1" id="focus-overlay" (dblclick)="enableEdit()">
+    <div tabindex="-1" class="focus-overlay" id="{{recipe.documentId}}-focus-overlay" (dblclick)="enableEdit()"
+         (click)="setFocus(selectedTableCell)">
       <input class="input-field" (copy)="copyContent($event)" (cut)="cutContent($event)" (paste)="pastContent($event)"
-             (focusout)="disableEdit()" (input)="newValue($event.target)" (keydown)="pressKey($event)">
+             (focusout)="disableEdit()" (input)="newValue($event.target)" (keydown)="pressKey($event)"
+             (focusin)="unmarkIngredient()">
     </div>
+
+    <input tabindex="-1" class="area-overlay" (focusout)="unmarkIngredient()" (copy)="copyContent($event)"
+           (paste)="pastContent($event)" id="{{recipe.documentId}}-area-overlay" [contentEditable]="false">
 
   </div>
 

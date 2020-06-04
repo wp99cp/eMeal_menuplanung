@@ -114,6 +114,7 @@ export class EditMealComponent implements OnInit, Saveable {
       separatorAfter: true
     });
 
+    /*
     HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Globale oder lokale Änderungen',
@@ -122,6 +123,7 @@ export class EditMealComponent implements OnInit, Saveable {
       type: 'toggle',
       values: ['Nur dieses Lager', 'Vorlage']
     });
+    */
 
     HeaderNavComponent.addToHeaderNav({
       active: false,

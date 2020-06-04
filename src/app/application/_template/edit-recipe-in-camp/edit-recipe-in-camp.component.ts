@@ -129,7 +129,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
       description: 'Wähle zuerst ein Rezept',
       name: 'Rezept',
       action: (() => null),
-      type: 'toggle'
+      icon: 'delete'
     });
 
 

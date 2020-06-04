@@ -1,5 +1,8 @@
 @import '../../../../sass/fonts'
 
+\:host
+  display: inline-block
+
 .recipe
   width: 100%
   font-size: 15px
@@ -45,6 +48,7 @@
   .ingredient-fresh-column
     width: 12%
     text-align: center
+    cursor: pointer
 
     .mat-icon
       color: #93c47d
@@ -68,6 +72,7 @@
   .ingredient-delete-column
     width: 4%
     text-align: center
+    cursor: pointer
 
   td, th
     padding: 3px
@@ -136,7 +141,7 @@
     color: black !important
 
 
-#focus-overlay
+.focus-overlay
   position: absolute
   border: 2px solid #1a73e8
   visibility: hidden
@@ -150,3 +155,16 @@
     line-height: 16px
     height: 30.5px
     padding: 2.5px 2px
+
+.area-overlay
+  position: absolute
+  border: 1px solid #1a73e8
+  visibility: hidden
+  background-color: #1a73e8
+  color: #1a73e8
+  opacity: 0.075
+  pointer-events: none
+
+
+.not-editable
+  opacity: 0.6

@@ -15,6 +15,7 @@ export class EditRecipeComponent implements OnInit {
 
   Arr = Array; // Array type captured in a variable
   Math = Math;
+  Number = Number;
 
   public recipeForm: FormGroup;
   public ingredients: OverwritenIngredient[];
@@ -23,18 +24,21 @@ export class EditRecipeComponent implements OnInit {
   @Input() public participants: number;
   @Output() newUnsavedChanges = new EventEmitter();
   public hasAccess = false;
-  public lastElement = null;
+  public selectedTableCell = null;
   public currentEditedField = null;
-  private ingredientFieldNodes: Element[];
+  public screenSize = 0;
+
   private oldValue;
-  private isEditable = false;
+  private isCurrentCellEditable = false;
+
+  private multipleCellsSelected = false;
+  private clipboardValue = '';
+  private selectedIngredientID = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService) {
   }
-
-  public screenSize = 0;
 
   async ngOnInit() {
 
@@ -54,7 +58,9 @@ export class EditRecipeComponent implements OnInit {
 
     window.addEventListener('resize', () => {
       this.screenSize = window.innerWidth;
-      this.setOverlySize(this.lastElement);
+      this.setOverlySize(this.selectedTableCell);
+      this.setAreaOverlay();
+
     });
 
 
@@ -70,6 +76,14 @@ export class EditRecipeComponent implements OnInit {
     if (!this.hasAccess) {
       return;
     }
+
+    if (!this.hasAccess) {
+      return;
+    }
+
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+    overlay.style.visibility = 'hidden';
+    window.blur();
 
     this.recipe.removeIngredient(uniqueId, 'a_unique_id');
     HeaderNavComponent.turnOn('Speichern');
@@ -111,28 +125,56 @@ export class EditRecipeComponent implements OnInit {
 
   public async copyContent(event: ClipboardEvent) {
 
-    if (this.isEditable) {
+    if (this.isCurrentCellEditable) {
       return;
     }
 
-    await navigator.clipboard.writeText(this.lastElement.innerText);
+    if (this.multipleCellsSelected) {
+
+      await navigator.clipboard.writeText(this.clipboardValue);
+
+    } else {
+      await navigator.clipboard.writeText(this.selectedTableCell.innerText);
+
+    }
+
     event.preventDefault();
 
   }
 
   public async pastContent(event: ClipboardEvent) {
 
-    if (this.isEditable) {
+    if (!this.hasAccess) {
       return;
     }
 
-    const inputField = (document.querySelector('.input-field') as HTMLInputElement);
-
-    if (inputField) {
-      const value = event.clipboardData.getData('Text');
-      inputField.value = value;
+    if (this.isCurrentCellEditable) {
+      return;
     }
-    this.newValue(inputField);
+
+    if (this.multipleCellsSelected) {
+
+      const inputFields = event.clipboardData.getData('text/plain').split('\r')[0].split('\t');
+      const ingredient = this.ingredients.filter(i => i.unique_id === this.selectedIngredientID)[0];
+
+      ingredient.measure = Number(inputFields[0]) ? Number(inputFields[0]) : 0;
+      ingredient.unit = inputFields[2] ? inputFields[2] : '';
+      ingredient.fresh = ['fresh', 'true', 'Frisch', 'frisch', 'Frischprod.', 'Frischprodukt'].includes(inputFields[3]);
+      ingredient.food = inputFields[4] ? inputFields[4] : '';
+      ingredient.comment = inputFields[5] ? inputFields[5] : '';
+
+    } else {
+
+      const inputField = (document.querySelector('.input-field') as HTMLInputElement);
+
+      if (inputField) {
+        const value = event.clipboardData.getData('Text');
+        inputField.value = value;
+      }
+      this.newValue(inputField);
+
+    }
+
     event.preventDefault();
 
     this.newUnsavedChanges.emit();
@@ -143,30 +185,37 @@ export class EditRecipeComponent implements OnInit {
 
   public async cutContent(event: ClipboardEvent) {
 
-    if (this.isEditable) {
+    if (this.isCurrentCellEditable) {
       return;
     }
 
     event.preventDefault();
 
-    await navigator.clipboard.writeText(this.lastElement.innerText);
+    await navigator.clipboard.writeText(this.selectedTableCell.innerText);
 
-    if (!this.isEditable) {
+    if (!this.hasAccess) {
+      return;
+    }
+
+    if (!this.isCurrentCellEditable) {
       this.clearField();
     }
 
     // is needed to cover up the cutted text
-    const overlay = document.getElementById('focus-overlay');
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
     overlay.style.backgroundColor = 'white';
 
   }
 
   public setFocus(target: EventTarget) {
 
-    const overlay = document.getElementById('focus-overlay');
+
+    this.unmarkIngredient();
+
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
     overlay.style.backgroundColor = 'transparent';
     overlay.style.visibility = 'visible';
-    this.lastElement = target as HTMLElement;
+    this.selectedTableCell = target as HTMLElement;
 
     this.setOverlySize(target as HTMLElement);
 
@@ -184,27 +233,27 @@ export class EditRecipeComponent implements OnInit {
 
     if ('Enter' === event.key) {
 
-      this.selectNextElement(this.lastElement);
+      this.selectNextElement(this.selectedTableCell);
       event.preventDefault();
 
-    } else if ('ArrowRight' === event.key && !this.isEditable) {
+    } else if ('ArrowRight' === event.key && !this.isCurrentCellEditable) {
 
-      this.selectNextElement(this.lastElement);
+      this.selectNextElement(this.selectedTableCell);
       event.preventDefault();
 
     } else if (['Tab'].includes(event.key)) {
 
       if (event.shiftKey) {
-        this.selectPreviousElement(this.lastElement);
+        this.selectPreviousElement(this.selectedTableCell);
       } else {
-        this.selectNextElement(this.lastElement);
+        this.selectNextElement(this.selectedTableCell);
       }
 
       event.preventDefault();
 
-    } else if ('ArrowLeft' === event.key && !this.isEditable) {
+    } else if ('ArrowLeft' === event.key && !this.isCurrentCellEditable) {
 
-      this.selectPreviousElement(this.lastElement);
+      this.selectPreviousElement(this.selectedTableCell);
       event.preventDefault();
 
     } else if (['Escape'].includes(event.key)) {
@@ -216,15 +265,19 @@ export class EditRecipeComponent implements OnInit {
 
     } else if (['Home'].includes(event.key)) {
 
-      this.setFocus(this.lastElement.parentElement.firstElementChild.nextElementSibling);
+      this.setFocus(this.selectedTableCell.parentElement.firstElementChild.nextElementSibling);
 
     } else if (['End'].includes(event.key)) {
 
-      this.setFocus(this.lastElement.parentElement.lastElementChild.previousElementSibling);
+      this.setFocus(this.selectedTableCell.parentElement.lastElementChild.previousElementSibling);
 
     } else if (['Delete', 'Backspace'].includes(event.key)) {
 
-      if (!this.isEditable) {
+      if (!this.hasAccess) {
+        return;
+      }
+
+      if (!this.isCurrentCellEditable) {
 
         this.clearField();
         event.preventDefault();
@@ -232,12 +285,12 @@ export class EditRecipeComponent implements OnInit {
 
       }
 
-    } else if ('ArrowUp' === event.key && !this.isEditable) {
+    } else if ('ArrowUp' === event.key && !this.isCurrentCellEditable) {
 
       let str = '';
-      this.lastElement.classList.forEach(classStr => str += '.' + classStr);
+      this.selectedTableCell.classList.forEach(classStr => str += '.' + classStr);
 
-      const node = this.lastElement.parentElement.parentElement.previousElementSibling?.firstElementChild?.querySelector(str);
+      const node = this.selectedTableCell.parentElement.parentElement.previousElementSibling?.firstElementChild?.querySelector(str);
       // Jump over delete and fresh
       if (!node.querySelector('data')) {
         return;
@@ -247,12 +300,12 @@ export class EditRecipeComponent implements OnInit {
         this.setFocus(node);
       }
 
-    } else if ('ArrowDown' === event.key && !this.isEditable) {
+    } else if ('ArrowDown' === event.key && !this.isCurrentCellEditable) {
 
       let str = '';
-      this.lastElement.classList.forEach(classStr => str += '.' + classStr);
+      this.selectedTableCell.classList.forEach(classStr => str += '.' + classStr);
 
-      const node = this.lastElement.parentElement.parentElement.nextElementSibling?.firstElementChild?.querySelector(str);
+      const node = this.selectedTableCell.parentElement.parentElement.nextElementSibling?.firstElementChild?.querySelector(str);
       // Jump over delete and fresh
       if (!node.querySelector('data')) {
         return;
@@ -269,7 +322,12 @@ export class EditRecipeComponent implements OnInit {
         return;
       }
 
-      if (!this.isEditable) {
+      if (!this.hasAccess) {
+        event.preventDefault();
+        return;
+      }
+
+      if (!this.isCurrentCellEditable) {
 
         this.enableEdit();
         this.clearField();
@@ -281,6 +339,7 @@ export class EditRecipeComponent implements OnInit {
   }
 
   public selectPreviousElement(currentElement: Element) {
+
 
     this.disableEdit();
 
@@ -307,6 +366,7 @@ export class EditRecipeComponent implements OnInit {
 
   public selectNextElement(currentElement: Element) {
 
+
     this.disableEdit();
 
     if (currentElement.nextElementSibling == null) {
@@ -332,7 +392,7 @@ export class EditRecipeComponent implements OnInit {
 
   public newValue(event: EventTarget) {
 
-    const ingredientId = this.lastElement.parentElement.parentElement.id;
+    const ingredientId = this.selectedTableCell.parentElement.parentElement.id;
     this.updateValue((event as HTMLInputElement).value, ingredientId);
 
     HeaderNavComponent.turnOn('Speichern');
@@ -341,6 +401,10 @@ export class EditRecipeComponent implements OnInit {
   }
 
   public toggleFresh(ingredient: Ingredient) {
+
+    if (!this.hasAccess) {
+      return;
+    }
 
     ingredient.fresh = !ingredient.fresh;
 
@@ -351,18 +415,24 @@ export class EditRecipeComponent implements OnInit {
 
   public enableEdit() {
 
-    if (this.isEditable) {
+    if (!this.hasAccess) {
       return;
     }
 
-    this.isEditable = true;
+    if (this.isCurrentCellEditable) {
+      return;
+    }
+
+    this.isCurrentCellEditable = true;
 
 
-    const overlay = document.getElementById('focus-overlay');
-    this.currentEditedField = this.lastElement;
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+    overlay.style.visibility = 'visible';
+
+    this.currentEditedField = this.selectedTableCell;
     const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
-    inputField.value = this.lastElement.innerText;
-    this.oldValue = this.lastElement.innerText;
+    inputField.value = this.selectedTableCell.innerText;
+    this.oldValue = this.selectedTableCell.innerText;
     inputField.style.opacity = '1';
     inputField.focus();
     inputField.style.cursor = 'text';
@@ -371,13 +441,14 @@ export class EditRecipeComponent implements OnInit {
 
   public disableEdit() {
 
-    this.isEditable = false;
+
+    this.isCurrentCellEditable = false;
 
     if (this.currentEditedField == null) {
       return;
     }
 
-    const overlay = document.getElementById('focus-overlay');
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
     const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
     inputField.style.opacity = '0';
     this.currentEditedField = null;
@@ -387,12 +458,63 @@ export class EditRecipeComponent implements OnInit {
 
   }
 
+  public markIngredient(uniqueId: string) {
+
+    this.selectedIngredientID = uniqueId;
+
+    this.multipleCellsSelected = true;
+    const ing = this.ingredients.filter(i => i.unique_id === uniqueId)[0];
+    this.clipboardValue = `${ing.measure}\t${ing.measure * this.participants}\t${ing.unit}\t` +
+      `${ing.fresh ? 'Frischprodukt' : ''}\t${ing.food}\t${ing.comment}`;
+
+    // remove selector for singe element
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+    overlay.style.visibility = 'hidden';
+
+    // select ingredient
+    const areaOverlay = document.getElementById(this.recipe.documentId + '-area-overlay');
+    areaOverlay.style.visibility = 'visible';
+    areaOverlay.focus();
+
+    this.setAreaOverlay();
+
+  }
+
+  public contextMenu(event) {
+
+    // event.preventDefault();
+
+  }
+
+  public unmarkIngredient() {
+
+    this.multipleCellsSelected = false;
+
+    // clear selection
+    const areaOverlay = document.getElementById(this.recipe.documentId + '-area-overlay');
+    areaOverlay.style.visibility = 'hidden';
+
+  }
+
+  private setAreaOverlay() {
+
+    const areaOverlay = document.getElementById(this.recipe.documentId + '-area-overlay');
+    const parent = areaOverlay.parentElement;
+    const ingredient = document.getElementById(this.selectedIngredientID);
+    areaOverlay.style.top = (ingredient.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';
+    areaOverlay.style.left = (ingredient.getBoundingClientRect().left - parent.getBoundingClientRect().left) + 'px';
+    areaOverlay.style.width = (ingredient.getBoundingClientRect().right - ingredient.getBoundingClientRect().left - 6) + 'px';
+    areaOverlay.style.height = (ingredient.getBoundingClientRect().bottom - ingredient.getBoundingClientRect().top - 4) + 'px';
+
+
+  }
+
   private updateValue(value, ingredientId) {
 
 
     const ingredient = this.ingredients.filter(ing => ing.unique_id === ingredientId)[0];
 
-    let field: string = this.lastElement.querySelector('data').value;
+    let field: string = this.selectedTableCell.querySelector('data').value;
 
     if (value === undefined) {
       value = '';
@@ -414,7 +536,13 @@ export class EditRecipeComponent implements OnInit {
 
   private setOverlySize(target: HTMLElement) {
 
-    const overlay = document.getElementById('focus-overlay');
+
+    if (target === null) {
+      return;
+    }
+
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+
     const parent = overlay.parentElement;
     const tableElem = target;
     overlay.style.top = (tableElem.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';
@@ -432,10 +560,10 @@ export class EditRecipeComponent implements OnInit {
 
   private clearField() {
 
-    const overlay = document.getElementById('focus-overlay');
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
     const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
     inputField.value = '';
-    this.newValue(this.lastElement);
+    this.newValue(this.selectedTableCell);
 
     this.newUnsavedChanges.emit();
     HeaderNavComponent.turnOn('Speichern');
