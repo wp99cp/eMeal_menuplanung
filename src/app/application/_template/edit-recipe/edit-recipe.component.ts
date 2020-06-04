@@ -209,7 +209,10 @@ export class EditRecipeComponent implements OnInit {
 
   public setFocus(target: EventTarget) {
 
-
+    if (target === this.selectedTableCell) {
+      return;
+    }
+    
     this.unmarkIngredient();
 
     const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
@@ -420,6 +423,10 @@ export class EditRecipeComponent implements OnInit {
     }
 
     if (this.isCurrentCellEditable) {
+      const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+      const inputField = (overlay.querySelector('.input-field') as HTMLInputElement);
+      inputField.select();
+
       return;
     }
 
