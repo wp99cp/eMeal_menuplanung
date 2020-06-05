@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AutoSaveService} from './auto-save.service';
-import {HelpService} from "./help.service";
+import {HelpService} from './help.service';
 
 @Injectable({
   providedIn: 'root'

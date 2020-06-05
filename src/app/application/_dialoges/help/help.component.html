@@ -1,7 +1,13 @@
 <h2>Hilfe und Erklärungen zu eMeal - Menüplanung</h2>
 
-<div mat-dialog-content>
-  <p>Zur Zeit stehen keine Tipps zur Verfügung!</p>
+<div mat-dialog-content *ngIf="data?.message">
+
+  <h3>
+    {{data.message.title}}
+  </h3>
+
+  <p [innerHTML]="data.message.message"></p>
+
 </div>
 
 <div mat-dialog-actions>

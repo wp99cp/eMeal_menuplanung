@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {HelpService} from '../../_service/help.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {HelpMessage} from '../../_service/help.service';
 
 @Component({
   selector: 'app-help',
@@ -8,10 +9,14 @@ import {HelpService} from '../../_service/help.service';
 })
 export class HelpComponent implements OnInit {
 
-  constructor(public helpService: HelpService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: HelpMessage }) {
+
   }
 
   ngOnInit(): void {
+
+    console.log(this.data.message)
+
   }
 
 }

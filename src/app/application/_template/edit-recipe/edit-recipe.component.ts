@@ -42,6 +42,22 @@ export class EditRecipeComponent implements OnInit {
     private databaseService: DatabaseService,
     private contextMenuService: ContextMenuService,
     private helpService: HelpService) {
+
+    helpService.addHelpMessage({
+      title: 'Rezepte direkt bearbeiten',
+      message: `Rezepte können auf direkt bearbeitet werden. <br>
+                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus.`
+    });
+
+    helpService.addHelpMessage({
+      title: 'Rezepte lokal Überschreiben',
+      message: `(Bald schon...) Können Rezepte lokal überschrieben werden. D.h. du kannst in einem Rezept
+                Zutaten hinzufügen und verändern, aber diese Änderungen gelten nur für das aktuelle Lager.
+                Die Rezept-Vorlage bleibt dabei unverändert. <br>
+                Nutze diese Funktion z.B. um die Mengen für ein Lager mit jüngeren/älteren Teilnehmenden anzupassen.
+                Oder Falls zu keinen Zugriff auf die Rezept-Vorlage hast, aber dennoch Änderungen anbringen willst/musst!`
+    });
+
   }
 
   async ngOnInit() {

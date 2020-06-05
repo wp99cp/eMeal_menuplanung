@@ -2,15 +2,31 @@ import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpComponent} from '../_dialoges/help/help.component';
 
+export interface HelpMessage {
+
+  title: string;
+  message: string;
+
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class HelpService {
 
+  constructor() {
+  }
+
+  private static helpMessages: HelpMessage[] = [];
+
   private isOpen = false;
   private dialog = null;
 
-  constructor() {
+  public addHelpMessage(helpMessage: HelpMessage) {
+
+    HelpService.helpMessages.push(helpMessage);
+    console.log(helpMessage)
+
   }
 
   openHelpPopup() {
@@ -24,11 +40,14 @@ export class HelpService {
       throw new Error('No Dialog added! Pleas add first a mat-dialog!');
     }
 
+    const index = Math.floor(Math.random() * HelpService.helpMessages.length);
     this.dialog
       .open(HelpComponent, {
-        height: '618px',
-        width: '1000px',
-        data: {}
+        height: '800px',
+        width: '550px',
+        data: {
+          message: HelpService.helpMessages[index]
+        }
       })
       .afterClosed()
       .subscribe(() => {
