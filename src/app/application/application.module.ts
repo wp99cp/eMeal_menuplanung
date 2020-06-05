@@ -12,7 +12,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DateAdapter, MatNativeDateModule} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatGridListModule} from '@angular/material/grid-list';
@@ -73,8 +73,10 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
 import {MarkdownModule} from 'ngx-markdown';
 import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component';
-import {ContextMenuService} from "./_service/context-menu.service";
-import {ShortcutService} from "./_service/shortcut.service";
+import {ContextMenuService} from './_service/context-menu.service';
+import {ShortcutService} from './_service/shortcut.service';
+import {HelpService} from './_service/help.service';
+import {HelpComponent} from './_dialoges/help/help.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +117,8 @@ import {ShortcutService} from "./_service/shortcut.service";
     CopyRecipeComponent,
     ListCardComponent,
     CopyCampComponent,
-    EditRecipeComponent
+    EditRecipeComponent,
+    HelpComponent
   ],
   providers: [
     AngularFirestore,
@@ -126,6 +129,7 @@ import {ShortcutService} from "./_service/shortcut.service";
     SwissDateAdapter,
     ContextMenuService,
     ShortcutService,
+    HelpService,
     Location,
     {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
@@ -191,7 +195,8 @@ import {ShortcutService} from "./_service/shortcut.service";
     CreateCampComponent,
     MealPrepareComponent,
     CopyRecipeComponent,
-    CopyCampComponent
+    CopyCampComponent,
+    HelpComponent
   ],
   exports: [
     MatTableModule,
@@ -205,7 +210,11 @@ import {ShortcutService} from "./_service/shortcut.service";
 
 export class ApplicationModule {
 
-  constructor(auth: AuthenticationService, contextMenu: ContextMenuService, shortCut: ShortcutService) {
+  constructor(auth: AuthenticationService,
+              contextMenu: ContextMenuService,
+              shortCut: ShortcutService,
+              helpService: HelpService,
+              dialog: MatDialog) {
 
     // Test on first load
     auth.trackCredentials();
@@ -213,6 +222,8 @@ export class ApplicationModule {
     // we want to use the context;enuService in this module
     contextMenu.activate();
     shortCut.activate();
+
+    helpService.addDialog(dialog);
 
   }
 

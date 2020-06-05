@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {AutoSaveService} from './auto-save.service';
+import {HelpService} from "./help.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShortcutService {
 
-  constructor(private autosave: AutoSaveService) {
+  constructor(private autosave: AutoSaveService, private helpService: HelpService) {
   }
 
   activate() {
@@ -15,6 +16,7 @@ export class ShortcutService {
 
       if (event.key === 'F1') {
 
+        this.helpService.openHelpPopup();
         event.preventDefault();
 
       }

@@ -6,6 +6,9 @@ import {Day} from '../../_class/day';
 import {SpecificMeal} from '../../_class/specific-meal';
 import {EditDayComponent} from '../../_dialoges/edit-day/edit-day.component';
 import {MatDialog} from '@angular/material/dialog';
+import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-meals-overview',
@@ -13,26 +16,75 @@ import {MatDialog} from '@angular/material/dialog';
   styleUrls: ['./meals-overview.component.sass']
 })
 export class MealsOverviewComponent implements OnChanges {
+  @Input() access: boolean;
+  // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
+  @Input() day: Day;
 
   // TODO: z.T. beim Löschen doppelte Mahlzeiten (sie tauchen wieder auf, falls eine zweite Mahlzeit
-  // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
-
-  @Input() access: boolean;
-  @Input() day: Day;
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
-
   @Input() hideIcons = false;
   @Output() mealDropped = new EventEmitter<[SpecificMeal, CdkDragDrop<any, any>]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<Day>();
-
   public hidden = false;
-
   public warning: string;
 
-  constructor(public dialog: MatDialog, public swissDateAdapter: SwissDateAdapter) {
+  constructor(public dialog: MatDialog,
+              public swissDateAdapter: SwissDateAdapter,
+              private contextMenuService: ContextMenuService,
+              private router: Router,
+              private activeRoute: ActivatedRoute,
+              private helpService: HelpService) {
+  }
+
+  setContextMenu() {
+
+
+    setTimeout(() => {
+      if (this.specificMeals === null) {
+        return;
+      }
+
+      this.specificMeals.forEach(meal => {
+
+        const element = document.getElementById(meal.documentId);
+
+        if (element === null || element === undefined) {
+          return;
+        }
+
+        const node: ContextMenuNode = {
+          node: element as HTMLElement,
+          contextMenuEntries: [
+            {
+              icon: 'edit',
+              name: 'Bearbeiten',
+              shortCut: '',
+              function: (event) => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
+                {relativeTo: this.activeRoute})
+            },
+            {
+              icon: 'delete',
+              name: 'Mahlzeit Löschen',
+              shortCut: '',
+              function: (event) => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
+            },
+            'Separator',
+            {
+              icon: 'help',
+              name: 'Hilfe / Erklärungen',
+              shortCut: 'F1',
+              function: (event) => this.helpService.openHelpPopup()
+            }
+          ]
+        };
+        this.contextMenuService.addContextMenuNode(node);
+
+      });
+    }, 200);
+
   }
 
   log(str) {
@@ -47,6 +99,8 @@ export class MealsOverviewComponent implements OnChanges {
     this.warning = '';
 
     this.sortMeals();
+
+    this.setContextMenu()
 
   }
 

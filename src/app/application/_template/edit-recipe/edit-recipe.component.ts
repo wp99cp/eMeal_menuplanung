@@ -6,6 +6,7 @@ import {DatabaseService} from '../../_service/database.service';
 import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-edit-recipe',
@@ -39,7 +40,8 @@ export class EditRecipeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
-    private contextMenuService: ContextMenuService) {
+    private contextMenuService: ContextMenuService,
+    private helpService: HelpService) {
   }
 
   async ngOnInit() {
@@ -101,7 +103,7 @@ export class EditRecipeComponent implements OnInit {
           icon: 'help',
           name: 'Hilfe / Erklärungen',
           shortCut: 'F1',
-          function: (event) => console.log('Help!')
+          function: (event) => this.helpService.openHelpPopup()
         }
       ]
     };

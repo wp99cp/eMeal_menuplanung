@@ -13,9 +13,9 @@
   <div *ngFor="let meal of specificMeals; let i = index">
 
 
-    <div class="meal-card" cdkDrag
+    <div class="meal-card meal-context-menu-added" cdkDrag
          [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
-         (cdkDragDropped)="mealDropped.emit([meal, $event]); sortMeals()"
+         (cdkDragDropped)="setContextMenu(); mealDropped.emit([meal, $event]); sortMeals();"
          matTooltip="{{meal.overrideParticipants ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.documentId}}">
 
       <div class="meal-placeholder" *cdkDragPlaceholder></div>

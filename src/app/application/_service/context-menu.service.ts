@@ -52,7 +52,9 @@ export class ContextMenuService {
       return;
     }
 
+    this.nodesWithContextMenu = this.nodesWithContextMenu.filter(elem => elem !== null);
     this.nodesWithContextMenu.forEach(entry => {
+
 
       if (entry.node.contains(event.target as Node)) {
 

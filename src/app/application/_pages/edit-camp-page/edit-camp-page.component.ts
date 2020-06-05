@@ -55,7 +55,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     this.camp.subscribe(async camp => {
       const access = await this.dbService.canWrite(camp);
       if (access)
-        HeaderNavComponent.turnOn("Mitarbeiter");
+        HeaderNavComponent.turnOn('Mitarbeiter');
     });
 
     HeaderNavComponent.addToHeaderNav({
