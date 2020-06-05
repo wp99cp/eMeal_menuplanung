@@ -101,7 +101,7 @@ export class MealsOverviewComponent implements OnChanges {
    * @param pluralOfMahlzeiten
    * @param orderOfMahlzeiten
    */
-  private sortMeals() {
+  sortMeals() {
 
     const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
     const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];

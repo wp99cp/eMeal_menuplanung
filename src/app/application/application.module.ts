@@ -73,6 +73,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
 import {MarkdownModule} from 'ngx-markdown';
 import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component';
+import {ContextMenuService} from "./_service/context-menu.service";
+import {ShortcutService} from "./_service/shortcut.service";
 
 @NgModule({
   declarations: [
@@ -122,6 +124,8 @@ import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component
     DatabaseService,
     AutoSaveService,
     SwissDateAdapter,
+    ContextMenuService,
+    ShortcutService,
     Location,
     {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
@@ -201,10 +205,14 @@ import {EditRecipeComponent} from './_template/edit-recipe/edit-recipe.component
 
 export class ApplicationModule {
 
-  constructor(auth: AuthenticationService) {
+  constructor(auth: AuthenticationService, contextMenu: ContextMenuService, shortCut: ShortcutService) {
 
     // Test on first load
     auth.trackCredentials();
+
+    // we want to use the context;enuService in this module
+    contextMenu.activate();
+    shortCut.activate();
 
   }
 

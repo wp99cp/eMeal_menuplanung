@@ -5,7 +5,7 @@ import {mergeMap, take} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {DatabaseService} from '../../_service/database.service';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
-import {Saveable} from '../../_service/auto-save.service';
+import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
 
 @Component({
   selector: 'app-edit-single-recipe',
@@ -18,7 +18,9 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
   private unsavedChanges = false;
   private unsavedRecipe: Recipe;
 
-  constructor(private route: ActivatedRoute, private dbService: DatabaseService) {
+  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private autosave: AutoSaveService) {
+
+    autosave.register(this);
 
     // Ladet das Rezept von der URL
     this.recipe = this.route.url.pipe(mergeMap(

@@ -1,6 +1,6 @@
-import { Injectable, NgZone } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CanDeactivate } from '@angular/router';
+import {Injectable, NgZone} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {CanDeactivate} from '@angular/router';
 
 
 export interface Saveable {
@@ -26,13 +26,25 @@ export interface Saveable {
  */
 export class AutoSaveService implements CanDeactivate<Saveable> {
 
-  constructor(public snackBar: MatSnackBar, private zone: NgZone) { }
+  private autosaveOnComponents: Saveable[] = [];
+
+  constructor(public snackBar: MatSnackBar, private zone: NgZone) {
+  }
+
+  saveChanges() {
+
+    this.autosaveOnComponents.forEach(comp => comp.save());
+    this.snackBar.open('Alle neuen Änderungen wurden gespeichert!', '', {duration: 2000});
+
+  }
 
   /**
    * Wird beim Wechsel der Seiten aufgerufen.
-   * 
+   *
    */
   canDeactivate(component: Saveable) {
+
+    this.autosaveOnComponents = this.autosaveOnComponents.filter(comp => comp !== component);
 
     component.save()
       .then(saved => {
@@ -42,7 +54,7 @@ export class AutoSaveService implements CanDeactivate<Saveable> {
           this.zone.run(() => {
 
             // Anzeige des Benachrichtigungs-Banners
-            this.snackBar.open('Änderungen wurden automatisch gespeichert!', '', { duration: 2000 });
+            this.snackBar.open('Änderungen wurden automatisch gespeichert!', '', {duration: 2000});
 
           });
         }
@@ -50,6 +62,13 @@ export class AutoSaveService implements CanDeactivate<Saveable> {
       });
 
     // Erlaubt das Wechseln der Seite(return true).
+    return true;
+
+  }
+
+  register(savable: Saveable) {
+
+    this.autosaveOnComponents.push(savable);
     return true;
 
   }

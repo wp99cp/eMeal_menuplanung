@@ -6,7 +6,7 @@
     <span class="recipe-participants-info" *ngIf="screenSize > 500">für {{participants}} Personen</span>
   </div>
 
-  <div class="recipe-table-area" (contextmenu)="contextMenu($event)">
+  <div class="recipe-table-area" (contextmenu)="contextMenu($event)" id="{{recipe.documentId}}-edit">
     <table class="recipe-table" [ngClass]="{'not-editable': !hasAccess}" id="{{recipe.documentId}}" *ngIf="(recipe.getIngredients() | async) as ingredients">
 
       <tr class="recipe-table-index-bar">

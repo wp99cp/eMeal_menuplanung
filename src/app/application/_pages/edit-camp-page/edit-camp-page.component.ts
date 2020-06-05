@@ -1,17 +1,17 @@
-import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { mergeMap, take, tap } from 'rxjs/operators';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
+import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {mergeMap, take, tap} from 'rxjs/operators';
+import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
-import { Camp } from '../../_class/camp';
-import { CampInfoComponent } from '../../_dialoges/camp-info/camp-info.component';
-import { ShareDialogComponent } from '../../_dialoges/share-dialog/share-dialog.component';
-import { Saveable } from '../../_service/auto-save.service';
-import { DatabaseService } from '../../_service/database.service';
-import { WeekViewComponent } from '../../_template/week-view/week-view.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {Camp} from '../../_class/camp';
+import {CampInfoComponent} from '../../_dialoges/camp-info/camp-info.component';
+import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
+import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
+import {DatabaseService} from '../../_service/database.service';
+import {WeekViewComponent} from '../../_template/week-view/week-view.component';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -24,7 +24,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
   // diese Funktion erstellt automatisch eine Wochenübersicht
   // basierend auf deinen Rezepten und Mahlzeiten und dem
   // verwendungszweck in den vergangenen Lagern.
-  // schaut darauf, dass Beilagen nicht zweimal pro Tag verwendet werden 
+  // schaut darauf, dass Beilagen nicht zweimal pro Tag verwendet werden
   // und auch nicht am vorherigen oder nächsten und schaut
   // das nur einmal pro Tag Fleisch verwendet wird.
 
@@ -38,8 +38,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
     private dbService: DatabaseService,
     private router: Router,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private autosave: AutoSaveService) {
 
+    autosave.register(this);
     // Ladet das Lager von der URL
     this.camp = this.route.url.pipe(mergeMap(
       url => this.dbService.getCampById(url[1].path)
@@ -47,36 +49,36 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   }
 
- async ngOnInit() {
+  async ngOnInit() {
 
-  // check for write access
-  this.camp.subscribe(async camp => {
-    const access = await this.dbService.canWrite(camp);
-    if(access)
-      HeaderNavComponent.turnOn("Mitarbeiter");
-  });
+    // check for write access
+    this.camp.subscribe(async camp => {
+      const access = await this.dbService.canWrite(camp);
+      if (access)
+        HeaderNavComponent.turnOn("Mitarbeiter");
+    });
 
-  HeaderNavComponent.addToHeaderNav({
-    active: true,
-    description: 'Informationen zum Lager',
-    name: 'Info',
-    action: (() => this.campInfoDialog()),
-    icon: 'info'
-   });
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Informationen zum Lager',
+      name: 'Info',
+      action: (() => this.campInfoDialog()),
+      icon: 'info'
+    });
 
-  HeaderNavComponent.addToHeaderNav({
-    active: false,
-    description: 'Mitarbeiter verwalten',
-    name: 'Mitarbeiter',
-    action: (() => this.shareDialog()),
-    icon: 'group_add'
-  });
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Mitarbeiter verwalten',
+      name: 'Mitarbeiter',
+      action: (() => this.shareDialog()),
+      icon: 'group_add'
+    });
 
-  HeaderNavComponent.addToHeaderNav({
+    HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Lager exportieren',
       name: 'Export',
-      action: (() => this.router.navigate(['export'], { relativeTo: this.route })),
+      action: (() => this.router.navigate(['export'], {relativeTo: this.route})),
       icon: 'cloud_download',
       separatorAfter: true
     });
@@ -120,9 +122,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
       this.dialog.open(CampInfoComponent, {
         height: '618px',
         width: '1000px',
-        data: { camp }
+        data: {camp}
       }).afterClosed()
-
     )).subscribe((camp: Camp | null) => {
 
       // Speichern der Änderungen im Dialog-Fenster
@@ -146,16 +147,15 @@ export class EditCampPageComponent implements OnInit, Saveable {
         this.dialog.open(ShareDialogComponent, {
           height: '618px',
           width: '1000px',
-          data: { camp }
+          data: {camp}
         }).afterClosed()
-
       )).subscribe((camp) =>
 
-        // TODO: upgrade rigths for all meals and recipes
-        // if necessary...
+      // TODO: upgrade rigths for all meals and recipes
+      // if necessary...
 
-        this.saveCamp(camp)
-      );
+      this.saveCamp(camp)
+    );
 
   }
 
@@ -165,7 +165,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
    */
   public saveCamp(camp: Camp) {
 
-    this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
+    this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
     this.dbService.updateDocument(camp);
 
   }

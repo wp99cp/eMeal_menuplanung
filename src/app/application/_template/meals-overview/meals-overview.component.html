@@ -10,14 +10,15 @@
 <div class="meal-list" cdkDropList [cdkDropListData]="specificMeals" id="{{day.getTimestamp().toMillis()}}">
 
   <!-- Meal Element-->
-  <ng-container *ngFor="let meal of specificMeals; let i = index">
+  <div *ngFor="let meal of specificMeals; let i = index">
+
 
     <div class="meal-card" cdkDrag
          [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
-         (cdkDragDropped)="mealDropped.emit([meal, $event])"
+         (cdkDragDropped)="mealDropped.emit([meal, $event]); sortMeals()"
          matTooltip="{{meal.overrideParticipants ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.documentId}}">
 
-      <div class=" meal-placeholder" *cdkDragPlaceholder></div>
+      <div class="meal-placeholder" *cdkDragPlaceholder></div>
 
       <span class="meal-card-name"> {{ meal.usedAs }} </span>
 
@@ -38,7 +39,7 @@
       * * * * *
     </span>
 
-  </ng-container>
+  </div>
 
   <span *ngIf=" specificMeals?.length > 0" class="meal-separator">
       * * * * *
@@ -49,6 +50,8 @@
   </div>
 
 </div>
+
+
 
 <p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Beim Export werden beide Mahlzeiten angezeigt.">
   {{warning}}</p>

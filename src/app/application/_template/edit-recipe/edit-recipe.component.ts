@@ -5,6 +5,7 @@ import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.compo
 import {DatabaseService} from '../../_service/database.service';
 import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
+import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -37,7 +38,8 @@ export class EditRecipeComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private databaseService: DatabaseService) {
+    private databaseService: DatabaseService,
+    private contextMenuService: ContextMenuService) {
   }
 
   async ngOnInit() {
@@ -63,6 +65,47 @@ export class EditRecipeComponent implements OnInit {
 
     });
 
+    const node: ContextMenuNode = {
+      node: document.getElementById(this.recipe.documentId + '-focus-overlay'),
+      contextMenuEntries: [
+        {
+          icon: 'file_copy',
+          name: 'Kopieren',
+          shortCut: 'Strg+C',
+          function: (event) => {
+            navigator.clipboard.writeText(this.selectedTableCell.innerText);
+          }
+        },
+        {
+          icon: 'assignment',
+          name: 'Einfügen',
+          shortCut: 'Strg+V',
+          // It's impossible...
+          function: (event: Event) => alert('Bitte Benutze für das Einfügen die Tasten-Kombination Strg+V')
+        },
+        {
+          icon: 'cut',
+          name: 'Ausschneiden',
+          shortCut: 'Strg+X',
+          function: (event) => this.cutContent(event)
+        },
+        'Separator',
+        {
+          icon: 'delete',
+          name: 'Zutat Löschen',
+          shortCut: '',
+          function: (event) => this.deleteIngredient(this.selectedTableCell.parentElement.parentElement.id)
+        },
+        'Separator',
+        {
+          icon: 'help',
+          name: 'Hilfe / Erklärungen',
+          shortCut: 'F1',
+          function: (event) => console.log('Help!')
+        }
+      ]
+    };
+    this.contextMenuService.addContextMenuNode(node);
 
   }
 
@@ -72,6 +115,8 @@ export class EditRecipeComponent implements OnInit {
    * @param index Index des Ingredient = Zeile in der Tabelle
    */
   deleteIngredient(uniqueId: string) {
+
+    console.log(uniqueId)
 
     if (!this.hasAccess) {
       return;
@@ -144,6 +189,8 @@ export class EditRecipeComponent implements OnInit {
 
   public async pastContent(event: ClipboardEvent) {
 
+    console.log('paste')
+
     if (!this.hasAccess) {
       return;
     }
@@ -209,13 +256,15 @@ export class EditRecipeComponent implements OnInit {
 
   public setFocus(target: EventTarget) {
 
-    if (target === this.selectedTableCell) {
+    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+
+    // do nothing if cell is already selected and the selection is visible
+    if (target === this.selectedTableCell && overlay.style.visibility === 'visible') {
       return;
     }
 
     this.unmarkIngredient();
 
-    const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
     overlay.style.backgroundColor = 'transparent';
     overlay.style.visibility = 'visible';
     this.selectedTableCell = target as HTMLElement;

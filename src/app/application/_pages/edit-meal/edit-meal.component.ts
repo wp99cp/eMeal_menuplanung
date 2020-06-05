@@ -13,7 +13,7 @@ import {SpecificRecipe} from '../../_class/specific-recipe';
 import {AddRecipeComponent} from '../../_dialoges/add-recipe/add-recipe.component';
 import {MealInfoComponent} from '../../_dialoges/meal-info/meal-info.component';
 import {MealPrepareComponent} from '../../_dialoges/meal-prepare/meal-prepare.component';
-import {Saveable} from '../../_service/auto-save.service';
+import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
 import {DatabaseService} from '../../_service/database.service';
 import {SettingsService} from '../../_service/settings.service';
 import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
@@ -45,7 +45,11 @@ export class EditMealComponent implements OnInit, Saveable {
     public dbService: DatabaseService,
     public dialog: MatDialog,
     private router: Router,
-    public swissDateAdapter: SwissDateAdapter) {
+    public swissDateAdapter: SwissDateAdapter,
+    private autosave: AutoSaveService) {
+
+    autosave.register(this);
+
   }
 
   public newOpened(index: number) {
