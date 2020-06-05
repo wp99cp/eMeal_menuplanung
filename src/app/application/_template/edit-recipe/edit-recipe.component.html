@@ -53,6 +53,36 @@
         </td>
       </tr>
 
+      <!-- Overwriting -->
+      <tr class="ingredient" *ngIf="false">
+        <td class="recipe-table-index-bar overwriting"><mat-icon>double_arrow</mat-icon></td>
+        <td class="ingredient-measure-column" *ngIf="screenSize > 800" (click)="setFocus($event.target)">
+          <data value="measure">{{ingredient.measure ? Number(ingredient.measure).toFixed(2) : ''}}</data>
+        </td>
+        <td class="ingredient-measure-column ingredient-measure-column-calc" (click)="setFocus($event.target)">
+          <data
+            value="measure_calc">{{ingredient.measure ? Number(ingredient.measure * participants).toFixed(2) : '' }}</data>
+        </td>
+        <td class="ingredient-unit-column" (click)="setFocus($event.target)">
+          <data value="unit">{{ingredient.unit}}</data>
+        </td>
+        <td class="ingredient-fresh-column" (click)="toggleFresh(ingredient)" *ngIf="screenSize > 500">
+          <mat-icon *ngIf="ingredient.fresh else notFresh">check_box</mat-icon>
+          <ng-template #notFresh>
+            <mat-icon>check_box_outline_blank</mat-icon>
+          </ng-template>
+        </td>
+        <td class="ingredient-food-column" (click)="setFocus($event.target)">
+          <data value="food">{{ingredient.food}} </data>
+        </td>
+        <td class="ingredient-comment-column" *ngIf="screenSize > 600" (click)="setFocus($event.target)">
+          <data value="comment">{{ingredient.comment}}</data>
+        </td>
+        <td class="ingredient-delete-column" *ngIf="screenSize > 500" (click)="deleteIngredient(ingredient.unique_id)">
+          <mat-icon>delete</mat-icon>
+        </td>
+      </tr>
+
       </tbody>
 
       <tbody class="ingredient-template-cell" (click)="addIngredientField($event.target)"

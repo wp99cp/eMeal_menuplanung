@@ -212,7 +212,7 @@ export class EditRecipeComponent implements OnInit {
     if (target === this.selectedTableCell) {
       return;
     }
-    
+
     this.unmarkIngredient();
 
     const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
