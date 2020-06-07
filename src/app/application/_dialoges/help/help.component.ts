@@ -15,8 +15,6 @@ export class HelpComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log(this.data.message)
-
   }
 
 }
