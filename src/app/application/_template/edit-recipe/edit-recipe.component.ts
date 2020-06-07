@@ -6,7 +6,8 @@ import {DatabaseService} from '../../_service/database.service';
 import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
-import {HelpService} from "../../_service/help.service";
+import {HelpService} from '../../_service/help.service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-edit-recipe',
@@ -41,12 +42,14 @@ export class EditRecipeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
     private contextMenuService: ContextMenuService,
-    private helpService: HelpService) {
+    private helpService: HelpService,
+    private router: Router) {
 
     helpService.addHelpMessage({
       title: 'Rezepte direkt bearbeiten',
       message: `Rezepte können auf direkt bearbeitet werden. <br>
-                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus.`
+                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus.`,
+      url: router.url
     });
 
     helpService.addHelpMessage({
@@ -55,7 +58,8 @@ export class EditRecipeComponent implements OnInit {
                 Zutaten hinzufügen und verändern, aber diese Änderungen gelten nur für das aktuelle Lager.
                 Die Rezept-Vorlage bleibt dabei unverändert. <br>
                 Nutze diese Funktion z.B. um die Mengen für ein Lager mit jüngeren/älteren Teilnehmenden anzupassen.
-                Oder Falls zu keinen Zugriff auf die Rezept-Vorlage hast, aber dennoch Änderungen anbringen willst/musst!`
+                Oder Falls zu keinen Zugriff auf die Rezept-Vorlage hast, aber dennoch Änderungen anbringen willst/musst!`,
+      url: router.url
     });
 
   }
