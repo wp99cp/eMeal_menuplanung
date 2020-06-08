@@ -41,24 +41,25 @@ export class HelpService {
       throw new Error('No Dialog added! Pleas add first a mat-dialog!');
     }
 
-    const helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
-    const index = Math.floor(Math.random() * helpMessagesForThisPage.length);
+    let helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
+    let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
 
-    let message = helpMessagesForThisPage[index];
+    const message = helpMessagesForThisPage[index];
 
     if (message === undefined) {
-      message = {
+      helpMessagesForThisPage = [{
         title: 'Nicht verfügbar!',
         message: 'Für diese Seite sind keine Hilfetexte/Erklärungen verfügbar.',
         url: ''
-      };
+      }];
+      index = 0;
     }
 
     this.dialog
       .open(HelpComponent, {
         height: '800px',
         width: '550px',
-        data: {message}
+        data: {index, messages: helpMessagesForThisPage}
       })
       .afterClosed()
       .subscribe(() => {

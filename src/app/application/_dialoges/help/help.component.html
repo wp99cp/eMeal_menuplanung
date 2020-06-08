@@ -1,16 +1,16 @@
 <h2>Hilfe und Erklärungen zu eMeal - Menüplanung</h2>
 
-<div mat-dialog-content *ngIf="data?.message">
+<div mat-dialog-content *ngIf="message">
 
   <h3>
-    {{data.message.title}}
+    {{message.title}}
   </h3>
 
-  <p [innerHTML]="data.message.message"></p>
+  <p [innerHTML]="message.message"></p>
 
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button disabled>Nächster Tipp</button>
+  <button mat-button (click)="nextMessage()">Nächster Tipp</button>
   <button mat-button [mat-dialog-close]="">Schliessen</button>
 </div>
