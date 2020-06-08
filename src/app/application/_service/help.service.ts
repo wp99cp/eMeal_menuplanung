@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpComponent} from '../_dialoges/help/help.component';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 export interface HelpMessage {
 
@@ -16,12 +16,21 @@ export interface HelpMessage {
 })
 export class HelpService {
 
-  private static helpMessages: HelpMessage[] = [];
-  private isOpen = false;
-  private dialog = null;
-
   constructor(private router: Router) {
   }
+
+  private static helpMessages: HelpMessage[] = [];
+
+  private readonly defaultMessage: HelpMessage = {
+    title: 'Keine Hilfetexte verfügbar',
+    message: `Für diese Seite sind noch keine Tipps, Tricks und/oder Hilfetexte verfügbar. Gerne aber kannst du uns
+                  über die Feedback-Funktion dein Anliegen schildern. Wir bemühen uns um eine Antwort/Lösung des Problems.<br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Feedback_erfassen.png">`,
+    url: ''
+  };
+  private isOpen = false;
+  private dialog = null;
 
   public addHelpMessage(helpMessage: HelpMessage) {
 
@@ -47,11 +56,7 @@ export class HelpService {
     const message = helpMessagesForThisPage[index];
 
     if (message === undefined) {
-      helpMessagesForThisPage = [{
-        title: 'Nicht verfügbar!',
-        message: 'Für diese Seite sind keine Hilfetexte/Erklärungen verfügbar.',
-        url: ''
-      }];
+      helpMessagesForThisPage = [this.defaultMessage];
       index = 0;
     }
 
