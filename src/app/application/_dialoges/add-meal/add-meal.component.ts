@@ -1,30 +1,30 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, ViewChild, Inject } from '@angular/core';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
+import {SelectionModel} from '@angular/cdk/collections';
+import {AfterViewInit, Component, Inject, ViewChild} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
+import {Observable} from 'rxjs';
 
-import { Meal } from '../../_class/meal';
-import { CreateMealComponent } from '../../_dialoges/create-meal/create-meal.component';
-import { FirestoreMeal, MealUsage } from '../../_interfaces/firestoreDatatypes';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { DatabaseService } from '../../_service/database.service';
-import { CustomPaginator } from './CustomPaginator';
-import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {Meal} from '../../_class/meal';
+import {CreateMealComponent} from '../../_dialoges/create-meal/create-meal.component';
+import {FirestoreMeal, MealUsage} from '../../_interfaces/firestoreDatatypes';
+import {AuthenticationService} from '../../_service/authentication.service';
+import {DatabaseService} from '../../_service/database.service';
+import {CustomPaginator} from './CustomPaginator';
+import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-add-meal',
   templateUrl: './add-meal.component.html',
   styleUrls: ['./add-meal.component.sass'],
   providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()}
   ]
 })
 export class AddMealComponent implements AfterViewInit {
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Datasource for the table
   public mealTableSource = new MatTableDataSource<Meal>();
@@ -54,10 +54,14 @@ export class AddMealComponent implements AfterViewInit {
 
     this.mealTableSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'name': return item.name.toLowerCase() + this.defaultSort(item);
-        case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
-        case 'useAs': return (item.lastMeal !== undefined) ? item.lastMeal.toLowerCase() : '';
-        default: return this.defaultSort(item);
+        case 'name':
+          return item.name.toLowerCase() + this.defaultSort(item);
+        case 'description':
+          return (item.description !== null) ? item.description.toLowerCase() : '';
+        case 'useAs':
+          return (item.lastMeal !== undefined) ? item.lastMeal.toLowerCase() : '';
+        default:
+          return this.defaultSort(item);
       }
     };
 
@@ -68,27 +72,6 @@ export class AddMealComponent implements AfterViewInit {
 
     this.mealTableSource.paginator = this.paginator;
 
-
-  }
-
-  /**
-   * Defines the default sorting order of the meals.
-   * Hierfür bekommt jede Mahlzeit eine Zahl zugeordnet.
-   *
-   * @param item meal to order
-   */
-  private defaultSort(meal: Meal): string | number {
-
-    // Bereits verwendete Mahlzeiten werden ganz nach hinten verschoben. Ausser
-    // es handelt sich dabei um einem Zmorgen, Zvieri oder Znüni
-    if (this.data.mealNames.includes(meal.name)
-      && meal.usedAs !== 'Zmorgen' && meal.usedAs !== 'Zvieri' && meal.usedAs !== 'Znüni') {
-      return 0;
-    }
-
-    // ansonsten werden die Mahlzeiten nach dem Datum sortiert,
-    // so dass das zuletzt verwendete zuoberst ist.
-    return -meal.lastChange.getTime();
 
   }
 
@@ -152,7 +135,7 @@ export class AddMealComponent implements AfterViewInit {
     this.dialog.open(CreateMealComponent, {
       height: '640px',
       width: '900px',
-      data: { mealName: (document.getElementById('search-field') as HTMLInputElement).value }
+      data: {mealName: (document.getElementById('search-field') as HTMLInputElement).value}
 
     }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
 
@@ -176,7 +159,6 @@ export class AddMealComponent implements AfterViewInit {
     document.getElementById('search-field').focus();
 
   }
-
 
   applyFilter(filterValue: string) {
 
@@ -242,6 +224,27 @@ export class AddMealComponent implements AfterViewInit {
       });
 
       */
+  }
+
+  /**
+   * Defines the default sorting order of the meals.
+   * Hierfür bekommt jede Mahlzeit eine Zahl zugeordnet.
+   *
+   * @param item meal to order
+   */
+  private defaultSort(meal: Meal): string | number {
+
+    // Bereits verwendete Mahlzeiten werden ganz nach hinten verschoben. Ausser
+    // es handelt sich dabei um einem Zmorgen, Zvieri oder Znüni
+    if (this.data.mealNames.includes(meal.name)
+      && !['Zmorgen', 'Zvieri', 'Znüni'].includes(meal.usedAs)) {
+      return 0;
+    }
+
+    // ansonsten werden die Mahlzeiten nach dem Datum sortiert,
+    // so dass das zuletzt verwendete zuoberst ist.
+    return -meal.lastChange.getTime();
+
   }
 
 }

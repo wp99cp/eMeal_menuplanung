@@ -3,7 +3,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
-import {merge, Observable, of} from 'rxjs';
+import {combineLatest, merge, Observable, of} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {Camp} from '../../_class/camp';
@@ -253,10 +253,10 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     // Testversuch für die Sortierung der Mahlzeiten
     const mealsOb: Observable<SpecificMeal[]>[] = [];
     this.camp.days.forEach(day => mealsOb.push(day.getMeals()));
-    merge(...mealsOb).pipe(take(1)).pipe(mergeMap((meal: SpecificMeal[]) => {
+    combineLatest(mealsOb).pipe(take(1)).pipe(mergeMap((meals: SpecificMeal[][]) => {
 
       const mealNames = [];
-      meal.forEach(m => mealNames.push(m.weekTitle));
+      meals.forEach(mls => mls.forEach(m => mealNames.push(m.weekTitle)));
 
       this.save();
 
