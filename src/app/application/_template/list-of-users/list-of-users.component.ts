@@ -23,7 +23,7 @@ export class ListOfUsersComponent implements OnChanges {
 
     if (this.userList != null) {
 
-      // creates an alphabeticaly sorted list of the users
+      // creates an alphabetically sorted list of the users
       this.owners = this.dbService.getUsers(this.userList)
         .pipe(map(results => results.sort((a, b) => a.displayName.localeCompare(b.displayName))));
 

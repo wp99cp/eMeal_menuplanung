@@ -2,10 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../../_class/recipe';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DatabaseService} from '../../_service/database.service';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
 import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
+import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-edit-single-recipe',
@@ -18,20 +21,53 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
   private unsavedChanges = false;
   private unsavedRecipe: Recipe;
 
-  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private autosave: AutoSaveService) {
+  constructor(
+    private route: ActivatedRoute,
+    private dbService: DatabaseService,
+    private autosave: AutoSaveService,
+    public dialog: MatDialog,
+    private helpService: HelpService,
+    private router: Router) {
 
     autosave.register(this);
 
+    /*
+    TODO: Zur Zeit werden die Änderungen nicht in realtime synchronisiert, da die Pipeline
+     auf ein Element beschnitten wird... Das Problem ist aber, dass ansonsten die Änderungen
+     nicht korrekt gespeichert werden, nach dem diese bereits einmal gespeichert wurden
+     (d.h. nur ein Speichervorgang funktioniert).
+   */
     // Ladet das Rezept von der URL
     this.recipe = this.route.url.pipe(mergeMap(
       url => this.dbService.getRecipeById(url[1].path).pipe(take(1))));
 
-    /*
-      TODO: Zur Zeit werden die Änderungen nicht in realtime synchronisiert, da die Pipeline
-       auf ein Element beschnitten wird... Das Problem ist aber, dass ansonsten die Änderungen
-       nicht korrekt gespeichert werden, nach dem diese bereits einmal gespeichert wurden
-       (d.h. nur ein Speichervorgang funktioniert).
-     */
+    // check access
+    this.recipe.subscribe(async recipe => {
+      if (await this.dbService.canWrite(recipe)) {
+        HeaderNavComponent.turnOn('Teilen');
+      } else {
+        HeaderNavComponent.turnOff('Teilen');
+      }
+    });
+
+    helpService.addHelpMessage({
+      title: 'Rezepte freigeben gemeinsam bearbeiten.',
+      message: `Rezepte können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
+                Dabei kannst du ein Rezept mit den folgenden Berechtigungen teilen: <br>
+                <ul>
+                    <li><b>Besitzer:</b> Diese Rolle hat derjenige, der das Rezept erstellt hat. Der Besitzer hat
+                    uneingeschränkten Zugriff auf das Rezept.</li>
+                    <li><b>Administrator:</b> Kann das Rezept bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
+                     es in eigenen Mahlzeiten verwenden. Kann das Lager mit andern teilen, nicht aber löschen.</li>
+                     <li><b>Leser:</b> Kann das Rezept und die Zutaten betrachten. Kann eine eigene Kopie erstellen
+                     und diese anschliessend bearbeiten.</li>
+                </ul>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Share_Recipe.png">`,
+      url: router.url,
+      ref: 'recipe-authorization-infos'
+    });
+
 
   }
 
@@ -42,8 +78,41 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
       description: 'Änderungen speichern',
       name: 'Speichern',
       action: (() => this.save()),
-      icon: 'save'
+      icon: 'save',
+      separatorAfter: true
     });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Rezept freigeben',
+      name: 'Teilen',
+      action: (() => this.share()),
+      icon: 'share',
+    });
+
+  }
+
+  share() {
+
+    this.recipe.pipe(mergeMap(recipe =>
+      this.dialog.open(ShareDialogComponent, {
+        height: '618px',
+        width: '1000px',
+        data: {
+          objectName: 'Rezept',
+          currentAccess: recipe.getAccessData(),
+          documentPath: recipe.path,
+          /*
+            TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
+             owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
+           */
+          accessLevels: ['editor', 'viewer']
+        }
+      }).afterClosed()))
+      .subscribe(() => {
+
+      });
+
 
   }
 

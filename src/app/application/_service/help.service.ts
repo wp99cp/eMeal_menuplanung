@@ -8,6 +8,7 @@ export interface HelpMessage {
   title: string;
   message: string;
   url: string;
+  ref?: string;
 
 }
 
@@ -16,11 +17,7 @@ export interface HelpMessage {
 })
 export class HelpService {
 
-  constructor(private router: Router) {
-  }
-
   private static helpMessages: HelpMessage[] = [];
-
   private readonly defaultMessage: HelpMessage = {
     title: 'Keine Hilfetexte verfügbar',
     message: `Für diese Seite sind noch keine Tipps, Tricks und/oder Hilfetexte verfügbar. Gerne aber kannst du uns
@@ -32,13 +29,16 @@ export class HelpService {
   private isOpen = false;
   private dialog = null;
 
+  constructor(private router: Router) {
+  }
+
   public addHelpMessage(helpMessage: HelpMessage) {
 
     HelpService.helpMessages.push(helpMessage);
 
   }
 
-  openHelpPopup() {
+  openHelpPopup(ref = '') {
 
 
     if (this.isOpen) {
@@ -52,7 +52,10 @@ export class HelpService {
 
     let helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
     let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
-
+    if (ref !== '') {
+      const elem =  helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
+      index = helpMessagesForThisPage.indexOf(elem);
+    }
     const message = helpMessagesForThisPage[index];
 
     if (message === undefined) {
