@@ -1,8 +1,8 @@
 import {SelectionModel} from '@angular/cdk/collections';
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
-import {map, mergeMap, take} from 'rxjs/operators';
+import {empty, Observable} from 'rxjs';
+import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {Camp} from '../../_class/camp';
@@ -27,7 +27,7 @@ import {MatDialog} from '@angular/material/dialog';
 })
 export class EditMealComponent implements OnInit, Saveable {
 
-  public camp: Observable<Camp>;
+  public camp: Observable<Camp | undefined>;
   public meal: Observable<Meal>;
   public specificMeal: Observable<SpecificMeal>;
   public recipes: Observable<Recipe[]>;
@@ -36,9 +36,7 @@ export class EditMealComponent implements OnInit, Saveable {
   public calcMealPart = SettingsService.calcMealParticipants;
   @ViewChildren(EditRecipeInCampComponent) editRecipes: QueryList<EditRecipeInCampComponent>;
   public showOverwirtes = true;
-  private campId: Observable<string>;
-  private mealId: Observable<string>;
-  private specificMealId: Observable<string>;
+  private urlPathData: Observable<string[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +50,20 @@ export class EditMealComponent implements OnInit, Saveable {
 
   }
 
+  /**
+   * returns the url segment based on a search of the parent directory.
+   *
+   * @param parentDirectory name of the parent directory
+   * @param offset form the parent directory
+   */
+  loadIDFromURL(parentDirectory: string, offset = 1) {
+    return (source: Observable<string[]>): Observable<string | undefined> => {
+      return source.pipe(map(segments =>
+        segments.includes(parentDirectory) && segments.length > segments.indexOf(parentDirectory) + offset ?
+          segments[segments.indexOf(parentDirectory) + offset] : undefined));
+    };
+  }
+
   public newOpened(index: number) {
 
     this.indexOfOpenedPanel = index;
@@ -60,18 +72,36 @@ export class EditMealComponent implements OnInit, Saveable {
 
   ngOnInit() {
 
-    // Ladet die Ids von der URL
-    this.campId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 4].path));
-    this.mealId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 2].path));
-    this.specificMealId = this.route.url.pipe(take(1)).pipe(map(url => url[url.length - 1].path));
+    // load id's form the URL
+    this.urlPathData = this.route.url.pipe(
+      map(urlSegments => urlSegments.map(segment => segment.path)),
+      tap(data => console.log(data)), // print on console
+      shareReplay() // use the same data for all subscribers
+    );
 
-    // Ladet die benötigten Dokumente
-    this.camp = this.campId.pipe(mergeMap(id => this.dbService.getCampById(id)));
-    this.meal = this.mealId.pipe(mergeMap(mealId => this.dbService.getMealById(mealId)));
-    this.specificMeal = this.mealId.pipe(mergeMap(mealId => this.specificMealId.pipe(mergeMap(specificMealId =>
-      this.dbService.getSpecificMeal(mealId, specificMealId)
-    ))));
-    this.recipes = this.mealId.pipe(mergeMap(mealId => this.dbService.getRecipes(mealId)));
+    this.camp = this.urlPathData.pipe(
+      this.loadIDFromURL('camps'),
+      switchMap(id => id !== undefined ? this.dbService.getCampById(id) : empty())
+    );
+
+    this.meal = this.urlPathData.pipe(this.loadIDFromURL('meals'),
+      switchMap(id => id !== undefined ? this.dbService.getMealById(id) : empty())
+    );
+
+    this.specificMeal = this.urlPathData.pipe(
+      this.loadIDFromURL('meals'),
+      mergeMap(mealId =>
+        this.urlPathData.pipe(
+          this.loadIDFromURL('meals', 2),
+          mergeMap(specificMealId => this.dbService.getSpecificMeal(mealId, specificMealId))
+        )
+      )
+    );
+
+    this.recipes = this.urlPathData.pipe(
+      this.loadIDFromURL('meals'),
+      mergeMap(mealId => this.dbService.getRecipes(mealId))
+    );
 
     this.camp.pipe(take(1)).subscribe(camp =>
 
@@ -83,6 +113,7 @@ export class EditMealComponent implements OnInit, Saveable {
         icon: 'nature_people',
         separatorAfter: true
       }, 0)
+
     );
 
     HeaderNavComponent.addToHeaderNav({
@@ -254,25 +285,25 @@ export class EditMealComponent implements OnInit, Saveable {
 
     this.save();
 
+    this.urlPathData.pipe(this.loadIDFromURL('meals'))
+      .subscribe(mealId =>
 
-    this.mealId.subscribe(mealId =>
+        this.dialog.open(AddRecipeComponent, {
+          height: '618px',
+          width: '1000px',
+          data: null
+        }).afterClosed().subscribe((results: SelectionModel<Recipe>) => {
 
-      this.dialog.open(AddRecipeComponent, {
-        height: '618px',
-        width: '1000px',
-        data: null
-      }).afterClosed().subscribe((results: SelectionModel<Recipe>) => {
+          if (results) {
 
-        if (results) {
+            this.camp.pipe(take(1)).subscribe(camp => this.urlPathData.pipe(this.loadIDFromURL('meals', 2)).subscribe(specificMealId =>
+              results.selected.forEach(recipe => this.dbService.addRecipe(recipe, specificMealId, mealId, camp))
+            ));
 
-          this.camp.pipe(take(1)).subscribe(camp => this.specificMealId.pipe(take(1)).subscribe(specificMealId =>
-            results.selected.forEach(recipe => this.dbService.addRecipe(recipe, specificMealId, mealId, camp))
-          ));
+          }
 
-        }
-
-      })
-    );
+        })
+      );
 
   }
 
@@ -288,5 +319,6 @@ export class EditMealComponent implements OnInit, Saveable {
     this.save();
 
   }
+
 
 }

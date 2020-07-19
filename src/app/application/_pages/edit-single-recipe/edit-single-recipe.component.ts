@@ -8,7 +8,7 @@ import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.compo
 import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from "../../_service/help.service";
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-edit-single-recipe',

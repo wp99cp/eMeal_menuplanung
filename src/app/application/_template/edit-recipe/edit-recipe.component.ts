@@ -7,7 +7,7 @@ import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
 import {HelpService} from '../../_service/help.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -215,7 +215,7 @@ export class EditRecipeComponent implements OnInit {
 
   public async pastContent(event: ClipboardEvent) {
 
-    console.log('paste')
+    console.log('paste');
 
     if (!this.hasAccess) {
       return;

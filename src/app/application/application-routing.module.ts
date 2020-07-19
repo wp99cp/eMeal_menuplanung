@@ -14,6 +14,7 @@ import {RecipeListComponent} from './_pages/recipe-list/recipe-list.component';
 import {EditSingleRecipeComponent} from './_pages/edit-single-recipe/edit-single-recipe.component';
 import {MealListComponent} from './_pages/meal-list/meal-list.component';
 import {MarkdownModule} from 'ngx-markdown';
+import {EditSingleMealComponent} from "./_pages/edit-single-meal/edit-single-meal.component";
 
 
 const routes: Routes = [
@@ -48,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'meals/:id',
-    component: EditMealComponent,
+    component: EditSingleMealComponent,
     canDeactivate: [AutoSaveService]
   },
   {

@@ -1,0 +1,24 @@
+<ng-container *ngIf="(meal | async) as meal; else loadingMeal">
+
+  <span class="big-page-title">{{meal.name}}</span>
+
+  <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
+
+    <ng-container *ngFor="let recipe of recipes; let i = index">
+      <app-edit-recipe [recipe]="recipe" participants="4" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+    </ng-container>
+
+    <p *ngIf="recipes?.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
+      <a (click)="newRecipe()">Rezept einfügen</a>.
+    </p>
+
+  </mat-accordion>
+
+</ng-container>
+
+
+<!-- Loading Animation -->
+<ng-template #loadingMeal>
+  <h1 class="mat-h1">Daten werden geladen...</h1>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

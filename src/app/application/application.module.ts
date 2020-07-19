@@ -77,6 +77,7 @@ import {ContextMenuService} from './_service/context-menu.service';
 import {ShortcutService} from './_service/shortcut.service';
 import {HelpService} from './_service/help.service';
 import {HelpComponent} from './_dialoges/help/help.component';
+import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import {HelpComponent} from './_dialoges/help/help.component';
     ListCardComponent,
     CopyCampComponent,
     EditRecipeComponent,
-    HelpComponent
+    HelpComponent,
+    EditSingleMealComponent
   ],
   providers: [
     AngularFirestore,
@@ -189,6 +191,7 @@ import {HelpComponent} from './_dialoges/help/help.component';
     ShareDialogComponent,
     CampInfoComponent,
     MealInfoComponent,
+    EditSingleMealComponent,
     RecipeInfoComponent,
     AddRecipeComponent,
     CreateRecipeComponent,
