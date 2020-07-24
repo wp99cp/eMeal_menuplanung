@@ -78,6 +78,7 @@ import {ShortcutService} from './_service/shortcut.service';
 import {HelpService} from './_service/help.service';
 import {HelpComponent} from './_dialoges/help/help.component';
 import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
+import { SingleRecipeInfoComponent } from './_dialoges/single-recipe-info/single-recipe-info.component';
 
 @NgModule({
   declarations: [
@@ -120,7 +121,8 @@ import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-mea
     CopyCampComponent,
     EditRecipeComponent,
     HelpComponent,
-    EditSingleMealComponent
+    EditSingleMealComponent,
+    SingleRecipeInfoComponent
   ],
   providers: [
     AngularFirestore,
@@ -192,6 +194,7 @@ import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-mea
     CampInfoComponent,
     MealInfoComponent,
     EditSingleMealComponent,
+    SingleRecipeInfoComponent,
     RecipeInfoComponent,
     AddRecipeComponent,
     CreateRecipeComponent,

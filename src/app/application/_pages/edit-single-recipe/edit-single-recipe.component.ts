@@ -9,6 +9,7 @@ import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpService} from '../../_service/help.service';
+import {SingleRecipeInfoComponent} from "../../_dialoges/single-recipe-info/single-recipe-info.component";
 
 @Component({
   selector: 'app-edit-single-recipe',
@@ -83,12 +84,36 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Informationen zum Rezept',
+      name: 'Rezept Info',
+      action: (() => this.recipeInfos()),
+      icon: 'info',
+    });
+
+    HeaderNavComponent.addToHeaderNav({
       active: false,
       description: 'Rezept freigeben',
       name: 'Teilen',
       action: (() => this.share()),
       icon: 'share',
     });
+
+  }
+
+  /**
+   * Opens the dialog for the settings of this recipe
+   *
+   */
+  recipeInfos() {
+
+    this.recipe.pipe(mergeMap(recipe =>
+      this.dialog.open(SingleRecipeInfoComponent, {
+        height: '618px',
+        width: '1000px',
+        data: recipe
+      }).afterClosed()))
+      .subscribe((recipe: Recipe) => this.dbService.updateDocument(recipe));
 
   }
 

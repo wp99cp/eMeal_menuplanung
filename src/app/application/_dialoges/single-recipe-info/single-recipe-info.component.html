@@ -1,0 +1,23 @@
+<h2>Informationen zum Rezept</h2>
+
+<form [formGroup]='recipeInfo'>
+
+  <h3>Name und Beschreibung</h3>
+
+  <mat-form-field class="full-width">
+    <input matInput placeholder="Rezept Name" formControlName="title">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
+  </mat-form-field>
+
+</form>
+
+
+<div mat-dialog-actions class="mat-buttons">
+  <button mat-raised-button [mat-dialog-close]="">Abbrechen</button>
+  <button mat-raised-button [disabled]="!recipeInfo.touched || !hasAccess" [mat-dialog-close]="saveValueChanges()"
+          color="save">Speichern
+  </button>
+</div>
