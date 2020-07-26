@@ -1,10 +1,11 @@
-<h3 mat-dialog-title>Mahlzeit importieren (Testversion).</h3>
+<h3 mat-dialog-title>Mahlzeit importieren</h3>
 
+<p>Importiere Mahlzeiten aus einer externen Quelle. Zur Zeit werden die folgenden Webseiten akzeptiert: fooby.ch, swissmilk.ch.</p>
 
-<div [formGroup]="input" style="display: grid">
+<div class="source" [formGroup]="input" style="display: grid">
 
   <mat-form-field>
-    <input matInput placeholder="URL der Webseite (swissmilk.ch)" formControlName="url">
+    <input matInput placeholder="URL der Webseite (swissmilk.ch oder fooby.ch)" formControlName="url">
   </mat-form-field>
 
   <button mat-raised-button (click)="loadFromURL()">Rezeptvorschau laden</button>

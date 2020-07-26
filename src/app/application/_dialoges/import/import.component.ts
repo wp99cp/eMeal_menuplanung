@@ -8,11 +8,11 @@ import { DatabaseService } from '../../_service/database.service';
 /**
  * TODO: neue Import Möglichkeiten mit Import von Swissmilk oder aus einer Excel-Vorlage..
  * Import auch in der Rezept-Übersicht anbieten.
- * 
+ *
  * Import Möglichkeiten auch für Lager und Mahlzeiten erweitern, ermöglichen, dass Lager als
  * Excel exportert werden können? (eher langfristig...). Aber sicher als JSON heruntergeladen und
  * wieder hochgeladen werden können.
- * 
+ *
  */
 @Component({
   selector: 'app-import',
@@ -42,7 +42,7 @@ export class ImportComponent implements OnInit {
   loadFromURL() {
 
 
-    this.dbService.importRecipe(this.input.value.url).then(rawMealData => this.createMeal(rawMealData));
+    this.dbService.importMeal(this.input.value.url).subscribe(rawMealData => console.log(rawMealData));
 
   }
 

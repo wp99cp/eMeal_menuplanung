@@ -23,7 +23,6 @@ import {
   FirestoreUser,
   Ingredient
 } from '../_interfaces/firestoreDatatypes';
-import {ErrorOnImport, RawMealData} from '../_interfaces/rawMealData';
 import {AuthenticationService} from './authentication.service';
 
 
@@ -261,20 +260,16 @@ export class DatabaseService {
 
   }
 
-  public importRecipe(url: string): Promise<RawMealData | ErrorOnImport> {
+  /**
+   *
+   * @param id
+   */
+  public importMeal(url: string): Observable<any> {
 
-    url = 'https://emeal.zh11.ch/services/loadContent.php?url=' + url;
-
-    const options = {
-      method: 'GET',
-      headers: [
-        ['Content-Type', 'application/json, charset=utf-8'],
-      ],
-    };
-
-    return fetch(url, options).then(res => res.json());
+    return this.functions.httpsCallable('importMeal')({url});
 
   }
+
 
   /**
    *
