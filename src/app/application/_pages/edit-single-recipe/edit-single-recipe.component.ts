@@ -113,7 +113,11 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
         width: '1000px',
         data: recipe
       }).afterClosed()))
-      .subscribe((recipe: Recipe) => this.dbService.updateDocument(recipe));
+      .subscribe((recipe: Recipe) => {
+        if (recipe) {
+          this.dbService.updateDocument(recipe);
+        }
+      });
 
   }
 

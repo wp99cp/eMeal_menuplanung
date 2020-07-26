@@ -10,6 +10,8 @@ import {Observable} from 'rxjs';
 import {FirestoreMeal} from '../../_interfaces/firestoreDatatypes';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
+import {ImportComponent} from '../../_dialoges/import/import.component';
 
 @Component({
   selector: 'app-meal-list',
@@ -26,6 +28,14 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     this.filterFn = (meal) => meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
     this.dbElementName = 'Mahlzeit';
 
+  }
+
+  import() {
+
+    this.dialog.open(ImportComponent, {
+      height: '618px',
+      width: '1000px'
+    }).afterClosed().subscribe();
   }
 
   ngOnInit() {
@@ -47,6 +57,14 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
         }
 
       }), 250);
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: 'Import aus einer externen Quelle',
+      name: 'Mahlzeit Importieren',
+      action: (() => this.import()),
+      icon: 'system_update_alt',
+    });
 
   }
 
@@ -77,7 +95,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
 
         const oldMealId = meal.documentId;
 
-        if (result == 'deep') {
+        if (result === 'deep') {
 
           const newMealId = (await this.dbService.createCopy(meal)).id;
 
@@ -88,7 +106,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
               this.dbService.createCopy(recipe, newMealId)
             ));
 
-        } else if (result == 'copy') {
+        } else if (result === 'copy') {
 
           // add id of new meal to used_in_meals field of the old recipes
           const newMealId = (await this.dbService.createCopy(meal)).id;
@@ -115,10 +133,11 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
 
     return new Promise(resolve => this.dbService.getNumberOfUses(element.documentId).subscribe(numb => {
 
-      if (numb != 0)
+      if (numb !== 0) {
         this.snackBar.open('Das Rezept kann nicht gelöscht werden, da es noch verwendet wird!', '', {duration: 2000});
+      }
 
-      resolve(numb == 0);
+      resolve(numb === 0);
 
     }));
 

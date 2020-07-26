@@ -5,7 +5,7 @@
   <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
     <ng-container *ngFor="let recipe of recipes; let i = index">
-      <app-edit-recipe [recipe]="recipe" participants="4" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+      <app-edit-recipe class="recipe-container" [recipe]="recipe" participants="4" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
     </ng-container>
 
     <p *ngIf="recipes?.length == 0"> Diese Mahlzeit enthält noch keine Rezepte:
