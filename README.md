@@ -4,4 +4,4 @@ Das Cevi Züri 11 Menüplanungsapp *eMeal - Menüplanung* ermöglicht es die Ess
 eMeal Menüplanung wird vom Cevi Züri 11 unter der Leitung von Cyrill Püntener v/o JPG (jpg@zh11.ch) entwickelt.
 
 ## Back- und Frontend
-Dieses Repository beinhaltet den Source-Code für das Frontend. Hier findest du den Quellcode zur Angular Application, wie sie auf https://eMeal.zh11.ch läuft. Den Quellcode für das Backend (Google Firestore) findest du hier:https://github.com/wp99cp/menuplanung_CloudFunctions.
+Dieses Repository beinhaltet den Source-Code für das Frontend. Hier findest du den Quellcode zur Angular Application, wie sie auf https://eMeal.zh11.ch läuft. Den Quellcode für das Backend (Google Firestore) findest du hier: https://github.com/wp99cp/menuplanung_CloudFunctions.
