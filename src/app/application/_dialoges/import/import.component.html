@@ -1,21 +1,44 @@
 <h3 mat-dialog-title>Mahlzeit importieren</h3>
 
-<p>Importiere Mahlzeiten aus einer externen Quelle. Zur Zeit werden die folgenden Webseiten akzeptiert: fooby.ch, swissmilk.ch.</p>
+<p>Importiere Mahlzeiten aus einer externen Quelle. Zur Zeit werden die folgenden Webseiten akzeptiert: fooby.ch,
+  swissmilk.ch.</p>
 
-<div class="source" [formGroup]="input" style="display: grid">
+<div class="source" [formGroup]="input">
 
   <mat-form-field>
-    <input matInput placeholder="URL der Webseite (swissmilk.ch oder fooby.ch)" formControlName="url">
+    <input matInput placeholder="URL der Webseite (swissmilk.ch oder fooby.ch)" formControlName="url"
+           (input)="loadMealFromURL()">
   </mat-form-field>
 
-  <button mat-raised-button (click)="loadFromURL()">Rezeptvorschau laden</button>
+  <mat-spinner class="spinner" *ngIf="showSpinner" diameter="25"></mat-spinner>
 
 </div>
 
-<p *ngIf="mealStr !== ''">{{mealStr}}</p>
+<div class="preview">
+
+  <p class="mat-error" *ngIf="showMessage">{{message}}</p>
+
+  <div class="meal-preview" *ngIf="showMeal">
+
+    <p><b>Name: </b>{{meal.meal_name}}</p>
+    <p><b>Beschreibung: </b>{{meal.meal_description}}</p>
+
+    <div *ngFor="let recipe of recipes">
+      <p><b>Rezept: </b>{{recipe.recipe_name}}</p>
+      <div class="recipe">
+        <p><b>Zutaten:</b></p>
+        <div class="ingredient-cell" *ngFor="let ing of recipe.ingredients">
+          <p>{{ing.measure}} {{ing.unit}} {{ing.food}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div mat-dialog-actions>
   <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [disabled]="!readyForImport" [mat-dialog-close]="meal">Mahlzeit erstellen</button>
+  <button mat-raised-button [disabled]="!readyForImport" (click)="importMeal()" [mat-dialog-close]="meal">
+    Mahlzeit erstellen
+  </button>
 </div>

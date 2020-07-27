@@ -12,6 +12,7 @@ import {DatabaseService} from '../../_service/database.service';
 import {CustomPaginator} from './CustomPaginator';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {ImportComponent} from '../import/import.component';
 
 @Component({
   selector: 'app-add-meal',
@@ -186,44 +187,11 @@ export class AddMealComponent implements AfterViewInit {
    */
   public import() {
 
-    throw new Error('Not yet implemented!');
-
-    /*
-
     this.dialog.open(ImportComponent, {
       height: '640px',
       width: '900px',
-      data: null
-    }).afterClosed()
-      .subscribe((result: Meal) => {
+    }).afterClosed().subscribe();
 
-        this.authService.getCurrentUser().subscribe(user => {
-
-          const document = result.toFirestoreDocument();
-          const access: AccessData = { [user.uid as string]: 'owner' };
-          document.access = access;
-          this.dbService.addDocument(document, 'meals').then(doc => {
-
-            result.recipes.subscribe(recipes => {
-
-              recipes.forEach(recipe => {
-
-                const recipeData = recipe.toFirestoreDocument();
-                recipeData.access = access;
-                this.dbService.addDocument(recipeData, 'meals/' + doc.id + '/recipes');
-
-              });
-            });
-
-          });
-
-        });
-
-        this.setFocusToSeachField();
-
-      });
-
-      */
   }
 
   /**

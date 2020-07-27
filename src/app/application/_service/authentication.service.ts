@@ -15,6 +15,8 @@ import {auth, User} from 'firebase/app';
 export class AuthenticationService {
 
   constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location) {
+
+
   }
 
   public static generateCoworkersList(ownerUid: string, coworkers: User[]): AccessData {

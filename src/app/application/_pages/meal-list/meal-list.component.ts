@@ -36,6 +36,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
       height: '618px',
       width: '1000px'
     }).afterClosed().subscribe();
+
   }
 
   ngOnInit() {

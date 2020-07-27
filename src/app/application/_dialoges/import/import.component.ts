@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Meal } from '../../_class/meal';
-import { ErrorOnImport, RawMealData } from '../../_interfaces/rawMealData';
-import { DatabaseService } from '../../_service/database.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {DatabaseService} from '../../_service/database.service';
+import {FirestoreMeal, FirestoreRecipe} from '../../_interfaces/firestoreDatatypes';
+import {AuthenticationService} from '../../_service/authentication.service';
+import {FirestoreObject} from '../../_class/firebaseObject';
 
 
 /**
- * TODO: neue Import Möglichkeiten mit Import von Swissmilk oder aus einer Excel-Vorlage..
+ *
  * Import auch in der Rezept-Übersicht anbieten.
  *
  * Import Möglichkeiten auch für Lager und Mahlzeiten erweitern, ermöglichen, dass Lager als
@@ -23,12 +24,20 @@ export class ImportComponent implements OnInit {
 
   public input: FormGroup;
   public readyForImport = false;
-  public meal: Meal;
 
   public mealStr = '';
 
+  public showSpinner = false;
 
-  constructor(private formBuilder: FormBuilder, private dbService: DatabaseService) {
+  public showMessage = false;
+  public message = '';
+
+  public showMeal: boolean;
+  public meal: FirestoreMeal;
+  public recipes: FirestoreRecipe[] = [];
+
+
+  constructor(private formBuilder: FormBuilder, private dbService: DatabaseService, private authService: AuthenticationService) {
 
     this.input = this.formBuilder.group({
       url: ''
@@ -36,74 +45,91 @@ export class ImportComponent implements OnInit {
 
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+  }
 
 
-  loadFromURL() {
+  loadMealFromURL() {
 
+    // update layout
+    this.showSpinner = true;
+    this.showMessage = false;
 
-    this.dbService.importMeal(this.input.value.url).subscribe(rawMealData => console.log(rawMealData));
+    // load data
+    this.dbService.importMeal(this.input.value.url)
+      .subscribe(rawMealData => {
+
+        // stop spinning
+        this.showSpinner = false;
+        console.log(rawMealData);
+
+        // containing an error
+        if (rawMealData.error) {
+
+          switch (rawMealData.error) {
+
+            case 'Invalid url!':
+              this.showMessage = true;
+              this.message = 'Ungültige URL! Diene URL ist ungültig oder diese Webseite wird (noch) nicht unterstützt.';
+              break;
+
+            default:
+              this.showMessage = true;
+              this.message = 'Ein unbekannter Fehler ist aufgetreten! Bitte versuche es erneut.';
+              break;
+
+          }
+
+          return;
+
+        }
+
+        // No error: create Meal
+        const uid = this.authService.fireAuth.auth.currentUser.uid;
+        this.meal = FirestoreObject.exportEmptyDocument(uid) as FirestoreMeal;
+        this.meal.meal_name = rawMealData.mealTitle;
+        this.meal.meal_description = '';
+        this.meal.meal_keywords = [];
+        this.meal.used_in_camps = [];
+
+        // create recipes
+        rawMealData.recipes.forEach(rawRecipe => {
+
+          const recipe = FirestoreObject.exportEmptyDocument(uid) as FirestoreRecipe;
+          recipe.recipe_name = rawRecipe.recipeName;
+          recipe.ingredients = rawRecipe.ingredients;
+          recipe.recipe_notes = '';
+          recipe.recipe_description = '';
+          this.recipes.push(recipe);
+
+        });
+
+        this.showMeal = true;
+        this.readyForImport = true;
+
+      });
 
   }
 
-  createMeal(rawMealData: RawMealData | ErrorOnImport) {
+  /**
+   * Do importing
+   */
+  importMeal() {
 
-    /*
-    if ((rawMealData as ErrorOnImport).error) {
-      console.log('Falsche URL');
+    if (!this.readyForImport) {
       return;
     }
 
-    const newRawMealData = rawMealData as RawMealData;
-
-    const mealData: FirestoreMeal = {
-
-      meal_name: newRawMealData.title,
-      meal_description: newRawMealData.notes
-
-    };
-    this.meal = new Meal(mealData, '', '');
-
-    const recipes: Recipe[] = [];
-
-    newRawMealData.recipes.forEach(rawRecipeData => {
-
-      rawRecipeData.ingredients = rawRecipeData.ingredients.map(ingredient => {
-
-        const ingredientNew: Ingredient = {
-          food: ingredient.food,
-          unit: ingredient.unit,
-          measure: ((ingredient.measure as number) / (newRawMealData.baseMeasure as number)),
-          comment: ''
-        };
-
-        return ingredientNew;
+    // save
+    this.dbService.addDocument(this.meal, 'meals')
+      .then(res => {
+        this.recipes.forEach(recipe => {
+          recipe.used_in_meals = [res.id];
+          this.dbService.addDocument(recipe, 'recipes');
+        });
       });
 
-      const recipeData: FirestoreRecipe = {
 
-        name: rawRecipeData.title,
-        description: '',
-        ingredients: rawRecipeData.ingredients,
-        notes: '',
-        access: null,
-        meals: []
-
-      };
-      const recipe = new Recipe(recipeData, '', null);
-      recipes.push(recipe);
-
-    });
-
-    this.meal.recipes = of(recipes);
-
-    this.mealStr = JSON.stringify(this.meal.toFirestoreDocument());
-    recipes.forEach(recipe => this.mealStr += JSON.stringify(recipe.toFirestoreDocument()));
-
-    this.readyForImport = true;
-
-    */
-    console.error('TODO');
   }
 
 }

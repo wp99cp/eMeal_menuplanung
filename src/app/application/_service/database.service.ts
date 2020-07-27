@@ -262,7 +262,10 @@ export class DatabaseService {
 
   /**
    *
-   * @param id
+   * Loads a meal form a external website.
+   *
+   * @param url of the external webpage with the meal data
+   *
    */
   public importMeal(url: string): Observable<any> {
 
