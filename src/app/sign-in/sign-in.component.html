@@ -3,10 +3,8 @@
   <span class="page-title">eMeal - Menüplanung für Lager</span>
   <h1>Anmelden</h1>
 
-  <!-- TODO: Add Login with username and password...
-  <p>Zur Zeit können keine neuen Accounts erstellt werden.
-    Melde dich mit deinem Google Account an oder melde dich beim
-    Administrator.</p>
+  <p>Um eMeal - Menüplanung zu verwenden musst du dich anmelden. Hierzu stehen dir die verschiedene Möglichkeiten zur
+    Verfügung. Falls du bereits angemeldet bist, so wirst du in Kürze weitergeleitet.</p>
 
   <div class="login-form">
     <div>
@@ -17,15 +15,19 @@
       <br>
       <mat-form-field appearance="fill">
         <mat-label>Passwort</mat-label>
-        <input #password matInput>
+        <input type="password" #password matInput>
       </mat-form-field>
     </div>
-    <button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
+    <button mat-raised-button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
   </div>
--->
+
+
+  <p>Zur Zeit können keine neuen Accounts erstellt werden. Falls du noch kein Login besitzt, dann melde dich mit deinem
+    Google Account an oder wende dich an den Administrator.</p>
+
   <div class="login-with-third-party">
 
-    <button  class="google-sign-in-button" (click)="auth.signInWithGoogle()">
+    <button class="google-sign-in-button" (click)="auth.signInWithGoogle()">
         <span class="large-button__icon">
           <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
             <path
