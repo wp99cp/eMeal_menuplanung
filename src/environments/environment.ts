@@ -1,9 +1,9 @@
 import {FirestoreSettingsToken} from '@angular/fire/firestore';
 
-export const environment= {
+export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyBb_UUqW_O8oyfJz39fww7_1gyRJ6d_JEU',
+    apiKey: 'AIzaSyD2ZDEVffGsZxKrnMcu39Uix-wzPxGSW3c',
     authDomain: 'cevizh11.firebaseapp.com',
     databaseURL: 'https://cevizh11.firebaseio.com',
     projectId: 'cevizh11',
