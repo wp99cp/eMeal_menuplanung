@@ -107,6 +107,13 @@ export class ImportComponent implements OnInit {
         this.showMeal = true;
         this.readyForImport = true;
 
+      }, error => {
+
+        this.message = 'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.';
+        this.showSpinner = false;
+        this.showMessage = true;
+
+
       });
 
   }
