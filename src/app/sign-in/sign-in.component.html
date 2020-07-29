@@ -10,12 +10,12 @@
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Benutzername</mat-label>
-        <input matInput #username>
+        <input name="username" matInput #username>
       </mat-form-field>
       <br>
       <mat-form-field appearance="fill">
         <mat-label>Passwort</mat-label>
-        <input type="password" #password matInput>
+        <input name="current-password" type="password" #password matInput>
       </mat-form-field>
     </div>
     <button mat-raised-button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
