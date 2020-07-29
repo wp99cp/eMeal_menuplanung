@@ -10,16 +10,24 @@
   <p>Weiter Informationen zum Lagerhandbuch kannst du der <a routerLink="/app/hilfe">Hilfeseite</a> entnehmen.</p>
 
   <div *ngIf="pending" class="waiting">
-    <mat-progress-bar mode="query"> </mat-progress-bar>
+    <mat-progress-bar mode="query"></mat-progress-bar>
   </div>
 
   <span *ngIf="message !== ''" class="error-message"> {{message}}</span>
 
-  <div *ngIf="(exports | async); let exports" class="camp-export-list">
-    <div class="docs camp-export" *ngFor="let export of exports">
-      <h3>Lagerhandbuch und Einkaufsliste</h3>
-      <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
-        [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')" [docPath]="path"></app-download>
+  <ng-container *ngIf="showExports">
+    <div *ngIf="(exports | async); let exports" class="camp-export-list">
+      <div class="docs camp-export" *ngFor="let export of exports">
+        <h3>Lagerhandbuch und Einkaufsliste</h3>
+        <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
+                      [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')"
+                      [docPath]="path"></app-download>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <p>Hast du gewusst? Den Link zu einem Export kannst du mit anderen Teilen. So können sie ebenfalls auf dein
+    Lagerhandbuch zugreifen. Aber Achtung nach einem Monat wird der Export automatisch gelöscht.
+  </p>
+
 </div>

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { delay, map, mergeMap, take } from 'rxjs/operators';
-import { HeaderNavComponent } from 'src/app/_template/header-nav/header-nav.component';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {delay, map, mergeMap, take} from 'rxjs/operators';
+import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
-import { DatabaseService } from '../../_service/database.service';
+import {DatabaseService} from '../../_service/database.service';
 
 @Component({
   selector: 'app-export-camp',
@@ -17,17 +17,20 @@ export class ExportCampComponent implements OnInit {
   // dies ermöglicht anschliessend, dass gemeinsame EInkaufen mit synch.
   // Abhacken der Lebensmitteln.
 
-  private campId: Observable<string>;
-
   public pending = false;
   public exports: Observable<any[]>;
   public message: string;
+  public showExports = true;
+  private campId: Observable<string>;
 
   constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router) {
 
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
-    this.exports.subscribe(console.log);
+    this.exports.subscribe(() => {
+        this.pending = false;
+      }
+    );
 
   }
 
@@ -40,12 +43,11 @@ export class ExportCampComponent implements OnInit {
           active: true,
           description: 'Zurück zum ' + camp.name,
           name: camp.name,
-          action: (() => this.router.navigate(['..'], { relativeTo: this.route })),
+          action: (() => this.router.navigate(['..'], {relativeTo: this.route})),
           icon: 'nature_people',
           separatorAfter: true
         }, 0)
       );
-
 
 
     HeaderNavComponent.addToHeaderNav({
@@ -70,6 +72,9 @@ export class ExportCampComponent implements OnInit {
 
   deleteExports() {
 
+    // reset gui
+    this.showExports = false;
+
     this.campId.subscribe(campId => this.dbService.deleteExports(campId));
 
   }
@@ -79,13 +84,14 @@ export class ExportCampComponent implements OnInit {
    */
   createPDF() {
 
+    this.showExports = true;
+
     this.pending = true;
     this.campId
       .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
       .pipe(delay(250))
       .subscribe(() => {
-        this.pending = false;
-      },
+        },
 
         // bug report on error
         (err) => {
