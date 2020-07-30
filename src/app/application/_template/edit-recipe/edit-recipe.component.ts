@@ -7,7 +7,7 @@ import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
 import {HelpService} from '../../_service/help.service';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -48,17 +48,21 @@ export class EditRecipeComponent implements OnInit {
     helpService.addHelpMessage({
       title: 'Rezepte direkt bearbeiten',
       message: `Rezepte können auf direkt bearbeitet werden. <br>
-                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus.`,
+                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus. <br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Edit_Single_Recipe_Nav.png">`,
       url: router.url
     });
 
     helpService.addHelpMessage({
-      title: 'Rezepte lokal Überschreiben',
-      message: `(Bald schon...) Können Rezepte lokal überschrieben werden. D.h. du kannst in einem Rezept
-                Zutaten hinzufügen und verändern, aber diese Änderungen gelten nur für das aktuelle Lager.
-                Die Rezept-Vorlage bleibt dabei unverändert. <br>
-                Nutze diese Funktion z.B. um die Mengen für ein Lager mit jüngeren/älteren Teilnehmenden anzupassen.
-                Oder Falls zu keinen Zugriff auf die Rezept-Vorlage hast, aber dennoch Änderungen anbringen willst/musst!`,
+      title: 'Zutaten kopieren, exportieren und einfügen',
+      message: `Mit einem Klick auf die Nummer neben einer Zutat, kannst du Zutaten bequem kopieren.
+                So kannst du Zutaten schnell in ein anderes Rezept oder in eine Excel-Liste kopieren.<br>
+                <br>
+                Das Einfügen geht genau so einfach. Die erste Zelle einer Zeile markieren und
+                die kopierte Zutat wieder einfügen. <br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Mark_Ingredient_Line.png">`,
       url: router.url
     });
 
@@ -211,7 +215,7 @@ export class EditRecipeComponent implements OnInit {
 
   public async pastContent(event: ClipboardEvent) {
 
-    console.log('paste')
+    console.log('paste');
 
     if (!this.hasAccess) {
       return;

@@ -9,6 +9,9 @@
 <div *ngIf="isSignedIn() else notSignedIn" class="nav" (click)="closeMenu()">
 
   <ul class="top">
+    <li routerLink="/app">
+      <a> Startseite </a>
+    </li>
     <li routerLink="/app/camps" routerLinkActive="active-link">
       <mat-icon class="nav-icon">nature_people</mat-icon>
       <a matTooltip="Meine Lager"> Meine Lager </a>
@@ -26,8 +29,8 @@
 
   <ul class="bottom">
     <hr/>
-    <li routerLink="/app">
-      <a> Startseite </a>
+    <li routerLink="/">
+      <a> Informationen </a>
     </li>
     <li routerLink="/app/hilfe" routerLinkActive="active-link">
       <a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a>

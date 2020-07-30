@@ -12,6 +12,7 @@ import {DatabaseService} from '../../_service/database.service';
 import {WeekViewComponent} from '../../_template/week-view/week-view.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -39,7 +40,18 @@ export class EditCampPageComponent implements OnInit, Saveable {
     private router: Router,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    private autosave: AutoSaveService) {
+    private autosave: AutoSaveService,
+    private helpService: HelpService) {
+
+    helpService.addHelpMessage({
+      title: 'Neue Mahlzeiten erstellen',
+      message: `Falls die Suche nach einer Mahlzeit keinen Treffer ergab, so kannst du mit einem
+                einfachen Klick auf "Mahlzeit erstellen" direkt eine Mahlzeit mit dem gewünschten
+                Namen erfassen und erstellen. <br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Create_Meal.png">`,
+      url: router.url
+    });
 
     autosave.register(this);
     // Ladet das Lager von der URL

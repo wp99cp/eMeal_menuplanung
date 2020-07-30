@@ -7,7 +7,8 @@
   </div>
 
   <div class="recipe-table-area" (contextmenu)="contextMenu($event)" id="{{recipe.documentId}}-edit">
-    <table class="recipe-table" [ngClass]="{'not-editable': !hasAccess}" id="{{recipe.documentId}}" *ngIf="(recipe.getIngredients() | async) as ingredients">
+    <table class="recipe-table" [ngClass]="{'not-editable': !hasAccess}" id="{{recipe.documentId}}"
+           *ngIf="(recipe.getIngredients() | async) as ingredients">
 
       <tr class="recipe-table-index-bar">
         <th class="recipe-table-header ingredient-number-column" *ngIf="screenSize > 500"></th>
@@ -55,7 +56,9 @@
 
       <!-- Overwriting -->
       <tr class="ingredient" *ngIf="false">
-        <td class="recipe-table-index-bar overwriting"><mat-icon>double_arrow</mat-icon></td>
+        <td class="recipe-table-index-bar overwriting">
+          <mat-icon>double_arrow</mat-icon>
+        </td>
         <td class="ingredient-measure-column" *ngIf="screenSize > 800" (click)="setFocus($event.target)">
           <data value="measure">{{ingredient.measure ? Number(ingredient.measure).toFixed(2) : ''}}</data>
         </td>
@@ -117,6 +120,16 @@
            (paste)="pastContent($event)" id="{{recipe.documentId}}-area-overlay" [contentEditable]="false">
 
   </div>
+
+  <form [formGroup]='recipeForm' class="recipe-info-form-fields">
+
+    <mat-form-field class="full-width">
+      <textarea matInput placeholder="Notizen zur Zubereitung" formControlName="notes" [readonly]="!hasAccess"></textarea>
+    </mat-form-field>
+
+  </form>
+
+  <i class="no-access-info" *ngIf="!hasAccess">Fehlende Berechtigung, um dieses dieses Rezeptes zu bearbeiten.</i>
 
 </div>
 

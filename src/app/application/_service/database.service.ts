@@ -3,8 +3,8 @@ import {Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryF
 import {AngularFireFunctions} from '@angular/fire/functions';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {firestore} from 'firebase/app';
-import {combineLatest, forkJoin, Observable, of, OperatorFunction} from 'rxjs';
-import {map, mergeMap, take} from 'rxjs/operators';
+import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction} from 'rxjs';
+import {catchError, delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
 import {Camp} from '../_class/camp';
 import {FirestoreObject} from '../_class/firebaseObject';
 import {Meal} from '../_class/meal';
@@ -23,7 +23,6 @@ import {
   FirestoreUser,
   Ingredient
 } from '../_interfaces/firestoreDatatypes';
-import {ErrorOnImport, RawMealData} from '../_interfaces/rawMealData';
 import {AuthenticationService} from './authentication.service';
 
 
@@ -113,8 +112,16 @@ export class DatabaseService {
    */
   public getExports(campId: string): Observable<ExportData[]> {
 
-    return this.db.collection('camps/' + campId + '/exports', query => query.orderBy('exportDate', 'desc').limit(6))
-      .snapshotChanges().pipe(this.getPathsToCloudDocuments());
+    return this.db.collection('camps/' + campId + '/exports',
+      query => query.orderBy('exportDate', 'desc').limit(6))
+      .snapshotChanges()
+      .pipe(this.getPathsToCloudDocuments())
+
+      // Retry on error (max 10 times with a delay of 500ms after each try)
+      .pipe(
+        retryWhen(err => err.pipe(delay(500), take(10))),
+        catchError(err => EMPTY)
+      );
 
   }
 
@@ -261,20 +268,19 @@ export class DatabaseService {
 
   }
 
-  public importRecipe(url: string): Promise<RawMealData | ErrorOnImport> {
+  /**
+   *
+   * Loads a meal form a external website.
+   *
+   * @param url of the external webpage with the meal data
+   *
+   */
+  public importMeal(url: string): Observable<any> {
 
-    url = 'https://emeal.zh11.ch/services/loadContent.php?url=' + url;
-
-    const options = {
-      method: 'GET',
-      headers: [
-        ['Content-Type', 'application/json, charset=utf-8'],
-      ],
-    };
-
-    return fetch(url, options).then(res => res.json());
+    return this.functions.httpsCallable('importMeal')({url});
 
   }
+
 
   /**
    *
@@ -765,15 +771,16 @@ export class DatabaseService {
     return mergeMap(docChangeAction =>
       forkJoin(docChangeAction.map(docData => {
 
-        const exportDocData = docData.payload.doc.data();
+          const exportDocData = docData.payload.doc.data();
 
-        const pathsObservables: Observable<string[]> = forkJoin(exportDocData.docs.map(docType =>
-          this.cloud.ref(exportDocData.path + '.' + docType).getDownloadURL() as Observable<string>)
-        );
+          const pathsObservables: Observable<string[]> = forkJoin(exportDocData.docs.map(docType =>
+            this.cloud.ref(exportDocData.path + '.' + docType).getDownloadURL() as Observable<string>
+          ));
 
-        return pathsObservables.pipe(map(paths => ({exportDate: exportDocData.exportDate, paths})));
+          return pathsObservables.pipe(map(paths => ({exportDate: exportDocData.exportDate, paths})));
 
-      }))
+        }
+      ))
     );
   }
 }

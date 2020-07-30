@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpComponent} from '../_dialoges/help/help.component';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 export interface HelpMessage {
 
   title: string;
   message: string;
   url: string;
+  ref?: string;
 
 }
 
@@ -17,6 +18,14 @@ export interface HelpMessage {
 export class HelpService {
 
   private static helpMessages: HelpMessage[] = [];
+  private readonly defaultMessage: HelpMessage = {
+    title: 'Keine Hilfetexte verfügbar',
+    message: `Für diese Seite sind noch keine Tipps, Tricks und/oder Hilfetexte verfügbar. Gerne aber kannst du uns
+                  über die Feedback-Funktion dein Anliegen schildern. Wir bemühen uns um eine Antwort/Lösung des Problems.<br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Feedback_erfassen.png">`,
+    url: ''
+  };
   private isOpen = false;
   private dialog = null;
 
@@ -29,7 +38,7 @@ export class HelpService {
 
   }
 
-  openHelpPopup() {
+  openHelpPopup(ref = '') {
 
 
     if (this.isOpen) {
@@ -41,24 +50,24 @@ export class HelpService {
       throw new Error('No Dialog added! Pleas add first a mat-dialog!');
     }
 
-    const helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
-    const index = Math.floor(Math.random() * helpMessagesForThisPage.length);
-
-    let message = helpMessagesForThisPage[index];
+    let helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
+    let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
+    if (ref !== '') {
+      const elem =  helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
+      index = helpMessagesForThisPage.indexOf(elem);
+    }
+    const message = helpMessagesForThisPage[index];
 
     if (message === undefined) {
-      message = {
-        title: 'Nicht verfügbar!',
-        message: 'Für diese Seite sind keine Hilfetexte/Erklärungen verfügbar.',
-        url: ''
-      };
+      helpMessagesForThisPage = [this.defaultMessage];
+      index = 0;
     }
 
     this.dialog
       .open(HelpComponent, {
         height: '800px',
         width: '550px',
-        data: {message}
+        data: {index, messages: helpMessagesForThisPage}
       })
       .afterClosed()
       .subscribe(() => {

@@ -36,10 +36,10 @@
       <td mat-cell *matCellDef="let element">
         <mat-form-field matTooltip="wähle Verwendung">
           <select matNativeControl #select [value]="element.accessLevel" (input)="element.accessLevel = select.value">
-            <option value="owner"> Besitzer </option>
-            <option value="editor"> Administrator </option>
-            <option value="collaborator"> Mitarbeiter </option>
-            <option value="viewer"> Leser </option>
+            <option value="viewer" *ngIf="accessLevels.includes('viewer')"> Leser </option>
+            <option value="collaborator" *ngIf="accessLevels.includes('collaborator')"> Mitarbeiter </option>
+            <option value="editor" *ngIf="accessLevels.includes('editor')"> Administrator </option>
+            <option value="owner" *ngIf="accessLevels.includes('owner')"> Besitzer </option>
           </select>
         </mat-form-field>
       </td>
@@ -53,10 +53,7 @@
     angezeigt.
   </p>
 
-  <!-- !selection.hasValue() -->
   <div matTooltip="Lager mit den ausgewählten Benutzer teilen!">
-    <button mat-raised-button (click)="coworkersSelected()" [disabled]="true" color="save">
-      Lager teilen
-    </button>
+    <button mat-raised-button (click)="coworkersSelected()" [disabled]="!selection.hasValue()" color="save"> Freigeben </button>
   </div>
 </div>

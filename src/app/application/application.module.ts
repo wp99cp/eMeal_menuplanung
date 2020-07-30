@@ -77,6 +77,9 @@ import {ContextMenuService} from './_service/context-menu.service';
 import {ShortcutService} from './_service/shortcut.service';
 import {HelpService} from './_service/help.service';
 import {HelpComponent} from './_dialoges/help/help.component';
+import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
+import { SingleRecipeInfoComponent } from './_dialoges/single-recipe-info/single-recipe-info.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -118,7 +121,9 @@ import {HelpComponent} from './_dialoges/help/help.component';
     ListCardComponent,
     CopyCampComponent,
     EditRecipeComponent,
-    HelpComponent
+    HelpComponent,
+    EditSingleMealComponent,
+    SingleRecipeInfoComponent
   ],
   providers: [
     AngularFirestore,
@@ -135,47 +140,48 @@ import {HelpComponent} from './_dialoges/help/help.component';
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
   ],
-  imports: [
-    CommonModule,
-    ApplicationRoutingModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-    AngularFireFunctionsModule,
-    AngularFireStorageModule,
-    AngularFirestoreModule,
-    AngularFireAuthModule,
-    VersionHistoryModule,
-    ReactiveFormsModule,
-    // Material Design
-    MatTableModule,
-    MatProgressBarModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatTooltipModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatTabsModule,
-    MatExpansionModule,
-    MatCheckboxModule,
-    MatListModule,
-    MatGridListModule,
-    MatIconModule,
-    MatDialogModule,
-    MatCardModule,
-    DragDropModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatRadioModule,
+    imports: [
+        CommonModule,
+        ApplicationRoutingModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+        AngularFireFunctionsModule,
+        AngularFireStorageModule,
+        AngularFirestoreModule,
+        AngularFireAuthModule,
+        VersionHistoryModule,
+        ReactiveFormsModule,
+        // Material Design
+        MatTableModule,
+        MatProgressBarModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatTooltipModule,
+        MatStepperModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatFormFieldModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatCheckboxModule,
+        MatListModule,
+        MatGridListModule,
+        MatIconModule,
+        MatDialogModule,
+        MatCardModule,
+        DragDropModule,
+        MatSlideToggleModule,
+        MatSnackBarModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatRadioModule,
 
-    MarkdownModule
-  ],
+        MarkdownModule,
+        MatProgressSpinnerModule
+    ],
 
   entryComponents: [
     DeleteCampComponent,
@@ -189,6 +195,8 @@ import {HelpComponent} from './_dialoges/help/help.component';
     ShareDialogComponent,
     CampInfoComponent,
     MealInfoComponent,
+    EditSingleMealComponent,
+    SingleRecipeInfoComponent,
     RecipeInfoComponent,
     AddRecipeComponent,
     CreateRecipeComponent,
