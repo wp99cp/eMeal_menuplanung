@@ -74,9 +74,22 @@ export class AuthenticationService {
 
   }
 
+  signInWithCeviDB() {
+
+    console.log('Auth with Cevi.DB: ');
+
+    // request code from https://demo.hitobito.com/oauth/authorize?response_type=code&client_id=GGCqAXRFO8_Iq-V9AdHcZwgmR-6suvIA2qsAi6LanHo&redirect_uri=https://emeal.zh11.ch&scope=name
+    const code = '';
+
+    // request custom access token form cloud function
+    const customToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU5NjI4ODkxOSwiZXhwIjoxNTk2MjkyNTE5LCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay04d2I4ekBjZXZpemgxMS5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInN1YiI6ImZpcmViYXNlLWFkbWluc2RrLTh3Yjh6QGNldml6aDExLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwidWlkIjoiNGVhNWM1MDhhNjU2NmU3NjI0MDU0M2Y4LTE2MiJ9.VXnTqORCmMTHkKWD7SfFO_D-yHhbEmqPTs5kHUIlpEjH8uFM_m6plM4WurAf7kAvJOOnkZ79kb3-9Tt9DtM2APtcL0unlTGKCXGph4vOYglwcvYJVu-Ldb2mV9MWMYM_zEGtuTdXskn3e5hTLhDdUXh0DfqOlMh0W9M4YHitPqPeJNMMin3J7MJK9LroSlqAYPUmqF6aWxwGrnlpiSNuQqmYHW_zP0EYKISj3wnoR19337OIdyFMOHHjs-i_omkhfvrdMKIhV2iniMp764VeGoETxdb8rlOge_LnGpYThZFIPI697PI4_WOMRX2-ie8VGoyc1fcQoEBD0gSlLZRkoA';
+    this.fireAuth.auth.signInWithCustomToken(customToken);
+
+  }
+
   signIn(email: string, password: string) {
 
-      this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+    this.fireAuth.auth.signInWithEmailAndPassword(email, password);
 
   }
 
@@ -109,6 +122,15 @@ export class AuthenticationService {
 
   }
 
+  redirectToApplication() {
+
+    // redirect to application page if still on signIn page
+    if (this.location.path().includes('/login')) {
+      this.router.navigate(['/app']);
+    }
+
+  }
+
   /**
    * Test the credentials
    *
@@ -118,15 +140,6 @@ export class AuthenticationService {
     // redirect to signIn page if not already there
     if (!this.location.path().includes('/login')) {
       this.router.navigate(['/login']);
-    }
-
-  }
-
-  redirectToApplication() {
-
-    // redirect to application page if still on signIn page
-    if (this.location.path().includes('/login')) {
-      this.router.navigate(['/app']);
     }
 
   }
