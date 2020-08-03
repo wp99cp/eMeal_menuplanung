@@ -4,30 +4,11 @@
   <h1>Anmelden</h1>
 
   <p>Um eMeal - Menüplanung zu verwenden musst du dich anmelden. Hierzu stehen dir die verschiedene Möglichkeiten zur
-    Verfügung. Falls du bereits angemeldet bist, so wirst du in Kürze weitergeleitet.</p>
-
-  <div class="login-form">
-    <div>
-      <mat-form-field appearance="fill">
-        <mat-label>Benutzername</mat-label>
-        <input name="username" matInput #username>
-      </mat-form-field>
-      <br>
-      <mat-form-field appearance="fill">
-        <mat-label>Passwort</mat-label>
-        <input name="current-password" type="password" #password matInput>
-      </mat-form-field>
-    </div>
-    <button mat-raised-button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
-  </div>
-
-
-  <p>Zur Zeit können keine neuen Accounts erstellt werden. Falls du noch kein Login besitzt, dann melde dich mit deinem
-    Google Account an oder wende dich an den Administrator.</p>
+    Verfügung.</p>
 
   <div class="login-with-third-party">
 
-    <button class="google-sign-in-button" (click)="auth.signInWithGoogle()">
+    <button class="sign-in-button" (click)="auth.signInWithGoogle()">
         <span class="large-button__icon">
           <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -50,7 +31,7 @@
 
   <div class="login-with-third-party">
 
-    <button class="google-sign-in-button" (click)="signInWithCeviDB()">
+    <button class="sign-in-button" (click)="signInWithCeviDB()">
         <span class="large-button__icon">
                  <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
 
@@ -67,6 +48,24 @@
       <span class="button-text">Anmelden mit Cevi.DB</span>
     </button>
 
+  </div>
+
+  <h3>Keiner dieser Accounts?</h3>
+  <p>Zur Zeit können keine neuen Accounts erstellt werden. Falls du noch kein Login besitzt wende dich an den Administrator.</p>
+
+  <div class="login-form">
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Benutzername</mat-label>
+        <input name="username" matInput #username>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Passwort</mat-label>
+        <input name="current-password" type="password" #password matInput>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
   </div>
 
 </div>

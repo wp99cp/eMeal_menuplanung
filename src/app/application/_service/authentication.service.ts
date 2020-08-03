@@ -76,6 +76,8 @@ export class AuthenticationService {
    */
   signInWithGoogle() {
 
+    this.location.replaceState('login/oauth-callback');
+
     this.fireAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
 
   }
@@ -87,11 +89,14 @@ export class AuthenticationService {
       return;
     }
 
-    console.log('Auth with Cevi.DB: ');
-
     this.route.queryParams.subscribe(pars => {
 
       const code = pars.code;
+
+      if (!code) {
+        return;
+      }
+
       console.log(code);
 
       const request = new Request('https://europe-west1-cevizh11.cloudfunctions.net/createAccessToken?code=' + code);
