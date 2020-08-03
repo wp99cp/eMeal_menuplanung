@@ -24,6 +24,8 @@ import {AngularFireModule} from '@angular/fire';
 import {SignInComponent} from "./sign-in/sign-in.component";
 import {MatInputModule} from "@angular/material/input";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {AngularFireFunctions} from "@angular/fire/functions";
+import { SignInCallbackComponent } from './sign-in-callback/sign-in-callback.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     MainMenuComponent,
     HeaderNavComponent,
     LandingPage,
-    SignInComponent
+    SignInComponent,
+    SignInCallbackComponent
   ],
     imports: [
 
@@ -57,7 +60,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     ],
   providers: [
     AngularFireAuth,
-    AuthenticationService
+    AuthenticationService,
+    AngularFireFunctions
   ],
   bootstrap: [AppComponent]
 })

@@ -4,6 +4,7 @@ import {MarkdownModule} from 'ngx-markdown';
 import {HttpClient} from '@angular/common/http';
 import {LandingPage} from './landingPage/landingPage.component';
 import {SignInComponent} from './sign-in/sign-in.component';
+import {SignInCallbackComponent} from "./sign-in-callback/sign-in-callback.component";
 
 
 const routes: Routes = [
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: SignInComponent
+  },
+  {
+    path: 'login/oauth-callback',
+    component: SignInCallbackComponent
   },
   {
     path: 'infos',
