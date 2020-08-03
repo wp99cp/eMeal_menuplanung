@@ -7,7 +7,6 @@ import {AccessData} from '../_interfaces/firestoreDatatypes';
 import {Location} from '@angular/common';
 import {MainMenuComponent} from '../../_template/main-menu/main-menu.component';
 import {auth, User} from 'firebase/app';
-import {AngularFireFunctions} from '@angular/fire/functions';
 
 
 @Injectable({
@@ -15,8 +14,11 @@ import {AngularFireFunctions} from '@angular/fire/functions';
 })
 export class AuthenticationService {
 
-  constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location, private route: ActivatedRoute, private functions: AngularFireFunctions) {
-
+  constructor(
+    public fireAuth: AngularFireAuth,
+    private router: Router,
+    private location: Location,
+    private route: ActivatedRoute) {
   }
 
   public static generateCoworkersList(ownerUid: string, coworkers: User[]): AccessData {
@@ -99,7 +101,7 @@ export class AuthenticationService {
 
       console.log(code);
 
-      const request = new Request('https://europe-west1-cevizh11.cloudfunctions.net/createAccessToken?code=' + code);
+      const request = new Request('https://europe-west1-cevizh11-menuplanung.cloudfunctions.net/createAccessToken?code=' + code);
       fetch(request).then(async req => {
 
         const json = await req.json();
