@@ -19,13 +19,19 @@ export class SingleRecipeInfoComponent {
 
     this.recipeInfo = this.formBuilder.group({
 
-      title: {value: this.recipe.name, disabled: !this.hasAccess},
-      description: {value: this.recipe.description, disabled: !this.hasAccess}
+      title: this.recipe.name,
+      description: this.recipe.description
 
     });
+    this.recipeInfo.disable();
 
     db.canWrite(recipe).then(access => {
       this.hasAccess = access;
+
+      if (access) {
+        this.recipeInfo.enable();
+      }
+
     });
 
   }
