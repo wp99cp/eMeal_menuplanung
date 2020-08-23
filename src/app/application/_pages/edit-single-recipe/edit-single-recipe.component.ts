@@ -52,14 +52,14 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     });
 
     helpService.addHelpMessage({
-      title: 'Rezepte freigeben gemeinsam bearbeiten.',
+      title: 'Rezepte freigeben und gemeinsam bearbeiten.',
       message: `Rezepte können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
                 Dabei kannst du ein Rezept mit den folgenden Berechtigungen teilen: <br>
                 <ul>
                     <li><b>Besitzer:</b> Diese Rolle hat derjenige, der das Rezept erstellt hat. Der Besitzer hat
                     uneingeschränkten Zugriff auf das Rezept.</li>
                     <li><b>Administrator:</b> Kann das Rezept bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
-                     es in eigenen Mahlzeiten verwenden. Kann das Lager mit andern teilen, nicht aber löschen.</li>
+                     es in eigenen Mahlzeiten verwenden. Kann das Rezept mit andern teilen, nicht aber löschen.</li>
                      <li><b>Leser:</b> Kann das Rezept und die Zutaten betrachten. Kann eine eigene Kopie erstellen
                      und diese anschliessend bearbeiten.</li>
                 </ul>

@@ -11,6 +11,8 @@ import {DatabaseService} from '../../_service/database.service';
 import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
+import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-edit-single-meal',
@@ -34,9 +36,29 @@ export class EditSingleMealComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
+    private helpService: HelpService,
     private autosave: AutoSaveService) {
 
     autosave.register(this);
+
+
+    helpService.addHelpMessage({
+      title: 'Mahlzeiten freigeben und gemeinsam bearbeiten.',
+      message: `Mahlzeiten können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
+                Dabei kannst du eine Mahlzeit mit den folgenden Berechtigungen teilen. Dabei erben die hinzugefügten Rezepte die Berechtigungen der Mahlzeit.<br>
+                <ul>
+                    <li><b>Besitzer:</b> Diese Rolle hat derjenige, der die Mahlzeit erstellt hat. Der Besitzer hat
+                    uneingeschränkten Zugriff auf die Mahlzeit.</li>
+                    <li><b>Administrator:</b> Kann die Mahlzeit bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
+                     es in eigenen Lagern verwenden. Kann die Mahlzeit mit andern teilen, nicht aber löschen.</li>
+                     <li><b>Leser:</b> Kann die Mahlzeit und die Rezepte betrachten. Kann eine eigene Kopie erstellen
+                     und diese anschliessend bearbeiten.</li>
+                </ul>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/Share_Recipe.png">`,
+      url: router.url,
+      ref: 'recipe-authorization-infos'
+    });
 
   }
 
@@ -74,6 +96,14 @@ export class EditSingleMealComponent implements OnInit {
       switchMap(id => id !== undefined ? this.dbService.getMealById(id) : empty())
     );
 
+    this.meal.subscribe(async meal => {
+      if (await this.dbService.canWrite(meal)) {
+        HeaderNavComponent.turnOn('Teilen');
+      } else {
+        HeaderNavComponent.turnOff('Teilen');
+      }
+    });
+
 
     this.recipes = this.urlPathData.pipe(
       this.loadIDFromURL('meals'),
@@ -95,6 +125,15 @@ export class EditSingleMealComponent implements OnInit {
       name: 'Mahlzeit',
       action: (() => this.mealInfoDialog()),
       icon: 'info',
+    });
+
+    HeaderNavComponent.addToHeaderNav({
+      active: false,
+      description: 'Mahlzeit freigeben',
+      name: 'Teilen',
+      action: (() => this.share()),
+      icon: 'share',
+      separatorAfter: true
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -194,4 +233,48 @@ export class EditSingleMealComponent implements OnInit {
     this.save();
 
   }
+
+
+  private share() {
+
+
+    this.meal.pipe(
+      take(1),
+      mergeMap(meal =>
+        this.dialog.open(ShareDialogComponent, {
+          height: '618px',
+          width: '1000px',
+          data: {
+            objectName: 'Mahlzeit',
+            currentAccess: meal.getAccessData(),
+            documentPath: meal.path,
+            /*
+              TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
+               owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
+             */
+            accessLevels: ['editor', 'viewer']
+          }
+        }).afterClosed()))
+      .subscribe((accessData) => {
+
+        // Add Berechtigung für Rezepte
+
+        // TODO: in Cloud-Function!!!!
+
+        this.recipes.pipe(take(1)).subscribe(recipes =>
+          recipes.forEach(recipe => {
+
+            console.log(accessData)
+
+            recipe.setAccessData(accessData);
+            this.dbService.updateDocument(recipe)
+
+          })
+        );
+
+      });
+
+  }
+
+
 }
