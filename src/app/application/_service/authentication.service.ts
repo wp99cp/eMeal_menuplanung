@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AccessData} from '../_interfaces/firestoreDatatypes';
 import {Location} from '@angular/common';
 import {MainMenuComponent} from '../../_template/main-menu/main-menu.component';
 import {auth, User} from 'firebase/app';
+import {AngularFireFunctions} from '@angular/fire/functions';
 
 
 @Injectable({
@@ -14,8 +15,7 @@ import {auth, User} from 'firebase/app';
 })
 export class AuthenticationService {
 
-  constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location) {
-
+  constructor(public fireAuth: AngularFireAuth, private router: Router, private location: Location, private route: ActivatedRoute, private functions: AngularFireFunctions) {
 
   }
 
@@ -53,13 +53,19 @@ export class AuthenticationService {
 
       // no credentials
       if (user === null) {
+
+        // try
+        this.signInWithCeviDB();
+
         this.redirectToSignInPage();
+
+      } else {
+
+        // user is signed in
+        this.redirectToApplication();
+        MainMenuComponent.authServ = this;
+
       }
-
-      // user is signed in
-      this.redirectToApplication();
-      MainMenuComponent.authServ = this;
-
     });
 
   }
@@ -70,13 +76,49 @@ export class AuthenticationService {
    */
   signInWithGoogle() {
 
+    this.location.replaceState('login/oauth-callback');
+
     this.fireAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
+
+  }
+
+  signInWithCeviDB() {
+
+    // check if it's an oauth-callback
+    if (!this.location.path().includes('/oauth-callback')) {
+      return;
+    }
+
+    this.route.queryParams.subscribe(pars => {
+
+      const code = pars.code;
+
+      if (!code) {
+        return;
+      }
+
+      console.log(code);
+
+      const request = new Request('https://europe-west1-cevizh11.cloudfunctions.net/createAccessToken?code=' + code);
+      fetch(request).then(async req => {
+
+        const json = await req.json();
+        console.log(json);
+
+        const customToken = json.data;
+        await this.fireAuth.auth.signInWithCustomToken(customToken);
+
+      });
+
+
+    });
+
 
   }
 
   signIn(email: string, password: string) {
 
-      this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+    this.fireAuth.auth.signInWithEmailAndPassword(email, password);
 
   }
 
@@ -109,6 +151,15 @@ export class AuthenticationService {
 
   }
 
+  redirectToApplication() {
+
+    // redirect to application page if still on signIn page
+    if (this.location.path().includes('/login')) {
+      this.router.navigate(['/app']);
+    }
+
+  }
+
   /**
    * Test the credentials
    *
@@ -118,15 +169,6 @@ export class AuthenticationService {
     // redirect to signIn page if not already there
     if (!this.location.path().includes('/login')) {
       this.router.navigate(['/login']);
-    }
-
-  }
-
-  redirectToApplication() {
-
-    // redirect to application page if still on signIn page
-    if (this.location.path().includes('/login')) {
-      this.router.navigate(['/app']);
     }
 
   }
