@@ -19,8 +19,8 @@ export class SingleRecipeInfoComponent {
 
     this.recipeInfo = this.formBuilder.group({
 
-      title: this.recipe.name,
-      description: this.recipe.description
+      title: {value: this.recipe.name, disabled: !this.hasAccess},
+      description: {value: this.recipe.description, disabled: !this.hasAccess}
 
     });
 
