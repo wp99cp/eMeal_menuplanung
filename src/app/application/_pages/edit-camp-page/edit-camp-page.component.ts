@@ -79,11 +79,11 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Mitarbeiter verwalten',
-      name: 'Mitarbeiter',
+      active: true,
+      description: 'Lager freigeben',
+      name: 'Teilen',
       action: (() => this.shareDialog()),
-      icon: 'group_add'
+      icon: 'share'
     });
 
     HeaderNavComponent.addToHeaderNav({
@@ -159,11 +159,21 @@ export class EditCampPageComponent implements OnInit, Saveable {
         this.dialog.open(ShareDialogComponent, {
           height: '618px',
           width: '1000px',
-          data: {camp}
+          data: {
+            objectName: 'Lager',
+            currentAccess: camp.getAccessData(),
+            documentPath: camp.path,
+            /*
+              TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
+               owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
+             */
+            accessLevels: ['editor', 'viewer']
+          }
         }).afterClosed()
       )).subscribe((camp) =>
 
       // TODO: upgrade rigths for all meals and recipes
+      // Cloud-Function!!!
       // if necessary...
 
       this.saveCamp(camp)
