@@ -1,10 +1,9 @@
 import {Component, Inject} from '@angular/core';
-import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
 import {UserWithAccess} from '../../_template/user-list/user-list.component';
 import {AccessData} from '../../_interfaces/firestoreDatatypes';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {HelpService} from "../../_service/help.service";
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-share-dialog',
@@ -12,6 +11,8 @@ import {HelpService} from "../../_service/help.service";
   styleUrls: ['./share-dialog.component.sass']
 })
 export class ShareDialogComponent {
+
+  public accessData: AccessData;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -22,6 +23,8 @@ export class ShareDialogComponent {
     },
     public helpService: HelpService,
     private databaseService: DatabaseService) {
+
+    this.accessData = data.currentAccess;
   }
 
 
@@ -63,7 +66,8 @@ export class ShareDialogComponent {
 
     });
 
-    this.data.currentAccess = newAccess;
+    // need to creat a new object, such that the changes get detected by the list-of-user module
+    this.accessData = JSON.parse(JSON.stringify(newAccess));
     this.databaseService.updateAccessData(newAccess, this.data.documentPath);
 
   }
