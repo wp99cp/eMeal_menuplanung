@@ -1,10 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Component, Input, OnChanges} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
-import { User } from '../../_class/user';
-import { AccessData } from '../../_interfaces/firestoreDatatypes';
-import { DatabaseService } from '../../_service/database.service';
+import {User} from '../../_class/user';
+import {AccessData} from '../../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../../_service/database.service';
 
 @Component({
   selector: 'app-list-of-users',
@@ -17,9 +17,13 @@ export class ListOfUsersComponent implements OnChanges {
 
   public owners: Observable<User[]>;
 
-  constructor(private dbService: DatabaseService) { }
+  constructor(private dbService: DatabaseService) {
+  }
+
 
   ngOnChanges() {
+
+    console.log('Changes!')
 
     if (this.userList != null) {
 

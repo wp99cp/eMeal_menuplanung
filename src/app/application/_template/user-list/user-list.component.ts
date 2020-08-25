@@ -84,7 +84,6 @@ export class UserListComponent implements OnInit {
   }
 
   coworkersSelected() {
-
     this.afterSelection.emit(this.selection.selected);
     this.selection.clear();
     this.snackBar.open('Ausgewählte Nutzer wurden hinzugefügt.', '', {duration: 2000});
