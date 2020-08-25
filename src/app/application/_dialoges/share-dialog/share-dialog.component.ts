@@ -24,7 +24,7 @@ export class ShareDialogComponent {
     },
     public helpService: HelpService,
     private databaseService: DatabaseService,
-    public snackBar: MatSnackBar ) {
+    public snackBar: MatSnackBar) {
 
     this.accessData = data.currentAccess;
   }
@@ -65,8 +65,10 @@ export class ShareDialogComponent {
   saveValueChanges() {
 
     console.log(this.accessData);
-    this.databaseService.updateAccessData(this.accessData, this.data.documentPath);
-    this.snackBar.open(this.data.objectName + ' wurde erfolgreich freigegeben!');
+    this.databaseService.updateAccessData(this.accessData, this.data.documentPath).subscribe(message => {
+      console.log(message);
+      this.snackBar.open(message.message ? message.message : message.error, '', {duration: 2000});
+    });
 
   }
 
