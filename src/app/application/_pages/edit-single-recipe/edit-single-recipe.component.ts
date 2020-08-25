@@ -131,16 +131,9 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
           objectName: 'Rezept',
           currentAccess: recipe.getAccessData(),
           documentPath: recipe.path,
-          /*
-            TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
-             owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
-           */
           accessLevels: ['editor', 'viewer']
         }
-      }).afterClosed()))
-      .subscribe(() => {
-
-      });
+      }).afterClosed())).subscribe();
 
 
   }

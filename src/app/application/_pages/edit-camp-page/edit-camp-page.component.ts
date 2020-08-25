@@ -12,7 +12,7 @@ import {DatabaseService} from '../../_service/database.service';
 import {WeekViewComponent} from '../../_template/week-view/week-view.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HelpService} from "../../_service/help.service";
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -163,21 +163,9 @@ export class EditCampPageComponent implements OnInit, Saveable {
             objectName: 'Lager',
             currentAccess: camp.getAccessData(),
             documentPath: camp.path,
-            /*
-              TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
-               owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
-             */
             accessLevels: ['editor', 'viewer']
           }
-        }).afterClosed()
-      )).subscribe((camp) =>
-
-      // TODO: upgrade rigths for all meals and recipes
-      // Cloud-Function!!!
-      // if necessary...
-
-      this.saveCamp(camp)
-    );
+        }).afterClosed())).subscribe();
 
   }
 

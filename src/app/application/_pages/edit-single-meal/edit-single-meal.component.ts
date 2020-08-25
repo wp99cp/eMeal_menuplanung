@@ -248,31 +248,9 @@ export class EditSingleMealComponent implements OnInit {
             objectName: 'Mahlzeit',
             currentAccess: meal.getAccessData(),
             documentPath: meal.path,
-            /*
-              TODO: Dies führt zu einer Sicherheitslücke! Falls der owner in dieser Liste steht, so kann ein Nutzer ohne
-               owner-Berechtigung einen anderen Benutzer zum Onwer erklären. DIes muss über eine Security-Rule gelöst werden!
-             */
             accessLevels: ['editor', 'viewer']
           }
-        }).afterClosed()))
-      .subscribe((accessData) => {
-
-        // Add Berechtigung für Rezepte
-
-        // TODO: in Cloud-Function!!!!
-
-        this.recipes.pipe(take(1)).subscribe(recipes =>
-          recipes.forEach(recipe => {
-
-            console.log(accessData)
-
-            recipe.setAccessData(accessData);
-            this.dbService.updateDocument(recipe)
-
-          })
-        );
-
-      });
+        }).afterClosed())).subscribe();
 
   }
 
