@@ -9,7 +9,7 @@ import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpService} from '../../_service/help.service';
-import {SingleRecipeInfoComponent} from "../../_dialoges/single-recipe-info/single-recipe-info.component";
+import {SingleRecipeInfoComponent} from '../../_dialoges/single-recipe-info/single-recipe-info.component';
 
 @Component({
   selector: 'app-edit-single-recipe',
