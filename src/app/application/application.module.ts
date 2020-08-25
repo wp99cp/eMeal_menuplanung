@@ -63,7 +63,7 @@ import {EditRecipeInCampComponent} from './_template/edit-recipe-in-camp/edit-re
 import {IngredientFieldComponent} from './_template/ingredient-field/ingredient-field.component';
 import {ListOfUsersComponent} from './_template/list-of-users/list-of-users.component';
 import {MealsOverviewComponent} from './_template/meals-overview/meals-overview.component';
-import {UserListComponent} from './_template/user-list/user-list.component';
+import {AddNewUserComponent} from './_template/add-new-user/add-new-user.component';
 import {WeekViewComponent} from './_template/week-view/week-view.component';
 import {CopyRecipeComponent} from './_dialoges/copy-recipe/copy-recipe.component';
 import {ListCardComponent} from './_template/list-card/list-card.component';
@@ -87,7 +87,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     CampListPageComponent,
 
     EditCampPageComponent,
-    UserListComponent,
+    AddNewUserComponent,
     DeleteCampComponent,
     EditDayComponent,
     WeekViewComponent,

@@ -318,10 +318,9 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
            */
 
 
-          // TODO: Implementation
-          this.dbService.upgradeAccessData(this.camp.getAccessData(), meal.getAccessData(), meal.path);
+          this.dbService.updateAccessData(this.camp.getAccessData(),  meal.path, true);
           this.dbService.getRecipes(meal.documentId).subscribe(recipes => recipes.forEach(
-            recipe => this.dbService.upgradeAccessData(this.camp.getAccessData(), recipe.getAccessData(), recipe.path)
+            recipe => this.dbService.updateAccessData(this.camp.getAccessData(),  recipe.path, true)
           ));
 
           // erstellt die specifischen Rezepte und Mahlzeiten

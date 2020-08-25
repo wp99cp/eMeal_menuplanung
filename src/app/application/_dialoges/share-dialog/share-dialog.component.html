@@ -1,11 +1,11 @@
-<h2 mat-dialog-title> Mitarbeiter verwalten und {{data.objectName}} freigeben</h2>
+<h2 mat-dialog-title> {{data.objectName}} freigeben</h2>
 
-<p><a (click)="helpService.openHelpPopup('recipe-authorization-infos')">Infos zu den Berechtigungen</a></p>
-
-<app-list-of-users [userList]="accessData"  class="current-collaborators"></app-list-of-users>
-
-<app-user-list (afterSelection)="selectUser($event)" [accessLevels]="data.accessLevels" class="add-collaborators"></app-user-list>
+<app-add-new-user (afterSelection)="selectUser($event)" [accessLevels]="data.accessLevels" class="add-collaborators"></app-add-new-user>
+<app-list-of-user-with-access [userList]="accessData" [accessLevels]="data.accessLevels" class="current-collaborators"></app-list-of-user-with-access>
 
 <div mat-dialog-actions class="mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="accessData"> Schliessen </button>
+    <p><a (click)="helpService.openHelpPopup('recipe-authorization-infos')">Infos zu den Berechtigungen</a></p>
+    <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+    <button mat-raised-button (click)="saveValueChanges()" [mat-dialog-close]="" color="save">Speichern</button>
 </div>
+

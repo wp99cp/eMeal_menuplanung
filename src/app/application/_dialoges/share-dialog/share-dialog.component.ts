@@ -1,9 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {DatabaseService} from '../../_service/database.service';
-import {UserWithAccess} from '../../_template/user-list/user-list.component';
+import {UserWithAccess} from '../../_template/add-new-user/add-new-user.component';
 import {AccessData} from '../../_interfaces/firestoreDatatypes';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {HelpService} from '../../_service/help.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-share-dialog',
@@ -22,53 +23,50 @@ export class ShareDialogComponent {
       accessLevels: string[];
     },
     public helpService: HelpService,
-    private databaseService: DatabaseService) {
+    private databaseService: DatabaseService,
+    public snackBar: MatSnackBar ) {
 
     this.accessData = data.currentAccess;
   }
 
-
-  jsonConcat(o1, o2) {
-    for (const key in o2) {
-      o1[key] = o2[key];
-    }
-    return o1;
-  }
-
   /** A user get selected */
-  selectUser(selectedCoworkers: UserWithAccess[]) {
+  selectUser(user: UserWithAccess) {
 
     const newAccess: AccessData = this.data.currentAccess;
 
-    selectedCoworkers.forEach(user => {
-      console.log(user.displayName + ' ' + user.accessLevel);
+    console.log(user.displayName + ' ' + user.accessLevel);
 
-      const oldAccessLevel = newAccess[user.uid];
+    const oldAccessLevel = newAccess[user.uid];
 
-      // upgrade level if possible
-      if (oldAccessLevel) {
+    // upgrade level if possible
+    if (oldAccessLevel) {
 
-        if (oldAccessLevel === 'editor' && user.accessLevel === 'owner') {
-          newAccess[user.uid] = user.accessLevel;
-        }
-
-        if (oldAccessLevel === 'collaborator' && (user.accessLevel === 'owner' || user.accessLevel === 'editor')) {
-          newAccess[user.uid] = user.accessLevel;
-        }
-
-        if (oldAccessLevel === 'viewer' && (user.accessLevel === 'collaborator' || user.accessLevel === 'editor' || user.accessLevel === 'owner')) {
-          newAccess[user.uid] = user.accessLevel;
-        }
-
-      } else {
+      if (oldAccessLevel === 'editor' && user.accessLevel === 'owner') {
         newAccess[user.uid] = user.accessLevel;
       }
 
-    });
+      if (oldAccessLevel === 'collaborator' && (user.accessLevel === 'owner' || user.accessLevel === 'editor')) {
+        newAccess[user.uid] = user.accessLevel;
+      }
+
+      if (oldAccessLevel === 'viewer' && (user.accessLevel === 'collaborator' || user.accessLevel === 'editor' || user.accessLevel === 'owner')) {
+        newAccess[user.uid] = user.accessLevel;
+      }
+
+    } else {
+      newAccess[user.uid] = user.accessLevel;
+    }
 
     // need to creat a new object, such that the changes get detected by the list-of-user module
     this.accessData = JSON.parse(JSON.stringify(newAccess));
-    this.databaseService.updateAccessData(newAccess, this.data.documentPath);
+
+  }
+
+  saveValueChanges() {
+
+    console.log(this.accessData);
+    this.databaseService.updateAccessData(this.accessData, this.data.documentPath);
+    this.snackBar.open(this.data.objectName + ' wurde erfolgreich freigegeben!');
 
   }
 

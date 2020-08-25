@@ -1,0 +1,45 @@
+<h4 class="title">Nutzer hinzufügen</h4>
+
+<div [ngClass]="{'editMode': selectedUser != null, 'searchMode':  selectedUser == null}">
+
+  <mat-form-field class="searchField mat-form-field full-width">
+    <input matInput (keyup)="applyFilter($event.target.value)" autocomplete="off" placeholder="Nach Nutzer suchen"
+           (keydown)="selectedUser = null" id="user-search-bar"/>
+  </mat-form-field>
+
+  <mat-form-field matTooltip="wähle Verwendung" *ngIf="selectedUser != null" class="ruleField">
+    <select matNativeControl #select (input)="selectedUser.accessLevel = select.value">
+      <option value="viewer" *ngIf="accessLevels.includes('viewer')"> Leser</option>
+      <option value="collaborator" *ngIf="accessLevels.includes('collaborator')"> Mitarbeiter</option>
+      <option value="editor" *ngIf="accessLevels.includes('editor')"> Administrator</option>
+      <option value="owner" *ngIf="accessLevels.includes('owner')"> Besitzer</option>
+    </select>
+  </mat-form-field>
+
+
+  <button class="share-button" matTooltip="Lager mit den ausgewählten Benutzer teilen!" mat-raised-button
+          (click)="coworkersSelected()" *ngIf="selectedUser != null" color="save">
+    Freigeben
+  </button>
+
+</div>
+
+<table mat-table [dataSource]="userList" *ngIf="selectedUser == null">
+
+  <!-- firstName Column -->
+  <ng-container matColumnDef="displayName">
+    <th mat-header-cell *matHeaderCellDef class="name">Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.displayName }}</td>
+  </ng-container>
+
+  <!-- lastname Column -->
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef class="mailadresse">Mailadresse</th>
+    <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+  </ng-container>
+
+  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectUser(row)"></tr>
+</table>
+
+
+

@@ -59,45 +59,11 @@ export class DatabaseService {
     private cloud: AngularFireStorage) {
   }
 
-  public updateAccessData(access: AccessData, path: string) {
+  public updateAccessData(access: AccessData, path: string, upgradeOnly = false) {
 
-    this.db.doc(path).set({access}, {merge: true});
-
-  }
-
-
-  /**
-   *
-   * TODO: In eine Cloud-Funktion auslagern und unbedingt durch für alle Elemente firestore.rules blockieren...
-   *
-   * @param requestedAccess
-   * @param access
-   * @param docPath
-   */
-  public upgradeAccessData(requestedAccess: AccessData, access: AccessData, docPath: string) {
-
-
-    for (const uid of Object.keys(requestedAccess)) {
-
-      // has already access
-      if (access[uid]) {
-
-        // keeps the access level
-        // unless it's ownly viewer access
-        if (access[uid] === 'viewer' && requestedAccess[uid] !== 'viewer') {
-          access[uid] = 'collaborator';
-        }
-
-      } else {
-
-        // hasn't access yet, gets viewer or collaborator access
-        access[uid] = requestedAccess[uid] === 'viewer' ? 'viewer' : 'collaborator';
-
-      }
-
-    }
-
-    this.db.doc(docPath).set({access}, {merge: true});
+    return this.functions.httpsCallable('changeAccessData')(
+      {documentPath: path, requestedAccessData: access, upgradeOnly}
+    );
 
   }
 

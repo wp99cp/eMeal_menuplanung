@@ -7,15 +7,16 @@ import {AccessData} from '../../_interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../_service/database.service';
 
 @Component({
-  selector: 'app-list-of-users',
+  selector: 'app-list-of-user-with-access',
   templateUrl: './list-of-users.component.html',
   styleUrls: ['./list-of-users.component.sass']
 })
 export class ListOfUsersComponent implements OnChanges {
 
+  @Input() public accessLevels: string[];
   @Input() userList: AccessData;
 
-  public owners: Observable<User[]>;
+  public users: Observable<User[]>;
 
   constructor(private dbService: DatabaseService) {
   }
@@ -28,11 +29,21 @@ export class ListOfUsersComponent implements OnChanges {
     if (this.userList != null) {
 
       // creates an alphabetically sorted list of the users
-      this.owners = this.dbService.getUsers(this.userList)
+      this.users = this.dbService.getUsers(this.userList)
         .pipe(map(results => results.sort((a, b) => a.displayName.localeCompare(b.displayName))));
 
     }
 
   }
 
+  remove(user: User) {
+
+    if (this.userList[user.uid] === 'owner') {
+      return;
+    }
+
+    delete this.userList[user.uid];
+    this.ngOnChanges();
+
+  }
 }

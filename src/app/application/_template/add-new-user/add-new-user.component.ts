@@ -14,18 +14,19 @@ export interface UserWithAccess extends User {
 }
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.sass']
+  selector: 'app-add-new-user',
+  templateUrl: './add-new-user.component.html',
+  styleUrls: ['./add-new-user.component.sass']
 })
-export class UserListComponent implements OnInit {
+export class AddNewUserComponent implements OnInit {
 
-  @Output() afterSelection = new EventEmitter<UserWithAccess[]>();
+  @Output() afterSelection = new EventEmitter<UserWithAccess>();
   @Input() public accessLevels: string[];
 
-  public selection = new SelectionModel<UserWithAccess>(true, []);
-  public displayedColumns: string[] = ['select', 'displayName', 'email', 'accessLevel'];
+  public displayedColumns: string[] = ['displayName', 'email'];
   public userList = new MatTableDataSource<UserWithAccess>();
+
+  public selectedUser = null;
 
   constructor(private dbService: DatabaseService, private authService: AuthenticationService, public snackBar: MatSnackBar) {
   }
@@ -61,32 +62,11 @@ export class UserListComponent implements OnInit {
 
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.userList.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.userList.data.forEach(user => this.selection.select(user));
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(user?: UserWithAccess): string {
-    if (!user) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(user) ? 'deselect' : 'select'} row ${user.uid}`;
-  }
-
   coworkersSelected() {
-    this.afterSelection.emit(this.selection.selected);
-    this.selection.clear();
-    this.snackBar.open('Ausgewählte Nutzer wurden hinzugefügt.', '', {duration: 2000});
+    this.afterSelection.emit(this.selectedUser);
+    this.selectedUser = null;
+    (document.getElementById('user-search-bar') as HTMLInputElement).value = '';
+    this.applyFilter('')
 
   }
 
@@ -97,9 +77,7 @@ export class UserListComponent implements OnInit {
       // Condition for the filter
       (user.displayName !== null && filter.trim().length >= 3 &&
         user.displayName.trim().toLowerCase().includes(filter.toLowerCase()) &&
-        filter.toLowerCase() !== 'v/o')
-
-      || this.selection.isSelected(user);
+        filter.toLowerCase() !== 'v/o');
 
   }
 
@@ -110,4 +88,10 @@ export class UserListComponent implements OnInit {
 
   }
 
+  selectUser(selectedUser: any) {
+
+    this.selectedUser = selectedUser;
+    (document.getElementById('user-search-bar') as HTMLInputElement).value = selectedUser.displayName;
+
+  }
 }
