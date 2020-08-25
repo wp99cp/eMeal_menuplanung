@@ -29,7 +29,7 @@ export class EditRecipeComponent implements OnInit {
   public hasAccess = false;
   public selectedTableCell = null;
   public currentEditedField = null;
-  public screenSize = 0;
+  public screenSize = window.innerWidth;
 
   private oldValue;
   private isCurrentCellEditable = false;
