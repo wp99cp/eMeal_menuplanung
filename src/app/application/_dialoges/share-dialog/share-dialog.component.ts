@@ -67,7 +67,7 @@ export class ShareDialogComponent {
     console.log(this.accessData);
     this.databaseService.updateAccessData(this.accessData, this.data.documentPath).subscribe(message => {
       console.log(message);
-      this.snackBar.open(message.message ? message.message : message.error, '', {duration: 2000});
+      this.snackBar.open(message.message ? message.message : message.error, '', {duration: 3500});
     });
 
   }
