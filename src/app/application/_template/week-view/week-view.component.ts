@@ -251,14 +251,23 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
         result.selected.forEach(async meal => {
 
+          // TODO: combine in one database write....
+
+          // falls keine Verwendung gestzt, dann als 'Zmorgen'
+          const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
+
           // add campId to usedInCamps
           if (!meal.usedInCamps.includes(this.camp.documentId)) {
             meal.usedInCamps.push(this.camp.documentId);
             await this.dbService.updateDocument(meal);
           }
 
+          // erstellt die spezifischen Rezepte und Mahlzeiten
+          const specificMealId = await meal.createSpecificMeal(this.dbService, this.camp, this.camp.days[dayIndex], usedAs);
+          await meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
+
           // request for update rights for meals, recipes and specificMeals and specificRecipes
-          this.dbService.refreshAccessData(this.camp.getAccessData(), this.camp.path)
+          this.dbService.refreshAccessData(this.camp.documentId, meal.path)
             .subscribe(console.log);
 
         });

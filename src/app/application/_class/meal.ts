@@ -1,8 +1,8 @@
-import { FirestoreMeal, FirestoreSpecificMeal, MealUsage } from '../_interfaces/firestoreDatatypes';
-import { DatabaseService } from '../_service/database.service';
-import { Camp } from './camp';
-import { Day } from './day';
-import { ExportableObject, FirestoreObject } from './firebaseObject';
+import {FirestoreMeal, FirestoreSpecificMeal, MealUsage} from '../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../_service/database.service';
+import {Camp} from './camp';
+import {Day} from './day';
+import {ExportableObject, FirestoreObject} from './firebaseObject';
 
 
 /**
@@ -61,12 +61,19 @@ export class Meal extends FirestoreObject implements ExportableObject {
    * @param camp Releted Camp
    *
    */
-  public createSpecificRecipes(databaseService: DatabaseService, camp: Camp, specificId: string) {
+  public async createSpecificRecipes(databaseService: DatabaseService, camp: Camp, specificId: string) {
 
-    databaseService.getRecipes(this.documentId)
-      .subscribe(recipes => recipes.forEach(recipe =>
-        recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)
-      ));
+    return new Promise(resolve => {
+
+      databaseService.getRecipes(this.documentId)
+        .subscribe(async recipes => {
+
+          await Promise.all(recipes.map(recipe =>
+            recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)))
+          resolve();
+
+        });
+    });
 
   }
 

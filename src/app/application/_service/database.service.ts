@@ -47,10 +47,6 @@ export class DatabaseService {
    * This service includes methods to fetch all kind of firebaseObjects form
    * the database.
    *
-   * @param db AngularFirestore: the database
-   * @param authService
-   * @param functions
-   * @param cloud
    */
   constructor(
     private db: AngularFirestore,
@@ -59,6 +55,11 @@ export class DatabaseService {
     private cloud: AngularFireStorage) {
   }
 
+  /**
+   *
+   * Updates the access of a document (if possible)
+   *
+   */
   public updateAccessData(access: AccessData, path: string, upgradeOnly = false) {
 
     return this.functions.httpsCallable('changeAccessData')(
@@ -67,10 +68,19 @@ export class DatabaseService {
 
   }
 
-  public refreshAccessData(access: AccessData, path: string) {
+  /**
+   *
+   * Refreshes (i.g. updates) the rights of the new added meal.
+   * Such that all users with access to the camp can edit the new meal.
+   *
+   * @param campId id of the camp
+   * @param mealPath id of the added meal
+   *
+   */
+  public refreshAccessData(campId: string, mealPath: string) {
 
     return this.functions.httpsCallable('refreshAccessData')(
-      {documentPath: path, requestedAccessData: access, upgradeOnly: true}
+      {campId, type: 'meal', path: mealPath}
     );
 
   }
