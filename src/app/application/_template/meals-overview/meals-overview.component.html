@@ -45,7 +45,7 @@
       * * * * *
     </span>
 
-  <div class="dotted-box meal-card clickable" matTooltip="Hinzufügen" (click)="addNewMeal(day)">
+  <div class="dotted-box meal-card clickable" matTooltip="Hinzufügen" (click)="addNewMeal(day)" *ngIf="!hideIcons && access">
     <mat-icon class="add-meal-card-icon" >add_circle_outline</mat-icon>
   </div>
 
