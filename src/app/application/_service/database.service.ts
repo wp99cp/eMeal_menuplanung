@@ -273,7 +273,7 @@ export class DatabaseService {
    */
   public addIdToRecipes(mealId: any, idToAdd: any) {
 
-    this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId])
+    this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'], ['used_in_meals', 'array-contains', mealId])
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
@@ -328,7 +328,7 @@ export class DatabaseService {
    */
   public getCampsWithAccess(): Observable<Camp[]> {
 
-    return this.createAccessQueryFn()
+    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
       .pipe(mergeMap(queryFn =>
         this.requestCollection('camps/', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
@@ -355,7 +355,7 @@ export class DatabaseService {
    *
    */
   public getEditableMeals(): Observable<Meal[]> {
-    return this.createAccessQueryFn()
+    return this.createAccessQueryFn(['editor', 'owner'])
       .pipe(mergeMap(queryFn =>
         this.requestCollection('meals/', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal))
@@ -395,7 +395,7 @@ export class DatabaseService {
    */
   public getRecipes(mealId: string): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId])
+    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'], ['used_in_meals', 'array-contains', mealId])
       .pipe(mergeMap(queryFn =>
         this.requestCollection('recipes', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
@@ -412,7 +412,7 @@ export class DatabaseService {
    */
   public getEditableRecipes(): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn()
+    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
       .pipe(mergeMap(queryFn =>
         this.requestCollection('recipes', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
@@ -616,7 +616,7 @@ export class DatabaseService {
    * @param mealId
    */
   public deleteRecipesRefs(mealId: string) {
-    this.createAccessQueryFn(['used_in_meals', 'array-contains', mealId]).pipe(mergeMap(query =>
+    this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'], ['used_in_meals', 'array-contains', mealId]).pipe(mergeMap(query =>
       this.db.collection('recipes', query).get()))
       .pipe(take(1))
       .subscribe(docRefs => docRefs.docs.forEach(doc =>
@@ -716,13 +716,13 @@ export class DatabaseService {
   }
 
   /** creates a query function for access restriction (using the currentUser) */
-  private createAccessQueryFn(...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
+  private createAccessQueryFn(accessRights: string[], ...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
 
     return this.authService.getCurrentUser().pipe(map(user =>
 
       (collRef => {
 
-        let query = collRef.where('access.' + user.uid, 'in', ['editor', 'owner', 'collaborator', 'viewer']);
+        let query = collRef.where('access.' + user.uid, 'in', accessRights);
         query = this.createQueryFn(query, ...queries);
         return query;
 
