@@ -28,7 +28,7 @@ import {AuthenticationService} from './authentication.service';
 
 /**
  * An angular service to provide data form the AngularFirestore database.
- * This service includes methodes to fetch all kind of firebaseObjects form
+ * This service includes methods to fetch all kind of firebaseObjects form
  * the database.
  *
  */
@@ -37,14 +37,14 @@ import {AuthenticationService} from './authentication.service';
 })
 export class DatabaseService {
 
-  // TODO: allgemein besseres Error-Handeling
+  // TODO: allgemein besseres Error-Handling
   // als erste Idee kann jeder Fehler einfach als Banner
   // angezeigt werden, dies lässt sich direkt aus dieser Klasse heraus
   // realisieren....
 
   /**
    * An angular service to provide data form the AngularFirestore database.
-   * This service includes methodes to fetch all kind of firebaseObjects form
+   * This service includes methods to fetch all kind of firebaseObjects form
    * the database.
    *
    * @param db AngularFirestore: the database
@@ -79,7 +79,7 @@ export class DatabaseService {
   /**
    * Gets the last 5 Elements
    *
-   * TODO: add Python-Skrip, das alte Exports automatisch löscht,
+   * TODO: add Python-Skript, das alte Exports automatisch löscht,
    * eine Cloud-Funktion gibt es hierfür teilweise sogar...
    *
    *
@@ -101,15 +101,15 @@ export class DatabaseService {
 
   /**
    *
-   * TODO: Hier gibt es ein Information-Leeking...
+   * TODO: Hier gibt es ein Information-Leaking...
    * Zur Zeit können somit alle User ausgelesen werden inkl. ihre E-Mail-Adressen.
    * (Es gibt zwar die Möglichkeit, sein eigenes Konto zu verstecken, aber dann
    * kann man auch nicht mehr mit anderen Zusammenarbeiten).
    *
    * Idee neue Freigabe nur über E-Mailadresse möglich, eine Cloud-Funktion gibt dann
    * den entsprechenden Namen zurück und fügt den User hinzu...
-   * Oder aber das ganze muss zumindestens in den AGBs/Datenschutzbestimmungen stehen
-   * diese müssen umbedingt mal angepasst werden.
+   * Oder aber das ganze muss mindestens in den AGBs/Datenschutzbestimmungen stehen
+   * diese müssen unbedingt mal angepasst werden.
    *
    */
   public getVisibleUsers() {
@@ -171,10 +171,10 @@ export class DatabaseService {
    * Firestore lässt es zurzeit nicht zu, dass dem
    * Query noch ein accessQuery mitgeschickt wird.
    * Dadurch muss auf den accessCheck bei einem GroupQuery
-   * verzeichtet werden.
+   * verzichtet werden.
    *
    * Dieses Sicherheitsrisiko ist kurzfristig aber
-   * vertrettbar, da für den Query die Id eines bestehenden
+   * vertretbar, da für den Query die Id eines bestehenden
    * Rezeptes bekannt sein muss.
    *
    * In Zukunft sollt man sich hier aber Gedanken machen,
@@ -492,7 +492,7 @@ export class DatabaseService {
         }
 
 
-        console.log('Copyed document: ');
+        console.log('Copied document: ');
         console.log(firebaseObject.toFirestoreDocument());
 
         const collPath = firebaseObject.path.substring(0, firebaseObject.path.indexOf('/'));
@@ -644,7 +644,7 @@ export class DatabaseService {
 
   /**
    *
-   * Loades the ingredients of an overwriting of a recipe
+   * Loads the ingredients of an overwriting of a recipe
    *
    * @param recipeId id of the recipe
    * @param overwriteId documentId of the overwriting
@@ -657,9 +657,9 @@ export class DatabaseService {
   }
 
   /**
-   * Saves the overwritings of a recipe
+   * Saves the overwriting of a recipe
    *
-   * @param ingredients overwritings of to be saved
+   * @param ingredients overwriting of to be saved
    * @param recipeId id of the recipe
    * @param writer documentId of the overwriting
    */
@@ -674,9 +674,9 @@ export class DatabaseService {
 
 
   // *********************************************************************************************
-  // private methodes
+  // private methods
   //
-  // TODO: Alle query funktions in eine eigene Klasse auslagern
+  // TODO: Alle query functions in eine eigene Klasse auslagern
   //
   // *********************************************************************************************
 
@@ -691,7 +691,7 @@ export class DatabaseService {
 
     return this.requestDocument('recipes/' + recipe.documentId + '/specificRecipes/' + specificMealId)
 
-      // nicht die schönste Lösung, um die specifischen Rezepte
+      // nicht die schönste Lösung, um die spezifischen Rezepte
       // dynamisch zu erzeugen, falls diese nicht existieren.
       .pipe(mergeMap(ref => {
 
@@ -706,14 +706,14 @@ export class DatabaseService {
   }
 
   /** creates a query function for access restriction (using the currentUser) */
-  private createAccessQueryFn(...querys: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
+  private createAccessQueryFn(...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
 
     return this.authService.getCurrentUser().pipe(map(user =>
 
       (collRef => {
 
         let query = collRef.where('access.' + user.uid, 'in', ['editor', 'owner', 'collaborator', 'viewer']);
-        query = this.createQueryFn(query, ...querys);
+        query = this.createQueryFn(query, ...queries);
         return query;
 
       })
@@ -721,19 +721,19 @@ export class DatabaseService {
 
   }
 
-  private createQuery(...querys: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): QueryFn {
+  private createQuery(...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): QueryFn {
 
     return (collRef => {
 
-      return this.createQueryFn(collRef, ...querys);
+      return this.createQueryFn(collRef, ...queries);
 
     });
 
   }
 
-  private createQueryFn(query: firestore.Query, ...querys: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]) {
+  private createQueryFn(query: firestore.Query, ...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]) {
 
-    querys.forEach(queryCond => {
+    queries.forEach(queryCond => {
       query = query.where(queryCond[0], queryCond[1], queryCond[2]);
     });
 
