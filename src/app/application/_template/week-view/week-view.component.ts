@@ -3,7 +3,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
-import {combineLatest, merge, Observable, of} from 'rxjs';
+import {combineLatest, Observable, of} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {Camp} from '../../_class/camp';
@@ -113,7 +113,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
       // Speichert die Mahlzeiten
       this.saveMeals();
-      this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', { duration: 2000 });
+      this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
 
       return true;
     }
@@ -143,7 +143,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
       // Vorbereitungsdatum nach oder am Tag der Mahlzeit...
       specificMeal.prepare = false;
-      this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', { duration: 2000 });
+      this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
 
     }
 
@@ -211,27 +211,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
-
-  /**
-   * Returns the date of the last day in the camp
-   *
-   */
-  private getDateOfLastDay() {
-
-    if (this.camp.days.length !== 0) {
-
-      return new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
-
-    } else {
-
-      // if camp is empty add a day with the date of today
-      const date = new Date();
-      date.setHours(0, 0, 0, 0);
-      return date;
-
-    }
-  }
-
   /**
    * Speichert das Lager
    */
@@ -249,7 +228,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
    */
   public addMeal(dayIndex: number = 0) {
 
-
     // Testversuch für die Sortierung der Mahlzeiten
     const mealsOb: Observable<SpecificMeal[]>[] = [];
     this.camp.days.forEach(day => mealsOb.push(day.getMeals()));
@@ -263,7 +241,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
       return this.dialog.open(AddMealComponent, {
         height: '618px',
         width: '1000px',
-        data: { mealNames }
+        data: {mealNames}
       }).afterClosed();
 
 
@@ -273,68 +251,20 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
 
         result.selected.forEach(async meal => {
 
-          // falls keine Verwendung gestzt, dann als 'Zmorgen'
-          const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
-
           // add campId to usedInCamps
           if (!meal.usedInCamps.includes(this.camp.documentId)) {
             meal.usedInCamps.push(this.camp.documentId);
-            this.dbService.updateDocument(meal);
+            await this.dbService.updateDocument(meal);
           }
 
-          /*
-           * TODO: Berechtigungen sind heikel, daher soll diese Funktion in Zukunft
-           * in einer Cloud-Function geregelt werden. Der Client darf und soll nichts
-           * mehr an der Berechtigungen verändern dürfen.
-           *
-           * Grundsätzlich gilt:
-           * Der aktuelle Nutzer hat auf das hinzugefügte Rezept mind. Administrator Rechte,
-           * ansonsten kann er es gar nicht erst zum Lager hinzufügen.
-           *
-           * Für ein Administrator und für den Owner der Mahlzeit gilt: Fügt er eine Mahlzeit hinzu
-           * so bleibt seine eigene Rolle unverändert, d.h. hat er die Inhaberschaft (owner) der
-           * Mahlzeit, so behält er diese; hat er nur Administratorrechte ist aber der Besitzer
-           * des Lagers so ändern sich seine Rechte an der Mahlzeit nicht.
-           *
-           * Für die anderen Nutzer des Lagers gilt:
-           * Alle Nutzer erhalten automatisch max. Mitarbeiter (collaborator) Berechtigung.
-           * D.h. sie können die Mahlzeit nur in diesem Lager bearbeiten. Nicht aber die globale
-           * Vorlage für die anderen Lagern. Hat ein Nutzer bereits höhere Rechte für die hinzu-
-           * gefügte Mahlzeit, so bleiben diese natürlich erhalten.
-           * Ein Leser (viewer) erhält ebenfalls Leseberechtigung für die Mahlzeit.
-           *
-           * Die Rechte können für die einzelnen Mahlzeiten beliebig erhöht werden. Bzw. bis maximal
-           * zum Leser abgestuft werden.
-           *
-           *
-           * Analog werden die Rechte für die Rezepte vergeben.
-           *
-           *
-           * Achtung: Collaborator Rollen werden auf Viewer Rollen abgestuft, sobald eine Mahlzeit oder
-           * ein Rezept aus dem Lager gelöscht wird. Viewer Rollen können (zur Zeit noch nicht) manuell
-           * wieder entfehrnt weren, sofern das Rezept oder die Mahlzeit niergens sonst Benutzt wird, wo
-           * Lesezugriff vergeben wurde.
-           *
-           */
-
-
-          this.dbService.updateAccessData(this.camp.getAccessData(),  meal.path, true);
-          this.dbService.getRecipes(meal.documentId).subscribe(recipes => recipes.forEach(
-            recipe => this.dbService.updateAccessData(this.camp.getAccessData(),  recipe.path, true)
-          ));
-
-          // erstellt die specifischen Rezepte und Mahlzeiten
-          const specificMealId = await meal.createSpecificMeal(this.dbService, this.camp, this.camp.days[dayIndex], usedAs);
-          meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
+          // request for update rights for meals, recipes and specificMeals and specificRecipes
+          this.dbService.refreshAccessData(this.camp.getAccessData(), this.camp.path)
+            .subscribe(console.log);
 
         });
-
       }
-
     });
-
   }
-
 
   /**
    * Löscht die ausgewählt Mahlzeit.
@@ -346,7 +276,7 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     document.getElementById(specificMealId).classList.add('hidden');
 
     // shown delete Meassage
-    const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', { duration: 4000 });
+    const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
 
     // Löscht das Rezept oder breicht den Vorgang ab, je nach Aktion der snackBar...
     let canDelete = true;
@@ -364,8 +294,6 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     });
 
   }
-
-
 
   /**
    * Bearbeitet den Tag.
@@ -404,6 +332,26 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     // Speichert die Änderungen
     this.save();
 
+  }
+
+  /**
+   * Returns the date of the last day in the camp
+   *
+   */
+  private getDateOfLastDay() {
+
+    if (this.camp.days.length !== 0) {
+
+      return new Date(this.camp.days[this.camp.days.length - 1].dateAsTypeDate);
+
+    } else {
+
+      // if camp is empty add a day with the date of today
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      return date;
+
+    }
   }
 
   /**
