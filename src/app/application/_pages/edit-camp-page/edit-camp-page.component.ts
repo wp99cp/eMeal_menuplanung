@@ -54,10 +54,11 @@ export class EditCampPageComponent implements OnInit, Saveable {
     });
 
     autosave.register(this);
+
     // Ladet das Lager von der URL
     this.camp = this.route.url.pipe(mergeMap(
       url => this.dbService.getCampById(url[1].path)
-    )).pipe(tap(camp => camp.loadMeals(this.dbService))).pipe(take(1));
+    )).pipe(tap(camp => camp.loadMeals(this.dbService)));
 
   }
 
