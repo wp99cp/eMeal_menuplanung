@@ -113,7 +113,6 @@ export class EditMealComponent implements OnInit, Saveable {
         icon: 'nature_people',
         separatorAfter: true
       }, 0)
-
     );
 
     HeaderNavComponent.addToHeaderNav({
@@ -296,14 +295,21 @@ export class EditMealComponent implements OnInit, Saveable {
 
           if (results) {
 
-            this.camp.pipe(take(1)).subscribe(camp => this.urlPathData.pipe(this.loadIDFromURL('meals', 2)).subscribe(specificMealId =>
-              results.selected.forEach(recipe => this.dbService.addRecipe(recipe, specificMealId, mealId, camp))
-            ));
+            this.camp.pipe(take(1))
+              .subscribe(camp => this.urlPathData.pipe(this.loadIDFromURL('meals', 2))
+                .subscribe(async specificMealId => {
 
+                  await Promise.all(
+                    results.selected.map(recipe => this.dbService.addRecipe(recipe, specificMealId, mealId, camp))
+                  );
+
+                  // request for update rights for meals, recipes and specificMeals and specificRecipes
+                  this.dbService.refreshAccessData(camp.documentId, mealId)
+                    .subscribe(console.log);
+
+                }));
           }
-
-        })
-      );
+        }));
 
   }
 

@@ -412,7 +412,7 @@ export class DatabaseService {
    */
   public getEditableRecipes(): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
+    return this.createAccessQueryFn(['editor', 'owner', 'collaborator'])
       .pipe(mergeMap(queryFn =>
         this.requestCollection('recipes', queryFn)
           .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
