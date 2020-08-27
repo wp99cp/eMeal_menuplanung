@@ -40,7 +40,6 @@ export class AddMealComponent implements AfterViewInit {
   constructor(
     private dbService: DatabaseService,
     public dialog: MatDialog,
-    private authService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA) public data: { mealNames: string[] }) {
 
     this.mealTableSource = new MatTableDataSource();
@@ -130,6 +129,7 @@ export class AddMealComponent implements AfterViewInit {
 
   /**
    * Öffnent den Dialog für, um eine neue Mahlzeit zu erstellen.
+   *
    */
   public newMeal() {
 
