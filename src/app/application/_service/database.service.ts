@@ -67,6 +67,14 @@ export class DatabaseService {
 
   }
 
+  public refreshAccessData(access: AccessData, path: string) {
+
+    return this.functions.httpsCallable('refreshAccessData')(
+      {documentPath: path, requestedAccessData: access, upgradeOnly: true}
+    );
+
+  }
+
 
   /**
    * Gets the last 5 Elements
