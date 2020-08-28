@@ -42,6 +42,6 @@
 
 <div mat-dialog-actions class="mat-buttons">
   <button mat-raised-button [mat-dialog-close]="">Abbrechen</button>
-  <button mat-raised-button [disabled]="!mealInfo.touched" [mat-dialog-close]="saveValueChanges()"
+  <button mat-raised-button [disabled]="!mealInfo.touched" [mat-dialog-close]="saveValueChanges()" [disabled]="!specificMealAccess"
     color="save">Speichern</button>
 </div>

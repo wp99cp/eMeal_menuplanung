@@ -1,16 +1,17 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Camp } from '../../_class/camp';
-import { Meal } from '../../_class/meal';
-import { SpecificMeal } from '../../_class/specific-meal';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {Camp} from '../../_class/camp';
+import {Meal} from '../../_class/meal';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {DatabaseService} from '../../_service/database.service';
 
 @Component({
   selector: 'app-meal-info',
   templateUrl: './meal-info.component.html',
   styleUrls: ['./meal-info.component.sass']
 })
-export class MealInfoComponent {
+export class MealInfoComponent implements OnInit {
 
   public mealInfo: FormGroup;
 
@@ -18,7 +19,13 @@ export class MealInfoComponent {
   public specificMeal: SpecificMeal;
   public meal: Meal;
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: { camp: Camp, meal: Meal, specificMeal: SpecificMeal }, private formBuilder: FormBuilder) {
+  public mealAccess = false;
+  public specificMealAccess = false;
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) data: { camp: Camp, meal: Meal, specificMeal: SpecificMeal },
+    private formBuilder: FormBuilder,
+    private db: DatabaseService) {
 
     this.camp = data.camp;
     this.specificMeal = data.specificMeal;
@@ -26,15 +33,43 @@ export class MealInfoComponent {
 
     this.mealInfo = this.formBuilder.group({
 
-      title: this.meal.name,
-      description: this.meal.description,
+      title: {value: this.meal.name, disabled: true},
+      description: {value: this.meal.description, disabled: true},
 
       // der weekTitle eines spezifischenMeal muss nicht zwingend gesetzt sein...
       // in diesem Fall wird der meal.title übernommen und bei der nächsten Speicherung abgespeichert
-      weekTitle: this.specificMeal.weekTitle !== '' ? this.specificMeal.weekTitle : this.meal.name,
-      overrideParticipants: this.specificMeal.overrideParticipants,
-      participants: this.specificMeal.participants
+      weekTitle: {
+        value: this.specificMeal.weekTitle !== '' ? this.specificMeal.weekTitle : this.meal.name,
+        disabled: true
+      },
+      overrideParticipants: {
+        value: this.specificMeal.overrideParticipants,
+        disabled: true
+      },
+      participants: {
+        value: this.specificMeal.participants,
+        disabled: true
+      },
+    });
+  }
 
+  ngOnInit () {
+
+    this.db.canWrite(this.meal).then(access => {
+      this.mealAccess = access;
+      if (access) {
+        this.mealInfo.controls.title.enable();
+        this.mealInfo.controls.description.enable();
+      }
+    });
+
+    this.db.canWrite(this.specificMeal).then(access => {
+      this.specificMealAccess = access;
+      if (access) {
+        this.mealInfo.controls.participants.enable();
+        this.mealInfo.controls.overrideParticipants.enable();
+        this.mealInfo.controls.weekTitle.enable();
+      }
     });
 
   }
