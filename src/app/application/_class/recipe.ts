@@ -193,7 +193,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     specificRecipeData.used_in_camp = camp.documentId;
     specificRecipeData.recipe_override_participants = false;
     specificRecipeData.recipe_used_for = 'all';
-    specificRecipeData.access = this.getAccessData();
+    specificRecipeData.access = camp.getAccessData(); // use the access data from camp
     specificRecipeData.recipe_specificId = specificRecipeId;
 
     const recipePath = 'recipes/' + recipeId + '/specificRecipes';

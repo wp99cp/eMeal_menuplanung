@@ -88,7 +88,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     specificMealData.used_in_camp = camp.documentId;
     specificMealData.meal_weekview_name = this.name;
     specificMealData.meal_override_participants = false;
-    specificMealData.access = this.getAccessData();
+    specificMealData.access = camp.getAccessData(); // use the access data from camp
     specificMealData.meal_date = day.getTimestamp();
     specificMealData.meal_gets_prepared = false;
     specificMealData.meal_prepare_date = day.getTimestamp();
