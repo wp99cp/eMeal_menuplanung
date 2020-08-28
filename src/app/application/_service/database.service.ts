@@ -421,6 +421,22 @@ export class DatabaseService {
   }
 
   /**
+   * @returns observable list of all recipes form the current meal.
+   *
+   * @param mealId id of the current meal
+   * @param campId id of the current camp
+   */
+  public getAccessableRecipes(): Observable<Recipe[]> {
+
+    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
+      .pipe(mergeMap(queryFn =>
+        this.requestCollection('recipes', queryFn)
+          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
+      ));
+
+  }
+
+  /**
    *
    * @param recipeId
    */

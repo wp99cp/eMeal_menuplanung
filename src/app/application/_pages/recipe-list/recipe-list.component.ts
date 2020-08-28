@@ -20,7 +20,7 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
 
   constructor(private dbService: DatabaseService, private snackBar: MatSnackBar, dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getEditableRecipes(), dialog);
+    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog);
 
     // set filter for searching
     this.filterFn = (rec: Recipe) => rec.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
