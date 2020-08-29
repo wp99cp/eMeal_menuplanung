@@ -10,6 +10,8 @@
 
 </div>
 
+<p *ngIf="filteredElements?.length === 0 && (dbElements | async)?.length !== 0"> Du hast noch keine Mahlzeit erstellt, die zu deinem Suchbegriff passt! </p>
+
 <div class="create-first-meal mat-elevation-z3" *ngIf="(dbElements | async)?.length === 0">
 
   <div>

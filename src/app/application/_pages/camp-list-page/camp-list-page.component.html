@@ -12,6 +12,8 @@
 
 </div>
 
+<p *ngIf="filteredElements?.length === 0 && (dbElements | async)?.length !== 0"> Du hast noch kein Lager erstellt, das zu deinem Suchbegriff passt! </p>
+
 <div class="create-first-camp mat-elevation-z3" *ngIf="(dbElements | async)?.length === 0">
 
   <div>
