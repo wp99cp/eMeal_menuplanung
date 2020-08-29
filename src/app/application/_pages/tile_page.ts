@@ -10,27 +10,21 @@ import {MatDialog} from '@angular/material/dialog';
 export abstract class TileListPage<T extends FirestoreObject> {
 
   // TODO: add sort option
-  // TODO: add message if filteredElements is empty...
-
-  public abstract copy(element: T): void;
-
-  protected abstract deleteElement(element: T): void;
-
-  protected abstract async deleteConditions(element: T): Promise<boolean>;
-
-  protected abstract newElement(): void;
 
   public dbElements: Observable<T[]>;
   public filteredElements: T[];
-
   protected filterValue = '';
   protected markedAsDeleted = [];
   public access = {};
-
   protected filterFn: (dbElement: T) => boolean;
   protected dbElementName = 'Element';
 
-  constructor(
+  public abstract copy(element: T): void;
+  protected abstract deleteElement(element: T): void;
+  protected abstract async deleteConditions(element: T): Promise<boolean>;
+  public abstract newElement(): void;
+
+  protected constructor(
     private databaseServcie: DatabaseService,
     private messageBar: MatSnackBar,
     dbElements: Observable<T[]>,
