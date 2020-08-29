@@ -118,7 +118,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
 
   }
 
-  protected newElement() {
+  public newElement() {
 
     this.dialog.open(CreateMealComponent, {
       height: '640px',

@@ -51,7 +51,7 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
    * Öffnent den Dialog für, um eine neue Mahlzeit zu erstellen.
    *
    */
-  protected newElement() {
+  public newElement() {
 
     this.dialog.open(CreateRecipeComponent, {
       height: '640px',
