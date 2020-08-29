@@ -3,6 +3,8 @@ import {AuthenticationService} from 'src/app/application/_service/authentication
 import {TemplateHeaderComponent} from '../template-header/template-header.component';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
+import {HelpService} from '../../application/_service/help.service';
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-main-menu',
@@ -13,7 +15,13 @@ export class MainMenuComponent {
 
   public static authServ: AuthenticationService;
 
-  constructor(private router: Router, private location: Location) {
+  constructor(private router: Router,
+              private location: Location,
+              public helpService: HelpService,
+              dialog: MatDialog) {
+
+    this.helpService.addDialog(dialog);
+
   }
 
   public closeMenu() {

@@ -9,12 +9,13 @@
 <div *ngIf="isSignedIn() else notSignedIn" class="nav" (click)="closeMenu()">
 
   <ul class="top">
-    <li routerLink="/app">
-      <a> Startseite </a>
-    </li>
+
+    <!-- TODO: Add zuletzt verwendet -->
+
+    <h4> Bibliothek </h4>
     <li routerLink="/app/camps" routerLinkActive="active-link">
       <mat-icon class="nav-icon">nature_people</mat-icon>
-      <a matTooltip="Meine Lager"> Meine Lager </a>
+      <a matTooltip="Lager"> Lager </a>
     </li>
     <li routerLink="/app/meals" routerLinkActive="active-link">
       <mat-icon class="nav-icon">fastfood</mat-icon>
@@ -24,25 +25,33 @@
       <mat-icon class="nav-icon"> menu_book</mat-icon>
       <a matTooltip="Übersicht aller Rezepte"> Rezepte </a>
     </li>
-  </ul>
 
+  </ul>
 
   <ul class="bottom">
     <hr/>
-    <li routerLink="/">
-      <a> Informationen </a>
-    </li>
-    <li routerLink="/app/hilfe" routerLinkActive="active-link">
-      <a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a>
+
+    <h4> Hilfestellung und Feedback </h4>
+
+    <li (click)="this.helpService.openHelpPopup()">
+      <mat-icon class="nav-icon">help</mat-icon>
+      <a matTooltip="Hilfe und Erklärungen (F1)">Erklärungen</a>
     </li>
     <li routerLink="/app/feedback" routerLinkActive="active-link">
+      <mat-icon class="nav-icon">feedback</mat-icon>
       <a matTooltip="Melde einen Fehler">Fehler melden</a>
     </li>
+
     <hr/>
+
+    <h4> Einstellungen und Konto </h4>
+
     <li routerLink="/app/settings" routerLinkActive="active-link">
+      <mat-icon class="nav-icon">settings</mat-icon>
       <a matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a>
     </li>
     <li routerLink="/">
+      <mat-icon class="nav-icon"></mat-icon>
       <a matTooltip="Von eMeal abmelden" (click)="signOut()">Abmelden</a>
     </li>
   </ul>

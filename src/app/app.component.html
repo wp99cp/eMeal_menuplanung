@@ -2,7 +2,7 @@
 
 <app-main-menu></app-main-menu>
 
-<main (click)="closeMenu()">
+<main id="main" (click)="closeMenu()">
   <router-outlet (activate)="onActivate($event)"></router-outlet>
 </main>
 

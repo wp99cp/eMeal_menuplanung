@@ -25,7 +25,8 @@ import {SignInComponent} from "./sign-in/sign-in.component";
 import {MatInputModule} from "@angular/material/input";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {AngularFireFunctions} from "@angular/fire/functions";
-import { SignInCallbackComponent } from './sign-in-callback/sign-in-callback.component';
+import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -38,30 +39,31 @@ import { SignInCallbackComponent } from './sign-in-callback/sign-in-callback.com
     SignInComponent,
     SignInCallbackComponent
   ],
-    imports: [
+  imports: [
 
-        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-        AngularFireAuthModule,
-        HttpClientModule,
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+    AngularFireAuthModule,
+    HttpClientModule,
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
 
-        // Material Design for the entire app
-        MatToolbarModule,
-        MatMenuModule,
-        MatTooltipModule,
-        MatButtonModule,
-        MatIconModule,
-        ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-        MarkdownModule,
-        MatInputModule,
-        MatSlideToggleModule
-    ],
+    // Material Design for the entire app
+    MatToolbarModule,
+    MatMenuModule,
+    MatTooltipModule,
+    MatButtonModule,
+    MatIconModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+    MarkdownModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatDialogModule
+  ],
   providers: [
     AngularFireAuth,
     AuthenticationService,
-    AngularFireFunctions
+    AngularFireFunctions,
   ],
   bootstrap: [AppComponent]
 })
