@@ -1,28 +1,21 @@
+<h2>Neues Lager erstellen</h2>
+
 <mat-vertical-stepper #campCreator [linear]="true">
-
-    <mat-step label="Lager erstellen.">
-
-      <h2 class="mat-h2">Mit Planen beginnen.</h2>
-      <p>Erstelle ein neues Lager und beginne sofort mit dem Planen.</p>
-      <button mat-raised-button matStepperNext>Lager erstellen</button>
-
-    </mat-step>
 
     <!-- Allgemeine Infos -->
     <mat-step label="Allgemeine Infos zum Lager." [stepControl]="newCampInfos">
 
       <form [formGroup]="newCampInfos">
 
-        <mat-form-field>
-          <input matInput placeholder="Name" required formControlName="name" #name maxlength="32" autocomplete="off">
-          <mat-hint align="start"><strong>Name des Lagers</strong></mat-hint>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32" autocomplete="off">
           <mat-hint align="end">{{name.value?.length}} / 32</mat-hint>
         </mat-form-field>
 
         <br />
 
-        <mat-form-field>
-          <input matInput placeholder="Beschreibung" formControlName="description" autocomplete="off">
+        <mat-form-field  class="full-width">
+          <input matInput placeholder="Beschreibung zum Lager" formControlName="description" autocomplete="off">
         </mat-form-field>
 
       </form>
@@ -37,15 +30,15 @@
 
       <form [formGroup]="newCampParticipants">
 
-        <mat-form-field>
-          <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'>
+        <mat-form-field  class="full-width">
+          <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number' autocomplete="off">
         </mat-form-field>
 
       </form>
 
       <p class="info">
-        Bitte gib die voraussichtliche Anzahl Teilnehmende an. Du kannst die Teilnehmer-Anzahl später jederzeit
-        anpassen.
+        Bitte gib die voraussichtliche Anzahl Teilnehmende an. <br>
+        Du kannst die Teilnehmeranzahl später jederzeit anpassen.
       </p>
 
       <br />
@@ -58,13 +51,11 @@
     <!-- Mit Planen beginnen -->
     <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">
 
-      <p>Füge einen ersten Tag hinzu.</p>
-
       <form [formGroup]="newCampDate">
 
-        <mat-form-field>
+        <mat-form-field  class="full-width">
           <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date"
-            data-date-format="DD MMMM YYYY">
+            data-date-format="DD MMMM YYYY" autocomplete="off">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
