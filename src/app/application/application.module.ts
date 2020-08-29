@@ -227,7 +227,7 @@ export class ApplicationModule {
     // Test on first load
     auth.trackCredentials();
 
-    // we want to use the context;enuService in this module
+    // we want to use the contextMenuService in this module
     contextMenu.activate();
     shortCut.activate();
 

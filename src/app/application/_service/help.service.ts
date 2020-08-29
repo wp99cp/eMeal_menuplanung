@@ -40,14 +40,14 @@ export class HelpService {
 
   openHelpPopup(ref = '') {
 
-
     if (this.isOpen) {
       return;
     }
+
     this.isOpen = true;
 
     if (!this.dialog) {
-      throw new Error('No Dialog added! Pleas add first a mat-dialog!');
+      throw new Error('No Dialog added! Please add first a mat-dialog!');
     }
 
     let helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
