@@ -38,7 +38,7 @@ import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 })
 export class DatabaseService {
 
-  private unsubscripeOnRouteChanges = new Subject();
+  private routerChanges = new Subject();
 
   // TODO: allgemein besseres Error-Handling
   // als erste Idee kann jeder Fehler einfach als Banner
@@ -60,11 +60,11 @@ export class DatabaseService {
 
     router.events
       .pipe(
-        filter(event => event instanceof NavigationStart),
-        skip(1)
+        filter(event => event instanceof NavigationStart), // triggers once every navigation event
+        skip(1) // ignore first change (on load page)
       ).subscribe((changeRoute: NavigationEnd) => {
       console.log('Trigger unsubscription! URL changed to: ' + changeRoute.url);
-      this.unsubscripeOnRouteChanges.next();
+      this.routerChanges.next();
     });
 
   }
@@ -329,16 +329,29 @@ export class DatabaseService {
 
   /**
    *
-   * @returns a Observable of the camps the currentUser has access
+   * Gets all camps the signed in user has access (i.g. owner, editor, collaborator or viewer rights).
+   * The database service automatically unsubscribe the observable on a router navigation.
+   * To prevent the auto subscription, pass the the optional argument.
+   *
+   * @param autoUnsubscription specifies weather the db service should automatically unsubscribe the
+   * observable on a router change (i.g. navigation). Optional parameter. Default value is true.
+   *
+   * @returns a Observable of the camps the currentUser has access to
    *
    */
-  public getCampsWithAccess(): Observable<Camp[]> {
+  public getCampsWithAccess(autoUnsubscription = true): Observable<Camp[]> {
 
-    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
-      .pipe(mergeMap(queryFn => this.requestCollection('camps/', queryFn)
-        .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
-      )).pipe(takeUntil(this.unsubscripeOnRouteChanges));
+    const campObservable = this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
+      .pipe(mergeMap(queryFn => this.requestCollection('camps/', queryFn)))
+      .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp));
 
+    // no auto unsubscription
+    if (!autoUnsubscription) {
+      return campObservable;
+    }
+
+    // enable auto-unsubscription
+    return campObservable.pipe(takeUntil(this.routerChanges)); // automatically unsubscribe on router changes
 
   }
 
