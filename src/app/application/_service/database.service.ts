@@ -3,8 +3,8 @@ import {Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryF
 import {AngularFireFunctions} from '@angular/fire/functions';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {firestore} from 'firebase/app';
-import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction} from 'rxjs';
-import {catchError, delay, map, mergeMap, retryWhen, take} from 'rxjs/operators';
+import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction, Subject} from 'rxjs';
+import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil} from 'rxjs/operators';
 import {Camp} from '../_class/camp';
 import {FirestoreObject} from '../_class/firebaseObject';
 import {Meal} from '../_class/meal';
@@ -24,6 +24,7 @@ import {
   Ingredient
 } from '../_interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 
 
 /**
@@ -36,6 +37,8 @@ import {AuthenticationService} from './authentication.service';
   providedIn: 'root'
 })
 export class DatabaseService {
+
+  private unsubscripeOnRouteChanges = new Subject();
 
   // TODO: allgemein besseres Error-Handling
   // als erste Idee kann jeder Fehler einfach als Banner
@@ -52,7 +55,18 @@ export class DatabaseService {
     private db: AngularFirestore,
     private authService: AuthenticationService,
     private functions: AngularFireFunctions,
-    private cloud: AngularFireStorage) {
+    private cloud: AngularFireStorage,
+    private router: Router) {
+
+    router.events
+      .pipe(
+        filter(event => event instanceof NavigationStart),
+        skip(1)
+      ).subscribe((changeRoute: NavigationEnd) => {
+      console.log('Trigger unsubscription! URL changed to: ' + changeRoute.url);
+      this.unsubscripeOnRouteChanges.next();
+    });
+
   }
 
   /**
@@ -321,10 +335,10 @@ export class DatabaseService {
   public getCampsWithAccess(): Observable<Camp[]> {
 
     return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
-      .pipe(mergeMap(queryFn =>
-        this.requestCollection('camps/', queryFn)
-          .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
-      ));
+      .pipe(mergeMap(queryFn => this.requestCollection('camps/', queryFn)
+        .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
+      )).pipe(takeUntil(this.unsubscripeOnRouteChanges));
+
 
   }
 

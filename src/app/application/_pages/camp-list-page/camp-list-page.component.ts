@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../_class/camp';
 import {CopyCampComponent} from '../../_dialoges/copy-camp/copy-camp.component';
