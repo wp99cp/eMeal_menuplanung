@@ -51,7 +51,6 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     this.addButtonNew();
     this.addHelpMessage();
 
-    // TODO: better version
     setTimeout(() =>
       this.route.queryParams.subscribe(params => {
 

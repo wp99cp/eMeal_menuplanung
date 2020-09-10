@@ -10,8 +10,6 @@ import {ExportableObject, FirestoreObject} from './firebaseObject';
  */
 export class Meal extends FirestoreObject implements ExportableObject {
 
-  // TODO: add camp sepcific data handeling
-
   public readonly path;
   public readonly documentId;
 

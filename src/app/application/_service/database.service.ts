@@ -88,8 +88,6 @@ export class DatabaseService {
   /**
    * Gets the last 5 Elements
    *
-   * TODO: add Python-Skript, das alte Exports automatisch löscht,
-   * eine Cloud-Funktion gibt es hierfür teilweise sogar...
    *
    *
    */

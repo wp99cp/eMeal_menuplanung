@@ -22,7 +22,6 @@ export interface HeaderNav {
 })
 export class HeaderNavComponent {
 
-  // TODO: move account from side to header (rigth side of top nav e.g. Google Account Settings)??
   // add popup for account to sign-out, change settingts and view username
 
   private static headerNav: HeaderNav[] = [];

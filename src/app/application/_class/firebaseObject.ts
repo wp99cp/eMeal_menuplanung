@@ -115,7 +115,6 @@ export abstract class FirestoreObject implements ExportableObject {
    */
   public setAccessData(access: AccessData): void {
 
-    // TODO: add checks for errors
     // und prüft auf erlaubte Veränderungen...
     this.access = access;
 
