@@ -75,7 +75,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
     // set as last used
     this.camp
-      .pipe(take(1))
       .subscribe(camp =>
       this.lastUsedService.addToHistory(camp)
     );
