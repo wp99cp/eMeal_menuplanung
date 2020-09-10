@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
 import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import {take} from "rxjs/operators";
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
@@ -107,7 +108,9 @@ export class AddRecipeComponent implements AfterViewInit {
       width: '900px',
       data: { recipeName: (document.getElementById('search-field') as HTMLInputElement).value }
 
-    }).afterClosed().subscribe((recipe: Observable<FirestoreRecipe>) => {
+    }).afterClosed()
+      .pipe(take(1))
+      .subscribe((recipe: Observable<FirestoreRecipe>) => {
 
       recipe.subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
       this.setFocusToSeachField();

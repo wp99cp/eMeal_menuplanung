@@ -133,7 +133,9 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
       width: '900px',
       data: {mealName: ''}
     }).afterClosed()
-      .pipe(mergeMap((meal: Observable<FirestoreMeal>) => meal))
+      .pipe(
+        mergeMap((meal: Observable<FirestoreMeal>) => meal),
+        take(1))
       .subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
 
   }

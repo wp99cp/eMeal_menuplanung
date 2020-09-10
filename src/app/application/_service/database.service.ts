@@ -85,7 +85,6 @@ export class DatabaseService {
 
   }
 
-
   /**
    * Gets the last 5 Elements
    *
@@ -131,7 +130,6 @@ export class DatabaseService {
       )));
 
   }
-
 
   /**
    *
@@ -205,7 +203,6 @@ export class DatabaseService {
 
   }
 
-
   /**
    *
    * Sends the Feedback to the administrator.
@@ -230,7 +227,6 @@ export class DatabaseService {
     xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
 
   }
-
 
   /**
    *
@@ -265,7 +261,6 @@ export class DatabaseService {
 
   }
 
-
   /**
    *
    * @param mealId
@@ -297,7 +292,6 @@ export class DatabaseService {
       .update({used_in_meals: firestore.FieldValue.arrayUnion(mealId)});
 
   }
-
 
   /**
    *
@@ -536,13 +530,23 @@ export class DatabaseService {
   public async addDocument(firebaseDocument: FirestoreDocument, collectionPath: string, documentId?: string):
     Promise<firebase.firestore.DocumentReference> {
 
+
     if (documentId === undefined) {
       return await this.db.collection(collectionPath).add(firebaseDocument);
-
     }
 
-    this.db.doc(collectionPath + '/' + documentId).set(firebaseDocument);
-    return this.db.doc(collectionPath + '/' + documentId).ref;
+    return new Promise((resolve) => {
+      this.db.doc(collectionPath + '/' + documentId).get().subscribe(async res => {
+
+        if (res.exists) {
+          throw new Error('Doc already exist!');
+        }
+
+        await this.db.doc(collectionPath + '/' + documentId).set(firebaseDocument);
+        resolve(this.db.doc(collectionPath + '/' + documentId).ref);
+
+      });
+    });
 
   }
 

@@ -13,6 +13,7 @@ import {CustomPaginator} from './CustomPaginator';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ImportComponent} from '../import/import.component';
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-add-meal',
@@ -138,7 +139,9 @@ export class AddMealComponent implements AfterViewInit {
       width: '900px',
       data: {mealName: (document.getElementById('search-field') as HTMLInputElement).value}
 
-    }).afterClosed().subscribe((meal: Observable<FirestoreMeal>) => {
+    }).afterClosed()
+      .pipe(take(1))
+      .subscribe((meal: Observable<FirestoreMeal>) => {
 
       meal.subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
       this.setFocusToSeachField();

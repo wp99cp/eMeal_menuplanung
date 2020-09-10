@@ -53,7 +53,9 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
       width: '900px',
       data: {campName: ''}
     }).afterClosed()
-      .pipe(mergeMap((camp: Observable<FirestoreCamp>) => camp))
+      .pipe(
+        mergeMap((camp: Observable<FirestoreCamp>) => camp),
+        take(1))
       .subscribe(campData => this.dbService.addDocument(campData, 'camps'));
 
   }

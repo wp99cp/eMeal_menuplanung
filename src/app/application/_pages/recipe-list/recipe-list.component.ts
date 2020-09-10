@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {mergeMap} from 'rxjs/operators';
+import {mergeMap, take} from 'rxjs/operators';
 import {Recipe} from '../../_class/recipe';
 import {CopyRecipeComponent} from '../../_dialoges/copy-recipe/copy-recipe.component';
 import {CreateRecipeComponent} from '../../_dialoges/create-recipe/create-recipe.component';
@@ -65,8 +65,10 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
       width: '900px',
       data: {recipeName: ''}
     }).afterClosed()
-      .pipe(mergeMap((recipe: Observable<FirestoreRecipe>) => recipe))
-      .subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
+      .pipe(
+        mergeMap((recipe: Observable<FirestoreRecipe>) => recipe),
+        take(1)
+      ).subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
 
   }
 
