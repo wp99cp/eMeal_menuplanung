@@ -289,9 +289,9 @@ export class DatabaseService {
    * @param mealId
    * @param camp
    */
-  public addRecipe(recipe: Recipe, specificId: string, mealId: string, camp: Camp) {
+  public async addRecipe(recipe: Recipe, specificId: string, mealId: string, camp: Camp) {
 
-    recipe.createSpecificRecipe(camp, recipe.documentId, specificId, this);
+    await recipe.createSpecificRecipe(camp, recipe.documentId, specificId, this);
 
     return this.db.doc('recipes/' + recipe.documentId)
       .update({used_in_meals: firestore.FieldValue.arrayUnion(mealId)});
