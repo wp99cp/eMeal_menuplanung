@@ -167,6 +167,8 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
         event.currentIndex);
     }
 
+    this.saveMeals();
+
   }
 
   /**
