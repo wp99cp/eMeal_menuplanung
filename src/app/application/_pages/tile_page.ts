@@ -1,11 +1,12 @@
 import {Observable} from 'rxjs';
 import {FirestoreObject} from '../_class/firebaseObject';
 import {DatabaseService} from '../_service/database.service';
-import {Recipe} from '../_class/recipe';
 import {take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {HelpService} from '../_service/help.service';
+import {Router} from '@angular/router';
 
 export abstract class TileListPage<T extends FirestoreObject> {
 
@@ -13,22 +14,19 @@ export abstract class TileListPage<T extends FirestoreObject> {
 
   public dbElements: Observable<T[]>;
   public filteredElements: T[];
+  public access = {};
   protected filterValue = '';
   protected markedAsDeleted = [];
-  public access = {};
   protected filterFn: (dbElement: T) => boolean;
   protected dbElementName = 'Element';
-
-  public abstract copy(element: T): void;
-  protected abstract deleteElement(element: T): void;
-  protected abstract async deleteConditions(element: T): Promise<boolean>;
-  public abstract newElement(): void;
 
   protected constructor(
     private databaseServcie: DatabaseService,
     private messageBar: MatSnackBar,
     dbElements: Observable<T[]>,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private helpSecice: HelpService,
+    private router: Router) {
 
     this.dbElements = dbElements;
 
@@ -47,27 +45,9 @@ export abstract class TileListPage<T extends FirestoreObject> {
 
   }
 
-  protected addButtonNew() {
+  public abstract copy(element: T): void;
 
-    HeaderNavComponent.addToHeaderNav({
-      active: true,
-      description: this.dbElementName + ' hinzufügen',
-      name: 'Neues ' + this.dbElementName,
-      action: (() => this.newElement()),
-      icon: 'add_circle_outline',
-    });
-
-  }
-
-  protected updateVisibleElements() {
-
-    this.dbElements
-      .pipe(take(1))
-      .subscribe(elements =>
-        this.filteredElements = elements.filter(elem =>
-          this.filterFn(elem) && !this.markedAsDeleted.includes(elem.documentId)));
-
-  }
+  public abstract newElement(): void;
 
   applyFilter(event: any) {
 
@@ -77,7 +57,6 @@ export abstract class TileListPage<T extends FirestoreObject> {
     this.updateVisibleElements();
 
   }
-
 
   async delete(element: T) {
 
@@ -122,5 +101,53 @@ export abstract class TileListPage<T extends FirestoreObject> {
 
   }
 
+  protected abstract deleteElement(element: T): void;
+
+  protected abstract async deleteConditions(element: T): Promise<boolean>;
+
+  protected addButtonNew() {
+
+    HeaderNavComponent.addToHeaderNav({
+      active: true,
+      description: this.dbElementName + ' hinzufügen',
+      name: 'Neues ' + this.dbElementName,
+      action: (() => this.newElement()),
+      icon: 'add_circle_outline',
+    });
+
+  }
+
+  protected updateVisibleElements() {
+
+    this.dbElements
+      .pipe(take(1))
+      .subscribe(elements =>
+        this.filteredElements = elements.filter(elem =>
+          this.filterFn(elem) && !this.markedAsDeleted.includes(elem.documentId)));
+
+  }
+
+  protected addHelpMessage() {
+
+    this.helpSecice.addHelpMessage({
+      title: this.dbElementName + ' hinzufügen',
+      message: `Ein neues Lager, Rezept oder Mahlzeit kannst
+                du ganz einfach über das Menü am oberen Bildschirm-Rand erstellen.<br>
+                Klicke dort einfach auf den entsprechenden Menüpunkt.`,
+      url: this.router.url
+    });
+
+    this.helpSecice.addHelpMessage({
+      title: 'Nach ' + this.dbElementName + ' suchen',
+      message: `Hast du die Übersicht verloren? Kein Problem: Du kannst ganz einfach nach ${this.dbElementName} suchen.
+                Verwende hierzu die Suchleiste.<br>
+                Nun werden dir nur noch Lager, Rezepte oder Mahlzeiten angezeigt, die deinen Suchbegriff im Namen beinhalten. <br>
+                <br>
+                <img width="100%" src="/assets/img/help_info_messages/search_bar.png">`,
+      url: this.router.url
+    });
+
+
+  }
 
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../_class/camp';
@@ -11,6 +11,7 @@ import {FirestoreCamp} from '../../_interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../_service/database.service';
 import {TileListPage} from '../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {HelpService} from '../../_service/help.service';
 
 /**
  * CampListPageComponent
@@ -29,9 +30,11 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
     public dialog: MatDialog,
     public dbService: DatabaseService,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    router: Router,
+    helpService: HelpService) {
 
-    super(dbService, snackBar, dbService.getCampsWithAccess(), dialog);
+    super(dbService, snackBar, dbService.getCampsWithAccess(), dialog, helpService, router);
 
     // set filter for searching
     this.filterFn = (camp: Camp) =>
@@ -103,6 +106,7 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
   ngOnInit() {
 
     this.addButtonNew();
+    this.addHelpMessage();
 
     setTimeout(() =>
 

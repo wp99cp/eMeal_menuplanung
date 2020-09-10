@@ -10,7 +10,7 @@ import {HelpMessage} from '../../_service/help.service';
 export class HelpComponent {
 
   public message: HelpMessage;
-  private index: number;
+  public index: number;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { index: number, messages: HelpMessage[] }) {
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {mergeMap, take} from 'rxjs/operators';
 import {Meal} from '../../_class/meal';
 import {DeepCopyMealComponent} from '../../_dialoges/deep-copy-meal/deep-copy-meal.component';
@@ -12,6 +12,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
 import {ImportComponent} from '../../_dialoges/import/import.component';
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-meal-list',
@@ -20,9 +21,15 @@ import {ImportComponent} from '../../_dialoges/import/import.component';
 })
 export class MealListComponent extends TileListPage<Meal> implements OnInit {
 
-  constructor(private dbService: DatabaseService, public snackBar: MatSnackBar, private route: ActivatedRoute, public dialog: MatDialog) {
+  constructor(
+    private dbService: DatabaseService,
+    public snackBar: MatSnackBar,
+    private route: ActivatedRoute,
+    public dialog: MatDialog,
+    router: Router,
+    helpService: HelpService) {
 
-    super(dbService, snackBar, dbService.getEditableMeals(), dialog);
+    super(dbService, snackBar, dbService.getEditableMeals(), dialog, helpService, router);
 
     // set filter for searching
     this.filterFn = (meal) => meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
@@ -42,6 +49,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
   ngOnInit() {
 
     this.addButtonNew();
+    this.addHelpMessage();
 
     // TODO: better version
     setTimeout(() =>

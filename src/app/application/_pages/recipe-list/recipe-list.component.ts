@@ -9,6 +9,8 @@ import {DatabaseService} from '../../_service/database.service';
 import {TileListPage} from '../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
+import {HelpService} from '../../_service/help.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -18,9 +20,14 @@ import {MatDialog} from '@angular/material/dialog';
 export class RecipeListComponent extends TileListPage<Recipe> implements OnInit {
 
 
-  constructor(private dbService: DatabaseService, private snackBar: MatSnackBar, dialog: MatDialog) {
+  constructor(
+    private dbService: DatabaseService,
+    private snackBar: MatSnackBar,
+    dialog: MatDialog,
+    router: Router,
+    helpService: HelpService) {
 
-    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog);
+    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog, helpService, router);
 
     // set filter for searching
     this.filterFn = (rec: Recipe) => rec.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
@@ -32,7 +39,7 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
   ngOnInit(): void {
 
     this.addButtonNew();
-
+    this.addHelpMessage();
 
   }
 

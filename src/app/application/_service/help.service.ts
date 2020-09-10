@@ -34,7 +34,8 @@ export class HelpService {
 
   public addHelpMessage(helpMessage: HelpMessage) {
 
-    HelpService.helpMessages.push(helpMessage);
+    if (!HelpService.helpMessages.map(mes => mes.title).includes(helpMessage.title))
+      HelpService.helpMessages.push(helpMessage);
 
   }
 
@@ -53,7 +54,7 @@ export class HelpService {
     let helpMessagesForThisPage = HelpService.helpMessages.filter(mess => mess.url === this.router.url);
     let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
     if (ref !== '') {
-      const elem =  helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
+      const elem = helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
       index = helpMessagesForThisPage.indexOf(elem);
     }
     const message = helpMessagesForThisPage[index];
