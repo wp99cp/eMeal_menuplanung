@@ -164,7 +164,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
             objectName: 'Lager',
             currentAccess: camp.getAccessData(),
             documentPath: camp.path,
-            accessLevels: ['editor', 'viewer', 'collaborator']
+            accessLevels: ['editor', 'viewer' ] // ['editor', 'viewer', 'collaborator']
           }
         }).afterClosed())).subscribe();
 
