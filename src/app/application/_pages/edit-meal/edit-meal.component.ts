@@ -19,6 +19,7 @@ import {SettingsService} from '../../_service/settings.service';
 import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
+import {CurrentlyUsedMealService} from "../../../_template/currently-used-meal.service";
 
 @Component({
   selector: 'app-edit-meal',
@@ -44,7 +45,9 @@ export class EditMealComponent implements OnInit, Saveable {
     public dialog: MatDialog,
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
-    private autosave: AutoSaveService) {
+    private autosave: AutoSaveService,
+    private lastUsedService: CurrentlyUsedMealService) {
+
 
     autosave.register(this);
 
@@ -101,6 +104,13 @@ export class EditMealComponent implements OnInit, Saveable {
     this.recipes = this.urlPathData.pipe(
       this.loadIDFromURL('meals'),
       mergeMap(mealId => this.dbService.getRecipes(mealId))
+    );
+
+    // set as last used
+    this.camp
+      .pipe(take(1))
+      .subscribe(camp =>
+      this.lastUsedService.addToHistory(camp)
     );
 
     this.camp.pipe(take(1)).subscribe(camp =>

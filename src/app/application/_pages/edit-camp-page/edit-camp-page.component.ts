@@ -13,6 +13,7 @@ import {WeekViewComponent} from '../../_template/week-view/week-view.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {HelpService} from '../../_service/help.service';
+import {CurrentlyUsedMealService} from '../../../_template/currently-used-meal.service';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -41,7 +42,8 @@ export class EditCampPageComponent implements OnInit, Saveable {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private autosave: AutoSaveService,
-    private helpService: HelpService) {
+    private helpService: HelpService,
+    private lastUsedService: CurrentlyUsedMealService) {
 
     helpService.addHelpMessage({
       title: 'Neue Mahlzeiten erstellen',
@@ -70,6 +72,13 @@ export class EditCampPageComponent implements OnInit, Saveable {
       if (access)
         HeaderNavComponent.turnOn('Mitarbeiter');
     });
+
+    // set as last used
+    this.camp
+      .pipe(take(1))
+      .subscribe(camp =>
+      this.lastUsedService.addToHistory(camp)
+    );
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
