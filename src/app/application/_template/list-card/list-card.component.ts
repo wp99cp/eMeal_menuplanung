@@ -30,8 +30,10 @@ export class ListCardComponent implements OnInit {
   public topCategoriePath;
   public categoriePath;
   public usage;
+  public icon;
 
   constructor(private databaseService: DatabaseService, router: Router, helpService: HelpService) {
+
 
     helpService.addHelpMessage({
       title: 'Lager, Mahlzeiten und Rezepte umbenennen.',
@@ -53,6 +55,7 @@ export class ListCardComponent implements OnInit {
       this.topCategoriePath = 'camps';
       this.categoriePath = 'meals';
       this.usage = this.cardElement.usedInCamps.length;
+      this.icon = 'fastfood';
 
     } else if (this.cardElement instanceof Recipe) {
       this.elementName = 'Rezept';
@@ -60,6 +63,8 @@ export class ListCardComponent implements OnInit {
       this.topCategoriePath = 'meals';
       this.categoriePath = 'recipes';
       this.usage = this.cardElement.usedInMeals.length;
+      this.icon = 'menu_book';
+
 
     } else if (this.cardElement instanceof Camp) {
       this.elementName = 'Lager';
@@ -67,6 +72,8 @@ export class ListCardComponent implements OnInit {
       this.topCategoriePath = '';
       this.categoriePath = 'camps';
       this.usage = 0;
+      this.icon = 'nature_people';
+
 
     }
 

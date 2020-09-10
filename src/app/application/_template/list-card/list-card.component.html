@@ -1,7 +1,7 @@
 <div class="card mat-elevation-z3" id="{{cardElement.documentId}}" [ngClass]="{'read-only': !access}">
 
   <div class="title">
-    <mat-icon> menu_book</mat-icon>
+    <mat-icon> {{icon}} </mat-icon>
     <h3 [attr.contenteditable]="access" id="{{cardElement.documentId}}-title" (input)="typesName(cardElement)"
         matTooltip="{{access ? 'Unbenennen durch Klicken' : ''}}" class="showDots" (click)="removeDots(cardElement)">
       {{cardElement.name}}
