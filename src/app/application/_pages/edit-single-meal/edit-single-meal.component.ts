@@ -57,7 +57,7 @@ export class EditSingleMealComponent implements OnInit {
                 <br>
                 <img width="100%" src="/assets/img/help_info_messages/Share_Recipe.png">`,
       url: router.url,
-      ref: 'recipe-authorization-infos'
+      ref: 'meal-authorization-infos'
     });
 
   }
@@ -246,6 +246,7 @@ export class EditSingleMealComponent implements OnInit {
           width: '1000px',
           data: {
             objectName: 'Mahlzeit',
+            helpMessageId: 'meal-authorization-infos',
             currentAccess: meal.getAccessData(),
             documentPath: meal.path,
             accessLevels: ['editor', 'viewer']

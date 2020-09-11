@@ -4,7 +4,7 @@
 <app-list-of-user-with-access [userList]="accessData" [accessLevels]="data.accessLevels" class="current-collaborators"></app-list-of-user-with-access>
 
 <div mat-dialog-actions class="mat-buttons">
-    <p><a (click)="helpService.openHelpPopup('recipe-authorization-infos')">Infos zu den Berechtigungen</a></p>
+    <p><a (click)="helpService.openHelpPopup(data.helpMessageId)">Infos zu den Berechtigungen</a></p>
     <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
     <button mat-raised-button (click)="saveValueChanges()" [mat-dialog-close]="" color="save">Speichern</button>
 </div>

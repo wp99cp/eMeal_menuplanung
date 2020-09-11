@@ -18,6 +18,7 @@ export class ShareDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
       objectName: string;
+      helpMessageId: string
       currentAccess: AccessData;
       documentPath: string;
       accessLevels: string[];
