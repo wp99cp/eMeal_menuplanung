@@ -202,10 +202,12 @@ export class DatabaseService {
   }
 
   /**
+   *
    *  Removes a recipe form a meal. If the meal is used in a camp.
    *  This function also deletes the corresponding specificRecipes.
    *
-   *  TODO: BUGGG!!!! Deletes all specific meals!!!
+   *  @param mealId id of the meal
+   *  @param recipeId id of the recipe to be removed form the meal
    *
    */
   public removeRecipe(mealId: string, recipeId: string): Promise<void> {
