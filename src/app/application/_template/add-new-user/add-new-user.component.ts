@@ -1,7 +1,6 @@
-import {SelectionModel} from '@angular/cdk/collections';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
-import {map, mergeMap} from 'rxjs/operators';
+import {map, mergeMap, take} from 'rxjs/operators';
 
 import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
@@ -35,6 +34,7 @@ export class AddNewUserComponent implements OnInit {
 
 
     this.dbService.getVisibleUsers()
+      .pipe(take(1))// we dont want realtime updates for the users, only one the current snapshot
       .pipe(this.removeCurrentUser())
       .pipe(map((users: UserWithAccess[]) => {
         users.forEach(user => user.accessLevel = 'viewer');
@@ -70,6 +70,13 @@ export class AddNewUserComponent implements OnInit {
 
   }
 
+  selectUser(selectedUser: any) {
+
+    this.selectedUser = selectedUser;
+    (document.getElementById('user-search-bar') as HTMLInputElement).value = selectedUser.displayName;
+
+  }
+
   private userFilterPredicate(): (data: UserWithAccess, filter: string) => boolean {
 
     return (user: UserWithAccess, filter: string) =>
@@ -85,13 +92,6 @@ export class AddNewUserComponent implements OnInit {
 
     return mergeMap((users: UserWithAccess[]) => this.authService.getCurrentUser()
       .pipe(map(currentUser => users.filter(user => user.uid !== currentUser.uid))));
-
-  }
-
-  selectUser(selectedUser: any) {
-
-    this.selectedUser = selectedUser;
-    (document.getElementById('user-search-bar') as HTMLInputElement).value = selectedUser.displayName;
 
   }
 }

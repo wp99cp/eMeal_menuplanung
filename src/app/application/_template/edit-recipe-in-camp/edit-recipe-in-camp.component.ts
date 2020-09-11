@@ -57,7 +57,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
   ngOnInit() {
 
     // Ladet das spezifische Rezept.
-    this.specificRecipe = this.databaseService.getSpecificRecipe(this.specificMeal.documentId, this.recipe, this.camp).pipe(take(1));
+    this.specificRecipe = this.databaseService.getSpecificRecipe(this.specificMeal.documentId, this.meal.documentId, this.recipe, this.camp).pipe(take(1));
     this.specificRecipe.subscribe(specificRecipe => this.calcPart(specificRecipe));
 
     // lade overwrites

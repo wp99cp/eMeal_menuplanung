@@ -40,11 +40,6 @@ export class DatabaseService {
 
   private routerChanges = new Subject();
 
-  // TODO: allgemein besseres Error-Handling
-  // als erste Idee kann jeder Fehler einfach als Banner
-  // angezeigt werden, dies lässt sich direkt aus dieser Klasse heraus
-  // realisieren....
-
   /**
    * An angular service to provide data form the AngularFirestore database.
    * This service includes methods to fetch all kind of firebaseObjects form
@@ -58,6 +53,7 @@ export class DatabaseService {
     private cloud: AngularFireStorage,
     private router: Router) {
 
+    // used for automatically unsubscribe if the user changes the page, i.g. leaves the edit section.
     router.events
       .pipe(
         filter(event => event instanceof NavigationStart), // triggers once every navigation event
@@ -71,7 +67,15 @@ export class DatabaseService {
 
   /**
    *
-   * Updates the access of a document (if possible)
+   * Updates the access of a document. <br/>
+   * Uses a cloud function to update the access rights. This cloud function automatically edits all related
+   * documents. And may return with an error.
+   *
+   * @param access the new AccessData
+   * @param path document path to the document whose access data should be changed
+   * @param upgradeOnly should only increase rights, decreases are ignored
+   *
+   * @return server response as an Observable<any>. This observable completes after one push.
    *
    */
   public updateAccessData(access: AccessData, path: string, upgradeOnly = false) {
@@ -80,15 +84,22 @@ export class DatabaseService {
       {documentPath: path, requestedAccessData: access, upgradeOnly}
     );
 
+
   }
 
   /**
-   *
-   * Refreshes (i.g. updates) the rights of the new added meal.
-   * Such that all users with access to the camp can edit the new meal.
+   * This function should be called after adding a meal to a camp.
+   * <br/>
+   * It calls a cloud function which updates the AccessData of the meal sucht hat all
+   * collaborators (viewer, editor, collaborator or owner rights on the camp document)
+   * can access the meal data (e.g. gives viewer or editor rights).
+   * <br/>
+   * It also updates all related recipes and specific docs.
    *
    * @param campId id of the camp
-   * @param mealPath id of the added meal
+   * @param mealPath path to the added meal
+   *
+   * @return server response as an Observable<any>. This observable completes after one push.
    *
    */
   public refreshAccessData(campId: string, mealPath: string) {
@@ -100,6 +111,10 @@ export class DatabaseService {
   }
 
   /**
+   *
+   * TODO: auto unsubscription
+   * TODO: update documentation
+   *
    * Gets the last 5 Elements
    *
    *
@@ -115,17 +130,25 @@ export class DatabaseService {
       // Retry on error (max 10 times with a delay of 500ms after each try)
       .pipe(
         retryWhen(err => err.pipe(delay(500), take(10))),
-        catchError(err => EMPTY)
+        catchError(() => EMPTY)
       );
 
   }
 
   /**
    *
-   * TODO: Hier gibt es ein Information-Leaking...
+   * Returns all visible user and its data as an `Observable<User[]>` object.
+   *
+   * @param autoUnsubscription specifies weather the db service should automatically unsubscribe the
+   * observable on a router change (i.g. navigation). Optional parameter. Default value is true.
+   * <br/>
+   * <br/>
+   *
+   * TODO: Hier gibt es ein Information-Leaking:
    * Zur Zeit können somit alle User ausgelesen werden inkl. ihre E-Mail-Adressen.
    * (Es gibt zwar die Möglichkeit, sein eigenes Konto zu verstecken, aber dann
    * kann man auch nicht mehr mit anderen Zusammenarbeiten).
+   * <br/>
    *
    * Idee neue Freigabe nur über E-Mailadresse möglich, eine Cloud-Funktion gibt dann
    * den entsprechenden Namen zurück und fügt den User hinzu...
@@ -133,60 +156,84 @@ export class DatabaseService {
    * diese müssen unbedingt mal angepasst werden.
    *
    */
-  public getVisibleUsers() {
+  public getVisibleUsers(autoUnsubscription = true) {
 
-    return this.db.collection('users', collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges().pipe(take(2))
+    return this.db.collection('users',
+      collRef => collRef.where('visibility', '==', 'visible')).snapshotChanges()
       // Create new Users out of the data
       .pipe(map(docActions => docActions.map(docRef =>
-        new User(docRef.payload.doc.data() as FirestoreUser, docRef.payload.doc.id)
-      )));
+        new User(docRef.payload.doc.data() as FirestoreUser, docRef.payload.doc.id))
+      ))
+      .pipe(this.doAutoUnsubscription(autoUnsubscription));
+
+  }
+
+  /**
+   * Returns all users have access as an `Observable<User[]>` object.
+   *
+   * @param access the AccessData containing the user ids.
+   * @param autoUnsubscription specifies weather the db service should automatically unsubscribe the
+   * observable on a router change (i.g. navigation). Optional parameter. Default value is true.
+   *
+   */
+  public getUsers(access: AccessData, autoUnsubscription = true): Observable<User[]> {
+
+    const arrayOfUsersObservable = Object.keys(access).map(userID => this.getUserById(userID));
+    return combineLatest(arrayOfUsersObservable)
+      .pipe(this.doAutoUnsubscription(autoUnsubscription));
 
   }
 
   /**
    *
+   * Loads the data of a user and returns an`Observable<User>` object.
    *
-   * @param userIDs
+   * @param userId of the user that should be loaded
+   * @param autoUnsubscription specifies weather the db service should automatically unsubscribe the
+   * observable on a router change (i.g. navigation). Optional parameter. Default value is true.
+   *
    */
-  public getUsers(access: AccessData): Observable<User[]> {
-
-    const arrayOfUsers = Object.keys(access).map(userID => this.getUserById(userID));
-    return combineLatest(arrayOfUsers);
-
-  }
-
-  /**
-   *
-   * In der User-Collection haben grundsätzlich alle Lese-Berechtigung:
-   * ausser der Benutzer ist versteckt.
-   *
-   * @param userId
-   */
-  public getUserById(userId: string): Observable<User> {
+  public getUserById(userId: string, autoUnsubscription = true): Observable<User> {
 
     return this.requestDocument('users/' + userId)
-      .pipe(FirestoreObject.createObject<FirestoreUser, User>(User));
+      .pipe(FirestoreObject.createObject<FirestoreUser, User>(User))
+      .pipe(this.doAutoUnsubscription(autoUnsubscription));
 
   }
 
   /**
-   * Löscht ein Rezept und seine SpecificRecipes
+   *  Removes a recipe form a meal. If the meal is used in a camp.
+   *  This function also deletes the corresponding specificRecipes.
    *
-   * TODO: muss als "Transaction" geschehen, damit ein fehlerhafter
-   * Status in der Datenbank ausgeschlossen werden könne.
+   *  TODO: BUGGG!!!! Deletes all specific meals!!!
    *
    */
-  public removeRecipe(mealId: string, recipeId: string) {
+  public removeRecipe(mealId: string, recipeId: string): Promise<void> {
 
-    this.db.doc('recipes/' + recipeId).update({
+    const batch = this.db.firestore.batch();
+
+    batch.update(this.db.doc('recipes/' + recipeId).ref, {
       used_in_meals: firestore.FieldValue.arrayRemove(mealId)
     });
-    this.db.collection('recipes/' + recipeId + '/specificRecipes').get()
-      .subscribe(docRefs => docRefs.forEach(docRef => docRef.ref.delete()));
+
+    return new Promise<void>(resolve => {
+
+      this.db.collection('recipes/' + recipeId + '/specificRecipes',
+        ref => ref.where('used_in_meal', '==', mealId)).get()
+        .pipe(take(1))
+        .subscribe(docRefs => {
+          docRefs.forEach(docRef => batch.delete(docRef.ref));
+          resolve(batch.commit());
+        });
+
+    });
 
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * TODO: hier entsteht eine Sicherheitslücke.
    * Firestore lässt es zurzeit nicht zu, dass dem
    * Query noch ein accessQuery mitgeschickt wird.
@@ -217,6 +264,9 @@ export class DatabaseService {
 
   /**
    *
+   *    * TODO: auto unsubscription
+
+   *
    * Sends the Feedback to the administrator.
    *
    * @param feedback
@@ -242,6 +292,9 @@ export class DatabaseService {
 
   /**
    *
+   *    * TODO: auto unsubscription
+
+   *
    * TODO: Besser als Cloud Funktion, damit auch wirklich alles gelöscht wird
    * und nicht fehlerhafte Zustände in der Datenbank entstehen...
    *
@@ -262,6 +315,9 @@ export class DatabaseService {
 
   /**
    *
+   *
+   *    * TODO: auto unsubscription
+
    * Loads a meal form a external website.
    *
    * @param url of the external webpage with the meal data
@@ -274,7 +330,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param mealId
    * @param idToAdd
    */
@@ -291,6 +348,8 @@ export class DatabaseService {
 
   /**
    *
+   *    * TODO: auto unsubscription
+
    * @param recipe
    * @param specificId
    * @param mealId
@@ -298,7 +357,7 @@ export class DatabaseService {
    */
   public async addRecipe(recipe: Recipe, specificId: string, mealId: string, camp: Camp) {
 
-    await recipe.createSpecificRecipe(camp, recipe.documentId, specificId, this);
+    await recipe.createSpecificRecipe(camp, recipe.documentId, mealId, specificId, this);
 
     return this.db.doc('recipes/' + recipe.documentId)
       .update({used_in_meals: firestore.FieldValue.arrayUnion(mealId)});
@@ -306,7 +365,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @return loads the specific meal
    */
   public getSpecificMeal(mealId: string, specificMealId: string): Observable<SpecificMeal> {
@@ -317,18 +377,24 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * @return loads the specific recipe
    *
    */
-  public getSpecificRecipe(specificMealId: string, recipe: Recipe, camp: Camp): Observable<SpecificRecipe> {
+  public getSpecificRecipe(specificMealId: string, mealId: string, recipe: Recipe, camp: Camp): Observable<SpecificRecipe> {
 
-    return this.loadSpecificRecipe(recipe, specificMealId, camp)
+    return this.loadSpecificRecipe(recipe, mealId, specificMealId, camp)
       .pipe(FirestoreObject.createObject<FirestoreSpecificRecipe, SpecificRecipe>(SpecificRecipe));
 
   }
 
   /**
    *
+   *    * TODO: auto unsubscription
+
+
    * Gets all camps the signed in user has access (i.g. owner, editor, collaborator or viewer rights).
    * The database service automatically unsubscribe the observable on a router navigation.
    * To prevent the auto subscription, pass the the optional argument.
@@ -357,6 +423,8 @@ export class DatabaseService {
 
   /**
    *
+   *    * TODO: auto unsubscription
+
    * @param mealId
    */
   public getCampsThatIncludes(mealId: string) {
@@ -371,7 +439,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    */
   public getEditableMeals(): Observable<Meal[]> {
     return this.createAccessQueryFn(['editor', 'owner'])
@@ -382,7 +451,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param recipeId
    */
   public getMealsThatIncludes(recipeId: string) {
@@ -397,6 +467,8 @@ export class DatabaseService {
   }
 
   /**
+   *    * TODO: auto unsubscription
+
    *
    * @param id
    */
@@ -407,6 +479,9 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * @returns observable list of all recipes form the current meal.
    *
    * @param mealId id of the current meal
@@ -424,6 +499,9 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * @returns observable list of all recipes form the current meal.
    *
    * @param mealId id of the current meal
@@ -440,6 +518,10 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
+
    * @returns observable list of all recipes form the current meal.
    *
    * @param mealId id of the current meal
@@ -456,7 +538,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param recipeId
    */
   public getRecipeById(recipeId: string): Observable<Recipe> {
@@ -468,7 +551,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param campId
    */
   public getCampById(campId: string): Observable<Camp> {
@@ -478,7 +562,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param mealId
    */
   public getMealById(mealId: string): Observable<Meal> {
@@ -490,7 +575,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * Updates an element in the database.
    *
    */
@@ -509,6 +595,9 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * Creates of an element. And clears all access data.
    *
    */
@@ -548,6 +637,9 @@ export class DatabaseService {
 
   /**
    *
+   *    * TODO: auto unsubscription
+
+   *
    * adds any Partial to the database
    * @param collectionPath the path can be a document path or a collection path
    *
@@ -577,6 +669,9 @@ export class DatabaseService {
 
   /**
    *
+   *
+   *    * TODO: auto unsubscription
+
    * @param campId
    */
   public deleteExports(campId: string) {
@@ -593,6 +688,10 @@ export class DatabaseService {
 
   /**
    *
+   *
+   *    * TODO: auto unsubscription
+
+
    * Löscht alle Rezepte und Mahlzeiten eines Lagers
    *
    * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
@@ -612,7 +711,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param obj
    */
   public deleteDocument(obj: FirestoreObject) {
@@ -621,7 +721,8 @@ export class DatabaseService {
 
   }
 
-  /**
+  /**   * TODO: auto unsubscription
+
    *
    * @param path
    */
@@ -632,7 +733,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param path
    * @param queryFn
    */
@@ -643,7 +745,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param mealId
    */
   public getNumberOfUses(mealId: string): Observable<number> {
@@ -654,7 +757,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
    * in der Datenbank vermieden werden könne.
    *
@@ -671,7 +775,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param firebaseObject
    */
   public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
@@ -686,7 +791,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * @param firebaseObject
    */
   public isOwner(firebaseObject: FirestoreObject): Promise<boolean> {
@@ -698,7 +804,8 @@ export class DatabaseService {
   }
 
   /**
-   *
+   *   * TODO: auto unsubscription
+
    * Loads the ingredients of an overwriting of a recipe
    *
    * @param recipeId id of the recipe
@@ -712,6 +819,9 @@ export class DatabaseService {
   }
 
   /**
+   *
+   *    * TODO: auto unsubscription
+
    * Saves the overwriting of a recipe
    *
    * @param ingredients overwriting of to be saved
@@ -727,6 +837,19 @@ export class DatabaseService {
 
   }
 
+  /**
+   *
+   * TODO: add description
+   * @param autoUnsubscription
+   *
+   */
+  private doAutoUnsubscription<T>(autoUnsubscription: boolean): OperatorFunction<T, T> {
+
+    return mergeMap(object =>
+      autoUnsubscription ? of(object).pipe(takeUntil(this.routerChanges)) : of(object));
+
+  }
+
 
   // *********************************************************************************************
   // private methods
@@ -735,14 +858,13 @@ export class DatabaseService {
   //
   // *********************************************************************************************
 
-
   /**
    *
    * @param recipe
    * @param specificMealId
    * @param camp
    */
-  private loadSpecificRecipe(recipe: Recipe, specificMealId: string, camp: Camp) {
+  private loadSpecificRecipe(recipe: Recipe, mealId: string, specificMealId: string, camp: Camp) {
 
     return this.requestDocument('recipes/' + recipe.documentId + '/specificRecipes/' + specificMealId)
 
@@ -754,8 +876,8 @@ export class DatabaseService {
           return of(ref);
         }
 
-        recipe.createSpecificRecipe(camp, recipe.documentId, specificMealId, this);
-        return this.loadSpecificRecipe(recipe, specificMealId, camp);
+        recipe.createSpecificRecipe(camp, recipe.documentId, mealId, specificMealId, this);
+        return this.loadSpecificRecipe(recipe, specificMealId, mealId, camp);
 
       }));
   }

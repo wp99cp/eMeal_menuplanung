@@ -67,7 +67,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
         .subscribe(async recipes => {
 
           await Promise.all(recipes.map(recipe =>
-            recipe.createSpecificRecipe(camp, recipe.documentId, specificId, databaseService)))
+            recipe.createSpecificRecipe(camp, recipe.documentId, this.documentId, specificId, databaseService)))
           resolve();
 
         });

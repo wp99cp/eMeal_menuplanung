@@ -24,13 +24,13 @@ export class ListOfUsersComponent implements OnChanges {
 
   ngOnChanges() {
 
-    console.log('Changes!')
-
     if (this.userList != null) {
 
       // creates an alphabetically sorted list of the users
       this.users = this.dbService.getUsers(this.userList)
-        .pipe(map(results => results.sort((a, b) => a.displayName.localeCompare(b.displayName))));
+        .pipe(map(results =>
+          results.sort((a, b) => a.displayName.localeCompare(b.displayName))
+        ));
 
     }
 

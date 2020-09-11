@@ -118,6 +118,7 @@ export interface FirestoreRecipe extends FirestoreDocument {
 export type UserGroups = 'all' | 'vegetarians' | 'non-vegetarians' | 'leaders';
 
 export interface FirestoreSpecificRecipe extends FirestoreDocument {
+  used_in_meal: string;
 
   recipe_participants: number;
   recipe_override_participants: boolean;

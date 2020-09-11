@@ -184,7 +184,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
 
   }
 
-  public createSpecificRecipe(camp: Camp, recipeId: string, specificRecipeId: string, databaseService: DatabaseService):
+  public createSpecificRecipe(camp: Camp, recipeId: string, mealId: string, specificRecipeId: string, databaseService: DatabaseService):
     Promise<DocumentReference> {
 
     const specificRecipeData = FirestoreObject.exportEmptyDocument('') as FirestoreSpecificRecipe;
@@ -195,6 +195,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     specificRecipeData.recipe_used_for = 'all';
     specificRecipeData.access = camp.getAccessData(); // use the access data from camp
     specificRecipeData.recipe_specificId = specificRecipeId;
+    specificRecipeData.used_in_meal = mealId;
 
     const recipePath = 'recipes/' + recipeId + '/specificRecipes';
     return databaseService.addDocument(specificRecipeData, recipePath, specificRecipeId);
