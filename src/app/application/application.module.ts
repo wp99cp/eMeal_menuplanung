@@ -6,7 +6,7 @@ import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
 import {AngularFireStorageModule} from '@angular/fire/storage';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -50,7 +50,6 @@ import {EditCampPageComponent} from './_pages/edit-camp-page/edit-camp-page.comp
 import {EditMealComponent} from './_pages/edit-meal/edit-meal.component';
 import {EditSingleRecipeComponent} from './_pages/edit-single-recipe/edit-single-recipe.component';
 import {ExportCampComponent} from './_pages/export-camp/export-camp.component';
-import {FeedbackPageComponent} from './_pages/feedback-page/feedback-page.component';
 import {HelpPageComponent} from './_pages/help-page/help-page.component';
 import {MealListComponent} from './_pages/meal-list/meal-list.component';
 import {RecipeListComponent} from './_pages/recipe-list/recipe-list.component';
@@ -78,8 +77,9 @@ import {ShortcutService} from './_service/shortcut.service';
 import {HelpService} from './_service/help.service';
 import {HelpComponent} from './_dialoges/help/help.component';
 import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
-import { SingleRecipeInfoComponent } from './_dialoges/single-recipe-info/single-recipe-info.component';
+import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-recipe-info.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +96,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     IngredientFieldComponent,
     AddMealComponent,
     ExportCampComponent,
-    FeedbackPageComponent,
     ImportComponent,
     MealsOverviewComponent,
     CreateMealComponent,
@@ -105,6 +104,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     ExportCampComponent,
     DownloadComponent,
     ShareDialogComponent,
+    FeedbackDialogComponent,
     CampInfoComponent,
     MealInfoComponent,
     RecipeInfoComponent,
@@ -140,48 +140,50 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
   ],
-    imports: [
-        CommonModule,
-        ApplicationRoutingModule,
-        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-        AngularFireFunctionsModule,
-        AngularFireStorageModule,
-        AngularFirestoreModule,
-        AngularFireAuthModule,
-        VersionHistoryModule,
-        ReactiveFormsModule,
-        // Material Design
-        MatTableModule,
-        MatProgressBarModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatTooltipModule,
-        MatStepperModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatFormFieldModule,
-        MatTabsModule,
-        MatExpansionModule,
-        MatCheckboxModule,
-        MatListModule,
-        MatGridListModule,
-        MatIconModule,
-        MatDialogModule,
-        MatCardModule,
-        DragDropModule,
-        MatSlideToggleModule,
-        MatSnackBarModule,
-        MatPaginatorModule,
-        MatTableModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatRadioModule,
+  imports: [
+    CommonModule,
+    ApplicationRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+    AngularFireFunctionsModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    VersionHistoryModule,
+    ReactiveFormsModule,
+    // Material Design
+    MatTableModule,
+    MatProgressBarModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatStepperModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatCheckboxModule,
+    MatListModule,
+    MatGridListModule,
+    MatIconModule,
+    MatDialogModule,
+    MatCardModule,
+    DragDropModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule,
 
-        MarkdownModule,
-        MatProgressSpinnerModule
-    ],
+    MarkdownModule,
+    MatProgressSpinnerModule
+  ],
 
   entryComponents: [
     DeleteCampComponent,
@@ -204,7 +206,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MealPrepareComponent,
     CopyRecipeComponent,
     CopyCampComponent,
-    HelpComponent
+    HelpComponent,
+    FeedbackDialogComponent
   ],
   exports: [
     MatTableModule,

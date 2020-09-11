@@ -98,12 +98,6 @@ export class ExportCampComponent implements OnInit {
 
           this.pending = false;
           this.message = 'Beim Export ist ein unerwarteter Fehler aufgetreten! Bitte versuches später erneut.';
-          this.campId.subscribe(campId =>
-            this.dbService.addFeedback({
-              title: 'Fehler beim Export',
-              feedback: `Das exportieren eines Lagers (` + campId + `) ist fehlgeschlagen!
-            Dies ist eine automatische Fehlermeldung des Systems. Zeitpunkt: ` + new Date().toUTCString()
-            }));
 
         });
 

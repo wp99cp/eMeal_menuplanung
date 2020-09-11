@@ -5,7 +5,6 @@ import {AppSettingsPageComponent} from './_pages/app-settings-page/app-settings-
 import {CampListPageComponent} from './_pages/camp-list-page/camp-list-page.component';
 import {EditCampPageComponent} from './_pages/edit-camp-page/edit-camp-page.component';
 import {EditMealComponent} from './_pages/edit-meal/edit-meal.component';
-import {FeedbackPageComponent} from './_pages/feedback-page/feedback-page.component';
 import {WelcomPageComponent} from './_pages/welcom-page/welcom-page.component';
 import {AutoSaveService} from './_service/auto-save.service';
 import {ExportCampComponent} from './_pages/export-camp/export-camp.component';
@@ -14,7 +13,7 @@ import {RecipeListComponent} from './_pages/recipe-list/recipe-list.component';
 import {EditSingleRecipeComponent} from './_pages/edit-single-recipe/edit-single-recipe.component';
 import {MealListComponent} from './_pages/meal-list/meal-list.component';
 import {MarkdownModule} from 'ngx-markdown';
-import {EditSingleMealComponent} from "./_pages/edit-single-meal/edit-single-meal.component";
+import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
 
 
 const routes: Routes = [
@@ -26,10 +25,6 @@ const routes: Routes = [
   {
     path: 'settings',
     component: AppSettingsPageComponent
-  },
-  {
-    path: 'feedback',
-    component: FeedbackPageComponent
   },
   {
     path: 'camps',

@@ -44,7 +44,7 @@
       <mat-icon class="nav-icon">help</mat-icon>
       <a matTooltip="Hilfe und Erklärungen (F1)">Erklärungen</a>
     </li>
-    <li routerLink="/app/feedback" routerLinkActive="active-link">
+    <li (click)="openFeedbackDialog()">
       <mat-icon class="nav-icon">feedback</mat-icon>
       <a matTooltip="Melde einen Fehler">Fehler melden</a>
     </li>

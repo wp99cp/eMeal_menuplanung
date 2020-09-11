@@ -7,6 +7,7 @@ import {HelpService} from '../../application/_service/help.service';
 import {MatDialog} from '@angular/material/dialog';
 import {CurrentlyUsedMealService} from '../currently-used-meal.service';
 import {Camp} from '../../application/_class/camp';
+import {FeedbackDialogComponent} from '../../application/_dialoges/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'app-main-menu',
@@ -22,7 +23,7 @@ export class MainMenuComponent {
   constructor(private router: Router,
               private location: Location,
               public helpService: HelpService,
-              dialog: MatDialog,
+              private dialog: MatDialog,
               public main: CurrentlyUsedMealService) {
 
     this.helpService.addDialog(dialog);
@@ -47,6 +48,17 @@ export class MainMenuComponent {
     if (MainMenuComponent.authServ) {
       MainMenuComponent.authServ.signOut();
     }
+
+  }
+
+  openFeedbackDialog() {
+
+    this.dialog.open(FeedbackDialogComponent, {
+      height: '800px',
+      width: '550px',
+      data: {}
+    }).afterClosed().subscribe();
+
 
   }
 

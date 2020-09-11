@@ -27,6 +27,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {AngularFireFunctions} from "@angular/fire/functions";
 import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -58,7 +60,10 @@ import {MatDialogModule} from "@angular/material/dialog";
     MarkdownModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatDialogModule
+    MatDialogModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSnackBarModule
   ],
   providers: [
     AngularFireAuth,

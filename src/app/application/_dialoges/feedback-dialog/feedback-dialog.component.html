@@ -1,20 +1,20 @@
-<div class="centered">
 
-  <span class="page-title">Feedback geben</span>
   <h1>Melde einen Fehler an den Entwickler!</h1>
 
-  <h2>Feedback verfassen.</h2>
   <p>Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
     für Rückfragen ggf. mit dir in Kontakt treten.</p>
+
+  <br>
+  <br>
+
 
   <form [formGroup]="feedbackForm" style="display: grid">
     <mat-form-field>
       <input matInput placeholder="Titel / Thema" formControlName="title">
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback"></textarea>
+      <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback" id="feedback-text"></textarea>
     </mat-form-field>
-    <button mat-raised-button (click)="send()">Feedback senden!</button>
+    <button mat-raised-button [mat-dialog-close]="" (click)="send()">Feedback senden!</button>
   </form>
 
-</div>
