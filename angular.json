@@ -14,9 +14,18 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@firebase/firestore",
+              "@firebase/auth",
+              "@firebase/functions",
+              "@firebase/app",
+              "firebase/app",
+              "hammerjs"
+            ],
             "outputPath": "dist/eMeal",
             "index": "src/index.html",
             "main": "src/main.ts",
