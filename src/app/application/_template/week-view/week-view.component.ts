@@ -106,10 +106,10 @@ export class WeekViewComponent implements OnInit, OnChanges, Saveable {
     // Speichert das Lager
     this.dbService.updateDocument(this.camp);
 
+    HeaderNavComponent.turnOff('Speichern');
+
     // Prüft, ob etwas gespeichert werden muss
     if (this.specificMealsToSave.length > 0) {
-
-      HeaderNavComponent.turnOff('Speichern');
 
       // Speichert die Mahlzeiten
       this.saveMeals();
