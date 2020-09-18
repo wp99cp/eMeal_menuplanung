@@ -15,22 +15,22 @@
       <h4> Aktuelles Lager </h4>
       <li routerLink="/app/camps/{{lastCamp.documentId}}" routerLinkActive="active-link">
         <mat-icon class="nav-icon">nature_people</mat-icon>
-        <a matTooltip="Lager"> {{lastCamp.name}} </a>
+        <a> {{lastCamp.name}} </a>
       </li>
     </ng-container>
 
     <h4> Meine Bibliothek </h4>
     <li routerLink="/app/camps" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
       <mat-icon class="nav-icon">nature_people</mat-icon>
-      <a matTooltip="Lager"> Alle Lager </a>
+      <a> Alle Lager </a>
     </li>
     <li routerLink="/app/meals" routerLinkActive="active-link">
       <mat-icon class="nav-icon">fastfood</mat-icon>
-      <a matTooltip="Übersicht aller Mahlzeiten"> Alle Mahlzeiten </a>
+      <a> Alle Mahlzeiten </a>
     </li>
     <li routerLink="/app/recipes" routerLinkActive="active-link">
       <mat-icon class="nav-icon"> menu_book</mat-icon>
-      <a matTooltip="Übersicht aller Rezepte"> Alle Rezepte </a>
+      <a> Alle Rezepte </a>
     </li>
 
   </ul>
@@ -59,7 +59,7 @@
     </li>
     <li routerLink="/">
       <mat-icon class="nav-icon"></mat-icon>
-      <a matTooltip="Von eMeal abmelden" (click)="signOut()">Abmelden</a>
+      <a (click)="signOut()">Abmelden</a>
     </li>
   </ul>
 
