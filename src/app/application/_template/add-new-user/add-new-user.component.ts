@@ -83,8 +83,8 @@ export class AddNewUserComponent implements OnInit {
 
       // Condition for the filter
       (user.displayName !== null && filter.trim().length >= 3 &&
-        user.displayName.trim().toLowerCase().includes(filter.toLowerCase()) &&
-        filter.toLowerCase() !== 'v/o');
+        ((user.displayName.trim().toLowerCase().includes(filter.toLowerCase()) && filter.toLowerCase() !== 'v/o') ||
+        user.email.split('@')[0].toLowerCase().includes(filter.toLowerCase())));
 
   }
 
