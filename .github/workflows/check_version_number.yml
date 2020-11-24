@@ -6,18 +6,9 @@ name: Continuous integration
 
 jobs:
   version-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+  - id: check # This will be the reference for getting the outputs.
+    uses: EndBug/version-check@v1 # You can choose the version/branch you prefer.
 
-      - run: git fetch --all --tags
-
-      - name: Check Release Version
-        uses: thebongy/version-check@v1
-        with:
-          file: package.json
-          tagFormat: v${version}
-        id: version_check_staging
-      - name:
-        run: |
-        echo "Version ${{steps.version_check_staging.outputs.releaseVersion}}"
+    with: # All these parameters are optional, check their descriptions to see if you need them.
+      file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/package.json
+      static-checking: localIsNew
