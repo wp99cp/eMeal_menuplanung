@@ -1,9 +1,9 @@
-on:
+name: Continuous integration
+'on':
   pull_request:
-    branches:
+    branch:
       - master
 
-name: Continuous integration
 jobs:
   version-check:
     runs-on: ubuntu-latest
