@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {LandingPage} from './landingPage/landingPage.component';
 import {SignInComponent} from './sign-in/sign-in.component';
 import {SignInCallbackComponent} from "./sign-in-callback/sign-in-callback.component";
+import {ErrorPageComponent} from './error-page/error-page.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'app',
     loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule)
+  },
+  {
+    path: '**',
+    component: ErrorPageComponent
   }
 ];
 
