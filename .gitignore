@@ -45,3 +45,4 @@ testem.log
 .DS_Store
 Thumbs.db
 firebase-debug.log
+package-lock.json
