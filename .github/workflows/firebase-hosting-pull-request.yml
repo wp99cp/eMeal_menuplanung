@@ -7,7 +7,7 @@ name: Prepare for realease
 on:
  pull_request:
     branches:
-      - master
+      - "master"
 
 jobs:
 
