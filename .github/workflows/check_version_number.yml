@@ -1,0 +1,23 @@
+name: Continuous integration
+'on':
+  pull_request:
+    branch:
+      - master
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: git fetch --all --tags
+
+      - name: Check Release Version
+        uses: thebongy/version-check@v1
+        with:
+          file: package.json
+          tagFormat: v${version}
+        id: version_check_staging
+      - name:
+        run: |
+        echo "Version ${{steps.version_check_staging.outputs.releaseVersion}}"
