@@ -29,6 +29,7 @@ import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.compo
 import {MatDialogModule} from "@angular/material/dialog";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     HeaderNavComponent,
     LandingPage,
     SignInComponent,
-    SignInCallbackComponent
+    SignInCallbackComponent,
+    ErrorPageComponent
   ],
   imports: [
 

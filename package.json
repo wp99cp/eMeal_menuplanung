@@ -1,12 +1,13 @@
 {
   "name": "@emeal/menuplanung",
-  "version": "1.7.1",
+  "version": "1.7.3",
   "license": "MIT",
   "copyrights": "© 2019 - 2020 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
+    "build": "ng build",
+    "build:prod": "ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
