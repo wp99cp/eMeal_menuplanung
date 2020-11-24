@@ -11,30 +11,6 @@ on:
 
 jobs:
 
-  version_bump:
-     runs-on: ubuntu-latest
-     steps:
-      - uses: actions/checkout@v2
-      
-      - name: "cat package.json"
-        run: cat ./package.json
-        
-      - name: "Setup Node.js"
-        uses: "actions/setup-node@v1"
-        with:
-          node-version: 12
-    
-      - name: "Automated Version Bump"
-        id: version-bump
-        uses: "phips28/gh-action-bump-version@master"
-        with:
-          tag-prefix: ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "cat package.json"
-        run: cat ./package.json
-
   build_and_preview:
     
     runs-on: ubuntu-latest
