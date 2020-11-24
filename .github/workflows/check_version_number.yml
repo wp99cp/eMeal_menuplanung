@@ -24,10 +24,19 @@ jobs:
           file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/package.json
           static-checking: localIsNew
 
-      - name: Log when changed
-        if: steps.check.outputs.changed == 'true'
-        run: 'echo "Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-
       - name: Log when unchanged
         if: steps.check.outputs.changed != 'true'
-        run: 'echo "No version change :/"'
+        run: exit 1
+
+      - name: Log when changed
+          run: 'echo "Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+
+      - name: 'Comment PR'
+        uses: actions/github-script@0.3.0
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            github.issues.createComment({ issue_number, owner, repo, body: 'Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})' });
+
