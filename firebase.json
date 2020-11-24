@@ -1,14 +1,11 @@
 {
   "hosting": {
-    
     "public": "dist/eMeal",
-
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-
     "rewrites": [
       {
         "source": "**",
