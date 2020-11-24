@@ -24,6 +24,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11 }}'
           expires: 7d
           projectId: cevizh11
-          channelId: pre-release
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
