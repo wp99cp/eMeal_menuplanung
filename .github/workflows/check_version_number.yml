@@ -6,9 +6,16 @@ name: Continuous integration
 
 jobs:
   version-check:
-  - id: check # This will be the reference for getting the outputs.
-    uses: EndBug/version-check@v1 # You can choose the version/branch you prefer.
+    name: Build
+    runs-on: ubuntu-latest
 
-    with: # All these parameters are optional, check their descriptions to see if you need them.
-      file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/package.json
-      static-checking: localIsNew
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Checl Version Number
+        id: check # This will be the reference for getting the outputs.
+        uses: EndBug/version-check@v1
+        with:
+          file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/package.json
+          static-checking: localIsNew
