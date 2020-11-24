@@ -34,7 +34,9 @@ jobs:
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
-        
+    
+      - uses: actions/checkout@v2
+    
       - run: npm ci && npm run build # build in dev mode
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
