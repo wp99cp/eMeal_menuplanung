@@ -80,6 +80,7 @@ import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-mea
 import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-recipe-info.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
+import {SettingsService} from "./_service/settings.service";
 
 @NgModule({
   declarations: [
@@ -136,6 +137,7 @@ import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dial
     ShortcutService,
     HelpService,
     Location,
+    SettingsService,
     {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
