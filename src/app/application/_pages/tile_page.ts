@@ -37,10 +37,9 @@ export abstract class TileListPage<T extends FirestoreObject> {
       this.updateVisibleElements();
 
       // save access
-      recipes.forEach(async recipe => {
+      recipes.forEach(async recipe =>
         this.access[recipe.documentId] = await this.databaseServcie.canWrite(recipe)
-        console.log(recipe.documentId + ' ' + this.access[recipe.documentId])
-      });
+      );
 
     });
 
