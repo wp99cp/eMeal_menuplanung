@@ -496,18 +496,21 @@ export class DatabaseService {
    *    * TODO: auto unsubscription
 
 
-   * @returns observable list of all recipes form the current meal.
+   * @returns observable list of all accessable meals (includes viewer access)
    *
-   * @param mealId id of the current meal
-   * @param campId id of the current camp
    */
   public getAccessableRecipes(): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
-      .pipe(mergeMap(queryFn =>
-        this.requestCollection('recipes', queryFn)
-          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
-      ));
+    const recipesCreatedByUsers = this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
+      .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+    const globalTemplates = this.requestCollection('recipes', ref =>
+      ref.where('access.all_users', 'in', ['viewer']))
+      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+    return combineLatest([recipesCreatedByUsers, globalTemplates])
+      .pipe(map(arr => arr.flat()));
 
   }
 
@@ -753,11 +756,11 @@ export class DatabaseService {
 
    * @param firebaseObject
    */
-  public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
+  public async canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
 
     return new Promise(resolve => this.authService.getCurrentUser().subscribe(user =>
       resolve(
-        firebaseObject.getAccessData()[user.uid] !== null &&  // user isn't listed
+        firebaseObject.getAccessData()[user.uid] !== undefined &&  // user isn't listed
         firebaseObject.getAccessData()[user.uid] !== 'viewer' // if user is listed, user isn't a viewer
       )
     ));
