@@ -504,8 +504,10 @@ export class DatabaseService {
    */
   public getAccessableRecipes(): Observable<Recipe[]> {
 
-    return this.settings.globalSettings.pipe(mergeMap(settings => {
-      
+    return this.settings.globalSettings
+      .pipe(take(1)) // only apply current settings
+      .pipe(mergeMap(settings => {
+
       const accessLevels = settings.show_templates ?
         ['editor', 'owner', 'collaborator', 'viewer'] :
         ['editor', 'owner', 'collaborator'];

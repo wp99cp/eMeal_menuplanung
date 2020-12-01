@@ -1,7 +1,7 @@
 import {FirestoreSettings, UserGroups} from '../_interfaces/firestoreDatatypes';
 import {DatabaseService} from './database.service';
 import {AuthenticationService} from './authentication.service';
-import {map, mergeMap} from 'rxjs/operators';
+import {map, mergeMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {FirebaseDatabase} from "@angular/fire";
@@ -27,13 +27,18 @@ export class SettingsService {
     this.globalSettings = authService.getCurrentUser().pipe(mergeMap(user =>
       this.loadUserSettings(user.uid)));
 
+    this.globalSettings.subscribe(console.log)
 
   }
 
  private loadUserSettings(userId: string): Observable<FirestoreSettings> {
 
     return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
-      .pipe(map(docRef => docRef.payload.data() as FirestoreSettings));
+      .pipe(map(docRef => docRef.payload.data() as any))
+      .pipe(map(settings =>
+        !settings || !settings.hasOwnProperty('show_templates') ? {
+        show_templates: true
+      } : settings));
 
   }
 
