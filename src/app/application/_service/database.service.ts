@@ -26,6 +26,7 @@ import {
 } from '../_interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {SettingsService} from './settings.service';
 
 
 /**
@@ -52,7 +53,8 @@ export class DatabaseService {
     private authService: AuthenticationService,
     private functions: AngularFireFunctions,
     private cloud: AngularFireStorage,
-    private router: Router) {
+    private router: Router,
+    private settings: SettingsService) {
 
     // used for automatically unsubscribe if the user changes the page, i.g. leaves the edit section.
     router.events
@@ -500,27 +502,31 @@ export class DatabaseService {
    * @returns observable list of all accessable meals (includes viewer access)
    *
    */
-  public getAccessableRecipes(includeTemplates: boolean = true): Observable<Recipe[]> {
+  public getAccessableRecipes(): Observable<Recipe[]> {
 
-    const accessLevels = includeTemplates ?
-      ['editor', 'owner', 'collaborator', 'viewer'] :
-      ['editor', 'owner', 'collaborator'];
+    return this.settings.globalSettings.pipe(mergeMap(settings => {
+      
+      const accessLevels = settings.show_templates ?
+        ['editor', 'owner', 'collaborator', 'viewer'] :
+        ['editor', 'owner', 'collaborator'];
 
-    const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
-      .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
-      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+      const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
+        .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+        .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
 
-    // return only recipes created by the user; exclude templates and read only recipes
-    if (!includeTemplates) {
-      return recipesCreatedByUsers;
-    }
+      // return only recipes created by the user; exclude templates and read only recipes
+      if (!settings.show_templates) {
+        return recipesCreatedByUsers;
+      }
 
-    const globalTemplates = this.requestCollection('recipes', ref =>
-      ref.where('access.all_users', 'in', ['viewer']))
-      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+      const globalTemplates = this.requestCollection('recipes', ref =>
+        ref.where('access.all_users', 'in', ['viewer']))
+        .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
 
-    return combineLatest([recipesCreatedByUsers, globalTemplates])
-      .pipe(map(arr => arr.flat()));
+      return combineLatest([recipesCreatedByUsers, globalTemplates])
+        .pipe(map(arr => arr.flat()));
+
+    }));
 
   }
 
@@ -824,12 +830,7 @@ export class DatabaseService {
 
   }
 
-  loadUserSettings(userId: string): Observable<FirestoreSettings> {
 
-    return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
-      .pipe(map(docRef => docRef.payload.data() as FirestoreSettings));
-
-  }
 
 
   // *********************************************************************************************
@@ -838,6 +839,14 @@ export class DatabaseService {
   // TODO: Alle query functions in eine eigene Klasse auslagern
   //
   // *********************************************************************************************
+
+  public updateSettings(settings: FirestoreSettings) {
+
+    return new Promise(resolve =>
+      this.authService.getCurrentUser().subscribe(user =>
+        this.db.doc('users/' + user.uid + '/private/settings').set(settings).then(resolve)));
+
+  }
 
   /**
    *
@@ -928,7 +937,6 @@ export class DatabaseService {
       ))
     );
   }
-
 }
 
 

@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { mergeMap, take } from 'rxjs/operators';
-import { copyrights, version as softwareVersion } from '../../../../../package.json';
-import { User } from '../../_class/user.js';
-import { AuthenticationService } from '../../_service/authentication.service';
-import { DatabaseService } from '../../_service/database.service';
-
+import {Component} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {mergeMap, take} from 'rxjs/operators';
+import {copyrights, version as softwareVersion} from '../../../../../package.json';
+import {User} from '../../_class/user.js';
+import {AuthenticationService} from '../../_service/authentication.service';
+import {DatabaseService} from '../../_service/database.service';
+import {SettingsService} from '../../_service/settings.service';
 
 
 @Component({
@@ -28,9 +28,9 @@ export class AppSettingsPageComponent {
 
   public userDataForm: FormGroup;
 
-  constructor(private auth: AuthenticationService, private dbService: DatabaseService, formBuilder: FormBuilder) {
+  constructor(private auth: AuthenticationService, private dbService: DatabaseService, formBuilder: FormBuilder, public settings: SettingsService) {
 
-    this.userDataForm = formBuilder.group({ displayName: '', visibility: 'hidden' });
+    this.userDataForm = formBuilder.group({displayName: '', visibility: 'hidden'});
 
     this.user = this.loadAndSetUserData();
     this.user.subscribe(user => {
@@ -44,17 +44,6 @@ export class AppSettingsPageComponent {
     });
 
   }
-
-  /**
-   * Ladet den aktuellen Benutzer
-   */
-  private loadAndSetUserData() {
-
-    return this.auth.getCurrentUser()
-      .pipe(mergeMap(user => this.dbService.getUserById(user.uid)));
-
-  }
-
 
   public visibilityChanged(visibility: 'hidden' | 'visible') {
 
@@ -81,4 +70,22 @@ export class AppSettingsPageComponent {
 
   }
 
+  changeIncludeTemplates(value: string) {
+
+    this.settings.globalSettings.pipe(take(1)).subscribe(settings => {
+      settings.show_templates = (value === 'true');
+      this.dbService.updateSettings(settings).then(console.log);
+    });
+
+  }
+
+  /**
+   * Ladet den aktuellen Benutzer
+   */
+  private loadAndSetUserData() {
+
+    return this.auth.getCurrentUser()
+      .pipe(mergeMap(user => this.dbService.getUserById(user.uid)));
+
+  }
 }
