@@ -551,7 +551,7 @@ export class DatabaseService {
           return mealsCreatedByUsers;
         }
 
-        const globalTemplates = this.requestCollection('recipes', ref =>
+        const globalTemplates = this.requestCollection('meals', ref =>
           ref.where('access.all_users', 'in', ['viewer']))
           .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
 
