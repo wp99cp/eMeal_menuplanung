@@ -29,6 +29,7 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
 
     super(dbService, snackBar, dbService.getAccessableRecipes(), dialog, helpService, router);
 
+
     // set filter for searching
     this.filterFn = (rec: Recipe) => rec.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
     this.dbElementName = 'Rezept';

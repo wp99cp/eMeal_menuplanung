@@ -24,8 +24,8 @@
       {{access ? 'edit' : 'remove_red_eye'}}
     </mat-icon>
     <mat-icon class="copy_recipe" matTooltip="Kopie erstellen" (click)="copy.emit(cardElement)"> file_copy</mat-icon>
-    <mat-icon class="delete_recipe" [ngClass]="{'deactive': usage > 0 || !access}"
-              matTooltip="{{!access ? 'Nur Lesezugriff' : usage > 0 ? elementName + ' wird verwendet' : elementName + ' löschen'}}"
+    <mat-icon *ngIf="access" class="delete_recipe" [ngClass]="{'deactive': usage > 0}"
+              matTooltip="{{ usage > 0 ? elementName + ' wird verwendet' : elementName + ' löschen'}}"
               (click)="delete.emit(cardElement)"> delete
     </mat-icon>
   </div>
