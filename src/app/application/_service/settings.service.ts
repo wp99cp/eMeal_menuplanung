@@ -1,11 +1,9 @@
 import {FirestoreSettings, UserGroups} from '../_interfaces/firestoreDatatypes';
-import {DatabaseService} from './database.service';
 import {AuthenticationService} from './authentication.service';
-import {map, mergeMap, tap} from 'rxjs/operators';
+import {map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
-import {FirebaseDatabase} from "@angular/fire";
-import {AngularFirestore} from "@angular/fire/firestore";
+import {Observable} from 'rxjs';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 /**
  * Settings Service
@@ -26,21 +24,8 @@ export class SettingsService {
 
     this.globalSettings = authService.getCurrentUser().pipe(mergeMap(user =>
       this.loadUserSettings(user.uid)));
-    
-  }
-
- private loadUserSettings(userId: string): Observable<FirestoreSettings> {
-
-    return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
-      .pipe(map(docRef => docRef.payload.data() as any))
-      .pipe(map(settings =>
-        !settings || !settings.hasOwnProperty('show_templates') ? {
-        show_templates: true
-      } : settings));
 
   }
-
-
 
   /**
    * Calculates the participants of a meal
@@ -90,6 +75,17 @@ export class SettingsService {
     }
 
     return calcRecipePart;
+
+  }
+
+  private loadUserSettings(userId: string): Observable<FirestoreSettings> {
+
+    return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
+      .pipe(map(docRef => docRef.payload.data() as any))
+      .pipe(map(settings =>
+        !settings || !settings.hasOwnProperty('show_templates') ? {
+          show_templates: true
+        } : settings));
 
   }
 
