@@ -508,28 +508,57 @@ export class DatabaseService {
       .pipe(take(1)) // only apply current settings
       .pipe(mergeMap(settings => {
 
-      const accessLevels = settings.show_templates ?
-        ['editor', 'owner', 'collaborator', 'viewer'] :
-        ['editor', 'owner', 'collaborator'];
+        const accessLevels = settings.show_templates ?
+          ['editor', 'owner', 'collaborator', 'viewer'] :
+          ['editor', 'owner', 'collaborator'];
 
-      const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
-        .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
-        .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+        const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
+          .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
 
-      // return only recipes created by the user; exclude templates and read only recipes
-      if (!settings.show_templates) {
-        return recipesCreatedByUsers;
-      }
+        // return only recipes created by the user; exclude templates and read only recipes
+        if (!settings.show_templates) {
+          return recipesCreatedByUsers;
+        }
 
-      const globalTemplates = this.requestCollection('recipes', ref =>
-        ref.where('access.all_users', 'in', ['viewer']))
-        .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+        const globalTemplates = this.requestCollection('recipes', ref =>
+          ref.where('access.all_users', 'in', ['viewer']))
+          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
 
-      return combineLatest([recipesCreatedByUsers, globalTemplates])
-        .pipe(map(arr => arr.flat()));
+        return combineLatest([recipesCreatedByUsers, globalTemplates])
+          .pipe(map(arr => arr.flat()));
 
-    }));
+      }));
 
+  }
+
+  public getAccessableMeals(): Observable<Meal[]> {
+
+    return this.settings.globalSettings
+      .pipe(take(1)) // only apply current settings
+      .pipe(mergeMap(settings => {
+
+        const accessLevels = settings.show_templates ?
+          ['editor', 'owner', 'collaborator', 'viewer'] :
+          ['editor', 'owner', 'collaborator'];
+
+        const mealsCreatedByUsers = this.createAccessQueryFn(accessLevels)
+          .pipe(mergeMap(queryFn => this.requestCollection('meals', queryFn)))
+          .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+
+        // return only recipes created by the user; exclude templates and read only recipes
+        if (!settings.show_templates) {
+          return mealsCreatedByUsers;
+        }
+
+        const globalTemplates = this.requestCollection('recipes', ref =>
+          ref.where('access.all_users', 'in', ['viewer']))
+          .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+
+        return combineLatest([mealsCreatedByUsers, globalTemplates])
+          .pipe(map(arr => arr.flat()));
+
+      }));
   }
 
   /**
