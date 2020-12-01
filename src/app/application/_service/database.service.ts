@@ -18,6 +18,7 @@ import {
   FirestoreDocument,
   FirestoreMeal,
   FirestoreRecipe,
+  FirestoreSettings,
   FirestoreSpecificMeal,
   FirestoreSpecificRecipe,
   FirestoreUser,
@@ -499,11 +500,20 @@ export class DatabaseService {
    * @returns observable list of all accessable meals (includes viewer access)
    *
    */
-  public getAccessableRecipes(): Observable<Recipe[]> {
+  public getAccessableRecipes(includeTemplates: boolean = true): Observable<Recipe[]> {
 
-    const recipesCreatedByUsers = this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
+    const accessLevels = includeTemplates ?
+      ['editor', 'owner', 'collaborator', 'viewer'] :
+      ['editor', 'owner', 'collaborator'];
+
+    const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
       .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
       .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+    // return only recipes created by the user; exclude templates and read only recipes
+    if (!includeTemplates) {
+      return recipesCreatedByUsers;
+    }
 
     const globalTemplates = this.requestCollection('recipes', ref =>
       ref.where('access.all_users', 'in', ['viewer']))
@@ -814,6 +824,21 @@ export class DatabaseService {
 
   }
 
+  loadUserSettings(userId: string): Observable<FirestoreSettings> {
+
+    return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
+      .pipe(map(docRef => docRef.payload.data() as FirestoreSettings));
+
+  }
+
+
+  // *********************************************************************************************
+  // private methods
+  //
+  // TODO: Alle query functions in eine eigene Klasse auslagern
+  //
+  // *********************************************************************************************
+
   /**
    *
    * TODO: add description
@@ -826,14 +851,6 @@ export class DatabaseService {
       autoUnsubscription ? of(object).pipe(takeUntil(this.routerChanges)) : of(object));
 
   }
-
-
-  // *********************************************************************************************
-  // private methods
-  //
-  // TODO: Alle query functions in eine eigene Klasse auslagern
-  //
-  // *********************************************************************************************
 
   /**
    *
@@ -911,6 +928,7 @@ export class DatabaseService {
       ))
     );
   }
+
 }
 
 

@@ -70,6 +70,12 @@ export interface FirestoreCamp extends FirestoreDocument {
 
 }
 
+export interface FirestoreSettings {
+
+  show_templates: boolean;
+
+}
+
 
 /**
  * Verwendung einer Mahlziet als Zmorgen, Zmittag, Znacht, Zvieri usw.

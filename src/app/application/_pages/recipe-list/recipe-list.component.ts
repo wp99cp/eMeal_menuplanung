@@ -11,6 +11,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpService} from '../../_service/help.service';
 import {Router} from '@angular/router';
+import {SettingsService} from '../../_service/settings.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -25,9 +26,10 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
     private snackBar: MatSnackBar,
     dialog: MatDialog,
     router: Router,
-    helpService: HelpService) {
+    helpService: HelpService,
+    settings: SettingsService) {
 
-    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog, helpService, router);
+    super(dbService, snackBar, dbService.getAccessableRecipes(settings.globalSettings.show_templates), dialog, helpService, router);
 
     // set filter for searching
     this.filterFn = (rec: Recipe) => rec.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());

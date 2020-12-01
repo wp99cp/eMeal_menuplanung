@@ -1,7 +1,8 @@
-import { UserGroups } from '../_interfaces/firestoreDatatypes';
-
-
-export class InvalidArgumentException extends Error { }
+import {FirestoreSettings, UserGroups} from '../_interfaces/firestoreDatatypes';
+import {DatabaseService} from './database.service';
+import {AuthenticationService} from './authentication.service';
+import {mergeMap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 
 /**
  * Settings Service
@@ -11,7 +12,26 @@ export class InvalidArgumentException extends Error { }
  * the settings of the user (which format).
  *
  */
+@Injectable({
+  providedIn: 'root'
+})
 export class SettingsService {
+
+  public globalSettings: FirestoreSettings = {
+    show_templates: true,
+  };
+
+  constructor(dbService: DatabaseService, authService: AuthenticationService) {
+
+    authService.getCurrentUser().pipe(mergeMap(user =>
+      dbService.loadUserSettings(user.uid)))
+      .subscribe(settings => {
+        this.globalSettings = settings;
+        console.log(settings);
+      });
+
+  }
+
 
   /**
    * Calculates the participants of a meal
@@ -63,7 +83,6 @@ export class SettingsService {
     return calcRecipePart;
 
   }
-
 
 
 }
