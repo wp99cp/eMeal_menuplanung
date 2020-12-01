@@ -30,7 +30,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     helpService: HelpService) {
 
     super(dbService, snackBar, dbService.getAccessableMeals(), dialog, helpService, router);
-    
+
     // set filter for searching
     this.filterFn = (meal) => meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
     this.dbElementName = 'Mahlzeit';
