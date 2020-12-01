@@ -26,9 +26,7 @@ export class SettingsService {
 
     this.globalSettings = authService.getCurrentUser().pipe(mergeMap(user =>
       this.loadUserSettings(user.uid)));
-
-    this.globalSettings.subscribe(console.log)
-
+    
   }
 
  private loadUserSettings(userId: string): Observable<FirestoreSettings> {
