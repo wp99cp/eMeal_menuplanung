@@ -4,13 +4,20 @@
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
 </mat-form-field>
 
-<div id="mealsList" *ngIf="filteredElements as meals">
 
-    <app-list-card *ngFor="let meal of meals" [cardElement]="meal" [access]="access[meal.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
-
+<div id="mealsList">
+  <ng-container *ngIf="filteredElements as meals else loading_preview">
+    <app-list-card *ngFor="let meal of meals" [cardElement]="meal" [access]="access[meal.documentId]"
+                   (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
+  </ng-container>
 </div>
 
-<p *ngIf="filteredElements?.length === 0 && (dbElements | async)?.length !== 0"> Du hast noch keine Mahlzeit erstellt, die zu deinem Suchbegriff passt! </p>
+<ng-template #loading_preview>
+  <app-list-card *ngFor="let number of [0, 0, 0, 0, 0]" class="templateStyle"></app-list-card>
+</ng-template>
+
+<p *ngIf="filteredElements?.length === 0 && (dbElements | async)?.length !== 0"> Du hast noch keine Mahlzeit erstellt,
+  die zu deinem Suchbegriff passt! </p>
 
 <div class="create-first-meal mat-elevation-z3" *ngIf="(dbElements | async)?.length === 0">
 
