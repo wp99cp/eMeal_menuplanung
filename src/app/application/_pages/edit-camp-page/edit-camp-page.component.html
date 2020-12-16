@@ -1,17 +1,35 @@
-<ng-container *ngIf="(camp | async) as camp; else loadingCamps">
+<ng-container *ngIf="!errorOnLoad else cantAccessMessage">
+  <ng-container *ngIf="(camp | async) as camp; else loadingCamps">
 
-  <span class="big-page-title">{{camp.name}}</span>
+    <span class="big-page-title">{{camp.name}}</span>
 
-  <p><b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
-    {{camp.leaders}} Per.)</p>
+    <p><b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
+      {{camp.leaders}} Per.)</p>
 
-  <!-- Week Overview -->
-  <app-week-view [camp]="camp"></app-week-view>
+    <!-- Week Overview -->
+    <app-week-view [camp]="camp"></app-week-view>
 
+  </ng-container>
 </ng-container>
 
 <!-- Loading Animation -->
 <ng-template #loadingCamps>
+
   <span class="page-title"></span>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+
 </ng-template>
+
+<!-- Cannot access the camp -->
+<ng-template #cantAccessMessage>
+  
+  <p><br></p>
+
+  <p class="warning"><b>Du hast keinen Zugriff auf dieses Lager.</b></p><p class="warning">Dies kann verschiedene Gründe haben:<br>
+    - du verwendest ein veraltetes Lesezeichen...<br>
+    - du hast keine Internetverbindung; prüfe deine Internetverbindung...<br>
+    - du hast keinen Zugriff mehr auf dieses Lager...<br>
+  </p>
+
+</ng-template>
+

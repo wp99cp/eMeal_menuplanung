@@ -34,6 +34,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   // camp Data from server
   public camp: Observable<Camp>;
+  public errorOnLoad = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -85,6 +86,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
     this.camp = this.route.url.pipe(mergeMap(
       url => this.dbService.getCampById(url[1].path)
     )).pipe(tap(camp => camp.loadMeals(this.dbService)));
+
+    this.camp.subscribe(() => {}, err => {
+      this.errorOnLoad = true;
+    });
 
   }
 
