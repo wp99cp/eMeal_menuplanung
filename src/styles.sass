@@ -27,11 +27,12 @@ html, body
 
 app-root
   display: grid
-  grid-template-rows: 50px auto 250px
-  height: 100%
+  grid-template-rows: 50px auto 422px
+  height: 100vh
   width: 100%
   grid-template-columns: 280px auto
   grid-template-areas: "header header" "main main" "footer footer"
+  grid-row-gap: 50px
 
 app-root.show-menu
   grid-template-areas: "menu header" "menu main" "menu footer"
@@ -62,7 +63,6 @@ app-template-header.show-menu
 
 app-template-footer
   grid-area: footer
-  margin-top: 100px
 
 main
   grid-area: main
@@ -74,6 +74,10 @@ main
 @media screen and (max-width: 600px)
   main
     padding: 20px 12px
+    max-width: calc(100vw - 24px)
+
+  app-root
+    grid-row-gap: 5px
 
 main
   .page-title, .big-page-title
@@ -89,19 +93,23 @@ main
 
   .page-title
     margin-bottom: 30px
-    margin-top: 70px
 
   p, li
     // maximale Breite eines Textkörpers
     max-width: 850px
     font: $p-font
-    margin: 0 0 2.5px 0
     color: rgb(95, 99, 104)
     font-size: 17px
     line-height: 28.05px
-    margin-bottom: 17px
-    margin-top: 0px
+    margin: 0px 0 17px
 
+@media screen and (max-width: 600px)
+  main
+    p, li
+      font-size: 14px !important
+      line-height: 23.1px
+
+main
   h1, .mat-h1
     font: $h1-font
     color: rgb(117, 117, 117)
@@ -115,15 +123,13 @@ main
     max-width: 765px
 
   h2
-    margin: 50px 0 10px
     color: rgb(117, 117, 117)
     display: block
     font-size: 29.75px
     font-weight: 500
     letter-spacing: -0.26554px
     line-height: 37.1875px
-    margin-top: 60px
-    margin-bottom: 10px
+    margin: 60px 0 10px
 
   h3
     color: rgb(117, 117, 117)
@@ -176,7 +182,6 @@ figure
 @media screen and (min-width: 1200px)
   .centered
     margin-left: 10%
-
 
 a
   text-decoration: none
@@ -315,9 +320,12 @@ a
   z-index: 201
   margin: 7px !important
 
-
 .full-width
   width: 100%
+
+button.full-width
+  width: calc(100% - 34px)
+
 
 // Curser zum Clicken
 .clickable
