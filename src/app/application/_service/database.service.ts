@@ -4,7 +4,7 @@ import {AngularFireFunctions} from '@angular/fire/functions';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {firestore} from 'firebase/app';
 import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction, Subject} from 'rxjs';
-import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil} from 'rxjs/operators';
+import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil, tap} from 'rxjs/operators';
 import {Camp} from '../_class/camp';
 import {FirestoreObject} from '../_class/firebaseObject';
 import {Meal} from '../_class/meal';
@@ -318,7 +318,7 @@ export class DatabaseService {
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-      doc.ref.update({'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd)})
+      doc.ref.update({used_in_meals: firestore.FieldValue.arrayUnion(idToAdd)})
     ));
 
   }
@@ -753,7 +753,7 @@ export class DatabaseService {
   public requestDocument(path: string): Observable<Action<DocumentSnapshot<unknown>>> {
 
     return this.db.doc(path).snapshotChanges();
-
+    
   }
 
   /**
@@ -860,8 +860,6 @@ export class DatabaseService {
       });
 
   }
-
-
 
 
   // *********************************************************************************************

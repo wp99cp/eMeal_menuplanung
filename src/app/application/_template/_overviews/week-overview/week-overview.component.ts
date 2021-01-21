@@ -51,7 +51,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   ngOnInit() {
 
-
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
       this.hasAccess = hasAccess;

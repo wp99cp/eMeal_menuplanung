@@ -1,4 +1,5 @@
 <ng-container *ngIf="!errorOnLoad else cantAccessMessage">
+
   <ng-container *ngIf="(camp | async) as camp; else loadingCamps">
 
     <span class="big-page-title">{{camp.name}}</span>
@@ -26,7 +27,8 @@
 
   <p><br></p>
 
-  <p class="warning"><b>Du hast keinen Zugriff auf dieses Lager.</b></p><p class="warning">Dies kann verschiedene Gründe haben:<br>
+  <p class="warning"><b>Du hast keinen Zugriff auf dieses Lager.</b></p>
+  <p class="warning">Dies kann verschiedene Gründe haben:<br>
     - du verwendest ein veraltetes Lesezeichen...<br>
     - du hast keine Internetverbindung; prüfe deine Internetverbindung...<br>
     - du hast keinen Zugriff mehr auf dieses Lager...<br>
