@@ -12,7 +12,8 @@
   <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
   <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
 
-    <div cdkDropList *ngIf="getMeal(nameOfMeal) as meals" class="meal-card {{nameOfMeal}}"
+    <div cdkDropList
+         *ngIf="getMeal(nameOfMeal) as meals" class="meal-card {{nameOfMeal}}"
          [ngClass]="{'has-a-meal': meals.length >= 1}"
          [attr.data-meal-name]="nameOfMeal">
 

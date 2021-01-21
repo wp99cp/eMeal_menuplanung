@@ -165,7 +165,6 @@ export class DayOverviewComponent implements OnChanges {
     const mealDateString = event.container.element.nativeElement.parentElement.id;
 
     console.log(event.container.element.nativeElement)
-    return;
 
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
