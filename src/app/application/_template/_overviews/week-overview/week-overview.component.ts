@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -51,7 +51,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   ngOnInit() {
 
-    console.log('Champ init!!!');
 
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
@@ -85,8 +84,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   ngOnChanges() {
 
-    console.log('Champ changed!!!');
-
     this.showParticipantsWarning = false;
 
     this.camp.days.forEach(day => {
@@ -106,7 +103,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
 
   public async save() {
-    
+
     // Speichert das Lager
     this.dbService.updateDocument(this.camp);
 
