@@ -1,12 +1,34 @@
 
-.mat-grid-list
-  margin-bottom: 30px
+.week-view
+  display: grid
+  grid-template-rows: 588px
+  grid-auto-flow: column
+  grid-template-columns: repeat(auto-fill, 350px)
+  grid-gap: 10px
+  width: calc(100vw - 54px)
+  overflow-x: scroll
+  padding: 20px 2px
 
-  .mat-grid-tile
-    max-width: 300px
+  .day-container
+    width: 350px
+    display: block
+
+.week-view::-webkit-scrollbar
+  height: 10px
+
+.week-view::-webkit-scrollbar-track
+  background: #f1f1f1
+
+.week-view::-webkit-scrollbar-thumb
+  background: #888
+
+.week-view::-webkit-scrollbar-thumb:hover
+  background: #555
+
 
 .add-day-box
   background-color: white
+  display: grid !important
 
   .add-day-icon
     font-size: 25px
