@@ -1,7 +1,7 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {first, mergeMap, take, tap} from 'rxjs/operators';
+import {filter, mergeMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {Camp} from '../../../_class/camp';
@@ -34,7 +34,10 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   // camp Data from server
   public camp: Observable<Camp>;
+  public campAngular: Observable<Camp>;
+
   public errorOnLoad = false;
+  private oldCamp: Camp;
 
   constructor(
     private route: ActivatedRoute,
@@ -92,6 +95,13 @@ export class EditCampPageComponent implements OnInit, Saveable {
     }, err => {
       this.errorOnLoad = true;
     });
+
+    this.campAngular = this.camp.pipe(
+      filter(camp => !this.oldCamp?.isEqual(camp)),
+      tap(camp => {
+        this.oldCamp = camp;
+      })
+    );
 
   }
 

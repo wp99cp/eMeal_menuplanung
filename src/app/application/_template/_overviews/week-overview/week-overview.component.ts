@@ -83,6 +83,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   ngOnChanges() {
 
+    console.log('Changes!!!');
+
     this.showParticipantsWarning = false;
 
     this.camp.days.forEach(day => {

@@ -1,6 +1,6 @@
 <ng-container *ngIf="!errorOnLoad else cantAccessMessage">
 
-  <ng-container *ngIf="(camp | async) as camp; else loadingCamps">
+  <ng-container *ngIf="(campAngular | async) as camp; else loadingCamps">
 
     <span class="big-page-title">{{camp.name}}</span>
 
