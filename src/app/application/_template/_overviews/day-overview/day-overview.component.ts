@@ -20,8 +20,7 @@ export class DayOverviewComponent implements OnChanges {
   @Input() access: boolean;
   // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
   @Input() day: Day;
-
-  // TODO: z.T. beim Löschen doppelte Mahlzeiten (sie tauchen wieder auf, falls eine zweite Mahlzeit
+  @Input() mealsToPrepare: SpecificMeal[];
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
   @Input() hideIcons = false;
@@ -41,6 +40,10 @@ export class DayOverviewComponent implements OnChanges {
   }
 
   getMeal(name: string) {
+
+    if (name === 'Vorbereiten') {
+      return this.mealsToPrepare;
+    }
 
     return this.specificMeals?.filter(meal => meal.usedAs === name);
 
@@ -160,6 +163,9 @@ export class DayOverviewComponent implements OnChanges {
     const mealUsage: MealUsage =
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
+
+    console.log(event.container.element.nativeElement)
+    return;
 
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
