@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -13,8 +13,7 @@ import {AddMealComponent} from '../../../_dialoges/add-meal/add-meal.component';
 import {Saveable} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MealUsage} from "../../../_interfaces/firestoreDatatypes";
-
+import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 
 /**
  * Wochenübersicht eines Lagers
@@ -23,7 +22,7 @@ import {MealUsage} from "../../../_interfaces/firestoreDatatypes";
 @Component({
   selector: 'app-week-overview',
   templateUrl: './week-overview.component.html',
-  styleUrls: ['./week-view.component.sass']
+  styleUrls: ['./week-view.component.sass'],
 })
 export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
@@ -37,7 +36,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public showParticipantsWarning = false;
   public specificMealsToSave: SpecificMeal[] = [];
 
-  public hasAccess: boolean = false;
+  public hasAccess = false;
 
   constructor(
     public dialog: MatDialog,
@@ -49,7 +48,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
+
   ngOnInit() {
+
+    console.log('Champ init!!!');
 
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
@@ -83,6 +85,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   ngOnChanges() {
 
+    console.log('Champ changed!!!');
+
     this.showParticipantsWarning = false;
 
     this.camp.days.forEach(day => {
@@ -102,7 +106,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
 
   public async save() {
-
+    
     // Speichert das Lager
     this.dbService.updateDocument(this.camp);
 
@@ -129,8 +133,9 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   public drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage, string]) {
 
-    if (!this.hasAccess)
+    if (!this.hasAccess) {
       return;
+    }
 
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');

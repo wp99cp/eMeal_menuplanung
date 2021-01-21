@@ -14,7 +14,8 @@ import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 @Component({
   selector: 'app-day-overview',
   templateUrl: './day-overview.component.html',
-  styleUrls: ['./day-overview.component.sass']
+  styleUrls: ['./day-overview.component.sass'],
+
 })
 export class DayOverviewComponent implements OnChanges {
   @Input() access: boolean;

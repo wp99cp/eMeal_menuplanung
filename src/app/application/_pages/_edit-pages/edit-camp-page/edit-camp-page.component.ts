@@ -1,7 +1,7 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {mergeMap, take, tap} from 'rxjs/operators';
+import {filter, mergeMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {Camp} from '../../../_class/camp';
@@ -83,11 +83,14 @@ export class EditCampPageComponent implements OnInit, Saveable {
     autosave.register(this);
 
     // Ladet das Lager von der URL
-    this.camp = this.route.url.pipe(mergeMap(
-      url => this.dbService.getCampById(url[1].path)
-    )).pipe(tap(camp => camp.loadMeals(this.dbService)));
+    this.camp = this.route.url.pipe(
+      mergeMap(url => this.dbService.getCampById(url[1].path)),
+    ).pipe(
+      tap(camp => camp.loadMeals(this.dbService))
+    );
 
-    this.camp.subscribe(() => {}, err => {
+    this.camp.subscribe(() => {
+    }, err => {
       this.errorOnLoad = true;
     });
 
@@ -98,8 +101,9 @@ export class EditCampPageComponent implements OnInit, Saveable {
     // check for write access
     this.camp.subscribe(async camp => {
       const access = await this.dbService.canWrite(camp);
-      if (access)
+      if (access) {
         HeaderNavComponent.turnOn('Mitarbeiter');
+      }
     });
 
     // set as last used
