@@ -1,10 +1,10 @@
 <!-- Header of the day -->
-<mat-grid-tile-header>
+<div class="day-header">
   <h4>{{swissDateAdapter.formatLong(day.dateAsTypeDate) }} {{ day.getDiscriptionInBracket() }}</h4>
   <mat-icon class="edit-day clickable" (click)="editDay(day)"
             matTooltip="{{access ? 'Tag bearbeiten' : 'Informationen zum Tag'}}" *ngIf="!hideIcons"> edit
   </mat-icon>
-</mat-grid-tile-header>
+</div>
 
 <!-- meal list of the day-->
 <div class="meal-list" id="{{day.getTimestamp().toMillis()}}">
@@ -19,10 +19,11 @@
       <span class="meal-card-name">{{nameOfMeal}}</span>
 
       <ng-container *ngIf="(meals.length >= 1) else noMeal">
-        <div class="meals clickable" *ngFor="let meal of meals"
-             cdkDrag (cdkDragDropped)="mealDroppedAction([meal, $event]);"
-             routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
-          <span>{{meal.weekTitle}}</span>
+        <div class="meals clickable"
+             cdkDrag
+             (cdkDragDropped)="mealDroppedAction([meals[0], $event]);"
+             routerLink="meals/{{ meals[0].getMealId() }}/{{meals[0].documentId}}">
+          <span>{{meals[0].weekTitle}}</span>
         </div>
       </ng-container>
 
