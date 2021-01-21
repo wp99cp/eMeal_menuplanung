@@ -1,20 +1,21 @@
-<mat-grid-list cdkDropListGroup [gutterSize]="'10px'" cols="{{ colCounter }}" rowHeight="588px">
+<div class="week-view">
 
-  <!-- Every day is a grid tile -->
-  <mat-grid-tile class="mat-elevation-z3" *ngFor="let day of camp.days; let i = index">
-    <app-day-overview [day]="day" [days]="camp.days" [specificMeals]="(day.getMeals() | async)"
+  <div class="mat-elevation-z3 day-container" *ngFor="let day of camp.days; let i = index">
+    <app-day-overview [day]="day" [days]="camp.days"
+                      [specificMeals]="(day.getMeals() | async)" [mealsToPrepare]="(day.getMealsToPrepare() | async)"
                       (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
-                      (dayEdited)="editDay($event[0], $event[1],  $event[2])" (addMeal)="addMeal(camp.days.indexOf($event))">
+                      (dayEdited)="editDay($event[0], $event[1],  $event[2])"
+                      (addMeal)="addMeal(camp.days.indexOf($event))">
     </app-day-overview>
-  </mat-grid-tile>
+  </div>
 
   <!-- HTML element for adding a new day -->
-  <mat-grid-tile class="add-day-box dotted-box" *ngIf="hasAccess">
-    <mat-icon class="add-day-icon clickable" matTooltip="Tag hinzufügen" (click)="addNewDay()">
+  <div class="add-day-box dotted-box day-container clickable" *ngIf="hasAccess" (click)="addNewDay()">
+    <mat-icon class="add-day-icon clickable" matTooltip="Tag hinzufügen">
       add_circle_outline
     </mat-icon>
-  </mat-grid-tile>
+  </div>
 
-</mat-grid-list>
+</div>
 
 
