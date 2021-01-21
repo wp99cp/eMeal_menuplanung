@@ -273,10 +273,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    * Löscht die ausgewählt Mahlzeit.
    *
    */
-  public deleteMeal(mealId: string, specificMealId: string) {
+  public deleteMeal(mealId: string, elementID: string) {
 
     // versteckt das Element aus dem GUi
-    document.getElementById(specificMealId).classList.add('hidden');
+    document.querySelector('[data-meal-id=' + elementID + ']')?.classList.add('hidden');
 
     // shown delete Meassage
     const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
@@ -285,14 +285,15 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     let canDelete = true;
     snackBar.onAction().subscribe(() => {
       canDelete = false;
-      document.getElementById(specificMealId).classList.toggle('hidden');
+      document.querySelector('[data-meal-id=' + elementID + ']')?.classList.toggle('hidden');
 
     });
     snackBar.afterDismissed().subscribe(() => {
 
       if (canDelete) {
-        this.dbService.deleteSpecificMealAndRecipes(mealId, specificMealId);
+        this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
       }
+      document.querySelector('[data-meal-id=' + elementID + ']')?.classList.toggle('hidden');
 
     });
 
