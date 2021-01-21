@@ -1,0 +1,67 @@
+\:host
+  width: 100%
+
+.meal-list
+    min-height: 260px
+    border-radius: 4px
+    overflow: hidden
+    position: inherit
+    max-height: 525px
+    margin-top: 40px
+    overflow-y: scroll
+
+.meal-list::-webkit-scrollbar
+    width: 3px
+
+.meal-list::-webkit-scrollbar-track
+    background: #f1f1f1
+
+.meal-list::-webkit-scrollbar-thumb
+    background: #888
+
+.meal-list::-webkit-scrollbar-thumb:hover
+    background: #555
+
+.mat-grid-tile-header
+    background: #7d8a9c
+    line-height: 1.8rem
+    padding-right: 35px
+
+/////////
+
+.hidden
+    display: none !important
+
+.meal-card
+  width: calc(100% - 40px)
+  margin: 10px
+  border-radius: 10px
+  border: dashed 1px darkgray
+  padding: 5px 10px
+  min-height: 12px
+  display: grid
+  grid-template: 'name add-meal' 'meals meals'
+  grid-template-columns: auto 25px
+  grid-template-rows: 20px auto
+
+  .meal-card-name
+    font-size: 12px
+    font-weight: bold
+    line-height: 20px
+    color: #A1A1A1
+    grid-area: name
+
+  .add-meal-icon
+    grid-area: add-meal
+
+.Zmorgen, .Zmittag, .Znacht
+  min-height: 80px
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+.edit-day
+  position: absolute
+  right: 10px
+  top: 15px
+  color: white

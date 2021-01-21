@@ -9,9 +9,21 @@
 <!-- Meal List for one day-->
 <div class="meal-list" cdkDropList [cdkDropListData]="specificMeals" id="{{day.getTimestamp().toMillis()}}">
 
-  <!-- Meal Element-->
-  <div *ngFor="let meal of specificMeals; let i = index">
+  <div *ngFor="let nameOfMeal of getMealNames(); let i = index">
 
+    <div class="meal-card {{nameOfMeal}}">
+      <span class="meal-card-name">{{nameOfMeal}}</span>
+
+      <div class="meals">
+
+      </div>
+
+      <mat-icon *ngIf="nameOfMeal != 'Vorbereiten'" class="add-meal-icon" >add_circle_outline</mat-icon>
+
+    </div>
+
+
+    <!--
 
     <div class="meal-card meal-context-menu-added" cdkDrag
          [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
@@ -35,11 +47,12 @@
 
     </div>
 
-    <span *ngIf="(i != specificMeals.length - 1) && visible(meal.documentId)" class="meal-separator">
-      * * * * *
-    </span>
+  -->
 
   </div>
+
+
+  <!--
 
   <span *ngIf=" specificMeals?.length > 0" class="meal-separator">
       * * * * *
@@ -49,8 +62,9 @@
     <mat-icon class="add-meal-card-icon" >add_circle_outline</mat-icon>
   </div>
 
-</div>
+  -->
 
+</div>
 
 
 <p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Beim Export werden beide Mahlzeiten angezeigt.">

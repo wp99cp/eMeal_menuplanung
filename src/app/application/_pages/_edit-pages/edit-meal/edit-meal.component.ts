@@ -5,21 +5,21 @@ import {empty, Observable} from 'rxjs';
 import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
-import {Camp} from '../../_class/camp';
-import {Meal} from '../../_class/meal';
-import {Recipe} from '../../_class/recipe';
-import {SpecificMeal} from '../../_class/specific-meal';
-import {SpecificRecipe} from '../../_class/specific-recipe';
-import {AddRecipeComponent} from '../../_dialoges/add-recipe/add-recipe.component';
-import {MealInfoComponent} from '../../_dialoges/meal-info/meal-info.component';
-import {MealPrepareComponent} from '../../_dialoges/meal-prepare/meal-prepare.component';
-import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
-import {DatabaseService} from '../../_service/database.service';
-import {SettingsService} from '../../_service/settings.service';
-import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
+import {Camp} from '../../../_class/camp';
+import {Meal} from '../../../_class/meal';
+import {Recipe} from '../../../_class/recipe';
+import {SpecificMeal} from '../../../_class/specific-meal';
+import {SpecificRecipe} from '../../../_class/specific-recipe';
+import {AddRecipeComponent} from '../../../_dialoges/add-recipe/add-recipe.component';
+import {MealInfoComponent} from '../../../_dialoges/meal-info/meal-info.component';
+import {MealPrepareComponent} from '../../../_dialoges/meal-prepare/meal-prepare.component';
+import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
+import {DatabaseService} from '../../../_service/database.service';
+import {SettingsService} from '../../../_service/settings.service';
+import {EditRecipeInCampComponent} from '../../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
-import {CurrentlyUsedMealService} from "../../../_template/currently-used-meal.service";
+import {CurrentlyUsedMealService} from "../../../../_template/currently-used-meal.service";
 
 @Component({
   selector: 'app-edit-meal',

@@ -4,16 +4,16 @@ import {Observable} from 'rxjs';
 import {mergeMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
-import {Camp} from '../../_class/camp';
-import {CampInfoComponent} from '../../_dialoges/camp-info/camp-info.component';
-import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
-import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
-import {DatabaseService} from '../../_service/database.service';
-import {WeekViewComponent} from '../../_template/week-view/week-view.component';
+import {Camp} from '../../../_class/camp';
+import {CampInfoComponent} from '../../../_dialoges/camp-info/camp-info.component';
+import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
+import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
+import {DatabaseService} from '../../../_service/database.service';
+import {WeekOverviewComponent} from '../../../_template/_overviews/week-overview/week-overview.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HelpService} from '../../_service/help.service';
-import {CurrentlyUsedMealService} from '../../../_template/currently-used-meal.service';
+import {HelpService} from '../../../_service/help.service';
+import {CurrentlyUsedMealService} from '../../../../_template/currently-used-meal.service';
 
 @Component({
   selector: 'app-edit-camp-page',
@@ -30,7 +30,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
   // und auch nicht am vorherigen oder nächsten und schaut
   // das nur einmal pro Tag Fleisch verwendet wird.
 
-  @ViewChildren(WeekViewComponent) weekViews: QueryList<WeekViewComponent>;
+  @ViewChildren(WeekOverviewComponent) weekViews: QueryList<WeekOverviewComponent>;
 
   // camp Data from server
   public camp: Observable<Camp>;

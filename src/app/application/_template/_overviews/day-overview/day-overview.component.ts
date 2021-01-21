@@ -2,20 +2,20 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
-import {Day} from '../../_class/day';
-import {SpecificMeal} from '../../_class/specific-meal';
-import {EditDayComponent} from '../../_dialoges/edit-day/edit-day.component';
+import {Day} from '../../../_class/day';
+import {SpecificMeal} from '../../../_class/specific-meal';
+import {EditDayComponent} from '../../../_dialoges/edit-day/edit-day.component';
 import {MatDialog} from '@angular/material/dialog';
-import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
+import {ContextMenuNode, ContextMenuService} from '../../../_service/context-menu.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {HelpService} from "../../_service/help.service";
+import {HelpService} from '../../../_service/help.service';
 
 @Component({
-  selector: 'app-meals-overview',
-  templateUrl: './meals-overview.component.html',
-  styleUrls: ['./meals-overview.component.sass']
+  selector: 'app-day-overview',
+  templateUrl: './day-overview.component.html',
+  styleUrls: ['./day-overview.component.sass']
 })
-export class MealsOverviewComponent implements OnChanges {
+export class DayOverviewComponent implements OnChanges {
   @Input() access: boolean;
   // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
   @Input() day: Day;
@@ -37,6 +37,12 @@ export class MealsOverviewComponent implements OnChanges {
               private router: Router,
               private activeRoute: ActivatedRoute,
               private helpService: HelpService) {
+  }
+
+  getMealNames(){
+
+    return ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
+
   }
 
   setContextMenu() {
@@ -175,4 +181,20 @@ export class MealsOverviewComponent implements OnChanges {
 
   }
 
+
+  getMinHeight(nameOfMeal: string) {
+
+    const heights = {
+      Zmorgen: 60,
+      Znüni: 12,
+      Zmittag: 60,
+      Zvieri: 12,
+      Znacht: 60,
+      Leitersnack: 12,
+      Vorbereiten: 12,
+    };
+
+    return heights[nameOfMeal];
+
+  }
 }

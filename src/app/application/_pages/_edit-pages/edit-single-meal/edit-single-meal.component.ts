@@ -3,16 +3,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {empty, Observable} from 'rxjs';
 import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
-import {Meal} from '../../_class/meal';
-import {Recipe} from '../../_class/recipe';
-import {MealInfoComponent} from '../../_dialoges/meal-info/meal-info.component';
-import {AutoSaveService} from '../../_service/auto-save.service';
-import {DatabaseService} from '../../_service/database.service';
-import {EditRecipeInCampComponent} from '../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
+import {Meal} from '../../../_class/meal';
+import {Recipe} from '../../../_class/recipe';
+import {MealInfoComponent} from '../../../_dialoges/meal-info/meal-info.component';
+import {AutoSaveService} from '../../../_service/auto-save.service';
+import {DatabaseService} from '../../../_service/database.service';
+import {EditRecipeInCampComponent} from '../../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
-import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
-import {HelpService} from '../../_service/help.service';
+import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
+import {HelpService} from '../../../_service/help.service';
 
 @Component({
   selector: 'app-edit-single-meal',

@@ -6,11 +6,12 @@
     <p><b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
       {{camp.leaders}} Per.)</p>
 
-    <!-- Week Overview -->
-    <app-week-view [camp]="camp"></app-week-view>
+    <!-- Week overview -->
+    <app-week-overview [camp]="camp"></app-week-overview>
 
   </ng-container>
 </ng-container>
+
 
 <!-- Loading Animation -->
 <ng-template #loadingCamps>
@@ -22,7 +23,7 @@
 
 <!-- Cannot access the camp -->
 <ng-template #cantAccessMessage>
-  
+
   <p><br></p>
 
   <p class="warning"><b>Du hast keinen Zugriff auf dieses Lager.</b></p><p class="warning">Dies kann verschiedene Gründe haben:<br>

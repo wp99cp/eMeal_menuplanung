@@ -3,15 +3,15 @@ import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, Subscription} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {Camp} from '../../_class/camp';
-import {CopyCampComponent} from '../../_dialoges/copy-camp/copy-camp.component';
-import {CreateCampComponent} from '../../_dialoges/create-camp/create-camp.component';
-import {DeleteCampComponent} from '../../_dialoges/delete-camp/delete-camp.component';
-import {FirestoreCamp} from '../../_interfaces/firestoreDatatypes';
-import {DatabaseService} from '../../_service/database.service';
-import {TileListPage} from '../tile_page';
+import {Camp} from '../../../_class/camp';
+import {CopyCampComponent} from '../../../_dialoges/copy-camp/copy-camp.component';
+import {CreateCampComponent} from '../../../_dialoges/create-camp/create-camp.component';
+import {DeleteCampComponent} from '../../../_dialoges/delete-camp/delete-camp.component';
+import {FirestoreCamp} from '../../../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../../../_service/database.service';
+import {TileListPage} from '../../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HelpService} from '../../_service/help.service';
+import {HelpService} from '../../../_service/help.service';
 
 /**
  * CampListPageComponent

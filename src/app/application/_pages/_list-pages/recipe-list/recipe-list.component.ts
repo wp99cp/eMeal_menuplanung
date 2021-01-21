@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {Recipe} from '../../_class/recipe';
-import {CopyRecipeComponent} from '../../_dialoges/copy-recipe/copy-recipe.component';
-import {CreateRecipeComponent} from '../../_dialoges/create-recipe/create-recipe.component';
-import {FirestoreRecipe} from '../../_interfaces/firestoreDatatypes';
-import {DatabaseService} from '../../_service/database.service';
-import {TileListPage} from '../tile_page';
+import {Recipe} from '../../../_class/recipe';
+import {CopyRecipeComponent} from '../../../_dialoges/copy-recipe/copy-recipe.component';
+import {CreateRecipeComponent} from '../../../_dialoges/create-recipe/create-recipe.component';
+import {FirestoreRecipe} from '../../../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../../../_service/database.service';
+import {TileListPage} from '../../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../../_service/help.service';
+import {HelpService} from '../../../_service/help.service';
 import {Router} from '@angular/router';
 
 @Component({

@@ -6,13 +6,13 @@ import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
-import {Camp} from '../../_class/camp';
-import {Day} from '../../_class/day';
-import {Meal} from '../../_class/meal';
-import {SpecificMeal} from '../../_class/specific-meal';
-import {AddMealComponent} from '../../_dialoges/add-meal/add-meal.component';
-import {Saveable} from '../../_service/auto-save.service';
-import {DatabaseService} from '../../_service/database.service';
+import {Camp} from '../../../_class/camp';
+import {Day} from '../../../_class/day';
+import {Meal} from '../../../_class/meal';
+import {SpecificMeal} from '../../../_class/specific-meal';
+import {AddMealComponent} from '../../../_dialoges/add-meal/add-meal.component';
+import {Saveable} from '../../../_service/auto-save.service';
+import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 
@@ -21,11 +21,11 @@ import {MatSnackBar} from '@angular/material/snack-bar';
  *
  */
 @Component({
-  selector: 'app-week-view',
-  templateUrl: './week-view.component.html',
+  selector: 'app-week-overview',
+  templateUrl: './week-overview.component.html',
   styleUrls: ['./week-view.component.sass']
 })
-export class WeekViewComponent implements OnInit, OnChanges, Saveable {
+export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   // TODO: add short-cut for adding meal (shift + M)
   // TODO: add short-cut for adding day (shift + D)
