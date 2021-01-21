@@ -160,6 +160,8 @@ export class DayOverviewComponent implements OnChanges {
   mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
 
+    event.item.element.nativeElement.style.visibility = 'hidden';
+
     const mealUsage: MealUsage =
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
