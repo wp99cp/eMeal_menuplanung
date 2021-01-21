@@ -1,7 +1,7 @@
 import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {filter, mergeMap, take, tap} from 'rxjs/operators';
+import {first, mergeMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {Camp} from '../../../_class/camp';
@@ -85,7 +85,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
     // Ladet das Lager von der URL
     this.camp = this.route.url.pipe(
       mergeMap(url => this.dbService.getCampById(url[1].path)),
-    ).pipe(
       tap(camp => camp.loadMeals(this.dbService))
     );
 
