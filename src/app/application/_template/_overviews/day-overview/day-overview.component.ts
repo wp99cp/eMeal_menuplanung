@@ -1,5 +1,5 @@
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
 import {Day} from '../../../_class/day';
@@ -17,7 +17,7 @@ import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
   styleUrls: ['./day-overview.component.sass'],
 
 })
-export class DayOverviewComponent implements OnChanges {
+export class DayOverviewComponent implements OnChanges, OnInit {
   @Input() access: boolean;
   // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
   @Input() day: Day;
@@ -60,33 +60,30 @@ export class DayOverviewComponent implements OnChanges {
 
 
     setTimeout(() => {
+
       if (this.specificMeals === null) {
         return;
       }
 
-      this.specificMeals.forEach(meal => {
+      const empties = document.querySelectorAll('[data-add-note="true"]');
 
-        const element = document.getElementById(meal.documentId);
-
-        if (element === null || element === undefined) {
-          return;
-        }
+      empties.forEach(empty => {
 
         const node: ContextMenuNode = {
-          node: element as HTMLElement,
+          node: empty.parentElement as HTMLElement,
           contextMenuEntries: [
             {
-              icon: 'edit',
-              name: 'Bearbeiten',
+              icon: 'add',
+              name: 'Hinzufügen',
               shortCut: '',
-              function: (event) => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
-                {relativeTo: this.activeRoute})
+              function: (event) => this.addMeal.emit(this.day)
             },
             {
-              icon: 'delete',
-              name: 'Mahlzeit Löschen',
+              icon: 'sticky_note_2',
+              name: 'Notiz einfügen',
               shortCut: '',
-              function: (event) => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
+              function: (event) => {
+              }
             },
             'Separator',
             {
@@ -100,6 +97,46 @@ export class DayOverviewComponent implements OnChanges {
         this.contextMenuService.addContextMenuNode(node);
 
       });
+
+      this.specificMeals.forEach(meal => {
+
+        const elements = document.querySelectorAll('[data-meal-id=' + meal.documentId + ']');
+
+        if (elements === null || elements === undefined) {
+          return;
+        }
+
+        elements.forEach(element => {
+
+          const node: ContextMenuNode = {
+            node: element as HTMLElement,
+            contextMenuEntries: [
+              {
+                icon: 'edit',
+                name: 'Bearbeiten',
+                shortCut: '',
+                function: (event) => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
+                  {relativeTo: this.activeRoute})
+              },
+              {
+                icon: 'delete',
+                name: 'Mahlzeit Löschen',
+                shortCut: '',
+                function: (event) => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
+              },
+              'Separator',
+              {
+                icon: 'help',
+                name: 'Hilfe / Erklärungen',
+                shortCut: 'F1',
+                function: (event) => this.helpService.openHelpPopup()
+              }
+            ]
+          };
+          this.contextMenuService.addContextMenuNode(node);
+
+        });
+      });
     }, 200);
 
   }
@@ -109,6 +146,8 @@ export class DayOverviewComponent implements OnChanges {
 
     this.warning = '';
     this.setContextMenu();
+    this.mealsToPrepare =
+      this.mealsToPrepare?.filter(meal => meal.prepareAsDate.getTime() === this.day.dateAsTypeDate.getTime());
 
   }
 
@@ -167,9 +206,14 @@ export class DayOverviewComponent implements OnChanges {
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
 
-    console.log(event.container.element.nativeElement)
+    console.log(event.container.element.nativeElement);
 
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
   }
+
+  ngOnInit(): void {
+  }
+
+
 }

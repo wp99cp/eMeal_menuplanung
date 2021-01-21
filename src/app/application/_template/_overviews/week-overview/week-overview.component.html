@@ -2,7 +2,7 @@
 
   <div class="mat-elevation-z3 day-container" *ngFor="let day of camp.days; let i = index">
     <app-day-overview [day]="day" [days]="camp.days"
-                      [specificMeals]="(day.getMeals() | async)" [mealsToPrepare]="(day.getMealsToPrepare() | async)"
+                      [specificMeals]="(day.getMeals() | async)" [mealsToPrepare]="(mealToPrepare | async)"
                       (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
                       (dayEdited)="editDay($event[0], $event[1],  $event[2])"
                       (addMeal)="addMeal(camp.days.indexOf($event))">

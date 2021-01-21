@@ -3,7 +3,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
-import {mergeMap, take} from 'rxjs/operators';
+import {map, mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {Camp} from '../../../_class/camp';
 import {Day} from '../../../_class/day';
@@ -35,8 +35,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public colCounter = this.calculateCols();
   public showParticipantsWarning = false;
   public specificMealsToSave: SpecificMeal[] = [];
-
   public hasAccess = false;
+  public mealToPrepare: Observable<SpecificMeal[]>;
 
   constructor(
     public dialog: MatDialog,
@@ -45,6 +45,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     // change number of collums when resize window
     window.addEventListener('resize', () => this.colCounter = this.calculateCols());
+
 
   }
 
@@ -73,6 +74,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
 
     });
+
+    this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
+    this.mealToPrepare.subscribe(console.log)
+
 
   }
 
@@ -276,7 +281,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public deleteMeal(mealId: string, elementID: string) {
 
     // versteckt das Element aus dem GUi
-    document.querySelector('[data-meal-id=' + elementID + ']')?.classList.add('hidden');
+    document.querySelectorAll('[data-meal-id=' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
 
     // shown delete Meassage
     const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
@@ -293,7 +298,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       if (canDelete) {
         this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
       }
-      document.querySelector('[data-meal-id=' + elementID + ']')?.classList.toggle('hidden');
+      
+      document.querySelectorAll('[data-meal-id=' + elementID + ']')?.forEach(el => el?.classList.toggle('hidden'));
 
     });
 
@@ -338,6 +344,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
+
   /**
    * Returns the date of the last day in the camp
    *
@@ -366,6 +373,4 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     return Math.floor(document.body.scrollWidth / 340);
   }
-
-
 }

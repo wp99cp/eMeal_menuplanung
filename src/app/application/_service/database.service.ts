@@ -4,7 +4,7 @@ import {AngularFireFunctions} from '@angular/fire/functions';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {firestore} from 'firebase/app';
 import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction, Subject} from 'rxjs';
-import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil, tap} from 'rxjs/operators';
+import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil} from 'rxjs/operators';
 import {Camp} from '../_class/camp';
 import {FirestoreObject} from '../_class/firebaseObject';
 import {Meal} from '../_class/meal';
@@ -753,7 +753,7 @@ export class DatabaseService {
   public requestDocument(path: string): Observable<Action<DocumentSnapshot<unknown>>> {
 
     return this.db.doc(path).snapshotChanges();
-    
+
   }
 
   /**
@@ -874,6 +874,16 @@ export class DatabaseService {
     return new Promise(resolve =>
       this.authService.getCurrentUser().subscribe(user =>
         this.db.doc('users/' + user.uid + '/private/settings').set(settings).then(resolve)));
+
+  }
+
+  getPreparedMeals(documentId: string) {
+
+    return this.db.collectionGroup('specificMeals', query => query
+      .where('meal_gets_prepared', '==', true)
+      .where('used_in_camp', '==', documentId))
+      .snapshotChanges()
+      .pipe(FirestoreObject.createObjects<FirestoreSpecificMeal, SpecificMeal>(SpecificMeal));
 
   }
 
