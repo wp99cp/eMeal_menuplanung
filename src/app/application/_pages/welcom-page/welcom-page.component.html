@@ -7,7 +7,7 @@
     <h2>Mit Planen beginnen.</h2>
     <!-- fast actions: overview -->
     <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
-      <p>Beginne jetzt gleich mit dem Planen deines ersten Lagers.<br /> Übrigens du bist angemeldet als
+      <p>Beginne jetzt gleich mit dem Planen deines ersten Lagers. Übrigens du bist angemeldet als
         {{user.displayName}}.</p>
       <button class="full-width" mat-raised-button routerLink="camps">Zu meinen Lagern</button>
     </ng-container>
