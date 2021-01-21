@@ -9,6 +9,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ContextMenuNode, ContextMenuService} from '../../../_service/context-menu.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelpService} from '../../../_service/help.service';
+import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 
 @Component({
   selector: 'app-day-overview',
@@ -24,7 +25,7 @@ export class DayOverviewComponent implements OnChanges {
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
   @Input() hideIcons = false;
-  @Output() mealDropped = new EventEmitter<[SpecificMeal, CdkDragDrop<any, any>]>();
+  @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<Day>();
@@ -39,7 +40,13 @@ export class DayOverviewComponent implements OnChanges {
               private helpService: HelpService) {
   }
 
-  getMealNames(){
+  getMeal(name: string) {
+
+    return this.specificMeals?.filter(meal => meal.usedAs === name);
+
+  }
+
+  getMealNames() {
 
     return ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
 
@@ -93,20 +100,11 @@ export class DayOverviewComponent implements OnChanges {
 
   }
 
-  log(str) {
-
-    console.log(str);
-
-  }
 
   ngOnChanges() {
 
-    // Sortiert die Mahlzeiten
     this.warning = '';
-
-    this.sortMeals();
-
-    this.setContextMenu()
+    this.setContextMenu();
 
   }
 
@@ -155,46 +153,15 @@ export class DayOverviewComponent implements OnChanges {
 
   }
 
-  /**
-   * Sortiert die Mahlzeiten
-   *
-   * @param pluralOfMahlzeiten
-   * @param orderOfMahlzeiten
-   */
-  sortMeals() {
 
-    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack'];
-    const pluralOfMahlzeiten = ['Zmorgen', 'Znüni\'s', 'Zmittage', 'Zvieri\'s', 'Znacht\'s', 'Leitersnack\'s'];
-
-    if (this.specificMeals == null) {
-      return;
-    }
-
-    this.specificMeals.sort((a, b) => {
-
-      if (a.usedAs === b.usedAs) {
-        this.warning = 'Achtung mehrere ' + pluralOfMahlzeiten[orderOfMahlzeiten.indexOf(a.usedAs)] + '!';
-      }
-      return orderOfMahlzeiten.indexOf(a.usedAs) - orderOfMahlzeiten.indexOf(b.usedAs);
-
-    });
-
-  }
+  mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
 
-  getMinHeight(nameOfMeal: string) {
+    const mealUsage: MealUsage =
+      event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
+    const mealDateString = event.container.element.nativeElement.parentElement.id;
 
-    const heights = {
-      Zmorgen: 60,
-      Znüni: 12,
-      Zmittag: 60,
-      Zvieri: 12,
-      Znacht: 60,
-      Leitersnack: 12,
-      Vorbereiten: 12,
-    };
-
-    return heights[nameOfMeal];
+    this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
   }
 }

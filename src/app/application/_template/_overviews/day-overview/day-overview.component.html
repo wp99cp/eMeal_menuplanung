@@ -6,66 +6,40 @@
   </mat-icon>
 </mat-grid-tile-header>
 
-<!-- Meal List for one day-->
-<div class="meal-list" cdkDropList [cdkDropListData]="specificMeals" id="{{day.getTimestamp().toMillis()}}">
+<!-- meal list of the day-->
+<div class="meal-list" id="{{day.getTimestamp().toMillis()}}">
 
-  <div *ngFor="let nameOfMeal of getMealNames(); let i = index">
+  <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
+  <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
 
-    <div class="meal-card {{nameOfMeal}}">
+    <div cdkDropList *ngIf="getMeal(nameOfMeal) as meals" class="meal-card {{nameOfMeal}}"
+         [ngClass]="{'has-a-meal': meals.length >= 1}"
+         [attr.data-meal-name]="nameOfMeal">
+
       <span class="meal-card-name">{{nameOfMeal}}</span>
 
-      <div class="meals">
+      <ng-container *ngIf="(meals.length >= 1)">
+        <div class="meals clickable" *ngFor="let meal of meals"
+             cdkDrag (cdkDragDropped)="mealDroppedAction([meal, $event]);"
+             routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
+          <span>{{meal.weekTitle}}</span>
+        </div>
+      </ng-container>
 
-      </div>
+      <ng-template #noMeal>
+        <ng-container *ngIf="['Zmorgen', 'Zmittag', 'Znacht'].includes(nameOfMeal)">
+          <div class="meals clickable">
+            <mat-icon class="add-notes-icon">sticky_note_2</mat-icon>
+          </div>
+        </ng-container>
+      </ng-template>
 
-      <mat-icon *ngIf="nameOfMeal != 'Vorbereiten'" class="add-meal-icon" >add_circle_outline</mat-icon>
-
-    </div>
-
-
-    <!--
-
-    <div class="meal-card meal-context-menu-added" cdkDrag
-         [ngClass]="{'participantsWarning': meal.overrideParticipants, 'prepare': meal.prepare}"
-         (cdkDragDropped)="setContextMenu(); mealDropped.emit([meal, $event]); sortMeals();"
-         matTooltip="{{meal.overrideParticipants ? 'Geänderte Teilnehmeranzahl!' : ''}}" id="{{meal.documentId}}">
-
-      <div class="meal-placeholder" *cdkDragPlaceholder></div>
-
-      <span class="meal-card-name"> {{ meal.usedAs }} </span>
-
-      <span class=" meal-card-description">{{ meal.weekTitle }}</span>
-
-      <div class="meal-card-icons">
-        <mat-icon class="edit-meal-icon meal-icon clickable" *ngIf="!hideIcons"
-                  routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}" matTooltip="Rezept bearbeiten">edit
-        </mat-icon>
-        <mat-icon class="delete-meal-icon meal-icon clickable" *ngIf="!hideIcons && access"
-                  (click)="mealDeleted.emit([meal.getMealId(), meal.documentId])" matTooltip="Rezept"> delete
-        </mat-icon>
-      </div>
+      <mat-icon *ngIf="!meals.length && nameOfMeal != 'Vorbereiten' && !hideIcons && access"
+                class="add-meal-icon clickable" (click)="addNewMeal(day)">add_circle_outline
+      </mat-icon>
 
     </div>
 
-  -->
-
-  </div>
-
-
-  <!--
-
-  <span *ngIf=" specificMeals?.length > 0" class="meal-separator">
-      * * * * *
-    </span>
-
-  <div class="dotted-box meal-card clickable" matTooltip="Hinzufügen" (click)="addNewMeal(day)" *ngIf="!hideIcons && access">
-    <mat-icon class="add-meal-card-icon" >add_circle_outline</mat-icon>
-  </div>
-
-  -->
+  </ng-container>
 
 </div>
-
-
-<p *ngIf="warning != ''" class="warning-dublicate" matTooltip="Beim Export werden beide Mahlzeiten angezeigt.">
-  {{warning}}</p>

@@ -1,5 +1,4 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
@@ -14,6 +13,7 @@ import {AddMealComponent} from '../../../_dialoges/add-meal/add-meal.component';
 import {Saveable} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MealUsage} from "../../../_interfaces/firestoreDatatypes";
 
 
 /**
@@ -127,7 +127,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    *
    *
    */
-  public drop([specificMeal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
+  public drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage, string]) {
 
     if (!this.hasAccess)
       return;
@@ -135,8 +135,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
 
+    specificMeal.usedAs = usedAs;
+
     // updatet das Datum
-    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(event.container.id, 10));
+    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
 
     // prüft das Vorbereitsungsdatum
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
@@ -152,19 +154,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
       this.specificMealsToSave.push(specificMeal);
 
-    }
-
-
-    // Updatet das GUI: verschiebt das Lager in den neuen Container
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
     }
 
     this.saveMeals();

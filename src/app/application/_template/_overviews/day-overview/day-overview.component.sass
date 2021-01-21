@@ -40,9 +40,10 @@
   padding: 5px 10px
   min-height: 12px
   display: grid
-  grid-template: 'name add-meal' 'meals meals'
+  grid-template: 'name addMeal' 'meals meals'
   grid-template-columns: auto 25px
   grid-template-rows: 20px auto
+  user-select: none
 
   .meal-card-name
     font-size: 12px
@@ -52,10 +53,25 @@
     grid-area: name
 
   .add-meal-icon
-    grid-area: add-meal
+    grid-area: addMeal
 
-.Zmorgen, .Zmittag, .Znacht
-  min-height: 80px
+  .meals
+    grid-area: meals
+    margin: auto
+    font-weight: bold
+    font-size: 16px
+    line-height: 15px
+    text-align: center
+
+  .add-notes-icon
+    color: #C0C0C0
+    font-size: 35px
+    height: 50px
+    width: 50px
+
+.Zmorgen, .Zmittag, .Znacht, .has-a-meal
+  min-height: 85px
+
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
