@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../../_class/camp';
 import {CopyCampComponent} from '../../../_dialoges/copy-camp/copy-camp.component';
@@ -31,7 +31,7 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
     public dbService: DatabaseService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    router: Router,
+    private router: Router,
     helpService: HelpService) {
 
     super(dbService, snackBar, dbService.getCampsWithAccess(), dialog, helpService, router);
@@ -56,7 +56,13 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
       .pipe(
         mergeMap((camp: Observable<FirestoreCamp>) => camp),
         take(1))
-      .subscribe(campData => this.dbService.addDocument(campData, 'camps'));
+      .subscribe(campData =>
+
+        // open edit camp page
+        this.dbService.addDocument(campData, 'camps').then(res => {
+          const campId = res.id;
+          this.router.navigateByUrl('/app/camps/' + campId);
+        }));
 
   }
 

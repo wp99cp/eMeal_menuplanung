@@ -26,7 +26,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
     dbElements: Observable<T[]>,
     public dialog: MatDialog,
     private helpSecice: HelpService,
-    private router: Router) {
+    private privateRouter: Router) {
 
     this.dbElements = dbElements;
 
@@ -134,7 +134,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
       message: `Ein neues Lager, Rezept oder Mahlzeit kannst
                 du ganz einfach über das Menü am oberen Bildschirm-Rand erstellen.<br>
                 Klicke dort einfach auf den entsprechenden Menüpunkt.`,
-      url: this.router.url
+      url: this.privateRouter.url
     });
 
     this.helpSecice.addHelpMessage({
@@ -144,7 +144,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
                 Nun werden dir nur noch Lager, Rezepte oder Mahlzeiten angezeigt, die deinen Suchbegriff im Namen beinhalten. <br>
                 <br>
                 <img width="100%" src="/assets/img/help_info_messages/search_bar.png">`,
-      url: this.router.url
+      url: this.privateRouter.url
     });
 
 
