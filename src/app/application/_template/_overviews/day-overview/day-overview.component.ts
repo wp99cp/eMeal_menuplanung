@@ -10,6 +10,7 @@ import {ContextMenuNode, ContextMenuService} from '../../../_service/context-men
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelpService} from '../../../_service/help.service';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-day-overview',
@@ -37,7 +38,8 @@ export class DayOverviewComponent implements OnChanges, OnInit {
               private contextMenuService: ContextMenuService,
               private router: Router,
               private activeRoute: ActivatedRoute,
-              private helpService: HelpService) {
+              private helpService: HelpService,
+              private snackBar: MatSnackBar) {
   }
 
   getMeal(name: string) {
@@ -82,7 +84,8 @@ export class DayOverviewComponent implements OnChanges, OnInit {
               icon: 'sticky_note_2',
               name: 'Notiz einfügen',
               shortCut: '',
-              function: (event) => {
+              function: () => {
+                this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
               }
             },
             'Separator',
