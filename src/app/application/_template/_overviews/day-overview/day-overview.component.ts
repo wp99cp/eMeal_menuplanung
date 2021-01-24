@@ -10,7 +10,7 @@ import {ContextMenuNode, ContextMenuService} from '../../../_service/context-men
 import {ActivatedRoute, Router} from '@angular/router';
 import {HelpService} from '../../../_service/help.service';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-day-overview',
@@ -26,7 +26,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
   @Input() hideIcons = false;
-  @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
+  @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string, HTMLElement]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<Day>();
@@ -202,16 +202,14 @@ export class DayOverviewComponent implements OnChanges, OnInit {
 
   mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
-
+    // hide meal at old place
     event.item.element.nativeElement.style.visibility = 'hidden';
 
     const mealUsage: MealUsage =
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
 
-    console.log(event.container.element.nativeElement);
-
-    this.mealDropped.emit([meal, mealUsage, mealDateString]);
+    this.mealDropped.emit([meal, mealUsage, mealDateString, event.item.element.nativeElement]);
 
   }
 

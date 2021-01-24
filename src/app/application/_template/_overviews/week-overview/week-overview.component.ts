@@ -3,7 +3,7 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
-import {map, mergeMap, take} from 'rxjs/operators';
+import {mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {Camp} from '../../../_class/camp';
 import {Day} from '../../../_class/day';
@@ -134,9 +134,24 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    *
    *
    */
-  public drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage, string]) {
+  public async drop([specificMeal, usedAs, mealDateAsString, droppedElement]: [SpecificMeal, MealUsage, string, HTMLElement]) {
 
     if (!this.hasAccess) {
+      return;
+    }
+
+    // updatet das Datum
+    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
+
+    const selectDropDay = this.camp.days.filter(d => d.dateAsTypeDate.getTime() === specificMeal.date.toMillis())[0];
+    const mealsOfDropDay = await new Promise<SpecificMeal[]>(resolve =>
+      selectDropDay.getMeals().pipe(take(1)).subscribe(meals => resolve(meals)));
+
+    // Stop drop if a meal is at this place...
+    if (mealsOfDropDay.filter(m => m.usedAs === usedAs).length > 0) {
+
+      // set old meal back to visible state
+      droppedElement.style.visibility = 'visible';
       return;
     }
 
@@ -144,9 +159,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     HeaderNavComponent.turnOn('Speichern');
 
     specificMeal.usedAs = usedAs;
-
-    // updatet das Datum
-    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
 
     // prüft das Vorbereitsungsdatum
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
@@ -159,9 +171,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     // markiert die Mahlzeit als geändert
     if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
-
       this.specificMealsToSave.push(specificMeal);
-
     }
 
     this.saveMeals();
@@ -298,7 +308,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       if (canDelete) {
         this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
       }
-      
+
       document.querySelectorAll('[data-meal-id=' + elementID + ']')?.forEach(el => el?.classList.toggle('hidden'));
 
     });
