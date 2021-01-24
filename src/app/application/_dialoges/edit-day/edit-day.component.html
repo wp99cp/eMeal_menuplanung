@@ -1,11 +1,5 @@
 <h2 mat-dialog-title>Informationen zum {{swissDateAdapter.formatLong(data.day.dateAsTypeDate)}}</h2>
 
-<mat-grid-list id="day-overview" cdkDropListGroup cols="1">
-  <mat-grid-tile class="mat-elevation-z3">
-    <app-day-overview [hideIcons]="true" [day]="data.day" [specificMeals]="data.specificMeals"></app-day-overview>
-  </mat-grid-tile>
-</mat-grid-list>
-
 <form [formGroup]='dayInfo' class="day-form">
 
   <h3>Informationen zum {{swissDateAdapter.weekday(data.day.dateAsTypeDate)}} bearbeiten</h3>
