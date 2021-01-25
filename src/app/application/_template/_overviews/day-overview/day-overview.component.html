@@ -25,7 +25,7 @@
              (cdkDragDropped)="mealDroppedAction([meal, $event]);"
              routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
           <span>{{meal.weekTitle}}</span>
-          <span *ngIf="meal.overrideParticipants && !(meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())" class="meal-note">Geänderte Anzahl TNs!</span>
+          <span *ngIf="meal.overrideParticipants && !(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())" class="meal-note">Geänderte Anzahl TNs!</span>
           <span *ngIf="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
                 class="meal-note">für {{swissDateAdapter.formatLong(meal.date.toDate())}}</span>
 
