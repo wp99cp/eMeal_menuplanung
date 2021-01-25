@@ -1,18 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {mergeMap, take} from 'rxjs/operators';
-import {Meal} from '../../_class/meal';
-import {DeepCopyMealComponent} from '../../_dialoges/deep-copy-meal/deep-copy-meal.component';
-import {DatabaseService} from '../../_service/database.service';
-import {TileListPage} from '../tile_page';
-import {CreateMealComponent} from '../../_dialoges/create-meal/create-meal.component';
+import {Meal} from '../../../_class/meal';
+import {DeepCopyMealComponent} from '../../../_dialoges/deep-copy-meal/deep-copy-meal.component';
+import {DatabaseService} from '../../../_service/database.service';
+import {TileListPage} from '../../tile_page';
+import {CreateMealComponent} from '../../../_dialoges/create-meal/create-meal.component';
 import {Observable} from 'rxjs';
-import {FirestoreMeal} from '../../_interfaces/firestoreDatatypes';
+import {FirestoreMeal} from '../../../_interfaces/firestoreDatatypes';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
-import {ImportComponent} from '../../_dialoges/import/import.component';
-import {HelpService} from '../../_service/help.service';
+import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.component';
+import {ImportComponent} from '../../../_dialoges/import/import.component';
+import {HelpService} from '../../../_service/help.service';
 
 @Component({
   selector: 'app-meal-list',

@@ -1,0 +1,21 @@
+<div class="week-view" cdkDropListGroup>
+
+  <div class="mat-elevation-z3 day-container" *ngFor="let day of camp.days; let i = index">
+    <app-day-overview [day]="day" [days]="camp.days"
+                      [specificMeals]="(day.getMeals() | async)" [mealsToPrepare]="(mealToPrepare | async)"
+                      (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
+                      (dayEdited)="editDay($event[0], $event[1],  $event[2])"
+                      (addMeal)="addMeal(camp.days.indexOf($event))">
+    </app-day-overview>
+  </div>
+
+  <!-- HTML element for adding a new day -->
+  <div class="add-day-box dotted-box day-container clickable" *ngIf="hasAccess" (click)="addNewDay()">
+    <mat-icon class="add-day-icon clickable" matTooltip="Tag hinzufügen">
+      add_circle_outline
+    </mat-icon>
+  </div>
+
+</div>
+
+

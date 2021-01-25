@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {Recipe} from '../../_class/recipe';
+import {Recipe} from '../../../_class/recipe';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DatabaseService} from '../../_service/database.service';
-import {HeaderNavComponent} from '../../../_template/header-nav/header-nav.component';
-import {AutoSaveService, Saveable} from '../../_service/auto-save.service';
-import {ShareDialogComponent} from '../../_dialoges/share-dialog/share-dialog.component';
+import {DatabaseService} from '../../../_service/database.service';
+import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.component';
+import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
+import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../../_service/help.service';
-import {SingleRecipeInfoComponent} from '../../_dialoges/single-recipe-info/single-recipe-info.component';
+import {HelpService} from '../../../_service/help.service';
+import {SingleRecipeInfoComponent} from '../../../_dialoges/single-recipe-info/single-recipe-info.component';
 
 @Component({
   selector: 'app-edit-single-recipe',

@@ -1,0 +1,125 @@
+\:host
+  width: 100%
+
+.meal-list
+  min-height: 260px
+  border-radius: 4px
+  overflow: hidden
+  position: inherit
+  max-height: 580px
+  margin-top: 10px
+  overflow-y: scroll
+
+.meal-list::-webkit-scrollbar
+  width: 3px
+
+.meal-list::-webkit-scrollbar-track
+  background: #f1f1f1
+
+.meal-list::-webkit-scrollbar-thumb
+  background: #888
+
+.meal-list::-webkit-scrollbar-thumb:hover
+  background: #555
+
+
+/////////////////////////////
+////////////////////////////
+
+.day-header
+  background: #7d8a9c
+  line-height: 1.8rem
+  padding-right: 35px
+  display: flex
+  height: 48px
+  color: #fff
+  position: relative
+  font-weight: normal
+  padding-left: 15px
+  font-size: 14px
+
+  h4
+    margin: auto 0
+
+/////////
+
+.hidden
+  display: none !important
+
+.meal-card
+  width: calc(100% - 40px)
+  margin: 10px
+  border-radius: 10px
+  border: dashed 1px darkgray
+  padding: 5px 10px
+  min-height: 12px
+  display: grid
+  grid-template: 'name addMeal' 'meals meals'
+  grid-template-columns: auto 25px
+  grid-template-rows: 20px auto
+  user-select: none
+
+  .meal-card-name
+    font-size: 12px
+    font-weight: bold
+    line-height: 20px
+    color: #A1A1A1
+    grid-area: name
+
+  .add-meal-icon
+    grid-area: addMeal
+
+  .meals
+    grid-area: meals
+    margin: auto
+    font-weight: bold
+    font-size: 16px
+    line-height: 15px
+    text-align: center
+    cursor: move
+
+    .meal-element
+      margin-bottom: 10px
+
+  .add-notes-icon
+    color: #C0C0C0
+    font-size: 35px
+    height: 50px
+    width: 50px
+
+.meal-note
+  display: block
+  font-size: 11px
+  font-weight: normal
+  padding-top: 5px
+  font-style: italic
+
+.Zmorgen, .Zmittag, .Znacht, .has-a-meal
+  min-height: 85px
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+.edit-day
+  position: absolute
+  right: 10px
+  top: 15px
+  color: white
+
+
+////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
+
+// no preview of drop
+.cdk-drag-placeholder
+  display: none
+
+.cdk-drag-preview
+  border-radius: 4px
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12)
+  font-weight: bold
+  font-size: 16px
+  line-height: 15px
+  text-align: center
+  padding: 15px

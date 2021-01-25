@@ -318,7 +318,7 @@ export class DatabaseService {
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-      doc.ref.update({'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd)})
+      doc.ref.update({used_in_meals: firestore.FieldValue.arrayUnion(idToAdd)})
     ));
 
   }
@@ -862,8 +862,6 @@ export class DatabaseService {
   }
 
 
-
-
   // *********************************************************************************************
   // private methods
   //
@@ -876,6 +874,16 @@ export class DatabaseService {
     return new Promise(resolve =>
       this.authService.getCurrentUser().subscribe(user =>
         this.db.doc('users/' + user.uid + '/private/settings').set(settings).then(resolve)));
+
+  }
+
+  getPreparedMeals(documentId: string) {
+
+    return this.db.collectionGroup('specificMeals', query => query
+      .where('meal_gets_prepared', '==', true)
+      .where('used_in_camp', '==', documentId))
+      .snapshotChanges()
+      .pipe(FirestoreObject.createObjects<FirestoreSpecificMeal, SpecificMeal>(SpecificMeal));
 
   }
 
