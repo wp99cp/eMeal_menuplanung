@@ -1,5 +1,5 @@
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
 import {Day} from '../../../_class/day';
@@ -30,6 +30,9 @@ export class DayOverviewComponent implements OnChanges, OnInit {
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<Day>();
+
+  @ViewChild('dayElement') dayElement;
+
   public hidden = false;
   public warning: string;
 
@@ -67,7 +70,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
         return;
       }
 
-      const empties = document.querySelectorAll('[data-add-note="true"]');
+      const empties = this.dayElement.nativeElement.querySelectorAll('[data-add-note="true"]');
 
       empties.forEach(empty => {
 
@@ -78,7 +81,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
               icon: 'add',
               name: 'Hinzufügen',
               shortCut: '',
-              function: (event) => this.addMeal.emit(this.day)
+              function: () => this.addMeal.emit(this.day)
             },
             {
               icon: 'sticky_note_2',
@@ -103,7 +106,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
 
       this.specificMeals.forEach(meal => {
 
-        const elements = document.querySelectorAll('[data-meal-id=' + meal.documentId + ']');
+        const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
 
         if (elements === null || elements === undefined) {
           return;

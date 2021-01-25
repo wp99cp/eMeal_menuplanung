@@ -7,7 +7,7 @@
 </div>
 
 <!-- meal list of the day-->
-<div class="meal-list" id="{{day.getTimestamp().toMillis()}}">
+<div class="meal-list" id="{{day.getTimestamp().toMillis()}}" #dayElement>
 
   <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
   <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
@@ -20,7 +20,7 @@
       <span class="meal-card-name">{{nameOfMeal}}</span>
 
       <ng-container *ngIf="(meals.length >= 1) else noMeal">
-        <div class="meals clickable" [attr.data-meal-id]="meals[0].documentId"
+        <div class="meals clickable" [attr.data-meal-id]="'ID-' + meals[0].documentId"
              cdkDrag
              (cdkDragDropped)="mealDroppedAction([meals[0], $event]);"
              routerLink="meals/{{ meals[0].getMealId() }}/{{meals[0].documentId}}">

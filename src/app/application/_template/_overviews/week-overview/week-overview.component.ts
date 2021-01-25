@@ -76,7 +76,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     });
 
     this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
-    this.mealToPrepare.subscribe(console.log)
+    this.mealToPrepare.subscribe(console.log);
 
 
   }
@@ -237,24 +237,27 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   public addMeal(dayIndex: number = 0) {
 
-    // Testversuch für die Sortierung der Mahlzeiten
-    const mealsOb: Observable<SpecificMeal[]>[] = [];
-    this.camp.days.forEach(day => mealsOb.push(day.getMeals()));
-    combineLatest(mealsOb).pipe(take(1)).pipe(mergeMap((meals: SpecificMeal[][]) => {
+    console.log('Add meal to day Nr. ' + dayIndex);
 
-      const mealNames = [];
-      meals.forEach(mls => mls.forEach(m => mealNames.push(m.weekTitle)));
+    // Create data fo dialog. The dataset contains all meals already used in the camp
+    // this allows the dialog to sort and rank the meals.
+    combineLatest(this.camp.days.map(day => day.getMeals().pipe(take(1))))
+      .pipe(take(1))
+      .pipe(mergeMap((meals: SpecificMeal[][]) => {
 
-      this.save();
+        // create array with names of meals
+        const mealNames = meals.flat().map(m => m.weekTitle);
 
-      return this.dialog.open(AddMealComponent, {
-        height: '618px',
-        width: '1000px',
-        data: {mealNames}
-      }).afterClosed();
+        // save the current camp
+        this.save();
 
+        return this.dialog.open(AddMealComponent, {
+          height: '618px',
+          width: '1000px',
+          data: {mealNames}
+        }).afterClosed();
 
-    })).subscribe((result: SelectionModel<Meal>) => {
+      })).subscribe((result: SelectionModel<Meal>) => {
 
       if (result != null) {
 
@@ -262,8 +265,20 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
           // TODO: combine in one database write....
 
-          // falls keine Verwendung gestzt, dann als 'Zmorgen'
+          // falls keine Verwendung gesetzt, dann als 'Zmorgen'
           const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
+
+          const day = this.camp.days[dayIndex];
+          const mealsOfDay = await new Promise<SpecificMeal[]>(resolve =>
+            day.getMeals().pipe(take(1)).subscribe(meals => resolve(meals)));
+
+          // skip meal if already a meal is at this place...
+          if (mealsOfDay.filter(m => m.usedAs === usedAs).length > 0) {
+            console.log('Skip creation of meal at day Nr. ' + dayIndex + ' as ' + usedAs + '.');
+            return;
+          }
+
+          console.log('Create meal at day Nr. ' + dayIndex + ' as ' + usedAs + '.');
 
           // add campId to usedInCamps
           if (!meal.usedInCamps.includes(this.camp.documentId)) {
@@ -271,13 +286,35 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
             await this.dbService.updateDocument(meal);
           }
 
-          // erstellt die spezifischen Rezepte und Mahlzeiten
-          const specificMealId = await meal.createSpecificMeal(this.dbService, this.camp, this.camp.days[dayIndex], usedAs);
-          await meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
+          console.log('Add campID');
 
-          // request for update rights for meals, recipes and specificMeals and specificRecipes
-          this.dbService.refreshAccessData(this.camp.documentId, meal.path)
-            .subscribe(console.log);
+          // erstellt die spezifischen Rezepte und Mahlzeiten
+          const specificMealId = await new Promise<string>(res => {
+            meal.createSpecificMeal(this.dbService, this.camp, day, usedAs)
+              .then(mealID => res(mealID))
+              .catch(console.log);
+          });
+
+          console.log('Create specificMealId: ' + specificMealId);
+
+          if (specificMealId === undefined || specificMealId === null) {
+            console.error('Problem can\'t add meal.');
+            return;
+          }
+
+          meal.createSpecificRecipes(this.dbService, this.camp, specificMealId)
+            .then(() => {
+
+              console.log(this.camp.documentId + ' // ' + meal.path);
+
+              // request for update rights for meals, recipes and specificMeals and specificRecipes
+              this.dbService.refreshAccessData(this.camp.documentId, meal.path)
+                .subscribe(console.log, error => console.log(error));
+
+            }).catch(console.log);
+
+          console.log('After Update Meal');
+
 
         });
       }
@@ -290,8 +327,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   public deleteMeal(mealId: string, elementID: string) {
 
+    console.log('   >>> Delete Meal');
+
     // versteckt das Element aus dem GUi
-    document.querySelectorAll('[data-meal-id=' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
+    document.querySelectorAll('[data-meal-id=ID-' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
 
     // shown delete Meassage
     const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
@@ -300,16 +339,15 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     let canDelete = true;
     snackBar.onAction().subscribe(() => {
       canDelete = false;
-      document.querySelector('[data-meal-id=' + elementID + ']')?.classList.toggle('hidden');
+      document.querySelector('[data-meal-id=ID-' + elementID + ']')?.classList.toggle('hidden');
 
     });
     snackBar.afterDismissed().subscribe(() => {
 
       if (canDelete) {
         this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
+        return;
       }
-
-      document.querySelectorAll('[data-meal-id=' + elementID + ']')?.forEach(el => el?.classList.toggle('hidden'));
 
     });
 
