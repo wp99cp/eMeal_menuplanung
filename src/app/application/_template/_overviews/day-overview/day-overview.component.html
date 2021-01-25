@@ -20,7 +20,7 @@
       <span class="meal-card-name">{{nameOfMeal}}</span>
 
       <ng-container *ngIf="(meals.length >= 1) else noMeal">
-        <div class="meals clickable" [attr.data-meal-id]="'ID-' + meals[0].documentId"
+        <div class="meals" [attr.data-meal-id]="'ID-' + meals[0].documentId"
              cdkDrag
              (cdkDragDropped)="mealDroppedAction([meals[0], $event]);"
              routerLink="meals/{{ meals[0].getMealId() }}/{{meals[0].documentId}}">

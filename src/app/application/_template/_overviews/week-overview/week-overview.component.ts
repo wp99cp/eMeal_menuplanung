@@ -134,7 +134,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    *
    *
    */
-  public async drop([specificMeal, usedAs, mealDateAsString, droppedElement]: [SpecificMeal, MealUsage, string, HTMLElement]) {
+  public async drop([specificMeal, usedAs, mealDateAsString, droppedElement]: [SpecificMeal, MealUsage | 'Vorbereiten', string, HTMLElement]) {
 
     if (!this.hasAccess) {
       return;
@@ -148,7 +148,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       selectDropDay.getMeals().pipe(take(1)).subscribe(meals => resolve(meals)));
 
     // Stop drop if a meal is at this place...
-    if (mealsOfDropDay.filter(m => m.usedAs === usedAs).length > 0) {
+    if (mealsOfDropDay.filter(m => m.usedAs === usedAs).length > 0 || usedAs === 'Vorbereiten') {
 
       // set old meal back to visible state
       droppedElement.style.visibility = 'visible';
@@ -158,7 +158,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
 
-    specificMeal.usedAs = usedAs;
 
     // prüft das Vorbereitsungsdatum
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
@@ -168,6 +167,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
 
     }
+
+    specificMeal.usedAs = usedAs as MealUsage;
 
     // markiert die Mahlzeit als geändert
     if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
@@ -302,19 +303,11 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
             return;
           }
 
-          meal.createSpecificRecipes(this.dbService, this.camp, specificMealId)
-            .then(() => {
+          await meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
 
-              console.log(this.camp.documentId + ' // ' + meal.path);
-
-              // request for update rights for meals, recipes and specificMeals and specificRecipes
-              this.dbService.refreshAccessData(this.camp.documentId, meal.path)
-                .subscribe(console.log, error => console.log(error));
-
-            }).catch(console.log);
+          this.updateAccess(meal);
 
           console.log('After Update Meal');
-
 
         });
       }
@@ -421,4 +414,20 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     return Math.floor(document.body.scrollWidth / 340);
   }
+
+  private updateAccess(meal: Meal) {
+
+    try {
+
+      // request for update rights for meals, recipes and specificMeals and specificRecipes
+      this.dbService.refreshAccessData(this.camp.documentId, meal.path)
+        .subscribe(console.log, error => console.log(error));
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+
+
 }

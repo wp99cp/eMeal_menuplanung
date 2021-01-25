@@ -1,6 +1,6 @@
 \:host
   display: grid
-  
+
 .week-view
   display: grid
   grid-template-rows: 640px
@@ -35,3 +35,12 @@
   .add-day-icon
     font-size: 25px
     line-height: 25px
+
+@media screen and (max-width: 600px)
+  .week-view
+    scroll-snap-type: x mandatory
+
+  .day-container
+    scroll-snap-align: start
+
+
