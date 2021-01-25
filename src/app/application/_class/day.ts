@@ -112,12 +112,5 @@ export class Day {
 
     return '';
   }
-
-
-  getMealsToPrepare(): Observable<SpecificMeal[]> {
-
-    // TODo return meals to be prepared today...
-    return new Observable<SpecificMeal[]>();
-
-  }
+  
 }
