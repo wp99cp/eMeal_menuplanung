@@ -25,11 +25,9 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     private dbService: DatabaseService,
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    public dialog: MatDialog,
-    router: Router,
-    helpService: HelpService) {
+    public dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getAccessableMeals(), dialog, helpService, router);
+    super(dbService, snackBar, dbService.getAccessableMeals(), dialog);
 
     // set filter for searching
     this.filterFn = (meal) => meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
@@ -49,7 +47,6 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
   ngOnInit() {
 
     this.addButtonNew();
-    this.addHelpMessage();
 
     setTimeout(() =>
       this.route.queryParams.subscribe(params => {

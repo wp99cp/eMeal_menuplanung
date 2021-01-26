@@ -227,7 +227,8 @@ export class ApplicationModule {
               contextMenu: ContextMenuService,
               shortCut: ShortcutService,
               helpService: HelpService,
-              dialog: MatDialog) {
+              dialog: MatDialog,
+              databaseService: DatabaseService) {
 
     // Test on first load
     auth.trackCredentials();
@@ -236,6 +237,7 @@ export class ApplicationModule {
     contextMenu.activate();
     shortCut.activate();
 
+    helpService.addDBService(databaseService);
     helpService.addDialog(dialog);
 
   }

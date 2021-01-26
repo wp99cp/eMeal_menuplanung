@@ -5,8 +5,6 @@ import {take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../_service/help.service';
-import {Router} from '@angular/router';
 
 export abstract class TileListPage<T extends FirestoreObject> {
 
@@ -24,9 +22,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
     private databaseServcie: DatabaseService,
     private messageBar: MatSnackBar,
     dbElements: Observable<T[]>,
-    public dialog: MatDialog,
-    private helpSecice: HelpService,
-    private privateRouter: Router) {
+    public dialog: MatDialog) {
 
     this.dbElements = dbElements;
 
@@ -124,29 +120,6 @@ export abstract class TileListPage<T extends FirestoreObject> {
       .subscribe(elements =>
         this.filteredElements = elements.filter(elem =>
           this.filterFn(elem) && !this.markedAsDeleted.includes(elem.documentId)));
-
-  }
-
-  protected addHelpMessage() {
-
-    this.helpSecice.addHelpMessage({
-      title: this.dbElementName + ' hinzufügen',
-      message: `Ein neues Lager, Rezept oder Mahlzeit kannst
-                du ganz einfach über das Menü am oberen Bildschirm-Rand erstellen.<br>
-                Klicke dort einfach auf den entsprechenden Menüpunkt.`,
-      url: this.privateRouter.url
-    });
-
-    this.helpSecice.addHelpMessage({
-      title: 'Nach ' + this.dbElementName + ' suchen',
-      message: `Hast du die Übersicht verloren? Kein Problem: Du kannst ganz einfach nach ${this.dbElementName} suchen.
-                Verwende hierzu die Suchleiste.<br>
-                Nun werden dir nur noch Lager, Rezepte oder Mahlzeiten angezeigt, die deinen Suchbegriff im Namen beinhalten. <br>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/search_bar.png">`,
-      url: this.privateRouter.url
-    });
-
 
   }
 
