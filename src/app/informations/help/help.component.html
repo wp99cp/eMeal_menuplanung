@@ -9,19 +9,50 @@
     Tipp: Du kannst die Hilfe jeder Zeit auch über die Taste F1 aufrufen.
   </p>
 
-  <mat-accordion class="help-textes">
 
-    <mat-expansion-panel hideToggle *ngFor="let mess of (helpMessages | async)">
+  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat">
+    <mat-accordion class="help-textes" *ngFor="let cat of Object.keys(helpMessByCat)">
 
-      <mat-expansion-panel-header>
-        <mat-panel-title>{{mess.title}}</mat-panel-title>
-        <mat-panel-description *ngIf="mess.description">
-          {{mess.description}}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div [innerHTML]="mess.message"></div>
-    </mat-expansion-panel>
+      <h3>{{cat}}</h3>
 
-  </mat-accordion>
+      <mat-expansion-panel hideToggle *ngFor="let mess of helpMessByCat[cat]">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{mess.title}}</mat-panel-title>
+          <mat-panel-description *ngIf="mess.description">
+            {{mess.description}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div [innerHTML]="mess.message"></div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </ng-container>
+
 
 </div>
+
+<!--
+
+
+  <ng-container *ngIf="false && (helpMessagesByCat | async) as helpMessagesByCat">
+    <mat-accordion class="help-textes" *ngFor="let item of helpMessagesByCat">
+
+
+      <mat-expansion-panel hideToggle *ngFor="let mess of helpMessagesByCat[item]">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{mess.title}}</mat-panel-title>
+          <mat-panel-description *ngIf="mess.description">
+            {{mess.description}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div [innerHTML]="mess.message"></div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </ng-container>
+
+  -->

@@ -10,20 +10,12 @@ import {ImpressumComponent} from './impressum/impressum.component';
 import {InformationsRoutingModule} from './informations-routing.module';
 import {KontaktComponent} from './kontakt/kontakt.component';
 import {ChangeLogComponent} from './change-log/change-log.component';
-import {HelpComponent} from './help/help.component';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {HelpComponent} from './help/help.component';
 
 
 @NgModule({
-  declarations: [
-    InformationspageComponent,
-    ImpressumComponent,
-    DatenschutzComponent,
-    KontaktComponent,
-    ChangeLogComponent,
-    HelpComponent
-  ],
   imports: [
     CommonModule,
     InformationsRoutingModule,
@@ -32,7 +24,15 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatButtonModule,
     MatCardModule,
     MarkdownModule,
-    MatExpansionModule
+    MatExpansionModule,
+  ],
+  declarations: [
+    InformationspageComponent,
+    ImpressumComponent,
+    DatenschutzComponent,
+    KontaktComponent,
+    ChangeLogComponent,
+    HelpComponent
   ],
   providers: [
     AngularFirestore

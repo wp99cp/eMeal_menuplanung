@@ -6,13 +6,12 @@ import {DatabaseService} from './database.service';
 import {take} from 'rxjs/operators';
 
 export interface HelpMessage {
-
   title: string;
   message: string;
   urls: string[];
   ref: string;
   description?: string;
-
+  category?: string;
 }
 
 @Injectable({
