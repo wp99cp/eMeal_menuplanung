@@ -50,7 +50,6 @@ import {EditCampPageComponent} from './_pages/_edit-pages/edit-camp-page/edit-ca
 import {EditMealComponent} from './_pages/_edit-pages/edit-meal/edit-meal.component';
 import {EditSingleRecipeComponent} from './_pages/_edit-pages/edit-single-recipe/edit-single-recipe.component';
 import {ExportCampComponent} from './_pages/export-camp/export-camp.component';
-import {HelpPageComponent} from './_pages/help-page/help-page.component';
 import {MealListComponent} from './_pages/_list-pages/meal-list/meal-list.component';
 import {RecipeListComponent} from './_pages/_list-pages/recipe-list/recipe-list.component';
 import {WelcomPageComponent} from './_pages/welcom-page/welcom-page.component';
@@ -112,7 +111,6 @@ import {SettingsService} from './_service/settings.service';
     AddRecipeComponent,
     CreateRecipeComponent,
     MealPrepareComponent,
-    HelpPageComponent,
     RecipeListComponent,
     EditSingleRecipeComponent,
     MealListComponent,

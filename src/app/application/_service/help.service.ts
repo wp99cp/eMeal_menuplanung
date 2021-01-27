@@ -11,6 +11,7 @@ export interface HelpMessage {
   message: string;
   urls: string[];
   ref: string;
+  description?: string;
 
 }
 
@@ -96,7 +97,7 @@ export class HelpService {
   private generalizeURL(url: string) {
 
     function replacer(match, slash, folder) {
-      const knownFolders = ['app', 'camps', 'meals', 'recipes', 'settings'];
+      const knownFolders = ['app', 'camps', 'meals', 'recipes', 'settings', 'export'];
       return knownFolders.includes(folder) ? match : '/*';
     }
 

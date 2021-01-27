@@ -8,7 +8,6 @@ import {EditMealComponent} from './_pages/_edit-pages/edit-meal/edit-meal.compon
 import {WelcomPageComponent} from './_pages/welcom-page/welcom-page.component';
 import {AutoSaveService} from './_service/auto-save.service';
 import {ExportCampComponent} from './_pages/export-camp/export-camp.component';
-import {HelpPageComponent} from './_pages/help-page/help-page.component';
 import {RecipeListComponent} from './_pages/_list-pages/recipe-list/recipe-list.component';
 import {EditSingleRecipeComponent} from './_pages/_edit-pages/edit-single-recipe/edit-single-recipe.component';
 import {MealListComponent} from './_pages/_list-pages/meal-list/meal-list.component';
@@ -29,10 +28,6 @@ const routes: Routes = [
   {
     path: 'camps',
     component: CampListPageComponent
-  },
-  {
-    path: 'hilfe',
-    component: HelpPageComponent
   },
   {
     path: 'meals',
