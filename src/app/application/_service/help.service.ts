@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpComponent} from '../_dialoges/help/help.component';
 import {Router} from '@angular/router';
-import {DatabaseService} from './database.service';
-import {take} from 'rxjs/operators';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 export interface HelpMessage {
   title: string;
@@ -30,9 +29,12 @@ export class HelpService {
   };
   private isOpen = false;
   private dialog = null;
-  private dbService: DatabaseService;
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private db: AngularFirestore) {
+
+    console.log('Create');
+
   }
 
   openHelpPopup(ref = '') {
@@ -47,16 +49,19 @@ export class HelpService {
       throw new Error('No Dialog added! Please add first a mat-dialog!');
     }
 
+    if (!this.db) {
+      throw new Error('No DB-Service added! Please add first a DB-Service!');
+    }
+
     const currentURL = this.generalizeURL(this.router.url);
 
     console.log('[Help Service] Open dialog for \'' + currentURL + '\'.');
 
-    this.dbService.requestCollection('/sharedData/helpMessages/messages',
-      doc => doc.where('urls', 'array-contains', currentURL))
-      .pipe(take(1))
+    this.db.collection('/sharedData/helpMessages/messages',
+      doc => doc.where('urls', 'array-contains', currentURL)).get()
       .subscribe(messages => {
 
-        let helpMessagesForThisPage = messages.map(docs => docs.payload.doc.data() as HelpMessage);
+        let helpMessagesForThisPage = messages.docs.map(docs => docs.data() as HelpMessage);
         let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
         if (ref !== '') {
           const elem = helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
@@ -86,12 +91,10 @@ export class HelpService {
   }
 
   addDialog(dialog: MatDialog) {
+    console.log('Add Dialog');
     this.dialog = dialog;
   }
 
-  addDBService(databaseService: DatabaseService) {
-    this.dbService = databaseService;
-  }
 
   private generalizeURL(url: string) {
 

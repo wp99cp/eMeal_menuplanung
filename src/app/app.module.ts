@@ -21,15 +21,16 @@ import {MarkdownModule} from 'ngx-markdown';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AuthenticationService} from './application/_service/authentication.service';
 import {AngularFireModule} from '@angular/fire';
-import {SignInComponent} from "./sign-in/sign-in.component";
-import {MatInputModule} from "@angular/material/input";
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {AngularFireFunctions} from "@angular/fire/functions";
+import {SignInComponent} from './sign-in/sign-in.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {AngularFireFunctions} from '@angular/fire/functions';
 import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
-import { ErrorPageComponent } from './error-page/error-page.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {ErrorPageComponent} from './error-page/error-page.component';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
   ],
   providers: [
     AngularFireAuth,
+    AngularFirestore,
     AuthenticationService,
     AngularFireFunctions,
   ],
