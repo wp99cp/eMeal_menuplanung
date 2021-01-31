@@ -557,6 +557,11 @@ export class EditRecipeComponent implements OnInit {
   private setAreaOverlay() {
 
     const areaOverlay = document.getElementById(this.recipe.documentId + '-area-overlay');
+
+    if (!areaOverlay) {
+      return;
+    }
+
     const parent = areaOverlay.parentElement;
     const ingredient = document.getElementById(this.selectedIngredientID);
     areaOverlay.style.top = (ingredient.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';
