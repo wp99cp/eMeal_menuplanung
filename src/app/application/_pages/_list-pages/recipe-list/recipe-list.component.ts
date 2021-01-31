@@ -23,11 +23,9 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
   constructor(
     private dbService: DatabaseService,
     private snackBar: MatSnackBar,
-    dialog: MatDialog,
-    router: Router,
-    helpService: HelpService) {
+    dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog, helpService, router);
+    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog);
 
 
     // set filter for searching
@@ -40,7 +38,6 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
   ngOnInit(): void {
 
     this.addButtonNew();
-    this.addHelpMessage();
 
   }
 

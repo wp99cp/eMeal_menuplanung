@@ -8,7 +8,6 @@ import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.co
 import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../../../_service/help.service';
 import {SingleRecipeInfoComponent} from '../../../_dialoges/single-recipe-info/single-recipe-info.component';
 
 @Component({
@@ -27,7 +26,6 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     private dbService: DatabaseService,
     private autosave: AutoSaveService,
     public dialog: MatDialog,
-    private helpService: HelpService,
     private router: Router) {
 
     autosave.register(this);
@@ -50,25 +48,6 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
         HeaderNavComponent.turnOff('Teilen');
       }
     });
-
-    helpService.addHelpMessage({
-      title: 'Rezepte freigeben und gemeinsam bearbeiten.',
-      message: `Rezepte können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
-                Dabei kannst du ein Rezept mit den folgenden Berechtigungen teilen: <br>
-                <ul>
-                    <li><b>Besitzer:</b> Diese Rolle hat derjenige, der das Rezept erstellt hat. Der Besitzer hat
-                    uneingeschränkten Zugriff auf das Rezept.</li>
-                    <li><b>Administrator:</b> Kann das Rezept bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
-                     es in eigenen Mahlzeiten verwenden. Kann das Rezept mit andern teilen, nicht aber löschen.</li>
-                     <li><b>Leser:</b> Kann das Rezept und die Zutaten betrachten. Kann eine eigene Kopie erstellen
-                     und diese anschliessend bearbeiten.</li>
-                </ul>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/Share_Recipe.png">`,
-      url: router.url,
-      ref: 'recipe-authorization-infos'
-    });
-
 
   }
 

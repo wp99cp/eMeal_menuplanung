@@ -8,6 +8,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {CurrentlyUsedMealService} from '../currently-used-meal.service';
 import {Camp} from '../../application/_class/camp';
 import {FeedbackDialogComponent} from '../../application/_dialoges/feedback-dialog/feedback-dialog.component';
+import {DatabaseService} from '../../application/_service/database.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -28,9 +29,8 @@ export class MainMenuComponent {
 
     this.helpService.addDialog(dialog);
 
-
     main.lastUsage.subscribe(camp => {
-      this.lastCamp = camp
+      this.lastCamp = camp;
     });
 
   }

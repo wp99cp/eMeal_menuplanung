@@ -46,42 +46,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private autosave: AutoSaveService,
-    private helpService: HelpService,
     private lastUsedService: CurrentlyUsedMealService) {
-
-    helpService.addHelpMessage({
-      title: 'Neue Mahlzeiten erstellen',
-      message: `Falls die Suche nach einer Mahlzeit keinen Treffer ergab, so kannst du mit einem
-                einfachen Klick auf "Mahlzeit erstellen" direkt eine Mahlzeit mit dem gewünschten
-                Namen erfassen und erstellen. <br>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/Create_Meal.png">`,
-      url: router.url
-    });
-
-    helpService.addHelpMessage({
-      title: 'Lager freigeben und gemeinsam bearbeiten.',
-      message: `Lager können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
-                Dabei kannst du eine Lager mit den folgenden Berechtigungen teilen.<br>
-                <ul>
-                    <li><b>Besitzer:</b> Diese Rolle hat derjenige, der das Lager erstellt hat. Der Besitzer hat
-                    Administrator-Rechte für jede Mahlzeit und jedes Rezept in diesem Lager.</li>
-                    <li><b>Administrator:</b> Kann jede Mahlzeit bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
-                     alle in seinen eigenen Lagern verwenden. Änderungen an Rezepten/Mahlzeiten
-                     werden auch in andere Lager übernommen. <i>Beispiel: Rezept A wird in Lager 1 bearbeitet.
-                     Wird Rezept 1 in Lager 2 ebenfalls verwendet, so werden die Zutaten in Lager 2 ebenfalls geändert.</i>
-                     </li>
-                     <li><b>Mitarbeiter:</b> (Noch nicht verfügbar) Kann jede Mahlzeit bearbeiten (Zutaten ändern, hinzufügen oder löschen),
-                     dabei werden die Änderungen aber nur lokal in diesem Lager gespeichert. Ein Mitarbeiter hat somit
-                     keinen Zugriff auf die Vorlagen der Lager/Rezepte.
-                     </li>
-                     <li><b>Leser:</b> Kann die Mahlzeit und die Rezepte in diesem Lager betrachten.
-                     Kann eine eigene Kopie erstellen und diese anschliessend bearbeiten.</li>
-                </ul>`,
-      url: router.url,
-      ref: 'camp-authorization-infos'
-    });
-
 
     autosave.register(this);
 

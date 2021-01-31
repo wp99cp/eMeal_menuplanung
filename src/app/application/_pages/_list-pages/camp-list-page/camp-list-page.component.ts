@@ -31,10 +31,9 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
     public dbService: DatabaseService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router,
-    helpService: HelpService) {
+    private router: Router) {
 
-    super(dbService, snackBar, dbService.getCampsWithAccess(), dialog, helpService, router);
+    super(dbService, snackBar, dbService.getCampsWithAccess(), dialog);
 
     // set filter for searching
     this.filterFn = (camp: Camp) =>
@@ -114,7 +113,6 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
   ngOnInit() {
 
     this.addButtonNew();
-    this.addHelpMessage();
 
     setTimeout(() =>
 

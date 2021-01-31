@@ -12,7 +12,6 @@ import {EditRecipeInCampComponent} from '../../../_template/edit-recipe-in-camp/
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
-import {HelpService} from '../../../_service/help.service';
 
 @Component({
   selector: 'app-edit-single-meal',
@@ -36,29 +35,9 @@ export class EditSingleMealComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
-    private helpService: HelpService,
     private autosave: AutoSaveService) {
 
     autosave.register(this);
-
-
-    helpService.addHelpMessage({
-      title: 'Mahlzeiten freigeben und gemeinsam bearbeiten.',
-      message: `Mahlzeiten können mit anderen Nutzern von eMeal-Menüplanung geteilt werden.
-                Dabei kannst du eine Mahlzeit mit den folgenden Berechtigungen teilen. Dabei erben die hinzugefügten Rezepte die Berechtigungen der Mahlzeit.<br>
-                <ul>
-                    <li><b>Besitzer:</b> Diese Rolle hat derjenige, der die Mahlzeit erstellt hat. Der Besitzer hat
-                    uneingeschränkten Zugriff auf die Mahlzeit.</li>
-                    <li><b>Administrator:</b> Kann die Mahlzeit bearbeiten (Zutaten ändern, hinzufügen oder löschen) und
-                     es in eigenen Lagern verwenden. Kann die Mahlzeit mit andern teilen, nicht aber löschen.</li>
-                     <li><b>Leser:</b> Kann die Mahlzeit und die Rezepte betrachten. Kann eine eigene Kopie erstellen
-                     und diese anschliessend bearbeiten.</li>
-                </ul>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/Share_Recipe.png">`,
-      url: router.url,
-      ref: 'meal-authorization-infos'
-    });
 
   }
 
