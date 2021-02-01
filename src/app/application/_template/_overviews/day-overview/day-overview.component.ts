@@ -26,7 +26,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
   @Input() specificMeals: SpecificMeal[];
   @Input() days: Day[];
   @Input() hideIcons = false;
-  @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string, HTMLElement]>();
+  @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<Day>();
@@ -207,12 +207,13 @@ export class DayOverviewComponent implements OnChanges, OnInit {
 
     // hide meal at old place
     event.item.element.nativeElement.style.visibility = 'hidden';
+    this.specificMeals = this.specificMeals.filter(m => m != meal);
 
     const mealUsage: MealUsage =
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
 
-    this.mealDropped.emit([meal, mealUsage, mealDateString, event.item.element.nativeElement]);
+    this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
   }
 

@@ -134,7 +134,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    *
    *
    */
-  public async drop([specificMeal, usedAs, mealDateAsString, droppedElement]: [SpecificMeal, MealUsage | 'Vorbereiten', string, HTMLElement]) {
+  public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
     if (!this.hasAccess) {
       return;
@@ -142,6 +142,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     // updatet das Datum
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
+    specificMeal.usedAs = usedAs as MealUsage;
 
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
@@ -154,8 +155,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
 
     }
-
-    specificMeal.usedAs = usedAs as MealUsage;
 
     // markiert die Mahlzeit als geändert
     if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
