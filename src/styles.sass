@@ -290,15 +290,29 @@ a
 // Buttons
 ///////////////////////////////////////////////////////////////
 
-.mat-button
+.mat-button, .mat-raised-button
   user-select: none
+  opacity: 0.9
+  margin: 15px !important
+
+.mat-raised-button:hover
+  opacity: 1
 
 .mat-save
   background-color: $prime-color
   color: $prime-text-color
 
-.mat-raised-button
-  margin: 15px !important
+.custom-mat-buttons
+  height: 100%
+  padding: 0 !important
+  grid-area: buttons
+  display: grid !important
+  grid-template-columns: auto 120px 120px
+
+  button
+    float: right
+    margin: 7px  10px  !important
+
 
 // Speicherbutton
 .saveButton
