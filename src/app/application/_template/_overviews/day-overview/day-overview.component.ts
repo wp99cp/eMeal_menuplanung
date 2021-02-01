@@ -1,4 +1,4 @@
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
@@ -217,7 +217,14 @@ export class DayOverviewComponent implements OnChanges, OnInit {
   }
 
   ngOnInit(): void {
+
+
   }
 
+  predicate(drag: CdkDrag, drop: CdkDropList): boolean {
+
+    return drop.element.nativeElement.getAttribute('is-full') !== 'true';
+
+  }
 
 }

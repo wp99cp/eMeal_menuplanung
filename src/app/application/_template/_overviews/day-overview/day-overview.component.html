@@ -12,20 +12,23 @@
   <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
   <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
 
-    <div cdkDropList
+    <div cdkDropList [cdkDropListEnterPredicate]="predicate"
          *ngIf="getMeal(nameOfMeal) as meals" class="meal-card {{nameOfMeal}}"
          [ngClass]="{'has-a-meal': meals.length >= 1}"
-         [attr.data-meal-name]="nameOfMeal">
+         [attr.data-meal-name]="nameOfMeal"  [attr.is-full]="getMeal(nameOfMeal).length > 0">
 
       <span class="meal-card-name">{{nameOfMeal}}</span>
 
       <div class="meals" *ngIf="(meals.length >= 1) else noMeal">
         <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
-             cdkDrag class="meal-element" [cdkDragDisabled]="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
+             cdkDrag class="meal-element"
+             [cdkDragDisabled]="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
              (cdkDragDropped)="mealDroppedAction([meal, $event]);"
              routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
           <span>{{meal.weekTitle}}</span>
-          <span *ngIf="meal.overrideParticipants && !(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())" class="meal-note">Geänderte Anzahl TNs!</span>
+          <span
+            *ngIf="meal.overrideParticipants && !(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())"
+            class="meal-note">Geänderte Anzahl TNs!</span>
           <span *ngIf="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
                 class="meal-note">für {{swissDateAdapter.formatLong(meal.date.toDate())}}</span>
 
@@ -33,8 +36,8 @@
       </div>
 
       <ng-template #noMeal>
-          <div class="meals clickable" [attr.data-add-note]="'true'">
-          </div>
+        <div class="meals clickable" [attr.data-add-note]="'true'">
+        </div>
       </ng-template>
 
       <!-- No add button visible

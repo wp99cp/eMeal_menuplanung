@@ -143,21 +143,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // updatet das Datum
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
 
-    const selectDropDay = this.camp.days.filter(d => d.dateAsTypeDate.getTime() === specificMeal.date.toMillis())[0];
-    const mealsOfDropDay = await new Promise<SpecificMeal[]>(resolve =>
-      selectDropDay.getMeals().pipe(take(1)).subscribe(meals => resolve(meals)));
-
-    // Stop drop if a meal is at this place...
-    if (mealsOfDropDay.filter(m => m.usedAs === usedAs).length > 0 || usedAs === 'Vorbereiten') {
-
-      // set old meal back to visible state
-      droppedElement.style.visibility = 'visible';
-      return;
-    }
-
     // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
-
 
     // prüft das Vorbereitsungsdatum
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
