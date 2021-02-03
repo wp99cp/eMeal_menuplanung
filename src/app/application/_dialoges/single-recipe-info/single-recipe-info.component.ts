@@ -13,6 +13,8 @@ export class SingleRecipeInfoComponent {
 
   public recipeInfo: FormGroup;
 
+  public valueHasChanged = false;
+
   public hasAccess = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) private recipe: Recipe, private formBuilder: FormBuilder, db: DatabaseService) {
@@ -25,6 +27,7 @@ export class SingleRecipeInfoComponent {
     });
     this.recipeInfo.disable();
 
+
     db.canWrite(recipe).then(access => {
       this.hasAccess = access;
 
@@ -32,6 +35,15 @@ export class SingleRecipeInfoComponent {
         this.recipeInfo.enable();
       }
 
+    });
+
+
+    // set up change listner
+    this.recipeInfo.valueChanges.subscribe(values => {
+      this.valueHasChanged = JSON.stringify(values) === JSON.stringify({
+        title: this.recipe.name,
+        description: this.recipe.description
+      });
     });
 
   }
@@ -48,4 +60,6 @@ export class SingleRecipeInfoComponent {
 
     return this.recipe;
   }
+
+
 }
