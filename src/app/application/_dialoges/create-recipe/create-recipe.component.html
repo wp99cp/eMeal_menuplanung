@@ -1,13 +1,12 @@
-<h2 mat-dialog-title>Rezept erstellen.</h2>
+<h3 mat-dialog-title>Rezept erstellen.</h3>
 
 <form [formGroup]="newRecipeForm">
 
-  <h3>Allgemeines</h3>
-  <mat-form-field>
+  <mat-form-field class="full-width">
     <input matInput required formControlName="title" placeholder="Name der Mahlzeit">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field class="full-width">
     <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
   </mat-form-field>
 
@@ -16,14 +15,16 @@
     Sowie weitere wichtige Informationen zur Mahlzeit.
   </p>
 
-  <mat-form-field>
+  <mat-form-field class="full-width">
     <textarea matInput placeholder="Notizen" formControlName="notes"></textarea>
   </mat-form-field>
 
 </form>
 
-<div mat-dialog-actions class=" mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="close()">Abbrechen</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="close()">Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="create()" color="save"
-    [disabled]="newRecipeForm.value.title == ''">Rezept erstellen</button>
+          [disabled]="newRecipeForm.value.title == ''">Rezept erstellen
+  </button>
 </div>

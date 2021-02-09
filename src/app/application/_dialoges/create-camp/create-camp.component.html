@@ -1,71 +1,56 @@
-<h2>Neues Lager erstellen</h2>
-
-<mat-vertical-stepper #campCreator [linear]="true">
-
-    <!-- Allgemeine Infos -->
-    <mat-step label="Allgemeine Infos zum Lager." [stepControl]="newCampInfos">
-
-      <form [formGroup]="newCampInfos">
-
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32" autocomplete="off">
-          <mat-hint align="end">{{name.value?.length}} / 32</mat-hint>
-        </mat-form-field>
-
-        <br />
-
-        <mat-form-field  class="full-width">
-          <input matInput placeholder="Beschreibung zum Lager" formControlName="description" autocomplete="off">
-        </mat-form-field>
-
-      </form>
-
-      <br />
-
-      <button mat-raised-button matStepperNext>Weiter</button>
-    </mat-step>
-
-    <!-- Anzahl Teilnehmende -->
-    <mat-step label="Anzahl Teilnehmer." [stepControl]="newCampParticipants">
-
-      <form [formGroup]="newCampParticipants">
-
-        <mat-form-field  class="full-width">
-          <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number' autocomplete="off">
-        </mat-form-field>
-
-      </form>
-
-      <p class="info">
-        Bitte gib die voraussichtliche Anzahl Teilnehmende an. <br>
-        Du kannst die Teilnehmeranzahl später jederzeit anpassen.
-      </p>
-
-      <br />
-
-      <button mat-raised-button matStepperNext>Weiter</button>
-
-    </mat-step>
+<h3>Neues Lager erstellen</h3>
 
 
-    <!-- Mit Planen beginnen -->
-    <mat-step label="Mit planen beginnen." [stepControl]="newCampDate">
+<div class="content">
 
-      <form [formGroup]="newCampDate">
+  <form [formGroup]="newCampInfos">
 
-        <mat-form-field  class="full-width">
-          <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date"
-            data-date-format="DD MMMM YYYY" autocomplete="off">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-      </form>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32"
+             autocomplete="off">
+      <mat-hint align="end">{{name.value?.length}} / 32</mat-hint>
+    </mat-form-field>
 
-      <br />
+    <br/>
 
-      <button mat-raised-button matStepperNext [mat-dialog-close]="createCamp()" type="submit">
-        Lager erstellen
-      </button>
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Beschreibung zum Lager" formControlName="description" autocomplete="off">
+    </mat-form-field>
 
-    </mat-step>
-  </mat-vertical-stepper>
+  </form>
+
+
+  <form [formGroup]="newCampParticipants">
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Anzahl Teilnehmende" required formControlName="participants" type='number'
+             autocomplete="off">
+    </mat-form-field>
+
+  </form>
+
+  <p class="info">
+    Bitte gib die voraussichtliche Anzahl Teilnehmende an. <br>
+    Du kannst die Teilnehmeranzahl später jederzeit anpassen.
+  </p>
+
+
+  <form [formGroup]="newCampDate">
+
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="picker" placeholder="Erster Lagertag" formControlName="date"
+             data-date-format="DD MMMM YYYY" autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+
+</div>
+
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p><a (click)="helpService.openHelpPopup()">Neu bei eMeal? Hilfe öffnen.</a></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
+  <button mat-raised-button color="save" [mat-dialog-close]="createCamp()"> Lager erstellen</button>
+</div>
+

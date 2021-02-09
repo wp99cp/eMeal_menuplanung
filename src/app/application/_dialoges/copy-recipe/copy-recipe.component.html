@@ -1,10 +1,11 @@
-<h2>Rezept kopieren</h2>
+<h3>Rezept kopieren</h3>
 
 <div mat-dialog-content>
     <p>Möchtes du von diesem Rezept eine Kopie erstellen? </p>
 </div>
 
-<div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="'copy'" color="save">Rezept kopieren</button>
-    <button mat-button [mat-dialog-close]="'close'" matTooltip="Kopieren abbrechen">Abbrechen</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="'close'"> Abbrechen </button>
+  <button mat-raised-button [mat-dialog-close]="'copy'" color="save">Rezept kopieren</button>
 </div>

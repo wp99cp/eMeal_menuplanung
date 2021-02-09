@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Mahlzeiten hinzufügen.</h2>
+<h3 mat-dialog-title>Mahlzeiten hinzufügen.</h3>
 
 <div class="meal-search-table">
 
@@ -70,11 +70,14 @@
 
 <mat-paginator [pageSize]="6"></mat-paginator>
 
-<div mat-dialog-actions class=" mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <div class="additional-buttons">
+    <button mat-stroked-button (click)="newMeal()" id="add-meal">Mahlzeit erstellen</button>
+    <button mat-stroked-button (click)="import()" matTooltip="Importieren von Mahlzeiten">Importieren</button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="selectedMeal" color="save" [disabled]="!selectedMeal.hasValue()"
           (click)="addLastMeal()">Mahlzeiten hinzufügen ({{selectedMeal.selected.length}})
   </button>
-  <button mat-raised-button (click)="newMeal()" id="add-meal">Mahlzeit erstellen</button>
-  <button mat-raised-button (click)="import()" matTooltip="Importieren von Mahlzeiten">Importieren</button>
 </div>

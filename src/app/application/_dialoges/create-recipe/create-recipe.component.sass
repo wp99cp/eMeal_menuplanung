@@ -1,24 +1,10 @@
-:host
+\:host
   width: 100%
   height: 100%
   display: grid
-  grid-template-rows: 50px auto 50px
-  grid-gap: 10px
-  grid-template-areas: "header" "form" "buttons"
+  grid-template-rows: 75px auto 50px
+  grid-template-areas: "header" "body" "buttons"
 
 
-form
-  display: grid
-  height: fit-content
-
-
-.mat-buttons
-  height: 100%
-  padding: 0
-  grid-area: buttons
-  float: right
-  display: block
-
-  button
-    float: right
-    margin: 7px  10px  !important
+.custom-mat-buttons
+  grid-template-columns: auto 120px 175px

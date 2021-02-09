@@ -6,6 +6,7 @@ import {FirestoreObject} from '../../_class/firebaseObject';
 import {FirestoreCamp} from '../../_interfaces/firestoreDatatypes';
 import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-create-camp',
@@ -20,13 +21,14 @@ export class CreateCampComponent {
   public newCampDate: FormGroup;
 
   constructor(private formBuilder: FormBuilder,
-    public dbService: DatabaseService,
-    private authService: AuthenticationService) {
+              public dbService: DatabaseService,
+              private authService: AuthenticationService,
+              public helpService: HelpService) {
 
     // create default values for addCampForms
-    this.newCampInfos = this.formBuilder.group({ name: '', description: '', });
-    this.newCampParticipants = this.formBuilder.group({ participants: '' });
-    this.newCampDate = this.formBuilder.group({ date: '' });
+    this.newCampInfos = this.formBuilder.group({name: '', description: '',});
+    this.newCampParticipants = this.formBuilder.group({participants: ''});
+    this.newCampDate = this.formBuilder.group({date: ''});
 
   }
 
@@ -45,8 +47,8 @@ export class CreateCampComponent {
 
       campData.camp_name = this.newCampInfos.value.name;
       campData.camp_description = this.newCampInfos.value.description;
-      campData.camp_year = date.toLocaleDateString('de-CH', { year: 'numeric' });
-      campData.days = [{ day_date: firestore.Timestamp.fromDate(date), day_description: '', day_notes: '' }];
+      campData.camp_year = date.toLocaleDateString('de-CH', {year: 'numeric'});
+      campData.days = [{day_date: firestore.Timestamp.fromDate(date), day_description: '', day_notes: ''}];
       campData.camp_participants = this.newCampParticipants.value.participants;
       campData.camp_vegetarians = 0;
       campData.camp_leaders = 0;

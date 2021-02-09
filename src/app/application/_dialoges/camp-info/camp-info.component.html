@@ -1,4 +1,4 @@
-<h2>Informationen zum {{camp.name}}</h2>
+<h3>Informationen zum {{camp.name}}</h3>
 
 <form [formGroup]="campInfosForm">
 
@@ -33,8 +33,8 @@
 
 </form>
 
-<div mat-dialog-actions class="mat-buttons" *ngIf="hasAccess">
-  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [disabled]="!campInfosForm.touched || !(hasAccess | async)" [mat-dialog-close]="saveValueChanges()"
-    color="save">Speichern</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen </button>
+  <button mat-raised-button [disabled]="valueHasNotChanged || !(hasAccess | async)" [mat-dialog-close]="saveValueChanges()" color="save">Speichern</button>
 </div>

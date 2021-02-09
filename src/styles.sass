@@ -290,10 +290,13 @@ a
 // Buttons
 ///////////////////////////////////////////////////////////////
 
+.custom-mat-buttons
+  .mat-button, .mat-raised-button
+    margin: 15px !important
+
 .mat-button, .mat-raised-button
-  user-select: none
-  opacity: 0.9
-  margin: 15px !important
+    user-select: none
+    opacity: 0.9
 
 .mat-button-focus-overlay
   opacity: 0 !important
@@ -303,7 +306,6 @@ a
 
 .mat-stroked-button:hover
   background-color: #f7f7f7
-
 
 .mat-raised-button[disabled]
   background-color: #dceec3 !important
@@ -317,11 +319,11 @@ a
   padding: 0 !important
   grid-area: buttons
   display: grid !important
-  grid-template-columns: auto 120px 120px
+  grid-template-columns: auto 140px 140px
 
   button
     float: right
-    margin: 7px  10px  !important
+    margin: 7px 10px !important
 
 
 // Speicherbutton

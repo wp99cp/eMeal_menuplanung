@@ -18,6 +18,7 @@ export class CampInfoComponent {
   public camp: Camp;
 
   public hasAccess: Promise<boolean>
+  public valueHasNotChanged = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp },
@@ -31,6 +32,22 @@ export class CampInfoComponent {
       participants: this.camp.participants,
       vegetarier: this.camp.vegetarians ? this.camp.vegetarians : 0,
       leaders: this.camp.leaders ? this.camp.leaders : 0
+    });
+
+
+    const originalValues = JSON.stringify({
+
+      name: this.camp.name,
+      description: this.camp.description,
+      participants: this.camp.participants,
+      vegetarier: this.camp.vegetarians ? this.camp.vegetarians : 0,
+      leaders: this.camp.leaders ? this.camp.leaders : 0
+
+    });
+
+    // set up change listner
+    this.campInfosForm.valueChanges.subscribe(values => {
+      this.valueHasNotChanged = JSON.stringify(values) === originalValues;
     });
 
     this.hasAccess = dbService.canWrite(this.camp);

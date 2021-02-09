@@ -93,8 +93,8 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
   copy(meal: Meal) {
 
     this.dialog.open(DeepCopyMealComponent, {
-      width: '530px',
-      height: '250px',
+      width: '520px',
+      height: '275px',
     }).afterClosed()
       .subscribe(async result => {
 
