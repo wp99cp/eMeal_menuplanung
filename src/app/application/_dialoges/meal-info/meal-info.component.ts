@@ -21,6 +21,7 @@ export class MealInfoComponent implements OnInit {
 
   public mealAccess = false;
   public specificMealAccess = false;
+  public valueHasChanged = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp, meal: Meal, specificMeal: SpecificMeal },
@@ -31,6 +32,8 @@ export class MealInfoComponent implements OnInit {
     this.specificMeal = data.specificMeal;
     this.meal = data.meal;
 
+
+    // create a copy for the form, the original value is needed for the comparison
     this.mealInfo = this.formBuilder.group({
 
       title: {value: this.meal.name, disabled: true},
@@ -51,9 +54,25 @@ export class MealInfoComponent implements OnInit {
         disabled: true
       },
     });
+
+    const originalValues = {
+
+      title: this.meal.name,
+      description: this.meal.description,
+      weekTitle: this.specificMeal.weekTitle !== '' ? this.specificMeal.weekTitle : this.meal.name,
+      overrideParticipants: this.specificMeal.overrideParticipants,
+      participants: this.specificMeal.participants
+
+    };
+
+    // set up change listner
+    this.mealInfo.valueChanges.subscribe(values => {
+      this.valueHasChanged = JSON.stringify(values) === JSON.stringify(originalValues);
+    });
+
   }
 
-  ngOnInit () {
+  ngOnInit() {
 
     this.db.canWrite(this.meal).then(access => {
       this.mealAccess = access;

@@ -38,12 +38,15 @@ export class SingleRecipeInfoComponent {
     });
 
 
+    const originalValues = JSON.stringify({
+      title: this.recipe.name,
+      description: this.recipe.description
+    });
+
+
     // set up change listner
     this.recipeInfo.valueChanges.subscribe(values => {
-      this.valueHasChanged = JSON.stringify(values) === JSON.stringify({
-        title: this.recipe.name,
-        description: this.recipe.description
-      });
+      this.valueHasChanged = JSON.stringify(values) === originalValues;
     });
 
   }

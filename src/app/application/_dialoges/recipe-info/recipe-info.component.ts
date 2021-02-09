@@ -22,6 +22,7 @@ export class RecipeInfoComponent implements OnInit {
   public recipeForm: FormGroup;
 
   public calcRecipeParticipants = SettingsService.calcRecipeParticipants;
+  public infoHasNotChanged = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp, specificMeal: SpecificMeal, recipe: Recipe, specificRecipe: SpecificRecipe },
@@ -39,6 +40,22 @@ export class RecipeInfoComponent implements OnInit {
       participants: this.specificRecipe.participants,
       overrideParticipants: this.specificRecipe.overrideParticipants,
       vegi: this.specificRecipe.vegi
+    });
+
+
+    const originalValues = {
+
+      description: this.recipe.description,
+      name: this.recipe.name,
+      participants: this.specificRecipe.participants,
+      overrideParticipants: this.specificRecipe.overrideParticipants,
+      vegi: this.specificRecipe.vegi
+
+    };
+
+    // set up change listner
+    this.recipeForm.valueChanges.subscribe(values => {
+      this.infoHasNotChanged = JSON.stringify(values) === JSON.stringify(originalValues);
     });
 
   }
