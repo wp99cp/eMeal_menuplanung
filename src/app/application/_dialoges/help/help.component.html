@@ -10,8 +10,8 @@
 
 </div>
 
-<div mat-dialog-actions class="buttons">
+<div mat-dialog-actions class="custom-mat-buttons">
   <p class="tipp-index"> Tipp {{index + 1}} von  {{ data.messages.length }}</p>
-  <button mat-button color="save" (click)="nextMessage()">Nächster Tipp</button>
-  <button mat-button [mat-dialog-close]="">Schliessen</button>
+  <button mat-stroked-button [mat-dialog-close]="null"> Schliessen </button>
+  <button mat-raised-button color="save" (click)="nextMessage()">Nächster Tipp</button>
 </div>

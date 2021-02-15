@@ -10,6 +10,7 @@ import {TemplateHeaderComponent as Header} from '../../../_template/template-hea
 })
 export class FeedbackDialogComponent implements OnInit {
   public feedbackForm: FormGroup;
+  public valueHasNotChanged = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -20,6 +21,18 @@ export class FeedbackDialogComponent implements OnInit {
     this.feedbackForm = this.formBuilder.group({
       title: '',
       feedback: ''
+    });
+
+
+
+    const originalValues = {
+      title: '',
+      feedback: ''
+    };
+
+    // set up change listner
+    this.feedbackForm.valueChanges.subscribe(values => {
+      this.valueHasNotChanged = JSON.stringify(values) === JSON.stringify(originalValues);
     });
 
   }

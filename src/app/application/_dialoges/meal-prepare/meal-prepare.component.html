@@ -1,4 +1,4 @@
-<h2>Mahlzeit an einem anderen Tag vorbereiten</h2>
+<h3>Mahlzeit an einem anderen Tag vorbereiten</h3>
 
 <div class="infos">
   <p class="info">Mahlzeiten können an einem anderen Tag vorbereitet werden.<br />
@@ -27,7 +27,8 @@
 
 </div>
 
-<div mat-dialog-actions class="mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="returnsSpecificMeal()" color="save">Speichern</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen </button>
+  <button mat-raised-button [mat-dialog-close]="returnsSpecificMeal()" [disabled]="valueHasNotChanged" color="save">Speichern</button>
 </div>

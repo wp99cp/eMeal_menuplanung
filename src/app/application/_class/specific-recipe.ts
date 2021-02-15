@@ -44,6 +44,7 @@ export class SpecificRecipe extends FirestoreObject implements ExportableObject 
 
   public toFirestoreDocument(): FirestoreSpecificRecipe {
 
+
     const recipe = super.toFirestoreDocument() as FirestoreSpecificRecipe;
 
     recipe.recipe_participants = this.participants;

@@ -15,9 +15,9 @@
 </form>
 
 
-<div mat-dialog-actions class="mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="">Abbrechen</button>
-  <button mat-raised-button [disabled]="!recipeInfo.touched || !hasAccess" [mat-dialog-close]="saveValueChanges()"
-          color="save">Speichern
-  </button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen </button>
+  <button mat-raised-button [disabled]="valueHasChanged || !hasAccess" [mat-dialog-close]="saveValueChanges()"
+          color="save">Speichern</button>
 </div>

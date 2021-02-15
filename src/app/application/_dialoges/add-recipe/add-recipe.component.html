@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Rezepte hinzufügen.</h2>
+<h3 mat-dialog-title>Rezepte hinzufügen.</h3>
 
 <div class="meal-search-table">
 
@@ -7,38 +7,39 @@
   </mat-form-field>
 
   <table mat-table [dataSource]="recipesTableSource" matSort matSortActive="title" matSortDirection="asc"
-    class="full-width">
+         class="full-width">
 
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef class="selection-header">
         <mat-checkbox (change)="$event ? masterToggle() : null"
-          [checked]="selectedRecipes.hasValue() && isAllSelected()"
-          [indeterminate]="selectedRecipes.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                      [checked]="selectedRecipes.hasValue() && isAllSelected()"
+                      [indeterminate]="selectedRecipes.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
         </mat-checkbox>
       </th>
 
       <td mat-cell *matCellDef="let row; let element">
         <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectedRecipes.toggle(row) : null"
-          [checked]="selectedRecipes.isSelected(row)" [aria-label]="checkboxLabel(row)" matTooltip="auswählen">
+                      [checked]="selectedRecipes.isSelected(row)" [aria-label]="checkboxLabel(row)"
+                      matTooltip="auswählen">
         </mat-checkbox>
       </td>
     </ng-container>
 
     <!-- firstName Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="title-header"> Name </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="title-header"> Name</th>
       <td mat-cell *matCellDef="let element"> {{element.name}} </td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="description-header"> Beschreibung </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="description-header"> Beschreibung</th>
       <td mat-cell *matCellDef="let element"> {{element.description}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"> </tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
   </table>
 
@@ -50,9 +51,13 @@
 
 <mat-paginator [pageSize]="6"></mat-paginator>
 
-<div mat-dialog-actions class=" mat-buttons">
-  <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <div class="additional-buttons">
+    <button mat-stroked-button (click)="newRecipe()" id="add-recipe">Rezept erstellen</button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="selectedRecipes" color="save"
-    [disabled]="!selectedRecipes.hasValue()">Rezepte hinzufügen</button>
-  <button mat-raised-button (click)="newRecipe()" id="add-recipe">Rezept erstellen</button>
+          [disabled]="!selectedRecipes.hasValue()">Rezepte hinzufügen
+  </button>
 </div>

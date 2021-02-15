@@ -1,13 +1,17 @@
-<h2>Mahlzeit kopieren</h2>
+<h3>Mahlzeit kopieren</h3>
 
 <div mat-dialog-content>
-    <p>Möchtes du von den verwendeten Rezepten ebenfalls eine Kopie erstellen? </p>
-    <p>(Wird nur empfohlen falls du keine Zugriffsrechte auf ein oder mehrere Rezepte hast. Von allen Rezepten wird
-        ebenfalls eine unabhängige Kopie erstellt.)</p>
+  <p>Möchtes du von den verwendeten Rezepten ebenfalls eine Kopie erstellen? </p>
+  <p>(Wird nur empfohlen falls du keine Zugriffsrechte auf ein oder mehrere Rezepte hast. Von allen Rezepten wird
+    ebenfalls eine unabhängige Kopie erstellt.)</p>
 </div>
 
-<div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="'copy'" color="save">Ohne Rezepte kopieren</button>
-    <button mat-button [mat-dialog-close]="'deep'" matTooltip="Rezepte werden ebenfalls kopiert (nicht empfohlen)!">Rezepte einschliessen</button>
-    <button mat-button [mat-dialog-close]="'close'" matTooltip="Kopieren abbrechen">Abbrechen</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <div class="additional-buttons">
+    <button mat-stroked-button [mat-dialog-close]="'deep'" color="warn" matTooltip="Nicht empfohlen!">
+      inkl. Rezepte
+    </button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="'close'">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="'copy'" color="save">ohne Rezepte</button>
 </div>

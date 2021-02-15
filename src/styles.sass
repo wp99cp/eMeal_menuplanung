@@ -290,15 +290,41 @@ a
 // Buttons
 ///////////////////////////////////////////////////////////////
 
-.mat-button
-  user-select: none
+.custom-mat-buttons
+  .mat-button, .mat-raised-button
+    margin: 15px !important
+
+.mat-button, .mat-raised-button
+    user-select: none
+    opacity: 0.9
+
+.mat-button-focus-overlay
+  opacity: 0 !important
+
+.mat-raised-button:hover
+  opacity: 1
+
+.mat-stroked-button:hover
+  background-color: #f7f7f7
+
+.mat-raised-button[disabled]
+  background-color: #dceec3 !important
 
 .mat-save
   background-color: $prime-color
   color: $prime-text-color
 
-.mat-raised-button
-  margin: 15px !important
+.custom-mat-buttons
+  height: 100%
+  padding: 0 !important
+  grid-area: buttons
+  display: grid !important
+  grid-template-columns: auto 140px 140px
+
+  button
+    float: right
+    margin: 7px 10px !important
+
 
 // Speicherbutton
 .saveButton
