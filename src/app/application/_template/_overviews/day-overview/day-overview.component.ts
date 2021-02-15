@@ -115,7 +115,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
         elements.forEach(element => {
 
           const node: ContextMenuNode = {
-            node: element as HTMLElement,
+            node: element.parentElement.parentElement as HTMLElement,
             contextMenuEntries: [
               {
                 icon: 'edit',
