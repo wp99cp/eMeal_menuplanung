@@ -1,12 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
-import { Camp } from '../../_class/camp';
-import { Recipe } from '../../_class/recipe';
-import { SpecificMeal } from '../../_class/specific-meal';
-import { SpecificRecipe } from '../../_class/specific-recipe';
-import { SettingsService } from '../../_service/settings.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {Camp} from '../../_class/camp';
+import {Recipe} from '../../_class/recipe';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {SpecificRecipe} from '../../_class/specific-recipe';
+import {SettingsService} from '../../_service/settings.service';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-recipe-info',
@@ -43,7 +43,7 @@ export class RecipeInfoComponent implements OnInit {
     });
 
 
-    const originalValues = {
+    const originalValues = JSON.stringify({
 
       description: this.recipe.description,
       name: this.recipe.name,
@@ -51,11 +51,11 @@ export class RecipeInfoComponent implements OnInit {
       overrideParticipants: this.specificRecipe.overrideParticipants,
       vegi: this.specificRecipe.vegi
 
-    };
+    });
 
     // set up change listner
     this.recipeForm.valueChanges.subscribe(values => {
-      this.infoHasNotChanged = JSON.stringify(values) === JSON.stringify(originalValues);
+      this.infoHasNotChanged = JSON.stringify(values) === originalValues;
     });
 
   }
@@ -71,9 +71,9 @@ export class RecipeInfoComponent implements OnInit {
     // save data to firestore
     this.recipe.description = this.recipeForm.value.description;
     this.recipe.name = this.recipeForm.value.name;
-    this.specificRecipe.overrideParticipants = this.recipeForm.value.overrideParticipants;
-    this.specificRecipe.participants = this.recipeForm.value.participants;
-    this.specificRecipe.vegi = this.recipeForm.value.vegi;
+    this.specificRecipe.overrideParticipants = this.recipeForm.get('overrideParticipants').value;
+    this.specificRecipe.participants = this.recipeForm.get('participants').value;
+    this.specificRecipe.vegi = this.recipeForm.get('vegi').value;
 
     return [this.recipe, this.specificRecipe];
 

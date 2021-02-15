@@ -55,7 +55,7 @@ export class MealInfoComponent implements OnInit {
       },
     });
 
-    const originalValues = {
+    const originalValues = JSON.stringify({
 
       title: this.meal.name,
       description: this.meal.description,
@@ -63,11 +63,11 @@ export class MealInfoComponent implements OnInit {
       overrideParticipants: this.specificMeal.overrideParticipants,
       participants: this.specificMeal.participants
 
-    };
+    });
 
     // set up change listner
     this.mealInfo.valueChanges.subscribe(values => {
-      this.valueHasChanged = JSON.stringify(values) === JSON.stringify(originalValues);
+      this.valueHasChanged = JSON.stringify(values) === originalValues;
     });
 
   }
@@ -102,8 +102,7 @@ export class MealInfoComponent implements OnInit {
     this.specificMeal.weekTitle = this.mealInfo.value.weekTitle;
     this.specificMeal.overrideParticipants = this.mealInfo.value.overrideParticipants;
     this.specificMeal.participants = this.mealInfo.value.participants;
-
-
+    
     return [this.meal, this.specificMeal];
   }
 

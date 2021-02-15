@@ -297,8 +297,11 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
       // after adding a new recipe without reloading the page inbetween
     )).pipe(take(1)).subscribe(async ([recipe, specificRecipe]: [Recipe, SpecificRecipe]) => {
 
-      await this.databaseService.updateDocument(recipe);
-      await this.databaseService.updateDocument(specificRecipe);
+
+      // Save results
+      await Promise.all([
+        this.databaseService.updateDocument(recipe),
+        this.databaseService.updateDocument(specificRecipe)]).catch(err => console.log('ERR: ' + err));
 
     });
 
