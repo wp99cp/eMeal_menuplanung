@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CopyCampComponent } from './copy-camp.component';
 
@@ -6,7 +6,7 @@ describe('CopyCampComponent', () => {
   let component: CopyCampComponent;
   let fixture: ComponentFixture<CopyCampComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CopyCampComponent ]
     })

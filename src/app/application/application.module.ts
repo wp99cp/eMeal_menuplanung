@@ -136,6 +136,7 @@ import {SettingsService} from './_service/settings.service';
     HelpService,
     Location,
     SettingsService,
+    AngularFirestoreModule,
     {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
 

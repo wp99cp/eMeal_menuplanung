@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DeepCopyMealComponent } from './deep-copy-meal.component';
 
@@ -6,7 +6,7 @@ describe('DeepCopyMealComponent', () => {
   let component: DeepCopyMealComponent;
   let fixture: ComponentFixture<DeepCopyMealComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DeepCopyMealComponent ]
     })
