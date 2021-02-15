@@ -1,3 +1,28 @@
-.menu-button
-  width: 300px
-  margin: 10px
+
+.cards
+  display: flex
+
+.card
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)
+  transition: all 30ms cubic-bezier(.4, 0, 1, 1)
+  overflow: hidden
+  margin: 5px
+  max-width: 320px
+
+  .cardDescription
+    padding: 12px 16px
+    font-weight: 400
+
+  img
+    width: 100%
+    height: auto
+    display: block
+    max-width: 760px
+    max-height: 760px
+    transition: transform .2s
+
+.card:hover
+  img
+    transform: scale(1.05)
+
+
