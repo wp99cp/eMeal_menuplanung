@@ -262,6 +262,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           // skip meal if already a meal is at this place...
           if (mealsOfDay.filter(m => m.usedAs === usedAs).length > 0) {
             console.log('Skip creation of meal at day Nr. ' + dayIndex + ' as ' + usedAs + '.');
+            this.snackBar.open('Mahlzeit wurde nicht hinzugefügt! Platz bereits besetzt!', 'Schliessen', {duration: 4000});
             return;
           }
 
