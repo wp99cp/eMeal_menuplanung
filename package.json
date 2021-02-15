@@ -30,6 +30,7 @@
     "@angular/router": "^10.2.4",
     "@angular/service-worker": "^10.2.4",
     "@schematics/angular": "^9.1.14",
+    "angular-cli": "^1.0.0-beta.28.3",
     "cross": "^1.0.0",
     "firebase": "^7.24.0",
     "hammerjs": "^2.0.8",
@@ -40,8 +41,8 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1000.8",
-    "@angular/cli": "^10.2.2",
+    "@angular-devkit/build-angular": "^0.1102.0",
+    "@angular/cli": "^11.2.0",
     "@angular/compiler-cli": "^10.2.4",
     "@angular/language-service": "^10.2.4",
     "@types/core-js": "^2.5.4",
