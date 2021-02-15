@@ -1,10 +1,9 @@
-<h2>{{data.name}} löschen?</h2>
+<h3>{{data.name}} löschen?</h3>
 
-<div mat-dialog-content>
-    <p>Zur Zeit können Lager nicht kopiert werden. Diese Funktion staht aber schon bald zur Verfügung.</p>
-</div>
+<p>Möchtest du das Lager endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden.</p>
 
-<div mat-dialog-actions>
-    <button mat-button color="warn" [mat-dialog-close]="true">Löschen</button>
-    <button mat-button [mat-dialog-close]="false">Abbrechen</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="false"> Abbrechen</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="true">Löschen</button>
 </div>

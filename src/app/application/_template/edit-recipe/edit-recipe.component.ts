@@ -7,7 +7,6 @@ import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
 import {HelpService} from '../../_service/help.service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -42,29 +41,8 @@ export class EditRecipeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
     private contextMenuService: ContextMenuService,
-    private helpService: HelpService,
-    private router: Router) {
+    private helpService: HelpService) {
 
-    helpService.addHelpMessage({
-      title: 'Rezepte direkt bearbeiten',
-      message: `Rezepte können auf direkt bearbeitet werden. <br>
-                Klicke hierfür auf den Menü-Punkt "Rezepte" und wähle dann ein Rezept aus. <br>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/Edit_Single_Recipe_Nav.png">`,
-      url: router.url
-    });
-
-    helpService.addHelpMessage({
-      title: 'Zutaten kopieren, exportieren und einfügen',
-      message: `Mit einem Klick auf die Nummer neben einer Zutat, kannst du Zutaten bequem kopieren.
-                So kannst du Zutaten schnell in ein anderes Rezept oder in eine Excel-Liste kopieren.<br>
-                <br>
-                Das Einfügen geht genau so einfach. Die erste Zelle einer Zeile markieren und
-                die kopierte Zutat wieder einfügen. <br>
-                <br>
-                <img width="100%" src="/assets/img/help_info_messages/Mark_Ingredient_Line.png">`,
-      url: router.url
-    });
 
   }
 
@@ -141,8 +119,6 @@ export class EditRecipeComponent implements OnInit {
    * @param index Index des Ingredient = Zeile in der Tabelle
    */
   deleteIngredient(uniqueId: string) {
-
-    console.log(uniqueId)
 
     if (!this.hasAccess) {
       return;
@@ -581,6 +557,11 @@ export class EditRecipeComponent implements OnInit {
   private setAreaOverlay() {
 
     const areaOverlay = document.getElementById(this.recipe.documentId + '-area-overlay');
+
+    if (!areaOverlay) {
+      return;
+    }
+
     const parent = areaOverlay.parentElement;
     const ingredient = document.getElementById(this.selectedIngredientID);
     areaOverlay.style.top = (ingredient.getBoundingClientRect().top - parent.getBoundingClientRect().top) + 'px';

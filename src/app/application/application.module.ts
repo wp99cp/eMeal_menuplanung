@@ -45,14 +45,13 @@ import {MealPrepareComponent} from './_dialoges/meal-prepare/meal-prepare.compon
 import {RecipeInfoComponent} from './_dialoges/recipe-info/recipe-info.component';
 import {ShareDialogComponent} from './_dialoges/share-dialog/share-dialog.component';
 import {AppSettingsPageComponent} from './_pages/app-settings-page/app-settings-page.component';
-import {CampListPageComponent} from './_pages/camp-list-page/camp-list-page.component';
-import {EditCampPageComponent} from './_pages/edit-camp-page/edit-camp-page.component';
-import {EditMealComponent} from './_pages/edit-meal/edit-meal.component';
-import {EditSingleRecipeComponent} from './_pages/edit-single-recipe/edit-single-recipe.component';
+import {CampListPageComponent} from './_pages/_list-pages/camp-list-page/camp-list-page.component';
+import {EditCampPageComponent} from './_pages/_edit-pages/edit-camp-page/edit-camp-page.component';
+import {EditMealComponent} from './_pages/_edit-pages/edit-meal/edit-meal.component';
+import {EditSingleRecipeComponent} from './_pages/_edit-pages/edit-single-recipe/edit-single-recipe.component';
 import {ExportCampComponent} from './_pages/export-camp/export-camp.component';
-import {HelpPageComponent} from './_pages/help-page/help-page.component';
-import {MealListComponent} from './_pages/meal-list/meal-list.component';
-import {RecipeListComponent} from './_pages/recipe-list/recipe-list.component';
+import {MealListComponent} from './_pages/_list-pages/meal-list/meal-list.component';
+import {RecipeListComponent} from './_pages/_list-pages/recipe-list/recipe-list.component';
 import {WelcomPageComponent} from './_pages/welcom-page/welcom-page.component';
 import {AuthenticationService} from './_service/authentication.service';
 import {AutoSaveService} from './_service/auto-save.service';
@@ -61,9 +60,9 @@ import {DownloadComponent} from './_template/download/download.component';
 import {EditRecipeInCampComponent} from './_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {IngredientFieldComponent} from './_template/ingredient-field/ingredient-field.component';
 import {ListOfUsersComponent} from './_template/list-of-users/list-of-users.component';
-import {MealsOverviewComponent} from './_template/meals-overview/meals-overview.component';
+import {DayOverviewComponent} from './_template/_overviews/day-overview/day-overview.component';
 import {AddNewUserComponent} from './_template/add-new-user/add-new-user.component';
-import {WeekViewComponent} from './_template/week-view/week-view.component';
+import {WeekOverviewComponent} from './_template/_overviews/week-overview/week-overview.component';
 import {CopyRecipeComponent} from './_dialoges/copy-recipe/copy-recipe.component';
 import {ListCardComponent} from './_template/list-card/list-card.component';
 import {CopyCampComponent} from './_dialoges/copy-camp/copy-camp.component';
@@ -76,10 +75,11 @@ import {ContextMenuService} from './_service/context-menu.service';
 import {ShortcutService} from './_service/shortcut.service';
 import {HelpService} from './_service/help.service';
 import {HelpComponent} from './_dialoges/help/help.component';
-import {EditSingleMealComponent} from './_pages/edit-single-meal/edit-single-meal.component';
+import {EditSingleMealComponent} from './_pages/_edit-pages/edit-single-meal/edit-single-meal.component';
 import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-recipe-info.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
+import {SettingsService} from './_service/settings.service';
 
 @NgModule({
   declarations: [
@@ -90,14 +90,14 @@ import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dial
     AddNewUserComponent,
     DeleteCampComponent,
     EditDayComponent,
-    WeekViewComponent,
+    WeekOverviewComponent,
     EditMealComponent,
     EditRecipeInCampComponent,
     IngredientFieldComponent,
     AddMealComponent,
     ExportCampComponent,
     ImportComponent,
-    MealsOverviewComponent,
+    DayOverviewComponent,
     CreateMealComponent,
     ListOfUsersComponent,
     AppSettingsPageComponent,
@@ -111,7 +111,6 @@ import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dial
     AddRecipeComponent,
     CreateRecipeComponent,
     MealPrepareComponent,
-    HelpPageComponent,
     RecipeListComponent,
     EditSingleRecipeComponent,
     MealListComponent,
@@ -136,6 +135,7 @@ import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dial
     ShortcutService,
     HelpService,
     Location,
+    SettingsService,
     {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
@@ -193,7 +193,7 @@ import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dial
     ImportComponent,
     CreateMealComponent,
     DeepCopyMealComponent,
-    MealsOverviewComponent,
+    DayOverviewComponent,
     ShareDialogComponent,
     CampInfoComponent,
     MealInfoComponent,

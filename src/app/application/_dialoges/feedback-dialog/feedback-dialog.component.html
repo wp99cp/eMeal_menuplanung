@@ -1,6 +1,6 @@
+<h3>Melde einen Fehler an den Entwickler!</h3>
 
-  <h2>Melde einen Fehler an den Entwickler!</h2>
-
+<div>
   <p>Der Fehlermeldung wird automatisch deinen Namen angefügt, so kann der Entwickler
     für Rückfragen ggf. mit dir in Kontakt treten.</p>
 
@@ -13,8 +13,14 @@
       <input matInput placeholder="Titel / Thema" formControlName="title">
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback" id="feedback-text"></textarea>
+      <textarea matInput placeholder="Fehlerbeschreibung / Feedback" formControlName="feedback"
+                id="feedback-text"></textarea>
     </mat-form-field>
-    <button mat-raised-button [mat-dialog-close]="" (click)="send()">Feedback senden!</button>
   </form>
+</div>
 
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
+  <button mat-raised-button color="save" [mat-dialog-close]="" (click)="send()" [disabled]="valueHasNotChanged">Feedback senden!</button>
+</div>

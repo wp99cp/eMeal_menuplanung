@@ -1,0 +1,30 @@
+<span class="big-page-title">Meine Lager</span>
+
+<mat-form-field class="mat-form-field full-width">
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Lager suchen..." id="search-field">
+</mat-form-field>
+
+
+<div id="lagerList" *ngIf="filteredElements as camps else loading_preview">
+
+  <app-list-card *ngFor="let camp of camps" [cardElement]="camp" [access]="access[camp.documentId]"
+                 (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
+
+</div>
+
+<ng-template #loading_preview>
+  <app-list-card *ngFor="let number of [0, 0, 0, 0, 0]" class="templateStyle"></app-list-card>
+</ng-template>
+
+<p *ngIf="filteredElements?.length === 0 && (dbElements | async)?.length !== 0"> Du hast noch kein Lager erstellt, das zu deinem Suchbegriff passt! </p>
+
+<div class="create-first-camp mat-elevation-z3" *ngIf="(dbElements | async)?.length === 0">
+
+  <div>
+    <h3>Erstelle jetzt dein erstes Lager!</h3>
+    <button (click)="newElement()" mat-raised-button color="save">Lager erstellen</button>
+  </div>
+
+</div>
+
+

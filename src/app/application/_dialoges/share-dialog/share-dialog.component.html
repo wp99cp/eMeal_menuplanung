@@ -3,9 +3,9 @@
 <app-add-new-user (afterSelection)="selectUser($event)" [accessLevels]="data.accessLevels" class="add-collaborators"></app-add-new-user>
 <app-list-of-user-with-access [userList]="accessData" [accessLevels]="data.accessLevels" class="current-collaborators"></app-list-of-user-with-access>
 
-<div mat-dialog-actions class="mat-buttons">
+<div mat-dialog-actions class="custom-mat-buttons">
     <p><a (click)="helpService.openHelpPopup(data.helpMessageId)">Infos zu den Berechtigungen</a></p>
-    <button mat-raised-button [mat-dialog-close]="null">Abbrechen</button>
+    <button mat-stroked-button [mat-dialog-close]="null">Abbrechen</button>
     <button mat-raised-button (click)="saveValueChanges()" [mat-dialog-close]="" color="save">Speichern</button>
 </div>
 

@@ -1,10 +1,10 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { SwissDateAdapter } from 'src/app/utils/format-datapicker';
+import {Component, Inject} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
-import { SpecificMeal } from '../../_class/specific-meal';
-import { Day } from '../../_class/day';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {SpecificMeal} from '../../_class/specific-meal';
+import {Day} from '../../_class/day';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-meal-prepare',
@@ -15,6 +15,7 @@ export class MealPrepareComponent {
 
   public prepareForm: FormGroup;
   public specificMeal: SpecificMeal;
+  public valueHasNotChanged = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: { specificMeal: SpecificMeal, days: Day[] },
@@ -39,6 +40,18 @@ export class MealPrepareComponent {
 
     }
 
+
+    const originalValues = JSON.stringify({
+
+      hasPrepareDate: false,
+      prepareDate: new Date()
+
+    });
+
+    // set up change listner
+    this.prepareForm.valueChanges.subscribe(values => {
+      this.valueHasNotChanged = JSON.stringify(values) === originalValues;
+    });
 
 
   }

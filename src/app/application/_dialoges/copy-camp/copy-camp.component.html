@@ -1,11 +1,11 @@
-<h2>Lager kopieren</h2>
+<h3>Lager kopieren</h3>
 
 <div mat-dialog-content>
-    <p>Zur Zeit können Lager nicht kopiert werden. Erstelle ein neues Lager und füge die Rezepte deiner Wahl hinzu.
-      (Diese Funktion steht schon bald zur Verfügung).</p>
+  <p>Zur Zeit können Lager nicht kopiert werden. Erstelle ein neues Lager und füge die Rezepte deiner Wahl hinzu.</p>
 </div>
 
-<div mat-dialog-actions>
-    <button mat-button disabled [mat-dialog-close]="'copy'" >Lager kopieren</button>
-    <button mat-button [mat-dialog-close]="'close'" matTooltip="Kopieren abbrechen">Abbrechen</button>
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="'close'">Abbrechen</button>
+  <button mat-raised-button disabled [mat-dialog-close]="'copy'" color="save">Lager kopieren</button>
 </div>

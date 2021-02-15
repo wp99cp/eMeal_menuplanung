@@ -1,0 +1,45 @@
+\:host
+  display: grid
+
+.week-view
+  display: grid
+  grid-template-rows: 640px
+  grid-auto-flow: column
+  grid-template-columns: repeat(auto-fill, 320px)
+  grid-gap: 10px
+  width: 100%
+  overflow-x: scroll
+  padding: 20px 0
+
+  .day-container
+    width: 320px
+    display: block
+
+.week-view::-webkit-scrollbar
+  height: 10px
+
+.week-view::-webkit-scrollbar-track
+  background: #f1f1f1
+
+.week-view::-webkit-scrollbar-thumb
+  background: #888
+
+.week-view::-webkit-scrollbar-thumb:hover
+  background: #555
+
+.add-day-box
+  background-color: white
+  display: grid !important
+
+  .add-day-icon
+    font-size: 25px
+    line-height: 25px
+
+@media screen and (max-width: 600px)
+  .week-view
+    scroll-snap-type: x mandatory
+
+  .day-container
+    scroll-snap-align: center
+
+

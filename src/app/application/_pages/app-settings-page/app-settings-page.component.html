@@ -5,7 +5,7 @@
   <h1>Bearbeite dein Konto oder verändere Einstellungen.</h1>
 
   <article>
-    <h2>Dein Benutzerkonto</h2>
+    <h2>Benutzerkonto</h2>
     <form [formGroup]="userDataForm" style="display: grid" *ngIf="userDataForm !== undefined else loadingUserSettings">
 
       <mat-form-field>
@@ -27,7 +27,7 @@
 
       <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
         <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit"
-          (input)="visibilityChanged(visibilitySelect.value)">
+                (input)="visibilityChanged(visibilitySelect.value)">
           <option value="hidden">versteckt</option>
           <option value="visible">sichtbar</option>
         </select>
@@ -38,6 +38,23 @@
     </form>
   </article>
 
+  <article>
+    <h2>Einstellungen</h2>
+
+    <p class="info"> Möchtest du, dass Vorlagen für Rezepte und Mahlzeiten in der Suche dargestellt werden?<br>
+      Vorlagen sind grün markiert und können für den eigenen Gebrauch kopiert werden. </p>
+
+    <mat-form-field matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width" *ngIf="(settings.globalSettings | async) as settings">
+      <select #includeTemplates matNativeControl [value]="settings.show_templates"
+              placeholder="Sichtbarkeit von Vorlagen"
+              (input)="changeIncludeTemplates(includeTemplates.value)">
+        <option value=true>sichtbar</option>
+        <option value=false>ausgeblendet</option>
+      </select>
+    </mat-form-field>
+
+  </article>
+
   <!-- Loading Animation -->
   <ng-template #loadingUserSettings>
     <mat-progress-bar mode="query"></mat-progress-bar>
@@ -46,7 +63,7 @@
   <article>
     <h2>Über eMeal - Menüplanung</h2>
     <p>eMeal ist eine freie Software des Cevi Züri 11 ({{copyrights}})</p>
-    <p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)<br />
+    <p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)<br/>
       Entwickler: <a href="mailto:eMeal-admin@zh11.ch">Cyrill Püntener v/o JPG</a></p>
   </article>
 </div>

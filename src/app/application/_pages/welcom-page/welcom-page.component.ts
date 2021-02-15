@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {AuthenticationService} from '../../_service/authentication.service';
 import {TemplateHeaderComponent as Header} from 'src/app/_template/template-header/template-header.component';
 import {User} from 'firebase/app';
+import {HelpService} from '../../_service/help.service';
 
 /**
  * WelcomPage of the eMeal appliction after signed in.
@@ -18,7 +19,7 @@ export class WelcomPageComponent implements OnInit {
   public currentUser: Observable<User>;
   public title: string;
 
-  constructor(public auth: AuthenticationService) {
+  constructor(public auth: AuthenticationService, public help: HelpService) {
 
     this.title = this.getRandTitle();
 

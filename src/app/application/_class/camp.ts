@@ -1,7 +1,7 @@
-import { FirestoreCamp } from '../_interfaces/firestoreDatatypes';
-import { DatabaseService } from '../_service/database.service';
-import { Day } from './day';
-import { ExportableObject, FirestoreObject } from './firebaseObject';
+import {FirestoreCamp} from '../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../_service/database.service';
+import {Day} from './day';
+import {ExportableObject, FirestoreObject} from './firebaseObject';
 
 /**
  * Repräsentiert ein Lager.
@@ -93,5 +93,8 @@ export class Camp extends FirestoreObject implements ExportableObject {
 
   }
 
+  isEqual(camp: Camp) {
+    return JSON.stringify(this.toFirestoreDocument()) === JSON.stringify(camp.toFirestoreDocument());
+  }
 
 }

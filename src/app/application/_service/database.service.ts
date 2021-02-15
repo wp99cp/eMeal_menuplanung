@@ -18,6 +18,7 @@ import {
   FirestoreDocument,
   FirestoreMeal,
   FirestoreRecipe,
+  FirestoreSettings,
   FirestoreSpecificMeal,
   FirestoreSpecificRecipe,
   FirestoreUser,
@@ -25,6 +26,7 @@ import {
 } from '../_interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {SettingsService} from './settings.service';
 
 
 /**
@@ -51,7 +53,8 @@ export class DatabaseService {
     private authService: AuthenticationService,
     private functions: AngularFireFunctions,
     private cloud: AngularFireStorage,
-    private router: Router) {
+    private router: Router,
+    private settings: SettingsService) {
 
     // used for automatically unsubscribe if the user changes the page, i.g. leaves the edit section.
     router.events
@@ -315,7 +318,7 @@ export class DatabaseService {
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-      doc.ref.update({'used_in_meals': firestore.FieldValue.arrayUnion(idToAdd)})
+      doc.ref.update({used_in_meals: firestore.FieldValue.arrayUnion(idToAdd)})
     ));
 
   }
@@ -496,19 +499,66 @@ export class DatabaseService {
    *    * TODO: auto unsubscription
 
 
-   * @returns observable list of all recipes form the current meal.
+   * @returns observable list of all accessable meals (includes viewer access)
    *
-   * @param mealId id of the current meal
-   * @param campId id of the current camp
    */
   public getAccessableRecipes(): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'])
-      .pipe(mergeMap(queryFn =>
-        this.requestCollection('recipes', queryFn)
-          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
-      ));
+    return this.settings.globalSettings
+      .pipe(take(1)) // only apply current settings
+      .pipe(mergeMap(settings => {
 
+        const accessLevels = settings.show_templates ?
+          ['editor', 'owner', 'collaborator', 'viewer'] :
+          ['editor', 'owner', 'collaborator'];
+
+        const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
+          .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+        // return only recipes created by the user; exclude templates and read only recipes
+        if (!settings.show_templates) {
+          return recipesCreatedByUsers;
+        }
+
+        const globalTemplates = this.requestCollection('recipes', ref =>
+          ref.where('access.all_users', 'in', ['viewer']))
+          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+        return combineLatest([recipesCreatedByUsers, globalTemplates])
+          .pipe(map(arr => arr.flat()));
+
+      }));
+
+  }
+
+  public getAccessableMeals(): Observable<Meal[]> {
+
+    return this.settings.globalSettings
+      .pipe(take(1)) // only apply current settings
+      .pipe(mergeMap(settings => {
+
+        const accessLevels = settings.show_templates ?
+          ['editor', 'owner', 'collaborator', 'viewer'] :
+          ['editor', 'owner', 'collaborator'];
+
+        const mealsCreatedByUsers = this.createAccessQueryFn(accessLevels)
+          .pipe(mergeMap(queryFn => this.requestCollection('meals', queryFn)))
+          .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+
+        // return only recipes created by the user; exclude templates and read only recipes
+        if (!settings.show_templates) {
+          return mealsCreatedByUsers;
+        }
+
+        const globalTemplates = this.requestCollection('meals', ref =>
+          ref.where('access.all_users', 'in', ['viewer']))
+          .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+
+        return combineLatest([mealsCreatedByUsers, globalTemplates])
+          .pipe(map(arr => arr.flat()));
+
+      }));
   }
 
   /**
@@ -753,11 +803,11 @@ export class DatabaseService {
 
    * @param firebaseObject
    */
-  public canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
+  public async canWrite(firebaseObject: FirestoreObject): Promise<boolean> {
 
     return new Promise(resolve => this.authService.getCurrentUser().subscribe(user =>
       resolve(
-        firebaseObject.getAccessData()[user.uid] !== null &&  // user isn't listed
+        firebaseObject.getAccessData()[user.uid] !== undefined &&  // user isn't listed
         firebaseObject.getAccessData()[user.uid] !== 'viewer' // if user is listed, user isn't a viewer
       )
     ));
@@ -811,6 +861,32 @@ export class DatabaseService {
 
   }
 
+
+  // *********************************************************************************************
+  // private methods
+  //
+  // TODO: Alle query functions in eine eigene Klasse auslagern
+  //
+  // *********************************************************************************************
+
+  public updateSettings(settings: FirestoreSettings) {
+
+    return new Promise(resolve =>
+      this.authService.getCurrentUser().subscribe(user =>
+        this.db.doc('users/' + user.uid + '/private/settings').set(settings).then(resolve)));
+
+  }
+
+  getPreparedMeals(documentId: string) {
+
+    return this.db.collectionGroup('specificMeals', query => query
+      .where('meal_gets_prepared', '==', true)
+      .where('used_in_camp', '==', documentId))
+      .snapshotChanges()
+      .pipe(FirestoreObject.createObjects<FirestoreSpecificMeal, SpecificMeal>(SpecificMeal));
+
+  }
+
   /**
    *
    * TODO: add description
@@ -823,14 +899,6 @@ export class DatabaseService {
       autoUnsubscription ? of(object).pipe(takeUntil(this.routerChanges)) : of(object));
 
   }
-
-
-  // *********************************************************************************************
-  // private methods
-  //
-  // TODO: Alle query functions in eine eigene Klasse auslagern
-  //
-  // *********************************************************************************************
 
   /**
    *
