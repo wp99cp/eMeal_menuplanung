@@ -30,7 +30,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ErrorPageComponent} from './error-page/error-page.component';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -73,6 +73,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
     AngularFirestore,
     AuthenticationService,
     AngularFireFunctions,
+    AngularFirestoreModule
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ChangeLogComponent } from './change-log.component';
 
@@ -6,7 +6,7 @@ describe('ChangeLogComponent', () => {
   let component: ChangeLogComponent;
   let fixture: ComponentFixture<ChangeLogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ChangeLogComponent ]
     })

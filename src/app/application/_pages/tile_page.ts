@@ -99,7 +99,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
 
   protected abstract deleteElement(element: T): void;
 
-  protected abstract async deleteConditions(element: T): Promise<boolean>;
+  protected abstract deleteConditions(element: T): Promise<boolean>;
 
   protected addButtonNew() {
 
