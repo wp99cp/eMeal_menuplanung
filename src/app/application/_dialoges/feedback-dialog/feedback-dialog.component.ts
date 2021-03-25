@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TemplateHeaderComponent as Header} from '../../../_template/template-header/template-header.component';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-feedback-dialog',
@@ -14,7 +15,8 @@ export class FeedbackDialogComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    public fireAuth: AngularFireAuth) {
 
     this.setHeaderInfo();
 
@@ -22,7 +24,6 @@ export class FeedbackDialogComponent implements OnInit {
       title: '',
       feedback: ''
     });
-
 
 
     const originalValues = {
@@ -49,29 +50,36 @@ export class FeedbackDialogComponent implements OnInit {
 
   }
 
+  public addFeedback(feedback: any) {
+
+    this.fireAuth.authState.subscribe(user => {
+
+      feedback.feedback += '<br> <br> User: ' + user.displayName + '  ' + user.email;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://emeal.zh11.ch/services/sendMailToTrello.php', true);
+
+      // Send the proper header information along with the request
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onreadystatechange = function() { // Call a function when the state changes.
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+          // Request finished. Do processing here.
+        }
+      };
+
+      xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
+
+    });
+
+
+  }
+
   /** setzt die HeaderInfos für die aktuelle Seite */
   private setHeaderInfo(): void {
 
     Header.title = 'Probleme melden! Feedback geben!';
     Header.path = ['Startseite', 'Feedback'];
-
-  }
-
-  public addFeedback(feedback: any) {
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://emeal.zh11.ch/services/sendMailToTrello.php', true);
-
-    // Send the proper header information along with the request
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onreadystatechange = function () { // Call a function when the state changes.
-      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-        // Request finished. Do processing here.
-      }
-    };
-
-    xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
 
   }
 
