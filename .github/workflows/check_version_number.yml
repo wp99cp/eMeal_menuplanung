@@ -1,12 +1,15 @@
-name: Continuous integration
-'on':
+name: check-version-number
+
+# See docu/Continuous Integration And_General_Tests.md for detailed information.
+on:
   pull_request:
-    branch:
+    branches:
       - master
 
 jobs:
-  version-check:
-    name: Build
+
+  check-version-number:
+    name: check-version-number
     runs-on: ubuntu-latest
 
     steps:
@@ -17,24 +20,34 @@ jobs:
         with:
           node-version: '12'
 
-      - name: Checl Version Number
+      # TODO: Check Version number of other components!
+
+      - name: Load Version of Latest Release
         id: check # This will be the reference for getting the outputs.
         uses: EndBug/version-check@v1
         with:
-          file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/package.json
+          file-name: ./frontend/package.json
+          file-url: https://raw.githubusercontent.com/wp99cp/eMeal_menuplanung/master/frontend/package.json
           static-checking: localIsNew
+
 
       - name: Log when unchanged
         if: steps.check.outputs.changed != 'true'
         run: exit 1
 
       - name: 'Comment PR'
-        uses: actions/github-script@0.3.0
+        uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: 'Version change found in commit ${{ steps.check.outputs.commit }}! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})' });
-
+            github.issues.createComment({
+                          issue_number, owner, repo,
+                          body: '- [X] Version changed since last release! Version of this release: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }}).'
+                        });
+            github.issues.addLabels({
+                         issue_number, owner, repo,
+                         labels: ['upcomming release']
+                       });
       - run: exit 0

@@ -1,0 +1,4 @@
+pylatex>=1.4.1
+google-cloud-storage
+firebase-admin>=4.5.2
+six>=1.13.0
