@@ -1,0 +1,221 @@
+rules_version = '2';
+
+// Security rules for eMeal Firebase Firestore Database
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // checks if the user is signed in
+    function isAuth(){
+        return request.auth != null;
+    }
+
+    // check's if the user has access to this document
+    // this function did not check the access level
+    function hasAccess() {
+        return resource.data.access[request.auth.uid] in ['editor', 'owner', 'collaborator' , 'viewer'] ||
+        resource.data.access['all_users'] in ['viewer'];
+    }
+
+    // check's if the user has access to write to this document
+    function canWrite() {
+        return resource.data.access[request.auth.uid] in ['editor', 'owner', 'collaborator'];
+    }
+
+    // check's if the user is the owner of this document
+    function isOwner(data) {
+        return data.access[request.auth.uid] == 'owner';
+    }
+
+    // user collecion
+    match /users/{userID} {
+
+        // checks if the changes to a user document are valid
+        function validChanges(){
+
+            return
+
+                // access data did not change
+                request.resource.data.access == resource.data.access &&
+
+                request.resource.data.displayName is string &&
+
+                // can't change it's email
+                request.resource.data.email == resource.data.email &&
+
+                // can't change it's own uid
+                request.resource.data.visibility in ['visible', 'hidden'] &&
+
+                // only this 3 fields are allowed
+                request.resource.data.keys().hasAll(['displayName', 'email', 'visibility']);
+
+        }
+
+        // A user only can edit it's own user document
+        // He can only change it's displayed name and the visibility-properity
+        allow update: if userID == request.auth.uid && validChanges();
+
+        // all visible user can be listed if the requesting user is signed in
+        allow list, get: if (resource.data.visibility == 'visible' || userID == request.auth.uid) && isAuth();
+
+    }
+
+    // user collecion
+    match /users/{userID}/private/{document=**} {
+
+    	allow read, write: if request.auth.uid == userID
+
+    }
+
+
+    // shared data can be read but not write to it
+    match /sharedData/{document=**} {
+
+        allow read, list: if isAuth();
+
+    }
+
+    // Help messages can be read by all users
+    match /sharedData/helpMessages/messages/{document=**} {
+
+        allow read, list;
+
+    }
+
+
+    // camps collection
+    match /camps/{campID} {
+
+        function validChanges(){
+
+            return
+                // participants fields are numbers
+                request.resource.data.camp_participants is number &&
+                request.resource.data.camp_vegetarians is number &&
+                request.resource.data.camp_leaders is number &&
+
+                // has name
+                request.resource.data.camp_name.size() > 0;
+
+        }
+
+        // every auth user can create camps on which he has access
+        allow create: if isAuth() && validChanges();
+        allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
+        allow list, get: if hasAccess();
+        allow delete: if isOwner(resource.data);
+
+        // has currently no access field
+        match /exports/{docID} {
+
+            allow read, list;
+            allow delete;
+
+        }
+
+    }
+
+
+    // group query for delete specificRecipes
+    match /{path=**}/specificRecipes/{specificRecipeId} {
+
+        // TODO: not save
+        allow read, list;
+
+    }
+
+    // group query for delete specificRecipes
+    match /{path=**}/specificMeals/{specificMealId} {
+
+        // TODO: not save
+        allow read, list;
+
+    }
+
+    // Meals
+    match /meals/{mealID} {
+
+        function validChanges(){
+            return
+                // has name
+                request.resource.data.meal_name is string &&
+                request.resource.data.meal_name.size() > 0;
+
+        }
+
+        allow create: if isAuth() && isOwner(request.resource.data) && validChanges();
+        allow list, get: if hasAccess();
+        allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
+        allow delete: if isOwner(resource.data); // TODO: if never used
+
+        // specific Meals
+        match /specificMeals/{specificMealID} {
+
+             function validChanges(){
+
+               return true;
+
+            }
+
+            allow create:  if isAuth() && validChanges();
+            allow get, list;
+            allow update: if  canWrite() && validChanges() && (request.resource.data.access == resource.data.access);
+            allow delete: if canWrite();
+
+        }
+
+    }
+
+    // recipes
+    match /recipes/{recipeID} {
+
+        function validChanges(){
+
+            return true;
+
+        }
+
+        allow create: if isAuth() && isOwner(request.resource.data) && validChanges();
+        allow list, get: if hasAccess();
+        allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
+        allow delete: if isOwner(resource.data); // TODO: if never used....
+
+
+		// overwrites
+        match /overwrites/{id} {
+
+            function validChanges(){
+
+                return true;
+
+            }
+
+            allow create:  if isAuth() && validChanges();
+            allow get, list: if hasAccess();
+            allow update: if  canWrite() && validChanges();
+            allow delete: if  canWrite();
+
+        }
+
+        // specific recipes
+        match /specificRecipes/{specificRecipeID} {
+
+            function validChanges(){
+
+                return true;
+
+            }
+
+            // TODO: add verification or access rules
+            allow create:  if isAuth() && validChanges();
+            allow get, list;
+            allow update: if  canWrite() && validChanges();
+            allow delete: if canWrite();
+
+        }
+
+
+    }
+
+ }
+
+}
