@@ -27,7 +27,7 @@ jobs:
         uses: EndBug/version-check@v1
         with:
           file-name: ./frontend/package.json
-          file-url: https://raw.githubusercontent.com/wp99cp/menuplanung/master/frontend/package.json
+          file-url: https://raw.githubusercontent.com/wp99cp/eMeal_menuplanung/master/frontend/package.json
           static-checking: localIsNew
 
 
