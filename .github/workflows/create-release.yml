@@ -46,6 +46,7 @@ jobs:
       - run: npm ci && npm run build:prod
         working-directory: frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
+        working-directory: frontend
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11_MENUPLANUNG }}'
