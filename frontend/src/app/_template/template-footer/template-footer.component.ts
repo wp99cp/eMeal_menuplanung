@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { version } from '../../../../package.json';
 import { copyrights } from '../../../../package.json';
+import buildInfo from '../../../build';
 
 @Component({
   selector: 'app-template-footer',
@@ -9,8 +10,8 @@ import { copyrights } from '../../../../package.json';
 })
 export class TemplateFooterComponent implements OnInit {
 
-  public version: string = version;
   public copyrights: string = copyrights;
+  public buildInfo = buildInfo;
 
   constructor() { }
 

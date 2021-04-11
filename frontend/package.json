@@ -5,9 +5,10 @@
   "copyrights": "© 2019 - 2021 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "build:prod": "ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
+    "start": "angular-build-info && ng serve",
+    "start:prod": "angular-build-info && ng serve --prod",
+    "build": "angular-build-info && ng build",
+    "build:prod": "angular-build-info && ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -30,6 +31,7 @@
     "@angular/router": "^12.0.0-next.0",
     "@angular/service-worker": "^12.0.0-next.0",
     "@schematics/angular": "^9.1.14",
+    "angular-build-info": "^2.0.1",
     "cross": "^1.0.0",
     "firebase": "^7.24.0",
     "moment": "^2.29.1",
