@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {AuthenticationService} from 'src/app/application/_service/authentication.service';
 import {TemplateHeaderComponent} from '../template-header/template-header.component';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
@@ -8,7 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {CurrentlyUsedMealService} from '../currently-used-meal.service';
 import {Camp} from '../../application/_class/camp';
 import {FeedbackDialogComponent} from '../../application/_dialoges/feedback-dialog/feedback-dialog.component';
-import {DatabaseService} from '../../application/_service/database.service';
+import {AuthenticationService} from '../../application/_service/authentication.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -17,11 +16,11 @@ import {DatabaseService} from '../../application/_service/database.service';
 })
 export class MainMenuComponent {
 
-  public static authServ: AuthenticationService;
 
   public lastCamp: Camp;
 
   constructor(private router: Router,
+              private auth: AuthenticationService,
               private location: Location,
               public helpService: HelpService,
               private dialog: MatDialog,
@@ -45,9 +44,7 @@ export class MainMenuComponent {
 
   public signOut() {
 
-    if (MainMenuComponent.authServ) {
-      MainMenuComponent.authServ.signOut();
-    }
+    this.auth.signOut();
 
   }
 

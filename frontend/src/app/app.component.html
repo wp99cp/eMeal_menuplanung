@@ -1,3 +1,10 @@
+<div *ngIf="!environment.production" style="background-color: #ec7b0f80; position: fixed;z-index: 2000;width: 100vw;height: 45px;top: 0;
+margin: 60px 280px;">
+  <span style="line-height: 45px;margin-left: 50px;font-size: 12px;font-weight: 600;color: #632501d1;">
+    Test Environment ({{build.timestamp}})| Version: {{build.version}}  |   Branch: {{build.git.branch}}
+    |   Commit-Hash: {{build.git.fullHash}}  | Database: {{environment.firebaseConfig.projectId}}</span>
+</div>
+
 <app-template-header></app-template-header>
 
 <app-main-menu></app-main-menu>

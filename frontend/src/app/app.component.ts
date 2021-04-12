@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { TemplateHeaderComponent } from './_template/template-header/template-header.component';
+import {Component} from '@angular/core';
+import {TemplateHeaderComponent} from './_template/template-header/template-header.component';
+import buildInfo from '../build';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +9,9 @@ import { TemplateHeaderComponent } from './_template/template-header/template-he
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
+
+  public build = buildInfo;
+  public environment = environment;
   title = 'eMeal';
 
   /** wird bei jedem Seitenwechsel ausgeführt */

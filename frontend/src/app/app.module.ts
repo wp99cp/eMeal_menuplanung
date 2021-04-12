@@ -31,6 +31,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
+import {AccessGuard} from './AccessGuard';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,7 @@ import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore'
     LandingPage,
     SignInComponent,
     SignInCallbackComponent,
-    ErrorPageComponent
+    ErrorPageComponent,
   ],
   imports: [
 
@@ -73,16 +74,14 @@ import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore'
     AngularFirestore,
     AuthenticationService,
     AngularFireFunctions,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AccessGuard
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 
-  constructor(auth: AuthenticationService) {
-
-    // Test on first load
-    auth.trackCredentials();
+  constructor() {
 
   }
 
