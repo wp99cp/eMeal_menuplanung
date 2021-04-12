@@ -222,14 +222,11 @@ import {SettingsService} from './_service/settings.service';
 
 export class ApplicationModule {
 
-  constructor(auth: AuthenticationService,
-              contextMenu: ContextMenuService,
+  constructor(contextMenu: ContextMenuService,
               shortCut: ShortcutService,
               helpService: HelpService,
               dialog: MatDialog) {
 
-    // Test on first load
-    auth.trackCredentials();
 
     // we want to use the contextMenuService in this module
     contextMenu.activate();
