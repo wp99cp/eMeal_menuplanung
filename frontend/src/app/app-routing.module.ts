@@ -4,8 +4,9 @@ import {MarkdownModule} from 'ngx-markdown';
 import {HttpClient} from '@angular/common/http';
 import {LandingPage} from './landingPage/landingPage.component';
 import {SignInComponent} from './sign-in/sign-in.component';
-import {SignInCallbackComponent} from "./sign-in-callback/sign-in-callback.component";
+import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.component';
 import {ErrorPageComponent} from './error-page/error-page.component';
+import {AccessGuard} from './AccessGuard';
 
 
 const routes: Routes = [
@@ -18,7 +19,9 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: SignInComponent
+    component: SignInComponent,
+    data: {notSignInRequired: true, redirectURL: '/app'},
+    canActivate: [AccessGuard]
   },
   {
     path: 'login/oauth-callback',
@@ -30,7 +33,9 @@ const routes: Routes = [
   },
   {
     path: 'app',
-    loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule)
+    loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule),
+    data: {requiresLogin: true, redirectURL: '/login'},
+    canActivate: [AccessGuard]
   },
   {
     path: '**',
@@ -39,7 +44,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+  imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
     MarkdownModule.forRoot({loader: HttpClient}),
     MarkdownModule.forChild()
   ],
