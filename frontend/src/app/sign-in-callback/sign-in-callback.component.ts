@@ -21,6 +21,11 @@ export class SignInCallbackComponent {
 
   async checkSignIn(auth: AuthenticationService, router: Router, counter) {
 
+    // Check if sign in with CeviDB
+    if (await auth.signInWithCeviDB()) {
+      return;
+    }
+
     // access auth state
     const isSignedIn = await new Promise(resolve =>
       auth.isSignedIn().subscribe(resolve)
