@@ -12,6 +12,7 @@ export class SignInCallbackComponent {
   // in ms
   private static intervall = 150;
   private static timeout = 2500;
+  private checkIfUsingCeviDB = true;
 
   constructor(auth: AuthenticationService, router: Router) {
 
@@ -22,8 +23,8 @@ export class SignInCallbackComponent {
   async checkSignIn(auth: AuthenticationService, router: Router, counter) {
 
     // Check if sign in with CeviDB
-    if (await auth.signInWithCeviDB()) {
-      return;
+    if (this.checkIfUsingCeviDB && await auth.signInWithCeviDB()) {
+      this.checkIfUsingCeviDB = false;
     }
 
     // access auth state
