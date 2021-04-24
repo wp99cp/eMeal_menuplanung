@@ -65,7 +65,7 @@
         <input name="current-password" type="password" #password matInput>
       </mat-form-field>
     </div>
-    <button mat-raised-button (click)="auth.signIn(username.value, password.value)">Anmelden</button>
+    <button mat-raised-button (click)="auth.signIn(username.value, password.value)" routerLink="/login/oauth-callback">Anmelden</button>
   </div>
 
 </div>
