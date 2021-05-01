@@ -5,8 +5,8 @@
   "copyrights": "© 2019 - 2021 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
-    "start": "angular-build-info && ng serve",
-    "start:prod": "angular-build-info && ng serve --prod",
+    "start": "angular-build-info && ng serve --ssl",
+    "start:prod": "angular-build-info && ng serve --prod --ssl",
     "build": "angular-build-info && ng build",
     "build:prod": "angular-build-info && ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
     "test": "ng test",
