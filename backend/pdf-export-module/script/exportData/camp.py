@@ -1,5 +1,3 @@
-from datetime import timezone, timedelta
-
 import firebase_admin
 from firebase_admin import firestore, credentials
 from pylatex import NoEscape
@@ -256,10 +254,14 @@ class Camp(object):
             meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(meal.get(
                 'meal_weekview_name') + r' \newline ')
             if meal.get('meal_gets_prepared'):
-                meal_weekview.get('Vorbereiten')[
-                    day_as_dates.index(meal.get('meal_prepare_date'))] += \
-                    NoEscape(meal.get('meal_weekview_name') + r"  \newline \tiny \textit{für " +
-                             meal.get('meal_prepare_date').strftime("%A %d. %b %Y") + r'}')
+
+                prepare_date = meal.get('meal_prepare_date')
+
+                if prepare_date in meal_weekview.get('Vorbereiten'):
+                    day_index = day_as_dates.index(prepare_date)
+                    meal_weekview.get('Vorbereiten')[day_index] += \
+                        NoEscape(meal.get('meal_weekview_name') + r"  \newline \tiny \textit{für " +
+                                 meal.get('meal_prepare_date').strftime("%A %d. %b %Y") + r'}')
 
         return meal_weekview
 

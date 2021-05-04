@@ -49,7 +49,7 @@ def generate_document(parts):
     document.packages.add(Package('babel', options='german'))
 
     # camp object that stores the exported date
-    camp = Camp('WRhzcGYImUWC1DV3MPaf', 'CKsbjuHkJQUstW1YULeAepDe9Wl1')
+    camp = Camp('16fXu6siwVDX1OOb38P3', 'CKsbjuHkJQUstW1YULeAepDe9Wl1')
 
     # add sections according to export settings
     for part in parts:
