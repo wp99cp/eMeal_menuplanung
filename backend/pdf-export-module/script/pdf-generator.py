@@ -82,10 +82,12 @@ def main():
     # generate document form parts
     document = generate_document(parts)
 
-    # page style, page numbers, etc.
+    # page style, font, page numbers, etc.
     document.packages.add(Package('fancyhdr'))
+    document.packages.add(Package('helvet'))
     document.append(Command('pagestyle', arguments='plain'))
     document.append(Command('renewcommand', arguments=Command('headrulewidth'), extra_arguments='0pt'))
+    document.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
 
     # create PDF file
     dir_path = os.path.dirname(os.path.realpath(__file__))
