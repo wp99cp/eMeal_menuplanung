@@ -32,6 +32,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AccessGuard} from './AccessGuard';
+import {DateAdapter} from "@angular/material/core";
+import {SwissDateAdapter} from "./utils/format-datapicker";
 
 @NgModule({
   declarations: [
@@ -75,7 +77,10 @@ import {AccessGuard} from './AccessGuard';
     AuthenticationService,
     AngularFireFunctions,
     AngularFirestoreModule,
-    AccessGuard
+    AccessGuard,
+    SwissDateAdapter,
+    {provide: DateAdapter, useClass: SwissDateAdapter},
+
   ],
   bootstrap: [AppComponent]
 })

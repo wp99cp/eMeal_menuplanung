@@ -10,7 +10,7 @@ Die Anbindung von Google Firebase (Firestore) und das Webinterface ermöglichen 
 aller Rezepte, Lager und Anlässen von mehreren Benutzern über alle Gerätetypen hinweg.
 
 eMeal Menüplanung wird vom Cevi Züri 11 unter der Leitung von Cyrill Püntener v/o JPG (jpg@zh11.ch) 
-entwickelt. Der Quellcode ist unter der GPL-3.0 Lizenz frei verfügbar. Der Cevi Züri 11 hostet eine 
+entwickelt. Der Quellcode ist unter der AGPL-3.0 Lizenz frei verfügbar. Der Cevi Züri 11 hostet eine 
 Instanz auf https://eMeal.zh11.ch.
 
 ### Hilfe und Anleitungen

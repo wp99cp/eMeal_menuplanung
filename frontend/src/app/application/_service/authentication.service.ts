@@ -45,7 +45,6 @@ export class AuthenticationService {
   signInWithGoogle() {
 
     this.location.replaceState('login/oauth-callback');
-
     this.fireAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
 
   }
@@ -54,15 +53,15 @@ export class AuthenticationService {
 
     // check if it's an oauth-callback
     if (!this.location.path().includes('/oauth-callback')) {
-      return;
+      return false;
     }
 
-    this.route.queryParams.subscribe(pars => {
+    return new Promise<boolean>(res => this.route.queryParams.subscribe(pars => {
 
       const code = pars.code;
 
       if (!code) {
-        return;
+        res(false);
       }
 
       console.log(code);
@@ -76,11 +75,12 @@ export class AuthenticationService {
         const customToken = json.data;
         await this.fireAuth.auth.signInWithCustomToken(customToken);
 
+        res(true);
+
       });
 
 
-    });
-
+    }));
 
   }
 

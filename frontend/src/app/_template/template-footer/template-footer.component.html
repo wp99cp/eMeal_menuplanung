@@ -3,33 +3,42 @@
   <div class="footer-menu">
 
     <div class="submenu">
-      <h4>Erklärungen & Ideen</h4>
+      <h4>Erklärungen</h4>
       <span class="clickable" routerLink="/infos">Über eMeal - Menüplanung</span>
-      <span class="clickable" routerLink="/login">Anmelden</span>
-      <span><br></span>
-      <span><a href="https://wiki.cevi.ch/index.php/Kategorie:Rezept">Rezeptsammlung</a></span>
-      <span><a href="https://wiki.cevi.ch/index.php/Lagerk%C3%BCche">Informationen zur Lagerküche</a></span>
-    </div>
+      <span class="clickable" routerLink="/infos/hilfe">Hilfe und Anleitungen</span>
 
-    <hr />
-
-    <div class="submenu">
-      <h4>Kontakt & Hilfe</h4>
-      <span class="clickable" routerLink="/infos/hilfe">Oft gestellte Fragen</span>
       <span><br></span>
+      <h4>Kontakt</h4>
       <span class="clickable" routerLink="infos/kontakt">Kontakt </span>
       <span class="clickable" routerLink="infos/datenschutz">Datenschutzbestimmungen</span>
       <span class="clickable" routerLink="infos/impressum">Impressum</span>
+
     </div>
 
-    <hr />
+    <hr/>
+
+    <div class="submenu">
+      <h4>Ideen & Rezepte</h4>
+      <span><a href="https://www.lagerkueche.ch/bestellung">Kochbuch: Feine Lagerküche</a></span>
+      <span><a href="https://wiki.cevi.ch/index.php/Kategorie:Rezept">Rezeptsammlung</a></span>
+
+      <span><br></span>
+      <h4>Hilfsmittel zur Lagerküche</h4>
+      <span><a href="https://wiki.cevi.ch/index.php/Lagerk%C3%BCche">Tipps und Tricks</a></span>
+      <span><a
+        href="https://www.jugendundsport.ch/content/jus-internet/de/sportarten/lagersport-trekking-uebersicht/aus-und-weiterbildung/_jcr_content/contentPar/tabs_copy/items/dokumente/tabPar/downloadlist_2028361_521363757/downloadItems/1229_1460466353407.download/merkblatt_kochen_im_lager_d.pdf">Merkblatt Kochen im Lager</a></span>
+
+    </div>
+
+    <hr/>
 
     <div class="submenu">
       <h4>Cevi Züri 11</h4>
       <span><a href="https://zh11.ch/ueber-uns">Cevi Züri 11</a></span>
       <span><a href="https://zh11.ch/material">Materialvermietung</a></span>
-      <span><a href="https://emeal.zh11.ch/infos">eMeal - Menüplanung</a></span>
       <span><br></span>
+
+      <h4>weiteres zum Cevi</h4>
       <span><a href="https://www.cevi.ch/home/">Cevi Schweiz</a></span>
       <span><a href="https://app.programmplaner.ch/">Programmplaner</a></span>
 
@@ -40,6 +49,9 @@
 </div>
 
 <footer class="footer">
-  <span><a href="https://github.com/wp99cp/menuplanung">Aktuelle Version: {{buildInfo.version}} ({{buildInfo.git.hash}})</a></span>
+  <span><b>Aktuelle Version:</b> {{buildInfo.version}}</span>
+  <span>(Build: {{buildInfo.git.hash}} vom {{ buildDate}})</span>
+  <span><a href="https://github.com/wp99cp/eMeal_menuplanung">Source code available under AGPL.</a></span>
+  <span><br></span>
   <span>{{copyrights}}</span>
 </footer>

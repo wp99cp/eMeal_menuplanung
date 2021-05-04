@@ -3,7 +3,7 @@
 <div class="meal-search-table">
 
   <mat-form-field class="mat-form-field full-width">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field" autocomplete="off">
   </mat-form-field>
 
 
@@ -54,8 +54,8 @@
             <option value="Zmorgen">Zmorgen</option>
             <option value="Zmittag">Zmittag</option>
             <option value="Znacht">Znacht</option>
-            <option value="Zvieri">Zvieri</option>
             <option value="Znüni">Znüni</option>
+            <option value="Zvieri">Zvieri</option>
             <option value="Leitersnack">Leitersnack</option>
           </select>
         </mat-form-field>

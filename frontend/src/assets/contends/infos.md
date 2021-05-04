@@ -42,4 +42,8 @@ eMeal - Menüplanung befindet sich zur Zeit noch in der Entwicklung. Es gibt abe
 
 Bereits seit einigen Jahren plante der [Cevi Züri 11](https://zh11.ch/) seine Lagerküche mithilfe eines Excel-Sheets. Dieses Excel fasst unter anderem die Zutaten automatisch zu einer Einkaufsliste für das gesamte Lager zusammen. Dies funktionierte gut, allerdings dauerten die aufwendigen Berechnungen jeweils sehr lange.
 
-Bald schon entstand die Idee, eine eigene Software zu schreiben. So entstand die Web-Applikation eMeal, die es von nun an ermöglicht Lager online zu planen. eMeal wird zur Zeit von Cyrill Püntener v/o JPG entwickelt und unterhalten. Für Auskünfte stehe ich gerne zur Verfügung.
+Bald schon entstand die Idee, eine eigene Software zu schreiben. 
+So entstand die Web-Applikation eMeal, die es von nun an ermöglicht Lager online zu planen. 
+eMeal wird zur Zeit von Cyrill Püntener v/o JPG entwickelt und unterhalten. 
+Der [Quellcode von eMeal - Menüplanung](https://github.com/wp99cp/eMeal_menuplanung) ist open-source und unter der AGPL-Lizenz frei verfügbar. 
+Für Auskünfte stehe ich gerne zur Verfügung.

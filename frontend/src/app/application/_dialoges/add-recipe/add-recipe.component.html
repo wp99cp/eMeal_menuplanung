@@ -3,7 +3,7 @@
 <div class="meal-search-table">
 
   <mat-form-field class="mat-form-field full-width">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field" autocomplete="off">
   </mat-form-field>
 
   <table mat-table [dataSource]="recipesTableSource" matSort matSortActive="title" matSortDirection="asc"
