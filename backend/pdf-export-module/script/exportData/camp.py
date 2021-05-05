@@ -253,17 +253,21 @@ class Camp(object):
             meal_weekview[meal_type] = [NoEscape('')] * len(day_as_dates)
 
         for meal in self.__specific_meals:
-            meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(meal.get(
-                'meal_weekview_name') + r' \newline ')
+            meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(
+                r'\centering ' + meal.get('meal_weekview_name') + r' \par ')
+
             if meal.get('meal_gets_prepared'):
 
                 prepare_date = meal.get('meal_prepare_date')
 
-                if prepare_date in meal_weekview.get('Vorbereiten'):
+                if prepare_date in day_as_dates:
                     day_index = day_as_dates.index(prepare_date)
                     meal_weekview.get('Vorbereiten')[day_index] += \
-                        NoEscape(meal.get('meal_weekview_name') + r"  \newline \tiny \textit{für " +
-                                 (meal.get('meal_prepare_date')+ timedelta(hours=2)).strftime("%A %d. %b %Y") + r'}')
+                        NoEscape(
+                            r'\centering ' + meal.get(
+                                'meal_weekview_name') + r" \par \vspace{0.15cm} \centering {\tiny \textit{für " +
+                            (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime(
+                                "%A") + r'}} \vspace{0.20cm} \par')
 
         return meal_weekview
 
@@ -284,7 +288,7 @@ class Camp(object):
             self.__fetch_camp_meta_data()
 
         def date_to_str(day):
-            return (day['day_date'] + timedelta(hours=2)).strftime("%A %d. %b %Y")
+            return (day['day_date'] + timedelta(hours=2)).strftime("%A, %d. %b %Y")
 
         days = list(map(date_to_str, self.__camp_meta_info.get('days')))
 

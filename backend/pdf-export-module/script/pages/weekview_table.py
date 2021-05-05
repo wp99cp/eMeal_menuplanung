@@ -1,7 +1,6 @@
+from exportData.camp import Camp
 from pylatex import NoEscape, Package, Tabularx, Command, Document
 from pylatex.base_classes import Environment, Arguments
-
-from exportData.camp import Camp
 
 
 class Sidewaystable(Environment):
@@ -33,10 +32,10 @@ def weekview_table(doc: Document, camp: Camp):
         doc.append(Command('caption*', arguments=Arguments(NoEscape(r'\textbf{Wochenplan Sommerlager 2021}'))))
         doc.append(Command('centering'))
         doc.append(Command('newcolumntype', arguments='Y',
-                           extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
+                           extra_arguments=Arguments(NoEscape(r'>{\arraybackslash}X'))))
         doc.append(Command('newcommand*'))
         doc.append(Command('rot', arguments=Command('rotatebox', options='origin=c', arguments='270')))
-        doc.append(Command('renewcommand', arguments=Command('arraystretch'), extra_arguments='2.25'))
+        doc.append(Command('renewcommand', arguments=Command('arraystretch'), extra_arguments='2.5'))
 
         column_template = r'| >{\bfseries}Y |'
         for _ in days:
@@ -46,7 +45,7 @@ def weekview_table(doc: Document, camp: Camp):
 
         with doc.create(Tabularx(NoEscape(column_template),
                                  width_argument=NoEscape(r'1.15\textwidth'))) as table_content:
-            # reset with since we use custom columntypes
+            # reset width, since we use custom columntypes
             table_content.width = len(days) + 1
 
             # add header
@@ -60,7 +59,7 @@ def weekview_table(doc: Document, camp: Camp):
 
             # add meals
             for meal_name in meals.keys():
-                table_content.add_row([meal_name] + meals[meal_name])
+                table_content.add_row([NoEscape(r'\centering ' + meal_name + r' \par ')] + meals[meal_name])
                 table_content.add_hline()
 
         doc.append(Command('thisfloatpagestyle', arguments='empty'))

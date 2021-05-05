@@ -2,15 +2,14 @@ import locale
 import logging
 import os
 
-from exportData.camp import Camp
 from google.cloud import storage
 from google.oauth2 import service_account
-from pages.meals import add_meals
-from pages.shopping_list import add_shopping_list
-from pages.title_page import add_title_page
-from pages.weekview_table import weekview_table
 from pylatex import Command, NoEscape, Package
 from pylatex import Document
+
+from exportData.camp import Camp
+from pages.title_page import add_title_page
+from pages.weekview_table import weekview_table
 from telegraf_logger import TelegrafLogger
 
 
@@ -74,9 +73,8 @@ def set_up_logging():
 
 
 def main():
-
     # global settings
-    parts = [add_title_page, weekview_table, add_shopping_list, add_meals]  # [add_meals]
+    parts = [add_title_page, weekview_table, ]  # add_shopping_list, add_meals]  # [add_meals]
 
     set_up_logging()
 
