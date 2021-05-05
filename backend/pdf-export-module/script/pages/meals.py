@@ -1,7 +1,8 @@
-from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
-from pylatex.base_classes import Environment
+import datetime
 
 from exportData.camp import Camp
+from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
+from pylatex.base_classes import Environment
 
 
 class Subtable(Environment):
@@ -27,7 +28,9 @@ def add_meals(doc: Document, camp: Camp):
         # general Infos
         with doc.create(Description()) as enum:
             if meal['meal_gets_prepared']:
-                enum.add_item('Vorbereiten:', 'am ' + meal['meal_prepare_date'].strftime("%A %d. %b %Y"))
+                enum.add_item('Vorbereiten:',
+                              'am ' + (meal['meal_prepare_date'] + datetime.timedelta(hours=2)).strftime(
+                                  "%A %d. %b %Y"))
 
             if meal['meal_description'] != '':
                 enum.add_item('Beschreibung / Notizen:', meal['meal_description'])
@@ -54,7 +57,8 @@ def add_header(doc, meal):
             # add header
             table_content.add_row([
                 NoEscape(r'\LARGE \textbf{' + meal['meal_name'] + '}'),
-                NoEscape(r'\color{gray} \large \textbf{' + meal['meal_date'].strftime("%a, %d. %b") + '}')])
+                NoEscape(r'\color{gray} \large \textbf{' + (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
+                    "%a, %d. %b") + '}')])
 
             table_content.add_row(
                 [NoEscape(r'\small \textit{(' + meal['meal_weekview_name'] + ')}'),

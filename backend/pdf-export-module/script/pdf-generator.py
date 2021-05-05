@@ -74,6 +74,7 @@ def set_up_logging():
 
 
 def main():
+
     # global settings
     parts = [add_title_page, weekview_table, add_shopping_list, add_meals]  # [add_meals]
 

@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import firebase_admin
 from firebase_admin import firestore, credentials
 from pylatex import NoEscape
@@ -261,7 +263,7 @@ class Camp(object):
                     day_index = day_as_dates.index(prepare_date)
                     meal_weekview.get('Vorbereiten')[day_index] += \
                         NoEscape(meal.get('meal_weekview_name') + r"  \newline \tiny \textit{für " +
-                                 meal.get('meal_prepare_date').strftime("%A %d. %b %Y") + r'}')
+                                 (meal.get('meal_prepare_date')+ timedelta(hours=2)).strftime("%A %d. %b %Y") + r'}')
 
         return meal_weekview
 
@@ -282,7 +284,7 @@ class Camp(object):
             self.__fetch_camp_meta_data()
 
         def date_to_str(day):
-            return day['day_date'].strftime("%A %d. %b %Y")
+            return (day['day_date'] + timedelta(hours=2)).strftime("%A %d. %b %Y")
 
         days = list(map(date_to_str, self.__camp_meta_info.get('days')))
 

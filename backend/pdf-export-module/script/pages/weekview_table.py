@@ -30,7 +30,7 @@ def weekview_table(doc: Document, camp: Camp):
         doc.append(Command('small'))
 
         # define table look
-        doc.append(Command('caption*', arguments=Arguments(NoEscape(r'\textbf{Wochenplan Sommerlager 2021} Achtung Datum falsch!!!'))))
+        doc.append(Command('caption*', arguments=Arguments(NoEscape(r'\textbf{Wochenplan Sommerlager 2021}'))))
         doc.append(Command('centering'))
         doc.append(Command('newcolumntype', arguments='Y',
                            extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
