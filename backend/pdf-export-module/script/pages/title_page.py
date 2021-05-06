@@ -1,9 +1,10 @@
-from pylatex import Package, Command, NoEscape, SmallText, Subsubsection, Document
+from argparse import Namespace
 
 from exportData.camp import Camp
+from pylatex import Package, Command, NoEscape, SmallText, Subsubsection, Document
 
 
-def add_title_page(doc: Document, camp: Camp):
+def add_title_page(doc: Document, camp: Camp, args: Namespace):
     # packages used for this page
     doc.packages.append(Package('datetime'))
     doc.packages.append(Package('graphicx'))

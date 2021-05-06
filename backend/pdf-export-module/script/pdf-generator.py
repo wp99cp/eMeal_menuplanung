@@ -11,7 +11,6 @@ from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
 from exportData.camp import Camp
-from pages.meals import add_meals
 from pages.shopping_list import add_shopping_list
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
@@ -71,7 +70,7 @@ def generate_document(parts: List, args: argparse.Namespace):
     # add sections according to export settings
     for part in parts:
         logging.log(logging.INFO, 'append ' + part.__name__)
-        part(document, camp)
+        part(document, camp, args)
         document.append(NoEscape(r'\newpage'))
 
     return document
@@ -97,7 +96,7 @@ def main():
     # TODO: check user quota
 
     # global settings
-    parts = [add_title_page, weekview_table, add_shopping_list, add_meals]
+    parts = [add_title_page, weekview_table, add_shopping_list]  # , add_meals]
 
     # generate document form parts
     document = generate_document(parts, args)
@@ -130,10 +129,9 @@ def parse_args():
     # Adding optional arguments
     parser.add_argument('--mp', help='Includes meals that get prepared in the weekview', default=False,
                         action='store_true')
-
-    # Adding optional arguments
     parser.add_argument('--dfn', help='Uses a default file name: /export.pdf (Should only be used for debugging).',
                         default=False, action='store_true')
+    parser.add_argument('--lscp', help='Prints the weekview in landscape', default=False, action='store_true')
 
     # Read arguments from command line
     args = parser.parse_args()

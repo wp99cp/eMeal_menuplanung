@@ -1,4 +1,5 @@
 import datetime
+from argparse import Namespace
 
 from exportData.camp import Camp
 from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
@@ -9,7 +10,7 @@ class Subtable(Environment):
     escape = False
 
 
-def add_meals(doc: Document, camp: Camp):
+def add_meals(doc: Document, camp: Camp, args: Namespace):
     doc.packages.append(Package('xcolor'))
     doc.packages.append(Package('tabularx'))
     doc.packages.append(Package('colortbl'))

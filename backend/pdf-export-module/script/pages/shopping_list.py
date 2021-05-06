@@ -1,3 +1,5 @@
+from argparse import Namespace
+
 from pylatex import Section, Command, Package, Description, Subsubsection, Document
 from pylatex.base_classes import Environment
 
@@ -14,7 +16,7 @@ class Spacing(Environment):
     content_separator = "\n"
 
 
-def add_shopping_list(doc: Document, camp: Camp):
+def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
     # content for this page
     doc.append(Section('Einkaufsliste', numbering=False))
 
