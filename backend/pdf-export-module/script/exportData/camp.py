@@ -1,3 +1,4 @@
+from argparse import Namespace
 from datetime import timedelta
 
 import firebase_admin
@@ -24,9 +25,12 @@ class Camp(object):
 
     """
 
-    def __init__(self, camp_id, user_id):
-        self.camp_id = camp_id
-        self.user_id = user_id
+    def __init__(self, args: Namespace):
+
+        self.camp_id = args.camp_id
+        self.user_id = args.user_id
+
+        self.args = args
 
         self.__user_data = None
         self.__user_data_fetched = False
@@ -233,10 +237,11 @@ class Camp(object):
             map(lambda m: m.get('meal_used_as'), self.__specific_meals))
 
         # add Vorbereiten if used
-        for meal in self.__specific_meals:
-            if meal.get('meal_gets_prepared'):
-                self.__used_meal_types += ['Vorbereiten']
-                break
+        if self.args.mp:
+            for meal in self.__specific_meals:
+                if meal.get('meal_gets_prepared'):
+                    self.__used_meal_types += ['Vorbereiten']
+                    break
 
         self.__used_meal_types = sorted(self.__used_meal_types, key=lambda x: meal_types.index(x))
 
@@ -256,7 +261,7 @@ class Camp(object):
             meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(
                 r'\centering ' + meal.get('meal_weekview_name') + r' \par ')
 
-            if meal.get('meal_gets_prepared'):
+            if meal.get('meal_gets_prepared') and self.args.mp:
 
                 prepare_date = meal.get('meal_prepare_date')
 
@@ -265,7 +270,8 @@ class Camp(object):
                     meal_weekview.get('Vorbereiten')[day_index] += \
                         NoEscape(
                             r'\centering ' + meal.get(
-                                'meal_weekview_name') + r" \par \vspace{0.15cm} \centering {\tiny \textit{für " +
+                                'meal_weekview_name') + r" \par \vspace{0.1cm} "
+                                                        r" {\tiny \textit{für " +
                             (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime(
                                 "%A") + r'}} \vspace{0.20cm} \par')
 
