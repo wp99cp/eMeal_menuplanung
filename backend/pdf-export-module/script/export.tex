@@ -15,11 +15,14 @@
 \usepackage[tableposition=top]{caption}%
 \usepackage{float}%
 \usepackage{pdflscape}%
+\usepackage{pifont}%
 \usepackage{multicol}%
 \usepackage{enumitem}%
 \usepackage{setspace}%
-\usepackage{pifont}%
 \usepackage{tabularx}%
+\usepackage{colortbl}%
+\usepackage{subcaption}%
+\usepackage[textfont={large, bf},labelformat=empty,justification=raggedright]{caption}%
 %
 \floatpagestyle{plain}%
 \pagestyle{plain}%
@@ -83,6 +86,22 @@ Dieses Dokument wurde automatisch erstellt. Obwohl uns Qualität und Richtigkeit
 %
 \end{landscape}%
 \newpage%
+\section*{Feedback der Teilnehmer zum Essen}%
+\label{sec:FeedbackderTeilnehmerzumEssen}%
+
+%
+Meine Nachricht%
+\vspace{2cm} \newline %
+\begin{tabularx}{\textwidth}{X c c c c c}%
+Gefüllte Kartoffeln mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Gefüllte Tomaten&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Spaghetti mit Gemüsecarbonara inkl. Dessert&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Polenta, Gulasch und Bohnen&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Knöpfli Alfredo mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Taboulé mit Brot&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+\end{tabularx}%
+\vspace{2cm} \newline %
+\newpage%
 \section*{Einkaufsliste}%
 \label{sec:Einkaufsliste}%
 
@@ -109,20 +128,1079 @@ the item%
 \end{description}
 \end{multicols}%
 \newpage%
-\section*{Feedback zum Essen}%
-\label{sec:FeedbackzumEssen}%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Taboulé mit Brot}&\color{gray} \large \textbf{Sa., 24. Jul}\\%
+\small \textit{(Taboulé, Brot)}&\color{gray} \large \textbf{Zmittag}\\%
+\hline%
+\end{tabularx}%
+\end{table}
 
 %
-Ich hoffe dir hat das Essen bei uns im Lager gefallen. Damit wir im nächsten Lager noch feiner kochen können, bitten wir dich die folgende Umfrage auszufüllen. Bewerte die folgenden Mahlzeiten von \ding{172} bis \ding{176} (schrecklich bis ausgezeichnet). %
-\vspace{2cm} \newline %
-\begin{tabularx}{\textwidth}{X c c c c c}%
-Gefüllte Kartoffeln mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
-Gefüllte Tomaten&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
-Spaghetti mit Gemüsecarbonara inkl. Dessert&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
-Polenta, Gulasch und Bohnen&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
-Knöpfli Alfredo mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
-Taboulé mit Brot&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+\begin{description}%
+\item[Vorbereiten:]%
+am Freitag 23. Jul 2021%
+\item[Beschreibung / Notizen:]%
+ohne Sauce%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Taboulé (Couscous) (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Couscous, nach Anleitung zubereiten, in eine grosse Schüssel geben, restliche Zutaten zum Couscous in die Schüssel geben. \\%
 \end{tabularx}%
-\vspace{2cm} \newline %
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+60.0&600.0&g&Couscous&\\%
+\hline%
+0.4&4.0&Stk.&Tomaten&(waschen, in Würfel schneiden)\\%
+\hline%
+0.1&1.0&Stk.&Peperoni, grün& (entkernen, in Würfel schneiden)\\%
+\hline%
+0.2&2.0&Stk.&Rüebli&(rüsten, waschen, scheibeln)\\%
+\hline%
+0.1&1.0&Stk.&Gurke&(waschen, längs vierteln, scheibeln)\\%
+\hline%
+0.1&1.0&Büchse&Mais&\\%
+\hline%
+75.0&750.0&g&Brot&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 5 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &mit Senf\\%
+Notizen:&Alles kräftig verrühren und in eine Petflasche abfüllen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{5 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouillon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&Olivenöl&\\%
+\hline%
+0.5&2.5&EL&Senf&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 5 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: & mit Mayonnaise, Französisch\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{5 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouilllon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&ÖL&\\%
+\hline%
+0.1&0.5&Tube&Mayonnaise&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Muffins}&\color{gray} \large \textbf{Sa., 24. Jul}\\%
+\small \textit{(Muffins)}&\color{gray} \large \textbf{Zvieri}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\begin{description}%
+\item[Beschreibung / Notizen:]%
+als Zvieri%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Muffins (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &als Zvieri\\%
+Notizen:&Muffins können bereits Zuhause vorbereitet werden. Alternativ können auch Madeleines gekauft werden.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+2.0&20.0&Stk.&Muffin&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Knöpfli Alfredo mit Salat}&\color{gray} \large \textbf{Sa., 24. Jul}\\%
+\small \textit{(Knöpfli Alfredo mit Salat)}&\color{gray} \large \textbf{Znacht}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Knöpfli Alfredo (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Knöpfli in reichlich Salzwasser al dente kochen, abschütten.\newline%
+2 EL Bratbutter erhitzen, Schinkenwürfeli darin anbraten. \newline%
+2 EL Maizena mit Rahm verrühren, zum Schinken giessen, unter Rühren aufkochen, mit 1 – 1 ½ EL Bouillonpulver, Pfeffer und Muskatnuss würzen. Vom Feuer nehmen und den Reibkäse unterrühren. Abschmecken. Knöpfli und Peterli dazugeben, vermischen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.1&1.0&kg&getrocknete Knöpfli&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+0.2&2.0&EL&Bratbutter&\\%
+\hline%
+30.0&300.0&g&Schinkenwüfeli&\\%
+\hline%
+0.1&1.0&l&Halbrahm&\\%
+\hline%
+0.2&2.0&EL&Maizena&\\%
+\hline%
+0.15&1.5&EL&Bouillonpulver&\\%
+\hline%
+&&&Peffer&\\%
+\hline%
+&&&Muskatnuss &\\%
+\hline%
+0.1&1.0&Bund&Peterli&gehackt\\%
+\hline%
+25.0&250.0&g&Reibkäse&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 5 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &mit Senf\\%
+Notizen:&Alles kräftig verrühren und in eine Petflasche abfüllen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{5 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouillon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&Olivenöl&\\%
+\hline%
+0.5&2.5&EL&Senf&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 5 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: & mit Mayonnaise, Französisch\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{5 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouilllon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&ÖL&\\%
+\hline%
+0.1&0.5&Tube&Mayonnaise&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Kopfsalat (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &ohne Sauce\\%
+Notizen:&waschen, zerkleinern, in eine Schüssel geben. Salatsauce dazugeben und mischen\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.25&2.5&Stk.&Kopfsalat&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Frühstück (Zopf)}&\color{gray} \large \textbf{So., 25. Jul}\\%
+\small \textit{(Frühstück (Zopf))}&\color{gray} \large \textbf{Zmorgen}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Frühstück mit Zopf (für 10 Per.)}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+90.0&900.0&g&Zopf&\\%
+\hline%
+50.0&500.0&g&Brot&dunkel\\%
+\hline%
+20.0&200.0&g&Butter&\\%
+\hline%
+20.0&200.0&g&Konfitüre&\\%
+\hline%
+60.0&600.0&g&verschiedene Käse&\\%
+\hline%
+0.25&2.5&l&Milch&\\%
+\hline%
+&&&Schoggipulver&\\%
+\hline%
+0.2&2.0&l&Orangensaft&\\%
+\hline%
+&&&Teebeutel&\\%
+\hline%
+&&&Zucker&\\%
+\hline%
+1.0&10.0&Stk.&Früchte&nach belieben\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Früchte, Brot}&\color{gray} \large \textbf{So., 25. Jul}\\%
+\small \textit{(Früchte, Brot)}&\color{gray} \large \textbf{Znüni}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\begin{description}%
+\item[Beschreibung / Notizen:]%
+al Zvieri oder Znüni geeignet%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Polenta, Gulasch und Bohnen}&\color{gray} \large \textbf{So., 25. Jul}\\%
+\small \textit{(Polenta, Gulasch und Bohnen)}&\color{gray} \large \textbf{Zmittag}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gulasch (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Öl erhitzen, Fleisch, Zwiebeln und Knoblauch dämpfen, entstandene Flüssigkeit etwas einkochen lassen. Gewürze über das Fleisch streuen, Wasser mit Bouillonpulver dazugeben. Alles ca. 1 ½ Std. auf kleinem Feuer köcheln lassen. Peperoni, Pellati und das Herausgelöste aus den Tomaten dazugeben und weitere 30 Minuten köcheln lassen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.2&2.0&EL&Öl&\\%
+\hline%
+0.12&1.25&kg&Rindsragout&in kleine Würfel schneiden\\%
+\hline%
+0.4&4.0&Stk.&Zwiebel&gross, feingehackt\\%
+\hline%
+0.4&4.0&Stk.&Knoblauchzehen&gepresst\\%
+\hline%
+0.1&1.0&Stk.&Peperoni, rot&entkernen, in Streifen schneiden\\%
+\hline%
+0.1&1.0&Stk.&Peperoni, grün&entkernen, in Streifen schneiden\\%
+\hline%
+0.4&4.0&TL&Paprika&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+0.05&0.5&TL&Majoran&\\%
+\hline%
+0.1&1.0&TL&Kümmel&in einem Tee{-}Ei\\%
+\hline%
+&&&Salz&\\%
+\hline%
+0.1&1.0&Büchse&Pelati&\\%
+\hline%
+0.1&1.0&EL&Bouillonpulver&\\%
+\hline%
+3.0&30.0&Stk.&kleine Tomaten&ausgehöhlte Tomaten in gutschliessendem Tupperware wegstellen, fürs Abendessen\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Polenta (als Beilage) (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Flüssigkeit aufkochen, Bouillonpulver, Pfeffer und Muskatnuss dazugeben. Maisgriess unter Rühren einrieseln lassen. Zugedeckt 2 Min. köcheln lassen, vom Feuer nehmen, gut durchrühren und zudecken. Weitere 5 Min. auf kleinem Feuer (oder neben dem Feuer) quellen lassen, gut durchrühren. Reibkäse dazugeben.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+60.0&600.0&g&Maisgriess&\\%
+\hline%
+0.15&1.5&l&Milch&\\%
+\hline%
+0.15&1.5&l&Wasser&\\%
+\hline%
+0.3&3.0&EL&Bouillon&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Muskatnuss&\\%
+\hline%
+15.0&150.0&g&Reibkäse&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Bohnen  (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &als Gemüsebeilage\\%
+Notizen:&Bohnen (tiefgekühlte oder frische, gerüstet und gewaschen). In wenig Bouillon kochen (Bohnen sollten noch Biss haben).\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.2&2.0&kg&Bohnen&tiefgekühlte oder frisch\\%
+\hline%
+&&&Bouillon&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Brot und Schokolade }&\color{gray} \large \textbf{So., 25. Jul}\\%
+\small \textit{(Brot und Schokolade )}&\color{gray} \large \textbf{Zvieri}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+%
+Diese Mahlzeit enthält keine Rezepte.%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Gefüllte Tomaten}&\color{gray} \large \textbf{So., 25. Jul}\\%
+\small \textit{(Gefüllte Tomaten)}&\color{gray} \large \textbf{Znacht}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\begin{description}%
+\item[Beschreibung / Notizen:]%
+Tomaten sind vom Mittagessen.%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gefüllte Tomaten: Tsaziki (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Gurken mit bestreuen und ca. 15 – 20 Min. stehen lassen. Gurkensaft abfliessen lassen, Gurken gut ausdrücken.\newline%
+Naturjoghurt, Knoblauch und Pfeffer verrühren, Gurken dazugeben und vermischen, abschmecken. In die Tomaten abfüllen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.15&1.5&Stk.&Gurke&in ein Löcherbecken raffeln\\%
+\hline%
+0.04&0.38&TL&Salz&\\%
+\hline%
+0.3&3.0&Stk.&Naturjoghurt&wenn möglich griechische\\%
+\hline%
+0.45&4.5&Stk.&Knoblauchzehen&gepresst\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &mit Senf\\%
+Notizen:&Alles kräftig verrühren und in eine Petflasche abfüllen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouillon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&Olivenöl&\\%
+\hline%
+0.5&2.5&EL&Senf&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Brot als Beilage (für 10 Per.)}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+100.0&1000.0&g&Brot&als Beilage\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gefüllte Tomaten: Maisfüllung (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Alle Zutaten gründlich vermischen und in Tomaten abfüllen.\newline%
+\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.3&3.0&Büchsen&Mais&\\%
+\hline%
+15.0&150.0&g&Mayonnaise&\\%
+\hline%
+0.15&1.5&dl&kräftiger Bouillon&\\%
+\hline%
+0.07&0.75&dl&Essig&\\%
+\hline%
+0.07&0.75&dl&Öl&\\%
+\hline%
+0.07&0.75&Tube&Mayonnaise&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Salatkräuter&\\%
+\hline%
+0.05&0.5&Bund&Schnittlauch&fein geschnitten\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Eisbergsalat (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &ohne Sauce\\%
+Notizen:&Eisbergsalat, rüsten, waschen, zerkleinern. Salatsauce beigeben.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.15&1.5&Stk.&Eisbergsalat&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Frühstück (gewöhnlich)}&\color{gray} \large \textbf{Mo., 26. Jul}\\%
+\small \textit{(Frühstück (gewöhnlich))}&\color{gray} \large \textbf{Zmorgen}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Frühstück (gewöhnlich) (für 10 Per.)}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.1&1.0&kg&Brot&\\%
+\hline%
+20.0&200.0&g&Butter&\\%
+\hline%
+30.0&300.0&g&Konfitüre&\\%
+\hline%
+0.1&1.0&Päckli&Flöckli&Snacks, Cornflakes\\%
+\hline%
+0.15&1.5&l&Milch&\\%
+\hline%
+&&&Schoggipulver&\\%
+\hline%
+&&&Teebeutel&\\%
+\hline%
+&&&Zucker&\\%
+\hline%
+1.0&10.0&Stk.&Früchte&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Spaghetti mit Gemüsecarbonara inkl. Dessert}&\color{gray} \large \textbf{Mo., 26. Jul}\\%
+\small \textit{(Spaghetti mit Carbonara und Dessert)}&\color{gray} \large \textbf{Zmittag}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\begin{description}%
+\item[Vorbereiten:]%
+am Sonntag 25. Jul 2021%
+\item[Beschreibung / Notizen:]%
+inkl. Dessert: Gefüllte Äpfel mit Vanillesauce%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Spaghetti (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &passt als Beilage zu einer Sauce\\%
+Notizen:&Spaghetti in reichlich Salzwasser al dente kochen, abschütten, mit Butter vermischen.\newline%
+\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.12&1.2&kg&Spaghetti&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+0.2&2.0&EL&Butter&\\%
+\hline%
+20.0&200.0&g&Reibkäse&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gemüse Carbonara{-}Sauce (für 10 Per.)}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.12&1.25&kg&Gemüse&Zucchetti, Rüebli, Kohlräbli, Erbsen\\%
+\hline%
+0.1&1.0&l&Kaffeerahm&\\%
+\hline%
+0.2&2.0&EL&Maizena&\\%
+\hline%
+0.2&2.0&EL&Bratbutter&\\%
+\hline%
+0.15&1.5&EL&Boullonpulver&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Muskatnuss&\\%
+\hline%
+0.05&0.5&Bund&Peterli&gehackt\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gefüllte Äpfel mit Vanillesauce (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Äpfel entkernen und Schale mit scharfem Messer einschneiden.\newline%
+Haselnüsse und Zucker mischen, soviel Zitronensaft beigeben bis eine kompakte, feuchte Masse entsteht; in die Äpfel einfüllen.\newline%
+\newline%
+Die Äpfel in einen Kochkesseldeckel stellen, Apfelsaft dazugiessen, Zimtstange dazulegen. Den Deckel mit Alufolie gut zudecken und aufs Feuer stellen. Ca. 10 –15 Min. köcheln lassen, bis die Äpfel gar sind.\newline%
+\newline%
+Vanillecreme anrühren.\newline%
+\newline%
+Anrichten: Vanillecrème ins Teller geben, 1 Apfel darauf setzen, mit etwas Apfelsaft aus dem Kochkesseldeckel übergiessen.\newline%
+\newline%
+\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+1.0&10.0&Stk.&Äpfel&\\%
+\hline%
+20.0&200.0&g&Haselnüsse&gemahlen\\%
+\hline%
+0.4&4.0&EL&Zucker&\\%
+\hline%
+&&&Zitronensaft&\\%
+\hline%
+0.5&5.0&dl&Apfelsaft&\\%
+\hline%
+0.1&1.0&Stk.&Zimtstange&\\%
+\hline%
+&&&Alufolie&\\%
+\hline%
+0.2&2.0&Beutel&Vanillecreme&zum kalt Anrühren\\%
+\hline%
+0.1&1.0&l&Milch&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Salatsauce (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: & mit Mayonnaise, Französisch\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.5&2.5&dl&Bouilllon&kräftig\\%
+\hline%
+0.25&1.25&dl&Essig&\\%
+\hline%
+0.25&1.25&dl&ÖL&\\%
+\hline%
+0.1&0.5&Tube&Mayonnaise&\\%
+\hline%
+&&etwas&Salz&\\%
+\hline%
+&&etwas&Pfeffer&\\%
+\hline%
+&&etwas&Salatkräuter&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Kopfsalat (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &ohne Sauce\\%
+Notizen:&waschen, zerkleinern, in eine Schüssel geben. Salatsauce dazugeben und mischen\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.25&2.5&Stk.&Kopfsalat&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
+\renewcommand{\arraystretch}{1.75}%
+\definecolor{light-gray}{gray}{0.85}%
+\arrayrulecolor{light-gray}%
+
+
+\begin{table}%
+\begin{tabularx}{\textwidth}{X r}%
+\LARGE \textbf{Gefüllte Kartoffeln mit Salat}&\color{gray} \large \textbf{Mo., 26. Jul}\\%
+\small \textit{(Gefüllte Kartoffeln mit Salat)}&\color{gray} \large \textbf{Znacht}\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\begin{description}%
+\item[Vorbereiten:]%
+am Sonntag 25. Jul 2021%
+\end{description}%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gurkensalat (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&3 Gurken waschen, evtl. schälen, in feine Scheiben schneiden, in eine Schüssel geben.\newline%
+Öl und Essig darübergeben, verrühren.\newline%
+\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.3&3.0&Stk&Gurken&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Dill&\\%
+\hline%
+&&&Kümmel&\\%
+\hline%
+0.4&4.0&Salatlöffel&Öl&\\%
+\hline%
+0.4&4.0&Salatlöffel&Essig&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gefüllte Kartoffeln: Mascarpone{-}Füllung (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Alles gut verrühren.\newline%
+\newline%
+Für jede Kartoffel ein Stück Alufolie mit Öl einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeelöffel oder Gehäuseausstecher aushöhlen. Das Ausgehöhlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit Füllung füllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 – 15 Minuten in der Glut braten, hie und da wenden.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+25.0&250.0&g&Mascarpone&\\%
+\hline%
+10.0&100.0&g&Reibkäse&\\%
+\hline%
+20.0&200.0&g&Schinkenwürfeli&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+&&&Peffer&\\%
+\hline%
+&&&Peterli&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{geschwellte Kartoffeln (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Am Vortag schwellen.\newline%
+\newline%
+Für jede Kartoffel ein Stück Alufolie mit Öl einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeelöffel oder Gehäuseausstecher aushöhlen. Das Ausgehöhlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit Füllung füllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 – 15 Minuten in der Glut braten, hie und da wenden \\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.25&2.5&kg&Kartoffeln&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Gefüllte Kartoffeln: Eier{-}Füllung (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Notizen:&Für jede Kartoffel ein Stück Alufolie mit Öl einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeelöffel oder Gehäuseausstecher aushöhlen. Das Ausgehöhlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit Füllung füllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 – 15 Minuten in der Glut braten, hie und da wenden \\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+1.0&10.0&Stk.&Eier&roh\\%
+\hline%
+&&&Salz&\\%
+\hline%
+&&&Pfeffer&\\%
+\hline%
+&&&Bohnenkraut&je nach Geschmack\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\vspace{0.75cm}%
+\renewcommand{\arraystretch}{1.25}%
+
+
+\begin{table}[h]%
+\caption{Lauchrahmfüllung (für 10 Per.)}%
+\begin{tabularx}{\textwidth}{l X}%
+Beschreibung: &für gefüllte Kartoffeln\\%
+Notizen:&Lauch rüsten, waschen, in feine Ringe schneiden. Butter erhitzen und Lauch während ca. 5 Min. gar dämpfen. Crème fraîche, Reibkäse, Salz, Pfeffer, evtl. Muskatnuss mit dem Lauch vermischen.\\%
+\end{tabularx}%
+\par%
+\begin{tabularx}{\textwidth}{| r | r | l | l | X |}%
+\hline%
+\tiny{1 Per.}&\tiny{10 Per.}&\tiny{Einheit}&\tiny{Lebensmittel}&\tiny{Kommentar}\\%
+\hline%
+0.2&2.0&Stk.&Lauchstengel&\\%
+\hline%
+0.1&1.0&EL&Bratbutter&\\%
+\hline%
+0.1&1.0&Becher&Crème fraîche à 250 g&\\%
+\hline%
+10.0&100.0&g&Reibkäse&\\%
+\hline%
+&&&Salz&\\%
+\hline%
+&&&Peffer&\\%
+\hline%
+&&&Muskatnuss&\\%
+\hline%
+\end{tabularx}%
+\end{table}
+
+%
+\clearpage%
+\pagebreak%
 \newpage%
 \end{document}

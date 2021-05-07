@@ -12,6 +12,7 @@ from pylatex import Document
 
 from exportData.camp import Camp
 from pages.feedback_survey import add_feedback_survey_page
+from pages.meals import add_meals
 from pages.shopping_list import add_shopping_list
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
@@ -97,7 +98,19 @@ def main():
     # TODO: check user quota
 
     # global settings
-    parts = [add_title_page, weekview_table, add_shopping_list, add_feedback_survey_page]  # , add_meals]
+    parts = [add_title_page]
+
+    if args.wv:
+        parts += [weekview_table]
+
+    if args.fdb:
+        parts += [add_feedback_survey_page]
+
+    if args.spl:
+        parts += [add_shopping_list]
+
+    if args.meals:
+        parts += [add_meals]
 
     # generate document form parts
     document = generate_document(parts, args)
@@ -133,6 +146,13 @@ def parse_args():
     parser.add_argument('--dfn', help='Uses a default file name: /export.pdf (Should only be used for debugging).',
                         default=False, action='store_true')
     parser.add_argument('--lscp', help='Prints the weekview in landscape', default=False, action='store_true')
+    parser.add_argument('--fdb', help='Includes a feedback form page for the participants of the camp', default=False,
+                        action='store_true')
+    parser.add_argument('--wv', help='Includes the weekview', default=False, action='store_true')
+    parser.add_argument('--spl', help='Includes the shopping list', default=False, action='store_true')
+    parser.add_argument('--meals', help='Includes the meals', default=False, action='store_true')
+
+    parser.add_argument('--fdbmsg', help='Custom feedback message on the feedback page', default=False)
 
     # Read arguments from command line
     args = parser.parse_args()
