@@ -11,6 +11,7 @@ from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
 from exportData.camp import Camp
+from pages.feedback_survey import add_feedback_survey_page
 from pages.shopping_list import add_shopping_list
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
@@ -96,7 +97,7 @@ def main():
     # TODO: check user quota
 
     # global settings
-    parts = [add_title_page, weekview_table, add_shopping_list]  # , add_meals]
+    parts = [add_title_page, weekview_table, add_shopping_list, add_feedback_survey_page]  # , add_meals]
 
     # generate document form parts
     document = generate_document(parts, args)

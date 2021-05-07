@@ -277,6 +277,16 @@ class Camp(object):
 
         return meal_weekview
 
+    def get_meal_names_for_feedback(self):
+
+        if not self.__specific_meals_loaded:
+            self.__fetch_specific_meals()
+
+        if not self.__meals_loaded:
+            self.__fetch_meals()
+
+        return self.__specific_meals
+
     def get_meals_for_meal_page(self):
         if not self.__specific_meals_loaded:
             self.__fetch_specific_meals()

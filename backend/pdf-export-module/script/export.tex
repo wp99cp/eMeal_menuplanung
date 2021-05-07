@@ -14,10 +14,11 @@
 \usepackage{xcolor}%
 \usepackage[tableposition=top]{caption}%
 \usepackage{float}%
+\usepackage{pdflscape}%
 \usepackage{multicol}%
 \usepackage{enumitem}%
 \usepackage{setspace}%
-\usepackage{rotating}%
+\usepackage{pifont}%
 \usepackage{tabularx}%
 %
 \floatpagestyle{plain}%
@@ -45,16 +46,19 @@ Dieses Dokument wurde automatisch erstellt. Obwohl uns Qualität und Richtigkeit
 \end{small}%
 }%
 \newpage%
-\begin{sidewaystable}[pH!]
-\small
-\caption*{\textbf{Wochenplan Sommerlager 2021}}
-\centering
-\newcolumntype{Y}{>{\arraybackslash}X}
-\newcommand*
-\rot{\rotatebox[origin=c]{270}}
-\renewcommand{\arraystretch}{2.5}
-\makebox[\textwidth]{
-\begin{tabularx}{1.15\textwidth}{| >{\bfseries}Y | Y |  Y |  Y |  Y |  Y |  Y |  Y |  Y | }%
+\begin{landscape}%
+
+
+\begin{figure}%
+\small%
+\caption*{\textbf{Wochenplan Sommerlager 2021}}%
+\centering%
+\newcolumntype{Y}{>{\arraybackslash}X}%
+\newcommand*%
+\rot{\rotatebox[origin=c]{270}}%
+\renewcommand{\arraystretch}{2.5}%
+\makebox[\textwidth]{%
+\begin{tabularx}{1.75\textwidth}{| >{\bfseries}Y | Y |  Y |  Y |  Y |  Y |  Y |  Y |  Y | }%
 \hline%
 &Samstag, 24. Jul 2021&Sonntag, 25. Jul 2021&Montag, 26. Jul 2021&Dienstag, 27. Jul 2021&Mittwoch, 28. Jul 2021&Donnerstag, 29. Jul 2021&Freitag, 30. Jul 2021&Samstag, 31. Jul 2021\\%
 \hline%
@@ -71,10 +75,13 @@ Dieses Dokument wurde automatisch erstellt. Obwohl uns Qualität und Richtigkeit
 \hline%
 \centering Vorbereiten \par &&\centering Gefüllte Kartoffeln mit Salat \par \vspace{0.1cm}  {\tiny \textit{für Sonntag}} \vspace{0.20cm} \par\centering Spaghetti mit Carbonara und Dessert \par \vspace{0.1cm}  {\tiny \textit{für Sonntag}} \vspace{0.20cm} \par&&&&&&\\%
 \hline%
-\end{tabularx}
-\thisfloatpagestyle{empty}
-}%
-\end{sidewaystable}%
+\end{tabularx}%
+\thisfloatpagestyle{empty}%
+}%%
+\end{figure}
+
+%
+\end{landscape}%
 \newpage%
 \section*{Einkaufsliste}%
 \label{sec:Einkaufsliste}%
@@ -101,5 +108,21 @@ the first item%
 the item%
 \end{description}
 \end{multicols}%
+\newpage%
+\section*{Feedback zum Essen}%
+\label{sec:FeedbackzumEssen}%
+
+%
+Ich hoffe dir hat das Essen bei uns im Lager gefallen. Damit wir im nächsten Lager noch feiner kochen können, bitten wir dich die folgende Umfrage auszufüllen. Bewerte die folgenden Mahlzeiten von \ding{172} bis \ding{176} (schrecklich bis ausgezeichnet). %
+\vspace{2cm} \newline %
+\begin{tabularx}{\textwidth}{X c c c c c}%
+Gefüllte Kartoffeln mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Gefüllte Tomaten&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Spaghetti mit Gemüsecarbonara inkl. Dessert&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Polenta, Gulasch und Bohnen&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Knöpfli Alfredo mit Salat&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+Taboulé mit Brot&\ding{172}&\ding{173}&\ding{174}&\ding{175}&\ding{176}\\%
+\end{tabularx}%
+\vspace{2cm} \newline %
 \newpage%
 \end{document}
