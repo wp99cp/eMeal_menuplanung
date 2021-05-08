@@ -15,7 +15,7 @@ def add_title_page(doc: Document, camp: Camp, args: Namespace):
         Command('title', NoEscape(r'\Huge \textbf{' +
                                   camp.get_camp_name() +
                                   r'} \\ \vspace{1.65cm} \Large \textbf{Handbuch Lagerküche}'
-                                  r'\\ \vspace{8cm}')))
+                                  r'\\ \vspace{11cm}')))
 
     doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + camp.get_full_author_name())))
     doc.preamble.append(Command('date', NoEscape(r'\normalsize Version vom \today')))

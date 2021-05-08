@@ -44,5 +44,5 @@ Vagrantfile
 
 # private keys and logging infos
 /keys/
-script/fullPDF.pdf
-script/fullPDF.tex
+script/export.pdf
+script/export.tex
