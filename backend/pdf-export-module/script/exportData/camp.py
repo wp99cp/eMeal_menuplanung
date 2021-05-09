@@ -116,7 +116,7 @@ class Camp(IngredientsCalculator, DataFetcher):
 
         return self._specific_meals
 
-    def get_meals_for_meal_page(self):
+    def get_specific_meals(self):
         if not self._specific_meals_loaded:
             self._fetch_specific_meals()
 

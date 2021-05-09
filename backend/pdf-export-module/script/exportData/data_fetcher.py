@@ -13,7 +13,6 @@ meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack',
 class DataFetcher(object):
 
     def __init__(self, args: Namespace):
-
         self.camp_id = args.camp_id
         self.user_id = args.user_id
 
@@ -40,22 +39,28 @@ class DataFetcher(object):
         self.__db = firestore.client()
 
     def _fetch_user_data(self):
-        user_ref = self.__db.document(u'users/' + self.user_id)
-        self._user_data = user_ref.get().to_dict()
+        if not self._user_data_fetched:
+            user_ref = self.__db.document(u'users/' + self.user_id)
+            self._user_data = user_ref.get().to_dict()
         self._user_data_fetched = True
 
     def _fetch_camp_meta_data(self):
-        camp_ref = self.__db.document(u'camps/' + self.camp_id)
-        self._camp_meta_info = camp_ref.get().to_dict()
+        if not self._camp_meta_info_fetched:
+            camp_ref = self.__db.document(u'camps/' + self.camp_id)
+            self._camp_meta_info = camp_ref.get().to_dict()
+
+            # sort days according to its dates
+            self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
+
         self._camp_meta_info_fetched = True
 
-        # sort days according to its dates
-        self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
-
     def _fetch_specific_meals(self):
-        meal_refs = self.__db.collection_group(u'specificMeals')
-        query_ref = meal_refs.where(u'used_in_camp', u'==', self.camp_id)
-        self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
+        if not self._specific_meals_loaded:
+            meal_refs = self.__db.collection_group(u'specificMeals')
+            query_ref = meal_refs.where(u'used_in_camp', u'==', self.camp_id)
+            self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
+
+        self._specific_meals_loaded = True
 
     def _fetch_meals(self):
         """
@@ -63,6 +68,9 @@ class DataFetcher(object):
           The following fields gets added: 'meal_name'
 
         """
+
+        if self._meals_loaded:
+            return
 
         if not self._specific_meals_loaded:
             self._fetch_specific_meals()
@@ -78,7 +86,11 @@ class DataFetcher(object):
                     specMeal['meal_name'] = meal['meal_name']
                     specMeal['meal_description'] = meal['meal_description']
 
+        self._meals_loaded = True
+
     def _fetch_recipes(self):
+        if self._recipes_loaded:
+            return
 
         if not self._specific_meals_loaded:
             self._fetch_specific_meals()
@@ -90,6 +102,7 @@ class DataFetcher(object):
 
         recipes = []
 
+        # Load recipes for DB
         # 'array_contains_any' supports max 10 values
         for meal_ids_max_10 in [meal_ids[x:x + 10] for x in range(0, len(meal_ids), 10)]:
             recipe_refs = self.__db.collection(u'recipes')
@@ -136,3 +149,5 @@ class DataFetcher(object):
         # sort meals
         self._specific_meals = sorted(self._specific_meals, key=lambda x: meal_types.index(x['meal_used_as']))
         self._specific_meals = sorted(self._specific_meals, key=lambda x: x['meal_date'])
+
+        self._recipes_loaded = True

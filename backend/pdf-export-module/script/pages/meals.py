@@ -19,7 +19,7 @@ def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
                                                     'justification=raggedright']))
 
     # for each meal
-    for meal in camp.get_meals_for_meal_page():
+    for meal in camp.get_specific_meals():
 
         add_header(doc, meal)
 
