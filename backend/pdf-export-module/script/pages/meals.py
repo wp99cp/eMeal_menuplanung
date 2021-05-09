@@ -1,7 +1,7 @@
 import datetime
 from argparse import Namespace
 
-from exportData.camp import Camp
+import exportData.camp
 from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
 from pylatex.base_classes import Environment
 
@@ -10,7 +10,7 @@ class Subtable(Environment):
     escape = False
 
 
-def add_meals(doc: Document, camp: Camp, args: Namespace):
+def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
     doc.packages.append(Package('xcolor'))
     doc.packages.append(Package('tabularx'))
     doc.packages.append(Package('colortbl'))
@@ -68,9 +68,6 @@ def add_header(doc, meal):
 
 
 def add_ingredient(table_content, ingredient):
-
-    print(ingredient['measure'], ingredient['measure_calc'])
-
     table_content.add_row([
         round(ingredient['measure'], 2) if ingredient['measure'] != 0 else '',
         round(ingredient['measure_calc'], 2) if ingredient['measure'] != 0 else '',

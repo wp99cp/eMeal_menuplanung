@@ -114,7 +114,19 @@ class DataFetcher(object):
                     spec_recipe_refs = self.__db.document(
                         u'recipes/' + recipe['doc_id'] + '/specificRecipes/' + meal['doc_id'])
 
-                    spec_recipe = convert_document(spec_recipe_refs.get())
+                    spec_recipe_doc = spec_recipe_refs.get()
+
+                    if spec_recipe_doc.to_dict() is not None:
+                        spec_recipe = convert_document(spec_recipe_doc)
+                    else:
+                        # If you create a new recipe for a meal that is already used in another camp
+                        # and you did not open the recipe in the other camp, the the specific recipe
+                        # does not exist in the database. We insert the default data.
+                        spec_recipe = {
+                            'recipe_used_for': 'all',
+                            'recipe_participants': 0,  # this value is ignored if override_participants is false
+                            'recipe_override_participants': False
+                        }
 
                     recipe['unique_id'] = meal['doc_id'] + '::' + recipe['doc_id']
                     recipe['recipe_used_for'] = spec_recipe['recipe_used_for']

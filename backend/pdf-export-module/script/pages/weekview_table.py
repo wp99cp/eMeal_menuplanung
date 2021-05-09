@@ -1,8 +1,9 @@
 from argparse import Namespace
 
-from exportData.camp import Camp
 from pylatex import NoEscape, Package, Tabularx, Command, Document, Figure
 from pylatex.base_classes import Environment, Arguments
+
+from exportData.camp import Camp
 
 
 class Sidewaystable(Environment):
@@ -47,7 +48,7 @@ def add_table(camp, days, doc, args: Namespace):
     doc.append(Command('caption*', arguments=Arguments(NoEscape(r'\textbf{Wochenplan Sommerlager 2021}'))))
     doc.append(Command('centering'))
     doc.append(Command('newcolumntype', arguments='Y',
-                       extra_arguments=Arguments(NoEscape(r'>{\arraybackslash}X'))))
+                       extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
     doc.append(Command('newcommand*'))
     doc.append(Command('rot', arguments=Command('rotatebox', options='origin=c', arguments='270')))
     doc.append(Command('renewcommand', arguments=Command('arraystretch'), extra_arguments='2.5'))
@@ -74,7 +75,7 @@ def add_table(camp, days, doc, args: Namespace):
 
         # add meals
         for meal_name in meals.keys():
-            table_content.add_row([NoEscape(r'\centering ' + meal_name + r' \par ')] + meals[meal_name])
+            table_content.add_row([NoEscape(meal_name)] + meals[meal_name])
             table_content.add_hline()
 
     doc.append(Command('thisfloatpagestyle', arguments='empty'))

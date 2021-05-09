@@ -68,7 +68,7 @@ class Camp(IngredientsCalculator, DataFetcher):
         self._used_meal_types = ['Zmorgen', 'Zmittag', 'Znacht'] + list(
             map(lambda m: m.get('meal_used_as'), self._specific_meals))
 
-        # add Vorbereiten if used
+        # add "Vorbereiten" if used
         if self.args.mp:
             for meal in self._specific_meals:
                 if meal.get('meal_gets_prepared'):
@@ -91,7 +91,7 @@ class Camp(IngredientsCalculator, DataFetcher):
 
         for meal in self._specific_meals:
             meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(
-                r'\centering ' + meal.get('meal_weekview_name') + r' \par ')
+                meal.get('meal_weekview_name'))
 
             if meal.get('meal_gets_prepared') and self.args.mp:
 
@@ -100,12 +100,9 @@ class Camp(IngredientsCalculator, DataFetcher):
                 if prepare_date in day_as_dates:
                     day_index = day_as_dates.index(prepare_date)
                     meal_weekview.get('Vorbereiten')[day_index] += \
-                        NoEscape(
-                            r'\centering ' + meal.get(
-                                'meal_weekview_name') + r" \par \vspace{0.1cm} "
-                                                        r" {\tiny \textit{für " +
-                            (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime(
-                                "%A") + r'}} \vspace{0.20cm} \par')
+                        NoEscape(meal.get('meal_weekview_name') + r" \par \vspace{0.1cm} {\tiny \textit{für " +
+                                 (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime("%A") +
+                                 r'}} \vspace{0.20cm}  \par ')
 
         return meal_weekview
 
@@ -138,7 +135,7 @@ class Camp(IngredientsCalculator, DataFetcher):
             self._fetch_camp_meta_data()
 
         def date_to_str(day):
-            return (day['day_date'] + timedelta(hours=2)).strftime("%A, %d. %b %Y")
+            return NoEscape((day['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y"))
 
         days = list(map(date_to_str, self._camp_meta_info.get('days')))
 
