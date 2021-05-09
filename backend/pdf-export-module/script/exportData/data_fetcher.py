@@ -18,25 +18,33 @@ class DataFetcher(object):
 
         self.args = args
 
-        self._user_data = None
         self._user_data_fetched = False
-
-        self._camp_meta_info = None
         self._camp_meta_info_fetched = False
-
-        self._specific_meals = None
         self._specific_meals_loaded = False
-
         self._meals_loaded = False
-
-        self._used_meal_types = None
-
         self._recipes_loaded = False
+
+        self._user_data = None
+        self._used_meal_types = None
+        self._camp_meta_info = None
+        self._specific_meals = None
 
         # Use the application default credentials
         cred = credentials.Certificate('keys/cevizh11-firebase-adminsdk.json')
         firebase_admin.initialize_app(cred)
         self.__db = firestore.client()
+
+    def setMockData(self, user_data, used_meal_types, camp_meta_info, specific_meals):
+        self._user_data_fetched = True
+        self._camp_meta_info_fetched = True
+        self._specific_meals_loaded = True
+        self._meals_loaded = True
+        self._recipes_loaded = True
+
+        self._user_data = user_data
+        self._used_meal_types = used_meal_types
+        self._camp_meta_info = camp_meta_info
+        self._specific_meals = specific_meals
 
     def _fetch_user_data(self):
         if not self._user_data_fetched:
@@ -49,8 +57,8 @@ class DataFetcher(object):
             camp_ref = self.__db.document(u'camps/' + self.camp_id)
             self._camp_meta_info = camp_ref.get().to_dict()
 
-            # sort days according to its dates
-            self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
+        # sort days according to its dates
+        self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
 
         self._camp_meta_info_fetched = True
 

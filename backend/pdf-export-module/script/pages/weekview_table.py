@@ -1,29 +1,17 @@
 from argparse import Namespace
+from datetime import timedelta
 
 from pylatex import NoEscape, Package, Tabularx, Command, Document, Figure
-from pylatex.base_classes import Environment, Arguments
+from pylatex.base_classes import Arguments
 
 from exportData.camp import Camp
-
-
-class Sidewaystable(Environment):
-    packages = [Package('rotating')]
-    escape = False
-    content_separator = "\n"
-
-
-class Makebox(Environment):
-    escape = False
-    content_separator = "\n"
-
-
-class Landscape(Environment):
-    pass
+from pages.enviroments import Sidewaystable, Landscape
 
 
 def weekview_table(doc: Document, camp: Camp, args: Namespace):
     # content for this page
     days = camp.get_days()
+    days = list(map(lambda d: NoEscape((d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y")), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
@@ -39,6 +27,31 @@ def weekview_table(doc: Document, camp: Camp, args: Namespace):
     else:
         with doc.create(Sidewaystable(options='pH!')):
             add_table(camp, days, doc, args)
+
+
+def prepareMealsForWeekview(camp: Camp, args: Namespace):
+    day_as_dates = camp.get_days_as_dates()
+    meal_weekview = {}
+
+    for meal_type in camp.get_meal_type_names():
+        meal_weekview[meal_type] = [NoEscape('')] * len(day_as_dates)
+
+    for meal in camp.get_meals_for_weekview():
+        meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(
+            meal.get('meal_weekview_name'))
+
+        if meal.get('meal_gets_prepared') and args.mp:
+
+            prepare_date = meal.get('meal_prepare_date')
+
+            if prepare_date in day_as_dates:
+                day_index = day_as_dates.index(prepare_date)
+                meal_weekview.get('Vorbereiten')[day_index] += \
+                    NoEscape(meal.get('meal_weekview_name') + r" \par \vspace{0.1cm} {\tiny \textit{für " +
+                             (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime("%A") +
+                             r'}} \vspace{0.20cm}  \par ')
+
+    return meal_weekview
 
 
 def add_table(camp, days, doc, args: Namespace):
@@ -71,7 +84,7 @@ def add_table(camp, days, doc, args: Namespace):
         table_content.add_hline()
 
         # get meal data
-        meals = camp.get_meals_for_weekview()
+        meals = prepareMealsForWeekview(camp, args=args)
 
         # add meals
         for meal_name in meals.keys():

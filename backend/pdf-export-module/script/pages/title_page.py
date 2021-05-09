@@ -1,7 +1,8 @@
 from argparse import Namespace
 
-from exportData.camp import Camp
 from pylatex import Package, Command, NoEscape, SmallText, Subsubsection, Document
+
+from exportData.camp import Camp
 
 
 def add_title_page(doc: Document, camp: Camp, args: Namespace):

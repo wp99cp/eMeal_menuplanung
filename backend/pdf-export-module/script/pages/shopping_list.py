@@ -1,19 +1,9 @@
 from argparse import Namespace
 
 from pylatex import Section, Command, Package, Description, Subsubsection, Document
-from pylatex.base_classes import Environment
 
 from exportData.camp import Camp
-
-
-class Multicols(Environment):
-    escape = False
-    content_separator = "\n"
-
-
-class Spacing(Environment):
-    escape = False
-    content_separator = "\n"
+from pages.enviroments import Multicols
 
 
 def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
