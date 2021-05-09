@@ -68,6 +68,9 @@ def add_header(doc, meal):
 
 
 def add_ingredient(table_content, ingredient):
+
+    print(ingredient['measure'], ingredient['measure_calc'])
+
     table_content.add_row([
         round(ingredient['measure'], 2) if ingredient['measure'] != 0 else '',
         round(ingredient['measure_calc'], 2) if ingredient['measure'] != 0 else '',
