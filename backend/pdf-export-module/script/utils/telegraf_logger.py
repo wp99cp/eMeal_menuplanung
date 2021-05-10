@@ -14,7 +14,9 @@ class TelegrafLogger(StreamHandler):
         with open('keys/influx_settings.json') as json_file:
             data = json.load(json_file)
 
-            self.client = DataFrameClient(host=data.get("host"), port=data.get("port"), username=data.get("username"),
+            self.client = DataFrameClient(host=data.get("host"),
+                                          port=data.get("port"),
+                                          username=data.get("username"),
                                           password=data.get("password"))
             self.client.switch_database(data.get("database"))
 

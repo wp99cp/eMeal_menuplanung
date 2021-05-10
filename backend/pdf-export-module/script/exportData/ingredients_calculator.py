@@ -51,9 +51,6 @@ class IngredientsCalculator(DataFetcher):
 
                     for ing in recipe['ingredients']:
 
-                        # We should only calculate the measurement once.
-                        assert 'measure_calc' not in ing
-
                         if ing['measure']:
                             ing['measure'] = float(ing['measure'])
                             ing['measure_calc'] = float(ing['measure']) * recipe['recipe_participants']

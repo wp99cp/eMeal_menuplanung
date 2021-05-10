@@ -34,7 +34,7 @@ class DataFetcher(object):
         firebase_admin.initialize_app(cred)
         self.__db = firestore.client()
 
-    def setMockData(self, user_data, used_meal_types, camp_meta_info, specific_meals):
+    def setMockData(self, user_data, camp_meta_info, specific_meals):
         self._user_data_fetched = True
         self._camp_meta_info_fetched = True
         self._specific_meals_loaded = True
@@ -42,7 +42,6 @@ class DataFetcher(object):
         self._recipes_loaded = True
 
         self._user_data = user_data
-        self._used_meal_types = used_meal_types
         self._camp_meta_info = camp_meta_info
         self._specific_meals = specific_meals
 
