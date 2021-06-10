@@ -1,8 +1,17 @@
-# Git / GitHub Setup for eMeal
+# General Project Structure
+
+eMeal Menüplanung consists of different components; a frontend written in Angular and different backend modules.
+
+The backend modules can be divided into the database ([Cloud Firestore](https://firebase.google.com/docs/firestore), a NoSQL Database), the file storage ([Cloud Storage for Firebase](https://firebase.google.com/docs/storage), used for storing the pdf files), a collection of lightweight cloud services (written as [Cloud Functions for Firebase](https://firebase.google.com/docs/functions) with TypeScript) and the PDF export module (a docker container, using a LaTeX compiler and some logic written in python to create a tex file).
+
+The hosted instance [eMeal.zh11.ch](eMeal.zh11.ch) is hosted on [Firebase Hosting](https://firebase.google.com/docs/hosting) and automatically build and deployed form the master branch of this project (see [Continuous Integration and General Tests](/docu/Continuous_Integration_And_General_Tests.md)). You can host your own incance by changing/adding your API-keys respectively your project-ids to each of component (including backends, frontend components).
+
+
+## Git / GitHub Setup for eMeal
 This project using continuous integration (CI) with github actions. 
 See [Continuous Integration and General Tests](/docu/Continuous_Integration_And_General_Tests.md).
 
-## General Guidelines and Branch Structure
+### General Guidelines and Branch Structure
 In general, we follow the model as described in https://nvie.com/posts/a-successful-git-branching-model/.
 
 We distinguish between the following branches:
@@ -41,7 +50,7 @@ We distinguish between the following branches:
  
 ![project structure](https://nvie.com/img/git-model@2x.png)
 
-### Creating a feature branch 
+#### Creating a feature branch 
 
     $ git checkout -b feature/my-feature develop
     Switched to a new branch "feature/my-feature"
@@ -50,7 +59,7 @@ Can be done with Github Desktop:
     
     Branch >> New branch... >> Select develop >> Create branch
 
-### Incorporating a finished feature on develop
+#### Incorporating a finished feature on develop
 
     $ git checkout develop
     Switched to branch 'develop'
@@ -72,7 +81,7 @@ Can be done with Github Desktop:
     select the merged feature branch
     Branch >> Delete ... (select the fetaure branch, make shure to delete also the remote branch)
 
-### Creating a release branch 
+#### Creating a release branch 
 
     $ git checkout -b release/v1.2.0 develop
     Switched to a new branch "release/v1.2.0"
@@ -87,7 +96,7 @@ Can be done with Github Desktop:
 Should be done with command line, can only be partly done with Github Desktop.
 
 
-### Finishing a release branch
+#### Finishing a release branch
 
 Must be done with a pull request! We do not allwo direct commits to the master branch.
 
@@ -116,7 +125,7 @@ Merge release to develop.
     (Summary of changes)
     
     
-### Creating the hotfix branch
+#### Creating the hotfix branch
     
     $ git checkout -b hotfix/v1.2.1 master
     Switched to a new branch "hotfix-1.2.1"
@@ -129,7 +138,7 @@ Merge release to develop.
     1 files changed, 1 insertions(+), 1 deletions(-)
     
     
-### Finishing a hotfix branch
+#### Finishing a hotfix branch
 
 The one exception to the rule here is that, when a release branch currently exists, 
 the hotfix changes need to be merged into that release branch, instead of!
@@ -155,7 +164,7 @@ the hotfix changes need to be merged into that release branch, instead of!
 
 This project using continuous integration (CI) with github actions.
 
-## Apply the following settings on Github
+### Apply the following settings on Github
 We use the following settings for our project:
 
 * in https://github.com/wp99cp/github_setup/settings
