@@ -1,21 +1,44 @@
-# Some General Thoughts About the Test-Cases
+# Some General Thoughts
 
-Exporting the recipes from the online platform is one of the core features of the application. Therefore, extensive
-testing is desired and necessary. The tests are intended to check the data processing of the export function for
-correctness and completeness. Different test-cases are needed to test these properties.
+Exporting the camp at the end of its creation process is one of the application's core features. Therefore, extensive
+testing is desired and necessary. These tests aim to check the data processing of the export function for correctness
+and completeness.
 
-![Test Structure](docu/test_structure.svg)
+The following schema should provide a general overview of our test strategy. In orange, we see the standard user
+procedure of creating and exporting a camp as a PDF. And in Green, our current test pipeline. To simplify the assembling
+of new test cases, we provide a script that generates templates for test cases directly out of the database (see
+section *Generating Test Cases*). We can use these test cases to compare the results of the export function with the
+hard-coded ground truth values manually calculated for those tests.
 
+![Schema of the Test Strategy](docu/test_structure.png)
+
+***Not yet included:** Furthermore, in purple, we compare the results of the export function and its associated ground
+truth values with those on the web interface. E.g., we compare the calculated measure of an ingredient on the webpage
+with the measurement in the exported recipe. This is especially exciting and important if participants are overwritten
+for specific meals or recipes.*
+
+Our can run the test cases by executing the following command:
+
+```shell
+python tests/test.py 
+```
 
 ## Generating Test-Cases
 
-The test cases can be generated directly from the database using a script (see command below), i.e. the data is recorded
-in the frontend (as if a user is using the application), the script then generates a JSON-file that contains the mock
-data for the test. The developer now manually adds the data to be calculated, such as the purchase list, quantity
-calculations, etc.
+The test cases can be generated directly from the database using a script (see command below). The script generates a
+JSON file that contains the mock data set for a selected camp we want to test the export for. The developer manually
+adds the ground truth values, e.g., the purchase list, quantity calculations, etc.
 
-    TODO: Add command for generating test-cases
+```shell
+# TODO: Add command for generating test-cases"
+```
 
+### An Example Test Case: The JSON Structure
 
-
+```json
+{
+  "camp": "value",
+  "camp2": "value"
+}
+```
 
