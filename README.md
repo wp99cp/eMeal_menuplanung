@@ -35,4 +35,4 @@ This repository contains all the code needed to run the application.
 Different suborders contain different parts of the application. You don't necessarily need 
 all the files for development, many things run independently of each other.
 
-More info see: [General Project Structure](/docu/General_Setup.md)
+More info see: [General Project Structure](/docu/General_Project_Structure.md)
