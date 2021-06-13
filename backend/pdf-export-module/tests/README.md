@@ -17,7 +17,7 @@ truth values with those on the web interface. E.g., we compare the calculated me
 with the measurement in the exported recipe. This is especially exciting and important if participants are overwritten
 for specific meals or recipes.*
 
-Our can run the test cases by executing the following command:
+You can run the test cases by executing the following command:
 
 ```shell
 python tests/test.py 
@@ -29,16 +29,25 @@ The test cases can be generated directly from the database using a script (see c
 JSON file that contains the mock data set for a selected camp we want to test the export for. The developer manually
 adds the ground truth values, e.g., the purchase list, quantity calculations, etc.
 
+Replace `{{user_id}}` and `{{ucamp_id}}` with the corresponding document ids.
+
 ```shell
-# TODO: Add command for generating test-cases"
+python tests/create_test_case.py {{user_id}} {{camp_id}}
 ```
 
 ### An Example Test Case: The JSON Structure
 
 ```json
 {
-  "camp": "value",
-  "camp2": "value"
+  "meals": [{
+    ...,
+    "recipes": [{
+      ...,
+      "ingredients": [...]
+    }, ...]
+  }, ...],
+  "camp_meta_info": ...,
+  "shopping_list": ...
 }
 ```
 
