@@ -1,4 +1,6 @@
 import copy
+import random
+import string
 from argparse import Namespace
 
 import firebase_admin
@@ -31,8 +33,10 @@ class DataFetcher(object):
 
         # Use the application default credentials
         cred = credentials.Certificate('keys/cevizh11-firebase-adminsdk.json')
-        firebase_admin.initialize_app(cred)
-        self.__db = firestore.client()
+        app = firebase_admin.initialize_app(
+            cred,
+            name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
+        self.__db = firestore.client(app)
 
     def setMockData(self, user_data, camp_meta_info, specific_meals):
         self._user_data_fetched = True

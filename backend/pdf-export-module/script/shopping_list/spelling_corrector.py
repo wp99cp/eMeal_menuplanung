@@ -3,14 +3,16 @@ from collections import Counter
 
 class SpellingCorrector:
 
-    def __init__(self):
-        # TODO: Load words for DB
-        self._WORDS = Counter(['Hallo', 'Welt'])
+    def __init__(self, db):
+
+        self.__db = db
+
+        # Load all known food names
+        food_dictionary = self.__db.document('sharedData/categories').get().to_dict().keys()
+        self._WORDS = Counter(food_dictionary)
 
     def fix_spelling_mistakes(self, ingredients):
         for ing in ingredients:
-            # test run
-
             ing['food'] = self._correction(ing['food'])
 
     def _P(self, word, n=None):

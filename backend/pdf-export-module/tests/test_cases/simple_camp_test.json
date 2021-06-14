@@ -58,7 +58,43 @@
       "meal_participants": 15,
       "meal_override_participants": true,
       "doc_id": "lcKt3mfiYlerX1OXhqaxu",
-      "meal_date": "22.05.2021"
+      "meal_date": "22.05.2021",
+      "recipe": [
+        {
+          "recipe_name": "Taboulé (Couscous)",
+          "recipe_description": "",
+          "recipe_notes": "Couscous, nach Anleitung zubereiten, in eine grosse Schüssel geben, restliche Zutaten zum Couscous in die Schüssel geben. ",
+          "recipe_used_for": "all",
+          "recipe_override_participants": false,
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::LHcDCr4FlNhgxaPjEM9J",
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "food": "Cousocus",
+              "unit": "g",
+              "measure": 60.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Milch",
+              "unit": "dl",
+              "measure": 2.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Peperoni",
+              "unit": "Stk.",
+              "measure": 1.0,
+              "fresh": true,
+              "comment": "Dies ist ein Kommentar"
+            }
+          ]
+        }
+      ]
     }
   ],
   "camp_meta_info": {
@@ -91,6 +127,29 @@
       }
     ],
     "camp_participants": 12
+  },
+  "shopping_list": {
+    "Früchte und Gemüse": [
+      {
+        "food": "Peperoni",
+        "measure_calc": 27.0,
+        "unit": "Stk."
+      }
+    ],
+    "Grundnahrungsmittel": [
+      {
+        "food": "Couscous",
+        "measure_calc": 1.62,
+        "unit": "kg"
+      }
+    ],
+    "Milchprodukte und Eier": [
+      {
+        "food": "Milch",
+        "measure_calc": 5.4,
+        "unit": "l"
+      }
+    ]
   }
 }
 
