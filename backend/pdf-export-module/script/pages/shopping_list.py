@@ -1,6 +1,6 @@
 from argparse import Namespace
 
-from pylatex import Section, Command, Package, Description, Document, NoEscape
+from pylatex import Command, Package, Document, NoEscape, Section, MiniPage, Itemize
 from pylatex.utils import bold
 
 from exportData.camp import Camp
@@ -9,8 +9,15 @@ from shopping_list.shopping_list import ShoppingList
 
 
 def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
+    doc.append(NoEscape(
+        r' \fancyhf{ \lhead{Vollständige Einkaufsliste (Fortsetzung)} \cfoot{\thepage}}'))
+    doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
+
+    doc.append(Section('Vollständige Einkaufsliste', numbering=False))
+    doc.append('Vollständige Einkaufsliste für das gesamte Lager, d.h. inkl. allen Frisch-Produkten!')
+
     # content for this page
-    doc.append(Section('Einkaufsliste', numbering=False))
+    doc.append(NoEscape(r' \vspace{0.75cm} \newline \vspace{0.75cm} \noindent '))
 
     # space between colums
     doc.append(Command('setlength'))
@@ -25,18 +32,28 @@ def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
     full_shopping_list = shoppingList.full_shopping_list
 
     for category_name in full_shopping_list.keys():
-        doc.append(bold(category_name))
+        append_category(category_name, doc, full_shopping_list)
+        doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
 
+    doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
+
+
+def append_category(category_name, doc, shopping_list):
+    with doc.create(MiniPage()):
+        doc.append(bold(category_name))
         with doc.create(Multicols(arguments='3')) as multicols:
             multicols.append(Command('small'))
 
-            with multicols.create(Description(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
+            with multicols.create(Itemize(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
                 # space between colums
                 itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
                 itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
 
-                for ing in full_shopping_list[category_name]:
-                    itemize.add_item('[ ]', ing['food'] + ', ' +
-                                     (str(ing['measure_calc']) if ing['measure_calc'] > 0 else ' ') + ' ' + ing['unit'])
+                append_ingredients(category_name, shopping_list, itemize)
 
-        doc.append(NoEscape(r'\vspace{0.5cm} \noindent'))
+
+def append_ingredients(category_name, shopping_list, itemize):
+    for ing in shopping_list[category_name]:
+        itemize.add_item(
+            ing['food'] + ((', ' + str(ing['measure_calc']) + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')
+        )
