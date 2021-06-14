@@ -46,3 +46,4 @@ Vagrantfile
 /keys/
 script/export.pdf
 script/export.tex
+script/exportData/.ipynb_checkpoints/

@@ -1,7 +1,7 @@
-import re
-from collections import Counter
+import copy
 
 from exportData.camp import Camp
+from shopping_list.spelling_corrector import SpellingCorrector
 
 """
 
@@ -44,57 +44,56 @@ from exportData.camp import Camp
 """
 
 
+def combine_ingredients(ingredients):
+    pass
+
+
+def convert_to_base_unit(ingredients):
+    pass
+
+
+def categorize_ingredients(ingredients):
+    return ingredients
+
+
 class ShoppingList:
     """
-    Helper class for creating a shopping list form a camp.
+    Helper class for creating a shopping list from a camp.
     """
 
     def __init__(self, camp: Camp):
-        self.camp
+        self.full_shopping_list = None
+        self._camp = camp
+        self._spellingCorrector = SpellingCorrector()
 
+    def create_full_shopping_list(self):
+        """
 
-def words(text):
-    return re.findall(r'\w+', text.lower())
+        Includes all meals to create a full shopping list for the complete camp.
+        This function ignores fresh products and merges all recipes of all meals into a single shopping list.
 
+        :return: shopping list object
+        """
 
-WORDS = Counter(words(open('big.txt').read()))
+        # Load meals for that shopping list
+        meals = self._camp.get_specific_meals()
 
+        # create an array with all ingredients of the camp
+        ingredients = []
+        for meal in meals:
+            if 'recipe' in meal:
+                for recipe in meal['recipe']:
+                    if 'ingredients' in recipe:
+                        ingredients += copy.deepcopy(recipe['ingredients'])
 
-def P(word, n=sum(WORDS.values())):
-    """Probability of `word`."""
-    return WORDS[word] / n
+        # (1) fix spelling mistakes
+        self._spellingCorrector.fix_spelling_mistakes(ingredients)
 
+        # (2) Combine ingredients and convert units
+        convert_to_base_unit(ingredients)
+        combine_ingredients(ingredients)
 
-def correction(word):
-    """Most probable spelling correction for word."""
-    return max(candidates(word), key=P)
+        # (3) Sort into categories
+        self.full_shopping_list = categorize_ingredients(ingredients)
 
-
-def candidates(word):
-    """Generate possible spelling corrections for word."""
-    return known([word]) or known(edits1(word)) or known(edits2(word)) or [word]
-
-
-def known(wds):
-    """The subset of `words` that appear in the dictionary of WORDS."""
-    return set(w for w in wds if w in WORDS)
-
-
-def edits1(word):
-    """All edits that are one edit away from `word`."""
-    letters = 'abcdefghijklmnopqrstuvwxyz'
-    splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-    deletes = [L + R[1:] for L, R in splits if R]
-    transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R) > 1]
-    replaces = [L + c + R[1:] for L, R in splits if R for c in letters]
-    inserts = [L + c + R for L, R in splits for c in letters]
-    return set(deletes + transposes + replaces + inserts)
-
-
-def edits2(word):
-    """All edits that are two edits away from `word`."""
-    return (e2 for e1 in edits1(word) for e2 in edits1(e1))
-
-
-# test run
-print(correction('Schwarzwurtzell'))
+        return self
