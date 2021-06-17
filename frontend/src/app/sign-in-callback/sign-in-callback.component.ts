@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthenticationService} from '../application/_service/authentication.service';
 import {Router} from '@angular/router';
+import {HelpService} from "../application/_service/help.service";
 
 @Component({
   selector: 'app-sign-in-callback',
@@ -14,7 +15,7 @@ export class SignInCallbackComponent {
   private static timeout = 2500;
   private checkIfUsingCeviDB = true;
 
-  constructor(auth: AuthenticationService, router: Router) {
+  constructor(auth: AuthenticationService, router: Router, public help: HelpService) {
 
     this.checkSignIn(auth, router, 0);
 
