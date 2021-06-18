@@ -49,9 +49,11 @@ app-main-menu
   position: fixed
   height: 100vh
   width: 280px
+  grid-template-rows: 101px auto
+  overscroll-behavior: contain
 
 app-main-menu.show-menu
-  display: inline-grid
+  display: grid
 
 app-template-header
   grid-area: header

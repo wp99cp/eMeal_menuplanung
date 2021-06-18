@@ -1,5 +1,7 @@
-
-
+.logo-container
+  position: fixed
+  background: white
+  width: 280px
 
 .iconText
   display: grid
@@ -31,22 +33,29 @@
 
 hr
   border-top: 0 solid rgba(0,0,0,.12)
-  margin: 18px 0
+  margin: 18px 0 0 0
   color: rgba(0, 0, 0, 0.12)
+  border-left: none
 
 .nav
-  height: 100vh
-  display: block
+  display: inline-grid
   user-select: none
+  overflow-y: auto
+  overflow-x: hidden
+  grid-row-start: 2
+  padding-top: 18px
 
   ul.top
     margin-bottom: auto
     top: 0
+    grid-row-start: 1
+    margin-top: 0
 
   ul.bottom
     margin-top: auto
     bottom: 25px
-    position: absolute
+    grid-row-start: 3
+    padding-top: 50px
 
   ul
     padding: 0
@@ -69,6 +78,17 @@ hr
       text-decoration: none
       font-weight: 500
 
+.nav::-webkit-scrollbar
+  width: 3px
+
+.nav::-webkit-scrollbar-track
+  background: #f1f1f1
+
+.nav::-webkit-scrollbar-thumb
+  background: #888
+
+.nav::-webkit-scrollbar-thumb:hover
+  background: #555
 
 .nav-icon
   color: unset
