@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TemplateHeaderComponent} from '../template-header/template-header.component';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
@@ -14,10 +14,12 @@ import {AuthenticationService} from '../../application/_service/authentication.s
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.sass']
 })
-export class MainMenuComponent {
+export class MainMenuComponent implements OnInit {
 
 
   public lastCamp: Camp;
+
+  public isSignedIn = false;
 
   constructor(private router: Router,
               private auth: AuthenticationService,
@@ -34,17 +36,28 @@ export class MainMenuComponent {
 
   }
 
-  public closeMenu() {
+  async ngOnInit(): Promise<void> {
+
+
+    this.auth.isSignedIn().subscribe(res => {
+      this.isSignedIn = res;
+    });
+
+
+  }
+
+  closeMenu() {
     TemplateHeaderComponent.showMenu();
   }
 
-  public isSignedIn() {
+  isInsideApp() {
     return this.router.url.includes('app');
   }
 
-  public signOut() {
+  signOut() {
 
     this.auth.signOut();
+    this.isSignedIn = false;
 
   }
 
