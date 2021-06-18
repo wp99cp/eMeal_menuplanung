@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from '../application/_service/authentication.service';
 import {Router} from '@angular/router';
 
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {HelpService} from '../application/_service/help.service';
 
 @Component({
@@ -17,6 +18,9 @@ export class SignInCallbackComponent {
   private checkIfUsingCeviDB = true;
 
 
+  constructor(auth: AuthenticationService,
+              router: Router,
+              private snackBar: MatSnackBar,
               public helpService: HelpService) {
 
     this.checkSignIn(auth, router, 0);
