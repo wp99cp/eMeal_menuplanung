@@ -99,7 +99,7 @@ export class HelpService {
   private generalizeURL(url: string) {
 
     function replacer(match, slash, folder) {
-      const knownFolders = ['app', 'camps', 'meals', 'recipes', 'settings', 'export'];
+      const knownFolders = ['app', 'camps', 'meals', 'recipes', 'settings', 'export', 'login', 'oauth-callback'];
       return knownFolders.includes(folder) ? match : '/*';
     }
 
