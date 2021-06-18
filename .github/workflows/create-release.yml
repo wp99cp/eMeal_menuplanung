@@ -55,4 +55,22 @@ jobs:
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
 
-  # TODO release backend!
+  execute_release_scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2
+
+      #install the python needed
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      # run copy_help_messages_to_production_DB.py
+      - name: execute py script
+        env:
+          FIREBASE_CEVIZH11_MENUPLANUNG: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11_MENUPLANUNG }}
+          FIREBASE_CEVIZH11: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11 }}
+        run: python ./deployment_scripts/copy_help_messages_to_production_DB.py
+

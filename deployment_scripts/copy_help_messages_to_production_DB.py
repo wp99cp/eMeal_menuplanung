@@ -1,16 +1,18 @@
 """
     This script copies the help messages form the dev environment to the prod environment.
 """
+import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-cred = credentials.Certificate(
-    "keys/cevizh11-menuplanung-firebase-adminsdk.json")
+prod_key = os.environ['FIREBASE_CEVIZH11_MENUPLANUNG']
+def_key = os.environ['FIREBASE_CEVIZH11']
+
+cred = credentials.Certificate(prod_key)
 app = firebase_admin.initialize_app(cred, name='prod')
 db_prod = firestore.client(app)
 
-cred = credentials.Certificate(
-    "keys/cevizh11-firebase-adminsdk.json")
+cred = credentials.Certificate(def_key)
 app = firebase_admin.initialize_app(cred, name='dev')
 db_def = firestore.client(app)
 
