@@ -77,6 +77,9 @@ export class AuthenticationService {
 
         res(true);
 
+      }).catch(err => {
+        console.log('Sign in failed!');
+        res(false);
       });
 
 
