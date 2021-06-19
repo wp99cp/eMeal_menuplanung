@@ -10,7 +10,7 @@
   </p>
 
 
-  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat">
+  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat else showLoadingBar">
     <mat-accordion class="help-textes" *ngFor="let cat of Object.keys(helpMessByCat)">
 
       <h3>{{cat}}</h3>
@@ -29,6 +29,10 @@
     </mat-accordion>
 
   </ng-container>
+
+  <ng-template #showLoadingBar>
+    <mat-progress-bar mode="query"></mat-progress-bar>
+  </ng-template>
 
 
 </div>
