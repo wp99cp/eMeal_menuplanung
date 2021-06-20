@@ -14,7 +14,7 @@ def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
     doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
 
     doc.append(Section('Vollständige Einkaufsliste', numbering=False))
-    doc.append('Vollständige Einkaufsliste für das gesamte Lager, d.h. inkl. allen Frisch-Produkten!')
+    doc.append('Dies ist die vollständige Einkaufsliste für das gesamte Lager, d.h. inkl. allen Frisch-Produkten!')
 
     # content for this page
     doc.append(NoEscape(r' \vspace{0.75cm} \newline \vspace{0.75cm} \noindent '))
@@ -32,13 +32,13 @@ def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
     full_shopping_list = shoppingList.full_shopping_list
 
     for category_name in full_shopping_list.keys():
-        append_category(category_name, doc, full_shopping_list)
+        append_category(category_name, doc, full_shopping_list, args)
         doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
 
     doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
 
 
-def append_category(category_name, doc, shopping_list):
+def append_category(category_name, doc, shopping_list, args):
     with doc.create(MiniPage()):
         doc.append(bold(category_name))
         with doc.create(Multicols(arguments='3')) as multicols:
@@ -49,11 +49,15 @@ def append_category(category_name, doc, shopping_list):
                 itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
                 itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
 
-                append_ingredients(category_name, shopping_list, itemize)
+                append_ingredients(category_name, shopping_list, itemize, args)
 
 
-def append_ingredients(category_name, shopping_list, itemize):
+def append_ingredients(category_name, shopping_list, itemize, args):
     for ing in shopping_list[category_name]:
-        itemize.add_item(
-            ing['food'] + ((', ' + str(ing['measure_calc']) + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')
-        )
+        if args.invm:
+            itemize.add_item(
+                ing['food'] + ((', ' + str(ing['measure_calc']) + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')
+            )
+        else:
+            itemize.add_item(
+                ((str(ing['measure_calc']) + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + ing['food'])

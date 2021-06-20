@@ -21,6 +21,9 @@ def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
     # for each meal
     for meal in camp.get_specific_meals():
 
+        doc.append(NoEscape(r' \fancyhf{ \lhead{' + meal['meal_name'] + r'} \cfoot{\thepage}}'))
+        doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
+
         add_header(doc, meal)
 
         # general Infos
@@ -42,7 +45,9 @@ def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
             doc.append('Diese Mahlzeit enthält keine Rezepte.')
 
         doc.append(Command(r'clearpage'))
+        doc.append(NoEscape(r' \pagestyle{plain}'))
         doc.append(Command(r'pagebreak'))
+
 
 
 def add_header(doc, meal):
