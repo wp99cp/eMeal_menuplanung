@@ -1,33 +1,35 @@
-<div class="centered">
+<span class="big-page-title">Lagerhandbuch erstellen</span>
 
-  <span class="page-title">Lager exportieren</span>
-
-  <h1>Lagerhandbuch erstellen und herunterladen.</h1>
-
-  <p>Kurze Zeit nach deinem Klick erscheint das fertige Lagerhandbuch in der Downloadliste. Du kannst es nun jederzeit
-    herunterladen. Es werden jeweils die letzten 6 Exporte angezeigt. Exporte stehen maximal einen Monat zur Verfügung.
-  </p>
-  <p>Weiter Informationen zum Lagerhandbuch kannst du der <a routerLink="/infos/hilfe">Hilfeseite</a> entnehmen.</p>
-
-  <div *ngIf="pending" class="waiting">
-    <mat-progress-bar mode="query"></mat-progress-bar>
+<div *ngIf="pending" class="waiting">
+  <br>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <br>
+  <div class="waiting-comment">
+    <h3>Der Export läuft, bitte warten...</h3>
+    <span><a (click)="helpService.openHelpPopup()">Hilfe / Erklärungen zum Lagerhandbuch</a> </span>
   </div>
-
-  <span *ngIf="message !== ''" class="error-message"> {{message}}</span>
-
-  <ng-container *ngIf="showExports">
-    <div *ngIf="(exports | async); let exports" class="camp-export-list">
-      <div class="docs camp-export" *ngFor="let export of exports">
-        <h3>Lagerhandbuch und Einkaufsliste</h3>
-        <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
-                      [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')"
-                      [docPath]="path"></app-download>
-      </div>
-    </div>
-  </ng-container>
-
-  <p>Hast du gewusst? Den Link zu einem Export kannst du mit anderen Teilen. So können sie ebenfalls auf dein
-    Lagerhandbuch zugreifen. Aber Achtung nach einem Monat wird der Export automatisch gelöscht.
-  </p>
-
 </div>
+
+<span *ngIf="message !== ''" class="error-message"> {{message}}</span>
+
+<ng-container *ngIf="showExports && (exports | async); let exports else noExports">
+  <div *ngIf="exports.length > 0 else noExports" class="camp-export-list">
+    <div class="docs camp-export" *ngFor="let export of exports">
+      <h3>Lagerhandbuch und Einkaufsliste</h3>
+      <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
+                    [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')"
+                    [docPath]="path"></app-download>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noExports>
+  <div class="create-first-export mat-elevation-z3" *ngIf="!exportIsRunning">
+    <div>
+      <h3>Du hast noch keine Exporte!</h3>
+      <button mat-raised-button color="save" (click)="createNewExport()">Lagerhandbuch erstellen</button>
+      <span><a (click)="helpService.openHelpPopup()">Hilfe / Erklärungen</a> </span>
+    </div>
+  </div>
+</ng-template>
+
