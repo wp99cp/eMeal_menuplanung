@@ -51,37 +51,50 @@
 
 
 .meal-card
-  width: calc(100% - 40px)
   margin: 10px
   border-radius: 10px
   border: dashed 1px darkgray
-  padding: 5px 10px
   min-height: 12px
-  display: grid
-  grid-template: 'name addMeal' 'meals meals'
-  grid-template-columns: auto 25px
-  grid-template-rows: 20px auto
   user-select: none
+  position: relative
+  display: flex
+  align-items: stretch
+  justify-content: space-between
+  align-content: space-around
+  min-height: 30px
+
 
   .meal-card-name
     font-size: 12px
     font-weight: bold
     line-height: 20px
     color: #A1A1A1
-    grid-area: name
+    position: absolute
+    top: 5px
+    left: 10px
 
-  .add-meal-icon
 
   .meals
-    grid-area: meals
-    margin: auto
     font-weight: bold
     font-size: 16px
     line-height: 15px
     text-align: center
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
 
     .meal-element
-      margin-bottom: 10px
+      height: 75px
+      width: 100%
+      display: flex
+      justify-content: center
+      align-items: center
+      flex-direction: column
+
+      span
+        padding: 0 20px
 
   .add-notes-icon
     color: #C0C0C0
@@ -102,6 +115,12 @@
 .has-a-meal:hover
   background-color: whitesmoke
 
+.Vorbereiten
+  padding-top: 30px
+  padding-bottom: 15px
+
+  .meal-element
+    height: 50px !important
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -111,7 +130,6 @@
   right: 10px
   top: 15px
   color: white
-
 
 ////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
@@ -127,4 +145,28 @@
   font-size: 16px
   line-height: 15px
   text-align: center
-  padding: 15px
+  margin: 15px
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+
+.cdk-drop-list-receiving
+  background-color: #75ba120f
+
+.cdk-drop-list-dragging:not(.block-drop)
+  background-color: #75ba1238 !important
+  cursor: copy
+
+
+.block-drop
+  background-color: #f7000008
+  cursor: no-drop !important
+
+  .meals
+    cursor: no-drop !important
+
+.home-field
+  .meals
+    cursor: copy !important
+    visibility: hidden !important

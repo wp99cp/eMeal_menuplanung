@@ -21,7 +21,7 @@
 
       <div class="meals" *ngIf="(meals.length >= 1) else noMeal" [ngClass]="{'moveable': nameOfMeal !== 'Vorbereiten' && access}">
         <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
-             cdkDrag class="meal-element"
+             cdkDrag class="meal-element" (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
              [cdkDragDisabled]="(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
              (cdkDragDropped)="mealDroppedAction([meal, $event]);"
              routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
@@ -36,7 +36,7 @@
       </div>
 
       <ng-template #noMeal>
-        <div class="meals clickable" [attr.data-add-note]="'true'">
+        <div class="meals" [attr.data-add-note]="'true'">
         </div>
       </ng-template>
 
