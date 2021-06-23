@@ -15,7 +15,6 @@ import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 import {DayOverviewComponent} from '../day-overview/day-overview.component';
-import assert from 'assert';
 
 /**
  * Week-Overview of a camp: This component renders the week-overview of a camp.
@@ -120,9 +119,6 @@ export class WeekOverviewComponent implements OnInit, Saveable {
    * @param mealDateAsString: the new date as a string (UNIX)
    */
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
-
-    // Assert the user has write-access to the camp
-    assert(this.hasWriteAccess);
 
     // update meal date, i.g. move the meal to the correct day
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
