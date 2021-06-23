@@ -15,6 +15,7 @@ import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 import {DayOverviewComponent} from '../day-overview/day-overview.component';
+import assert from 'assert';
 
 /**
  * Week-Overview of a camp: This component renders the week-overview of a camp.
@@ -66,7 +67,9 @@ export class WeekOverviewComponent implements OnInit, Saveable {
 
   ngOnInit() {
 
-
+    // Check whether the user as write-access to the camp.
+    // The result get sored in the local var hasWriteAccess on top of that
+    // if the user has access, the "Speichern" "Mahlzeiten" button are created.
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
       this.hasWriteAccess = hasAccess;
@@ -87,39 +90,39 @@ export class WeekOverviewComponent implements OnInit, Saveable {
         icon: 'fastfood'
       });
 
-
     });
 
+    // save a list of meals that gets prepared on another day
     this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
-    this.mealToPrepare.subscribe(console.log);
-
 
   }
 
 
+  /**
+   * Saves the camp.
+   * @returns: Promise<boolean> resolving once the save process has been successfully finished. The promise always
+   * resolve with a value true, since the camp get saved regardless if it got changed or not.
+   */
   public async save() {
 
     // Speichert das Lager
-    this.dbService.updateDocument(this.camp);
-
+    await this.dbService.updateDocument(this.camp);
     HeaderNavComponent.turnOff('Speichern');
 
-
-    return false;
+    return true;
   }
 
   /**
-   * Wir bei einem Drop eines Meals ausgelöst.
+   * Action executed after a meal has been dropped into another meal or day (drag and drop of meals in week-overview).
    *
-   *
-   *
+   * @param specificMeal: reference to the meal that got dropped
+   * @param usedAs: the new use case
+   * @param mealDateAsString: the new date as a string (UNIX)
    */
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
-    // Check if the current user has access to move meals
-    if (!this.hasWriteAccess) {
-      return;
-    }
+    // Assert the user has write-access to the camp
+    assert(this.hasWriteAccess);
 
     // update meal date, i.g. move the meal to the correct day
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
@@ -128,15 +131,13 @@ export class WeekOverviewComponent implements OnInit, Saveable {
     HeaderNavComponent.turnOn('Speichern');
 
     // check if meal gets prepared, if so, check if the prepare date is older than the meal usage.
-    // If that is the case the prepare will ve deactivated
+    // If that is the case the prepare will be deactivated
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
       specificMeal.prepare = false;
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
     }
 
-
-    this.dbService.updateDocument(specificMeal);
-
+    await this.dbService.updateDocument(specificMeal);
 
   }
 
