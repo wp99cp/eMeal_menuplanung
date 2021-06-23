@@ -58,7 +58,7 @@ export class ContextMenuService {
     this.nodesWithContextMenu.forEach(entry => {
 
 
-      if (entry.node.contains(event.target as Node)) {
+      if (entry.node?.contains(event.target as Node)) {
 
         this.createContextMenu(event, entry, event.clientX, event.clientY);
         return;

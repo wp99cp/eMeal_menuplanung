@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChildren} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -14,6 +14,7 @@ import {Saveable} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
+import {DayOverviewComponent} from "../day-overview/day-overview.component";
 
 /**
  * Wochenübersicht eines Lagers
@@ -39,6 +40,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public mealToPrepare: Observable<SpecificMeal[]>;
 
   public modelSaved = true;
+
+  @ViewChildren(DayOverviewComponent) dayOverviews;
 
   constructor(
     public dialog: MatDialog,
@@ -228,7 +231,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    * Fügt eine neue Mahlzeit hinzu.
    *
    */
-  public addMeal(dayIndex: number = 0) {
+  public addMeal(dayIndex: number = 0, usage?: MealUsage) {
 
 
     // Create data fo dialog. The dataset contains all meals already used in the camp
@@ -246,7 +249,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
         return this.dialog.open(AddMealComponent, {
           height: '618px',
           width: '1000px',
-          data: {mealNames}
+          data: {mealNames, usage},
         }).afterClosed();
 
       })).subscribe((result: SelectionModel<Meal>) => {
@@ -258,7 +261,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           // TODO: combine in one database write....
 
           // falls keine Verwendung gesetzt, dann als 'Zmorgen'
-          const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
+          const usedAs = usage ? usage : (meal.usedAs ? meal.usedAs : 'Zmorgen');
 
           const day = this.camp.days[dayIndex];
           const mealsOfDay = await new Promise<SpecificMeal[]>(resolve =>
@@ -271,7 +274,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
             return;
           }
 
-          console.log('Create meal at day Nr. ' + dayIndex + ' as ' + usedAs + '.');
+          console.log('Create meal at day Nr. ' + dayIndex + ' as ' + usedAs);
 
           // add campId to usedInCamps
           if (!meal.usedInCamps.includes(this.camp.documentId)) {
@@ -280,6 +283,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           }
 
           console.log('Add campID');
+          this.updateContextMenus();
 
           // erstellt die spezifischen Rezepte und Mahlzeiten
           const specificMealId = await new Promise<string>(res => {
@@ -296,14 +300,16 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           }
 
           await meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
-
-          this.updateAccess(meal);
-
           console.log('After Update Meal');
+
+          this.updateContextMenus();
+
+          setTimeout(() => this.updateAccess(meal), 0);
 
         });
       }
     });
+
   }
 
   /**
@@ -317,24 +323,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // versteckt das Element aus dem GUi
     document.querySelectorAll('[data-meal-id=ID-' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
 
-    // shown delete Meassage
-    const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
-
-    // Löscht das Rezept oder breicht den Vorgang ab, je nach Aktion der snackBar...
-    let canDelete = true;
-    snackBar.onAction().subscribe(() => {
-      canDelete = false;
-      document.querySelector('[data-meal-id=ID-' + elementID + ']')?.classList.toggle('hidden');
-
-    });
-    snackBar.afterDismissed().subscribe(() => {
-
-      if (canDelete) {
-        this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
-        return;
-      }
-
-    });
+    this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
+    this.updateContextMenus();
 
   }
 
@@ -416,6 +406,9 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   private updateAccess(meal: Meal) {
 
+    console.log('updateAccess stared');
+
+
     try {
 
       // request for update rights for meals, recipes and specificMeals and specificRecipes
@@ -427,4 +420,9 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     }
 
   }
+
+  private updateContextMenus() {
+    this.dayOverviews.forEach(el => el.setContextMenu());
+  }
+
 }

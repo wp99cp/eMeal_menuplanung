@@ -33,7 +33,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
-  @Output() addMeal = new EventEmitter<Day>();
+  @Output() addMeal = new EventEmitter<[Day, string]>();
   @Output() modelChanged = new EventEmitter<boolean>();
 
   @ViewChild('dayElement') dayElement;
@@ -102,6 +102,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     empties.forEach(empty => {
 
+
       const node: ContextMenuNode = {
         node: empty as HTMLElement,
         contextMenuEntries: [
@@ -109,7 +110,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
             icon: 'add',
             name: 'Hinzufügen',
             shortCut: '',
-            function: () => this.addMeal.emit(this.day)
+            function: () => this.addMeal.emit([this.day, empty.parentElement.getAttribute('data-meal-name')])
           },
           {
             icon: 'sticky_note_2',
@@ -205,11 +206,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   }
 
-  addNewMeal(day: Day) {
-
-    this.addMeal.emit(day);
-
-  }
 
   /**
    * Berbeite einen Tag.
@@ -240,7 +236,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
-    console.log('mealDroppedAction')
+    console.log('mealDroppedAction');
 
     // Don't update the model, if the meal has not been moved to another location.
     if (event.container === event.previousContainer) {

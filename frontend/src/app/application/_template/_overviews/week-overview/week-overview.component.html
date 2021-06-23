@@ -5,7 +5,7 @@
                       [specificMeals]="getSpecificMealsOfDay(day)" [mealsToPrepare]="mealToPrepare"
                       (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
                       (dayEdited)="editDay($event[0], $event[1],  $event[2])"
-                      (addMeal)="addMeal(camp.days.indexOf($event))">
+                      (addMeal)="addMeal(camp.days.indexOf($event[0]), $event[1])">
     </app-day-overview>
   </div>
 

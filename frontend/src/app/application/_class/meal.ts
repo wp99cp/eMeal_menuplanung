@@ -94,6 +94,9 @@ export class Meal extends FirestoreObject implements ExportableObject {
     specificMealData.meal_id = this.documentId;
 
     const mealPath = 'meals/' + this.documentId + '/specificMeals/';
+
+    console.log('await databaseService.addDocument(specificMealData, mealPath);\n')
+
     const ref = await databaseService.addDocument(specificMealData, mealPath);
 
     return ref.id;

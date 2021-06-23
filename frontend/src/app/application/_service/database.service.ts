@@ -673,11 +673,20 @@ export class DatabaseService {
 
 
     if (documentId === undefined) {
-      return await this.db.collection(collectionPath).add(firebaseDocument);
+
+      return new Promise((resolve) => {
+
+        this.db.collection(collectionPath).add(firebaseDocument)
+          .then(res => resolve(res))
+          .catch(err => console.log(err));
+
+      });
+
     }
 
     return new Promise((resolve) => {
       this.db.doc(collectionPath + '/' + documentId).get().subscribe(async res => {
+
 
         if (res.exists) {
           throw new Error('Doc already exist!');
