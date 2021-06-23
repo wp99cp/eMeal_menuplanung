@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChildren} from '@angular/core';
+import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -14,10 +14,14 @@ import {Saveable} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
-import {DayOverviewComponent} from "../day-overview/day-overview.component";
+import {DayOverviewComponent} from '../day-overview/day-overview.component';
 
 /**
- * Wochenübersicht eines Lagers
+ * Week-Overview of a camp: This component renders the week-overview of a camp.
+ * It provides drag and drop support for meals between days and meals.
+ *
+ *  TODO: add short-cut for adding meal (shift + M)
+ *  TODO: add short-cut for adding day (shift + D)
  *
  */
 @Component({
@@ -25,42 +29,47 @@ import {DayOverviewComponent} from "../day-overview/day-overview.component";
   templateUrl: './week-overview.component.html',
   styleUrls: ['./week-view.component.sass'],
 })
-export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
+export class WeekOverviewComponent implements OnInit, Saveable {
 
-  // TODO: add short-cut for adding meal (shift + M)
-  // TODO: add short-cut for adding day (shift + D)
 
-  // inputed fields
+  /** The camp for which this component should create the week-overview. */
   @Input() camp: Camp;
 
-  public colCounter = this.calculateCols();
-  public showParticipantsWarning = false;
-  public specificMealsToSave: SpecificMeal[] = [];
-  public hasAccess = false;
+  /** Number of columns (i.g. days) that have space on the screen */
+  public showNColumns = WeekOverviewComponent.calculateCols();
+  /** Whether or not the user has write-access to this camp. */
+  public hasWriteAccess = false;
+  /** Stores a list of all meals that get prepared on another day */
   public mealToPrepare: Observable<SpecificMeal[]>;
 
-  public modelSaved = true;
-
-  @ViewChildren(DayOverviewComponent) dayOverviews;
+  /** List of all day-overview */
+  @ViewChildren(DayOverviewComponent) dayOverviews: QueryList<DayOverviewComponent>;
 
   constructor(
     public dialog: MatDialog,
     public dbService: DatabaseService,
-    public snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef) {
+    public snackBar: MatSnackBar) {
 
-    // change number of collums when resize window
-    window.addEventListener('resize', () => this.colCounter = this.calculateCols());
-
+    // Change number of columns (i.g. days) when the window gets resized
+    window.addEventListener('resize', () =>
+      this.showNColumns = WeekOverviewComponent.calculateCols());
 
   }
 
+  /**
+   * Calculates the number (i.g. days) of columns that have space on the screen width.
+   * @returns: the number of columns
+   */
+  private static calculateCols() {
+    return Math.floor(document.body.scrollWidth / 340);
+  }
 
   ngOnInit() {
 
+
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
-      this.hasAccess = hasAccess;
+      this.hasWriteAccess = hasAccess;
 
       HeaderNavComponent.addToHeaderNav({
         active: false,
@@ -71,7 +80,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       }, 0);
 
       HeaderNavComponent.addToHeaderNav({
-        active: true && this.hasAccess,
+        active: this.hasWriteAccess,
         description: 'Mahlzeiten hinzufügen',
         name: 'Mahlzeiten',
         action: (() => this.addMeal()),
@@ -81,35 +90,9 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     });
 
-    this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId)
+    this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
     this.mealToPrepare.subscribe(console.log);
 
-
-  }
-
-
-  /**
-   * updates the participantsWarning
-   *
-   */
-  ngOnChanges() {
-
-    console.log('Changes!!!');
-
-    this.showParticipantsWarning = false;
-
-    this.camp.days.forEach(day => {
-
-      if (day.getMeals() !== undefined) {
-
-        day.getMeals().subscribe(meals =>
-          meals.forEach(meal =>
-            (this.showParticipantsWarning = this.showParticipantsWarning || meal.overrideParticipants)
-          ));
-
-      }
-
-    });
 
   }
 
@@ -121,15 +104,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     HeaderNavComponent.turnOff('Speichern');
 
-    // Prüft, ob etwas gespeichert werden muss
-    if (this.specificMealsToSave.length > 0) {
-
-      // Speichert die Mahlzeiten
-      this.saveMeals();
-      this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
-
-      return true;
-    }
 
     return false;
   }
@@ -143,7 +117,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
     // Check if the current user has access to move meals
-    if (!this.hasAccess) {
+    if (!this.hasWriteAccess) {
       return;
     }
 
@@ -160,30 +134,9 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
     }
 
-    // mark the meal as changed
-    // if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
-    //   this.specificMealsToSave.push(specificMeal);
-    // }
-
-
-    this.modelSaved = true;
 
     this.dbService.updateDocument(specificMeal);
 
-    // save the meals
-    // this.saveMeals();
-
-  }
-
-
-  /**
-   * Speichert das Lager ab.
-   *
-   */
-  saveMeals() {
-
-    this.specificMealsToSave.map(meal => this.dbService.updateDocument(meal));
-    this.specificMealsToSave = [];
 
   }
 
@@ -374,7 +327,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
-
   /**
    * Returns the date of the last day in the camp
    *
@@ -393,15 +345,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       return date;
 
     }
-  }
-
-  /**
-   * Berechnet die Anzhal Tage pro Zeile gemäss der Bildschirmbreite
-   *
-   */
-  private calculateCols() {
-
-    return Math.floor(document.body.scrollWidth / 340);
   }
 
   private updateAccess(meal: Meal) {

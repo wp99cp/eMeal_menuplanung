@@ -24,7 +24,7 @@
              [ngClass]="{'moveable': nameOfMeal !== 'Vorbereiten' && access}">
           <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
                cdkDrag class="meal-element" (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
-               [cdkDragDisabled]="!modelSaved || (meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
+               [cdkDragDisabled]="(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
                (cdkDragDropped)="mealDroppedAction([meal, $event]);"
                routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
             <span>{{meal.weekTitle}}</span>

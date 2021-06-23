@@ -22,19 +22,18 @@ import Timeout = NodeJS.Timeout;
 
 })
 export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
+
   @Input() access: boolean;
-  // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
   @Input() day: Day;
   @Input() mealsToPrepare: Observable<SpecificMeal[]>;
   @Input() specificMeals: Observable<SpecificMeal[]>;
   @Input() days: Day[];
-  @Input() modelSaved = true;
   @Input() hideIcons = false;
+
   @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
   @Output() addMeal = new EventEmitter<[Day, string]>();
-  @Output() modelChanged = new EventEmitter<boolean>();
 
   @ViewChild('dayElement') dayElement;
 
@@ -42,7 +41,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   public warning: string;
   public specificMealsByName = {};
   private crashChecker: Timeout;
-  private subscription: Subscription;
+  private specificMealsSubscription: Subscription;
 
   constructor(public dialog: MatDialog,
               public swissDateAdapter: SwissDateAdapter,
@@ -54,7 +53,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.specificMealsSubscription.unsubscribe();
   }
 
 
@@ -125,7 +124,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
             icon: 'help',
             name: 'Hilfe / Erklärungen',
             shortCut: 'F1',
-            function: (event) => this.helpService.openHelpPopup()
+            function: () => this.helpService.openHelpPopup()
           }
         ]
       };
@@ -133,11 +132,11 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     });
 
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.specificMealsSubscription) {
+      this.specificMealsSubscription.unsubscribe();
     }
 
-    this.subscription = this.specificMeals.pipe(take(1)).subscribe(meals => meals.forEach(meal => {
+    this.specificMealsSubscription = this.specificMeals.pipe(take(1)).subscribe(meals => meals.forEach(meal => {
 
       const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
 
@@ -156,21 +155,21 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
                 icon: 'edit',
                 name: 'Bearbeiten',
                 shortCut: '',
-                function: (event) => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
+                function: () => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
                   {relativeTo: this.activeRoute})
               },
               {
                 icon: 'delete',
                 name: 'Mahlzeit Löschen',
                 shortCut: '',
-                function: (event) => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
+                function: () => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
               },
               'Separator',
               {
                 icon: 'help',
                 name: 'Hilfe / Erklärungen',
                 shortCut: 'F1',
-                function: (event) => this.helpService.openHelpPopup()
+                function: () => this.helpService.openHelpPopup()
               }
             ]
           };
@@ -240,7 +239,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     // Don't update the model, if the meal has not been moved to another location.
     if (event.container === event.previousContainer) {
-      this.modelChanged.emit(true);
       return;
     }
 
@@ -269,7 +267,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   dragStarted(event: CdkDragStart) {
 
-    console.log('dragStarted ' + this.modelSaved);
 
     this.crashChecker = setInterval(() => {
 
@@ -292,7 +289,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     }, 25);
 
-    this.modelChanged.emit(false);
 
     document.querySelectorAll('.has-a-meal, .Vorbereiten').forEach(el => {
       if (el !== event.source.dropContainer.element.nativeElement) {
