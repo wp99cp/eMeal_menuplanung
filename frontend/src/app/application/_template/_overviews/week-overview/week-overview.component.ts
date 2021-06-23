@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -38,10 +38,13 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
   public hasAccess = false;
   public mealToPrepare: Observable<SpecificMeal[]>;
 
+  public modelSaved = true;
+
   constructor(
     public dialog: MatDialog,
     public dbService: DatabaseService,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef) {
 
     // change number of collums when resize window
     window.addEventListener('resize', () => this.colCounter = this.calculateCols());
@@ -75,7 +78,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
     });
 
-    this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
+    this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId)
     this.mealToPrepare.subscribe(console.log);
 
 
@@ -136,34 +139,41 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
+    // Check if the current user has access to move meals
     if (!this.hasAccess) {
       return;
     }
 
-    // updatet das Datum
+    // update meal date, i.g. move the meal to the correct day
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
     specificMeal.usedAs = usedAs as MealUsage;
 
-    // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
 
-    // prüft das Vorbereitsungsdatum
+    // check if meal gets prepared, if so, check if the prepare date is older than the meal usage.
+    // If that is the case the prepare will ve deactivated
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
-
-      // Vorbereitungsdatum nach oder am Tag der Mahlzeit...
       specificMeal.prepare = false;
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
-
     }
 
-    // markiert die Mahlzeit als geändert
-    if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
-      this.specificMealsToSave.push(specificMeal);
-    }
+    // mark the meal as changed
+    // if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
+    //   this.specificMealsToSave.push(specificMeal);
+    // }
 
-    this.saveMeals();
+
+    console.log('Start Saving');
+
+    this.modelSaved = true;
+
+    this.dbService.updateDocument(specificMeal);
+
+    // save the meals
+    // this.saveMeals();
 
   }
+
 
   /**
    * Speichert das Lager ab.
@@ -171,9 +181,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   saveMeals() {
 
-    this.specificMealsToSave.forEach(meal =>
-      this.dbService.updateDocument(meal));
-
+    this.specificMealsToSave.map(meal => this.dbService.updateDocument(meal));
     this.specificMealsToSave = [];
 
   }
@@ -372,6 +380,13 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
+  getSpecificMealsOfDay(day: Day) {
+
+    return day.getMeals();
+
+
+  }
+
 
   /**
    * Returns the date of the last day in the camp
@@ -415,6 +430,4 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     }
 
   }
-
-
 }

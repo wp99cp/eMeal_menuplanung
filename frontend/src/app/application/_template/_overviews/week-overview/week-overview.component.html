@@ -1,8 +1,8 @@
 <div class="week-view" cdkDropListGroup>
 
   <div class="mat-elevation-z3 day-container" *ngFor="let day of camp.days; let i = index">
-    <app-day-overview [day]="day" [days]="camp.days"
-                      [specificMeals]="(day.getMeals() | async)" [mealsToPrepare]="(mealToPrepare | async)"
+    <app-day-overview [day]="day" [days]="camp.days" [modelSaved]="modelSaved" (modelChanged)="modelSaved = $event"
+                      [specificMeals]="getSpecificMealsOfDay(day)" [mealsToPrepare]="mealToPrepare"
                       (mealDropped)="drop($event)" (mealDeleted)="deleteMeal($event[0], $event[1])" [access]="hasAccess"
                       (dayEdited)="editDay($event[0], $event[1],  $event[2])"
                       (addMeal)="addMeal(camp.days.indexOf($event))">

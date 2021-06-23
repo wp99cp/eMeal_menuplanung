@@ -12,41 +12,46 @@
   <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
   <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
 
-    <div cdkDropList [cdkDropListEnterPredicate]="predicate"
-         *ngIf="getMeal(nameOfMeal) as meals" class="meal-card {{nameOfMeal}}"
-         [ngClass]="{'has-a-meal': meals.length >= 1}"
-         [attr.data-meal-name]="nameOfMeal"  [attr.is-full]="getMeal(nameOfMeal).length > 0">
+    <ng-container *ngIf="this.specificMealsByName && (this.specificMealsByName[nameOfMeal] | async) as meals">
+      <div cdkDropList [cdkDropListEnterPredicate]="predicate"
+           class="meal-card {{nameOfMeal}}"
+           [ngClass]="{'has-a-meal': meals.length >= 1}"
+           [attr.data-meal-name]="nameOfMeal" [attr.is-full]="meals.length > 0">
 
-      <span class="meal-card-name">{{nameOfMeal}}</span>
+        <span class="meal-card-name">{{nameOfMeal}}</span>
 
-      <div class="meals" *ngIf="(meals.length >= 1) else noMeal" [ngClass]="{'moveable': nameOfMeal !== 'Vorbereiten' && access}">
-        <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
-             cdkDrag class="meal-element" (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
-             [cdkDragDisabled]="(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
-             (cdkDragDropped)="mealDroppedAction([meal, $event]);"
-             routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
-          <span>{{meal.weekTitle}}</span>
-          <span
-            *ngIf="meal.overrideParticipants && !(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())"
-            class="meal-note">Geänderte Anzahl TNs!</span>
-          <span *ngIf="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
-                class="meal-note">für {{swissDateAdapter.formatLong(meal.date.toDate())}}</span>
+        <div class="meals" *ngIf="(meals.length >= 1) else noMeal"
+             [ngClass]="{'moveable': nameOfMeal !== 'Vorbereiten' && access}">
+          <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
+               cdkDrag class="meal-element" (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
+               [cdkDragDisabled]="!modelSaved || (meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
+               (cdkDragDropped)="mealDroppedAction([meal, $event]);"
+               routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
+            <span>{{meal.weekTitle}}</span>
+            <span
+              *ngIf="meal.overrideParticipants && !(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay())"
+              class="meal-note">Geänderte Anzahl TNs!</span>
+            <span *ngIf="meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()"
+                  class="meal-note">für {{swissDateAdapter.formatLong(meal.date.toDate())}}</span>
 
+          </div>
         </div>
+
+        <ng-template #noMeal>
+          <div class="meals no-meal" [attr.data-add-note]="'true'">
+          </div>
+        </ng-template>
+
+        <!-- No add button visible
+          <mat-icon *ngIf="!meals.length && nameOfMeal != 'Vorbereiten' && !hideIcons && access"
+                  class="add-meal-icon clickable" (click)="addNewMeal(day)">add_circle_outline
+          </mat-icon>
+        -->
+
       </div>
 
-      <ng-template #noMeal>
-        <div class="meals" [attr.data-add-note]="'true'">
-        </div>
-      </ng-template>
+    </ng-container>
 
-      <!-- No add button visible
-        <mat-icon *ngIf="!meals.length && nameOfMeal != 'Vorbereiten' && !hideIcons && access"
-                class="add-meal-icon clickable" (click)="addNewMeal(day)">add_circle_outline
-        </mat-icon>
-      -->
-
-    </div>
 
   </ng-container>
 

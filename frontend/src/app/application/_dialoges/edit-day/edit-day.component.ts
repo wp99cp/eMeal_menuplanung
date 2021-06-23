@@ -44,6 +44,10 @@ export class EditDayComponent implements OnInit {
    */
   public dateFilter = (d: Date | null): boolean => {
 
+    if (d === null) {
+      return;
+    }
+
     const withSameDate = this.data.days.filter(day => day.dateAsTypeDate.getTime() === d.getTime());
     return withSameDate.length === 0 || d.getTime() === this.currentDate.getTime();
 
