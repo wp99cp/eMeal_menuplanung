@@ -163,8 +163,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // }
 
 
-    console.log('Start Saving');
-
     this.modelSaved = true;
 
     this.dbService.updateDocument(specificMeal);
@@ -232,7 +230,6 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    */
   public addMeal(dayIndex: number = 0) {
 
-    console.log('Add meal to day Nr. ' + dayIndex);
 
     // Create data fo dialog. The dataset contains all meals already used in the camp
     // this allows the dialog to sort and rank the meals.
