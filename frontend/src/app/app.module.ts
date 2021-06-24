@@ -32,9 +32,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AccessGuard} from './AccessGuard';
-import {DateAdapter} from "@angular/material/core";
-import {SwissDateAdapter} from "./utils/format-datapicker";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {DateAdapter} from '@angular/material/core';
+import {SwissDateAdapter} from './utils/format-datapicker';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [

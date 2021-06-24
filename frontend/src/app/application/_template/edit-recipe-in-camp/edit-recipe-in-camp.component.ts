@@ -64,7 +64,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
     this.databaseService.loadRecipeOverwrites(this.recipe.documentId, this.camp.documentId).subscribe(doc => {
 
         if (doc.data()) {
-          const ings = doc.data().ingredients;
+          const ings = (doc.data() as any).ingredients;
           this.recipe.overwriteIngredients(ings, this.camp.documentId);
         }
 
