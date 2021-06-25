@@ -1,33 +1,37 @@
+import datetime
+from argparse import Namespace
+
 from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
-from pylatex.base_classes import Environment
 
-from exportData.camp import Camp
-
-
-class Subtable(Environment):
-    escape = False
+import exportData.camp
 
 
-def add_meals(doc: Document, camp: Camp):
+def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
     doc.packages.append(Package('xcolor'))
     doc.packages.append(Package('tabularx'))
     doc.packages.append(Package('colortbl'))
     doc.packages.append(Package('enumitem'))
     doc.packages.append(Package('float'))
     doc.packages.append(Package('subcaption'))
+    doc.packages.append(Package('multirow'))
 
     doc.packages.append(Package('caption', options=[NoEscape(r'textfont={large, bf}'), 'labelformat=empty',
                                                     'justification=raggedright']))
 
     # for each meal
-    for meal in camp.get_meals_for_meal_page():
+    for meal in camp.get_specific_meals():
+
+        doc.append(NoEscape(r' \fancyhf{ \lhead{' + meal['meal_name'] + r'} \cfoot{\thepage}}'))
+        doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
 
         add_header(doc, meal)
 
         # general Infos
         with doc.create(Description()) as enum:
             if meal['meal_gets_prepared']:
-                enum.add_item('Vorbereiten:', 'am ' + meal['meal_prepare_date'].strftime("%A %d. %b %Y"))
+                enum.add_item('Vorbereiten:',
+                              'am ' + (meal['meal_prepare_date'] + datetime.timedelta(hours=2)).strftime(
+                                  "%A %d. %b %Y"))
 
             if meal['meal_description'] != '':
                 enum.add_item('Beschreibung / Notizen:', meal['meal_description'])
@@ -41,7 +45,9 @@ def add_meals(doc: Document, camp: Camp):
             doc.append('Diese Mahlzeit enthält keine Rezepte.')
 
         doc.append(Command(r'clearpage'))
+        doc.append(NoEscape(r' \pagestyle{plain}'))
         doc.append(Command(r'pagebreak'))
+
 
 
 def add_header(doc, meal):
@@ -53,12 +59,12 @@ def add_header(doc, meal):
         with doc.create(Tabularx("X r", width_argument=NoEscape(r'\textwidth'))) as table_content:
             # add header
             table_content.add_row([
-                NoEscape(r'\LARGE \textbf{' + meal['meal_name'] + '}'),
-                NoEscape(r'\color{gray} \large \textbf{' + meal['meal_date'].strftime("%a, %d. %b") + '}')])
+                NoEscape(r'\multirow{2}{12cm}{\LARGE \textbf{' + meal['meal_name'] + '}}'),
+                NoEscape(r'\color{gray} \large \textbf{' + (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
+                    "%a, %d. %b") + '}')])
 
             table_content.add_row(
-                [NoEscape(r'\small \textit{(' + meal['meal_weekview_name'] + ')}'),
-                 NoEscape(r'\color{gray} \large \textbf{' + meal['meal_used_as'] + '}')])
+                ['', NoEscape(r'\color{gray} \large \textbf{' + meal['meal_used_as'] + '}')])
             table_content.add_hline()
 
 
@@ -82,16 +88,6 @@ def add_recipe(doc, recipe):
 
             table.add_caption(recipe['recipe_name'] + ' (für ' + str(recipe['recipe_participants']) + ' Per.)')
 
-            # add section for 'recipe_description' or 'recipe_notes' if one is none-empty
-            if recipe['recipe_description'] + recipe['recipe_notes'] != '':
-                with table.create(Tabularx('l X', width_argument=NoEscape(r'\textwidth'))) as table_content:
-                    if recipe['recipe_description'] != '':
-                        table_content.add_row(['Beschreibung: ', recipe['recipe_description']])
-                    if recipe['recipe_notes'] != '':
-                        table_content.add_row(['Notizen:', recipe['recipe_notes']])
-
-            table.append(NoEscape(r'\par'))
-
             with table.create(Tabularx('| r | r | l | l | X |', width_argument=NoEscape(r'\textwidth'))) \
                     as table_content:
                 table_content.add_hline()
@@ -103,3 +99,13 @@ def add_recipe(doc, recipe):
                 for ingredient in recipe['ingredients']:
                     add_ingredient(table_content, ingredient)
                     table_content.add_hline()
+
+            table.append(NoEscape(r'\par \vspace{0.6cm}'))
+
+            # add section for 'recipe_description' or 'recipe_notes' if one is none-empty
+            if recipe['recipe_description'] + recipe['recipe_notes'] != '':
+                with table.create(Tabularx('l X', width_argument=NoEscape(r'\textwidth'))) as table_content:
+                    if recipe['recipe_description'] != '':
+                        table_content.add_row(['Beschreibung: ', recipe['recipe_description']])
+                    if recipe['recipe_notes'] != '':
+                        table_content.add_row(['Notizen:', recipe['recipe_notes']])

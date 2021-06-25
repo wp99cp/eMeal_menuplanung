@@ -57,7 +57,7 @@ export class ImportComponent implements OnInit {
 
     // load data
     this.dbService.importMeal(this.input.value.url)
-      .subscribe(rawMealData => {
+      .subscribe(async rawMealData => {
 
         // stop spinning
         this.showSpinner = false;
@@ -85,7 +85,7 @@ export class ImportComponent implements OnInit {
         }
 
         // No error: create Meal
-        const uid = this.authService.fireAuth.auth.currentUser.uid;
+        const uid = (await this.authService.fireAuth.currentUser).uid;
         this.meal = FirestoreObject.exportEmptyDocument(uid) as FirestoreMeal;
         this.meal.meal_name = rawMealData.mealTitle;
         this.meal.meal_description = '';

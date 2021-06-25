@@ -103,7 +103,14 @@ export class HelpService {
       return knownFolders.includes(folder) ? match : '/*';
     }
 
-    return url.replace(/(\/)([a-zA-Z0-9_.-]+)/gm, replacer).replace(/^\//, '');
+    let generalizedURL = url.replace(/(\/)([a-zA-Z0-9_.-]+)/gm, replacer).replace(/^\//, '');
+
+    const indexOfQuery = generalizedURL.indexOf('?');
+    if (indexOfQuery > 0) {
+      generalizedURL = generalizedURL.substring(0, indexOfQuery);
+    }
+
+    return generalizedURL;
 
   }
 

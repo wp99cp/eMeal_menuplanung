@@ -1,22 +1,35 @@
-
 // News Items
-.news-element::before
-  padding: 5px 22px
-  border-radius: 10px
-  color: white
+
+@media screen and (min-width: 1800px)
+  .news-element::before
+    padding: 2px 22px
+    border-radius: 30px
+    color: white
+    width: 80px
+    display: block
+    float: left
+    text-align: center
+    margin: 5px 28px 5px -152px
+
+@media screen and (max-width: 1800px)
+  .news-element::before
+    margin-right: 5px
+    padding: 0 12px
+    color: white
+
 
 .news-fixed::before
   content: "FIXED"
-  margin: 5px 49px 5px -140px
   background: #e5352c
 
 .news-feature::before
   content: "FEATURE"
-  margin: 5px 23px 5px -138px
   background: #96bf10
 
 .news-layout::before
   content: "LAYOUT"
-  margin: 5px 23px 5px -132px
   background: #96bf10
 
+
+h3
+  margin-top: 50px

@@ -1,43 +1,63 @@
-from pylatex import Section, Command, Package, Description, Subsubsection, Document
-from pylatex.base_classes import Environment
+from argparse import Namespace
+
+from pylatex import Command, Package, Document, NoEscape, Section, MiniPage, Itemize
+from pylatex.utils import bold
 
 from exportData.camp import Camp
+from pages.enviroments import Multicols
+from shopping_list.shopping_list import ShoppingList
 
 
-class Multicols(Environment):
-    escape = False
-    content_separator = "\n"
+def add_shopping_list(doc: Document, camp: Camp, args: Namespace):
+    doc.append(NoEscape(
+        r' \fancyhf{ \lhead{Vollständige Einkaufsliste (Fortsetzung)} \cfoot{\thepage}}'))
+    doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
 
+    doc.append(Section('Vollständige Einkaufsliste', numbering=False))
+    doc.append('Dies ist die vollständige Einkaufsliste für das gesamte Lager, d.h. inkl. allen Frisch-Produkten!')
 
-class Spacing(Environment):
-    escape = False
-    content_separator = "\n"
-
-
-def add_shopping_list(doc: Document, camp: Camp):
     # content for this page
-    doc.append(Section('Einkaufsliste', numbering=False))
+    doc.append(NoEscape(r' \vspace{0.75cm} \newline \vspace{0.75cm} \noindent '))
 
     # space between colums
     doc.append(Command('setlength'))
-    doc.append(Command('columnsep', arguments='40pt'))
+    doc.append(Command('columnsep', arguments='25pt'))
 
     doc.packages.add(Package('multicol'))
     doc.packages.add(Package('enumitem'))
     doc.packages.add(Package('setspace'))
 
-    for _ in range(1):
-        doc.append(Subsubsection('Gemüse und Früchte', numbering=False))
+    shoppingList = ShoppingList(camp)
+    shoppingList.create_full_shopping_list()
+    full_shopping_list = shoppingList.full_shopping_list
 
-        with doc.create(Multicols(arguments='2')) as multicols:
+    for category_name in full_shopping_list.keys():
+        append_category(category_name, doc, full_shopping_list, args)
+        doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
+
+    doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
+
+
+def append_category(category_name, doc, shopping_list, args):
+    with doc.create(MiniPage()):
+        doc.append(bold(category_name))
+        with doc.create(Multicols(arguments='3')) as multicols:
             multicols.append(Command('small'))
 
-            with multicols.create(Description(options='leftmargin=1.75cm, itemsep=4pt')) as itemize:
+            with multicols.create(Itemize(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
                 # space between colums
                 itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
                 itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
 
-                itemize.add_item('100g', 'the first item')
-                itemize.add_item('23 Stk.', 'Bananen')
-                itemize.add_item('100g', 'the first item')
-                itemize.add_item('10g', 'the item')
+                append_ingredients(category_name, shopping_list, itemize, args)
+
+
+def append_ingredients(category_name, shopping_list, itemize, args):
+    for ing in shopping_list[category_name]:
+        if args.invm:
+            itemize.add_item(
+                ing['food'] + ((', ' + str(ing['measure_calc']) + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')
+            )
+        else:
+            itemize.add_item(
+                ((str(ing['measure_calc']) + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + ing['food'])

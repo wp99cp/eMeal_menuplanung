@@ -13,19 +13,21 @@ import {ChangeLogComponent} from './change-log/change-log.component';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {HelpComponent} from './help/help.component';
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    InformationsRoutingModule,
-    VersionHistoryModule,
-    // mat design
-    MatButtonModule,
-    MatCardModule,
-    MarkdownModule,
-    MatExpansionModule,
-  ],
+    imports: [
+        CommonModule,
+        InformationsRoutingModule,
+        VersionHistoryModule,
+        // mat design
+        MatButtonModule,
+        MatCardModule,
+        MarkdownModule,
+        MatExpansionModule,
+        MatProgressBarModule,
+    ],
   declarations: [
     InformationspageComponent,
     ImpressumComponent,

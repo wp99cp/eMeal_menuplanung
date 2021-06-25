@@ -1,0 +1,156 @@
+{
+  "meals": [
+    {
+      "meal_id": "0PWg6RoMZDzkLz6TueD4",
+      "meal_weekview_name": "Gefüllte Kartoffeln mit Salattt",
+      "meal_description": "",
+      "meal_name": "Gefüllte Kartoffeln mit Salat und einem Dessert",
+      "meal_used_as": "Znacht",
+      "meal_gets_prepared": false,
+      "meal_participants": 10,
+      "meal_override_participants": false,
+      "doc_id": "lcKt3mfiYl3X1OXhqaxu",
+      "meal_date": "23.05.2021",
+      "recipe": [
+        {
+          "recipe_name": "Taboulé (Couscous)",
+          "recipe_description": "",
+          "recipe_notes": "Couscous, nach Anleitung zubereiten, in eine grosse Schüssel geben, restliche Zutaten zum Couscous in die Schüssel geben. ",
+          "recipe_used_for": "all",
+          "recipe_override_participants": false,
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::LHcDCr4FlNhgxaPjEM9J",
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "food": "Cousocus",
+              "unit": "g",
+              "measure": 60.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Milch",
+              "unit": "dl",
+              "measure": 2.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Peperoni",
+              "unit": "Stk.",
+              "measure": 1.0,
+              "fresh": true,
+              "comment": "Dies ist ein Kommentar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "meal_id": "0PWg6RoMZerzkLz6TueD4",
+      "meal_weekview_name": "Gefüllte Tomaten",
+      "meal_description": "",
+      "meal_name": "Gefüllte Tomaten",
+      "meal_used_as": "Znacht",
+      "meal_gets_prepared": false,
+      "meal_participants": 15,
+      "meal_override_participants": true,
+      "doc_id": "lcKt3mfiYlerX1OXhqaxu",
+      "meal_date": "22.05.2021",
+      "recipe": [
+        {
+          "recipe_name": "Taboulé (Couscous)",
+          "recipe_description": "",
+          "recipe_notes": "Couscous, nach Anleitung zubereiten, in eine grosse Schüssel geben, restliche Zutaten zum Couscous in die Schüssel geben. ",
+          "recipe_used_for": "all",
+          "recipe_override_participants": false,
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::LHcDCr4FlNhgxaPjEM9J",
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "food": "Cousocus",
+              "unit": "g",
+              "measure": 60.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Milch",
+              "unit": "dl",
+              "measure": 2.0,
+              "fresh": false,
+              "comment": "Dies ist ein Kommentar"
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Peperoni",
+              "unit": "Stk.",
+              "measure": 1.0,
+              "fresh": true,
+              "comment": "Dies ist ein Kommentar"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "camp_meta_info": {
+    "camp_name": "Sommerlager 2021 - Testlager",
+    "days": [
+      {
+        "day_description": "Day 1",
+        "day_notes": "",
+        "day_date": "21.05.2021"
+      },
+      {
+        "day_description": "Day 2",
+        "day_notes": "",
+        "day_date": "22.05.2021"
+      },
+      {
+        "day_description": "Day 3",
+        "day_notes": "",
+        "day_date": "23.05.2021"
+      },
+      {
+        "day_description": "Day 4",
+        "day_notes": "",
+        "day_date": "25.05.2021"
+      },
+      {
+        "day_description": "Day 5",
+        "day_notes": "",
+        "day_date": "26.05.2021"
+      }
+    ],
+    "camp_participants": 12
+  },
+  "shopping_list": {
+    "Früchte und Gemüse": [
+      {
+        "food": "Peperoni",
+        "measure_calc": 27.0,
+        "unit": "Stk."
+      }
+    ],
+    "Grundnahrungsmittel": [
+      {
+        "food": "Couscous",
+        "measure_calc": 1.62,
+        "unit": "kg"
+      }
+    ],
+    "Milchprodukte und Eier": [
+      {
+        "food": "Milch",
+        "measure_calc": 5.4,
+        "unit": "l"
+      }
+    ]
+  }
+}
+
+

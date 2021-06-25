@@ -45,7 +45,7 @@ export class AuthenticationService {
   signInWithGoogle() {
 
     this.location.replaceState('login/oauth-callback');
-    this.fireAuth.auth.signInWithRedirect(new auth.GoogleAuthProvider());
+    return this.fireAuth.signInWithRedirect(new auth.GoogleAuthProvider());
 
   }
 
@@ -73,10 +73,13 @@ export class AuthenticationService {
         console.log(json);
 
         const customToken = json.data;
-        await this.fireAuth.auth.signInWithCustomToken(customToken);
+        await this.fireAuth.signInWithCustomToken(customToken);
 
         res(true);
 
+      }).catch(err => {
+        console.log('Sign in failed!');
+        res(false);
       });
 
 
@@ -86,7 +89,7 @@ export class AuthenticationService {
 
   signIn(email: string, password: string) {
 
-    this.fireAuth.auth.signInWithEmailAndPassword(email, password);
+    return this.fireAuth.signInWithEmailAndPassword(email, password);
 
   }
 
@@ -114,8 +117,7 @@ export class AuthenticationService {
    */
   signOut() {
 
-    this.fireAuth.auth.signOut()
-      .then(() => console.log('User signed out!'));
+    this.fireAuth.signOut().then(() => console.log('User signed out!'));
 
   }
 

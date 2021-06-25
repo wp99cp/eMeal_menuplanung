@@ -7,13 +7,12 @@ import {Observable} from 'rxjs';
 import {Meal} from '../../_class/meal';
 import {CreateMealComponent} from '../../_dialoges/create-meal/create-meal.component';
 import {FirestoreMeal, MealUsage} from '../../_interfaces/firestoreDatatypes';
-import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
 import {CustomPaginator} from './CustomPaginator';
 import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ImportComponent} from '../import/import.component';
-import {take} from "rxjs/operators";
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-meal',
@@ -41,7 +40,7 @@ export class AddMealComponent implements AfterViewInit {
   constructor(
     private dbService: DatabaseService,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: { mealNames: string[] }) {
+    @Inject(MAT_DIALOG_DATA) public data: { mealNames: string[], usage: MealUsage }) {
 
     this.mealTableSource = new MatTableDataSource();
 
@@ -121,7 +120,7 @@ export class AddMealComponent implements AfterViewInit {
 
     this.selectedMeal.selected.forEach(meal => {
 
-      meal.lastMeal = meal.usedAs;
+      meal.lastMeal = this.data.usage ? this.data.usage : meal.usedAs;
       this.dbService.updateDocument(meal);
 
     });
@@ -143,19 +142,19 @@ export class AddMealComponent implements AfterViewInit {
       .pipe(take(1))
       .subscribe((meal: Observable<FirestoreMeal>) => {
 
-      meal.subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
-      this.setFocusToSeachField();
+        meal.subscribe(mealData => this.dbService.addDocument(mealData, 'meals'));
+        this.setFocusToSeachField();
 
-      // Remove Color
-      document.getElementById('add-meal').classList.remove('mat-save');
+        // Remove Color
+        document.getElementById('add-meal').classList.remove('mat-save');
 
-      if (this.sort.active === 'title') {
+        if (this.sort.active === 'title') {
 
-        (document.getElementById('search-field') as HTMLInputElement).value = '';
-        this.applyFilter('');
-      }
+          (document.getElementById('search-field') as HTMLInputElement).value = '';
+          this.applyFilter('');
+        }
 
-    });
+      });
   }
 
   public setFocusToSeachField() {

@@ -43,15 +43,18 @@ app-root.show-menu
 app-main-menu
   grid-area: menu
   background-color: #fff
-  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 10px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+  // box-shadow: 0 16px 24px 2px rgba(0, 0, 0, .14), 0 6px 10px 5px rgba(0, 0, 0, .12), 0 8px 10px -5px rgba(0, 0, 0, .2)
+  border-right: 1px solid rgba(0, 0, 0, 0.12)
   z-index: 300
   display: none
   position: fixed
   height: 100vh
   width: 280px
+  grid-template-rows: 101px auto
+  overscroll-behavior: contain
 
 app-main-menu.show-menu
-  display: inline-grid
+  display: grid
 
 app-template-header
   grid-area: header
@@ -82,6 +85,11 @@ main
   app-root
     grid-row-gap: 5px
 
+  h1
+    font-size: 36px !important
+    line-height: 42px !important
+    margin-bottom: 30px !important
+
 main
   .page-title, .big-page-title
     color: rgb(150, 191, 16)
@@ -105,12 +113,6 @@ main
     font-size: 17px
     line-height: 28.05px
     margin: 0px 0 17px
-
-@media screen and (max-width: 600px)
-  main
-    p, li
-      font-size: 14px !important
-      line-height: 23.1px
 
 main
   h1, .mat-h1
@@ -139,7 +141,7 @@ main
     display: block
     font-size: 20.4px
     font-weight: 500
-    height: 25px
+    line-height: 25px
     letter-spacing: -0.26554px
     line-height: 25.5px
     margin-top: 25px
@@ -148,6 +150,7 @@ main
   // Tabellen füllen die gesamte Breite des Bildschirms
   table
     width: 100%
+
 
 
 .centered
@@ -232,9 +235,8 @@ a
   color: $info-text-color
   font-style: italic
   font-size: 1.3rem
+  line-height: 1.5rem
 
-.news-element
-  margin: 10px 0 10px 140px
 
 
 .dotted-box
@@ -246,11 +248,13 @@ a
 // Context-Menu
 ////////////////////////////////////////////////////////////////
 
+#context-menu-container
+  position: fixed
+
 #context-menu
   box-shadow: 0 1px 1px 0 rgba(66, 66, 66, 0.08), 0 1px 3px 1px rgba(66, 66, 66, 0.16)
   background: #fff
   z-index: 2000
-  position: fixed
   padding: 8px 1px
   border-radius: 3px
   user-select: none

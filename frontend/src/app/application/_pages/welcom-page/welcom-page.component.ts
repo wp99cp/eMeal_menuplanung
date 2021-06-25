@@ -45,7 +45,7 @@ export class WelcomPageComponent implements OnInit {
 
     const titles = [
       `Kochen ist nicht einfach, doch mit eMeal wird's zum Kinderspiel.`,
-      `Willkommen bei eMeal, der Menüplanungssoftware für Lager.`,
+      `Willkommen bei eMeal, der Menüplanungs-Software für Lager.`,
       `Planen war noch nie so einfach! Beginne jetzt mit einem neuen Lager.`,
       `Spar dir Zeit und verwende deine Mahlzeiten in verschiedenen Lagern.`,
       `Gewusst? Mit der Import-Funktion können Mahlzeiten ganz einfach erstellt werden.`

@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
+import {AngularFireFunctionsModule, REGION} from '@angular/fire/functions';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -137,7 +137,7 @@ import {SettingsService} from './_service/settings.service';
     Location,
     SettingsService,
     AngularFirestoreModule,
-    {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
+    {provide: REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
   ],

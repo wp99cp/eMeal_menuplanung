@@ -5,6 +5,7 @@ import {delay, map, mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {DatabaseService} from '../../_service/database.service';
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-export-camp',
@@ -13,17 +14,14 @@ import {DatabaseService} from '../../_service/database.service';
 })
 export class ExportCampComponent implements OnInit {
 
-  // TODO: Möglichkeit die Einkaufsliste in ein Trelloboard zu exportieren
-  // dies ermöglicht anschliessend, dass gemeinsame EInkaufen mit synch.
-  // Abhacken der Lebensmitteln.
-
   public pending = false;
   public exports: Observable<any[]>;
   public message: string;
   public showExports = true;
+  public exportIsRunning = false;
   private campId: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router) {
+  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router, public helpService: HelpService) {
 
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
@@ -54,7 +52,7 @@ export class ExportCampComponent implements OnInit {
       active: true,
       description: 'Lager erneut exportieren',
       name: 'Neuer Export',
-      action: (() => this.createPDF()),
+      action: (() => this.createNewExport()),
       icon: 'create_new_folder'
     });
 
@@ -74,7 +72,6 @@ export class ExportCampComponent implements OnInit {
 
     // reset gui
     this.showExports = false;
-
     this.campId.subscribe(campId => this.dbService.deleteExports(campId));
 
   }
@@ -82,15 +79,18 @@ export class ExportCampComponent implements OnInit {
   /**
    * Request a PDF export of the camp
    */
-  createPDF() {
+  createNewExport() {
 
     this.showExports = true;
+    this.exportIsRunning = true;
 
     this.pending = true;
+
     this.campId
       .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
       .pipe(delay(250))
       .subscribe(() => {
+          this.exportIsRunning = false;
         },
 
         // bug report on error

@@ -1,5 +1,3 @@
-import {FirestoreSettingsToken} from '@angular/fire/firestore';
-
 export const environment = {
   production: false,
   firebaseConfig: {
