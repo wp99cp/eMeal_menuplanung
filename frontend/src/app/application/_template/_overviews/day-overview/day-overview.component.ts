@@ -160,7 +160,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
               },
               {
                 icon: 'delete',
-                name: 'Mahlzeit Löschen',
+                name: 'Mahlzeit entfernen',
                 shortCut: '',
                 function: () => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
               },
