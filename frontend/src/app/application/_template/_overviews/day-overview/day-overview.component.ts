@@ -33,7 +33,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
-  @Output() addMeal = new EventEmitter<[Day, string]>();
+  @Output() addMeal = new EventEmitter<[Day, MealUsage]>();
 
   @ViewChild('dayElement') dayElement;
 
