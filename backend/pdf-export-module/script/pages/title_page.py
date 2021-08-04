@@ -35,5 +35,6 @@ def add_title_page(doc: Document, camp: Camp, args: Namespace):
     doc.append(SmallText('Dieses Dokument wurde automatisch erstellt. Obwohl uns Qualität und Richtigkeit sehr am '
                          'Herzen liegt, können wir Fehler nie ganz ausschliessen. eMeal – Menüplanung haftet nicht '
                          'für Schäden, die im Zusammenhang mit diesem Export entstanden sind. Bitte kontrolliere '
-                         'diesen Export vor dem Lager auf Vollständigkeit.'))
+                         'diesen Export vor dem Lager auf Vollständigkeit und Korrektheit. Das Team von eMeal - '
+                         'Menüplanung wünscht ganz viel Spass im Lager.'))
     doc.append(NoEscape('}'))

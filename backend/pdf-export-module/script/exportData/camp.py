@@ -99,5 +99,15 @@ class Camp(IngredientsCalculator, DataFetcher):
 
         return self._camp_meta_info.get('days')
 
+    def get_TN_description(self):
+
+        self._fetch_camp_meta_data()
+
+        return r'Anzahl TNs {} (davon Leiter {} bzw. Vegetarier {})'.format(
+            self._camp_meta_info['camp_participants'],
+            self._camp_meta_info['camp_leaders'],
+            self._camp_meta_info['camp_vegetarians']
+        )
+
     def get_days_as_dates(self):
         return list(map(lambda d: d['day_date'], self.get_days()))

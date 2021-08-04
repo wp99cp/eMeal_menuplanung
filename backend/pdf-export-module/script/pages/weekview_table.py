@@ -58,7 +58,8 @@ def add_table(camp, days, doc, args: Namespace):
     doc.append(Command('small'))
 
     # define table look
-    doc.append(Command('caption*', arguments=Arguments(NoEscape(r'\textbf{Wochenplan Sommerlager 2021}'))))
+    doc.append(Command('caption*', arguments=Arguments(
+        NoEscape(r'\centering \textbf{Wochenplan ' + camp.get_camp_name() + r' }'))))
     doc.append(Command('centering'))
     doc.append(Command('newcolumntype', arguments='Y',
                        extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
@@ -93,3 +94,7 @@ def add_table(camp, days, doc, args: Namespace):
 
     doc.append(Command('thisfloatpagestyle', arguments='empty'))
     doc.append(NoEscape(r'}%'))  # close makebox
+
+    doc.append(Command('small'))
+    doc.append(Command('par'))
+    doc.append(NoEscape(camp.get_TN_description()))
