@@ -31,7 +31,7 @@ from shopping_list.spelling_corrector import SpellingCorrector
                                                                        * --------- *
 
 
-    Basic idea: Creating the shopping lists is a multi stage process. For each type of shopping
+    Basic idea: Creating the shopping lists is a multi-tage process. For each type of shopping
     list we walk through the following steps.
 
     (1) We fix spelling mistakes in the ingredients of each meal. Using minimal editing distance.
@@ -89,25 +89,41 @@ class ShoppingList:
         """
 
         # Sort by food name and measure name
-        ingredients.sort(key=lambda ing: ing['food'] + ing['unit'])
+        ingredients.sort(key=lambda _ing: _ing['food'] + _ing['unit'] + str(_ing['fresh']))
 
         ingredients_uncategorized = copy.deepcopy(ingredients)
         ingredients.clear()
 
-        current_sum = None
-        for i, ing in enumerate(ingredients_uncategorized):
+        # The idea behind the merging algorithm is to sum up the measurements as long as the name, the unit and
+        # fresh/none-fresh-value of consecutive ingredients are identical. If one of it changes, we flush the buffer
+        # into the ingredients object.
+        ing_buf = None
 
+        for ing in ingredients_uncategorized:
+
+            # drop unnecessary ingredient fields
             ing = {
                 'food': ing['food'],
                 'unit': ing['unit'],
-                'measure_calc': ing['measure_calc']
+                'measure_calc': ing['measure_calc'],
+                'fresh': ing['fresh']
             }
 
-            if current_sum is not None and ing['food'] == current_sum['food'] and ing['unit'] == current_sum['unit']:
-                current_sum['measure_calc'] += ing['measure_calc']
+            if ing_buf is not None and \
+                    ing['food'] == ing_buf['food'] and \
+                    ing['unit'] == ing_buf['unit'] and \
+                    ing['fresh'] == ing_buf['fresh']:
+                ing_buf['measure_calc'] += ing['measure_calc']
+
             else:
-                current_sum = ing
-                ingredients.append(ing)
+                # flush buffer and replace content with new ingredient
+                if ing_buf is not None:
+                    ingredients.append(ing_buf)
+                ing_buf = ing
+
+        # final flush of buffer
+        if ing_buf is not None:
+            ingredients.append(ing_buf)
 
     @classmethod
     def convert_to_base_unit(cls, ingredients):
@@ -191,23 +207,29 @@ class ShoppingList:
                     if 'ingredients' in recipe:
                         ingredients += copy.deepcopy(recipe['ingredients'])
 
+        self.full_shopping_list = self.finish_shopping_list(ingredients)
+
+        return self
+
+    def finish_shopping_list(self, ingredients):
+
         # (1) fix spelling mistakes
         start_time = time.time()
         self._spellingCorrector.fix_spelling_mistakes(ingredients)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds for fix_spelling_mistakes---" % (time.time() - start_time))
 
         # (2) Combine ingredients and convert units
         start_time = time.time()
         self.convert_to_base_unit(ingredients)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds for convert_to_base_unit---" % (time.time() - start_time))
 
         start_time = time.time()
         self.combine_ingredients(ingredients)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("--- %s seconds for combine_ingredients---" % (time.time() - start_time))
 
         # (3) Sort into categories
         start_time = time.time()
-        self.full_shopping_list = self.categorize_ingredients(ingredients)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        full_shopping_list = self.categorize_ingredients(ingredients)
+        print("--- %s seconds for categorize_ingredients---" % (time.time() - start_time))
 
-        return self
+        return full_shopping_list

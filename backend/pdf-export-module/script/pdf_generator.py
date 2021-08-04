@@ -14,7 +14,7 @@ from utils.commandline_args_parser import setup_parser
 from exportData.camp import Camp
 from pages.feedback_survey import add_feedback_survey_page
 from pages.meals import add_meals
-from pages.shopping_list import add_shopping_list
+from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
 from utils.telegraf_logger import TelegrafLogger
@@ -112,7 +112,7 @@ def create_pdf(camp: Camp, args: argparse.Namespace):
     if args.fdb:
         parts += [add_feedback_survey_page]
     if args.spl:
-        parts += [add_shopping_list]
+        parts += [add_shopping_lists]
     if args.meals:
         parts += [add_meals]
 
