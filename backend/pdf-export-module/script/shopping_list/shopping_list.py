@@ -233,3 +233,24 @@ class ShoppingList:
         print("--- %s seconds for categorize_ingredients---" % (time.time() - start_time))
 
         return full_shopping_list
+
+    def create_day_shopping_list(self, day):
+
+        # Load meals for that shopping list
+        meals = self._camp.get_specific_meals()
+
+        # create an array with all ingredients of the camp
+        ingredients = []
+        for meal in meals:
+
+            if meal['meal_date'] != day:
+                continue
+
+            if 'recipe' in meal:
+                for recipe in meal['recipe']:
+                    if 'ingredients' in recipe:
+                        ingredients += copy.deepcopy(recipe['ingredients'])
+
+        self.full_shopping_list = self.finish_shopping_list(ingredients)
+
+        return self

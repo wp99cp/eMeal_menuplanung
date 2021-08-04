@@ -1,4 +1,5 @@
 from argparse import Namespace
+from datetime import timedelta
 
 from pylatex import Command, Package, Document, NoEscape, Section, MiniPage, Itemize
 from pylatex.utils import bold
@@ -13,6 +14,22 @@ def add_shopping_lists(doc: Document, camp: Camp, args: Namespace):
     shoppingList = ShoppingList(camp)
 
     add_full_shopping_list(args, doc, shoppingList)
+
+    for day in camp.get_days_as_dates():
+        add_day_shopping_list(args, doc, shoppingList, day)
+
+
+def add_day_shopping_list(args: Namespace, doc: Document, shoppingList: ShoppingList, day):
+    shoppingList.create_day_shopping_list(day)
+
+    date = (day + timedelta(hours=2)).strftime("%A, %d. %b")
+
+    shopping_list_name = 'Tageseinkaufsliste ' + date
+    shopping_list_description = 'Diese Einkaufsliste enthält alle Zutaten für den {}, ' \
+                                'insbesondere also auch die Frischprodukte. ' \
+                                'Diese werden dabei mit Symbol {} gekennzeichnet.'.format(date, FRESH_PRODUCT_SYMBOL)
+    add_shopping_list(args, doc, shoppingList.full_shopping_list, shopping_list_description, shopping_list_name,
+                      include_fresh=True)
 
 
 def add_full_shopping_list(args: Namespace, doc: Document, shoppingList: ShoppingList):
