@@ -58,6 +58,8 @@ class ShoppingList:
     def __init__(self, camp: Camp):
         self.full_shopping_list = None
         self._camp = camp
+        self.checked_spelling = False
+        self.meals = None
 
         # Use the application default credentials
         cred = credentials.Certificate('keys/cevizh11-firebase-adminsdk.json')
@@ -185,7 +187,18 @@ class ShoppingList:
             cls.__db.document('sharedData/foodCategories') \
                 .update({'uncategorised': firestore.ArrayUnion(category_unknown)})
 
-        return ingredients_categorized
+        # Merge categories with less than two elements
+        final_categories = {}
+        for cat_names in ingredients_categorized.keys():
+            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= 2:
+                if 'Diverses' in final_categories:
+                    final_categories['Diverses'].extend(ingredients_categorized[cat_names])
+                else:
+                    final_categories['Diverses'] = ingredients_categorized[cat_names]
+                continue
+            final_categories[cat_names] = ingredients_categorized[cat_names]
+
+        return final_categories
 
     def create_full_shopping_list(self):
         """
@@ -197,7 +210,7 @@ class ShoppingList:
         """
 
         # Load meals for that shopping list
-        meals = self._camp.get_specific_meals()
+        meals = self.get_meals()
 
         # create an array with all ingredients of the camp
         ingredients = []
@@ -205,18 +218,22 @@ class ShoppingList:
             if 'recipe' in meal:
                 for recipe in meal['recipe']:
                     if 'ingredients' in recipe:
-                        ingredients += copy.deepcopy(recipe['ingredients'])
+                        ingredients += recipe['ingredients']
 
         self.full_shopping_list = self.finish_shopping_list(ingredients)
-
         return self
 
     def finish_shopping_list(self, ingredients):
 
         # (1) fix spelling mistakes
-        start_time = time.time()
-        self._spellingCorrector.fix_spelling_mistakes(ingredients)
-        print("--- %s seconds for fix_spelling_mistakes---" % (time.time() - start_time))
+        if not self.checked_spelling:
+            self.checked_spelling = True
+            start_time = time.time()
+            self._spellingCorrector.fix_spelling_mistakes(ingredients)
+            print("--- %s seconds for fix_spelling_mistakes---" % (time.time() - start_time))
+
+        # create a copy of the ingredients
+        ingredients = copy.deepcopy(ingredients)
 
         # (2) Combine ingredients and convert units
         start_time = time.time()
@@ -237,7 +254,7 @@ class ShoppingList:
     def create_day_shopping_list(self, day):
 
         # Load meals for that shopping list
-        meals = self._camp.get_specific_meals()
+        meals = self.get_meals()
 
         # create an array with all ingredients of the camp
         ingredients = []
@@ -249,8 +266,15 @@ class ShoppingList:
             if 'recipe' in meal:
                 for recipe in meal['recipe']:
                     if 'ingredients' in recipe:
-                        ingredients += copy.deepcopy(recipe['ingredients'])
+                        ingredients += recipe['ingredients']
 
         self.full_shopping_list = self.finish_shopping_list(ingredients)
-
         return self
+
+    def get_meals(self):
+
+        if not self.meals:
+            # Load meals for that shopping list
+            self.meals = self._camp.get_specific_meals()
+
+        return self.meals
