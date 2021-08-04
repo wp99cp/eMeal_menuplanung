@@ -4,6 +4,7 @@ from argparse import Namespace
 from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
 
 import exportData.camp
+from pages.global_constants import FRESH_PRODUCT_SYMBOL
 
 
 def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
@@ -49,7 +50,6 @@ def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
         doc.append(Command(r'pagebreak'))
 
 
-
 def add_header(doc, meal):
     doc.append(Command('renewcommand', arguments=Command('arraystretch'), extra_arguments='1.75'))
     doc.append(NoEscape(r'\definecolor{light-gray}{gray}{0.85}'))
@@ -73,7 +73,7 @@ def add_ingredient(table_content, ingredient):
         round(ingredient['measure'], 2) if ingredient['measure'] != 0 else '',
         round(ingredient['measure_calc'], 2) if ingredient['measure'] != 0 else '',
         ingredient['unit'],
-        ingredient['food'],
+        NoEscape(ingredient['food'] + ((r' (%s)' % FRESH_PRODUCT_SYMBOL) if ingredient['fresh'] else '')),
         ingredient['comment']
     ])
 

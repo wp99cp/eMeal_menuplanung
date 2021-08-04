@@ -5,6 +5,7 @@ from pylatex.utils import bold
 
 from exportData.camp import Camp
 from pages.enviroments import Multicols
+from pages.global_constants import FRESH_PRODUCT_SYMBOL
 from shopping_list.shopping_list import ShoppingList
 
 
@@ -18,10 +19,10 @@ def add_full_shopping_list(args: Namespace, doc: Document, shoppingList: Shoppin
     # create and add full shopping list
     shoppingList.create_full_shopping_list()
     shopping_list_name = 'Vollständige Lagereinkaufsliste'
-    shopping_list_description = 'Dies ist die vollständige Einkaufsliste für das gesamte Lager, d.h., in dieser Liste ' \
-                                'sind alle Zutaten aufgelistet, insbesondere also auch die Frischprodukte. ' \
-                                r'Diese werden dabei mit Symbol \includegraphics[height=1.25 ' \
-                                r'\fontcharht\font`\B]{./assets/icons/outline_water_drop_48dp} gekennzeichnet.'
+    shopping_list_description = 'Dies ist die vollständige Einkaufsliste für das gesamte Lager, d.h., ' \
+                                'in dieser Liste sind alle Zutaten aufgelistet, insbesondere also auch ' \
+                                'die Frischprodukte. Diese werden dabei mit Symbol %s gekennzeichnet.' \
+                                % FRESH_PRODUCT_SYMBOL
     add_shopping_list(args, doc, shoppingList.full_shopping_list, shopping_list_description, shopping_list_name,
                       include_fresh=True)
 
@@ -89,9 +90,7 @@ def append_ingredients(category_name, shopping_list, itemize, args, include_fres
         if not include_fresh and ing['fresh']:
             continue
 
-        food_name = ing['food'] + (
-            r' (\includegraphics[height=1.25 \fontcharht\font`\B]{./assets/icons/outline_water_drop_48dp})' if
-            ing['fresh'] else '')
+        food_name = ing['food'] + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
 
         if args.invm:
             itemize.add_item(NoEscape(
