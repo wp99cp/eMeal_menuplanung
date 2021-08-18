@@ -80,9 +80,10 @@ def add_shopping_list(args: Namespace,
     doc.packages.add(Package('setspace'))
 
     # add ingredients in categories
-    for category_name in shopping_list.keys():
+    for i, category_name in enumerate(shopping_list.keys()):
+        if i > 0:
+            doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
         append_category(category_name, doc, shopping_list, args, include_fresh)
-        doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
 
     doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
 

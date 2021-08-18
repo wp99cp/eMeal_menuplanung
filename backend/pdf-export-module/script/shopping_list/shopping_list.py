@@ -190,7 +190,7 @@ class ShoppingList:
         # Merge categories with less than two elements
         final_categories = {}
         for cat_names in ingredients_categorized.keys():
-            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= 2:
+            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= 4:
                 if 'Diverses' in final_categories:
                     final_categories['Diverses'].extend(ingredients_categorized[cat_names])
                 else:
