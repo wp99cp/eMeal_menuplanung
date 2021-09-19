@@ -109,10 +109,11 @@ def append_ingredients(category_name, shopping_list, itemize, args, include_fres
             continue
 
         food_name = ing['food'] + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
+        measure_as_str = str(round(ing['measure_calc'], 2))
 
         if args.invm:
             itemize.add_item(NoEscape(
-                food_name + ((', ' + str(ing['measure_calc']) + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')))
+                food_name + ((', ' + measure_as_str + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')))
         else:
             itemize.add_item(NoEscape(
-                ((str(ing['measure_calc']) + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + food_name))
+                ((measure_as_str + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + food_name))
