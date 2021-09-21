@@ -1,10 +1,25 @@
 from argparse import Namespace
 
-from exportData.camp import Camp
 from pylatex import Document, Section, Tabularx, NoEscape, Package
+
+from exportData.camp import Camp
+
+
+def any_evaluable_meals_exist(camp: Camp):
+
+    for meal in camp.get_meal_names_for_feedback():
+        if meal['meal_used_as'] in ['Zmittag', 'Znacht']:
+            return True
+
+    return False
 
 
 def add_feedback_survey_page(doc: Document, camp: Camp, args: Namespace):
+
+    # check if any meal exist that should be evaluated (only 'Zmittag' and 'Znacht' will be listed)
+    if not any_evaluable_meals_exist(camp):
+        return
+
     doc.append(Section('Feedback der Teilnehmer zum Essen', numbering=False))
 
     doc.packages.add(Package('pifont'))
