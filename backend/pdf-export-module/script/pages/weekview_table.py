@@ -97,4 +97,6 @@ def add_table(camp, days, doc, args: Namespace):
 
     doc.append(Command('small'))
     doc.append(Command('par'))
+    doc.append(NoEscape(r'\vspace * {.35cm}'))
+
     doc.append(NoEscape(camp.get_TN_description()))
