@@ -75,6 +75,9 @@ def generate_document(parts: List, camp: Camp, args: argparse.Namespace):
         arguments=['article'],
     )
 
+    document.packages.add(Package('floatpag'))
+    document.packages.add(Package('hyperref', 'pdftex'))
+
     # globally packages
     document.packages.add(Package('babel', options='german'))
 
@@ -89,6 +92,9 @@ def generate_document(parts: List, camp: Camp, args: argparse.Namespace):
 
     # TODO: Option for sans serif font
     # document.preamble.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
+
+    document.append(NoEscape(r'\hypersetup{pdftitle = {' + camp.get_camp_name() +
+                             '}, pdfauthor = {' + camp.get_full_author_name() + '}}'))
 
     # add sections according to export settings
     for part in parts:
