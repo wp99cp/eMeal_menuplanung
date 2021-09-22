@@ -152,6 +152,10 @@ class DataFetcher(object):
                             'recipe_override_participants': False
                         }
 
+                    for _ing in recipe['ingredients']:
+                        if 'fresh' not in _ing:
+                            _ing.update({'fresh': False})
+
                     recipe['unique_id'] = meal['doc_id'] + '::' + recipe['doc_id']
                     recipe['recipe_used_for'] = spec_recipe['recipe_used_for']
                     recipe['recipe_participants'] = spec_recipe['recipe_participants']
