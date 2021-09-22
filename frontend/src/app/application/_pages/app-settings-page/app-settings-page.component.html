@@ -44,7 +44,8 @@
     <p class="info"> Möchtest du, dass Vorlagen für Rezepte und Mahlzeiten in der Suche dargestellt werden?<br>
       Vorlagen sind grün markiert und können für den eigenen Gebrauch kopiert werden. </p>
 
-    <mat-form-field matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width" *ngIf="(settings.globalSettings | async) as settings">
+    <mat-form-field matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width"
+                    *ngIf="(settings.globalSettings | async) as settings">
       <select #includeTemplates matNativeControl [value]="settings.show_templates"
               placeholder="Sichtbarkeit von Vorlagen"
               (input)="changeIncludeTemplates(includeTemplates.value)">
@@ -62,8 +63,11 @@
 
   <article>
     <h2>Über eMeal - Menüplanung</h2>
-    <p>eMeal ist eine freie Software des Cevi Züri 11 ({{copyrights}})</p>
-    <p>Aktuelle Version: {{version}} (<a href="https://github.com/wp99cp/menuplanung">Source on GitHub</a>)<br/>
+    <p>eMeal - Menüplanung wird vom Cevi Züri 11 unter der Leitung von Cyrill Püntener v/o JPG entwickelt.
+      Der Quellcode ist unter der <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GPL-3.0 Lizenz</a> frei
+      verfügbar. Der Cevi Züri 11 hostet eine Instanz auf <a href="https://eMeal.zh11.ch">eMeal.zh11.ch</a>.
+    </p>
+    <p>Aktuelle Version: <a href="https://github.com/wp99cp/menuplanung">{{version}} (Source Code)</a><br/>
       Entwickler: <a href="mailto:eMeal-admin@zh11.ch">Cyrill Püntener v/o JPG</a></p>
   </article>
 </div>
