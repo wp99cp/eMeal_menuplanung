@@ -1,4 +1,4 @@
-from script.exportData.data_fetcher import DataFetcher
+from exportData.data_fetcher import DataFetcher
 
 
 class IngredientsCalculator(DataFetcher):

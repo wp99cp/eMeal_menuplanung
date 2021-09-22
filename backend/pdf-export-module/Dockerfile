@@ -18,4 +18,3 @@ RUN pip3 install --no-cache-dir -r ./script/requirements.txt
 
 # run python script
 COPY ./ ./
-CMD [ "python3", "./script/pdf-generator.py" ]

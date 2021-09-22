@@ -26,8 +26,15 @@ We expect docker is already pre-installed. Within a linux environment you can ru
 execute the export function inside a container environment.
 
 ```shell
-docker build . -t exportcamp && docker run exportcamp
+docker build . -t exportcamp && docker run exportcamp python3 script/pdf_generator.py {{user_id}} {{camp_id}} --optionalArgs
 ```
+
+For example:
+
+```shell
+docker build . -t exportcamp && docker run exportcamp python3 script/pdf_generator.py CKsbjuHkJQUstW1YULeAepDe9Wl1 16fXu6siwVDX1OOb38P3 --dfn --lscp --mp
+```
+
 
 ### run the export function outside a container environment
 

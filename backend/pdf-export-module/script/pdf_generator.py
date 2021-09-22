@@ -1,41 +1,65 @@
 import argparse
+import datetime
 import locale
 import logging
 import os
+import random
+import string
 import time
 from typing import List
 
+import firebase_admin
+from dateutil.relativedelta import relativedelta
+from firebase_admin import firestore
 from google.cloud import storage
 from google.oauth2 import service_account
 from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
-from utils.commandline_args_parser import setup_parser
 from exportData.camp import Camp
 from pages.feedback_survey import add_feedback_survey_page
 from pages.meals import add_meals
 from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
+from utils.commandline_args_parser import setup_parser
 from utils.telegraf_logger import TelegrafLogger
 
 
-def upload_blob(source_file_name):
+def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
     bucket_name = "cevizh11.appspot.com"
-    destination_blob_name = "eMeal-export"
+    destination_blob_name = "eMeal-export" + source_file_name
 
     credentials = service_account.Credentials.from_service_account_file('keys/cevizh11-firebase-adminsdk.json')
     storage_client = storage.Client(credentials=credentials, project='cevizh11')
 
     bucket = storage_client.bucket(bucket_name)
 
-    blob = bucket.blob(destination_blob_name)
-    blob.upload_from_filename(source_file_name)
+    blob = bucket.blob(destination_blob_name + '.pdf')
+    blob.upload_from_filename(source_file_path + '.pdf')
+
+    # Use the application default credentials
+    cred = firebase_admin.credentials.Certificate('keys/cevizh11-firebase-adminsdk.json')
+    app = firebase_admin.initialize_app(
+        cred,
+        name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
+    db = firestore.client(app)
+
+    data = {
+        u'docs': [u'pdf'],
+        u'path': destination_blob_name,
+        u'exportDate': datetime.datetime.now(),
+        u'expiryDate': datetime.datetime.now() + relativedelta(months=1)
+
+    }
+
+    # Add a new doc in collection 'cities' with ID 'LA'
+    db.collection(u'camps/' + camp_id + '/exports').add(data)
 
     print("File {} uploaded to {}.".format(
-        source_file_name, destination_blob_name))
+        source_file_name + '.pdf', destination_blob_name + '.pdf'))
 
 
 def generate_document(parts: List, camp: Camp, args: argparse.Namespace):
@@ -100,9 +124,6 @@ def main():
 
     create_pdf(camp, args)
 
-    # uncomment for uploading to bucket
-    # upload_blob(file_name + '.pdf')
-
 
 def create_pdf(camp: Camp, args: argparse.Namespace):
     # global settings
@@ -123,8 +144,12 @@ def create_pdf(camp: Camp, args: argparse.Namespace):
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
     # filename = export_{camp_id}_{timestamp}
-    file_name = dir_path + '/export' + ('_' + args.camp_id + str(time.time()) if not args.dfn else '')
-    document.generate_pdf(clean_tex=False, filepath=file_name, compiler='pdflatex')
+    file_name = '/export' + ('_' + args.camp_id + '_' + str(time.time()) if not args.dfn else '')
+    file_path = dir_path + file_name
+    document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
+
+    # uncomment for uploading to bucket
+    upload_blob(file_path, file_name, args.camp_id)
 
 
 def parse_args():

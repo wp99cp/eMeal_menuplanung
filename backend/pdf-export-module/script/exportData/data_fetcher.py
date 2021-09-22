@@ -6,7 +6,7 @@ from argparse import Namespace
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-from script.exportData.utils import convert_document
+from exportData.utils import convert_document
 
 # defines order of meal types
 meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten']

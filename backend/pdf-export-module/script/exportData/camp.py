@@ -1,5 +1,5 @@
-from script.exportData.data_fetcher import DataFetcher, meal_types
-from script.exportData.ingredients_calculator import IngredientsCalculator
+from exportData.data_fetcher import DataFetcher, meal_types
+from exportData.ingredients_calculator import IngredientsCalculator
 
 
 class Camp(IngredientsCalculator, DataFetcher):
