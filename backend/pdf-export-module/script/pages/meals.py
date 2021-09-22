@@ -1,7 +1,7 @@
 import datetime
 from argparse import Namespace
 
-from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description
+from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Description, Center
 
 import exportData.camp
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
@@ -35,7 +35,7 @@ def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
                                   "%A %d. %b %Y"))
 
             if meal['meal_description'] != '':
-                enum.add_item('Beschreibung / Notizen:', meal['meal_description'])
+                enum.add_item('Notizen:', meal['meal_description'])
 
         # add recipes
         if 'recipe' in meal:
@@ -54,18 +54,12 @@ def add_header(doc, meal):
     doc.append(Command('renewcommand', arguments=Command('arraystretch'), extra_arguments='1.75'))
     doc.append(NoEscape(r'\definecolor{light-gray}{gray}{0.85}'))
     doc.append(Command('arrayrulecolor', arguments=NoEscape(r'light-gray')))
-
-    with doc.create(Table()):
-        with doc.create(Tabularx("X r", width_argument=NoEscape(r'\textwidth'))) as table_content:
-            # add header
-            table_content.add_row([
-                NoEscape(r'\multirow{2}{12cm}{\LARGE \textbf{' + meal['meal_name'] + '}}'),
-                NoEscape(r'\color{gray} \large \textbf{' + (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
-                    "%a, %d. %b") + '}')])
-
-            table_content.add_row(
-                ['', NoEscape(r'\color{gray} \large \textbf{' + meal['meal_used_as'] + '}')])
-            table_content.add_hline()
+    with doc.create(Center()) as centered_section:
+        centered_section.append(NoEscape(r' \center \LARGE \textbf{' + meal['meal_name'] + r'} \par %'))
+        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' +
+                                         (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
+                                             "%A, %d. %b") + r'} / '))
+        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' + meal['meal_used_as'] + r'} \par'))
 
 
 def add_ingredient(table_content, ingredient):
@@ -78,6 +72,24 @@ def add_ingredient(table_content, ingredient):
     ])
 
 
+def get_participants_description(recipe):
+    """
+    Describes the participants. I.g., is this recipe for vegetarians only, or only for leaders?
+
+    :param recipe: a recipe for which the participants description should be created
+    :return: string with a short description of the participants
+    """
+    if 'recipe_used_for' in recipe:
+        if recipe['recipe_used_for'] == 'non-vegetarians':
+            return 'nur für Nicht-Vegis'
+        elif recipe['recipe_used_for'] == 'vegetarians':
+            return 'nur für Vegis'
+        elif recipe['recipe_used_for'] == 'leaders':
+            return 'nur für Leiter*innen'
+
+    return 'für alle'
+
+
 def add_recipe(doc, recipe):
     doc.append(Command('vspace', arguments='0.75cm'))
 
@@ -86,7 +98,8 @@ def add_recipe(doc, recipe):
     if 'ingredients' in recipe and len(recipe['ingredients']) > 0:
         with doc.create(Table(position='h')) as table:
 
-            table.add_caption(recipe['recipe_name'] + ' (für ' + str(recipe['recipe_participants']) + ' Per.)')
+            table.add_caption(recipe['recipe_name'] + ' (' + get_participants_description(recipe) + ', ' + str(
+                recipe['recipe_participants']) + ' Per.)')
 
             with table.create(Tabularx('| r | r | l | l | X |', width_argument=NoEscape(r'\textwidth'))) \
                     as table_content:
