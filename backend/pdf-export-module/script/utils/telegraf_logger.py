@@ -24,4 +24,6 @@ class TelegrafLogger(StreamHandler):
         # initialize list of lists
         data = [[record.getMessage(), record.lineno, record.funcName, record.exc_info]]
         df = pd.DataFrame(data, columns=['log_message', 'lineno', 'funcName', 'exc_info'], index=[datetime.utcnow()])
-        self.client.write_points(measurement="camp_export", dataframe=df, tags={"log_level": record.levelname})
+
+        # TODO: fix logger
+        # self.client.write_points(measurement="camp_export", dataframe=df, tags={"log_level": record.levelname})

@@ -118,9 +118,8 @@ def set_up_logging():
     root.addHandler(handler)
 
 
-def main():
+def main(args: argparse.Namespace):
     set_up_logging()
-    args = parse_args()
 
     # TODO: check user quota
 
@@ -171,4 +170,6 @@ def parse_args():
 
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    print(args)
+    main(args)
