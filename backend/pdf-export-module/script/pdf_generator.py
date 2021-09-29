@@ -32,7 +32,8 @@ def upload_blob(source_file_path, source_file_name, camp_id):
     bucket_name = "cevizh11.appspot.com"
     destination_blob_name = "eMeal-export" + source_file_name
 
-    credentials = service_account.Credentials.from_service_account_file('../keys/cevizh11-firebase-adminsdk.json')
+    credentials = service_account.Credentials.from_service_account_file(
+        '../keys/firebase/cevizh11-firebase-adminsdk.json')
     storage_client = storage.Client(credentials=credentials, project='cevizh11')
 
     bucket = storage_client.bucket(bucket_name)
@@ -41,7 +42,7 @@ def upload_blob(source_file_path, source_file_name, camp_id):
     blob.upload_from_filename(source_file_path + '.pdf')
 
     # Use the application default credentials
-    cred = firebase_admin.credentials.Certificate('../keys/cevizh11-firebase-adminsdk.json')
+    cred = firebase_admin.credentials.Certificate('../keys/firebase/cevizh11-firebase-adminsdk.json')
     app = firebase_admin.initialize_app(
         cred,
         name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
