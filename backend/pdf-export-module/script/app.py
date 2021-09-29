@@ -23,5 +23,10 @@ def hello_world(campID, userID):
     return "PDF created successfully!"
 
 
+@app.route("/cwd")
+def return_cwd():
+    return os.getcwd()
+
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
