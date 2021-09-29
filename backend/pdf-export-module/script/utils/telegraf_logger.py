@@ -11,7 +11,7 @@ class TelegrafLogger(StreamHandler):
     def __init__(self):
         StreamHandler.__init__(self)
 
-        with open('keys/influx_settings.json') as json_file:
+        with open('../keys/influx_settings.json') as json_file:
             data = json.load(json_file)
 
             self.client = DataFrameClient(host=data.get("host"),
