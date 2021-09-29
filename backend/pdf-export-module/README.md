@@ -4,11 +4,17 @@ This Docker container contains the functionality for the PDF export of a camp.
 
 ![Export Overview](docu/export_overview.png)
 
+This docker container hosts a simple flask server that exposes an API-endpoint to create PDF exports for a specific
+camp. The endpoint accepts various export settings as HTTP queries directly in the URL. Each request to the
+corresponding URL will trigger the creation of a PDF export. Once the PDF is created, the container will upload it to a
+firebase-storage bucket. Furthermore, a new document is made in the Firestore database containing the export meta-data
+and a link to the created PDF. This link will be used by the frontend to display a download link.
+
 ## Setup
 
 Before running the container, you must add your own keys files to the folder `./keys/`. Both key for
-the `Firebase Admin SDK` and for the `Influxdb`. Latter should be a file of the following structure
-called `./keys/influx_settings.json`
+the `Firebase Admin SDK` (inside a subfolder called ```firebase```) and for the `Influxdb`. Latter should be a file of
+the following structure called `./keys/influx/influx_settings.json`.
 
 ```json
 {
@@ -29,23 +35,19 @@ execute the export function inside a container environment.
 docker build . -t exportcamp && docker run -e PORT=5000 -p 5000:5000 exportcamp
 ```
 
-For example:
+Now the webserver should run, and you can trigger a PDF creation by navigating to
 
-```shell
-docker build . -t exportcamp && docker run -e PORT=5000 -p 5000:5000 exportcamp
-```
-
-Now you can trigger a PDF creation by navigating to 
 ```
 http://localhost:5000/export/camp/<campID>/user/<userID>/?<optional_args>
 ```
 
-For example:
-```
-http://localhost:5000/export/camp/16fXu6siwVDX1OOb38P3/user/CKsbjuHkJQUstW1YULeAepDe9Wl1/?--fdb&--lscp
-```
+For example
+```http://localhost:5000/export/camp/16fXu6siwVDX1OOb38P3/user/CKsbjuHkJQUstW1YULeAepDe9Wl1/?--spl&--lscp&--wv```
+will create an export for camp ```16fXu6siwVDX1OOb38P3``` including the shopping list and the weekview in landscape.
 
-### run the export function outside a container environment
+More export flags can be found [hier](./script/README.md).
+
+### Run the export function outside a container environment
 
 We expect you to have python and texlive installed on your system. Furthermore, you must install all the dependencies
 listed in `requirements.txt`. Now, you can run the export function using the following command. Replace `{{user_id}}`

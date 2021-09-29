@@ -1,5 +1,4 @@
 import functools
-import glob
 import os
 
 from flask import Flask, request
@@ -11,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.route("/export/camp/<campID>/user/<userID>/")
-def hello_world(campID, userID):
+def pdf_export(campID, userID):
     parser = setup_parser()
 
     args_as_dict = request.args.to_dict(flat=True)
@@ -22,16 +21,6 @@ def hello_world(campID, userID):
     script.pdf_generator.main(args)
 
     return "PDF created successfully!"
-
-
-@app.route("/cwd")
-def return_cwd():
-    return str(glob.glob("/usr/src/app/*"))
-
-
-@app.route("/keys")
-def return_cwd_keys():
-    return str(glob.glob("/usr/src/app/keys/*"))
 
 
 if __name__ == "__main__":
