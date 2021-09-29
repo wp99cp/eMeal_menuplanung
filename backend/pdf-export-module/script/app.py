@@ -1,4 +1,5 @@
 import functools
+import glob
 import os
 
 from flask import Flask, request
@@ -25,7 +26,11 @@ def hello_world(campID, userID):
 
 @app.route("/cwd")
 def return_cwd():
-    return os.getcwd()
+    return str(glob.glob("/usr/src/app/*"))
+
+@app.route("/keys")
+def return_cwd_keys():
+    return str(glob.glob("/usr/src/app/keys/*"))
 
 
 if __name__ == "__main__":
