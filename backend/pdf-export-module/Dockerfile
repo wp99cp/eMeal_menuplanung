@@ -18,4 +18,4 @@ RUN pip3 install --no-cache-dir -r ./script/requirements.txt
 
 # run python script
 COPY ./ ./
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app
+CMD exec gunicorn --workers 1 --bind :$PORT --threads 8 --timeout 0 --chdir script app:app
