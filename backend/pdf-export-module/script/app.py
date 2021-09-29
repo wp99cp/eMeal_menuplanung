@@ -8,17 +8,9 @@ from script.utils.commandline_args_parser import setup_parser
 
 app = Flask(__name__)
 
-executed = False
-
 
 @app.route("/export/camp/<campID>/user/<userID>/")
 def hello_world(campID, userID):
-    global executed
-    if executed:
-        return "Already executed!"
-    else:
-        executed = True
-
     parser = setup_parser()
 
     args_as_dict = request.args.to_dict(flat=True)
