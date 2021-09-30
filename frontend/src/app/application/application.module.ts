@@ -80,6 +80,7 @@ import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-r
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
 import {SettingsService} from './_service/settings.service';
+import { ExportSettingsComponent } from './_dialoges/export-settings/export-settings.component';
 
 @NgModule({
   declarations: [
@@ -122,7 +123,8 @@ import {SettingsService} from './_service/settings.service';
     EditRecipeComponent,
     HelpComponent,
     EditSingleMealComponent,
-    SingleRecipeInfoComponent
+    SingleRecipeInfoComponent,
+    ExportSettingsComponent
   ],
   providers: [
     AngularFirestore,

@@ -8,5 +8,6 @@ export const environment = {
     storageBucket: 'cevizh11.appspot.com',
     messagingSenderId: '1008874012549',
     appId: '1:1008874012549:web:d0dc251cd8ccf25c744eec'
-  }
+  },
+  exportEndpoint: 'https://emeal-pdf-export-develop-bo6axiz4bq-oa.a.run.app'
 };

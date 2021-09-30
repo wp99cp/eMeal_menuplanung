@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {delay, map, mergeMap, take} from 'rxjs/operators';
+import {delay, map, mergeMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 
 import {DatabaseService} from '../../_service/database.service';
 import {HelpService} from '../../_service/help.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ExportSettingsComponent} from '../../_dialoges/export-settings/export-settings.component';
 
 @Component({
   selector: 'app-export-camp',
@@ -21,7 +23,11 @@ export class ExportCampComponent implements OnInit {
   public exportIsRunning = false;
   private campId: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private dbService: DatabaseService, private router: Router, public helpService: HelpService) {
+  constructor(private route: ActivatedRoute,
+              private dbService: DatabaseService,
+              private router: Router,
+              public helpService: HelpService,
+              private dialog: MatDialog) {
 
     this.campId = this.route.url.pipe(map(url => url[1].path));
     this.exports = this.campId.pipe(mergeMap(campId => dbService.getExports(campId)));
@@ -81,25 +87,40 @@ export class ExportCampComponent implements OnInit {
    */
   createNewExport() {
 
-    this.showExports = true;
-    this.exportIsRunning = true;
+    this.campId.pipe(mergeMap(campId =>
+      this.dialog.open(ExportSettingsComponent, {
+        height: '618px',
+        width: '1000px',
+        data: campId
+      }).afterClosed()))
+      .pipe(tap(() => {
+        this.showExports = true;
+        this.exportIsRunning = true;
+        this.pending = true;
+        this.message = '';
+      }))
+      .pipe(mergeMap(result => {
 
-    this.pending = true;
+        if (result.legacy) {
+          return this.dbService.legacyPDFCreation(result.campId);
+        }
+        return this.dbService.createPDF(result.campId, result.optionalArgs);
 
-    this.campId
-      .pipe(mergeMap(campId => this.dbService.createPDF(campId)))
+      }))
       .pipe(delay(250))
       .subscribe(() => {
-          this.exportIsRunning = false;
-        },
+        this.exportIsRunning = false;
+      }, (err) => {
 
-        // bug report on error
-        (err) => {
-
-          this.pending = false;
+        if (String(err).includes('TypeError')) {
+          console.log('Export Aborted!');
+        } else {
           this.message = 'Beim Export ist ein unerwarteter Fehler aufgetreten! Bitte versuches später erneut.';
+        }
 
-        });
+        this.pending = false;
+
+      });
 
   }
 

@@ -27,6 +27,7 @@ import {
 import {AuthenticationService} from './authentication.service';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {SettingsService} from './settings.service';
+import {environment} from '../../../environments/environment';
 
 
 /**
@@ -444,14 +445,46 @@ export class DatabaseService {
   }
 
   /**
-   *    * TODO: auto unsubscription
-
+   * Triggers a PDF creation for the specified camp.
    *
-   * @param id
+   * @param campID: Id of the camp that should be exported.
+   *
+   * @param optionalSettings Optional settings for the export
+   *
    */
-  public createPDF(id: string): Observable<any> {
+  public createPDF(campID: string, optionalSettings: { [id: string]: string } = {'--spl': ''}): Promise<any> {
 
-    return this.functions.httpsCallable('createPDF')({campId: id});
+    console.log(optionalSettings);
+
+    return new Promise((resolve, reject) => {
+
+      this.authService.getCurrentUser().subscribe(user => {
+
+        let queryStr = '?';
+
+        Object.entries(optionalSettings).forEach(([k, v]) => {
+          queryStr += k + '=' + v + '&';
+        });
+
+        const url = environment.exportEndpoint + '/export/camp/'
+          + campID + '/user/' + user.uid + '/' + queryStr;
+
+        console.log('Export: ' + url);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            resolve(xhr.responseText);
+          } else {
+            reject(new Error(xhr.responseText));
+          }
+        };
+        xhr.send();
+
+      });
+    });
+
 
   }
 
@@ -896,6 +929,10 @@ export class DatabaseService {
 
   }
 
+  legacyPDFCreation(campId) {
+    return this.functions.httpsCallable('createPDF')({campId});
+  }
+
   /**
    *
    * TODO: add description
@@ -985,6 +1022,7 @@ export class DatabaseService {
       ))
     );
   }
+
 }
 
 

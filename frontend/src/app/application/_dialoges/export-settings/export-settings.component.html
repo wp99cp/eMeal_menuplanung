@@ -1,0 +1,21 @@
+<h2>PDF Export erstellen</h2>
+
+<div mat-dialog-content>
+
+  <h3>Bestandteile</h3>
+  <form class="export-settings" [formGroup]="formGroup">
+
+    <mat-slide-toggle formControlName="weekView" color="primary"> Wochenübersicht</mat-slide-toggle>
+    <mat-slide-toggle formControlName="shoppingList" color="primary"> Einkaufsliste</mat-slide-toggle>
+    <mat-slide-toggle formControlName="meals" color="primary"> Mahlzeiten und Rezepte</mat-slide-toggle>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p><a (click)="helpService.openHelpPopup()">Hilfe / Erklärungen</a></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Schliessen</button>
+  <button mat-stroked-button (click)="legacyPDCreation()"> Legacy PDF Export</button>
+  <button mat-raised-button color="save" (click)="generatePDF()">PDF Erstellen</button>
+</div>
