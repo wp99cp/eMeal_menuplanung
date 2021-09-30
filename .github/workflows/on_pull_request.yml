@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@master
+        uses: thollander/actions-comment-pull-request@main
         with:
           message: "
           Todos before releasing a new version \n \n
