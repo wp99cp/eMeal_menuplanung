@@ -1,15 +1,15 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import {SelectionModel} from '@angular/cdk/collections';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 
-import { DatabaseService } from '../../_service/database.service';
-import { Recipe } from '../../_class/recipe';
-import { CreateRecipeComponent } from '../create-recipe/create-recipe.component';
-import { Observable } from 'rxjs';
-import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
-import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {DatabaseService} from '../../_service/database.service';
+import {Recipe} from '../../_class/recipe';
+import {CreateRecipeComponent} from '../create-recipe/create-recipe.component';
+import {Observable} from 'rxjs';
+import {FirestoreRecipe} from '../../_interfaces/firestoreDatatypes';
+import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {take} from "rxjs/operators";
 
 export function CustomPaginator() {

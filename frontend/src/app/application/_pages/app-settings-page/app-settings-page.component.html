@@ -42,7 +42,8 @@
     <h2>Einstellungen</h2>
 
     <p class="info"> Möchtest du, dass Vorlagen für Rezepte und Mahlzeiten in der Suche dargestellt werden?<br>
-      Vorlagen sind grün markiert und können für den eigenen Gebrauch kopiert werden. </p>
+      Vorlagen sind grün markiert und können für den eigenen Gebrauch kopiert werden. <a
+        (click)="help.openHelpPopup('kochbuch-rezeptvorlagen')">Hilfe zu den Rezeptvorlagen.</a></p>
 
     <mat-form-field matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width"
                     *ngIf="(settings.globalSettings | async) as settings">

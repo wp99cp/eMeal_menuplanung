@@ -7,6 +7,7 @@ import {User} from '../../_class/user.js';
 import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
 import {SettingsService} from '../../_service/settings.service';
+import {HelpService} from '../../_service/help.service';
 
 
 @Component({
@@ -28,7 +29,11 @@ export class AppSettingsPageComponent {
 
   public userDataForm: FormGroup;
 
-  constructor(private auth: AuthenticationService, private dbService: DatabaseService, formBuilder: FormBuilder, public settings: SettingsService) {
+  constructor(private auth: AuthenticationService,
+              private dbService: DatabaseService,
+              formBuilder: FormBuilder,
+              public settings: SettingsService,
+              public help: HelpService) {
 
     this.userDataForm = formBuilder.group({displayName: '', visibility: 'hidden'});
 

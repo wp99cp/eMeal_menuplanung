@@ -405,15 +405,8 @@ export class DatabaseService {
 
    * @param mealId
    */
-  public getCampsThatIncludes(mealId: string) {
-
-    return this.getMealById(mealId).pipe(mergeMap(meal =>
-
-      this.requestCollection('camps/',
-        this.createQuery([firestore.FieldPath.documentId(), 'in', meal.usedInCamps]))
-        .pipe(FirestoreObject.createObjects<FirestoreCamp, Camp>(Camp))
-    ));
-
+  public getCampIDsThatIncludes(mealID: string) {
+    return this.getMealById(mealID).pipe(map(camp => camp.usedInCamps));
   }
 
   /**
@@ -433,15 +426,8 @@ export class DatabaseService {
 
    * @param recipeId
    */
-  public getMealsThatIncludes(recipeId: string) {
-
-    return this.getRecipeById(recipeId).pipe(mergeMap(recipe =>
-
-      this.requestCollection('meals/',
-        this.createQuery([firestore.FieldPath.documentId(), 'in', recipe.usedInMeals]))
-        .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal))
-    ));
-
+  public getMealIDsThatIncludes(recipeId: string) {
+    return this.getRecipeById(recipeId).pipe(map(recipe => recipe.usedInMeals));
   }
 
   /**
@@ -499,12 +485,18 @@ export class DatabaseService {
    */
   public getRecipes(mealId: string): Observable<Recipe[]> {
 
-    return this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'], ['used_in_meals', 'array-contains', mealId])
-      .pipe(mergeMap(queryFn =>
-        this.requestCollection('recipes', queryFn)
-          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe))
-      ));
+    const recipesCreatedByUsers = this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'],
+      ['used_in_meals', 'array-contains', mealId])
+      .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
 
+    const globalTemplates = this.requestCollection('recipes', ref => ref
+      .where('access.all_users', 'in', ['viewer'])
+      .where('used_in_meals', 'array-contains', mealId))
+      .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+
+    return combineLatest([recipesCreatedByUsers, globalTemplates])
+      .pipe(map(arr => arr.flat()));
 
   }
 
@@ -663,8 +655,10 @@ export class DatabaseService {
     return new Promise((resolve) =>
       this.authService.getCurrentUser().subscribe(async user => {
 
-        // set current user as owner of the document
-        firebaseObject.setAccessData({[user.uid]: 'owner'});
+        if ((firebaseObject instanceof Recipe || firebaseObject instanceof Meal) &&
+          firebaseObject.getAccessData().all_users === 'viewer') {
+          firebaseObject.createdFromTemplate = firebaseObject.documentId;
+        }
 
         // deletes specific data
         if (firebaseObject instanceof Recipe) {
@@ -681,6 +675,9 @@ export class DatabaseService {
         if (firebaseObject instanceof Meal) {
           firebaseObject.usedInCamps = [];
         }
+
+        // set current user as owner of the document
+        firebaseObject.setAccessData({[user.uid]: 'owner'});
 
 
         console.log('Copied document: ');
@@ -1022,6 +1019,29 @@ export class DatabaseService {
       ))
     );
   }
+
+  linkOrCopyRecipes(oldMealId: any, newMealId: string) {
+
+    this.getRecipes(oldMealId)
+      .pipe(take(1))
+      .subscribe(recipes => recipes.forEach(recipe => {
+
+        this.createAccessQueryFn(['editor', 'owner', 'collaborator', 'viewer'],
+          ['created_from_template', '==', recipe.documentId])
+          .pipe(mergeMap(queryFn => this.db.collection('recipes', queryFn).get()))
+          .subscribe(docs => {
+            console.log(docs.docs)
+            if (docs.docs.length > 0) {
+              docs.docs[0].ref.update({used_in_meals: firestore.FieldValue.arrayUnion(newMealId)});
+            } else {
+              this.createCopy(recipe, newMealId);
+            }
+          });
+
+      }));
+
+  }
+
 
 }
 

@@ -17,6 +17,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
   protected markedAsDeleted = [];
   protected filterFn: (dbElement: T) => boolean;
   protected dbElementName = 'Element';
+  protected filterDocIDs: string[] = [];
 
   protected constructor(
     private databaseServcie: DatabaseService,
@@ -45,9 +46,13 @@ export abstract class TileListPage<T extends FirestoreObject> {
 
   public abstract newElement(): void;
 
-  applyFilter(event: any) {
+  applyFilter(event: any, docIds: string[] = []) {
+
+    console.log(event)
+    console.log(docIds)
 
     this.filterValue = event;
+    this.filterDocIDs = docIds;
 
     // update the values
     this.updateVisibleElements();
@@ -119,7 +124,8 @@ export abstract class TileListPage<T extends FirestoreObject> {
       .pipe(take(1))
       .subscribe(elements =>
         this.filteredElements = elements.filter(elem =>
-          this.filterFn(elem) && !this.markedAsDeleted.includes(elem.documentId)));
+          this.filterFn(elem) && !this.markedAsDeleted.includes(elem.documentId))
+      );
 
   }
 

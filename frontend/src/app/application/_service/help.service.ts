@@ -37,7 +37,7 @@ export class HelpService {
 
   }
 
-  openHelpPopup(ref = '') {
+  async openHelpPopup(ref = '') {
 
     if (this.isOpen) {
       return;
@@ -57,34 +57,31 @@ export class HelpService {
 
     console.log('[Help Service] Open dialog for \'' + currentURL + '\'.');
 
-    this.db.collection('/sharedData/helpMessages/messages',
-      doc => doc.where('urls', 'array-contains', currentURL)).get()
-      .subscribe(messages => {
+    const helpMessages = (await this.db.collection('/sharedData/helpMessages/messages',
+      doc => doc.where('urls', 'array-contains', currentURL)).get().toPromise()).docs;
 
-        let helpMessagesForThisPage = messages.docs.map(docs => docs.data() as HelpMessage);
-        let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
-        if (ref !== '') {
-          const elem = helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
-          index = helpMessagesForThisPage.indexOf(elem);
-        }
-        const message = helpMessagesForThisPage[index];
+    let helpMessagesForThisPage = helpMessages.map(docs => docs.data() as HelpMessage);
+    let index = Math.floor(Math.random() * helpMessagesForThisPage.length);
+    if (ref !== '') {
+      const elem = helpMessagesForThisPage.filter(mess => mess.ref === ref)[0];
+      index = helpMessagesForThisPage.indexOf(elem);
+    }
+    const message = helpMessagesForThisPage[index];
 
-        if (message === undefined) {
-          helpMessagesForThisPage = [this.defaultMessage];
-          index = 0;
-        }
+    if (message === undefined) {
+      helpMessagesForThisPage = [this.defaultMessage];
+      index = 0;
+    }
 
-        this.dialog
-          .open(HelpComponent, {
-            height: '800px',
-            width: '550px',
-            data: {index, messages: helpMessagesForThisPage}
-          })
-          .afterClosed()
-          .subscribe(() => {
-            this.isOpen = false;
-          });
-
+    this.dialog
+      .open(HelpComponent, {
+        height: '800px',
+        width: '550px',
+        data: {index, messages: helpMessagesForThisPage}
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.isOpen = false;
       });
 
 

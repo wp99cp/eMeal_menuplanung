@@ -20,6 +20,8 @@ export class Meal extends FirestoreObject implements ExportableObject {
   public lastMeal: MealUsage;
   public usedAs: MealUsage;
   public participantsWarning: boolean;
+  public createdFromTemplate: string;
+
 
   public usedInCamps: string[];
 
@@ -35,6 +37,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     this.keywords = meal.meal_keywords;
     this.lastMeal = meal.meal_last_usage;
     this.usedInCamps = meal.used_in_camps ? meal.used_in_camps : [];
+    this.createdFromTemplate = meal.created_from_template;
 
   }
 
@@ -47,6 +50,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     firestoreMeal.meal_keywords = this.keywords;
     firestoreMeal.meal_last_usage = this.lastMeal;
     firestoreMeal.used_in_camps = this.usedInCamps;
+    firestoreMeal.created_from_template = this.createdFromTemplate;
 
     return firestoreMeal;
 
