@@ -49,7 +49,7 @@
 </div>
 
 <footer class="footer">
-  <span><b>Aktuelle Version:</b> {{buildInfo.version}}</span>
+  <span><a [routerLink]="'infos/changeLog'"><b>Aktuelle Version:</b> {{buildInfo.version}}</a></span>
   <span>(Build: {{buildInfo.git.hash}} vom {{ buildDate}})</span>
   <span><a href="https://github.com/wp99cp/eMeal_menuplanung">Source code available under AGPL.</a></span>
   <span><br></span>
