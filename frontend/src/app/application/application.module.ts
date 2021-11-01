@@ -80,7 +80,9 @@ import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-r
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
 import {SettingsService} from './_service/settings.service';
-import { ExportSettingsComponent } from './_dialoges/export-settings/export-settings.component';
+import {ExportSettingsComponent} from './_dialoges/export-settings/export-settings.component';
+import buildInfo from '../../build';
+import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
 
 @NgModule({
   declarations: [
@@ -124,7 +126,8 @@ import { ExportSettingsComponent } from './_dialoges/export-settings/export-sett
     HelpComponent,
     EditSingleMealComponent,
     SingleRecipeInfoComponent,
-    ExportSettingsComponent
+    ExportSettingsComponent,
+    ChangeLogComponent
   ],
   providers: [
     AngularFirestore,
@@ -227,7 +230,8 @@ export class ApplicationModule {
   constructor(contextMenu: ContextMenuService,
               shortCut: ShortcutService,
               helpService: HelpService,
-              dialog: MatDialog) {
+              dialog: MatDialog,
+              settings: SettingsService) {
 
 
     // we want to use the contextMenuService in this module
@@ -235,6 +239,21 @@ export class ApplicationModule {
     shortCut.activate();
 
     helpService.addDialog(dialog);
+
+    settings.globalSettings.subscribe(s => {
+
+      if (s.last_shown_changelog !== buildInfo.version) {
+
+        dialog.open(ChangeLogComponent, {
+          height: '618px',
+          width: '1000px'
+        }).afterClosed()
+          .subscribe(() => settings.setLastShownChangelog(buildInfo.version));
+
+      }
+
+    });
+
 
   }
 
