@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Camp } from '../../_class/camp';
 import { DatabaseService } from '../../_service/database.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {HelpService} from '../../_service/help.service';
 
 /**
  * CampInfoComponent ist ein Dialog zum bearbeiten der Camp-Infos
@@ -23,7 +24,8 @@ export class CampInfoComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp },
     formBuilder: FormBuilder,
-    dbService: DatabaseService) {
+    dbService: DatabaseService,
+    public helpService: HelpService) {
 
     this.camp = data.camp;
     this.campInfosForm = formBuilder.group({

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-copy-recipe',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CopyRecipeComponent implements OnInit {
 
-  constructor() { }
+  constructor(public helpService: HelpService) {
+  }
 
   ngOnInit() {
   }
