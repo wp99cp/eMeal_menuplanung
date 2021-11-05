@@ -182,7 +182,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     recipe.used_in_meals = this.usedInMeals;
     recipe.ingredients = this.getOriginalIngredients();
     recipe.recipe_notes = this.notes;
-    recipe.created_from_template = this.createdFromTemplate;
+    recipe.created_from_template = this.createdFromTemplate === undefined ? '' : this.createdFromTemplate;
 
     return recipe;
 
