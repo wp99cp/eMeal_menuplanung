@@ -9,5 +9,5 @@ export const environment = {
     messagingSenderId: '417609675904',
     appId: '1:417609675904:web:4fe34235bcf29712'
   },
-  exportEndpoint: 'https://emeal-pdf-export-develop-bo6axiz4bq-oa.a.run.app'
+  exportEndpoint: 'https://prod-emeal-menuplanung-pdf-export-service-nlpqlgqwxq-oa.a.run.app'
 };
