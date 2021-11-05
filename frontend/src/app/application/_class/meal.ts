@@ -50,7 +50,7 @@ export class Meal extends FirestoreObject implements ExportableObject {
     firestoreMeal.meal_keywords = this.keywords;
     firestoreMeal.meal_last_usage = this.lastMeal;
     firestoreMeal.used_in_camps = this.usedInCamps;
-    firestoreMeal.created_from_template = this.createdFromTemplate;
+    firestoreMeal.created_from_template = this.createdFromTemplate === undefined ? '' : this.createdFromTemplate;
 
     return firestoreMeal;
 
