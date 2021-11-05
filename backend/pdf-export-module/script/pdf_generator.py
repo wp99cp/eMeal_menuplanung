@@ -29,12 +29,15 @@ from utils.telegraf_logger import TelegrafLogger
 def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
-    bucket_name = "cevizh11.appspot.com"
+    with open('../keys/firebase/environment.json') as json_file:
+        project_and_bucket_name = json_file['storage_bucket_name']
+
+    bucket_name = project_and_bucket_name + ".appspot.com"
     destination_blob_name = "eMeal-export" + source_file_name
 
     credentials = service_account.Credentials.from_service_account_file(
         '../keys/firebase/cevizh11-firebase-adminsdk.json')
-    storage_client = storage.Client(credentials=credentials, project='cevizh11')
+    storage_client = storage.Client(credentials=credentials, project=project_and_bucket_name)
 
     bucket = storage_client.bucket(bucket_name)
 
