@@ -7,6 +7,8 @@ import random
 import string
 import time
 from typing import List
+import json
+
 
 import firebase_admin
 from dateutil.relativedelta import relativedelta
@@ -30,7 +32,7 @@ def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
     with open('../keys/environment/environment.json') as json_file:
-        project_and_bucket_name = json_file['storage_bucket_name']
+        project_and_bucket_name = json.load(json_file)['storage_bucket_name']
 
     bucket_name = project_and_bucket_name + ".appspot.com"
     destination_blob_name = "eMeal-export" + source_file_name
