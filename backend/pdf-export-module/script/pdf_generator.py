@@ -29,7 +29,7 @@ from utils.telegraf_logger import TelegrafLogger
 def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
-    with open('../keys/firebase/environment.json') as json_file:
+    with open('../keys/environment/environment.json') as json_file:
         project_and_bucket_name = json_file['storage_bucket_name']
 
     bucket_name = project_and_bucket_name + ".appspot.com"
