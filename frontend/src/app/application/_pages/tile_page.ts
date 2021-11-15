@@ -111,7 +111,7 @@ export abstract class TileListPage<T extends FirestoreObject> {
     HeaderNavComponent.addToHeaderNav({
       active: true,
       description: this.dbElementName + ' hinzufügen',
-      name: 'Neues ' + this.dbElementName,
+      name: this.dbElementName + ' erstellen',
       action: (() => this.newElement()),
       icon: 'add_circle_outline',
     });
