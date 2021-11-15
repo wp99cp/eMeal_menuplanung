@@ -51,7 +51,8 @@
   </div>
 
   <h3>Keiner dieser Accounts?</h3>
-  <p>Zur Zeit können keine neuen Accounts erstellt werden. Falls du noch kein Login besitzt wende dich an den Administrator.</p>
+  <p>Zur Zeit können keine neuen Accounts erstellt werden. Falls du noch kein Login besitzt, wende dich an den
+    Administrator.</p>
 
   <div class="login-form">
     <div>
@@ -65,7 +66,9 @@
         <input name="current-password" type="password" #password matInput>
       </mat-form-field>
     </div>
-    <button mat-raised-button (click)="auth.signIn(username.value, password.value)" routerLink="/login/oauth-callback">Anmelden</button>
+    <button mat-raised-button  color="save" (click)="auth.signIn(username.value, password.value)"
+            routerLink="/login/oauth-callback">Anmelden
+    </button>
   </div>
 
 </div>

@@ -32,6 +32,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ErrorPageComponent} from './error-page/error-page.component';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
 import {AccessGuard} from './AccessGuard';
+import {DateAdapter} from '@angular/material/core';
+import {SwissDateAdapter} from './utils/format-datapicker';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -45,37 +48,41 @@ import {AccessGuard} from './AccessGuard';
     SignInCallbackComponent,
     ErrorPageComponent,
   ],
-  imports: [
+    imports: [
 
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-    AngularFireAuthModule,
-    HttpClientModule,
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+        AngularFireAuthModule,
+        HttpClientModule,
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
 
-    // Material Design for the entire app
-    MatToolbarModule,
-    MatMenuModule,
-    MatTooltipModule,
-    MatButtonModule,
-    MatIconModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
-    MarkdownModule,
-    MatInputModule,
-    MatSlideToggleModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatSnackBarModule
-  ],
+        // Material Design for the entire app
+        MatToolbarModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatIconModule,
+        ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+        MarkdownModule,
+        MatInputModule,
+        MatSlideToggleModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSnackBarModule,
+        MatProgressBarModule
+    ],
   providers: [
     AngularFireAuth,
     AngularFirestore,
     AuthenticationService,
     AngularFireFunctions,
     AngularFirestoreModule,
-    AccessGuard
+    AccessGuard,
+    SwissDateAdapter,
+    {provide: DateAdapter, useClass: SwissDateAdapter},
+
   ],
   bootstrap: [AppComponent]
 })

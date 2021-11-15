@@ -1,16 +1,16 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import {SelectionModel} from '@angular/cdk/collections';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 
-import { DatabaseService } from '../../_service/database.service';
-import { Recipe } from '../../_class/recipe';
-import { CreateRecipeComponent } from '../create-recipe/create-recipe.component';
-import { Observable } from 'rxjs';
-import { FirestoreRecipe } from '../../_interfaces/firestoreDatatypes';
-import { MatPaginatorIntl, MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import {take} from "rxjs/operators";
+import {DatabaseService} from '../../_service/database.service';
+import {Recipe} from '../../_class/recipe';
+import {CreateRecipeComponent} from '../create-recipe/create-recipe.component';
+import {Observable} from 'rxjs';
+import {FirestoreRecipe} from '../../_interfaces/firestoreDatatypes';
+import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {take} from 'rxjs/operators';
 
 export function CustomPaginator() {
   const customPaginatorIntl = new MatPaginatorIntl();
@@ -32,13 +32,13 @@ export function CustomPaginator() {
   templateUrl: './add-recipe.component.html',
   styleUrls: ['./add-recipe.component.sass'],
   providers: [
-    { provide: MatPaginatorIntl, useValue: CustomPaginator() }
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()}
   ]
 })
 export class AddRecipeComponent implements AfterViewInit {
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   // Datasource for the table
   public recipesTableSource = new MatTableDataSource<Recipe>();
@@ -62,9 +62,12 @@ export class AddRecipeComponent implements AfterViewInit {
     this.recipesTableSource.sort = this.sort;
     this.recipesTableSource.sortingDataAccessor = (item, property) => {
       switch (property) {
-        case 'name': return item.name.toLowerCase();
-        case 'description': return (item.description !== null) ? item.description.toLowerCase() : '';
-        default: return item[property];
+        case 'name':
+          return item.name.toLowerCase();
+        case 'description':
+          return (item.description !== null) ? item.description.toLowerCase() : '';
+        default:
+          return item[property];
       }
     };
 
@@ -106,19 +109,19 @@ export class AddRecipeComponent implements AfterViewInit {
     this.dialog.open(CreateRecipeComponent, {
       height: '640px',
       width: '900px',
-      data: { recipeName: (document.getElementById('search-field') as HTMLInputElement).value }
+      data: {recipeName: (document.getElementById('search-field') as HTMLInputElement).value}
 
     }).afterClosed()
       .pipe(take(1))
       .subscribe((recipe: Observable<FirestoreRecipe>) => {
 
-      recipe.subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
-      this.setFocusToSeachField();
+        recipe.subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
+        this.setFocusToSeachField();
 
-      // Remove Color
-      document.getElementById('add-recipe').classList.remove('mat-save');
+        // Remove Color
+        document.getElementById('add-recipe').classList.remove('mat-save');
 
-    });
+      }, error => {});
 
 
   }

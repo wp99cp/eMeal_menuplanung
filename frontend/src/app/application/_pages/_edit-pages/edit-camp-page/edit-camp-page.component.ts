@@ -89,7 +89,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     HeaderNavComponent.addToHeaderNav({
       active: true,
       description: 'Informationen zum Lager',
-      name: 'Info',
+      name: 'Lager Info',
       action: (() => this.campInfoDialog()),
       icon: 'info'
     });

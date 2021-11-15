@@ -420,27 +420,33 @@ export class EditRecipeComponent implements OnInit {
 
   public selectNextElement(currentElement: Element) {
 
-
     this.disableEdit();
 
+    let successorElement = currentElement;
+
     if (currentElement.nextElementSibling == null) {
-      currentElement = currentElement.parentElement.parentElement.nextElementSibling?.firstElementChild?.firstElementChild;
+      successorElement = currentElement.parentElement.parentElement.nextElementSibling?.firstElementChild?.firstElementChild;
     }
 
     // End of Table
-    if (currentElement == null) {
-      return;
+    if (successorElement == null) {
+
+      successorElement = currentElement.parentElement;
+      successorElement = successorElement.firstElementChild.nextElementSibling;
+
+      this.addIngredientField(successorElement);
+    return;
     }
 
-    currentElement = currentElement.nextElementSibling;
+    successorElement = successorElement.nextElementSibling;
 
     // Jump over delete and fresh
-    if (!currentElement.querySelector('data')) {
-      this.selectNextElement(currentElement);
+    if (!successorElement.querySelector('data')) {
+      this.selectNextElement(successorElement);
       return;
     }
 
-    this.setFocus(currentElement);
+    this.setFocus(successorElement);
 
   }
 

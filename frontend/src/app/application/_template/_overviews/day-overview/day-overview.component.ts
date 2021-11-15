@@ -1,5 +1,5 @@
-import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList} from '@angular/cdk/drag-drop';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 
 import {Day} from '../../../_class/day';
@@ -11,6 +11,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HelpService} from '../../../_service/help.service';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Observable, Subscription} from 'rxjs';
+import {map, take} from 'rxjs/operators';
+import Timeout = NodeJS.Timeout;
 
 @Component({
   selector: 'app-day-overview',
@@ -18,23 +21,27 @@ import {MatSnackBar} from '@angular/material/snack-bar';
   styleUrls: ['./day-overview.component.sass'],
 
 })
-export class DayOverviewComponent implements OnChanges, OnInit {
+export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
+
   @Input() access: boolean;
-  // gleichzeitig gelöscht wird!) Beheben analog zu tile_page class....
   @Input() day: Day;
-  @Input() mealsToPrepare: SpecificMeal[];
-  @Input() specificMeals: SpecificMeal[];
+  @Input() mealsToPrepare: Observable<SpecificMeal[]>;
+  @Input() specificMeals: Observable<SpecificMeal[]>;
   @Input() days: Day[];
   @Input() hideIcons = false;
+
   @Output() mealDropped = new EventEmitter<[SpecificMeal, MealUsage, string]>();
   @Output() mealDeleted = new EventEmitter<[string, string]>();
   @Output() dayEdited = new EventEmitter<[number, Day, SpecificMeal[]]>();
-  @Output() addMeal = new EventEmitter<Day>();
+  @Output() addMeal = new EventEmitter<[Day, MealUsage]>();
 
   @ViewChild('dayElement') dayElement;
 
   public hidden = false;
   public warning: string;
+  public specificMealsByName = {};
+  private crashChecker: Timeout;
+  private specificMealsSubscription: Subscription;
 
   constructor(public dialog: MatDialog,
               public swissDateAdapter: SwissDateAdapter,
@@ -45,15 +52,28 @@ export class DayOverviewComponent implements OnChanges, OnInit {
               private snackBar: MatSnackBar) {
   }
 
-  getMeal(name: string) {
+  ngOnDestroy(): void {
+    this.specificMealsSubscription.unsubscribe();
+  }
 
-    if (name === 'Vorbereiten') {
-      return this.mealsToPrepare;
-    }
 
-    return this.specificMeals?.filter(meal => meal.usedAs === name);
+  ngOnInit(): void {
+
+    this.getMealNames().forEach(name => {
+
+      if (name === 'Vorbereiten') {
+        this.specificMealsByName[name] = this.mealsToPrepare;
+      } else {
+        this.specificMealsByName[name] = this.specificMeals.pipe(
+          map(meals =>
+            meals.filter(meal =>
+              meal.usedAs === name)));
+      }
+    });
+
 
   }
+
 
   getMealNames() {
 
@@ -61,89 +81,102 @@ export class DayOverviewComponent implements OnChanges, OnInit {
 
   }
 
-  setContextMenu() {
+  setContextMenu(includeLateChanges = true) {
+
+    if (includeLateChanges) {
+      setTimeout(() => this.setContextMenu(false), 250);
+    }
+
+    if (this.specificMeals === null) {
+      return;
+    }
 
 
-    setTimeout(() => {
+    const empties = this.dayElement?.nativeElement.querySelectorAll('[data-add-note="true"]');
 
-      if (this.specificMeals === null) {
+    if (empties === undefined || empties.length === 0) {
+      setTimeout(() => this.setContextMenu(), 250);
+      return;
+    }
+
+    empties.forEach(empty => {
+
+
+      const node: ContextMenuNode = {
+        node: empty as HTMLElement,
+        contextMenuEntries: [
+          {
+            icon: 'add',
+            name: 'Hinzufügen',
+            shortCut: '',
+            function: () => this.addMeal.emit([this.day, empty.parentElement.getAttribute('data-meal-name')])
+          },
+          {
+            icon: 'sticky_note_2',
+            name: 'Notiz einfügen',
+            shortCut: '',
+            function: () => {
+              this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
+            }
+          },
+          'Separator',
+          {
+            icon: 'help',
+            name: 'Hilfe / Erklärungen',
+            shortCut: 'F1',
+            function: () => this.helpService.openHelpPopup()
+          }
+        ]
+      };
+      this.contextMenuService.addContextMenuNode(node);
+
+    });
+
+    if (this.specificMealsSubscription) {
+      this.specificMealsSubscription.unsubscribe();
+    }
+
+    this.specificMealsSubscription = this.specificMeals.pipe(take(1)).subscribe(meals => meals.forEach(meal => {
+
+      const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
+
+      if (elements === null || elements === undefined) {
         return;
       }
 
-      const empties = this.dayElement.nativeElement.querySelectorAll('[data-add-note="true"]');
+      elements.forEach(element => {
 
-      empties.forEach(empty => {
-
-        const node: ContextMenuNode = {
-          node: empty.parentElement as HTMLElement,
-          contextMenuEntries: [
-            {
-              icon: 'add',
-              name: 'Hinzufügen',
-              shortCut: '',
-              function: () => this.addMeal.emit(this.day)
-            },
-            {
-              icon: 'sticky_note_2',
-              name: 'Notiz einfügen',
-              shortCut: '',
-              function: () => {
-                this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
-              }
-            },
-            'Separator',
-            {
-              icon: 'help',
-              name: 'Hilfe / Erklärungen',
-              shortCut: 'F1',
-              function: (event) => this.helpService.openHelpPopup()
-            }
-          ]
-        };
-        this.contextMenuService.addContextMenuNode(node);
-
-      });
-
-      this.specificMeals.forEach(meal => {
-
-        const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
-
-        if (elements === null || elements === undefined) {
-          return;
-        }
-
-        elements.forEach(element => {
+        if (element.parentElement.nodeName !== 'BODY') {
 
           const node: ContextMenuNode = {
-            node: element.parentElement.parentElement as HTMLElement,
+            node: element as HTMLElement,
             contextMenuEntries: [
               {
                 icon: 'edit',
                 name: 'Bearbeiten',
                 shortCut: '',
-                function: (event) => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
+                function: () => this.router.navigate([`meals/${meal.getMealId()}/${meal.documentId}`],
                   {relativeTo: this.activeRoute})
               },
               {
                 icon: 'delete',
-                name: 'Mahlzeit Löschen',
+                name: 'Mahlzeit entfernen',
                 shortCut: '',
-                function: (event) => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
+                function: () => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
               },
               'Separator',
               {
                 icon: 'help',
                 name: 'Hilfe / Erklärungen',
                 shortCut: 'F1',
-                function: (event) => this.helpService.openHelpPopup()
+                function: () => this.helpService.openHelpPopup()
               }
             ]
           };
           this.contextMenuService.addContextMenuNode(node);
-
-        });
+        }
       });
-    }, 200);
+    }));
 
   }
 
@@ -153,7 +186,7 @@ export class DayOverviewComponent implements OnChanges, OnInit {
     this.warning = '';
     this.setContextMenu();
     this.mealsToPrepare =
-      this.mealsToPrepare?.filter(meal => meal.prepareAsDate.getTime() === this.day.dateAsTypeDate.getTime());
+      this.mealsToPrepare?.pipe(map(meals => meals.filter(meal => meal.prepareAsDate.getTime() === this.day.dateAsTypeDate.getTime())));
 
   }
 
@@ -172,11 +205,6 @@ export class DayOverviewComponent implements OnChanges, OnInit {
 
   }
 
-  addNewMeal(day: Day) {
-
-    this.addMeal.emit(day);
-
-  }
 
   /**
    * Berbeite einen Tag.
@@ -186,45 +214,109 @@ export class DayOverviewComponent implements OnChanges, OnInit {
    */
   editDay(day: Day) {
 
+    this.specificMeals.pipe(take(1)).subscribe(meals => {
 
-    this.dialog
-      .open(EditDayComponent, {
-        height: '618px',
-        width: '1000px',
-        data: {day, specificMeals: this.specificMeals, days: this.days, access: this.access}
-      })
-      .afterClosed()
-      .subscribe((save: number) => {
+      this.dialog
+        .open(EditDayComponent, {
+          height: '618px',
+          width: '1000px',
+          data: {day, specificMeals: meals, days: this.days, access: this.access}
+        })
+        .afterClosed()
+        .subscribe((save: number) => {
 
-        this.dayEdited.emit([save, this.day, this.specificMeals]);
+          this.dayEdited.emit([save, this.day, meals]);
 
-      });
+        });
+    });
 
   }
 
 
   mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
 
+    console.log('mealDroppedAction');
+
+    // Don't update the model, if the meal has not been moved to another location.
+    if (event.container === event.previousContainer) {
+      return;
+    }
+
     // hide meal at old place
     event.item.element.nativeElement.style.visibility = 'hidden';
-    this.specificMeals = this.specificMeals.filter(m => m != meal);
 
+    // remove the meal form the current day. If this line is commented out
+    // a wird flicker will occur, where the meal first jumps to the correct time, e.g.
+    // form "Zmorgen" to "Znacht" before jumping to the correct day.
+    this.specificMeals = this.specificMeals.pipe(map(meals => meals.filter(m => m !== meal)));
+
+    // Move the meal in the model
     const mealUsage: MealUsage =
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
-
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
   }
 
-  ngOnInit(): void {
-
-
-  }
 
   predicate(drag: CdkDrag, drop: CdkDropList): boolean {
 
     return drop.element.nativeElement.getAttribute('is-full') !== 'true';
+
+  }
+
+  dragStarted(event: CdkDragStart) {
+
+
+    this.crashChecker = setInterval(() => {
+
+      if (event.source.dropped.observers.length === 0) {
+
+        clearInterval(this.crashChecker);
+
+        this.router.navigate(['..'], {relativeTo: this.activeRoute}).then(() =>
+          this.activeRoute.url.subscribe(segments =>
+            this.router.navigate(['app'].concat(segments.map(seg => seg.path)))));
+
+        setTimeout(() =>
+            this.snackBar.open(
+              'Es ist ein Fehler aufgetreten. Die Seite wurde neu geladen.',
+              'Schliessen',
+              {duration: 3_500}),
+          500);
+
+      }
+
+    }, 25);
+
+
+    document.querySelectorAll('.has-a-meal, .Vorbereiten').forEach(el => {
+      if (el !== event.source.dropContainer.element.nativeElement) {
+        el.classList.add('block-drop');
+      } else {
+        el.classList.add('home-field');
+      }
+    });
+
+
+  }
+
+  dragStopped(event: CdkDragStart) {
+
+    console.log('dragStopped');
+
+    clearInterval(this.crashChecker);
+
+    document.querySelectorAll('.has-a-meal, .Vorbereiten').forEach(el => {
+      if (el !== event.source.dropContainer.element.nativeElement) {
+        el.classList.remove('block-drop');
+      } else {
+        el.classList.remove('home-field');
+      }
+    });
+
+    document.querySelectorAll('.block-drop').forEach(el =>
+      el.classList.remove('block-drop'));
 
   }
 

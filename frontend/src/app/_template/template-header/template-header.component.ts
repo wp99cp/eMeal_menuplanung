@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthenticationService} from "../../application/_service/authentication.service";
 
 
 /**
@@ -21,6 +22,10 @@ export class TemplateHeaderComponent implements OnInit {
 
   public static menuState = false;
   public static forcedState = false;
+  public innerWidth = 0;
+
+  constructor(private router: Router, private route: ActivatedRoute, public auth: AuthenticationService) {
+  }
 
   public static showMenu(force = null, fixState = false) {
 
@@ -42,7 +47,9 @@ export class TemplateHeaderComponent implements OnInit {
     }
   }
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
   }
 
   ngOnInit() {
@@ -62,11 +69,14 @@ export class TemplateHeaderComponent implements OnInit {
   }
 
 
-
-
   // Methoden für das HTML file
-  public getTitle() { return TemplateHeaderComponent.title; }
-  public getPath() { return TemplateHeaderComponent.path; }
+  public getTitle() {
+    return TemplateHeaderComponent.title;
+  }
+
+  public getPath() {
+    return TemplateHeaderComponent.path;
+  }
 
   public navigateTo(level: number = 1) {
 
@@ -88,7 +98,6 @@ export class TemplateHeaderComponent implements OnInit {
     TemplateHeaderComponent.showMenu(true);
 
   }
-
 
 
 }

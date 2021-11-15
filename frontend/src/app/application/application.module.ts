@@ -4,7 +4,7 @@ import {NgModule} from '@angular/core';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireFunctionsModule, FUNCTIONS_REGION} from '@angular/fire/functions';
+import {AngularFireFunctionsModule, REGION} from '@angular/fire/functions';
 import {AngularFireStorageModule} from '@angular/fire/storage';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -80,6 +80,9 @@ import {SingleRecipeInfoComponent} from './_dialoges/single-recipe-info/single-r
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FeedbackDialogComponent} from './_dialoges/feedback-dialog/feedback-dialog.component';
 import {SettingsService} from './_service/settings.service';
+import {ExportSettingsComponent} from './_dialoges/export-settings/export-settings.component';
+import buildInfo from '../../build';
+import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
 
 @NgModule({
   declarations: [
@@ -122,7 +125,9 @@ import {SettingsService} from './_service/settings.service';
     EditRecipeComponent,
     HelpComponent,
     EditSingleMealComponent,
-    SingleRecipeInfoComponent
+    SingleRecipeInfoComponent,
+    ExportSettingsComponent,
+    ChangeLogComponent
   ],
   providers: [
     AngularFirestore,
@@ -137,7 +142,7 @@ import {SettingsService} from './_service/settings.service';
     Location,
     SettingsService,
     AngularFirestoreModule,
-    {provide: FUNCTIONS_REGION, useValue: 'europe-west1'},
+    {provide: REGION, useValue: 'europe-west1'},
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
   ],
@@ -225,7 +230,8 @@ export class ApplicationModule {
   constructor(contextMenu: ContextMenuService,
               shortCut: ShortcutService,
               helpService: HelpService,
-              dialog: MatDialog) {
+              dialog: MatDialog,
+              settings: SettingsService) {
 
 
     // we want to use the contextMenuService in this module
@@ -233,6 +239,21 @@ export class ApplicationModule {
     shortCut.activate();
 
     helpService.addDialog(dialog);
+
+    settings.globalSettings.subscribe(s => {
+
+      if (s.last_shown_changelog !== buildInfo.version) {
+
+        dialog.open(ChangeLogComponent, {
+          height: '618px',
+          width: '1000px'
+        }).afterClosed()
+          .subscribe(() => settings.setLastShownChangelog(buildInfo.version));
+
+      }
+
+    });
+
 
   }
 

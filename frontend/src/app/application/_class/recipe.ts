@@ -15,6 +15,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   public description: string;
   public notes: string;
   public usedInMeals: string[];
+  public createdFromTemplate: string;
 
   private readonly ingredients: { [id: string]: OverwritableIngredient };
   private currentWriter: string[] = [];
@@ -27,6 +28,8 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     super(recipe);
 
     this.usedInMeals = recipe.used_in_meals;
+    this.createdFromTemplate = recipe.created_from_template;
+
 
     this.documentId = path.substring(path.lastIndexOf('/') + 1);
     this.path = path;
@@ -179,6 +182,7 @@ export class Recipe extends FirestoreObject implements ExportableObject {
     recipe.used_in_meals = this.usedInMeals;
     recipe.ingredients = this.getOriginalIngredients();
     recipe.recipe_notes = this.notes;
+    recipe.created_from_template = this.createdFromTemplate === undefined ? '' : this.createdFromTemplate;
 
     return recipe;
 

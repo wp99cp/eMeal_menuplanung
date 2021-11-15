@@ -18,8 +18,13 @@
 </form>
 
 <div mat-dialog-actions class="custom-mat-buttons">
-  <p></p>
+  <div class="additional-buttons">
+    <button mat-stroked-button (click)="dialogRef.closeAll(); router.navigateByUrl('/app/meals')" id="create-from-template">Aus Vorlage
+      erstellen
+    </button>
+  </div>
   <button mat-stroked-button [mat-dialog-close]="close()">Abbrechen</button>
   <button mat-raised-button [mat-dialog-close]="create()" color="save"
-    [disabled]="newMealForm.value.title == ''">Mahlzeiten erstellen</button>
+          [disabled]="newMealForm.value.title == ''">Mahlzeiten erstellen
+  </button>
 </div>

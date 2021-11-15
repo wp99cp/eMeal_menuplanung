@@ -10,7 +10,7 @@
   </p>
 
 
-  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat">
+  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat else showLoadingBar">
     <mat-accordion class="help-textes" *ngFor="let cat of Object.keys(helpMessByCat)">
 
       <h3>{{cat}}</h3>
@@ -19,7 +19,7 @@
 
         <mat-expansion-panel-header>
           <mat-panel-title>{{mess.title}}</mat-panel-title>
-          <mat-panel-description *ngIf="mess.description">
+          <mat-panel-description *ngIf="mess.description" class="help-description">
             {{mess.description}}
           </mat-panel-description>
         </mat-expansion-panel-header>
@@ -29,6 +29,10 @@
     </mat-accordion>
 
   </ng-container>
+
+  <ng-template #showLoadingBar>
+    <mat-progress-bar mode="waiting"></mat-progress-bar>
+  </ng-template>
 
 
 </div>

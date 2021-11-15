@@ -1,0 +1,1 @@
+FRESH_PRODUCT_SYMBOL = r'\includegraphics[height=1.25 \fontcharht\font`\B]{./assets/icons/outline_fresh_product}'

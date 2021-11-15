@@ -71,7 +71,7 @@ export interface FirestoreCamp extends FirestoreDocument {
 }
 
 export interface FirestoreSettings {
-
+  last_shown_changelog: string;
   show_templates: boolean;
 
 }
@@ -95,6 +95,7 @@ export interface FirestoreMeal extends FirestoreDocument {
   meal_last_usage?: MealUsage;
   meal_keywords: string[];
   used_in_camps: string[];
+  created_from_template: string;
 
 }
 
@@ -115,6 +116,7 @@ export interface FirestoreRecipe extends FirestoreDocument {
   recipe_name: string;
   recipe_description: string;
   recipe_notes: string;
+  created_from_template: string;
 
   ingredients: Ingredient[];
   used_in_meals: string[];

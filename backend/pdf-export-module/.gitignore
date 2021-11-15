@@ -44,5 +44,6 @@ Vagrantfile
 
 # private keys and logging infos
 /keys/
-script/fullPDF.pdf
-script/fullPDF.tex
+script/*.pdf
+script/*.tex
+script/exportData/.ipynb_checkpoints/

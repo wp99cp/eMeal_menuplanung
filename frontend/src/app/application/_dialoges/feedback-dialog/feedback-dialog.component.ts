@@ -1,22 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TemplateHeaderComponent as Header} from '../../../_template/template-header/template-header.component';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {Router} from '@angular/router';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {firestore} from 'firebase/app';
 
 @Component({
   selector: 'app-feedback-dialog',
   templateUrl: './feedback-dialog.component.html',
   styleUrls: ['./feedback-dialog.component.sass']
 })
-export class FeedbackDialogComponent implements OnInit {
+export class FeedbackDialogComponent {
   public feedbackForm: FormGroup;
   public valueHasNotChanged = true;
 
   constructor(
     private formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
-    public fireAuth: AngularFireAuth) {
+    public fireAuth: AngularFireAuth,
+    private db: AngularFirestore,
+    public router: Router) {
 
     this.setHeaderInfo();
 
@@ -38,40 +43,25 @@ export class FeedbackDialogComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-  }
 
   public send() {
 
-    this.addFeedback(this.feedbackForm.value);
-    this.snackBar.open('Dein Feedback wurde  gesenden!', '', {duration: 2500});
-    this.feedbackForm.reset();
-
-
-  }
-
-  public addFeedback(feedback: any) {
-
     this.fireAuth.authState.subscribe(user => {
-
-      feedback.feedback += '<br> <br> User: ' + user.displayName + '  ' + user.email;
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://emeal.zh11.ch/services/sendMailToTrello.php', true);
-
-      // Send the proper header information along with the request
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-      xhr.onreadystatechange = function() { // Call a function when the state changes.
-        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-          // Request finished. Do processing here.
-        }
-      };
-
-      xhr.send('title=' + feedback.title + '&feedback=' + feedback.feedback);
-
+      this.db.collection('sharedData/feedback/messages').add(
+        {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          message: this.feedbackForm.value.feedback,
+          title: this.feedbackForm.value.title,
+          currentURL: this.router.url,
+          date_added: firestore.FieldValue.serverTimestamp(),
+          access: {[user.uid]: 'owner'}
+        }).then(() => {
+        this.snackBar.open('Dein Feedback wurde  gesenden!', '', {duration: 2500});
+        this.feedbackForm.reset();
+      });
     });
-
 
   }
 

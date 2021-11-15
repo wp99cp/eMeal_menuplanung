@@ -1,17 +1,39 @@
 <h3>Mahlzeit kopieren</h3>
 
-<div mat-dialog-content>
-  <p>Möchtes du von den verwendeten Rezepten ebenfalls eine Kopie erstellen? </p>
-  <p>(Wird nur empfohlen falls du keine Zugriffsrechte auf ein oder mehrere Rezepte hast. Von allen Rezepten wird
-    ebenfalls eine unabhängige Kopie erstellt.)</p>
+<div mat-dialog-content *ngIf="!isTemplate">
+  <p>Möchtes du von dieser Mahlzeit eine Kopie erstellen?</p>
+  <p>
+    Rezepte dieser Mahlzeit werden dabei nicht kopiert, sondern nur verknüpft. Alternativ kannst du von jedem Rezept
+    eine zusätzliche Kopie erstellen lassen (nicht empfohlen)! Mache dies nur, wenn du keinen Schreib-Zugriff
+    auf die alle verwendeten Rezepte hast.
+  </p>
+
 </div>
 
-<div mat-dialog-actions class="custom-mat-buttons">
+
+<div mat-dialog-content *ngIf="isTemplate">
+  <p>Möchtes du von dieser Mahlzeit eine Kopie erstellen?</p>
+  <p>Diese Mahlzeit ist eine Vorlage. Du kannst sie bearbeiten, indem du eine Kopie erstellst. Rezepte, die ebenfalls
+    aus Vorlagen erstellt worden sind, werden dabei automaisch verknüpft.
+  </p>
+  <p>Alternativ kannst du von jedem Rezept eine zusätzliche Kopie erstellen lassen (nicht empfohlen).</p>
+</div>
+
+<div mat-dialog-actions class="custom-mat-buttons" *ngIf="!isTemplate">
   <div class="additional-buttons">
     <button mat-stroked-button [mat-dialog-close]="'deep'" color="warn" matTooltip="Nicht empfohlen!">
       inkl. Rezepte
     </button>
   </div>
   <button mat-stroked-button [mat-dialog-close]="'close'">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="'copy'" color="save">ohne Rezepte</button>
+  <button mat-raised-button [mat-dialog-close]="'copy'" color="save">Rezepte verknüpfen</button>
 </div>
+
+<div mat-dialog-actions class="custom-mat-buttons" *ngIf="isTemplate">
+  <div class="additional-buttons">
+    <button mat-stroked-button [mat-dialog-close]="'deep'" color="warn">inkl. Rezepte</button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="'close'">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="'deep-template'" color="save">Rezepte verknüpfen</button>
+</div>
+

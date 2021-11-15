@@ -11,7 +11,6 @@ import {FirestoreCamp} from '../../../_interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../../_service/database.service';
 import {TileListPage} from '../../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {HelpService} from '../../../_service/help.service';
 
 /**
  * CampListPageComponent
@@ -37,8 +36,10 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
 
     // set filter for searching
     this.filterFn = (camp: Camp) =>
-      camp.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()) ||
-      camp.year.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
+      (this.filterDocIDs.length === 0 || this.filterDocIDs.includes(camp.documentId)) && (
+        camp.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()) ||
+        camp.year.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase()));
+
 
     // set name of Type
     this.dbElementName = 'Lager';
@@ -134,16 +135,12 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
   applyFilter(event: string) {
 
     if (event.includes('includes:')) {
-
-      const mealId = event.substr(event.indexOf(':') + 1).trim();
-      this.dbService.getCampsThatIncludes(mealId).pipe(take(1))
-        .subscribe(camps => this.filteredElements = camps);
-
-      return;
-
+      const recipeId = event.substr(event.indexOf(':') + 1).trim();
+      this.dbService.getCampIDsThatIncludes(recipeId).subscribe(mealIds =>
+        super.applyFilter('', mealIds), err => super.applyFilter(''));
+    } else {
+      super.applyFilter(event);
     }
-
-    super.applyFilter(event);
 
   }
 

@@ -6,7 +6,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { empty } from 'rxjs';
 import { FirestoreMeal } from '../../_interfaces/firestoreDatatypes';
 import { FirestoreObject } from '../../_class/firebaseObject';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-meal',
@@ -20,6 +21,8 @@ export class CreateMealComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     formBuilder: FormBuilder,
+    public router: Router,
+    public dialogRef: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { mealName: string }) {
 
     this.newMealForm = formBuilder.group({

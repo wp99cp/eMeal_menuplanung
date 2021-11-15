@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {mergeMap, take} from 'rxjs/operators';
 import {Meal} from '../../../_class/meal';
 import {DeepCopyMealComponent} from '../../../_dialoges/deep-copy-meal/deep-copy-meal.component';
@@ -12,7 +12,6 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.component';
 import {ImportComponent} from '../../../_dialoges/import/import.component';
-import {HelpService} from '../../../_service/help.service';
 
 @Component({
   selector: 'app-meal-list',
@@ -30,7 +29,9 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     super(dbService, snackBar, dbService.getAccessableMeals(), dialog);
 
     // set filter for searching
-    this.filterFn = (meal) => meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
+    this.filterFn = (meal) => (this.filterDocIDs.length === 0 || this.filterDocIDs.includes(meal.documentId)) &&
+      meal.name.toLocaleLowerCase().includes(this.filterValue.toLocaleLowerCase());
+
     this.dbElementName = 'Mahlzeit';
 
   }
@@ -77,16 +78,12 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
   applyFilter(event: string) {
 
     if (event.includes('includes:')) {
-
       const recipeId = event.substr(event.indexOf(':') + 1).trim();
-      this.dbService.getMealsThatIncludes(recipeId).pipe(take(1))
-        .subscribe(meals => this.filteredElements = meals);
-
-      return;
-
+      this.dbService.getMealIDsThatIncludes(recipeId).subscribe(mealIds =>
+        super.applyFilter('', mealIds), err => super.applyFilter(''));
+    } else {
+      super.applyFilter(event);
     }
-
-    super.applyFilter(event);
 
   }
 
@@ -95,6 +92,7 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
     this.dialog.open(DeepCopyMealComponent, {
       width: '520px',
       height: '275px',
+      data: meal
     }).afterClosed()
       .subscribe(async result => {
 
@@ -110,6 +108,11 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
             .subscribe(recipes => recipes.forEach(recipe =>
               this.dbService.createCopy(recipe, newMealId)
             ));
+
+        } else if (result === 'deep-template') {
+
+          const newMealId = (await this.dbService.createCopy(meal)).id;
+          this.dbService.linkOrCopyRecipes(oldMealId, newMealId);
 
         } else if (result === 'copy') {
 

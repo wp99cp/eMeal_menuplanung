@@ -2,11 +2,12 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {copyrights, version as softwareVersion} from '../../../../../package.json';
+import packageJSON from '../../../../../package.json';
 import {User} from '../../_class/user.js';
 import {AuthenticationService} from '../../_service/authentication.service';
 import {DatabaseService} from '../../_service/database.service';
 import {SettingsService} from '../../_service/settings.service';
+import {HelpService} from '../../_service/help.service';
 
 
 @Component({
@@ -23,12 +24,16 @@ import {SettingsService} from '../../_service/settings.service';
 export class AppSettingsPageComponent {
 
   public user: Observable<User>;
-  public version: string = softwareVersion;
-  public copyrights: string = copyrights;
+  public version: string = packageJSON.version;
+  public copyrights: string = packageJSON.copyrights;
 
   public userDataForm: FormGroup;
 
-  constructor(private auth: AuthenticationService, private dbService: DatabaseService, formBuilder: FormBuilder, public settings: SettingsService) {
+  constructor(private auth: AuthenticationService,
+              private dbService: DatabaseService,
+              formBuilder: FormBuilder,
+              public settings: SettingsService,
+              public help: HelpService) {
 
     this.userDataForm = formBuilder.group({displayName: '', visibility: 'hidden'});
 

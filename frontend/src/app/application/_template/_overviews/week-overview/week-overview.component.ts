@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
@@ -14,9 +14,14 @@ import {Saveable} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
+import {DayOverviewComponent} from '../day-overview/day-overview.component';
 
 /**
- * Wochenübersicht eines Lagers
+ * Week-Overview of a camp: This component renders the week-overview of a camp.
+ * It provides drag and drop support for meals between days and meals.
+ *
+ *  TODO: add short-cut for adding meal (shift + M)
+ *  TODO: add short-cut for adding day (shift + D)
  *
  */
 @Component({
@@ -24,37 +29,49 @@ import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
   templateUrl: './week-overview.component.html',
   styleUrls: ['./week-view.component.sass'],
 })
-export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
+export class WeekOverviewComponent implements OnInit, Saveable {
 
-  // TODO: add short-cut for adding meal (shift + M)
-  // TODO: add short-cut for adding day (shift + D)
 
-  // inputed fields
+  /** The camp for which this component should create the week-overview. */
   @Input() camp: Camp;
 
-  public colCounter = this.calculateCols();
-  public showParticipantsWarning = false;
-  public specificMealsToSave: SpecificMeal[] = [];
-  public hasAccess = false;
+  /** Number of columns (i.g. days) that have space on the screen */
+  public showNColumns = WeekOverviewComponent.calculateCols();
+  /** Whether or not the user has write-access to this camp. */
+  public hasWriteAccess = false;
+  /** Stores a list of all meals that get prepared on another day */
   public mealToPrepare: Observable<SpecificMeal[]>;
+
+  /** List of all day-overview */
+  @ViewChildren(DayOverviewComponent) dayOverviews: QueryList<DayOverviewComponent>;
 
   constructor(
     public dialog: MatDialog,
     public dbService: DatabaseService,
     public snackBar: MatSnackBar) {
 
-    // change number of collums when resize window
-    window.addEventListener('resize', () => this.colCounter = this.calculateCols());
-
+    // Change number of columns (i.g. days) when the window gets resized
+    window.addEventListener('resize', () =>
+      this.showNColumns = WeekOverviewComponent.calculateCols());
 
   }
 
+  /**
+   * Calculates the number (i.g. days) of columns that have space on the screen width.
+   * @returns: the number of columns
+   */
+  private static calculateCols() {
+    return Math.floor(document.body.scrollWidth / 340);
+  }
 
   ngOnInit() {
 
+    // Check whether the user as write-access to the camp.
+    // The result get sored in the local var hasWriteAccess on top of that
+    // if the user has access, the "Speichern" "Mahlzeiten" button are created.
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
-      this.hasAccess = hasAccess;
+      this.hasWriteAccess = hasAccess;
 
       HeaderNavComponent.addToHeaderNav({
         active: false,
@@ -65,116 +82,58 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
       }, 0);
 
       HeaderNavComponent.addToHeaderNav({
-        active: true && this.hasAccess,
+        active: this.hasWriteAccess,
         description: 'Mahlzeiten hinzufügen',
         name: 'Mahlzeiten',
         action: (() => this.addMeal()),
         icon: 'fastfood'
       });
 
-
     });
 
+    // save a list of meals that gets prepared on another day
     this.mealToPrepare = this.dbService.getPreparedMeals(this.camp?.documentId);
-    this.mealToPrepare.subscribe(console.log);
-
 
   }
 
 
   /**
-   * updates the participantsWarning
-   *
+   * Saves the camp.
+   * @returns: Promise<boolean> resolving once the save process has been successfully finished. The promise always
+   * resolve with a value true, since the camp get saved regardless if it got changed or not.
    */
-  ngOnChanges() {
-
-    console.log('Changes!!!');
-
-    this.showParticipantsWarning = false;
-
-    this.camp.days.forEach(day => {
-
-      if (day.getMeals() !== undefined) {
-
-        day.getMeals().subscribe(meals =>
-          meals.forEach(meal =>
-            (this.showParticipantsWarning = this.showParticipantsWarning || meal.overrideParticipants)
-          ));
-
-      }
-
-    });
-
-  }
-
-
   public async save() {
 
     // Speichert das Lager
-    this.dbService.updateDocument(this.camp);
-
+    await this.dbService.updateDocument(this.camp);
     HeaderNavComponent.turnOff('Speichern');
 
-    // Prüft, ob etwas gespeichert werden muss
-    if (this.specificMealsToSave.length > 0) {
-
-      // Speichert die Mahlzeiten
-      this.saveMeals();
-      this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
-
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   /**
-   * Wir bei einem Drop eines Meals ausgelöst.
+   * Action executed after a meal has been dropped into another meal or day (drag and drop of meals in week-overview).
    *
-   *
-   *
+   * @param specificMeal: reference to the meal that got dropped
+   * @param usedAs: the new use case
+   * @param mealDateAsString: the new date as a string (UNIX)
    */
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
-    if (!this.hasAccess) {
-      return;
-    }
-
-    // updatet das Datum
+    // update meal date, i.g. move the meal to the correct day
     specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
     specificMeal.usedAs = usedAs as MealUsage;
 
-    // aktiviert das Speichern
     HeaderNavComponent.turnOn('Speichern');
 
-    // prüft das Vorbereitsungsdatum
+    // check if meal gets prepared, if so, check if the prepare date is older than the meal usage.
+    // If that is the case the prepare will be deactivated
     if (specificMeal.prepareAsDate.getTime() >= specificMeal.date.toDate().getTime() && specificMeal.prepare) {
-
-      // Vorbereitungsdatum nach oder am Tag der Mahlzeit...
       specificMeal.prepare = false;
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
-
     }
 
-    // markiert die Mahlzeit als geändert
-    if (this.specificMealsToSave.indexOf(specificMeal) === -1) {
-      this.specificMealsToSave.push(specificMeal);
-    }
-
-    this.saveMeals();
-
-  }
-
-  /**
-   * Speichert das Lager ab.
-   *
-   */
-  saveMeals() {
-
-    this.specificMealsToSave.forEach(meal =>
-      this.dbService.updateDocument(meal));
-
-    this.specificMealsToSave = [];
+    await this.dbService.updateDocument(specificMeal);
 
   }
 
@@ -222,9 +181,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
    * Fügt eine neue Mahlzeit hinzu.
    *
    */
-  public addMeal(dayIndex: number = 0) {
+  public addMeal(dayIndex: number = 0, usage?: MealUsage) {
 
-    console.log('Add meal to day Nr. ' + dayIndex);
 
     // Create data fo dialog. The dataset contains all meals already used in the camp
     // this allows the dialog to sort and rank the meals.
@@ -241,7 +199,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
         return this.dialog.open(AddMealComponent, {
           height: '618px',
           width: '1000px',
-          data: {mealNames}
+          data: {mealNames, usage},
         }).afterClosed();
 
       })).subscribe((result: SelectionModel<Meal>) => {
@@ -253,7 +211,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           // TODO: combine in one database write....
 
           // falls keine Verwendung gesetzt, dann als 'Zmorgen'
-          const usedAs = meal.usedAs ? meal.usedAs : 'Zmorgen';
+          const usedAs = usage ? usage : (meal.usedAs ? meal.usedAs : 'Zmorgen');
 
           const day = this.camp.days[dayIndex];
           const mealsOfDay = await new Promise<SpecificMeal[]>(resolve =>
@@ -266,7 +224,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
             return;
           }
 
-          console.log('Create meal at day Nr. ' + dayIndex + ' as ' + usedAs + '.');
+          console.log('Create meal at day Nr. ' + dayIndex + ' as ' + usedAs);
 
           // add campId to usedInCamps
           if (!meal.usedInCamps.includes(this.camp.documentId)) {
@@ -275,6 +233,7 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           }
 
           console.log('Add campID');
+          this.updateContextMenus();
 
           // erstellt die spezifischen Rezepte und Mahlzeiten
           const specificMealId = await new Promise<string>(res => {
@@ -291,14 +250,16 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
           }
 
           await meal.createSpecificRecipes(this.dbService, this.camp, specificMealId);
-
-          this.updateAccess(meal);
-
           console.log('After Update Meal');
+
+          this.updateContextMenus();
+
+          setTimeout(() => this.updateAccess(meal), 0);
 
         });
       }
     });
+
   }
 
   /**
@@ -312,24 +273,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     // versteckt das Element aus dem GUi
     document.querySelectorAll('[data-meal-id=ID-' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
 
-    // shown delete Meassage
-    const snackBar = this.snackBar.open('Mahlzeit wurde entfehrnt.', 'Rückgängig', {duration: 4000});
-
-    // Löscht das Rezept oder breicht den Vorgang ab, je nach Aktion der snackBar...
-    let canDelete = true;
-    snackBar.onAction().subscribe(() => {
-      canDelete = false;
-      document.querySelector('[data-meal-id=ID-' + elementID + ']')?.classList.toggle('hidden');
-
-    });
-    snackBar.afterDismissed().subscribe(() => {
-
-      if (canDelete) {
-        this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
-        return;
-      }
-
-    });
+    this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
+    this.updateContextMenus();
 
   }
 
@@ -372,6 +317,12 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
+  getSpecificMealsOfDay(day: Day) {
+
+    return day.getMeals();
+
+
+  }
 
   /**
    * Returns the date of the last day in the camp
@@ -393,16 +344,10 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
     }
   }
 
-  /**
-   * Berechnet die Anzhal Tage pro Zeile gemäss der Bildschirmbreite
-   *
-   */
-  private calculateCols() {
-
-    return Math.floor(document.body.scrollWidth / 340);
-  }
-
   private updateAccess(meal: Meal) {
+
+    console.log('updateAccess stared');
+
 
     try {
 
@@ -416,5 +361,8 @@ export class WeekOverviewComponent implements OnInit, OnChanges, Saveable {
 
   }
 
+  private updateContextMenus() {
+    this.dayOverviews.forEach(el => el.setContextMenu());
+  }
 
 }

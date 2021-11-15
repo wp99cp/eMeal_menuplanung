@@ -1,12 +1,12 @@
 {
   "name": "@emeal/menuplanung",
-  "version": "1.9.5",
+  "version": "1.10.0",
   "license": "MIT",
   "copyrights": "© 2019 - 2021 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
-    "start": "angular-build-info && ng serve",
-    "start:prod": "angular-build-info && ng serve --prod",
+    "start": "angular-build-info && ng serve --ssl",
+    "start:prod": "angular-build-info && ng serve --prod --ssl",
     "build": "angular-build-info && ng build",
     "build:prod": "angular-build-info && ng build --prod --aot=true --buildOptimizer=true --progress=true\n",
     "test": "ng test",
@@ -21,7 +21,7 @@
     "@angular/common": "^12.0.0-next.0",
     "@angular/compiler": "^12.0.0-next.0",
     "@angular/core": "^12.0.0-next.0",
-    "@angular/fire": "^5.4.2",
+    "@angular/fire": "^6.1.5",
     "@angular/forms": "^12.0.0-next.0",
     "@angular/localize": "^12.0.0-next.0",
     "@angular/material": "^11.2.0",
@@ -31,24 +31,24 @@
     "@angular/router": "^12.0.0-next.0",
     "@angular/service-worker": "^12.0.0-next.0",
     "@schematics/angular": "^9.1.14",
-    "angular-build-info": "^2.0.1",
     "cross": "^1.0.0",
     "firebase": "^7.24.0",
     "moment": "^2.29.1",
     "ngx-markdown": "^9.1.1",
     "rxjs": "^6.6.3",
     "tslib": "^1.14.1",
-    "zone.js": "^0.10.2"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1102.0",
-    "@angular/cli": "^11.2.0",
+    "@angular-devkit/build-angular": "^12.0.5",
+    "@angular/cli": "^12.0.0-next.0",
     "@angular/compiler-cli": "^12.0.0-next.0",
     "@angular/language-service": "^12.0.0-next.0",
     "@types/core-js": "^2.5.4",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.20.1",
+    "angular-build-info": "^2.0.1",
     "codelyzer": "^5.1.2",
     "jasmine-core": "^3.6.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -61,6 +61,6 @@
     "sass": "^1.32.7",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
-    "typescript": "^4.1.5"
+    "typescript": "~4.2.4"
   }
 }

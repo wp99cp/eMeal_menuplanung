@@ -60,28 +60,23 @@ export function changeAccessData(requestedChanges: AccessChange, context: functi
  */
 export function refreshAccessData(refreshRequest: Refresh, context: functions.https.CallableContext): Promise<any> {
 
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
 
-        db.runTransaction(async (transaction) => {
+        // get the access data form the camp
+        const campAccessData = ((await db.doc('camps/' + refreshRequest.campId).get())
+            .data() as FirestoreDocument).access;
 
-            // get the access data form the camp
-            const campAccessData = ((await transaction.get(db.doc('camps/' + refreshRequest.campId)))
-                .data() as FirestoreDocument).access;
+        // create AccessChanges
+        const accessChanges: AccessChange = {
+            documentPath: 'camps/' + refreshRequest.campId,
+            requestedAccessData: campAccessData,
+            upgradeOnly: true
+        }
 
-            // create AccessChanges
-            const accessChanges: AccessChange = {
-                documentPath: 'camps/' + refreshRequest.campId,
-                requestedAccessData: campAccessData,
-                upgradeOnly: true
-            }
+        // execute all the changes...
+        await changeAccessDataWithTransaction(accessChanges, context, true, undefined)
 
-            // execute all the changes...
-            await changeAccessDataWithTransaction(accessChanges, context, true, undefined)
-
-        })  // function create response
-            .then(() => resolve({message: 'AccessData successfully updated.'}))
-            .catch(err => resolve({error: err.message}));
-
+        resolve({message: 'AccessData successfully updated.'});
     });
 
 }

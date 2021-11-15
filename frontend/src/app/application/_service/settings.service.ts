@@ -3,13 +3,13 @@ import {AuthenticationService} from './authentication.service';
 import {map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 
 /**
  * Settings Service
  *
  * This service offers some functions that can be changed on the settings page of the application.
- * For example it provides a convertion function of a date to it's swiss-date string according to
+ * For example it provides a conversion function of a date to it's swiss-date string according to
  * the settings of the user (which format).
  *
  */
@@ -19,6 +19,7 @@ import {AngularFirestore} from '@angular/fire/firestore';
 export class SettingsService {
 
   public globalSettings: Observable<FirestoreSettings>;
+  private docRef: AngularFirestoreDocument<FirestoreSettings>;
 
   constructor(private db: AngularFirestore, authService: AuthenticationService) {
 
@@ -80,14 +81,43 @@ export class SettingsService {
 
   private loadUserSettings(userId: string): Observable<FirestoreSettings> {
 
-    return this.db.doc('users/' + userId + '/private/settings').snapshotChanges()
-      .pipe(map(docRef => docRef.payload.data() as any))
-      .pipe(map(settings =>
-        !settings || !settings.hasOwnProperty('show_templates') ? {
-          show_templates: true
-        } : settings));
+    this.docRef = this.db.doc('users/' + userId + '/private/settings');
+
+    return this.docRef.get()
+      .pipe(map(docRef => docRef.data() as any))
+      .pipe(map(settings => {
+
+        let modified = false;
+
+        if (!settings) {
+          settings = {};
+          modified = true;
+        }
+
+        if (!settings.hasOwnProperty('show_templates')) {
+          settings.show_templates = true;
+          modified = true;
+        }
+
+        if (!settings.hasOwnProperty('last_shown_changelog')) {
+          settings.last_shown_changelog = '';
+          modified = true;
+        }
+
+        if (modified) {
+          this.docRef.set(settings);
+        }
+
+        return settings;
+      }));
 
   }
 
+
+  setLastShownChangelog(version: string) {
+
+    this.docRef.update({last_shown_changelog: version});
+
+  }
 
 }

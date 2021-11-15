@@ -1,0 +1,25 @@
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  add_todo_list:
+    runs-on: ubuntu-latest
+    name: Add release todo-list
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@main
+        with:
+          message: "
+          Todos before releasing a new version \n \n
+
+          - [ ] Check release notes: All new features/changes included? Date correct? \n
+          - [ ] Check help messages: Are they all up to date? Update screenshots. Is the date correct? \n
+          - [ ] Check preview build and test it with the productive database. \n
+          - [ ] Deploy new revision of the PDF-Export Service \n
+          "
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -46,6 +46,8 @@ export class ContextMenuService {
 
   private openContextMenu(event: MouseEvent) {
 
+    console.log('Open Context Menu')
+
     this.closeContextMenu();
 
     if (!this.isActive) {
@@ -56,7 +58,7 @@ export class ContextMenuService {
     this.nodesWithContextMenu.forEach(entry => {
 
 
-      if (entry.node.contains(event.target as Node)) {
+      if (entry.node?.contains(event.target as Node)) {
 
         this.createContextMenu(event, entry, event.clientX, event.clientY);
         return;
@@ -71,7 +73,7 @@ export class ContextMenuService {
 
   private closeContextMenu() {
 
-    const contextMenu = document.getElementById('context-menu');
+    const contextMenu = document.getElementById('context-menu-container');
     if (contextMenu) {
       document.body.removeChild(contextMenu);
     }
@@ -83,16 +85,25 @@ export class ContextMenuService {
 
     this.contextMenuEntries = contextMenu.contextMenuEntries;
 
-    let menuDiv = document.getElementById('context-menu');
+    let menuDiv = document.getElementById('context-menu-container');
     if (menuDiv) {
       document.body.removeChild(menuDiv);
     }
+
     menuDiv = document.createElement('div');
 
-    menuDiv.id = 'context-menu';
-    menuDiv.style.top = y + 'px';
-    menuDiv.style.left = x + 'px';
+    menuDiv.id = 'context-menu-container';
+    menuDiv.style.top = (y - 40) + 'px';
+    menuDiv.style.left = (x - 40) + 'px';
     menuDiv.tabIndex = -1;
+    menuDiv.style.padding = '40px';
+
+    const innerDiv = document.createElement('div');
+    innerDiv.id = 'context-menu';
+    menuDiv.appendChild(innerDiv);
+
+    menuDiv.addEventListener('mouseleave', () => this.closeContextMenu());
+
 
     this.contextMenuEntries.forEach(e => {
 
@@ -107,10 +118,10 @@ export class ContextMenuService {
             e.function(event);
             this.closeContextMenu();
           });
-          menuDiv.appendChild(entryDiv);
+          innerDiv.appendChild(entryDiv);
 
         } else {
-          menuDiv.appendChild(document.createElement('hr'));
+          innerDiv.appendChild(document.createElement('hr'));
         }
       }
     );

@@ -1,0 +1,2451 @@
+{
+  "camp_meta_info": {
+    "camp_name": "Vorlage: Das Zeltlager",
+    "access": {
+      "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+    },
+    "camp_leaders": 0,
+    "date_added": "30.04.2021",
+    "camp_participants": 10,
+    "date_modified": "07.06.2021",
+    "camp_year": "2021",
+    "camp_description": "Dieses Lager enth\u00e4lt den Wochenplan f\u00fcr das Zeltlager aus dem Kochbuch \"Feine Lagerk\u00fcche\". Infos unter https://lagerkueche.ch.",
+    "days": [
+      {
+        "day_date": "23.07.2021",
+        "day_description": "",
+        "day_notes": ""
+      },
+      {
+        "day_notes": "",
+        "day_date": "24.07.2021",
+        "day_description": ""
+      },
+      {
+        "day_description": "",
+        "day_date": "25.07.2021",
+        "day_notes": ""
+      },
+      {
+        "day_date": "26.07.2021",
+        "day_description": "",
+        "day_notes": ""
+      },
+      {
+        "day_notes": "",
+        "day_date": "27.07.2021",
+        "day_description": ""
+      },
+      {
+        "day_notes": "",
+        "day_description": "",
+        "day_date": "28.07.2021"
+      },
+      {
+        "day_date": "29.07.2021",
+        "day_notes": "",
+        "day_description": ""
+      },
+      {
+        "day_date": "30.07.2021",
+        "day_description": "",
+        "day_notes": ""
+      }
+    ],
+    "camp_vegetarians": 0
+  },
+  "meals": [
+    {
+      "meal_id": "vc6icuBzzzTP5JY6krZX",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_weekview_name": "Taboul\u00e9, Brot",
+      "meal_participants": 10,
+      "meal_used_as": "Zmittag",
+      "meal_prepare_date": "22.07.2021",
+      "meal_date": "23.07.2021",
+      "meal_gets_prepared": true,
+      "date_added": "30.04.2021",
+      "meal_override_participants": false,
+      "date_modified": "30.04.2021",
+      "doc_id": "J2cYCRBNbLP09uYbXXRs",
+      "meal_name": "Taboul\u00e9 mit Brot",
+      "meal_description": "ohne Sauce",
+      "recipe": [
+        {
+          "date_modified": "30.04.2021",
+          "recipe_notes": "Couscous, nach Anleitung zubereiten, in eine grosse Sch\u00fcssel geben, restliche Zutaten zum Couscous in die Sch\u00fcssel geben. ",
+          "recipe_description": "",
+          "recipe_name": "Taboul\u00e9 (Couscous)",
+          "date_added": "30.04.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "food": "Couscous",
+              "unique_id": "LHcDCr-boeyk4",
+              "comment": "",
+              "fresh": false,
+              "measure": 60,
+              "unit": "g",
+              "isAnOverwriting": false
+            },
+            {
+              "measure": 0.4,
+              "fresh": true,
+              "food": "Tomaten",
+              "unit": "Stk.",
+              "isAnOverwriting": false,
+              "comment": "(waschen, in W\u00fcrfel schneiden)",
+              "unique_id": "LHcDCr-28UaXi"
+            },
+            {
+              "unique_id": "LHcDCr-3MHhhd",
+              "food": "Peperoni, gr\u00fcn",
+              "measure": 0.1,
+              "unit": "Stk.",
+              "comment": " (entkernen, in W\u00fcrfel schneiden)",
+              "fresh": true,
+              "isAnOverwriting": false
+            },
+            {
+              "food": "R\u00fcebli",
+              "comment": "(r\u00fcsten, waschen, scheibeln)",
+              "unit": "Stk.",
+              "fresh": true,
+              "isAnOverwriting": false,
+              "measure": 0.2,
+              "unique_id": "LHcDCr-NOqHTg"
+            },
+            {
+              "fresh": true,
+              "isAnOverwriting": false,
+              "comment": "(waschen, l\u00e4ngs vierteln, scheibeln)",
+              "measure": 0.1,
+              "food": "Gurke",
+              "unique_id": "LHcDCr-JQUJfg",
+              "unit": "Stk."
+            },
+            {
+              "fresh": false,
+              "comment": "",
+              "unit": "B\u00fcchse",
+              "food": "Mais",
+              "measure": 0.1,
+              "unique_id": "LHcDCr-jztHKZ",
+              "isAnOverwriting": false
+            },
+            {
+              "fresh": true,
+              "measure": 75,
+              "unit": "g",
+              "isAnOverwriting": false,
+              "food": "Brot",
+              "unique_id": "LHcDCr-8JdTKV",
+              "comment": ""
+            }
+          ],
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX"
+          ],
+          "doc_id": "LHcDCr4FlNhgxaPjEM9J",
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::LHcDCr4FlNhgxaPjEM9J",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_name": "Salatsauce",
+          "date_added": "30.04.2021",
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "recipe_description": "mit Senf",
+          "date_modified": "30.04.2021",
+          "recipe_notes": "Alles kr\u00e4ftig verr\u00fchren und in eine Petflasche abf\u00fcllen.",
+          "ingredients": [
+            {
+              "unit": "dl",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unique_id": "UCdh5z-L3GJnR",
+              "comment": "kr\u00e4ftig",
+              "measure": 0.5,
+              "food": "Bouillon"
+            },
+            {
+              "isAnOverwriting": false,
+              "comment": "",
+              "unit": "dl",
+              "fresh": false,
+              "unique_id": "UCdh5z-n7mNjK",
+              "measure": 0.25,
+              "food": "Essig"
+            },
+            {
+              "fresh": false,
+              "comment": "",
+              "unit": "dl",
+              "food": "Oliven\u00f6l",
+              "isAnOverwriting": false,
+              "measure": 0.25,
+              "unique_id": "UCdh5z-tuYg0n"
+            },
+            {
+              "unique_id": "UCdh5z-gcYebX",
+              "comment": "",
+              "food": "Senf",
+              "unit": "EL",
+              "fresh": false,
+              "measure": 0.5,
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "etwas",
+              "comment": "",
+              "fresh": false,
+              "unique_id": "UCdh5z-C4wRUg",
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "food": "Pfeffer",
+              "fresh": false,
+              "unique_id": "UCdh5z-uy0jjW",
+              "measure": null,
+              "unit": "etwas"
+            },
+            {
+              "unique_id": "UCdh5z-qwbQVq",
+              "measure": null,
+              "fresh": false,
+              "food": "Salatkr\u00e4uter",
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "comment": ""
+            }
+          ],
+          "doc_id": "UCdh5zxWHXVSfsCQgBht",
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::UCdh5zxWHXVSfsCQgBht",
+          "recipe_used_for": "all",
+          "recipe_participants": 5,
+          "recipe_override_participants": true
+        },
+        {
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "recipe_description": " mit Mayonnaise, Franz\u00f6sisch",
+          "date_added": "30.04.2021",
+          "recipe_notes": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "unique_id": "XJmRS7-aDOUrT",
+              "unit": "dl",
+              "fresh": false,
+              "comment": "kr\u00e4ftig",
+              "isAnOverwriting": false,
+              "food": "Bouilllon",
+              "measure": 0.5
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": 0.25,
+              "food": "Essig",
+              "unit": "dl",
+              "unique_id": "XJmRS7-BfqwuS"
+            },
+            {
+              "food": "\u00d6L",
+              "measure": 0.25,
+              "unit": "dl",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "XJmRS7-6dtEd7",
+              "comment": ""
+            },
+            {
+              "fresh": false,
+              "isAnOverwriting": false,
+              "food": "Mayonnaise",
+              "measure": 0.1,
+              "comment": "",
+              "unique_id": "XJmRS7-lAx1Xv",
+              "unit": "Tube"
+            },
+            {
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null,
+              "fresh": false,
+              "unit": "etwas",
+              "comment": "",
+              "unique_id": "XJmRS7-wSyxBx"
+            },
+            {
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": null,
+              "food": "Pfeffer",
+              "unique_id": "XJmRS7-V5LGpZ",
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": null,
+              "unique_id": "XJmRS7-nUc20W",
+              "food": "Salatkr\u00e4uter",
+              "fresh": false,
+              "comment": "",
+              "unit": "etwas"
+            }
+          ],
+          "date_modified": "30.04.2021",
+          "recipe_name": "Salatsauce",
+          "doc_id": "XJmRS7XrZdqsEkwcqag3",
+          "unique_id": "J2cYCRBNbLP09uYbXXRs::XJmRS7XrZdqsEkwcqag3",
+          "recipe_used_for": "all",
+          "recipe_participants": 5,
+          "recipe_override_participants": true
+        }
+      ]
+    },
+    {
+      "meal_weekview_name": "Muffins",
+      "meal_used_as": "Zvieri",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_participants": 10,
+      "meal_prepare_date": "23.07.2021",
+      "meal_override_participants": false,
+      "meal_id": "O11zdowbunaMPVc2QZp0",
+      "date_modified": "30.04.2021",
+      "meal_date": "23.07.2021",
+      "meal_gets_prepared": false,
+      "date_added": "30.04.2021",
+      "doc_id": "ZGbV5nCN4eYjWZCNhqND",
+      "meal_name": "Muffins",
+      "meal_description": "als Zvieri",
+      "recipe": [
+        {
+          "recipe_notes": "Muffins k\u00f6nnen bereits Zuhause vorbereitet werden. Alternativ k\u00f6nnen auch Madeleines gekauft werden.",
+          "date_added": "30.04.2021",
+          "ingredients": [
+            {
+              "comment": "",
+              "measure": 2,
+              "unit": "Stk.",
+              "isAnOverwriting": false,
+              "food": "Muffin",
+              "unique_id": "E7HDhJ-gt8wLK",
+              "fresh": false
+            }
+          ],
+          "used_in_meals": [
+            "O11zdowbunaMPVc2QZp0"
+          ],
+          "recipe_description": "als Zvieri",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_modified": "30.04.2021",
+          "recipe_name": "Muffins",
+          "doc_id": "E7HDhJKIDfeCQBEndztN",
+          "unique_id": "ZGbV5nCN4eYjWZCNhqND::E7HDhJKIDfeCQBEndztN",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_prepare_date": "23.07.2021",
+      "meal_gets_prepared": false,
+      "meal_participants": 10,
+      "date_modified": "30.04.2021",
+      "meal_used_as": "Znacht",
+      "date_added": "30.04.2021",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_date": "23.07.2021",
+      "meal_id": "o7y7Td898K376eVoyS3w",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_override_participants": false,
+      "meal_weekview_name": "Kn\u00f6pfli Alfredo mit Salat",
+      "doc_id": "vExIxOZeZmliIyWUXsCn",
+      "meal_name": "Kn\u00f6pfli Alfredo mit Salat",
+      "meal_description": "",
+      "recipe": [
+        {
+          "recipe_description": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_notes": "Kn\u00f6pfli in reichlich Salzwasser al dente kochen, absch\u00fctten.\n2 EL Bratbutter erhitzen, Schinkenw\u00fcrfeli darin anbraten. \n2 EL Maizena mit Rahm verr\u00fchren, zum Schinken giessen, unter R\u00fchren aufkochen, mit 1 \u2013 1 \u00bd EL Bouillonpulver, Pfeffer und Muskatnuss w\u00fcrzen. Vom Feuer nehmen und den Reibk\u00e4se unterr\u00fchren. Abschmecken. Kn\u00f6pfli und Peterli dazugeben, vermischen.",
+          "recipe_name": "Kn\u00f6pfli Alfredo",
+          "date_added": "30.04.2021",
+          "date_modified": "30.04.2021",
+          "used_in_meals": [
+            "o7y7Td898K376eVoyS3w"
+          ],
+          "ingredients": [
+            {
+              "comment": "",
+              "fresh": false,
+              "unit": "kg",
+              "food": "getrocknete Kn\u00f6pfli",
+              "measure": 0.1,
+              "isAnOverwriting": false,
+              "unique_id": "8EFUXM-RS5UeZ"
+            },
+            {
+              "unit": "",
+              "food": "Salz",
+              "measure": null,
+              "fresh": false,
+              "unique_id": "8EFUXM-XLbJ7A",
+              "comment": "",
+              "isAnOverwriting": false
+            },
+            {
+              "measure": 0.2,
+              "unique_id": "8EFUXM-f01ZVV",
+              "food": "Bratbutter",
+              "fresh": false,
+              "unit": "EL",
+              "comment": "",
+              "isAnOverwriting": false
+            },
+            {
+              "comment": "",
+              "food": "Schinkenw\u00fcfeli",
+              "unit": "g",
+              "measure": 30,
+              "isAnOverwriting": false,
+              "unique_id": "8EFUXM-be6ZCz",
+              "fresh": false
+            },
+            {
+              "unique_id": "8EFUXM-RglMZv",
+              "measure": 0.1,
+              "fresh": false,
+              "food": "Halbrahm",
+              "isAnOverwriting": false,
+              "comment": "",
+              "unit": "l"
+            },
+            {
+              "unique_id": "8EFUXM-UHTQ24",
+              "unit": "EL",
+              "fresh": false,
+              "food": "Maizena",
+              "isAnOverwriting": false,
+              "measure": 0.2,
+              "comment": ""
+            },
+            {
+              "comment": "",
+              "measure": 0.15,
+              "fresh": false,
+              "unique_id": "8EFUXM-heQKTh",
+              "unit": "EL",
+              "isAnOverwriting": false,
+              "food": "Bouillonpulver"
+            },
+            {
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false,
+              "food": "Peffer",
+              "measure": null,
+              "unit": "",
+              "unique_id": "8EFUXM-UMwArC"
+            },
+            {
+              "isAnOverwriting": false,
+              "unique_id": "8EFUXM-i1j3h5",
+              "fresh": false,
+              "measure": null,
+              "food": "Muskatnuss ",
+              "unit": "",
+              "comment": ""
+            },
+            {
+              "unique_id": "8EFUXM-UbfC4U",
+              "measure": 0.1,
+              "food": "Peterli",
+              "fresh": false,
+              "comment": "gehackt",
+              "unit": "Bund",
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "g",
+              "unique_id": "8EFUXM-7HPxHT",
+              "comment": "",
+              "measure": 25,
+              "isAnOverwriting": false,
+              "fresh": false,
+              "food": "Reibk\u00e4se"
+            }
+          ],
+          "doc_id": "8EFUXMWjBtGpAM4kgYDQ",
+          "unique_id": "vExIxOZeZmliIyWUXsCn::8EFUXMWjBtGpAM4kgYDQ",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_name": "Salatsauce",
+          "date_added": "30.04.2021",
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "recipe_description": "mit Senf",
+          "date_modified": "30.04.2021",
+          "recipe_notes": "Alles kr\u00e4ftig verr\u00fchren und in eine Petflasche abf\u00fcllen.",
+          "ingredients": [
+            {
+              "unit": "dl",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unique_id": "UCdh5z-L3GJnR",
+              "comment": "kr\u00e4ftig",
+              "measure": 0.5,
+              "food": "Bouillon"
+            },
+            {
+              "isAnOverwriting": false,
+              "comment": "",
+              "unit": "dl",
+              "fresh": false,
+              "unique_id": "UCdh5z-n7mNjK",
+              "measure": 0.25,
+              "food": "Essig"
+            },
+            {
+              "fresh": false,
+              "comment": "",
+              "unit": "dl",
+              "food": "Oliven\u00f6l",
+              "isAnOverwriting": false,
+              "measure": 0.25,
+              "unique_id": "UCdh5z-tuYg0n"
+            },
+            {
+              "unique_id": "UCdh5z-gcYebX",
+              "comment": "",
+              "food": "Senf",
+              "unit": "EL",
+              "fresh": false,
+              "measure": 0.5,
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "etwas",
+              "comment": "",
+              "fresh": false,
+              "unique_id": "UCdh5z-C4wRUg",
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "food": "Pfeffer",
+              "fresh": false,
+              "unique_id": "UCdh5z-uy0jjW",
+              "measure": null,
+              "unit": "etwas"
+            },
+            {
+              "unique_id": "UCdh5z-qwbQVq",
+              "measure": null,
+              "fresh": false,
+              "food": "Salatkr\u00e4uter",
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "comment": ""
+            }
+          ],
+          "doc_id": "UCdh5zxWHXVSfsCQgBht",
+          "unique_id": "vExIxOZeZmliIyWUXsCn::UCdh5zxWHXVSfsCQgBht",
+          "recipe_used_for": "all",
+          "recipe_participants": 5,
+          "recipe_override_participants": true
+        },
+        {
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "recipe_description": " mit Mayonnaise, Franz\u00f6sisch",
+          "date_added": "30.04.2021",
+          "recipe_notes": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "unique_id": "XJmRS7-aDOUrT",
+              "unit": "dl",
+              "fresh": false,
+              "comment": "kr\u00e4ftig",
+              "isAnOverwriting": false,
+              "food": "Bouilllon",
+              "measure": 0.5
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": 0.25,
+              "food": "Essig",
+              "unit": "dl",
+              "unique_id": "XJmRS7-BfqwuS"
+            },
+            {
+              "food": "\u00d6L",
+              "measure": 0.25,
+              "unit": "dl",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "XJmRS7-6dtEd7",
+              "comment": ""
+            },
+            {
+              "fresh": false,
+              "isAnOverwriting": false,
+              "food": "Mayonnaise",
+              "measure": 0.1,
+              "comment": "",
+              "unique_id": "XJmRS7-lAx1Xv",
+              "unit": "Tube"
+            },
+            {
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null,
+              "fresh": false,
+              "unit": "etwas",
+              "comment": "",
+              "unique_id": "XJmRS7-wSyxBx"
+            },
+            {
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": null,
+              "food": "Pfeffer",
+              "unique_id": "XJmRS7-V5LGpZ",
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": null,
+              "unique_id": "XJmRS7-nUc20W",
+              "food": "Salatkr\u00e4uter",
+              "fresh": false,
+              "comment": "",
+              "unit": "etwas"
+            }
+          ],
+          "date_modified": "30.04.2021",
+          "recipe_name": "Salatsauce",
+          "doc_id": "XJmRS7XrZdqsEkwcqag3",
+          "unique_id": "vExIxOZeZmliIyWUXsCn::XJmRS7XrZdqsEkwcqag3",
+          "recipe_used_for": "all",
+          "recipe_participants": 5,
+          "recipe_override_participants": true
+        },
+        {
+          "recipe_description": "ohne Sauce",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_modified": "30.04.2021",
+          "date_added": "30.04.2021",
+          "recipe_name": "Kopfsalat",
+          "used_in_meals": [
+            "o7y7Td898K376eVoyS3w",
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "recipe_notes": "waschen, zerkleinern, in eine Sch\u00fcssel geben. Salatsauce dazugeben und mischen",
+          "ingredients": [
+            {
+              "unit": "Stk.",
+              "fresh": true,
+              "isAnOverwriting": false,
+              "food": "Kopfsalat",
+              "measure": 0.25,
+              "unique_id": "uru38A-rMW2T1",
+              "comment": ""
+            }
+          ],
+          "doc_id": "uru38AtzqsHdvZPh7pmv",
+          "unique_id": "vExIxOZeZmliIyWUXsCn::uru38AtzqsHdvZPh7pmv",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_prepare_date": "24.07.2021",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_used_as": "Zmorgen",
+      "meal_weekview_name": "Fr\u00fchst\u00fcck (Zopf)",
+      "date_added": "30.04.2021",
+      "meal_override_participants": false,
+      "meal_date": "24.07.2021",
+      "meal_id": "fKLmZXqLYooZAQCO6NtD",
+      "meal_participants": 10,
+      "meal_gets_prepared": false,
+      "date_modified": "30.04.2021",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "doc_id": "QGWgP04vLrm7uEVYHpBs",
+      "meal_name": "Fr\u00fchst\u00fcck (Zopf)",
+      "meal_description": "",
+      "recipe": [
+        {
+          "date_added": "30.04.2021",
+          "ingredients": [
+            {
+              "unit": "g",
+              "measure": 90,
+              "fresh": true,
+              "unique_id": "vXGXjK-FQzrDw",
+              "comment": "",
+              "food": "Zopf",
+              "isAnOverwriting": false
+            },
+            {
+              "fresh": true,
+              "food": "Brot",
+              "comment": "dunkel",
+              "unique_id": "vXGXjK-7phFy4",
+              "measure": 50,
+              "isAnOverwriting": false,
+              "unit": "g"
+            },
+            {
+              "measure": 20,
+              "isAnOverwriting": false,
+              "unit": "g",
+              "fresh": false,
+              "food": "Butter",
+              "comment": "",
+              "unique_id": "vXGXjK-yWOs5T"
+            },
+            {
+              "unit": "g",
+              "unique_id": "vXGXjK-2QDWw3",
+              "food": "Konfit\u00fcre",
+              "measure": 20,
+              "comment": "",
+              "isAnOverwriting": false,
+              "fresh": false
+            },
+            {
+              "fresh": false,
+              "food": "verschiedene K\u00e4se",
+              "isAnOverwriting": false,
+              "unit": "g",
+              "unique_id": "vXGXjK-KINAqN",
+              "comment": "",
+              "measure": 60
+            },
+            {
+              "unique_id": "vXGXjK-RBcqCS",
+              "food": "Milch",
+              "isAnOverwriting": false,
+              "unit": "l",
+              "fresh": false,
+              "measure": 0.25,
+              "comment": ""
+            },
+            {
+              "unit": "",
+              "food": "Schoggipulver",
+              "measure": null,
+              "comment": "",
+              "isAnOverwriting": false,
+              "unique_id": "vXGXjK-oIujDP",
+              "fresh": false
+            },
+            {
+              "unit": "l",
+              "food": "Orangensaft",
+              "isAnOverwriting": false,
+              "comment": "",
+              "unique_id": "vXGXjK-03sopM",
+              "measure": 0.2,
+              "fresh": false
+            },
+            {
+              "fresh": false,
+              "isAnOverwriting": false,
+              "comment": "",
+              "measure": null,
+              "food": "Teebeutel",
+              "unique_id": "vXGXjK-AF5Z6e",
+              "unit": ""
+            },
+            {
+              "unique_id": "vXGXjK-fw0Khr",
+              "comment": "",
+              "food": "Zucker",
+              "measure": null,
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false
+            },
+            {
+              "comment": "nach belieben",
+              "isAnOverwriting": false,
+              "food": "Fr\u00fcchte",
+              "measure": 1,
+              "unique_id": "vXGXjK-fjmpH2",
+              "unit": "Stk.",
+              "fresh": true
+            }
+          ],
+          "recipe_name": "Fr\u00fchst\u00fcck mit Zopf",
+          "recipe_notes": "",
+          "recipe_description": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_modified": "30.04.2021",
+          "used_in_meals": [
+            "fKLmZXqLYooZAQCO6NtD"
+          ],
+          "doc_id": "vXGXjKADhEZjaKds7AM1",
+          "unique_id": "QGWgP04vLrm7uEVYHpBs::vXGXjKADhEZjaKds7AM1",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_participants": 10,
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_gets_prepared": false,
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_override_participants": false,
+      "date_modified": "01.05.2021",
+      "meal_prepare_date": "24.07.2021",
+      "meal_id": "61mM3xzi9xzTb3vF6jyP",
+      "meal_date": "24.07.2021",
+      "meal_used_as": "Zn\u00fcni",
+      "meal_weekview_name": "Fr\u00fcchte, Brot",
+      "date_added": "01.05.2021",
+      "doc_id": "l4HfamgLYlOPCI7H9vhb",
+      "meal_name": "Fr\u00fcchte, Brot",
+      "meal_description": "al Zvieri oder Zn\u00fcni geeignet",
+      "recipe": [
+        {
+          "recipe_name": "Fr\u00fcchte, Brot",
+          "ingredients": [],
+          "recipe_description": "als Zvieri oder Zn\u00fcni geeignet",
+          "date_modified": "01.05.2021",
+          "date_added": "01.05.2021",
+          "used_in_meals": [
+            "61mM3xzi9xzTb3vF6jyP"
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_notes": "",
+          "doc_id": "nsmmCloe7riZjizW0JQ8",
+          "unique_id": "l4HfamgLYlOPCI7H9vhb::nsmmCloe7riZjizW0JQ8",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_used_as": "Zmittag",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "date_modified": "30.04.2021",
+      "meal_id": "j6bsWsTOio4zvEyGxOTK",
+      "meal_date": "24.07.2021",
+      "meal_prepare_date": "24.07.2021",
+      "date_added": "30.04.2021",
+      "meal_override_participants": false,
+      "meal_participants": 10,
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_weekview_name": "Polenta, Gulasch und Bohnen",
+      "meal_gets_prepared": false,
+      "doc_id": "5vy8R6kC2oImb310gbTv",
+      "meal_name": "Polenta, Gulasch und Bohnen",
+      "meal_description": "",
+      "recipe": [
+        {
+          "recipe_name": "Gulasch",
+          "date_modified": "30.04.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "measure": 0.2,
+              "food": "\u00d6l",
+              "fresh": false,
+              "comment": "",
+              "isAnOverwriting": false,
+              "unit": "EL",
+              "unique_id": "52uS2X-GEZRjh"
+            },
+            {
+              "measure": 0.125,
+              "unique_id": "52uS2X-LoTdGY",
+              "comment": "in kleine W\u00fcrfel schneiden",
+              "fresh": false,
+              "unit": "kg",
+              "food": "Rindsragout",
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "Stk.",
+              "unique_id": "52uS2X-RBsf5C",
+              "food": "Zwiebel",
+              "measure": 0.4,
+              "isAnOverwriting": false,
+              "fresh": false,
+              "comment": "gross, feingehackt"
+            },
+            {
+              "unit": "Stk.",
+              "unique_id": "52uS2X-MnA5jV",
+              "fresh": false,
+              "comment": "gepresst",
+              "measure": 0.4,
+              "isAnOverwriting": false,
+              "food": "Knoblauchzehen"
+            },
+            {
+              "comment": "entkernen, in Streifen schneiden",
+              "fresh": true,
+              "unique_id": "52uS2X-b48KB3",
+              "food": "Peperoni, rot",
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "measure": 0.1
+            },
+            {
+              "comment": "entkernen, in Streifen schneiden",
+              "unit": "Stk.",
+              "unique_id": "52uS2X-afYZmC",
+              "food": "Peperoni, gr\u00fcn",
+              "fresh": true,
+              "isAnOverwriting": false,
+              "measure": 0.1
+            },
+            {
+              "food": "Paprika",
+              "comment": "",
+              "unique_id": "52uS2X-Dq1UeH",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unit": "TL",
+              "measure": 0.4
+            },
+            {
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "52uS2X-CMXTFt",
+              "food": "Pfeffer",
+              "comment": "",
+              "measure": null
+            },
+            {
+              "unique_id": "52uS2X-d0fOzn",
+              "food": "Majoran",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": 0.05,
+              "unit": "TL",
+              "comment": ""
+            },
+            {
+              "measure": 0.1,
+              "unit": "TL",
+              "isAnOverwriting": false,
+              "food": "K\u00fcmmel",
+              "unique_id": "52uS2X-q5DONw",
+              "fresh": false,
+              "comment": "in einem Tee-Ei"
+            },
+            {
+              "measure": null,
+              "isAnOverwriting": false,
+              "unique_id": "52uS2X-r5hDvs",
+              "fresh": false,
+              "comment": "",
+              "unit": "",
+              "food": "Salz"
+            },
+            {
+              "food": "Pelati",
+              "comment": "",
+              "unit": "B\u00fcchse",
+              "isAnOverwriting": false,
+              "unique_id": "52uS2X-gZPdBJ",
+              "measure": 0.1,
+              "fresh": false
+            },
+            {
+              "unique_id": "52uS2X-1ulR2y",
+              "comment": "",
+              "unit": "EL",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "food": "Bouillonpulver",
+              "measure": 0.1
+            },
+            {
+              "measure": 3,
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "comment": "ausgeh\u00f6hlte Tomaten in gutschliessendem Tupperware wegstellen, f\u00fcrs Abendessen",
+              "food": "kleine Tomaten",
+              "fresh": true,
+              "unique_id": "52uS2X-u4RqLA"
+            }
+          ],
+          "used_in_meals": [
+            "j6bsWsTOio4zvEyGxOTK"
+          ],
+          "recipe_description": "",
+          "date_added": "30.04.2021",
+          "recipe_notes": "\u00d6l erhitzen, Fleisch, Zwiebeln und Knoblauch d\u00e4mpfen, entstandene Fl\u00fcssigkeit etwas einkochen lassen. Gew\u00fcrze \u00fcber das Fleisch streuen, Wasser mit Bouillonpulver dazugeben. Alles ca. 1 \u00bd Std. auf kleinem Feuer k\u00f6cheln lassen. Peperoni, Pellati und das Herausgel\u00f6ste aus den Tomaten dazugeben und weitere 30 Minuten k\u00f6cheln lassen.",
+          "doc_id": "52uS2X7jFWUlvA0awQBo",
+          "unique_id": "5vy8R6kC2oImb310gbTv::52uS2X7jFWUlvA0awQBo",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_name": "Polenta (als Beilage)",
+          "ingredients": [
+            {
+              "measure": 60,
+              "food": "Maisgriess",
+              "comment": "",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unit": "g",
+              "unique_id": "jeRKKH-t7vtEp"
+            },
+            {
+              "unique_id": "jeRKKH-dv03HA",
+              "unit": "l",
+              "comment": "",
+              "food": "Milch",
+              "isAnOverwriting": false,
+              "measure": 0.15,
+              "fresh": false
+            },
+            {
+              "measure": 0.15,
+              "food": "Wasser",
+              "isAnOverwriting": false,
+              "unique_id": "jeRKKH-zrd6w7",
+              "fresh": false,
+              "unit": "l",
+              "comment": ""
+            },
+            {
+              "unique_id": "jeRKKH-W36rvV",
+              "measure": 0.3,
+              "unit": "EL",
+              "fresh": false,
+              "food": "Bouillon",
+              "comment": "",
+              "isAnOverwriting": false
+            },
+            {
+              "comment": "",
+              "food": "Pfeffer",
+              "fresh": false,
+              "unit": "",
+              "measure": null,
+              "unique_id": "jeRKKH-wvrDJ8",
+              "isAnOverwriting": false
+            },
+            {
+              "unique_id": "jeRKKH-r07uws",
+              "fresh": false,
+              "comment": "",
+              "food": "Muskatnuss",
+              "unit": "",
+              "measure": null,
+              "isAnOverwriting": false
+            },
+            {
+              "isAnOverwriting": false,
+              "fresh": false,
+              "comment": "",
+              "measure": 15,
+              "unique_id": "jeRKKH-SA44IL",
+              "unit": "g",
+              "food": "Reibk\u00e4se"
+            }
+          ],
+          "date_modified": "30.04.2021",
+          "used_in_meals": [
+            "j6bsWsTOio4zvEyGxOTK"
+          ],
+          "date_added": "30.04.2021",
+          "recipe_notes": "Fl\u00fcssigkeit aufkochen, Bouillonpulver, Pfeffer und Muskatnuss dazugeben. Maisgriess unter R\u00fchren einrieseln lassen. Zugedeckt 2 Min. k\u00f6cheln lassen, vom Feuer nehmen, gut durchr\u00fchren und zudecken. Weitere 5 Min. auf kleinem Feuer (oder neben dem Feuer) quellen lassen, gut durchr\u00fchren. Reibk\u00e4se dazugeben.",
+          "recipe_description": "",
+          "doc_id": "jeRKKHR534vpXa5a9VRf",
+          "unique_id": "5vy8R6kC2oImb310gbTv::jeRKKHR534vpXa5a9VRf",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "date_modified": "01.05.2021",
+          "recipe_name": "Bohnen ",
+          "date_added": "30.04.2021",
+          "recipe_notes": "Bohnen (tiefgek\u00fchlte oder frische, ger\u00fcstet und gewaschen). In wenig Bouillon kochen (Bohnen sollten noch Biss haben).",
+          "recipe_description": "als Gem\u00fcsebeilage",
+          "ingredients": [
+            {
+              "fresh": false,
+              "unique_id": "shb26k-YSDgRK",
+              "comment": "tiefgek\u00fchlte oder frisch",
+              "measure": 0.2,
+              "food": "Bohnen",
+              "isAnOverwriting": false,
+              "unit": "kg"
+            },
+            {
+              "fresh": false,
+              "measure": null,
+              "unit": "",
+              "isAnOverwriting": false,
+              "food": "Bouillon",
+              "unique_id": "shb26k-rIny40",
+              "comment": ""
+            }
+          ],
+          "used_in_meals": [
+            "j6bsWsTOio4zvEyGxOTK"
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "doc_id": "shb26kMIedEYTcFIZNAP",
+          "unique_id": "5vy8R6kC2oImb310gbTv::shb26kMIedEYTcFIZNAP",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "date_added": "01.05.2021",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_id": "6QVhj7AC2aQVsg9kXPBv",
+      "meal_used_as": "Zvieri",
+      "meal_override_participants": false,
+      "meal_gets_prepared": false,
+      "meal_date": "24.07.2021",
+      "meal_prepare_date": "24.07.2021",
+      "date_modified": "01.05.2021",
+      "meal_participants": 10,
+      "meal_weekview_name": "Brot und Schokolade ",
+      "doc_id": "kVyWQwRTE6xqpVptVngj",
+      "meal_name": "Brot und Schokolade ",
+      "meal_description": "",
+      "recipe": [
+        {
+          "used_in_meals": [
+            "6QVhj7AC2aQVsg9kXPBv"
+          ],
+          "date_added": "08.05.2021",
+          "date_modified": "08.05.2021",
+          "ingredients": [
+            {
+              "food": "Schokolade",
+              "measure": 2,
+              "fresh": false,
+              "unique_id": "CUYuOs-ufYLER",
+              "unit": "Reihen",
+              "isAnOverwriting": false,
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": 1,
+              "unit": "Scheibe",
+              "unique_id": "CUYuOs-1ryeuC",
+              "food": "Brot",
+              "comment": "",
+              "fresh": false
+            }
+          ],
+          "recipe_description": "",
+          "recipe_name": "Brot mit Schokolade",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_notes": "",
+          "doc_id": "CUYuOsuvysoyjwR5zExP",
+          "unique_id": "kVyWQwRTE6xqpVptVngj::CUYuOsuvysoyjwR5zExP",
+          "recipe_used_for": "all",
+          "recipe_participants": 0,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "date_modified": "01.05.2021",
+      "meal_override_participants": false,
+      "meal_weekview_name": "Gef\u00fcllte Tomaten",
+      "meal_gets_prepared": false,
+      "meal_participants": 10,
+      "meal_used_as": "Znacht",
+      "meal_date": "24.07.2021",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_id": "F4Mdf3kyQKRc6RTtNPoQ",
+      "meal_prepare_date": "24.07.2021",
+      "date_added": "30.04.2021",
+      "doc_id": "YsnSSbJmuuuVU1GuIqTU",
+      "meal_name": "Gef\u00fcllte Tomaten",
+      "meal_description": "Tomaten sind vom Mittagessen.",
+      "recipe": [
+        {
+          "recipe_name": "Gef\u00fcllte Tomaten: Tsaziki",
+          "recipe_description": "",
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "unique_id": "K31u3L-XDTL6q",
+              "fresh": true,
+              "measure": 0.15,
+              "food": "Gurke",
+              "comment": "in ein L\u00f6cherbecken raffeln"
+            },
+            {
+              "unit": "TL",
+              "isAnOverwriting": false,
+              "measure": 0.0375,
+              "food": "Salz",
+              "comment": "",
+              "unique_id": "K31u3L-SLqzcC",
+              "fresh": false
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Naturjoghurt",
+              "comment": "wenn m\u00f6glich griechische",
+              "fresh": false,
+              "unique_id": "K31u3L-yQoYGd",
+              "measure": 0.3,
+              "unit": "Stk."
+            },
+            {
+              "comment": "gepresst",
+              "fresh": false,
+              "food": "Knoblauchzehen",
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "unique_id": "K31u3L-5vaRP0",
+              "measure": 0.45
+            },
+            {
+              "comment": "",
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "measure": null,
+              "food": "Pfeffer",
+              "unique_id": "K31u3L-f7GrRr"
+            },
+            {
+              "unique_id": "K31u3L-tFF1ha",
+              "measure": null,
+              "food": "Salz",
+              "fresh": false,
+              "unit": "",
+              "comment": "",
+              "isAnOverwriting": false
+            }
+          ],
+          "date_modified": "30.04.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "used_in_meals": [
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "date_added": "30.04.2021",
+          "recipe_notes": "Gurken mit bestreuen und ca. 15 \u2013 20 Min. stehen lassen. Gurkensaft abfliessen lassen, Gurken gut ausdr\u00fccken.\nNaturjoghurt, Knoblauch und Pfeffer verr\u00fchren, Gurken dazugeben und vermischen, abschmecken. In die Tomaten abf\u00fcllen.",
+          "doc_id": "K31u3LIHNDcPIXcFPT78",
+          "unique_id": "YsnSSbJmuuuVU1GuIqTU::K31u3LIHNDcPIXcFPT78",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_name": "Salatsauce",
+          "date_added": "30.04.2021",
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "recipe_description": "mit Senf",
+          "date_modified": "30.04.2021",
+          "recipe_notes": "Alles kr\u00e4ftig verr\u00fchren und in eine Petflasche abf\u00fcllen.",
+          "ingredients": [
+            {
+              "unit": "dl",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unique_id": "UCdh5z-L3GJnR",
+              "comment": "kr\u00e4ftig",
+              "measure": 0.5,
+              "food": "Bouillon"
+            },
+            {
+              "isAnOverwriting": false,
+              "comment": "",
+              "unit": "dl",
+              "fresh": false,
+              "unique_id": "UCdh5z-n7mNjK",
+              "measure": 0.25,
+              "food": "Essig"
+            },
+            {
+              "fresh": false,
+              "comment": "",
+              "unit": "dl",
+              "food": "Oliven\u00f6l",
+              "isAnOverwriting": false,
+              "measure": 0.25,
+              "unique_id": "UCdh5z-tuYg0n"
+            },
+            {
+              "unique_id": "UCdh5z-gcYebX",
+              "comment": "",
+              "food": "Senf",
+              "unit": "EL",
+              "fresh": false,
+              "measure": 0.5,
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "etwas",
+              "comment": "",
+              "fresh": false,
+              "unique_id": "UCdh5z-C4wRUg",
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "food": "Pfeffer",
+              "fresh": false,
+              "unique_id": "UCdh5z-uy0jjW",
+              "measure": null,
+              "unit": "etwas"
+            },
+            {
+              "unique_id": "UCdh5z-qwbQVq",
+              "measure": null,
+              "fresh": false,
+              "food": "Salatkr\u00e4uter",
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "comment": ""
+            }
+          ],
+          "doc_id": "UCdh5zxWHXVSfsCQgBht",
+          "unique_id": "YsnSSbJmuuuVU1GuIqTU::UCdh5zxWHXVSfsCQgBht",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "unit": "g",
+              "unique_id": "aTDyO9-nnzHAU",
+              "measure": 100,
+              "comment": "als Beilage",
+              "food": "Brot",
+              "fresh": true
+            }
+          ],
+          "recipe_notes": "",
+          "used_in_meals": [
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "recipe_name": "Brot als Beilage",
+          "date_modified": "30.04.2021",
+          "recipe_description": "",
+          "date_added": "30.04.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "doc_id": "aTDyO9ZobafduONX3Tbc",
+          "unique_id": "YsnSSbJmuuuVU1GuIqTU::aTDyO9ZobafduONX3Tbc",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "used_in_meals": [
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "date_modified": "30.04.2021",
+          "ingredients": [
+            {
+              "unit": "B\u00fcchsen",
+              "isAnOverwriting": false,
+              "food": "Mais",
+              "measure": 0.3,
+              "fresh": false,
+              "comment": "",
+              "unique_id": "eKWmmJ-qfOCeF"
+            },
+            {
+              "food": "Mayonnaise",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unit": "g",
+              "unique_id": "eKWmmJ-Dhu5TY",
+              "comment": "",
+              "measure": 15
+            },
+            {
+              "measure": 0.15,
+              "comment": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "food": "kr\u00e4ftiger Bouillon",
+              "unique_id": "eKWmmJ-XzlFvF",
+              "unit": "dl"
+            },
+            {
+              "unit": "dl",
+              "measure": 0.075,
+              "isAnOverwriting": false,
+              "food": "Essig",
+              "unique_id": "eKWmmJ-nN0sPz",
+              "fresh": false,
+              "comment": ""
+            },
+            {
+              "comment": "",
+              "food": "\u00d6l",
+              "unique_id": "eKWmmJ-ft2Wva",
+              "unit": "dl",
+              "isAnOverwriting": false,
+              "measure": 0.075,
+              "fresh": false
+            },
+            {
+              "fresh": false,
+              "food": "Mayonnaise",
+              "unique_id": "eKWmmJ-XrsckU",
+              "comment": "",
+              "measure": 0.075,
+              "isAnOverwriting": false,
+              "unit": "Tube"
+            },
+            {
+              "measure": null,
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "eKWmmJ-Y4lJ7m",
+              "food": "Salz",
+              "comment": ""
+            },
+            {
+              "food": "Pfeffer",
+              "comment": "",
+              "unique_id": "eKWmmJ-LKar4A",
+              "unit": "",
+              "measure": null,
+              "fresh": false,
+              "isAnOverwriting": false
+            },
+            {
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false,
+              "unique_id": "eKWmmJ-yBvvkw",
+              "unit": "",
+              "measure": null,
+              "food": "Salatkr\u00e4uter"
+            },
+            {
+              "isAnOverwriting": false,
+              "unique_id": "eKWmmJ-yiI80f",
+              "fresh": true,
+              "measure": 0.05,
+              "comment": "fein geschnitten",
+              "unit": "Bund",
+              "food": "Schnittlauch"
+            }
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_notes": "Alle Zutaten gr\u00fcndlich vermischen und in Tomaten abf\u00fcllen.\n",
+          "recipe_name": "Gef\u00fcllte Tomaten: Maisf\u00fcllung",
+          "date_added": "30.04.2021",
+          "recipe_description": "",
+          "doc_id": "eKWmmJGbUGGFdj9ClhQW",
+          "unique_id": "YsnSSbJmuuuVU1GuIqTU::eKWmmJGbUGGFdj9ClhQW",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "recipe_name": "Eisbergsalat",
+          "used_in_meals": [
+            "F4Mdf3kyQKRc6RTtNPoQ"
+          ],
+          "date_added": "30.04.2021",
+          "recipe_description": "ohne Sauce",
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "measure": 0.15,
+              "unit": "Stk.",
+              "fresh": true,
+              "comment": "",
+              "unique_id": "z2Joa8-C01ohr",
+              "food": "Eisbergsalat"
+            }
+          ],
+          "date_modified": "01.05.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_notes": "Eisbergsalat, r\u00fcsten, waschen, zerkleinern. Salatsauce beigeben.",
+          "doc_id": "z2Joa8ctXZ1JW3FCEKCi",
+          "unique_id": "YsnSSbJmuuuVU1GuIqTU::z2Joa8ctXZ1JW3FCEKCi",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_prepare_date": "25.07.2021",
+      "meal_weekview_name": "Fr\u00fchst\u00fcck (gew\u00f6hnlich)",
+      "meal_override_participants": false,
+      "meal_id": "wrUI1eE2OlXkMKO1k8hd",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_participants": 10,
+      "meal_date": "25.07.2021",
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_used_as": "Zmorgen",
+      "meal_gets_prepared": false,
+      "date_modified": "30.04.2021",
+      "date_added": "30.04.2021",
+      "doc_id": "h4mMV8KrEC24SzmAxH9C",
+      "meal_name": "Fr\u00fchst\u00fcck (gew\u00f6hnlich)",
+      "meal_description": "",
+      "recipe": [
+        {
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "unique_id": "xwcNej-hBrX3m",
+              "unit": "kg",
+              "isAnOverwriting": false,
+              "comment": "",
+              "measure": 0.1,
+              "fresh": true,
+              "food": "Brot"
+            },
+            {
+              "fresh": false,
+              "unit": "g",
+              "measure": 20,
+              "comment": "",
+              "isAnOverwriting": false,
+              "food": "Butter",
+              "unique_id": "xwcNej-sVTj7y"
+            },
+            {
+              "unit": "g",
+              "unique_id": "xwcNej-0xmgFL",
+              "comment": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "measure": 30,
+              "food": "Konfit\u00fcre"
+            },
+            {
+              "measure": 0.1,
+              "unit": "P\u00e4ckli",
+              "unique_id": "xwcNej-HK8fgv",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "comment": "Snacks, Cornflakes",
+              "food": "Fl\u00f6ckli"
+            },
+            {
+              "fresh": false,
+              "unique_id": "xwcNej-XTJiiI",
+              "comment": "",
+              "measure": 0.15,
+              "food": "Milch",
+              "isAnOverwriting": false,
+              "unit": "l"
+            },
+            {
+              "food": "Schoggipulver",
+              "comment": "",
+              "unique_id": "xwcNej-IF4lVG",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "measure": null,
+              "unit": ""
+            },
+            {
+              "measure": null,
+              "fresh": false,
+              "unique_id": "xwcNej-Z3daHY",
+              "unit": "",
+              "food": "Teebeutel",
+              "comment": "",
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "",
+              "measure": null,
+              "unique_id": "xwcNej-rSh2AL",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "food": "Zucker",
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": 1,
+              "comment": "",
+              "fresh": true,
+              "unit": "Stk.",
+              "unique_id": "xwcNej-WkYtkl",
+              "food": "Fr\u00fcchte"
+            }
+          ],
+          "date_added": "30.04.2021",
+          "recipe_description": "",
+          "recipe_notes": "",
+          "used_in_meals": [
+            "wrUI1eE2OlXkMKO1k8hd"
+          ],
+          "date_modified": "30.04.2021",
+          "recipe_name": "Fr\u00fchst\u00fcck (gew\u00f6hnlich)",
+          "doc_id": "xwcNejxovPjgRx7RoSFa",
+          "unique_id": "h4mMV8KrEC24SzmAxH9C::xwcNejxovPjgRx7RoSFa",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_override_participants": false,
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_participants": 10,
+      "meal_used_as": "Zmittag",
+      "meal_date": "25.07.2021",
+      "meal_prepare_date": "24.07.2021",
+      "date_added": "30.04.2021",
+      "meal_weekview_name": "Spaghetti mit Carbonara und Dessert",
+      "meal_id": "YCY25U6nFQATcgZi4YzO",
+      "date_modified": "09.05.2021",
+      "meal_gets_prepared": true,
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "doc_id": "B9p8nNMpYYVdQCHTSseB",
+      "meal_name": "Spaghetti mit Gem\u00fcsecarbonara inkl. Dessert: Gef\u00fcllte \u00c4pfel mit Vanillesauce",
+      "meal_description": "inkl. Dessert: Gef\u00fcllte \u00c4pfel mit Vanillesauce",
+      "recipe": [
+        {
+          "recipe_notes": "Spaghetti in reichlich Salzwasser al dente kochen, absch\u00fctten, mit Butter vermischen.\n",
+          "used_in_meals": [
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "recipe_description": "passt als Beilage zu einer Sauce",
+          "ingredients": [
+            {
+              "comment": "",
+              "unique_id": "AYPgWP-bCCvuS",
+              "unit": "kg",
+              "food": "Spaghetti",
+              "measure": 0.12,
+              "isAnOverwriting": false,
+              "fresh": false
+            },
+            {
+              "measure": null,
+              "unique_id": "AYPgWP-F6qyvN",
+              "unit": "",
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false
+            },
+            {
+              "isAnOverwriting": false,
+              "unit": "EL",
+              "fresh": false,
+              "comment": "",
+              "food": "Butter",
+              "unique_id": "AYPgWP-ucEKaD",
+              "measure": 0.2
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": 20,
+              "fresh": false,
+              "comment": "",
+              "unique_id": "AYPgWP-j0Izca",
+              "food": "Reibk\u00e4se",
+              "unit": "g"
+            }
+          ],
+          "recipe_name": "Spaghetti",
+          "date_modified": "01.05.2021",
+          "date_added": "30.04.2021",
+          "doc_id": "AYPgWPD5xqas0YiRXrcW",
+          "unique_id": "B9p8nNMpYYVdQCHTSseB::AYPgWPD5xqas0YiRXrcW",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "measure": 0.125,
+              "food": "Gem\u00fcse",
+              "unit": "kg",
+              "unique_id": "IIroyT-bsZ8gH",
+              "comment": "Zucchetti, R\u00fcebli, Kohlr\u00e4bli, Erbsen",
+              "fresh": false
+            },
+            {
+              "food": "Kaffeerahm",
+              "isAnOverwriting": false,
+              "unique_id": "IIroyT-52sOCx",
+              "unit": "l",
+              "measure": 0.1,
+              "fresh": false,
+              "comment": ""
+            },
+            {
+              "measure": 0.2,
+              "unique_id": "IIroyT-aq1hhx",
+              "unit": "EL",
+              "food": "Maizena",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "unit": "EL",
+              "unique_id": "IIroyT-r6ILTy",
+              "food": "Bratbutter",
+              "comment": "",
+              "measure": 0.2,
+              "fresh": false
+            },
+            {
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": 0.15,
+              "food": "Boullonpulver",
+              "comment": "",
+              "unit": "EL",
+              "unique_id": "IIroyT-x7eWqz"
+            },
+            {
+              "unit": "",
+              "unique_id": "IIroyT-dCZczo",
+              "isAnOverwriting": false,
+              "measure": null,
+              "comment": "",
+              "fresh": false,
+              "food": "Pfeffer"
+            },
+            {
+              "unique_id": "IIroyT-ggg4yk",
+              "comment": "",
+              "measure": null,
+              "isAnOverwriting": false,
+              "food": "Muskatnuss",
+              "unit": "",
+              "fresh": false
+            },
+            {
+              "fresh": false,
+              "comment": "gehackt",
+              "unit": "Bund",
+              "isAnOverwriting": false,
+              "food": "Peterli",
+              "measure": 0.05,
+              "unique_id": "IIroyT-RQi6SR"
+            }
+          ],
+          "recipe_description": "",
+          "recipe_name": "Gem\u00fcse Carbonara-Sauce",
+          "used_in_meals": [
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_modified": "30.04.2021",
+          "date_added": "30.04.2021",
+          "recipe_notes": "",
+          "doc_id": "IIroyTP4n5Y5PvLb0NBy",
+          "unique_id": "B9p8nNMpYYVdQCHTSseB::IIroyTP4n5Y5PvLb0NBy",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "date_added": "01.05.2021",
+          "date_modified": "01.05.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "used_in_meals": [
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "ingredients": [
+            {
+              "food": "\u00c4pfel",
+              "measure": 1,
+              "isAnOverwriting": false,
+              "comment": "",
+              "unit": "Stk.",
+              "fresh": false,
+              "unique_id": "KQKQGk-Kg00MP"
+            },
+            {
+              "fresh": false,
+              "unit": "g",
+              "food": "Haseln\u00fcsse",
+              "isAnOverwriting": false,
+              "unique_id": "KQKQGk-Z6ERqU",
+              "comment": "gemahlen",
+              "measure": 20
+            },
+            {
+              "measure": 0.4,
+              "unique_id": "KQKQGk-EgWWdy",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "unit": "EL",
+              "food": "Zucker",
+              "comment": ""
+            },
+            {
+              "unit": "",
+              "isAnOverwriting": false,
+              "food": "Zitronensaft",
+              "comment": "",
+              "unique_id": "KQKQGk-U1QVNp",
+              "measure": null,
+              "fresh": false
+            },
+            {
+              "food": "Apfelsaft",
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false,
+              "measure": 0.5,
+              "unit": "dl",
+              "unique_id": "KQKQGk-JunOot"
+            },
+            {
+              "unique_id": "KQKQGk-IlB5qs",
+              "fresh": false,
+              "food": "Zimtstange",
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "measure": 0.1,
+              "comment": ""
+            },
+            {
+              "unique_id": "KQKQGk-Pgr05d",
+              "food": "Alufolie",
+              "comment": "",
+              "measure": null,
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "Beutel",
+              "unique_id": "KQKQGk-y0K4JO",
+              "food": "Vanillecreme",
+              "fresh": false,
+              "measure": 0.2,
+              "isAnOverwriting": false,
+              "comment": "zum kalt Anr\u00fchren"
+            },
+            {
+              "fresh": false,
+              "unit": "l",
+              "unique_id": "KQKQGk-l0OMjN",
+              "comment": "",
+              "isAnOverwriting": false,
+              "measure": 0.1,
+              "food": "Milch"
+            }
+          ],
+          "recipe_notes": "\u00c4pfel entkernen und Schale mit scharfem Messer einschneiden.\nHaseln\u00fcsse und Zucker mischen, soviel Zitronensaft beigeben bis eine kompakte, feuchte Masse entsteht; in die \u00c4pfel einf\u00fcllen.\n\nDie \u00c4pfel in einen Kochkesseldeckel stellen, Apfelsaft dazugiessen, Zimtstange dazulegen. Den Deckel mit Alufolie gut zudecken und aufs Feuer stellen. Ca. 10 \u201315 Min. k\u00f6cheln lassen, bis die \u00c4pfel gar sind.\n\nVanillecreme anr\u00fchren.\n\nAnrichten: Vanillecr\u00e8me ins Teller geben, 1 Apfel darauf setzen, mit etwas Apfelsaft aus dem Kochkesseldeckel \u00fcbergiessen.\n\n",
+          "recipe_name": "Gef\u00fcllte \u00c4pfel mit Vanillesauce",
+          "recipe_description": "",
+          "doc_id": "KQKQGkFfswWhUdEJIzoq",
+          "unique_id": "B9p8nNMpYYVdQCHTSseB::KQKQGkFfswWhUdEJIzoq",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "used_in_meals": [
+            "vc6icuBzzzTP5JY6krZX",
+            "o7y7Td898K376eVoyS3w",
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "recipe_description": " mit Mayonnaise, Franz\u00f6sisch",
+          "date_added": "30.04.2021",
+          "recipe_notes": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "unique_id": "XJmRS7-aDOUrT",
+              "unit": "dl",
+              "fresh": false,
+              "comment": "kr\u00e4ftig",
+              "isAnOverwriting": false,
+              "food": "Bouilllon",
+              "measure": 0.5
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": 0.25,
+              "food": "Essig",
+              "unit": "dl",
+              "unique_id": "XJmRS7-BfqwuS"
+            },
+            {
+              "food": "\u00d6L",
+              "measure": 0.25,
+              "unit": "dl",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "XJmRS7-6dtEd7",
+              "comment": ""
+            },
+            {
+              "fresh": false,
+              "isAnOverwriting": false,
+              "food": "Mayonnaise",
+              "measure": 0.1,
+              "comment": "",
+              "unique_id": "XJmRS7-lAx1Xv",
+              "unit": "Tube"
+            },
+            {
+              "food": "Salz",
+              "isAnOverwriting": false,
+              "measure": null,
+              "fresh": false,
+              "unit": "etwas",
+              "comment": "",
+              "unique_id": "XJmRS7-wSyxBx"
+            },
+            {
+              "unit": "etwas",
+              "isAnOverwriting": false,
+              "fresh": false,
+              "measure": null,
+              "food": "Pfeffer",
+              "unique_id": "XJmRS7-V5LGpZ",
+              "comment": ""
+            },
+            {
+              "isAnOverwriting": false,
+              "measure": null,
+              "unique_id": "XJmRS7-nUc20W",
+              "food": "Salatkr\u00e4uter",
+              "fresh": false,
+              "comment": "",
+              "unit": "etwas"
+            }
+          ],
+          "date_modified": "30.04.2021",
+          "recipe_name": "Salatsauce",
+          "doc_id": "XJmRS7XrZdqsEkwcqag3",
+          "unique_id": "B9p8nNMpYYVdQCHTSseB::XJmRS7XrZdqsEkwcqag3",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "recipe_description": "ohne Sauce",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_modified": "30.04.2021",
+          "date_added": "30.04.2021",
+          "recipe_name": "Kopfsalat",
+          "used_in_meals": [
+            "o7y7Td898K376eVoyS3w",
+            "YCY25U6nFQATcgZi4YzO"
+          ],
+          "recipe_notes": "waschen, zerkleinern, in eine Sch\u00fcssel geben. Salatsauce dazugeben und mischen",
+          "ingredients": [
+            {
+              "unit": "Stk.",
+              "fresh": true,
+              "isAnOverwriting": false,
+              "food": "Kopfsalat",
+              "measure": 0.25,
+              "unique_id": "uru38A-rMW2T1",
+              "comment": ""
+            }
+          ],
+          "doc_id": "uru38AtzqsHdvZPh7pmv",
+          "unique_id": "B9p8nNMpYYVdQCHTSseB::uru38AtzqsHdvZPh7pmv",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    },
+    {
+      "meal_used_as": "Znacht",
+      "used_in_camp": "16fXu6siwVDX1OOb38P3",
+      "meal_gets_prepared": true,
+      "meal_participants": 10,
+      "access": {
+        "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+      },
+      "meal_weekview_name": "Gef\u00fcllte Kartoffeln mit Salat",
+      "meal_date": "25.07.2021",
+      "meal_prepare_date": "24.07.2021",
+      "meal_override_participants": false,
+      "date_added": "01.05.2021",
+      "date_modified": "01.05.2021",
+      "meal_id": "0PWg6RoMZDzkLz6TueD4",
+      "doc_id": "lcKt3mfiYl3X1OXhqaxu",
+      "meal_name": "Gef\u00fcllte Kartoffeln mit Salat",
+      "meal_description": "",
+      "recipe": [
+        {
+          "used_in_meals": [
+            "0PWg6RoMZDzkLz6TueD4"
+          ],
+          "recipe_description": "",
+          "ingredients": [
+            {
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unit": "Stk",
+              "unique_id": "StGzFm-PrGyMb",
+              "comment": "",
+              "measure": 0.3,
+              "food": "Gurken"
+            },
+            {
+              "unique_id": "StGzFm-1QtoHT",
+              "measure": null,
+              "food": "Salz",
+              "comment": "",
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false
+            },
+            {
+              "unit": "",
+              "food": "Pfeffer",
+              "measure": null,
+              "isAnOverwriting": false,
+              "comment": "",
+              "unique_id": "StGzFm-ZRAAkm",
+              "fresh": false
+            },
+            {
+              "unique_id": "StGzFm-LZsRor",
+              "unit": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "comment": "",
+              "food": "Dill",
+              "measure": null
+            },
+            {
+              "food": "K\u00fcmmel",
+              "unique_id": "StGzFm-2dliTc",
+              "fresh": false,
+              "comment": "",
+              "measure": null,
+              "unit": "",
+              "isAnOverwriting": false
+            },
+            {
+              "fresh": false,
+              "comment": "",
+              "isAnOverwriting": false,
+              "unit": "Salatl\u00f6ffel",
+              "food": "\u00d6l",
+              "measure": 0.4,
+              "unique_id": "StGzFm-fnR48O"
+            },
+            {
+              "food": "Essig",
+              "measure": 0.4,
+              "comment": "",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "unique_id": "StGzFm-dBQPqN",
+              "unit": "Salatl\u00f6ffel"
+            }
+          ],
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "date_added": "01.05.2021",
+          "recipe_name": "Gurkensalat",
+          "date_modified": "01.05.2021",
+          "recipe_notes": "3 Gurken waschen, evtl. sch\u00e4len, in feine Scheiben schneiden, in eine Sch\u00fcssel geben.\n\u00d6l und Essig dar\u00fcbergeben, verr\u00fchren.\n",
+          "doc_id": "StGzFmZQJMuU3hq2G6Jd",
+          "unique_id": "lcKt3mfiYl3X1OXhqaxu::StGzFmZQJMuU3hq2G6Jd",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "recipe_description": "",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "used_in_meals": [
+            "0PWg6RoMZDzkLz6TueD4"
+          ],
+          "date_added": "01.05.2021",
+          "date_modified": "01.05.2021",
+          "recipe_name": "Gef\u00fcllte Kartoffeln: Mascarpone-F\u00fcllung",
+          "recipe_notes": "Alles gut verr\u00fchren.\n\nF\u00fcr jede Kartoffel ein St\u00fcck Alufolie mit \u00d6l einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeel\u00f6ffel oder Geh\u00e4useausstecher aush\u00f6hlen. Das Ausgeh\u00f6hlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit F\u00fcllung f\u00fcllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 \u2013 15 Minuten in der Glut braten, hie und da wenden.",
+          "ingredients": [
+            {
+              "unit": "g",
+              "measure": 25,
+              "unique_id": "TJz6nU-bGzt2b",
+              "fresh": false,
+              "comment": "",
+              "food": "Mascarpone",
+              "isAnOverwriting": false
+            },
+            {
+              "food": "Reibk\u00e4se",
+              "isAnOverwriting": false,
+              "measure": 10,
+              "comment": "",
+              "unit": "g",
+              "unique_id": "TJz6nU-hSBFS4",
+              "fresh": false
+            },
+            {
+              "isAnOverwriting": false,
+              "food": "Schinkenw\u00fcrfeli",
+              "comment": "",
+              "measure": 20,
+              "unique_id": "TJz6nU-AMhl6w",
+              "unit": "g",
+              "fresh": false
+            },
+            {
+              "unit": "",
+              "unique_id": "TJz6nU-y4TTNC",
+              "measure": null,
+              "isAnOverwriting": false,
+              "fresh": false,
+              "food": "Salz",
+              "comment": ""
+            },
+            {
+              "measure": null,
+              "food": "Peffer",
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false,
+              "unit": "",
+              "unique_id": "TJz6nU-iLkdUy"
+            },
+            {
+              "isAnOverwriting": false,
+              "fresh": false,
+              "comment": "",
+              "measure": null,
+              "unique_id": "TJz6nU-dEuuHU",
+              "food": "Peterli",
+              "unit": ""
+            }
+          ],
+          "doc_id": "TJz6nUWnfxgl1JS2dBj1",
+          "unique_id": "lcKt3mfiYl3X1OXhqaxu::TJz6nUWnfxgl1JS2dBj1",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "used_in_meals": [
+            "0PWg6RoMZDzkLz6TueD4"
+          ],
+          "recipe_description": "",
+          "recipe_notes": "Am Vortag schwellen.\n\nF\u00fcr jede Kartoffel ein St\u00fcck Alufolie mit \u00d6l einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeel\u00f6ffel oder Geh\u00e4useausstecher aush\u00f6hlen. Das Ausgeh\u00f6hlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit F\u00fcllung f\u00fcllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 \u2013 15 Minuten in der Glut braten, hie und da wenden ",
+          "date_added": "01.05.2021",
+          "recipe_name": "geschwellte Kartoffeln",
+          "date_modified": "01.05.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "ingredients": [
+            {
+              "unit": "kg",
+              "measure": 0.25,
+              "comment": "",
+              "food": "Kartoffeln",
+              "unique_id": "kHaB5L-mi1FbU",
+              "fresh": false,
+              "isAnOverwriting": false
+            }
+          ],
+          "doc_id": "kHaB5L1ZtY97GiQ6PW13",
+          "unique_id": "lcKt3mfiYl3X1OXhqaxu::kHaB5L1ZtY97GiQ6PW13",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "ingredients": [
+            {
+              "measure": 1,
+              "comment": "roh",
+              "isAnOverwriting": false,
+              "unit": "Stk.",
+              "unique_id": "p2D77f-RkTaA1",
+              "fresh": false,
+              "food": "Eier"
+            },
+            {
+              "measure": null,
+              "food": "Salz",
+              "unique_id": "p2D77f-ukEKvE",
+              "comment": "",
+              "unit": "",
+              "isAnOverwriting": false,
+              "fresh": false
+            },
+            {
+              "comment": "",
+              "measure": null,
+              "food": "Pfeffer",
+              "unit": "",
+              "isAnOverwriting": false,
+              "unique_id": "p2D77f-rNN3IL",
+              "fresh": false
+            },
+            {
+              "comment": "je nach Geschmack",
+              "fresh": false,
+              "measure": null,
+              "isAnOverwriting": false,
+              "unit": "",
+              "food": "Bohnenkraut",
+              "unique_id": "p2D77f-HLcLNv"
+            }
+          ],
+          "date_modified": "01.05.2021",
+          "recipe_name": "Gef\u00fcllte Kartoffeln: Eier-F\u00fcllung",
+          "recipe_notes": "F\u00fcr jede Kartoffel ein St\u00fcck Alufolie mit \u00d6l einstreichen. Kartoffel einen Deckel abschneiden und mit einem Kaffeel\u00f6ffel oder Geh\u00e4useausstecher aush\u00f6hlen. Das Ausgeh\u00f6hlte auf die Alufolie legen, Kartoffel darauf setzen. Kartoffel mit F\u00fcllung f\u00fcllen, Deckel aufsetzen und satt in die Alufolie einwickeln. In die Glut legen und ca. 10 \u2013 15 Minuten in der Glut braten, hie und da wenden ",
+          "recipe_description": "",
+          "date_added": "01.05.2021",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "used_in_meals": [
+            "0PWg6RoMZDzkLz6TueD4"
+          ],
+          "doc_id": "p2D77fBcf04kZQQP4cKr",
+          "unique_id": "lcKt3mfiYl3X1OXhqaxu::p2D77fBcf04kZQQP4cKr",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        },
+        {
+          "recipe_notes": "Lauch r\u00fcsten, waschen, in feine Ringe schneiden. Butter erhitzen und Lauch w\u00e4hrend ca. 5 Min. gar d\u00e4mpfen. Cr\u00e8me fra\u00eeche, Reibk\u00e4se, Salz, Pfeffer, evtl. Muskatnuss mit dem Lauch vermischen.",
+          "recipe_name": "Lauchrahmf\u00fcllung",
+          "date_added": "01.05.2021",
+          "used_in_meals": [
+            "0PWg6RoMZDzkLz6TueD4"
+          ],
+          "ingredients": [
+            {
+              "isAnOverwriting": false,
+              "measure": 0.2,
+              "comment": "",
+              "food": "Lauchstengel",
+              "unique_id": "xAUgor-biMQzr",
+              "unit": "Stk.",
+              "fresh": false
+            },
+            {
+              "unit": "EL",
+              "measure": 0.1,
+              "food": "Bratbutter",
+              "unique_id": "xAUgor-wQAoyG",
+              "fresh": false,
+              "isAnOverwriting": false,
+              "comment": ""
+            },
+            {
+              "unique_id": "xAUgor-nlbIrK",
+              "measure": 0.1,
+              "unit": "Becher",
+              "fresh": false,
+              "comment": "",
+              "food": "Cr\u00e8me fra\u00eeche \u00e0 250 g",
+              "isAnOverwriting": false
+            },
+            {
+              "comment": "",
+              "isAnOverwriting": false,
+              "food": "Reibk\u00e4se",
+              "unique_id": "xAUgor-p0DIGI",
+              "measure": 10,
+              "fresh": false,
+              "unit": "g"
+            },
+            {
+              "unique_id": "xAUgor-kWSkyR",
+              "fresh": false,
+              "measure": null,
+              "unit": "",
+              "comment": "",
+              "food": "Salz",
+              "isAnOverwriting": false
+            },
+            {
+              "unique_id": "xAUgor-DufgT3",
+              "isAnOverwriting": false,
+              "comment": "",
+              "fresh": false,
+              "unit": "",
+              "food": "Peffer",
+              "measure": null
+            },
+            {
+              "unit": "",
+              "fresh": false,
+              "comment": "",
+              "measure": null,
+              "unique_id": "xAUgor-IJtrA1",
+              "food": "Muskatnuss",
+              "isAnOverwriting": false
+            }
+          ],
+          "date_modified": "01.05.2021",
+          "recipe_description": "f\u00fcr gef\u00fcllte Kartoffeln",
+          "access": {
+            "CKsbjuHkJQUstW1YULeAepDe9Wl1": "owner"
+          },
+          "doc_id": "xAUgorbK7bKyuGlj34HR",
+          "unique_id": "lcKt3mfiYl3X1OXhqaxu::xAUgorbK7bKyuGlj34HR",
+          "recipe_used_for": "all",
+          "recipe_participants": 10,
+          "recipe_override_participants": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,10 @@
 
 .cards
   display: flex
+  align-items: center
+
+
+
 
 .card
   box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)
@@ -21,6 +25,15 @@
     max-width: 760px
     max-height: 760px
     transition: transform .2s
+
+@media screen and (max-width: 560px)
+  .cards
+    flex-direction: column
+
+  .card
+    img
+      height: 140px
+      object-fit: cover
 
 .card:hover
   img

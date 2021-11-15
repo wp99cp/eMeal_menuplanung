@@ -3,7 +3,7 @@
 <div class="meal-search-table">
 
   <mat-form-field class="mat-form-field full-width">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Rezept suchen..." id="search-field" autocomplete="off">
   </mat-form-field>
 
   <table mat-table [dataSource]="recipesTableSource" matSort matSortActive="title" matSortDirection="asc"
@@ -29,13 +29,13 @@
     <!-- firstName Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="title-header"> Name</th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <td mat-cell *matCellDef="let row; let element" (click)="selectedRecipes.toggle(row)"> {{element.name}} </td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef mat-sort-header class="description-header"> Beschreibung</th>
-      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      <td mat-cell  *matCellDef="let row; let element" (click)="selectedRecipes.toggle(row)"> {{element.description}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

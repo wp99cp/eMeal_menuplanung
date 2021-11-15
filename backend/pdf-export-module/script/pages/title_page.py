@@ -1,9 +1,11 @@
+from argparse import Namespace
+
 from pylatex import Package, Command, NoEscape, SmallText, Subsubsection, Document
 
 from exportData.camp import Camp
 
 
-def add_title_page(doc: Document, camp: Camp):
+def add_title_page(doc: Document, camp: Camp, args: Namespace):
     # packages used for this page
     doc.packages.append(Package('datetime'))
     doc.packages.append(Package('graphicx'))
@@ -14,7 +16,7 @@ def add_title_page(doc: Document, camp: Camp):
         Command('title', NoEscape(r'\Huge \textbf{' +
                                   camp.get_camp_name() +
                                   r'} \\ \vspace{1.65cm} \Large \textbf{Handbuch Lagerküche}'
-                                  r'\\ \vspace{8cm}')))
+                                  r'\\ \vspace{11cm}')))
 
     doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + camp.get_full_author_name())))
     doc.preamble.append(Command('date', NoEscape(r'\normalsize Version vom \today')))
@@ -33,5 +35,6 @@ def add_title_page(doc: Document, camp: Camp):
     doc.append(SmallText('Dieses Dokument wurde automatisch erstellt. Obwohl uns Qualität und Richtigkeit sehr am '
                          'Herzen liegt, können wir Fehler nie ganz ausschliessen. eMeal – Menüplanung haftet nicht '
                          'für Schäden, die im Zusammenhang mit diesem Export entstanden sind. Bitte kontrolliere '
-                         'diesen Export vor dem Lager auf Vollständigkeit.'))
+                         'diesen Export vor dem Lager auf Vollständigkeit und Korrektheit. Das Team von eMeal - '
+                         'Menüplanung wünscht ganz viel Spass im Lager.'))
     doc.append(NoEscape('}'))
