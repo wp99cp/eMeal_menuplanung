@@ -44,8 +44,10 @@ export class AuthenticationService {
    */
   signInWithGoogle() {
 
-    this.location.replaceState('login/oauth-callback');
-    return this.fireAuth.signInWithRedirect(new auth.GoogleAuthProvider());
+    this.location.replaceState('login/oauth-callback?method=google');
+    this.fireAuth.signInWithRedirect(new auth.GoogleAuthProvider())
+      .then(console.log)
+      .catch(console.error);
 
   }
 
@@ -58,10 +60,15 @@ export class AuthenticationService {
 
     return new Promise<boolean>(res => this.route.queryParams.subscribe(pars => {
 
+      if (pars.methode === 'google') {
+        return;
+      }
+
       const code = pars.code;
 
       if (!code) {
         res(false);
+        return;
       }
 
       console.log(code);
