@@ -75,7 +75,7 @@ jobs:
       # run copy_help_messages_to_production_DB.py
       - name: execute py script
         env:
-          FIREBASE_CEVIZH11_MENUPLANUNG: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11_MENUPLANUNG }}
-          FIREBASE_CEVIZH11: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11 }}
+          FIREBASE_SERVICE_ACCOUNT_CEVIZH11_MENUPLANUNG__PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11_MENUPLANUNG__PRIVATE_KEY }}
+          FIREBASE_SERVICE_ACCOUNT_CEVIZH11__PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CEVIZH11__PRIVATE_KEY }}
         run: python ./deployment_scripts/copy_help_messages_to_production_DB.py
 
