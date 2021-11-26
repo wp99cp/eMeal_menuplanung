@@ -9,16 +9,15 @@
     <ng-container *ngIf="meal.usedInCamps.length == 1">
       Diese Mahlzeit wird in einem Lager verwendet (
     </ng-container>
-    
-    <ng-container *ngFor="let c of camps">
-      <a routerLink="/app/camps/{{c.documentId}}"> {{c.name}}</a>
-    </ng-container>
 
-    <ng-container *ngIf="camps.length > 0">
-      und
+    <ng-container *ngFor="let c of camps; let last = last">
+      <a routerLink="/app/camps/{{c.documentId}}"> {{c.name}}
+        <ng-container *ngIf="!last">,</ng-container>
+      </a>
     </ng-container>
 
     <ng-container *ngIf="camps.length !== meal.usedInCamps.length">
+      und
       {{meal.usedInCamps.length - camps.length}} ohne Zugriff
     </ng-container>
 
