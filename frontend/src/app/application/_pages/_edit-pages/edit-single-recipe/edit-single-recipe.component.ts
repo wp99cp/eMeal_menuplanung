@@ -9,6 +9,7 @@ import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRecipeInfoComponent} from '../../../_dialoges/single-recipe-info/single-recipe-info.component';
+import {SettingsService} from '../../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-single-recipe',
@@ -25,7 +26,8 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     private route: ActivatedRoute,
     private dbService: DatabaseService,
     private autosave: AutoSaveService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public settingsService: SettingsService) {
 
     autosave.register(this);
 

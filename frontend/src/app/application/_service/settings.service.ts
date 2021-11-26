@@ -104,6 +104,11 @@ export class SettingsService {
           modified = true;
         }
 
+        if (!settings.hasOwnProperty('default_participants')) {
+          settings.default_participants = 4;
+          modified = true;
+        }
+
         if (modified) {
           this.docRef.set(settings);
         }

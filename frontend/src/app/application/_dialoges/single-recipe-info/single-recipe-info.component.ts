@@ -2,7 +2,8 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Recipe} from '../../_class/recipe';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DatabaseService} from "../../_service/database.service";
+import {DatabaseService} from '../../_service/database.service';
+import {HelpService} from '../../_service/help.service';
 
 @Component({
   selector: 'app-single-recipe-info',
@@ -17,7 +18,11 @@ export class SingleRecipeInfoComponent {
 
   public hasAccess = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private recipe: Recipe, private formBuilder: FormBuilder, db: DatabaseService) {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) private recipe: Recipe,
+    private formBuilder: FormBuilder,
+    db: DatabaseService,
+    public helpService: HelpService) {
 
     this.recipeInfo = this.formBuilder.group({
 

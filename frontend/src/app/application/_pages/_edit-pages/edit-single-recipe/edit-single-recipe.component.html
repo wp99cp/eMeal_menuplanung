@@ -1,6 +1,7 @@
-
 <ng-container *ngIf="(recipe | async) as recipe">
   <span class="big-page-title">Rezept bearbeiten</span>
-  <app-edit-recipe [recipe]="recipe" [participants]="4" (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+  <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" [recipe]="recipe"
+                   [participants]="settings.default_participants"
+                   (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
 </ng-container>
 

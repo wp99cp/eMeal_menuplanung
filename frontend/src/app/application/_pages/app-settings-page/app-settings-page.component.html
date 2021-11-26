@@ -55,6 +55,15 @@
       </select>
     </mat-form-field>
 
+    <p class="info">Rezepte können auch ausserhalb eines Lagers bearbeitet werden. Mit dieser Einstellung kannst du
+      festlegen, für wie viele Personen Rezepte standartmässig berechnet werden.</p>
+
+    <mat-form-field matTooltip="Anzahl Personen für Rezept" class="full-width"
+                    *ngIf="(settings.globalSettings | async) as settings">
+      <input #defaultParticipants matInput placeholder="Anzahl Personen" [value]="settings.default_participants"
+             type="number" (input)="changeDefaultParticipants(defaultParticipants.value)">
+    </mat-form-field>
+
   </article>
 
   <!-- Loading Animation -->

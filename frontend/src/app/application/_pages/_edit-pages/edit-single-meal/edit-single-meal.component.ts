@@ -12,6 +12,7 @@ import {EditRecipeInCampComponent} from '../../../_template/edit-recipe-in-camp/
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
+import {SettingsService} from '../../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-single-meal',
@@ -35,7 +36,8 @@ export class EditSingleMealComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
-    private autosave: AutoSaveService) {
+    private autosave: AutoSaveService,
+    public settingsService: SettingsService) {
 
     autosave.register(this);
 

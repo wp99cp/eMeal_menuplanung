@@ -5,11 +5,12 @@
   <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
     <ng-container *ngFor="let recipe of recipes; let i = index">
-      <app-edit-recipe class="recipe-container" [recipe]="recipe" participants="4"
+      <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" class="recipe-container"
+                       [recipe]="recipe" [participants]="settings.default_participants"
                        (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
     </ng-container>
 
-    <p *ngIf="recipes?.length == 0"> <b>Diese Mahlzeit enthält noch keine Rezepte!</b> <br>
+    <p *ngIf="recipes?.length == 0"><b>Diese Mahlzeit enthält noch keine Rezepte!</b> <br>
       Leider können aktuell in dieser Ansicht noch keine Rezepte hinzugefügt bzw. die Mahlzeit nicht bearbeitet werden.
       Füge die Mahlzeit zu einem Lager hinzu, um sie zu bearbeiten.</p>
 
