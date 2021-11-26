@@ -219,12 +219,15 @@ export class EditRecipeComponent implements OnInit {
       if (inputField) {
         const value = event.clipboardData.getData('Text');
         inputField.value = value;
+        const overlay = document.getElementById(this.recipe.documentId + '-focus-overlay');
+        overlay.style.backgroundColor = 'transparent';
       }
       this.newValue(inputField);
 
     }
 
     event.preventDefault();
+
 
     this.newUnsavedChanges.emit();
     HeaderNavComponent.turnOn('Speichern');
@@ -435,7 +438,7 @@ export class EditRecipeComponent implements OnInit {
       successorElement = successorElement.firstElementChild.nextElementSibling;
 
       this.addIngredientField(successorElement);
-    return;
+      return;
     }
 
     successorElement = successorElement.nextElementSibling;
