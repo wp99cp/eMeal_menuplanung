@@ -111,7 +111,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
           objectName: 'Rezept',
           currentAccess: recipe.getAccessData(),
           documentPath: recipe.path,
-          helpMessageId: 'recipe-authorization-infos',
+          helpMessageId: 'camp-authorization-infos',
           accessLevels: ['editor', 'viewer']
         }
       }).afterClosed())).subscribe();

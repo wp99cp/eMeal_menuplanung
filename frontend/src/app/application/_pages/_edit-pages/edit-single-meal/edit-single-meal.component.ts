@@ -227,7 +227,7 @@ export class EditSingleMealComponent implements OnInit {
           width: '1000px',
           data: {
             objectName: 'Mahlzeit',
-            helpMessageId: 'meal-authorization-infos',
+            helpMessageId: 'camp-authorization-infos',
             currentAccess: meal.getAccessData(),
             documentPath: meal.path,
             accessLevels: ['editor', 'viewer']
