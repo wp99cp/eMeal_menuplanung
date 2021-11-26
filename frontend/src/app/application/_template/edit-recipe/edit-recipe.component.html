@@ -12,7 +12,7 @@
   <p class="used-info" *ngIf="recipe.usedInMeals.length == 1">Rezept wird nur in dieser Mahlzeit verwendet.</p>
   <p class="used-info" *ngIf="recipe.usedInMeals.length == 0">Rezept wird in keiner Mahlzeit verwendet.</p>
 
-  <div class="recipe-table-area" (contextmenu)="contextMenu($event)" id="{{recipe.documentId}}-edit">
+  <div class="recipe-table-area" id="{{recipe.documentId}}-edit">
     <table class="recipe-table" [ngClass]="{'not-editable': !hasAccess}" id="{{recipe.documentId}}"
            *ngIf="(recipe.getIngredients() | async) as ingredients">
 
@@ -33,14 +33,16 @@
       <tr class="ingredient">
         <td class="recipe-table-index-bar ingredient-number" *ngIf="screenSize > 500"
             (click)="markIngredient(ingredient.unique_id)">{{i + 1}}</td>
-        <td class="ingredient-measure-column" *ngIf="screenSize > 800" (click)="setFocus($event.target)">
+        <td class="ingredient-measure-column" *ngIf="screenSize > 800" (click)="setFocus($event.target)"
+            (contextmenu)="setFocus($event.target)">
           <data value="measure">{{ingredient.measure ? Number(ingredient.measure).toFixed(2) : ''}}</data>
         </td>
-        <td class="ingredient-measure-column ingredient-measure-column-calc" (click)="setFocus($event.target)">
+        <td class="ingredient-measure-column ingredient-measure-column-calc" (click)="setFocus($event.target)"
+            (contextmenu)="setFocus($event.target)">
           <data
             value="measure_calc">{{ingredient.measure ? Number(ingredient.measure * participants).toFixed(2) : '' }}</data>
         </td>
-        <td class="ingredient-unit-column" (click)="setFocus($event.target)">
+        <td class="ingredient-unit-column" (click)="setFocus($event.target)" (contextmenu)="setFocus($event.target)">
           <data value="unit">{{ingredient.unit}}</data>
         </td>
         <td class="ingredient-fresh-column" (click)="toggleFresh(ingredient)" *ngIf="screenSize > 500">
@@ -49,10 +51,11 @@
             <mat-icon>check_box_outline_blank</mat-icon>
           </ng-template>
         </td>
-        <td class="ingredient-food-column" (click)="setFocus($event.target)">
+        <td class="ingredient-food-column" (click)="setFocus($event.target)" (contextmenu)="setFocus($event.target)">
           <data value="food">{{ingredient.food}} </data>
         </td>
-        <td class="ingredient-comment-column" *ngIf="screenSize > 600" (click)="setFocus($event.target)">
+        <td class="ingredient-comment-column" *ngIf="screenSize > 600" (click)="setFocus($event.target)"
+            (contextmenu)="setFocus($event.target)">
           <data value="comment">{{ingredient.comment}}</data>
         </td>
         <td class="ingredient-delete-column" *ngIf="screenSize > 500" (click)="deleteIngredient(ingredient.unique_id)">

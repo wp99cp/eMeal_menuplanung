@@ -435,7 +435,7 @@ export class EditRecipeComponent implements OnInit {
       successorElement = successorElement.firstElementChild.nextElementSibling;
 
       this.addIngredientField(successorElement);
-    return;
+      return;
     }
 
     successorElement = successorElement.nextElementSibling;
@@ -544,11 +544,6 @@ export class EditRecipeComponent implements OnInit {
 
   }
 
-  public contextMenu(event) {
-
-    // event.preventDefault();
-
-  }
 
   public unmarkIngredient() {
 
