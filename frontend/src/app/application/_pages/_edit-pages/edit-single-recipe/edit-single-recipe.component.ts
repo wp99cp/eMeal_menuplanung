@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../../../_class/recipe';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {DatabaseService} from '../../../_service/database.service';
 import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.component';
 import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
@@ -25,8 +25,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     private route: ActivatedRoute,
     private dbService: DatabaseService,
     private autosave: AutoSaveService,
-    public dialog: MatDialog,
-    private router: Router) {
+    public dialog: MatDialog) {
 
     autosave.register(this);
 
@@ -110,7 +109,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
           objectName: 'Rezept',
           currentAccess: recipe.getAccessData(),
           documentPath: recipe.path,
-          helpMessageId: 'recipe-authorization-infos',
+          helpMessageId: 'camp-authorization-infos',
           accessLevels: ['editor', 'viewer']
         }
       }).afterClosed())).subscribe();
