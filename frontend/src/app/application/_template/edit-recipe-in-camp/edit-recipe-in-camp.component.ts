@@ -147,9 +147,10 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
 
     this.saveOthers.emit(true);
 
+
     this.specificRecipe.subscribe(specificRecipe => {
 
-      document.getElementById(specificRecipe.documentId).classList.add('hidden');
+      document.getElementById(this.recipe.documentId).classList.add('hidden');
 
       const snackBar = this.snackBar.open('Rezept wurde entfernt.', 'Rückgängig', {duration: 4000});
 

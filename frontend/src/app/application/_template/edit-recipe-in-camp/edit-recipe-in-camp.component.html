@@ -1,6 +1,6 @@
 <ng-container *ngIf="(specificRecipe | async) as specificRecipe">
   <mat-expansion-panel (closed)=" onClose()" (opened)="onExpand()" [expanded]="isOpen" class="mat-expansion-panel"
-    id="{{specificRecipe.documentId}}">
+    id="{{recipe.documentId}}">
 
     <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
 
