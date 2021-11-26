@@ -83,6 +83,7 @@ import {SettingsService} from './_service/settings.service';
 import {ExportSettingsComponent} from './_dialoges/export-settings/export-settings.component';
 import buildInfo from '../../build';
 import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
+import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp/meal-info-without-camp.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +128,8 @@ import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
     EditSingleMealComponent,
     SingleRecipeInfoComponent,
     ExportSettingsComponent,
-    ChangeLogComponent
+    ChangeLogComponent,
+    MealInfoWithoutCampComponent
   ],
   providers: [
     AngularFirestore,
@@ -213,6 +215,7 @@ import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
     CopyRecipeComponent,
     CopyCampComponent,
     HelpComponent,
+    MealInfoWithoutCampComponent,
     FeedbackDialogComponent
   ],
   exports: [

@@ -4,21 +4,37 @@
 
       <span class="big-page-title">{{meal.name}}</span>
 
+
       <div class="meal-infos">
         <p><b>Anzahl Personen:</b>
-          {{calcMealPart(camp.participants, specificMeal.participants, specificMeal.overrideParticipants )}} Per.
+          {{calcMealPart(camp.participants, specificMeal.participants, specificMeal.overrideParticipants)}} Per.
           (Vegis im Lager:
           {{camp.vegetarians}} Per.) </p>
-        <p><b>Verwendung:</b> {{swissDateAdapter.formatLong(specificMeal.date.toDate())}} /
-          {{specificMeal.usedAs}} </p>
+        <p><b>Verwendung:</b> im <a
+          routerLink="../../.."> {{camp.name}}</a> als {{swissDateAdapter.formatLong(specificMeal.date.toDate())}} /
+          {{specificMeal.usedAs}}        </p>
+
+        <ng-container *ngIf="meal.usedInCamps.length > 2">
+          <p><b>Andere Verwendungen: </b>
+            <a routerLink="/app/camps"
+               [queryParams]="{includes: meal.documentId}">{{meal.usedInCamps.length - 1}} Lager</a>
+          </p>
+        </ng-container>
+        <ng-container *ngIf="meal.usedInCamps.length == 2">
+          <p><b>Andere Verwendung: </b>
+            <a routerLink="/app/camps"
+               [queryParams]="{includes: meal.documentId}">ein Lager</a>
+          </p>
+        </ng-container>
       </div>
 
       <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
+
           <app-edit-recipe-in-camp [recipe]="recipe" [specificMeal]="specificMeal" [camp]="camp" [index]="i"
-            [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="meal"
-            (saveOthers)="save(); indexOfOpenedPanel = -1" [showOverwrites]="showOverwirtes">
+                                   [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="meal"
+                                   (saveOthers)="save(); indexOfOpenedPanel = -1" [showOverwrites]="showOverwirtes">
           </app-edit-recipe-in-camp>
         </ng-container>
 
@@ -31,7 +47,6 @@
     </ng-container>
   </ng-container>
 </ng-container>
-
 
 
 <!-- Loading Animation -->

@@ -2,12 +2,56 @@
 
   <span class="big-page-title">{{meal.name}}</span>
 
+  <p *ngIf="meal.usedInCamps.length > 0">
+    <ng-container *ngIf="meal.usedInCamps.length > 1">
+      Diese Mahlzeit wird in {{meal.usedInCamps.length}} Lager verwendet (
+    </ng-container>
+    <ng-container *ngIf="meal.usedInCamps.length == 1">
+      Diese Mahlzeit wird in einem Lager verwendet (
+    </ng-container>
+    
+    <ng-container *ngFor="let c of camps">
+      <a routerLink="/app/camps/{{c.documentId}}"> {{c.name}}</a>
+    </ng-container>
+
+    <ng-container *ngIf="camps.length > 0">
+      und
+    </ng-container>
+
+    <ng-container *ngIf="camps.length !== meal.usedInCamps.length">
+      {{meal.usedInCamps.length - camps.length}} ohne Zugriff
+    </ng-container>
+
+    ).
+  </p>
+
+  <ng-container *ngIf="meal.usedInCamps.length == 0">
+    <p>Diese Mahlzeit wird in in keinem Lager verwendet.</p>
+  </ng-container>
+
+
   <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
     <ng-container *ngFor="let recipe of recipes; let i = index">
-      <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" class="recipe-container"
-                       [recipe]="recipe" [participants]="settings.default_participants"
-                       (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+
+      <mat-expansion-panel class="mat-expansion-panel"
+                           id="{{recipe.documentId}}">
+
+        <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
+          <mat-panel-title>
+            <b>{{recipe.name}}</b>
+          </mat-panel-title>
+          <mat-panel-description class="header-description">
+            {{recipe.description}}
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" class="recipe-container"
+                         [recipe]="recipe" [participants]="settings.default_participants"
+
+                         (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+      </mat-expansion-panel>
     </ng-container>
 
     <p *ngIf="recipes?.length == 0"><b>Diese Mahlzeit enthält noch keine Rezepte!</b> <br>
