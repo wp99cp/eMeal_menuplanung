@@ -5,9 +5,25 @@
   <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
     <ng-container *ngFor="let recipe of recipes; let i = index">
-      <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" class="recipe-container"
-                       [recipe]="recipe" [participants]="settings.default_participants"
-                       (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+
+      <mat-expansion-panel class="mat-expansion-panel"
+                           id="{{recipe.documentId}}">
+
+        <mat-expansion-panel-header [collapsedHeight]="'70px'" [expandedHeight]="'70px'">
+          <mat-panel-title>
+            <b>{{recipe.name}}</b>
+          </mat-panel-title>
+          <mat-panel-description class="header-description">
+            {{recipe.description}}
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <app-edit-recipe *ngIf="(settingsService.globalSettings | async) as settings" class="recipe-container"
+                         [recipe]="recipe" [participants]="settings.default_participants"
+
+                         (newUnsavedChanges)="newUnsavedChanges(recipe)"></app-edit-recipe>
+      </mat-expansion-panel>
     </ng-container>
 
     <p *ngIf="recipes?.length == 0"><b>Diese Mahlzeit enthält noch keine Rezepte!</b> <br>

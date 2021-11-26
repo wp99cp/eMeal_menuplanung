@@ -16,6 +16,7 @@
       <mat-accordion *ngIf="(recipes | async) as recipes; else loadingMeal">
 
         <ng-container *ngFor="let recipe of recipes; let i = index">
+
           <app-edit-recipe-in-camp [recipe]="recipe" [specificMeal]="specificMeal" [camp]="camp" [index]="i"
             [isOpen]="i == indexOfOpenedPanel" (opened)="newOpened($event)" [meal]="meal"
             (saveOthers)="save(); indexOfOpenedPanel = -1" [showOverwrites]="showOverwirtes">
