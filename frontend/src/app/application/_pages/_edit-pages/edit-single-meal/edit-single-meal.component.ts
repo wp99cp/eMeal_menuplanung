@@ -13,6 +13,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
 import {SettingsService} from '../../../_service/settings.service';
 import {MealInfoWithoutCampComponent} from '../../../_dialoges/meal-info-without-camp/meal-info-without-camp.component';
+import {Camp} from '../../../_class/camp';
 
 @Component({
   selector: 'app-edit-single-meal',
@@ -29,6 +30,8 @@ export class EditSingleMealComponent implements OnInit {
 
   private urlPathData: Observable<string[]>;
   private unsavedChanges: { [id: string]: Recipe } = {};
+
+  public camps: Camp[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -131,6 +134,14 @@ export class EditSingleMealComponent implements OnInit {
       name: 'Rezept',
       action: (() => null),
       icon: 'delete'
+    });
+
+    this.meal.subscribe(async meal => {
+
+      const campsPromises = meal.usedInCamps.map(campId =>
+        new Promise(res => this.dbService.getCampById(campId).subscribe(camp => res(camp), err => res(undefined))));
+      this.camps = (await Promise.all(campsPromises) as Camp[]).filter(c => c !== undefined);
+
     });
 
 
