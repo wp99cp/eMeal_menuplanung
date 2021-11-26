@@ -13,10 +13,10 @@
   <ul class="top">
 
     <ng-container *ngIf="lastCamp?.documentId">
-      <h4> Aktuelles Lager </h4>
+      <h4> {{lastCamp.name}} </h4>
       <li routerLink="/app/camps/{{lastCamp.documentId}}" routerLinkActive="active-link">
-        <mat-icon class="nav-icon">nature_people</mat-icon>
-        <a> {{lastCamp.name}} </a>
+        <mat-icon class="nav-icon">edit_calendar</mat-icon>
+        <a> Wochenübersicht </a>
       </li>
     </ng-container>
 

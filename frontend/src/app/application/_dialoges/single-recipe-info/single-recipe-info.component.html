@@ -16,8 +16,10 @@
 
 
 <div mat-dialog-actions class="custom-mat-buttons">
-  <p></p>
+  <p><a (click)="helpService.openHelpPopup('change-default-participants')">Hilfe: Anzahl Personen ändern</a></p>
   <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen </button>
   <button mat-raised-button [disabled]="valueHasChanged || !hasAccess" [mat-dialog-close]="saveValueChanges()"
           color="save">Speichern</button>
+
+
 </div>

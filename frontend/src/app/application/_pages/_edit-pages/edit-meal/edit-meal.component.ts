@@ -120,7 +120,6 @@ export class EditMealComponent implements OnInit, Saveable {
         description: 'Zurück zum ' + camp.name,
         name: camp.name,
         action: (() => this.router.navigate(['../../..'], {relativeTo: this.route})),
-        icon: 'nature_people',
         separatorAfter: true
       }, 0)
     );

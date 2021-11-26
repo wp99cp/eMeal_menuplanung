@@ -1,0 +1,22 @@
+<h2>Informationen zur Mahlzeit</h2>
+
+<form [formGroup]='mealInfo'>
+
+  <h3>Name und Beschreibung</h3>
+  <mat-form-field class="full-width">
+    <input id="titleField" matInput placeholder="Mahlzeit" formControlName="title">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea id="descriptionField" matInput placeholder="Beschreibung" formControlName="description"></textarea>
+  </mat-form-field>
+
+</form>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
+  <button mat-raised-button [disabled]="valueHasChanged" [mat-dialog-close]="saveValueChanges()" color="save">
+    Speichern
+  </button>
+</div>

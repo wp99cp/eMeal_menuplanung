@@ -5,13 +5,15 @@ import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
 import {Meal} from '../../../_class/meal';
 import {Recipe} from '../../../_class/recipe';
-import {MealInfoComponent} from '../../../_dialoges/meal-info/meal-info.component';
 import {AutoSaveService} from '../../../_service/auto-save.service';
 import {DatabaseService} from '../../../_service/database.service';
 import {EditRecipeInCampComponent} from '../../../_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
 import {MatDialog} from '@angular/material/dialog';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
+import {SettingsService} from '../../../_service/settings.service';
+import {MealInfoWithoutCampComponent} from '../../../_dialoges/meal-info-without-camp/meal-info-without-camp.component';
+import {Camp} from '../../../_class/camp';
 
 @Component({
   selector: 'app-edit-single-meal',
@@ -29,13 +31,16 @@ export class EditSingleMealComponent implements OnInit {
   private urlPathData: Observable<string[]>;
   private unsavedChanges: { [id: string]: Recipe } = {};
 
+  public camps: Camp[] = [];
+
   constructor(
     private route: ActivatedRoute,
     public dbService: DatabaseService,
     public dialog: MatDialog,
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
-    private autosave: AutoSaveService) {
+    private autosave: AutoSaveService,
+    public settingsService: SettingsService) {
 
     autosave.register(this);
 
@@ -99,7 +104,7 @@ export class EditSingleMealComponent implements OnInit {
     });
 
     HeaderNavComponent.addToHeaderNav({
-      active: false,
+      active: true,
       description: 'Informationen zur Mahlzeit',
       name: 'Mahlzeit',
       action: (() => this.mealInfoDialog()),
@@ -131,6 +136,14 @@ export class EditSingleMealComponent implements OnInit {
       icon: 'delete'
     });
 
+    this.meal.subscribe(async meal => {
+
+      const campsPromises = meal.usedInCamps.map(campId =>
+        new Promise(res => this.dbService.getCampById(campId).subscribe(camp => res(camp), err => res(undefined))));
+      this.camps = (await Promise.all(campsPromises) as Camp[]).filter(c => c !== undefined);
+
+    });
+
 
   }
 
@@ -144,15 +157,19 @@ export class EditSingleMealComponent implements OnInit {
     this.meal.pipe(take(1)).pipe(mergeMap(meal =>
 
       // Dialog öffnen
-      this.dialog.open(MealInfoComponent, {
+      this.dialog.open(MealInfoWithoutCampComponent, {
         height: '618px',
         width: '1000px',
         data: {meal}
       }).afterClosed()
-    )).subscribe((resp: Meal) => {
+    )).subscribe((meal: Meal) => {
+
+      if (meal === undefined) {
+        return;
+      }
 
       // Speichern der geänderten Daten im Dialog-Fenster
-      this.dbService.updateDocument(resp);
+      this.dbService.updateDocument(meal);
 
     });
 
@@ -225,7 +242,7 @@ export class EditSingleMealComponent implements OnInit {
           width: '1000px',
           data: {
             objectName: 'Mahlzeit',
-            helpMessageId: 'meal-authorization-infos',
+            helpMessageId: 'camp-authorization-infos',
             currentAccess: meal.getAccessData(),
             documentPath: meal.path,
             accessLevels: ['editor', 'viewer']
