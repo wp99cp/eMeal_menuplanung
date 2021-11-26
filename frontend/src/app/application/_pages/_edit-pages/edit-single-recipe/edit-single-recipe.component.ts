@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../../../_class/recipe';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {DatabaseService} from '../../../_service/database.service';
 import {HeaderNavComponent} from '../../../../_template/header-nav/header-nav.component';
 import {AutoSaveService, Saveable} from '../../../_service/auto-save.service';
 import {ShareDialogComponent} from '../../../_dialoges/share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {SingleRecipeInfoComponent} from '../../../_dialoges/single-recipe-info/single-recipe-info.component';
+import {SettingsService} from '../../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-single-recipe',
@@ -26,7 +27,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
     private dbService: DatabaseService,
     private autosave: AutoSaveService,
     public dialog: MatDialog,
-    private router: Router) {
+    public settingsService: SettingsService) {
 
     autosave.register(this);
 
