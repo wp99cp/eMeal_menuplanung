@@ -1,17 +1,15 @@
-
-
-
+/*
 // Used for local testing
 // Execute with the following command: tsc functions/src/importMeal.ts && node functions/src/importMeal.js
 console.log('Launch importMeal...')
 console.log()
-importMeal({url: "https://www.swissmilk.ch/de/rezepte-kochideen/rezepte/SM2020_DIVE_08/linsen-dal-mit-suesskartoffeln-und-joghurt/"})
+importMeal({url: "https://fooby.ch/en/recipes/13305/spring-bean-salad?startAuto1=0"})
     .then(res => {
         console.log(JSON.stringify(res));
         console.log();
         console.log('End importMeal')
     });
-
+*/
 
 export async function importMeal(requestData: { url: string }): Promise<any> {
 
@@ -224,6 +222,24 @@ function parseSwissmilk(document: any): any {
 
             }
 
+            // fix amount / unit if nested into <span>'s
+            if (amount.includes("span")) {
+
+                amount = amount.replace("\n", "");
+
+                const start1 = amount.indexOf("<span><!----><span>") + 19;
+                const end1 = amount.indexOf("</span>", start1);
+
+                const start2 = amount.indexOf("<span> ", end1) + 7;
+                const end2 = amount.indexOf("</span>", start2);
+
+                let substr2 = amount.substring(start2, end2);
+                if (substr2.includes("class="))
+                    substr2 = "";
+                amount = amount.substring(start1, end1) + " " + substr2;
+
+            }
+
             // parse amount
             let unit = '', measure;
             const reg = /[^a-zA-Z]*/
@@ -245,7 +261,8 @@ function parseSwissmilk(document: any): any {
             // parses food string. Normally after a comma follows a description (i.g. the comment)
             const foodAndComment = food.split(',')
             food = foodAndComment[0].trim();
-            const comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
+            const  comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
+            comment.replace(":", " ");
 
             // test for null and calc for 1 person
             measure = measure ? measure / participants : 0;
