@@ -11,7 +11,7 @@
     "hotReload": "npm run build && firebase serve --only functions"
   },
   "engines": {
-    "node": "10"
+    "node": "14"
   },
   "main": "lib/index.js",
   "dependencies": {
