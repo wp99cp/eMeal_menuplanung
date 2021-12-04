@@ -1,5 +1,5 @@
 
-/*
+
 
 // Used for local testing
 // Execute with the following command: tsc functions/src/importMeal.ts && node functions/src/importMeal.js
@@ -11,7 +11,7 @@ importMeal({url: "https://www.swissmilk.ch/de/rezepte-kochideen/rezepte/SM2020_D
         console.log();
         console.log('End importMeal')
     });
-*/
+
 
 export async function importMeal(requestData: { url: string }): Promise<any> {
 
@@ -179,7 +179,7 @@ function parseSwissmilk(document: any): any {
         // Meta Data
         const dom = recipesDom[i];
         const nameElement = dom.querySelector("tr.IngredientsCalculator--group--title > th");
-        const recipeName = nameElement ? nameElement.innerHTML : mealTitle;
+        const recipeName = nameElement ? nameElement.innerHTML.replace(":", "") : mealTitle;
 
         const ingredients = [];
 
