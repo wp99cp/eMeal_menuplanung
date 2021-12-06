@@ -38,6 +38,12 @@ const routes: Routes = [
     canActivate: [AccessGuard]
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./admin-pages/admin-pages.module').then(mod => mod.AdminPagesModule),
+    data: {requiresLogin: true, requiresAdminRights: true, redirectURL: '/app'},
+    canActivate: [AccessGuard]
+  },
+  {
     path: '**',
     component: ErrorPageComponent
   }
