@@ -128,4 +128,11 @@ export class AuthenticationService {
 
   }
 
+
+  async isAdmin(): Promise<boolean> {
+    const currentUser: User = await new Promise(res => this.getCurrentUser().subscribe(r => res(r)));
+    const idTokenResult = await currentUser.getIdTokenResult();
+    return idTokenResult.claims.isAdmin;
+
+  }
 }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
 import {AuthenticationService} from './application/_service/authentication.service';
-import {User} from 'firebase/app';
 
 @Injectable()
 export class AccessGuard implements CanActivate {
@@ -26,10 +25,7 @@ export class AccessGuard implements CanActivate {
 
     if (route.data.requiresAdminRights) {
 
-      const currentUser: User = await new Promise(res => this.auth.getCurrentUser().subscribe(r => res(r)));
-      const idTokenResult = await currentUser.getIdTokenResult();
-
-      if (!idTokenResult.claims.isAdmin) {
+      if (!await this.auth.isAdmin()) {
         return this.router.parseUrl(route.data.redirectURL);
       }
 
