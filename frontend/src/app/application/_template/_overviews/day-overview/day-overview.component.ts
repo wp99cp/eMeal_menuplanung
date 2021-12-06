@@ -136,7 +136,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
       this.specificMealsSubscription.unsubscribe();
     }
 
-    this.specificMealsSubscription = this.specificMeals.pipe(take(1)).subscribe(meals => meals.forEach(meal => {
+    this.specificMealsSubscription = this.specificMeals.subscribe(meals => meals.forEach(meal => {
 
       const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
 
@@ -239,6 +239,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     // Don't update the model, if the meal has not been moved to another location.
     if (event.container === event.previousContainer) {
+      this.setContextMenu();
       return;
     }
 
