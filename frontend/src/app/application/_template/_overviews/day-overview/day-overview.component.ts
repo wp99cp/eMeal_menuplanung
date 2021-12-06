@@ -320,4 +320,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   }
 
+  addMealToUsage(emit: [Day, string]) {
+    this.addMeal.emit(emit as [Day, MealUsage]);
+  }
 }

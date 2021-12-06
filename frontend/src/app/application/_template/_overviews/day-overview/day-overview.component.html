@@ -38,8 +38,12 @@
         </div>
 
         <ng-template #noMeal>
-          <div class="meals no-meal" [attr.data-add-note]="'true'">
-          </div>
+          <div *ngIf="nameOfMeal != 'Vorbereiten'" class="meals no-meal meal-addable clickable" [attr.data-add-note]="'true'"
+               (click)="addMealToUsage([day, nameOfMeal])">
+            <mat-icon class="clickable add_button" matTooltip="Mahlzeit hinzufügen">
+              add_circle_outline
+            </mat-icon>          </div>
+          <div *ngIf="nameOfMeal == 'Vorbereiten'" class="meals no-meal" [attr.data-add-note]="'true'"></div>
         </ng-template>
 
         <!-- No add button visible
