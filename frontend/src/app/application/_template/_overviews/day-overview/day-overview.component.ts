@@ -256,6 +256,8 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
     const mealDateString = event.container.element.nativeElement.parentElement.id;
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
 
+    this.setContextMenu(true);
+
   }
 
 
