@@ -5,11 +5,28 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Day} from '../../_class/day';
 import {SpecificMeal} from '../../_class/specific-meal';
 import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter
+} from '@angular/material-moment-adapter';
+
+import 'moment/locale/de';
 
 @Component({
   selector: 'app-edit-day',
   templateUrl: './edit-day.component.html',
-  styleUrls: ['./edit-day.component.sass']
+  styleUrls: ['./edit-day.component.sass'],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'de-CH'},
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}
+  ]
 })
 export class EditDayComponent implements OnInit {
 
