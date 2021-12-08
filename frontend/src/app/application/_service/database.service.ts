@@ -1043,6 +1043,14 @@ export class DatabaseService {
   }
 
 
+  getFeedbackMessages() {
+    return this.db.collection('/sharedData/feedback/messages',
+      ref => ref.orderBy('date_added', 'desc')).snapshotChanges();
+  }
+
+  resolve_issue(docID: string) {
+    return this.db.doc('/sharedData/feedback/messages/' + docID).delete();
+  }
 }
 
 
