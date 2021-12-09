@@ -10,6 +10,8 @@ import {HelpService} from '../../_service/help.service';
 import {ImportIngredientsComponent} from '../../_dialoges/import-ingredients/import-ingredients.component';
 import {MatDialog} from '@angular/material/dialog';
 import {SettingsService} from '../../_service/settings.service';
+import {take} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -44,6 +46,7 @@ export class EditRecipeComponent implements OnInit {
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
     private dialog: MatDialog,
+    private router: Router,
     public settings: SettingsService,
     private contextMenuService: ContextMenuService,
     private helpService: HelpService) {
@@ -74,8 +77,10 @@ export class EditRecipeComponent implements OnInit {
 
     });
 
-    this.settings.globalSettings.subscribe(settings => {
-      if (settings.experimental_features) {
+    this.settings.globalSettings.pipe(take(1)).subscribe(settings => {
+
+      // Only on single edit page, not inside a camp. At least for the moment
+      if (settings.experimental_features && this.router.url.includes('app/recipes')) {
         HeaderNavComponent.addToHeaderNav({
           active: true,
           description: '(Expermimental) Zutaten aus Excel Importieren',
