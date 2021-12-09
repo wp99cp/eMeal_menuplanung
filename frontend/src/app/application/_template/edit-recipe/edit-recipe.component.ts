@@ -7,6 +7,9 @@ import {OverwritenIngredient} from '../../_class/overwritableIngredient';
 import {Ingredient} from '../../_interfaces/firestoreDatatypes';
 import {ContextMenuNode, ContextMenuService} from '../../_service/context-menu.service';
 import {HelpService} from '../../_service/help.service';
+import {ImportIngredientsComponent} from '../../_dialoges/import-ingredients/import-ingredients.component';
+import {MatDialog} from '@angular/material/dialog';
+import {SettingsService} from '../../_service/settings.service';
 
 @Component({
   selector: 'app-edit-recipe',
@@ -40,6 +43,8 @@ export class EditRecipeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private databaseService: DatabaseService,
+    private dialog: MatDialog,
+    public settings: SettingsService,
     private contextMenuService: ContextMenuService,
     private helpService: HelpService) {
 
@@ -68,6 +73,19 @@ export class EditRecipeComponent implements OnInit {
       this.setAreaOverlay();
 
     });
+
+    this.settings.globalSettings.subscribe(settings => {
+      if (settings.experimental_features) {
+        HeaderNavComponent.addToHeaderNav({
+          active: true,
+          description: '(Expermimental) Zutaten aus Excel Importieren',
+          name: 'Zutaten Importieren',
+          action: (() => this.open_import_dialog()),
+          icon: 'playlist_add'
+        });
+      }
+    });
+
 
     const node: ContextMenuNode = {
       node: document.getElementById(this.recipe.documentId + '-focus-overlay'),
@@ -623,6 +641,26 @@ export class EditRecipeComponent implements OnInit {
     inputField.style.width = (tableElem.getBoundingClientRect().right - tableElem.getBoundingClientRect().left - 10) + 'px';
     inputField.style.height = (tableElem.getBoundingClientRect().bottom - tableElem.getBoundingClientRect().top - 10) + 'px';
 
+  }
+
+  open_import_dialog() {
+
+    this.dialog.open(ImportIngredientsComponent, {
+      height: '800px',
+      width: '550px',
+    }).afterClosed()
+      .subscribe(ings => {
+        if (ings) {
+          (ings as Ingredient[]).forEach(ing => {
+            ing.unique_id = Recipe.createIngredientId(this.recipe.documentId);
+            this.recipe.addIngredient(ing);
+          });
+        }
+
+        this.newUnsavedChanges.emit();
+        HeaderNavComponent.turnOn('Speichern');
+
+      });
   }
 
   private clearField() {

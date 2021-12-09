@@ -109,6 +109,12 @@ export class SettingsService {
           modified = true;
         }
 
+
+        if (!settings.hasOwnProperty('experimental_features')) {
+          settings.experimental_features = true;
+          modified = true;
+        }
+
         if (modified) {
           this.docRef.set(settings);
         }

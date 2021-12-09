@@ -64,6 +64,18 @@
              type="number" (input)="changeDefaultParticipants(defaultParticipants.value)">
     </mat-form-field>
 
+    <p class="info">Experimentelle Funktionen anzeigen (nicht empfohlen). Experimentelle Features sind mit der Farbe
+      Orange gekennzeichnet.</p>
+
+    <mat-form-field appearance="fill" class="full-width" *ngIf="(settings.globalSettings | async) as settings">
+      <mat-label>Experimentelle Funktionen</mat-label>
+      <mat-select #experimental_features [value]="settings.experimental_features"
+                  (selectionChange)="changeExpFeatures(experimental_features.value)">
+        <mat-option [value]="false">Ausblenden</mat-option>
+        <mat-option [value]="true">Anzeigen</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </article>
 
   <!-- Loading Animation -->
