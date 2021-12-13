@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {map} from 'rxjs/operators';
 import {HelpMessage} from '../../application/_service/help.service';
 import {Observable} from 'rxjs';

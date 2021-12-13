@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpComponent} from '../_dialoges/help/help.component';
 import {Router} from '@angular/router';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
 
 export interface HelpMessage {
   title: string;

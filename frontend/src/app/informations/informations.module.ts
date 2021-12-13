@@ -10,7 +10,7 @@ import {ImpressumComponent} from './impressum/impressum.component';
 import {InformationsRoutingModule} from './informations-routing.module';
 import {KontaktComponent} from './kontakt/kontakt.component';
 import {ChangeLogComponent} from './change-log/change-log.component';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {HelpComponent} from './help/help.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";

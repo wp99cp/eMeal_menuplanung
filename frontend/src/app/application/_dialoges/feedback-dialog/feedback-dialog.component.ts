@@ -2,10 +2,11 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TemplateHeaderComponent as Header} from '../../../_template/template-header/template-header.component';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {Router} from '@angular/router';
-import {AngularFirestore} from '@angular/fire/firestore';
-import {firestore} from 'firebase/app';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
+import FieldValue = firebase.firestore.FieldValue;
 
 @Component({
   selector: 'app-feedback-dialog',
@@ -55,7 +56,7 @@ export class FeedbackDialogComponent {
           message: this.feedbackForm.value.feedback,
           title: this.feedbackForm.value.title,
           currentURL: this.router.url,
-          date_added: firestore.FieldValue.serverTimestamp(),
+          date_added: FieldValue.serverTimestamp(),
           access: {[user.uid]: 'owner'}
         }).then(() => {
         this.snackBar.open('Dein Feedback wurde  gesenden!', '', {duration: 2500});

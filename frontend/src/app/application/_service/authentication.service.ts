@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AccessData} from '../_interfaces/firestoreDatatypes';
 import {Location} from '@angular/common';
-import {auth, User} from 'firebase/app';
-
+import firebase from 'firebase/compat/app';
+import auth = firebase.auth;
+import User = firebase.User;
 
 @Injectable({
   providedIn: 'root',
