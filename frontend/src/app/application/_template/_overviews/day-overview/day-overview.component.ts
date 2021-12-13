@@ -237,11 +237,23 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     console.log('mealDroppedAction');
 
+    const mealDropUsage = event.container.element.nativeElement.dataset.mealName
+
     // Don't update the model, if the meal has not been moved to another location.
-    if (event.container === event.previousContainer) {
+    if (event.container === event.previousContainer || mealDropUsage === 'Vorbereiten') {
+
+      if (mealDropUsage === 'Vorbereiten') {
+        this.snackBar
+          .open('Mahlzeit konnte nicht verschoben werden. Erfahre, wie du Mahlzeiten vorbereiten kannst.', 'Hilfe', {duration: 2500})
+          .onAction().subscribe(() => {
+            this.helpService.openHelpPopup('mahlzeit-vorbereiten')
+        });
+      }
+
       this.setContextMenu();
       return;
     }
+
 
     // hide meal at old place
     event.item.element.nativeElement.style.visibility = 'hidden';
