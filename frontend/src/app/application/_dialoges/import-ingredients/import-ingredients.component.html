@@ -3,13 +3,15 @@
 
 <div mat-dialog-content>
 
-  <p>Über dieses Fenster können Zuateten direkt aus einem Excel-File eingefügt werden.</p>
+  <p>Über dieses Fenster können Zutaten direkt aus einem Excel-File eingefügt werden.</p>
 
-  <p>Damit der Import fehlerfei funktioniert, es es wichtig, dass dein Excel folgende drei Spalten hat:
-    Menge pro Person, Einheit, Zutat. Nun kannst du die Zellen anwählen, kopieren und im folgenden Feld einfügen.</p>
+  <p>Damit der Import fehlerfrei funktioniert, es es wichtig, dass dein Excel folgende drei Spalten hat:
+    Menge pro Person, Einheit und Zutat. Nun kannst du die Zellen anwählen, kopieren und im folgenden Feld einfügen.</p>
+
+  <br>
 
   <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Folgende Zutaten werden hinzugefügt;</mat-label>
+    <mat-label>Zutaten hinzufügen:</mat-label>
     <textarea #textAreaElement matInput (input)="parseInput(textAreaElement.value)"></textarea>
   </mat-form-field>
 
