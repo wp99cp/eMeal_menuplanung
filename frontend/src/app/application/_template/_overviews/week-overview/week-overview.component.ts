@@ -1,7 +1,6 @@
 import {SelectionModel} from '@angular/cdk/collections';
 import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {firestore} from 'firebase/app';
 import {combineLatest, Observable, of} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {HeaderNavComponent} from 'src/app/_template/header-nav/header-nav.component';
@@ -15,6 +14,8 @@ import {DatabaseService} from '../../../_service/database.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../../_interfaces/firestoreDatatypes';
 import {DayOverviewComponent} from '../day-overview/day-overview.component';
+import firebase from "firebase/compat/app";
+import Timestamp = firebase.firestore.Timestamp;
 
 /**
  * Week-Overview of a camp: This component renders the week-overview of a camp.
@@ -121,7 +122,7 @@ export class WeekOverviewComponent implements OnInit, Saveable {
   public async drop([specificMeal, usedAs, mealDateAsString]: [SpecificMeal, MealUsage | 'Vorbereiten', string]) {
 
     // update meal date, i.g. move the meal to the correct day
-    specificMeal.date = firestore.Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
+    specificMeal.date = Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
     specificMeal.usedAs = usedAs as MealUsage;
 
     HeaderNavComponent.turnOn('Speichern');
@@ -151,7 +152,7 @@ export class WeekOverviewComponent implements OnInit, Saveable {
 
     // Erstellt einen neuen Tag und fügt diesen hinzu
     const day = new Day({
-      day_date: firestore.Timestamp.fromDate(date),
+      day_date: Timestamp.fromDate(date),
       day_description: '',
       day_notes: ''
     }, this.camp.documentId);

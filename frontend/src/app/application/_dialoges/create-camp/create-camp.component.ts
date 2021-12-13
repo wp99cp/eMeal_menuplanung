@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {firestore} from 'firebase/app';
+import firebase from 'firebase/compat/app';
 import {map} from 'rxjs/operators';
 import {FirestoreObject} from '../../_class/firebaseObject';
 import {DayData, FirestoreCamp} from '../../_interfaces/firestoreDatatypes';
@@ -15,6 +15,7 @@ import {
 } from '@angular/material-moment-adapter';
 
 import 'moment/locale/de';
+import Timestamp = firebase.firestore.Timestamp;
 
 @Component({
   selector: 'app-create-camp',
@@ -80,7 +81,7 @@ export class CreateCampComponent {
       campData.camp_description = this.newCampInfos.value.description;
       campData.camp_year = startDate.toLocaleDateString('de-CH', {year: 'numeric'});
       campData.days = this.getDates(startDate, endDate).map(day => {
-        return {day_date: firestore.Timestamp.fromDate(day), day_description: '', day_notes: ''} as DayData;
+        return {day_date: Timestamp.fromDate(day), day_description: '', day_notes: ''} as DayData;
       });
       campData.camp_participants = this.newCampParticipants.value.participants;
       campData.camp_vegetarians = this.newCampParticipants.value.vegetarians;
