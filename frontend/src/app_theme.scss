@@ -1,0 +1,7 @@
+@import '~@angular/material/theming';
+
+$custom-typography: mat-typography-config(
+  $font-family: 'inherit'
+);
+
+@include mat-core($custom-typography);
