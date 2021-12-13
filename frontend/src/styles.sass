@@ -2,6 +2,8 @@
 @import 'sass/fonts'
 @import 'sass/animations'
 
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap')
+@import 'app_theme'
 
 ///////////////////////////////////////////////////////////////
 // Grundlegende Einstellungen zum Hauptfenster der Applikation
@@ -119,8 +121,7 @@ main
     font: $h1-font
     color: rgb(117, 117, 117)
     display: block
-    font-size: 42.5px
-    font-weight: 400
+    font-weight: 500
     letter-spacing: -0.26554px
     line-height: 53.125px
     margin-top: 28.475px
@@ -130,8 +131,8 @@ main
   h2
     color: rgb(117, 117, 117)
     display: block
-    font-size: 29.75px
-    font-weight: 500
+    font-size: 24px
+    font-weight: 600
     letter-spacing: -0.26554px
     line-height: 37.1875px
     margin: 60px 0 10px
@@ -140,7 +141,7 @@ main
     color: rgb(117, 117, 117)
     display: block
     font-size: 20.4px
-    font-weight: 500
+    font-weight: 600
     line-height: 25px
     letter-spacing: -0.26554px
     line-height: 25.5px
@@ -152,7 +153,7 @@ main
     width: 100%
 
 .iconText, .nav li, .nav-icon-description
-    font-family: "Segoe UI Semibold"
+  font-weight: 500
 
 
 .centered
@@ -196,7 +197,7 @@ a
   color: rgb(150, 191, 16)
   cursor: pointer
   display: inline
-  font-weight: 500
+  font-weight: 600
 
 .cdk-global-scrollblock
   height: 100%
@@ -238,7 +239,6 @@ a
   font-style: italic
   font-size: 1.3rem
   line-height: 1.5rem
-
 
 
 .dotted-box
@@ -301,8 +301,8 @@ a
     margin: 15px !important
 
 .mat-button, .mat-raised-button
-    user-select: none
-    opacity: 0.9
+  user-select: none
+  opacity: 0.9
 
 .mat-button-focus-overlay
   opacity: 0 !important
