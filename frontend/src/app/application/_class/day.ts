@@ -1,9 +1,10 @@
-import { firestore } from 'firebase/app';
-import { Observable } from 'rxjs';
+import firebase from 'firebase/compat/app';
+import {Observable} from 'rxjs';
 
-import { DayData } from '../_interfaces/firestoreDatatypes';
-import { DatabaseService } from '../_service/database.service';
-import { SpecificMeal } from './specific-meal';
+import {DayData} from '../_interfaces/firestoreDatatypes';
+import {DatabaseService} from '../_service/database.service';
+import {SpecificMeal} from './specific-meal';
+import Timestamp = firebase.firestore.Timestamp;
 
 /**
  * Day repräsentiert ein Tag im Lager.
@@ -46,7 +47,6 @@ export class Day {
   }
 
 
-
   /**
    * Ein Tag wird im Normalfall ohne die Mahlzeiten geladen.
    *
@@ -71,9 +71,9 @@ export class Day {
    * Gibt das Datum als Timestamp zurück.
    *
    */
-  public getTimestamp(): firestore.Timestamp {
+  public getTimestamp(): Timestamp {
 
-    return firestore.Timestamp.fromDate(this.dateAsTypeDate);
+    return Timestamp.fromDate(this.dateAsTypeDate);
 
   }
 

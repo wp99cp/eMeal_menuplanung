@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {AuthenticationService} from '../../_service/authentication.service';
 import {TemplateHeaderComponent as Header} from 'src/app/_template/template-header/template-header.component';
-import {User} from 'firebase/app';
 import {HelpService} from '../../_service/help.service';
+import firebase from "firebase/compat/app";
+import User = firebase.User;
 
 /**
  * WelcomPage of the eMeal appliction after signed in.
@@ -31,7 +32,6 @@ export class WelcomPageComponent implements OnInit {
     this.setHeaderInfo();
 
   }
-
 
 
   /** setzt die HeaderInfos für die aktuelle Seite */
