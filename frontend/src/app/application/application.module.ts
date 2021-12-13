@@ -1,11 +1,11 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CommonModule, Location} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {AngularFireModule} from '@angular/fire';
-import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
-import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireFunctionsModule, REGION} from '@angular/fire/functions';
-import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AngularFireModule} from '@angular/fire/compat';
+import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/compat/auth';
+import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireFunctionsModule, REGION} from '@angular/fire/compat/functions';
+import {AngularFireStorageModule} from '@angular/fire/compat/storage';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';

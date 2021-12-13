@@ -1,8 +1,10 @@
 import {AccessData, FirestoreDocument} from '../_interfaces/firestoreDatatypes';
 import {OperatorFunction} from 'rxjs';
-import {Action, DocumentChangeAction, DocumentSnapshot} from '@angular/fire/firestore';
+import {Action, DocumentChangeAction, DocumentSnapshot} from '@angular/fire/compat/firestore';
 import {map} from 'rxjs/operators';
-import {firestore} from 'firebase/app';
+import firebase from "firebase/compat/app";
+import FieldValue = firebase.firestore.FieldValue;
+import Timestamp = firebase.firestore.Timestamp;
 
 export interface ExportableObject {
 
@@ -33,7 +35,7 @@ export abstract class FirestoreObject implements ExportableObject {
   public readonly abstract documentId: string;
   public lastChange: Date;
   private access: AccessData;
-  private readonly dateAdded: firestore.Timestamp;
+  private readonly dateAdded: Timestamp;
 
   /**
    * creates a new FirestoreObject from a FirestoreDocument
@@ -45,9 +47,9 @@ export abstract class FirestoreObject implements ExportableObject {
       throw new Error('Invalid firestore document!');
     }
 
-    this.lastChange = document.date_modified !== null ? (document.date_modified as firestore.Timestamp).toDate() : new Date();
+    this.lastChange = document.date_modified !== null ? (document.date_modified as Timestamp).toDate() : new Date();
 
-    this.dateAdded = document.date_added as firestore.Timestamp;
+    this.dateAdded = document.date_added as Timestamp;
     this.access = document.access;
 
   }
@@ -89,8 +91,8 @@ export abstract class FirestoreObject implements ExportableObject {
   public static exportEmptyDocument(ownerUid: string): FirestoreDocument {
 
     return {
-      date_modified: firestore.FieldValue.serverTimestamp(),
-      date_added: firestore.FieldValue.serverTimestamp(),
+      date_modified: FieldValue.serverTimestamp(),
+      date_added: FieldValue.serverTimestamp(),
       access: {[ownerUid]: 'owner'}
     };
 
@@ -127,7 +129,7 @@ export abstract class FirestoreObject implements ExportableObject {
   public toFirestoreDocument(): FirestoreDocument {
 
     return {
-      date_modified: firestore.FieldValue.serverTimestamp(),
+      date_modified: FieldValue.serverTimestamp(),
       date_added: this.dateAdded,
       access: this.access
     };

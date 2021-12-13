@@ -3,7 +3,7 @@ import {AuthenticationService} from './authentication.service';
 import {map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
 
 /**
  * Settings Service
