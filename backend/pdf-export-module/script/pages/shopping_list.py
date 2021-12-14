@@ -83,23 +83,32 @@ def add_shopping_list(args: Namespace,
     for i, category_name in enumerate(shopping_list.keys()):
         if i > 0:
             doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
-        append_category(category_name, doc, shopping_list, args, include_fresh)
+        append_category_columns(category_name, doc, shopping_list, args, include_fresh)
 
     doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
 
 
-def append_category(category_name, doc, shopping_list, args, include_fresh):
+def append_category_columns(category_name, doc, shopping_list, args, include_fresh):
     with doc.create(MiniPage()):
         doc.append(bold(category_name))
-        with doc.create(Multicols(arguments='3')) as multicols:
-            multicols.append(Command('small'))
 
-            with multicols.create(Itemize(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
-                # space between colums
-                itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
-                itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
+        if int(args.ncols) == 1:
+            append_category(args, category_name, doc, include_fresh, shopping_list)
+            return
 
-                append_ingredients(category_name, shopping_list, itemize, args, include_fresh)
+        n_cols = int(args.ncols) if int(args.ncols) in [1, 2, 3, 4] else 2
+        with doc.create(Multicols(arguments=str(n_cols))):
+            append_category(args, category_name, doc, include_fresh, shopping_list)
+
+
+def append_category(args, category_name, doc, include_fresh, shopping_list):
+    doc.append(Command('small'))
+    with doc.create(Itemize(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
+        # space between colums
+        itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
+        itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
+
+        append_ingredients(category_name, shopping_list, itemize, args, include_fresh)
 
 
 def append_ingredients(category_name, shopping_list, itemize, args, include_fresh):

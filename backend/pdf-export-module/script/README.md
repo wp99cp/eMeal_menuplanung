@@ -16,5 +16,6 @@ Name | arguments | Description
 |  |
 `--spl`| `None` | Includes the shopping list
 `--meals`| `None` | Includes all meals
+`-ncols` | `[1-3]` | Number of columns in shopping list 
 | |
 `--invm`| `None` | Invert order of the ingredients and measurement in the shopping-list. Default "2kg Mehl" or with this flag "Mehl, 2kg".

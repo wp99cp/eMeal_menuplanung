@@ -47,8 +47,6 @@ def prepareMealsForWeekview(camp: Camp, args: Namespace):
             if prepare_date in day_as_dates:
                 day_index = day_as_dates.index(prepare_date)
                 meal_weekview.get('Vorbereiten')[day_index] += \
-                    NoEscape(meal.get('meal_weekview_name') + r" \par \vspace{0.1cm} {\tiny \textit{für " +
-                             (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime("%A") +
                              (meal.get('meal_date') + timedelta(hours=2)).strftime("%A") +
                              r'}} \vspace{0.20cm}  \par ')
 
