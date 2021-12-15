@@ -4,6 +4,7 @@ import string
 import time
 
 import firebase_admin
+from argparse import Namespace
 from firebase_admin import firestore, credentials
 
 from exportData.camp import Camp
@@ -150,11 +151,12 @@ class ShoppingList:
             ing['measure_calc'] = round(ing['measure_calc'], 3)
 
     @classmethod
-    def categorize_ingredients(cls, ingredients):
+    def categorize_ingredients(cls, ingredients, args: Namespace):
         """
 
         This function converts a list of ingredients to a categorised list of ingredients.
 
+        :param args:
         :param ingredients: as a list of dicts
         :return: ingredients categorised as a dict
         """
@@ -187,10 +189,12 @@ class ShoppingList:
             cls.__db.document('sharedData/foodCategories') \
                 .update({'uncategorised': firestore.ArrayUnion(category_unknown)})
 
-        # Merge categories with less than two elements
+
+        # Merge categories with less than args.minNIng elements
+        min_number_of_ings = int(args.minNIng) if int(args.minNIng) else 1
         final_categories = {}
         for cat_names in ingredients_categorized.keys():
-            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= 4:
+            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= min_number_of_ings:
                 if 'Diverses' in final_categories:
                     final_categories['Diverses'].extend(ingredients_categorized[cat_names])
                 else:
@@ -200,7 +204,7 @@ class ShoppingList:
 
         return final_categories
 
-    def create_full_shopping_list(self):
+    def create_full_shopping_list(self, args: Namespace):
         """
 
         Includes all meals to create a full shopping list for the complete camp.
@@ -220,10 +224,10 @@ class ShoppingList:
                     if 'ingredients' in recipe:
                         ingredients += recipe['ingredients']
 
-        self.full_shopping_list = self.finish_shopping_list(ingredients)
+        self.full_shopping_list = self.finish_shopping_list(ingredients, args)
         return self
 
-    def finish_shopping_list(self, ingredients):
+    def finish_shopping_list(self, ingredients, args: Namespace):
 
         # (1) fix spelling mistakes
         if not self.checked_spelling:
@@ -246,12 +250,12 @@ class ShoppingList:
 
         # (3) Sort into categories
         start_time = time.time()
-        full_shopping_list = self.categorize_ingredients(ingredients)
+        full_shopping_list = self.categorize_ingredients(ingredients, args)
         print("--- %s seconds for categorize_ingredients---" % (time.time() - start_time))
 
         return full_shopping_list
 
-    def create_day_shopping_list(self, day):
+    def create_day_shopping_list(self, day, args: Namespace):
 
         # Load meals for that shopping list
         meals = self.get_meals()
@@ -268,7 +272,7 @@ class ShoppingList:
                     if 'ingredients' in recipe:
                         ingredients += recipe['ingredients']
 
-        self.full_shopping_list = self.finish_shopping_list(ingredients)
+        self.full_shopping_list = self.finish_shopping_list(ingredients, args)
         return self
 
     def get_meals(self):

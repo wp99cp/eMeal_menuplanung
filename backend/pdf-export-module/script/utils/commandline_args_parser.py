@@ -23,8 +23,11 @@ def setup_parser():
     parser.add_argument('--wv', help='Includes the weekview', default=False, action='store_true')
     parser.add_argument('--spl', help='Includes the shopping list', default=False, action='store_true')
     parser.add_argument('--meals', help='Includes the meals', default=False, action='store_true')
-    parser.add_argument('--fdbmsg', help='Custom feedback message on the feedback page', default=False)
+    parser.add_argument('--fdbmsg', help='Custom feedback message on the feedback page', default='')
     parser.add_argument('--invm', help='Invert order of the ingredients and measurement in the shopping-list. '
-                                       'Default "2kg Mehl" or with this flag "Mehl, 2kg"', default=False,  action='store_true')
+                                       'Default "2kg Mehl" or with this flag "Mehl, 2kg"',
+                        default=False, action='store_true')
+    parser.add_argument('--ncols', help='Number of columns in shopping list.', default=2)
+    parser.add_argument('--minNIng', help='Minimal number of ingredients per category. If the number of ingredients in a category is below this threshold, they get listed onder "Diverses" in the shopping list.', default=2)
 
     return parser

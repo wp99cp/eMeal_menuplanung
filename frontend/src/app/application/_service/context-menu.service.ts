@@ -4,6 +4,7 @@ export interface ContextMenuEntry {
   icon: string;
   name: string;
   shortCut: string;
+  disabled?: boolean;
   function: (MouseEvent) => void;
 }
 
@@ -110,14 +111,20 @@ export class ContextMenuService {
         if (typeof e === 'object') {
           const entryDiv = document.createElement('div');
           entryDiv.classList.add('entry');
+
+          if (e.disabled)
+            entryDiv.classList.add('disabled');
+
           entryDiv.innerHTML = `<mat-icon class="mat-icon">${e.icon}</mat-icon><span class="context-menu-entry-name">${e.name}</span>`
             + `<span class="context-menu-entry-shortcut">${e.shortCut}</span>`;
 
-          entryDiv.addEventListener('click', () => {
-            console.log('event!');
-            e.function(event);
-            this.closeContextMenu();
-          });
+          if (!e.disabled) {
+            entryDiv.addEventListener('click', () => {
+              console.log('event!');
+              e.function(event);
+              this.closeContextMenu();
+            });
+          }
           innerDiv.appendChild(entryDiv);
 
         } else {

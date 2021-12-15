@@ -11,7 +11,9 @@ from pages.enviroments import Sidewaystable, Landscape
 def weekview_table(doc: Document, camp: Camp, args: Namespace):
     # content for this page
     days = camp.get_days()
-    days = list(map(lambda d: NoEscape((d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y")), days))
+    days = list(map(lambda d: NoEscape(
+        (d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y") +
+        ((r'\par (' + d['day_description'] + ')') if d['day_description'] is not '' else '')), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
@@ -48,7 +50,7 @@ def prepareMealsForWeekview(camp: Camp, args: Namespace):
                 day_index = day_as_dates.index(prepare_date)
                 meal_weekview.get('Vorbereiten')[day_index] += \
                     NoEscape(meal.get('meal_weekview_name') + r" \par \vspace{0.1cm} {\tiny \textit{für " +
-                             (meal.get('meal_prepare_date') + timedelta(hours=2)).strftime("%A") +
+                             (meal.get('meal_date') + timedelta(hours=2)).strftime("%A") +
                              r'}} \vspace{0.20cm}  \par ')
 
     return meal_weekview

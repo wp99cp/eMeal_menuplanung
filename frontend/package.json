@@ -35,7 +35,7 @@
     "cross": "^1.0.0",
     "firebase": "^9.4.0",
     "moment": "^2.29.1",
-    "ngx-markdown": "^13.0.0",
+    "ngx-markdown": "^12.0.0",
     "rxfire": "^6.0.0",
     "rxjs": "^6.6.3",
     "tslib": "^1.14.1",

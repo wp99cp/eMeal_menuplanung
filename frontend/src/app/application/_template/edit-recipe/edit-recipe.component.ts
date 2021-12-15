@@ -185,6 +185,11 @@ export class EditRecipeComponent implements OnInit {
     setTimeout(() => {
       let str = '';
       target.classList.forEach(classStr => str += '.' + classStr);
+
+      // No focus on fresh column
+      if(str.includes("fresh-column"))
+        return;
+
       this.setFocus(target.parentElement.parentElement.previousElementSibling.firstElementChild.querySelector(str));
     }, 20);
 
