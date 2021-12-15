@@ -28,5 +28,6 @@ def setup_parser():
                                        'Default "2kg Mehl" or with this flag "Mehl, 2kg"',
                         default=False, action='store_true')
     parser.add_argument('--ncols', help='Number of columns in shopping list.', default=2)
+    parser.add_argument('--minNIng', help='Minimal number of ingredients per category. If the number of ingredients in a category is below this threshold, they get listed onder "Diverses" in the shopping list.', default=2)
 
     return parser

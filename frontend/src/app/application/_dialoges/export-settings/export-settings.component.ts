@@ -1,4 +1,4 @@
-import {Component, Inject, Injectable, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {HelpService} from '../../_service/help.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
@@ -33,6 +33,7 @@ export class ExportSettingsComponent implements OnInit {
       prepareMeals: true,
       feedbackPage: false,
       nCols: 2,
+      minNIng: 1,
       feedbackMessage: "Rückmeldungen erlauben uns im nächsten Lager noch feineres Essen zu kochen. " +
         "Bewerte die Mahlzeiten mit 1-5 Sternen (1=sehr schlecht, 5=ausgezeichnet). Wir danken für dein Feedback."
     });

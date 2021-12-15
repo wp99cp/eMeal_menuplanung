@@ -20,7 +20,7 @@ def add_shopping_lists(doc: Document, camp: Camp, args: Namespace):
 
 
 def add_day_shopping_list(args: Namespace, doc: Document, shoppingList: ShoppingList, day):
-    shoppingList.create_day_shopping_list(day)
+    shoppingList.create_day_shopping_list(day, args)
 
     date = (day + timedelta(hours=2)).strftime("%A, %d. %b")
 
@@ -34,7 +34,7 @@ def add_day_shopping_list(args: Namespace, doc: Document, shoppingList: Shopping
 
 def add_full_shopping_list(args: Namespace, doc: Document, shoppingList: ShoppingList):
     # create and add full shopping list
-    shoppingList.create_full_shopping_list()
+    shoppingList.create_full_shopping_list(args)
     shopping_list_name = 'Vollständige Lagereinkaufsliste'
     shopping_list_description = 'Dies ist die vollständige Einkaufsliste für das gesamte Lager, d.h., ' \
                                 'in dieser Liste sind alle Zutaten aufgelistet, insbesondere also auch ' \
