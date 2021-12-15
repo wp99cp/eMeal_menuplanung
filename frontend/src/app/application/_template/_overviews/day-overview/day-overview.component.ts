@@ -117,7 +117,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
             icon: 'sticky_note_2',
             name: 'Notiz einfügen',
             shortCut: '',
-            disabled: !(empty as HTMLElement).classList.contains('meal-addable'),
+            disabled: true,
             function: () => {
               this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
             }
