@@ -14,6 +14,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import Timeout = NodeJS.Timeout;
+import {DatabaseService} from "../../../_service/database.service";
 
 @Component({
   selector: 'app-day-overview',
@@ -49,7 +50,8 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
               private router: Router,
               private activeRoute: ActivatedRoute,
               private helpService: HelpService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dbService: DatabaseService) {
   }
 
   ngOnDestroy(): void {
@@ -129,6 +131,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
           }
         ]
       };
+
       this.contextMenuService.addContextMenuNode(node);
 
     });
@@ -165,15 +168,27 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
                 shortCut: '',
                 function: () => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
               },
-              'Separator',
-              {
-                icon: 'help',
-                name: 'Hilfe / Erklärungen',
-                shortCut: 'F1',
-                function: () => this.helpService.openHelpPopup()
-              }
+              'Separator'
             ]
           };
+
+          if (((element as HTMLElement).parentElement.parentElement).classList.contains('Vorbereiten')) {
+            node.contextMenuEntries.push({
+              icon: 'av_timer',
+              name: 'Vorbereiten Löschen',
+              shortCut: '',
+              function: () => this.removePrepareDate(meal)
+            });
+            node.contextMenuEntries.push('Separator');
+          }
+
+          node.contextMenuEntries.push({
+            icon: 'help',
+            name: 'Hilfe / Erklärungen',
+            shortCut: 'F1',
+            function: () => this.helpService.openHelpPopup()
+          });
+
           this.contextMenuService.addContextMenuNode(node);
         }
       });
@@ -247,7 +262,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
         this.snackBar
           .open('Mahlzeit konnte nicht verschoben werden. Erfahre, wie du Mahlzeiten vorbereiten kannst.', 'Hilfe', {duration: 2500})
           .onAction().subscribe(() => {
-            this.helpService.openHelpPopup('mahlzeit-vorbereiten')
+          this.helpService.openHelpPopup('mahlzeit-vorbereiten')
         });
       }
 
@@ -338,5 +353,12 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   addMealToUsage(emit: [Day, string]) {
     this.addMeal.emit(emit as [Day, MealUsage]);
+  }
+
+  private removePrepareDate(meal: SpecificMeal) {
+
+    meal.prepare = false;
+    this.dbService.updateDocument(meal);
+
   }
 }
