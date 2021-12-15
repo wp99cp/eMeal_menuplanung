@@ -30,6 +30,7 @@ export class ExportSettingsComponent implements OnInit {
       invertIngredients: false,
       meals: true,
       weekView: true,
+      weekViewLandscape: false,
       prepareMeals: true,
       feedbackPage: false,
       nCols: 2,
@@ -57,6 +58,10 @@ export class ExportSettingsComponent implements OnInit {
 
     if (this.formGroup.value.invertIngredients) {
       optionalArgs['--invm'] = '';
+    }
+
+    if (this.formGroup.value.weekViewLandscape) {
+      optionalArgs['--lscp'] = '';
     }
 
     if (this.formGroup.value.meals) {
