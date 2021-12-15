@@ -101,7 +101,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     empties.forEach(empty => {
 
-
       const node: ContextMenuNode = {
         node: empty as HTMLElement,
         contextMenuEntries: [
@@ -109,12 +108,14 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
             icon: 'add',
             name: 'Hinzufügen',
             shortCut: '',
+            disabled: !(empty as HTMLElement).classList.contains('meal-addable'),
             function: () => this.addMeal.emit([this.day, empty.parentElement.getAttribute('data-meal-name')])
           },
           {
             icon: 'sticky_note_2',
             name: 'Notiz einfügen',
             shortCut: '',
+            disabled: !(empty as HTMLElement).classList.contains('meal-addable'),
             function: () => {
               this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
             }
