@@ -2,12 +2,59 @@
 
 <div mat-dialog-content>
 
-  <h3>Bestandteile</h3>
+  <p>Der Export ist bereits so konfiguriert, dass du ein fix fertiges Lagerhandbuch erhältst. Für einen schnellen Export
+    klicke also einfach auf den grünen Button "PDF Erstellen". Im Folgenden kannst du aber diverse Einstellungen
+    vornehmen, um das Lagerhandbuch deinen Bedürfnissen anzupassen.</p>
+
   <form class="export-settings" [formGroup]="formGroup">
 
-    <mat-slide-toggle formControlName="weekView" color="primary"> Wochenübersicht</mat-slide-toggle>
-    <mat-slide-toggle formControlName="shoppingList" color="primary"> Einkaufsliste</mat-slide-toggle>
-    <mat-slide-toggle formControlName="meals" color="primary"> Mahlzeiten und Rezepte</mat-slide-toggle>
+    <mat-vertical-stepper>
+      <mat-step optional>
+        <ng-template matStepLabel>Wochenübersicht und Rezepte</ng-template>
+
+        <mat-slide-toggle formControlName="weekView" color="primary">Wochenübersicht im Export integrieren
+        </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="weekViewLandscape" color="primary">Wochenübersicht im Querformat drucken
+        </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="prepareMeals" color="primary">Vorzubereitende Mahlzeiten in der Wochenansicht
+          anzeigen
+        </mat-slide-toggle>
+        <mat-slide-toggle formControlName="meals" color="primary">Mahlzeiten und Rezepte im Export integrieren
+        </mat-slide-toggle>
+
+      </mat-step>
+
+      <mat-step optional>
+        <ng-template matStepLabel>Einkaufslisten</ng-template>
+        <mat-slide-toggle formControlName="shoppingList" color="primary">Einkaufslisten im Export integrieren
+        </mat-slide-toggle>
+        <mat-form-field class="full-width">
+          <input type="number" matInput placeholder="Anzahl Spalten Einkaufsliste" formControlName="nCols"/>
+        </mat-form-field>
+        <mat-form-field class="full-width">
+          <input type="number" matInput
+                 placeholder="Minimale Anzahl Zutaten pro Kategorie (sonst werden Zutaten unter Diverses aufgelistet)"
+                 formControlName="minNIng"/>
+        </mat-form-field>
+        <mat-slide-toggle formControlName="invertIngredients" color="primary">
+          Zutaten invertieren: 1kg Mehl oder Mehl, 1kg
+        </mat-slide-toggle>
+      </mat-step>
+
+      <mat-step optional>
+        <ng-template matStepLabel>Weitere Optionen</ng-template>
+        <mat-slide-toggle formControlName="feedbackPage" color="primary">
+          Seite für Feedback der Teilnehmenden zum Lageressen
+        </mat-slide-toggle>
+
+        <mat-form-field class="full-width">
+          <textarea matInput placeholder="Einleitung Feedback Seite" formControlName="feedbackMessage"></textarea>
+        </mat-form-field>
+      </mat-step>
+
+    </mat-vertical-stepper>
 
   </form>
 

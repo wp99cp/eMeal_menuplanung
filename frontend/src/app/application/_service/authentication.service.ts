@@ -6,7 +6,6 @@ import {map} from 'rxjs/operators';
 import {AccessData} from '../_interfaces/firestoreDatatypes';
 import {Location} from '@angular/common';
 import firebase from 'firebase/compat/app';
-import auth = firebase.auth;
 import User = firebase.User;
 
 @Injectable({
@@ -46,7 +45,7 @@ export class AuthenticationService {
   signInWithGoogle() {
 
     this.location.replaceState('login/oauth-callback?method=google');
-    this.fireAuth.signInWithRedirect(new auth.GoogleAuthProvider())
+    this.fireAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())
       .then(console.log)
       .catch(console.error);
 
