@@ -8,12 +8,14 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from "@angular/material/icon";
+import { FoodCategoriesComponent } from './admin-dashboard/food-categories/food-categories.component';
 
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
     FeedbackMessageOverviewComponent,
+    FoodCategoriesComponent
   ],
   imports: [
     CommonModule,

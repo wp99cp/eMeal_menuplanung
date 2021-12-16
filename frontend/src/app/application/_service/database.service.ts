@@ -1061,6 +1061,14 @@ export class DatabaseService {
   resolve_issue(docID: string) {
     return this.db.doc('/sharedData/feedback/messages/' + docID).delete();
   }
+
+  getUncategorizedFood() {
+    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['uncategorised']));
+  }
+
+  getResentCorrections() {
+    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['resentCorrections']));
+  }
 }
 
 
