@@ -111,7 +111,7 @@ export class SettingsService {
 
 
         if (!settings.hasOwnProperty('experimental_features')) {
-          settings.experimental_features = true;
+          settings.experimental_features = false;
           modified = true;
         }
 
