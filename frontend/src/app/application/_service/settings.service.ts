@@ -3,7 +3,7 @@ import {AuthenticationService} from './authentication.service';
 import {map, mergeMap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
 
 /**
  * Settings Service
@@ -106,6 +106,12 @@ export class SettingsService {
 
         if (!settings.hasOwnProperty('default_participants')) {
           settings.default_participants = 4;
+          modified = true;
+        }
+
+
+        if (!settings.hasOwnProperty('experimental_features')) {
+          settings.experimental_features = true;
           modified = true;
         }
 

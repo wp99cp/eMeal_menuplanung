@@ -4,8 +4,12 @@
 
     <span class="big-page-title">{{camp.name}}</span>
 
-    <p><b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
+
+    <p><b>Beschreibung:</b> {{camp.description}}<br>
+    <b>Anzahl Teilnehmende:</b> {{camp.participants}} Per. (davon Vegis: {{camp.vegetarians}} Per. / davon Leitende:
       {{camp.leaders}} Per.)</p>
+
+
 
     <!-- Week overview  -->
     <app-week-overview [camp]="camp"></app-week-overview>

@@ -1,11 +1,11 @@
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {CommonModule, Location} from '@angular/common';
 import {NgModule} from '@angular/core';
-import {AngularFireModule} from '@angular/fire';
-import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/auth';
-import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireFunctionsModule, REGION} from '@angular/fire/functions';
-import {AngularFireStorageModule} from '@angular/fire/storage';
+import {AngularFireModule} from '@angular/fire/compat';
+import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/compat/auth';
+import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireFunctionsModule, REGION} from '@angular/fire/compat/functions';
+import {AngularFireStorageModule} from '@angular/fire/compat/storage';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
@@ -84,6 +84,9 @@ import {ExportSettingsComponent} from './_dialoges/export-settings/export-settin
 import buildInfo from '../../build';
 import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
 import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp/meal-info-without-camp.component';
+import { NewListElementComponent } from './_template/new-list-element/new-list-element.component';
+import { ImportIngredientsComponent } from './_dialoges/import-ingredients/import-ingredients.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -129,7 +132,9 @@ import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp
     SingleRecipeInfoComponent,
     ExportSettingsComponent,
     ChangeLogComponent,
-    MealInfoWithoutCampComponent
+    MealInfoWithoutCampComponent,
+    NewListElementComponent,
+    ImportIngredientsComponent
   ],
   providers: [
     AngularFirestore,
@@ -190,7 +195,8 @@ import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp
     ReactiveFormsModule,
 
     MarkdownModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSelectModule
   ],
 
   entryComponents: [
@@ -216,7 +222,8 @@ import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp
     CopyCampComponent,
     HelpComponent,
     MealInfoWithoutCampComponent,
-    FeedbackDialogComponent
+    FeedbackDialogComponent,
+    ImportIngredientsComponent
   ],
   exports: [
     MatTableModule,

@@ -3,7 +3,7 @@ import {DatabaseService} from '../_service/database.service';
 import {Camp} from './camp';
 import {ExportableObject, FirestoreObject} from './firebaseObject';
 import {OverwritableIngredient} from './overwritableIngredient';
-import {DocumentReference} from '@angular/fire/firestore';
+import {DocumentReference} from '@angular/fire/compat/firestore';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 export class Recipe extends FirestoreObject implements ExportableObject {

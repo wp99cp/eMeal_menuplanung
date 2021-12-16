@@ -1,17 +1,34 @@
 <h4>Mitarbeiter mit Zugriff</h4>
 
-<div *ngFor="let user of (users | async)" class="user">
+<ng-container *ngIf="(users | async) as users else loading">
+  <div *ngFor="let user of users" class="user">
 
-  <span> {{user.displayName}} ({{user.email}})</span>
-  <mat-form-field matTooltip="wähle Verwendung"class="ruleField">
-    <select matNativeControl #select (input)="userList[user.uid] = select.value" [disabled]="userList[user.uid] == 'owner'">
-      <option value="viewer" [selected]="userList[user.uid] == 'viewer'" *ngIf="accessLevels.includes('viewer') || userList[user.uid] == 'viewer'"> Leser</option>
-      <option value="collaborator" [selected]="userList[user.uid] == 'collaborator'" *ngIf="accessLevels.includes('collaborator') || userList[user.uid] == 'collaborator'"> Mitarbeiter</option>
-      <option value="editor" [selected]="userList[user.uid] == 'editor'" *ngIf="accessLevels.includes('editor') || userList[user.uid] == 'editor'"> Administrator</option>
-      <option value="owner" [selected]="userList[user.uid] == 'owner'" *ngIf="accessLevels.includes('owner') || userList[user.uid] == 'owner'"> Besitzer</option>
-    </select>
-  </mat-form-field>
+    <span> {{user.displayName}} ({{user.email}})</span>
+    <mat-form-field matTooltip="wähle Verwendung" class="ruleField">
+      <select matNativeControl #select (input)="userList[user.uid] = select.value"
+              [disabled]="userList[user.uid] == 'owner'">
+        <option value="viewer" [selected]="userList[user.uid] == 'viewer'"
+                *ngIf="accessLevels.includes('viewer') || userList[user.uid] == 'viewer'"> Leser
+        </option>
+        <option value="collaborator" [selected]="userList[user.uid] == 'collaborator'"
+                *ngIf="accessLevels.includes('collaborator') || userList[user.uid] == 'collaborator'"> Mitarbeiter
+        </option>
+        <option value="editor" [selected]="userList[user.uid] == 'editor'"
+                *ngIf="accessLevels.includes('editor') || userList[user.uid] == 'editor'"> Administrator
+        </option>
+        <option value="owner" [selected]="userList[user.uid] == 'owner'"
+                *ngIf="accessLevels.includes('owner') || userList[user.uid] == 'owner'"> Besitzer
+        </option>
+      </select>
+    </mat-form-field>
 
-  <mat-icon class="delete-icon" [ngClass]="{'deactive': userList[user.uid] == 'owner'}" (click)="remove(user)">delete</mat-icon>
+    <mat-icon class="delete-icon" [ngClass]="{'deactive': userList[user.uid] == 'owner'}" (click)="remove(user)">
+      delete
+    </mat-icon>
 
-</div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <mat-progress-bar mode="query"></mat-progress-bar>
+</ng-template>

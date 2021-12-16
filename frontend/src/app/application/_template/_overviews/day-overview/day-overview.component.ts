@@ -14,6 +14,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import Timeout = NodeJS.Timeout;
+import {DatabaseService} from "../../../_service/database.service";
 
 @Component({
   selector: 'app-day-overview',
@@ -49,7 +50,8 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
               private router: Router,
               private activeRoute: ActivatedRoute,
               private helpService: HelpService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dbService: DatabaseService) {
   }
 
   ngOnDestroy(): void {
@@ -101,7 +103,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     empties.forEach(empty => {
 
-
       const node: ContextMenuNode = {
         node: empty as HTMLElement,
         contextMenuEntries: [
@@ -109,12 +110,14 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
             icon: 'add',
             name: 'Hinzufügen',
             shortCut: '',
+            disabled: !(empty as HTMLElement).classList.contains('meal-addable'),
             function: () => this.addMeal.emit([this.day, empty.parentElement.getAttribute('data-meal-name')])
           },
           {
             icon: 'sticky_note_2',
             name: 'Notiz einfügen',
             shortCut: '',
+            disabled: true,
             function: () => {
               this.snackBar.open('Notizen können zur Zeit nicht hinzugefügt werden!', '', {duration: 2000});
             }
@@ -128,6 +131,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
           }
         ]
       };
+
       this.contextMenuService.addContextMenuNode(node);
 
     });
@@ -136,7 +140,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
       this.specificMealsSubscription.unsubscribe();
     }
 
-    this.specificMealsSubscription = this.specificMeals.pipe(take(1)).subscribe(meals => meals.forEach(meal => {
+    this.specificMealsSubscription = this.specificMeals.subscribe(meals => meals.forEach(meal => {
 
       const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
 
@@ -164,15 +168,27 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
                 shortCut: '',
                 function: () => this.mealDeleted.emit([meal.getMealId(), meal.documentId])
               },
-              'Separator',
-              {
-                icon: 'help',
-                name: 'Hilfe / Erklärungen',
-                shortCut: 'F1',
-                function: () => this.helpService.openHelpPopup()
-              }
+              'Separator'
             ]
           };
+
+          if (((element as HTMLElement).parentElement.parentElement).classList.contains('Vorbereiten')) {
+            node.contextMenuEntries.push({
+              icon: 'av_timer',
+              name: 'Vorbereiten Löschen',
+              shortCut: '',
+              function: () => this.removePrepareDate(meal)
+            });
+            node.contextMenuEntries.push('Separator');
+          }
+
+          node.contextMenuEntries.push({
+            icon: 'help',
+            name: 'Hilfe / Erklärungen',
+            shortCut: 'F1',
+            function: () => this.helpService.openHelpPopup()
+          });
+
           this.contextMenuService.addContextMenuNode(node);
         }
       });
@@ -237,10 +253,23 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     console.log('mealDroppedAction');
 
+    const mealDropUsage = event.container.element.nativeElement.dataset.mealName
+
     // Don't update the model, if the meal has not been moved to another location.
-    if (event.container === event.previousContainer) {
+    if (event.container === event.previousContainer || mealDropUsage === 'Vorbereiten') {
+
+      if (mealDropUsage === 'Vorbereiten') {
+        this.snackBar
+          .open('Mahlzeit konnte nicht verschoben werden. Erfahre, wie du Mahlzeiten vorbereiten kannst.', 'Hilfe', {duration: 2500})
+          .onAction().subscribe(() => {
+          this.helpService.openHelpPopup('mahlzeit-vorbereiten')
+        });
+      }
+
+      this.setContextMenu();
       return;
     }
+
 
     // hide meal at old place
     event.item.element.nativeElement.style.visibility = 'hidden';
@@ -255,6 +284,8 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
       event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
     const mealDateString = event.container.element.nativeElement.parentElement.id;
     this.mealDropped.emit([meal, mealUsage, mealDateString]);
+
+    this.setContextMenu(true);
 
   }
 
@@ -320,4 +351,14 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   }
 
+  addMealToUsage(emit: [Day, string]) {
+    this.addMeal.emit(emit as [Day, MealUsage]);
+  }
+
+  private removePrepareDate(meal: SpecificMeal) {
+
+    meal.prepare = false;
+    this.dbService.updateDocument(meal);
+
+  }
 }

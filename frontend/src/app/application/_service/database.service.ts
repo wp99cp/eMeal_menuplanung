@@ -1,8 +1,14 @@
 import {Injectable} from '@angular/core';
-import {Action, AngularFirestore, DocumentChangeAction, DocumentSnapshot, QueryFn} from '@angular/fire/firestore';
-import {AngularFireFunctions} from '@angular/fire/functions';
-import {AngularFireStorage} from '@angular/fire/storage';
-import {firestore} from 'firebase/app';
+import {
+  Action,
+  AngularFirestore,
+  DocumentChangeAction,
+  DocumentReference,
+  DocumentSnapshot, FieldPath, Query,
+  QueryFn
+} from '@angular/fire/compat/firestore';
+import {AngularFireFunctions} from '@angular/fire/compat/functions';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
 import {combineLatest, EMPTY, forkJoin, Observable, of, OperatorFunction, Subject} from 'rxjs';
 import {catchError, delay, filter, map, mergeMap, retryWhen, skip, take, takeUntil} from 'rxjs/operators';
 import {Camp} from '../_class/camp';
@@ -28,6 +34,10 @@ import {AuthenticationService} from './authentication.service';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {SettingsService} from './settings.service';
 import {environment} from '../../../environments/environment';
+import firebase from "firebase/compat/app";
+import FieldValue = firebase.firestore.FieldValue;
+import WhereFilterOp = firebase.firestore.WhereFilterOp;
+import Timestamp = firebase.firestore.Timestamp;
 
 
 /**
@@ -219,7 +229,7 @@ export class DatabaseService {
     const batch = this.db.firestore.batch();
 
     batch.update(this.db.doc('recipes/' + recipeId).ref, {
-      used_in_meals: firestore.FieldValue.arrayRemove(mealId)
+      used_in_meals: FieldValue.arrayRemove(mealId)
     });
 
     return new Promise<void>(resolve => {
@@ -256,7 +266,7 @@ export class DatabaseService {
    * Achtung: benötigt einen Zusammengesetzten-Index
    *
    */
-  public getSpecificMeals(campId: string, dayTimestamp: firestore.Timestamp): Observable<SpecificMeal[]> {
+  public getSpecificMeals(campId: string, dayTimestamp: Timestamp): Observable<SpecificMeal[]> {
 
     const queryFn = this.createQuery(
       ['used_in_camp', '==', campId],
@@ -319,7 +329,7 @@ export class DatabaseService {
       .pipe(mergeMap(query =>
         this.db.collection('recipes', query).get()
       )).subscribe(docRefs => docRefs.docs.forEach(doc =>
-      doc.ref.update({used_in_meals: firestore.FieldValue.arrayUnion(idToAdd)})
+      doc.ref.update({used_in_meals: FieldValue.arrayUnion(idToAdd)})
     ));
 
   }
@@ -338,7 +348,7 @@ export class DatabaseService {
     await recipe.createSpecificRecipe(camp, recipe.documentId, mealId, specificId, this);
 
     return this.db.doc('recipes/' + recipe.documentId)
-      .update({used_in_meals: firestore.FieldValue.arrayUnion(mealId)});
+      .update({used_in_meals: FieldValue.arrayUnion(mealId)});
 
   }
 
@@ -650,7 +660,7 @@ export class DatabaseService {
    * Creates of an element. And clears all access data.
    *
    */
-  public createCopy(firebaseObject: FirestoreObject, id?: string): Promise<firestore.DocumentReference> {
+  public createCopy(firebaseObject: FirestoreObject, id?: string): Promise<DocumentReference> {
 
     return new Promise((resolve) =>
       this.authService.getCurrentUser().subscribe(async user => {
@@ -699,7 +709,7 @@ export class DatabaseService {
    *
    */
   public async addDocument(firebaseDocument: FirestoreDocument, collectionPath: string, documentId?: string):
-    Promise<firebase.firestore.DocumentReference> {
+    Promise<DocumentReference> {
 
 
     if (documentId === undefined) {
@@ -832,7 +842,7 @@ export class DatabaseService {
       this.db.collection('recipes', query).get()))
       .pipe(take(1))
       .subscribe(docRefs => docRefs.docs.forEach(doc =>
-        doc.ref.update({used_in_meals: firestore.FieldValue.arrayRemove(mealId)})
+        doc.ref.update({used_in_meals: FieldValue.arrayRemove(mealId)})
       ));
 
   }
@@ -968,7 +978,7 @@ export class DatabaseService {
   }
 
   /** creates a query function for access restriction (using the currentUser) */
-  private createAccessQueryFn(accessRights: string[], ...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): Observable<QueryFn> {
+  private createAccessQueryFn(accessRights: string[], ...queries: [string | FieldPath, WhereFilterOp, any][]): Observable<QueryFn> {
 
     return this.authService.getCurrentUser().pipe(map(user =>
 
@@ -983,7 +993,7 @@ export class DatabaseService {
 
   }
 
-  private createQuery(...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]): QueryFn {
+  private createQuery(...queries: [string | FieldPath, WhereFilterOp, any][]): QueryFn {
 
     return (collRef => {
 
@@ -993,7 +1003,7 @@ export class DatabaseService {
 
   }
 
-  private createQueryFn(query: firestore.Query, ...queries: [string | firestore.FieldPath, firestore.WhereFilterOp, any][]) {
+  private createQueryFn(query: Query, ...queries: [string | FieldPath, WhereFilterOp, any][]) {
 
     queries.forEach(queryCond => {
       query = query.where(queryCond[0], queryCond[1], queryCond[2]);
@@ -1032,7 +1042,7 @@ export class DatabaseService {
           .subscribe(docs => {
             console.log(docs.docs)
             if (docs.docs.length > 0) {
-              docs.docs[0].ref.update({used_in_meals: firestore.FieldValue.arrayUnion(newMealId)});
+              docs.docs[0].ref.update({used_in_meals: FieldValue.arrayUnion(newMealId)});
             } else {
               this.createCopy(recipe, newMealId);
             }
@@ -1043,6 +1053,22 @@ export class DatabaseService {
   }
 
 
+  getFeedbackMessages() {
+    return this.db.collection('/sharedData/feedback/messages',
+      ref => ref.orderBy('date_added', 'desc')).snapshotChanges();
+  }
+
+  resolve_issue(docID: string) {
+    return this.db.doc('/sharedData/feedback/messages/' + docID).delete();
+  }
+
+  getUncategorizedFood() {
+    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['uncategorised']));
+  }
+
+  getResentCorrections() {
+    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['resentCorrections']));
+  }
 }
 
 

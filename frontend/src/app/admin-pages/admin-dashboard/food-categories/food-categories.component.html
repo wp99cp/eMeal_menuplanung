@@ -1,0 +1,19 @@
+<h3>Ingredients with associated Categories</h3>
+<p><a href="https://docs.google.com/spreadsheets/u/1/d/1wsSIxBE1xw4uigsTjU70526XBfWlZfBFd8hKmwsCTBQ/edit#gid=0">
+  <mat-icon>launch</mat-icon>
+  Google Docs</a></p>
+
+
+<h3>Uncategorized Food</h3>
+<ng-container *ngIf="(uncategorizedFood | async) as uncategorizedFood">
+  <p>
+    <ng-container *ngFor="let food of uncategorizedFood">{{food}},&nbsp;</ng-container>
+  </p>
+</ng-container>
+
+<h3>Resent Corrections</h3>
+<ng-container *ngIf="(corrections | async) as corrections">
+  <p *ngFor="let corr of corrections">{{corr.from}} -> {{corr.to}} </p>
+</ng-container>
+
+

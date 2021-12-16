@@ -30,7 +30,14 @@ class SpellingCorrector:
         Most probable spelling correction for word.
         """
 
-        return max(self._candidates(word), key=self._P)
+        new_word = max(self._candidates(word), key=self._P)
+
+        if new_word != word:
+            self.__db.document('sharedData/foodCategories').set(
+                {"resentCorrections": [{"from": word, "to": new_word}]},
+                merge=True)
+
+        return new_word
 
     def _candidates(self, word):
         """

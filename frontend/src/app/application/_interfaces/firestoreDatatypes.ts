@@ -1,4 +1,6 @@
-import {firestore} from 'firebase/app';
+import firebase from 'firebase/compat/app';
+import Timestamp = firebase.firestore.Timestamp;
+import FieldValue = firebase.firestore.FieldValue;
 
 /**
  * Das AccessData Object regelt die Zugriffsberechtigung auf ein
@@ -33,8 +35,8 @@ export interface AccessData {
 export interface FirestoreDocument {
 
   access: AccessData;
-  date_added: firestore.Timestamp | firestore.FieldValue;
-  date_modified: firestore.Timestamp | firestore.FieldValue;
+  date_added: Timestamp | FieldValue;
+  date_modified: Timestamp | FieldValue;
 
 }
 
@@ -46,7 +48,7 @@ export interface FirestoreDocument {
  */
 export interface DayData {
 
-  day_date: firestore.Timestamp;
+  day_date: Timestamp;
   day_description: string;
   day_notes: string;
 
@@ -74,6 +76,7 @@ export interface FirestoreSettings {
   last_shown_changelog: string;
   show_templates: boolean;
   default_participants: number;
+  experimental_features: boolean;
 }
 
 
@@ -145,8 +148,8 @@ export interface FirestoreSpecificMeal extends FirestoreDocument {
   meal_weekview_name: string;
 
   meal_gets_prepared: boolean;
-  meal_prepare_date: firestore.Timestamp;
-  meal_date: firestore.Timestamp;
+  meal_prepare_date: Timestamp;
+  meal_date: Timestamp;
 
   used_in_camp: string;
   meal_id: string;
