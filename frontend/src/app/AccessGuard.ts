@@ -23,6 +23,15 @@ export class AccessGuard implements CanActivate {
       return this.router.parseUrl(route.data.redirectURL);
     }
 
+    if (route.data.requiresAdminRights) {
+
+      if (!await this.auth.isAdmin()) {
+        return this.router.parseUrl(route.data.redirectURL);
+      }
+
+    }
+
+
     return true;
 
   }

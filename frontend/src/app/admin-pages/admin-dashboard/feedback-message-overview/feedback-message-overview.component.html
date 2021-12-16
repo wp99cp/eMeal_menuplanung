@@ -1,0 +1,27 @@
+<h3>Feedback Messages</h3>
+<mat-accordion>
+
+  <mat-expansion-panel hideToggle *ngFor="let feedback of (feedbackMessages | async)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{feedback.title}}
+      </mat-panel-title>
+      <mat-panel-description>
+        <p>{{swissDateAdapter.format_time(feedback.date_added.toDate())}}</p>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <p>
+      <b>Name: </b> {{feedback.displayName}}: (<a href="mailto:{{feedback.email}}">{{feedback.uid}}</a>)<br>
+      <b>URL: </b>{{feedback.currentURL}}<br>
+    </p>
+
+    <p><b>Message: </b>{{feedback.message}}</p>
+
+    <div class="action-panel">
+      <button mat-stroked-button disabled>Link GitHub Issue</button>
+      <button mat-stroked-button (click)="resolve_issue(feedback.id)">Resolve Issue</button>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

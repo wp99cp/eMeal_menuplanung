@@ -63,6 +63,12 @@
       <mat-icon class="nav-icon">settings</mat-icon>
       <a matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a>
     </li>
+
+    <li routerLink="/app/admin" routerLinkActive="active-link" *ngIf="isAdmin">
+      <mat-icon class="nav-icon">dashboard</mat-icon>
+      <a>Admin Dashboard</a>
+    </li>
+
     <li routerLink="/">
       <mat-icon class="nav-icon">logout</mat-icon>
       <a (click)="signOut()">Abmelden</a>

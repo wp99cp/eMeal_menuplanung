@@ -18,7 +18,7 @@ export class MainMenuComponent implements OnInit {
 
 
   public lastCamp: Camp;
-
+  public isAdmin = false;
   public isSignedIn = false;
 
   constructor(private router: Router,
@@ -34,6 +34,7 @@ export class MainMenuComponent implements OnInit {
       this.lastCamp = camp;
     });
 
+
   }
 
   async ngOnInit(): Promise<void> {
@@ -43,6 +44,7 @@ export class MainMenuComponent implements OnInit {
       this.isSignedIn = res;
     });
 
+    this.auth.isAdmin().then(adminState => this.isAdmin = adminState);
 
   }
 
