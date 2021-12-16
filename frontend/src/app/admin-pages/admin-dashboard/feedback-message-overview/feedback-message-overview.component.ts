@@ -5,11 +5,11 @@ import {Observable} from 'rxjs';
 import {SwissDateAdapter} from '../../../utils/format-datapicker';
 
 @Component({
-  selector: 'app-help-message-overview',
-  templateUrl: './help-message-overview.component.html',
-  styleUrls: ['./help-message-overview.component.sass']
+  selector: 'app-feedback-message-overview',
+  templateUrl: './feedback-message-overview.component.html',
+  styleUrls: ['./feedback-message-overview.component.sass']
 })
-export class HelpMessageOverviewComponent implements OnInit {
+export class FeedbackMessageOverviewComponent implements OnInit {
 
   public feedbackMessages: Observable<any>;
 
