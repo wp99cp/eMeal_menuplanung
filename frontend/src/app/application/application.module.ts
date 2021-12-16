@@ -85,6 +85,8 @@ import buildInfo from '../../build';
 import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
 import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp/meal-info-without-camp.component';
 import { NewListElementComponent } from './_template/new-list-element/new-list-element.component';
+import { ImportIngredientsComponent } from './_dialoges/import-ingredients/import-ingredients.component';
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -131,7 +133,8 @@ import { NewListElementComponent } from './_template/new-list-element/new-list-e
     ExportSettingsComponent,
     ChangeLogComponent,
     MealInfoWithoutCampComponent,
-    NewListElementComponent
+    NewListElementComponent,
+    ImportIngredientsComponent
   ],
   providers: [
     AngularFirestore,
@@ -192,7 +195,8 @@ import { NewListElementComponent } from './_template/new-list-element/new-list-e
     ReactiveFormsModule,
 
     MarkdownModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSelectModule
   ],
 
   entryComponents: [
@@ -218,7 +222,8 @@ import { NewListElementComponent } from './_template/new-list-element/new-list-e
     CopyCampComponent,
     HelpComponent,
     MealInfoWithoutCampComponent,
-    FeedbackDialogComponent
+    FeedbackDialogComponent,
+    ImportIngredientsComponent
   ],
   exports: [
     MatTableModule,

@@ -76,6 +76,7 @@ export interface FirestoreSettings {
   last_shown_changelog: string;
   show_templates: boolean;
   default_participants: number;
+  experimental_features: boolean;
 }
 
 
