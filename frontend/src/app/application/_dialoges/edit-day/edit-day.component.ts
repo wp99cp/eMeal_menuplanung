@@ -13,6 +13,7 @@ import {
 } from '@angular/material-moment-adapter';
 
 import 'moment/locale/de';
+import {Moment} from "moment";
 
 @Component({
   selector: 'app-edit-day',
@@ -59,21 +60,21 @@ export class EditDayComponent implements OnInit {
    * Mahlzeiten können nur mind. ein Tag vorhher vorbereitet werden.
    *
    */
-  public dateFilter = (d: Date | null): boolean => {
+  public dateFilter = (d: Moment | null): boolean => {
 
     if (d === null) {
       return;
     }
 
-    const withSameDate = this.data.days.filter(day => day.dateAsTypeDate.getTime() === d.getTime());
-    return withSameDate.length === 0 || d.getTime() === this.currentDate.getTime();
+    const withSameDate = this.data.days.filter(day => day.dateAsTypeDate?.getDate() === d.toDate().getDate());
+    return withSameDate.length === 0 || d.date() === this.currentDate.getDate();
 
   }
 
 
   saveDayData() {
 
-    this.data.day.dateAsTypeDate = this.dayInfo.value.date;
+    this.data.day.dateAsTypeDate = this.dayInfo.value.date.toDate();
     this.data.day.description = this.dayInfo.value.description;
     this.data.day.notes = this.dayInfo.value.notes;
 
