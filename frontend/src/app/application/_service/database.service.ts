@@ -4,7 +4,9 @@ import {
   AngularFirestore,
   DocumentChangeAction,
   DocumentReference,
-  DocumentSnapshot, FieldPath, Query,
+  DocumentSnapshot,
+  FieldPath,
+  Query,
   QueryFn
 } from '@angular/fire/compat/firestore';
 import {AngularFireFunctions} from '@angular/fire/compat/functions';
@@ -31,7 +33,7 @@ import {
   Ingredient
 } from '../_interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, Params, Router} from '@angular/router';
 import {SettingsService} from './settings.service';
 import {environment} from '../../../environments/environment';
 import firebase from "firebase/compat/app";
@@ -537,22 +539,35 @@ export class DatabaseService {
    * @returns observable list of all accessable meals (includes viewer access)
    *
    */
-  public getAccessableRecipes(): Observable<Recipe[]> {
+  public getAccessableRecipes(params: Observable<Params>): Observable<Recipe[]> {
 
-    return this.settings.globalSettings
-      .pipe(take(1)) // only apply current settings
-      .pipe(mergeMap(settings => {
+    return combineLatest([this.settings.globalSettings.pipe(take(1)), params])
+      .pipe(mergeMap(([settings, params]: [FirestoreSettings, Params]) => {
 
         const accessLevels = settings.show_templates ?
           ['editor', 'owner', 'collaborator', 'viewer'] :
           ['editor', 'owner', 'collaborator'];
 
-        const recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
-          .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
-          .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+        const onlyTemplates = params?.vorlagen && params['vorlagen'] == '1';
+
+        let recipesCreatedByUsers = of([]);
+
+        // Load Recipes of the user (if not only templates should be loaded).
+        if (!onlyTemplates) {
+          recipesCreatedByUsers = this.createAccessQueryFn(accessLevels)
+            .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+            .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+        }
+
+        // if param 'vorlagen' is active, then templates will be loaded regardless the show_templates settings
+        else {
+          recipesCreatedByUsers = this.createAccessQueryFn(['viewer'])
+            .pipe(mergeMap(queryFn => this.requestCollection('recipes', queryFn)))
+            .pipe(FirestoreObject.createObjects<FirestoreRecipe, Recipe>(Recipe));
+        }
 
         // return only recipes created by the user; exclude templates and read only recipes
-        if (!settings.show_templates) {
+        if (!settings.show_templates && !onlyTemplates) {
           return recipesCreatedByUsers;
         }
 

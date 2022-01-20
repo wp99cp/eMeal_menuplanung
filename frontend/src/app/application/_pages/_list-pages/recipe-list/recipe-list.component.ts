@@ -9,8 +9,7 @@ import {DatabaseService} from '../../../_service/database.service';
 import {TileListPage} from '../../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../../../_service/help.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -23,10 +22,10 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
   constructor(
     private dbService: DatabaseService,
     private snackBar: MatSnackBar,
+    public route: ActivatedRoute,
     dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog);
-
+    super(dbService, snackBar, dbService.getAccessableRecipes(route.queryParams), dialog);
 
 
     // set filter for searching
