@@ -1,10 +1,10 @@
 import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {SwissDateAdapter} from 'src/app/utils/format-datapicker';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn} from '@angular/forms';
 
 import {SpecificMeal} from '../../_class/specific-meal';
 import {Day} from '../../_class/day';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {HelpService} from "../../_service/help.service";
 
 @Component({
   selector: 'app-meal-prepare',
@@ -14,83 +14,69 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 export class MealPrepareComponent {
 
   public prepareForm: FormGroup;
-  public specificMeal: SpecificMeal;
-  public valueHasNotChanged = true;
+  public dataHasNotChanged = true;
+  public readonly dayBeforeDate: Date | undefined;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: { specificMeal: SpecificMeal, days: Day[] },
-    public swissDateAdapter: SwissDateAdapter,
-    private formBuilder: FormBuilder) {
+    @Inject(MAT_DIALOG_DATA) public readonly data: { specificMeal: SpecificMeal, days: Day[] },
+    private formBuilder: FormBuilder,
+    public helpService: HelpService) {
 
-    this.specificMeal = data.specificMeal;
-
-    if (data.specificMeal.prepareAsDate !== undefined) {
-
-      this.prepareForm = this.formBuilder.group({
-        hasPrepareDate: data.specificMeal.prepare,
-        prepareDate: data.specificMeal.prepareAsDate
-      });
-
-    } else {
-
-      this.prepareForm = this.formBuilder.group({
-        hasPrepareDate: false,
-        prepareDate: new Date()
-      });
-
-    }
+    // Select the day before the current day. Only days in the week view are considered
+    this.dayBeforeDate = this.data.days.filter(day =>
+      day.dateAsTypeDate.getTime() < this.data.specificMeal.date.toDate().getTime()).slice(-1)[0]?.getTimestamp().toDate()
 
 
-    const originalValues = JSON.stringify({
+    const hasPrepareDate = data.specificMeal.prepare;
+    const defaultPrepareDate = this.dayBeforeDate !== undefined ? this.dayBeforeDate : new Date()
+    const prepareDate = hasPrepareDate ? data.specificMeal.prepareAsDate : defaultPrepareDate
+    const condition = !this.data.specificMeal.prepare && !this.dayBeforeDate;
 
-      hasPrepareDate: false,
-      prepareDate: new Date()
-
+    this.prepareForm = this.formBuilder.group({
+      hasPrepareDate: new FormControl({value: hasPrepareDate, disabled: condition}),
+      prepareDate: prepareDate
     });
 
-    // set up change listner
+    // Create a Change Listener, which is used to activate the save button
+    const originalValues = JSON.stringify(this.prepareForm.value);
     this.prepareForm.valueChanges.subscribe(values => {
-      this.valueHasNotChanged = JSON.stringify(values) === originalValues;
+      this.dataHasNotChanged = JSON.stringify(values) === originalValues;
     });
-
 
   }
 
+
   /**
-   * Mahlzeiten können nur mind. ein Tag vorhher vorbereitet werden.
+   * Mahlzeiten können nur mind. ein Tag vorher vorbereitet werden.
    * Ausserdem können sie nur vor dem Lager oder während dem Lager an einem
    * existierenden Tag vorbereitet werden.
    *
-   * TODO: Vorbereiten löschen, falls der Tag an dem die Mahlzeit vorbereitet wird gelöscht wird,
-   * dies führt dazu, dass die Zutaten nicht in der EInkaufsliste auftauchen... --> known bug
-   *
    */
-  public dateFilter = (d: Date | null): boolean => {
+  public dateFilter = (dateToCheck: string | null): boolean => {
 
-    const filter = this.data.days.filter(day => day.dateAsTypeDate.getTime() === d.getTime());
-    return d.getTime() < this.data.days[0].dateAsTypeDate.getTime() ||
-      (filter.length === 1 && d.getTime() < this.specificMeal.date.toDate().getTime());
+    if (dateToCheck == null) return;
+
+    const date = new Date(dateToCheck);
+    const dayInWeekviewExists = this.data.days.filter(day => day.dateAsTypeDate.getTime() === date.getTime()).length;
+    return dayInWeekviewExists && date.getTime() < this.data.specificMeal.date.toDate().getTime();
 
   }
 
   /**
-   * Returns the updatetd specificMeal
+   * Returns the updated specificMeal
    */
   public returnsSpecificMeal() {
 
-    // standardmässig wird eine Mahlzeit nicht vorbereitet
-    this.specificMeal.prepare = false;
+    // Default Value
+    this.data.specificMeal.prepare = false;
 
     if (this.prepareForm.value.hasPrepareDate) {
-
-      this.specificMeal.prepareAsDate = this.prepareForm.value.prepareDate;
-      this.specificMeal.prepare = true;
-
+      this.data.specificMeal.prepareAsDate = this.prepareForm.value.prepareDate;
+      this.data.specificMeal.prepare = true;
     }
 
-    return this.specificMeal;
+    return this.data.specificMeal;
 
   }
-
 
 }
