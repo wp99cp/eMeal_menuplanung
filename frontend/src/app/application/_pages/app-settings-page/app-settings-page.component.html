@@ -64,8 +64,7 @@
              type="number" (input)="changeDefaultParticipants(defaultParticipants.value)">
     </mat-form-field>
 
-    <p class="info">Experimentelle Funktionen anzeigen (nicht empfohlen). Experimentelle Features sind mit der Farbe
-      Orange gekennzeichnet.</p>
+    <p class="info">Experimentelle Funktionen anzeigen (nicht empfohlen).</p>
 
     <mat-form-field appearance="fill" class="full-width" *ngIf="(settings.globalSettings | async) as settings">
       <mat-label>Experimentelle Funktionen</mat-label>
