@@ -36,7 +36,9 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
 
   ngOnInit(): void {
 
-    this.addButtonNew();
+    this.route.queryParams.subscribe(() => {
+      setTimeout(() => this.addButtonNew(), 0);
+    })
 
   }
 

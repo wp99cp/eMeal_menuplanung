@@ -19,7 +19,8 @@
 
 <div mat-dialog-actions class="custom-mat-buttons">
   <div class="additional-buttons">
-    <button mat-stroked-button (click)="dialogRef.closeAll(); router.navigateByUrl('/app/meals')" id="create-from-template">Aus Vorlage
+    <button mat-stroked-button (click)="dialogRef.closeAll()" routerLink="/app/meals" [queryParams]="{vorlagen: 1}"
+            id="create-from-template">Aus Vorlage
       erstellen
     </button>
   </div>

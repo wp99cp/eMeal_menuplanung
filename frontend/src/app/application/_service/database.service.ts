@@ -582,22 +582,34 @@ export class DatabaseService {
 
   }
 
-  public getAccessableMeals(): Observable<Meal[]> {
+  public getAccessableMeals(params: Observable<Params>): Observable<Meal[]> {
 
-    return this.settings.globalSettings
-      .pipe(take(1)) // only apply current settings
-      .pipe(mergeMap(settings => {
+    return combineLatest([this.settings.globalSettings.pipe(take(1)), params])
+      .pipe(mergeMap(([settings, params]: [FirestoreSettings, Params]) => {
 
         const accessLevels = settings.show_templates ?
           ['editor', 'owner', 'collaborator', 'viewer'] :
           ['editor', 'owner', 'collaborator'];
 
-        const mealsCreatedByUsers = this.createAccessQueryFn(accessLevels)
-          .pipe(mergeMap(queryFn => this.requestCollection('meals', queryFn)))
-          .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+        const onlyTemplates = params?.vorlagen && params['vorlagen'] == '1';
 
-        // return only recipes created by the user; exclude templates and read only recipes
-        if (!settings.show_templates) {
+        let mealsCreatedByUsers = of([]);
+
+        // Load Meals of the user (if not only templates should be loaded).
+        if (!onlyTemplates) {
+          mealsCreatedByUsers = this.createAccessQueryFn(accessLevels)
+            .pipe(mergeMap(queryFn => this.requestCollection('meals', queryFn)))
+            .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+        }
+        // if param 'vorlagen' is active, then templates will be loaded regardless the show_templates settings
+        else {
+          mealsCreatedByUsers = this.createAccessQueryFn(['viewer'])
+            .pipe(mergeMap(queryFn => this.requestCollection('meals', queryFn)))
+            .pipe(FirestoreObject.createObjects<FirestoreMeal, Meal>(Meal));
+        }
+
+        // return only meals created by the user; exclude templates and read only recipes
+        if (!settings.show_templates && !onlyTemplates) {
           return mealsCreatedByUsers;
         }
 
