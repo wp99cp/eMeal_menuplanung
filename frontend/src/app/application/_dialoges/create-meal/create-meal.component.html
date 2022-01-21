@@ -25,7 +25,7 @@
     </button>
   </div>
   <button mat-stroked-button [mat-dialog-close]="close()">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="create()" color="save"
+  <button mat-raised-button [mat-dialog-close]="create()" routerLink="/app/meals" [queryParams]="{vorlagen: 0}" color="save"
           [disabled]="newMealForm.value.title == ''">Mahlzeiten erstellen
   </button>
 </div>
