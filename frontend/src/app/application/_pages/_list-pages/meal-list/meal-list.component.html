@@ -1,13 +1,19 @@
 <span class="big-page-title">Meine Mahlzeiten</span>
 
 <mat-form-field class="mat-form-field full-width">
-  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field">
+  <mat-chip-list #chipList *ngIf="(route.queryParams | async) as params">
+    <mat-chip *ngIf="params.vorlagen == '1'"> Vorlagen
+      <mat-icon routerLink="." [queryParams]="{'vorlagen': 0}">cancel</mat-icon>
+    </mat-chip>
+    <input matInput [matChipInputFor]="chipList" (keyup)="applyFilter($event.target.value)"
+           placeholder="Mahlzeit suchen..." id="search-field">
+  </mat-chip-list>
 </mat-form-field>
 
 
 <div id="mealsList" *ngIf="filteredElements as meals else loading_preview">
-    <app-list-card *ngFor="let meal of meals" [cardElement]="meal" [access]="access[meal.documentId]"
-                   (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
+  <app-list-card *ngFor="let meal of meals" [cardElement]="meal" [access]="access[meal.documentId]"
+                 (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
 
   <app-new-list-element>
     <h3>Neue Mahlzeit erstellen</h3>

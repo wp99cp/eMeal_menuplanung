@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import {mergeMap, take} from 'rxjs/operators';
+import {filter, mergeMap, take} from 'rxjs/operators';
 import {Recipe} from '../../../_class/recipe';
 import {CopyRecipeComponent} from '../../../_dialoges/copy-recipe/copy-recipe.component';
 import {CreateRecipeComponent} from '../../../_dialoges/create-recipe/create-recipe.component';
-import {FirestoreRecipe} from '../../../_interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../../_service/database.service';
 import {TileListPage} from '../../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
-import {HelpService} from '../../../_service/help.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
+import {FirestoreRecipe} from "../../../_interfaces/firestoreDatatypes";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-recipe-list',
@@ -23,10 +22,10 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
   constructor(
     private dbService: DatabaseService,
     private snackBar: MatSnackBar,
+    public route: ActivatedRoute,
     dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getAccessableRecipes(), dialog);
-
+    super(dbService, snackBar, dbService.getAccessableRecipes(route.queryParams), dialog);
 
 
     // set filter for searching
@@ -38,7 +37,9 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
 
   ngOnInit(): void {
 
-    this.addButtonNew();
+    this.route.queryParams.subscribe(() => {
+      setTimeout(() => this.addButtonNew(), 0);
+    })
 
   }
 
@@ -64,10 +65,13 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
       width: '900px',
       data: {recipeName: ''}
     }).afterClosed()
-      .pipe(
-        mergeMap((recipe: Observable<FirestoreRecipe>) => recipe),
-        take(1)
-      ).subscribe(recipeData => this.dbService.addDocument(recipeData, 'recipes'));
+      .pipe(filter(recipeData => recipeData !== undefined))
+      .pipe(mergeMap((recipe: Observable<FirestoreRecipe>) => recipe))
+      .pipe(take(1))
+      .subscribe(recipeData => {
+        console.log(recipeData)
+        this.dbService.addDocument(recipeData, 'recipes')
+      });
 
   }
 

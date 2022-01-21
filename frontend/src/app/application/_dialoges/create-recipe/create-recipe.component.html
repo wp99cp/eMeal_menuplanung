@@ -23,12 +23,14 @@
 
 <div mat-dialog-actions class="custom-mat-buttons">
   <div class="additional-buttons">
-    <button mat-stroked-button (click)="dialogRef.closeAll(); router.navigateByUrl('/app/recipes')" id="create-from-template">Aus Vorlage
+    <button mat-stroked-button (click)="dialogRef.closeAll()" routerLink="/app/recipes" [queryParams]="{vorlagen: 1}"
+            id="create-from-template">Aus Vorlage
       erstellen
     </button>
   </div>
   <button mat-stroked-button [mat-dialog-close]="close()">Abbrechen</button>
-  <button mat-raised-button [mat-dialog-close]="create()" color="save"
+  <button mat-raised-button [mat-dialog-close]="create()" routerLink="/app/recipes" [queryParams]="{vorlagen: 0}"
+          color="save"
           [disabled]="newRecipeForm.value.title == ''">Rezept erstellen
   </button>
 </div>

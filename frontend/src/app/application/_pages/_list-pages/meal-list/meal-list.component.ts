@@ -23,10 +23,10 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
   constructor(
     private dbService: DatabaseService,
     public snackBar: MatSnackBar,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     public dialog: MatDialog) {
 
-    super(dbService, snackBar, dbService.getAccessableMeals(), dialog);
+    super(dbService, snackBar, dbService.getAccessableMeals(route.queryParams), dialog);
 
     // set filter for searching
     this.filterFn = (meal) => (this.filterDocIDs.length === 0 || this.filterDocIDs.includes(meal.documentId)) &&
@@ -47,7 +47,20 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
 
   ngOnInit() {
 
-    this.addButtonNew();
+    this.route.queryParams.subscribe(() => {
+      setTimeout(() => {
+        this.addButtonNew();
+
+        HeaderNavComponent.addToHeaderNav({
+          active: true,
+          description: 'Import aus einer externen Quelle',
+          name: 'Mahlzeit Importieren',
+          action: (() => this.import()),
+          icon: 'system_update_alt',
+        });
+
+      }, 0);
+    })
 
     setTimeout(() =>
       this.route.queryParams.subscribe(params => {
@@ -63,14 +76,6 @@ export class MealListComponent extends TileListPage<Meal> implements OnInit {
         }
 
       }), 250);
-
-    HeaderNavComponent.addToHeaderNav({
-      active: true,
-      description: 'Import aus einer externen Quelle',
-      name: 'Mahlzeit Importieren',
-      action: (() => this.import()),
-      icon: 'system_update_alt',
-    });
 
   }
 
