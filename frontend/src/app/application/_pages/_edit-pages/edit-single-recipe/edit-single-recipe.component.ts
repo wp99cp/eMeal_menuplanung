@@ -39,7 +39,7 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
    */
     // Ladet das Rezept von der URL
     this.recipe = this.route.url.pipe(mergeMap(
-      url => this.dbService.getRecipeById(url[1].path).pipe(take(1))));
+      url => this.dbService.getRecipeById(url[1].path)));
 
     // check access
     this.recipe.subscribe(async recipe => {
@@ -87,7 +87,9 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
    */
   recipeInfos() {
 
-    this.recipe.pipe(mergeMap(recipe =>
+    this.recipe
+      .pipe(take(1))
+      .pipe(mergeMap(recipe =>
       this.dialog.open(SingleRecipeInfoComponent, {
         height: '618px',
         width: '1000px',
@@ -103,7 +105,9 @@ export class EditSingleRecipeComponent implements OnInit, Saveable {
 
   share() {
 
-    this.recipe.pipe(mergeMap(recipe =>
+    this.recipe
+      .pipe(take(1))
+      .pipe(mergeMap(recipe =>
       this.dialog.open(ShareDialogComponent, {
         height: '618px',
         width: '1000px',
