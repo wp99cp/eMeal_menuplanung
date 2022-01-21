@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {take} from 'rxjs/operators';
+import {filter, mergeMap, take} from 'rxjs/operators';
 import {Recipe} from '../../../_class/recipe';
 import {CopyRecipeComponent} from '../../../_dialoges/copy-recipe/copy-recipe.component';
 import {CreateRecipeComponent} from '../../../_dialoges/create-recipe/create-recipe.component';
@@ -9,6 +9,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
 import {FirestoreRecipe} from "../../../_interfaces/firestoreDatatypes";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-recipe-list',
@@ -64,10 +65,12 @@ export class RecipeListComponent extends TileListPage<Recipe> implements OnInit 
       width: '900px',
       data: {recipeName: ''}
     }).afterClosed()
+      .pipe(filter(recipeData => recipeData !== undefined))
+      .pipe(mergeMap((recipe: Observable<FirestoreRecipe>) => recipe))
       .pipe(take(1))
       .subscribe(recipeData => {
-        if (recipeData)
-          this.dbService.addDocument(recipeData as FirestoreRecipe, 'recipes')
+        console.log(recipeData)
+        this.dbService.addDocument(recipeData, 'recipes')
       });
 
   }
