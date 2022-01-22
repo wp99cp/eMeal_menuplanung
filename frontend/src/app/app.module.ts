@@ -38,6 +38,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { EmealFeaturesComponent } from './landingPage/emeal-features/emeal-features.component';
 import { FeatureItemComponent } from './landingPage/emeal-features/feature-item/feature-item.component';
 import { TeaserImagesComponent } from './landingPage/teaser-images/teaser-images.component';
+import { DevelopEnviromentBannerComponent } from './develop-enviroment-banner/develop-enviroment-banner.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { TeaserImagesComponent } from './landingPage/teaser-images/teaser-images
     EmealFeaturesComponent,
     FeatureItemComponent,
     TeaserImagesComponent,
+    DevelopEnviromentBannerComponent,
   ],
     imports: [
 

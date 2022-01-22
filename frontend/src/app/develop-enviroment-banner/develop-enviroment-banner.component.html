@@ -1,0 +1,10 @@
+<div *ngIf="!environment.production" id="banner">
+  <span style="line-height: 15px;
+    margin: 15px 0 15px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: #491b00a6;
+    display: block;">
+    Test Environment | Version: {{build.version}} | Branch: {{build.git.branch}}
+    | Build: {{build.git.hash}}  | DB: {{environment.firebaseConfig.projectId}}</span>
+</div>
