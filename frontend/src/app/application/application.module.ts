@@ -56,7 +56,6 @@ import {WelcomPageComponent} from './_pages/welcom-page/welcom-page.component';
 import {AuthenticationService} from './_service/authentication.service';
 import {AutoSaveService} from './_service/auto-save.service';
 import {DatabaseService} from './_service/database.service';
-import {DownloadComponent} from './_template/download/download.component';
 import {EditRecipeInCampComponent} from './_template/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {IngredientFieldComponent} from './_template/ingredient-field/ingredient-field.component';
 import {ListOfUsersComponent} from './_template/list-of-users/list-of-users.component';
@@ -83,11 +82,12 @@ import {SettingsService} from './_service/settings.service';
 import {ExportSettingsComponent} from './_dialoges/export-settings/export-settings.component';
 import buildInfo from '../../build';
 import {ChangeLogComponent} from './_dialoges/change-log/change-log.component';
-import { MealInfoWithoutCampComponent } from './_dialoges/meal-info-without-camp/meal-info-without-camp.component';
-import { NewListElementComponent } from './_template/new-list-element/new-list-element.component';
-import { ImportIngredientsComponent } from './_dialoges/import-ingredients/import-ingredients.component';
+import {MealInfoWithoutCampComponent} from './_dialoges/meal-info-without-camp/meal-info-without-camp.component';
+import {NewListElementComponent} from './_template/new-list-element/new-list-element.component';
+import {ImportIngredientsComponent} from './_dialoges/import-ingredients/import-ingredients.component';
 import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
+import {DownloadModule} from "../modules/download/download.module";
 
 @NgModule({
   declarations: [
@@ -110,7 +110,6 @@ import {MatChipsModule} from "@angular/material/chips";
     ListOfUsersComponent,
     AppSettingsPageComponent,
     ExportCampComponent,
-    DownloadComponent,
     ShareDialogComponent,
     FeedbackDialogComponent,
     CampInfoComponent,
@@ -135,7 +134,8 @@ import {MatChipsModule} from "@angular/material/chips";
     ChangeLogComponent,
     MealInfoWithoutCampComponent,
     NewListElementComponent,
-    ImportIngredientsComponent
+    ImportIngredientsComponent,
+
   ],
   providers: [
     AngularFirestore,
@@ -154,52 +154,52 @@ import {MatChipsModule} from "@angular/material/chips";
     {provide: DateAdapter, useClass: SwissDateAdapter},
 
   ],
-    imports: [
-        CommonModule,
-        ApplicationRoutingModule,
-        AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
-        AngularFireFunctionsModule,
-        AngularFireStorageModule,
-        AngularFirestoreModule,
-        AngularFireAuthModule,
-        VersionHistoryModule,
-        ReactiveFormsModule,
-        // Material Design
-        MatTableModule,
-        MatProgressBarModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatTooltipModule,
-        MatStepperModule,
-        MatButtonModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatFormFieldModule,
-        MatTabsModule,
-        MatExpansionModule,
-        MatCheckboxModule,
-        MatListModule,
-        MatGridListModule,
-        MatIconModule,
-        MatDialogModule,
-        MatCardModule,
-        DragDropModule,
-        MatSlideToggleModule,
-        MatSnackBarModule,
-        MatPaginatorModule,
-        MatTableModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatRadioModule,
-        FormsModule,
-        ReactiveFormsModule,
-
-        MarkdownModule,
-        MatProgressSpinnerModule,
-        MatSelectModule,
-        MatChipsModule
-    ],
+  imports: [
+    CommonModule,
+    ApplicationRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+    AngularFireFunctionsModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    VersionHistoryModule,
+    ReactiveFormsModule,
+    // Material Design
+    MatTableModule,
+    MatProgressBarModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatTooltipModule,
+    MatStepperModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatTabsModule,
+    MatExpansionModule,
+    MatCheckboxModule,
+    MatListModule,
+    MatGridListModule,
+    MatIconModule,
+    MatDialogModule,
+    MatCardModule,
+    DragDropModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DownloadModule,
+    MarkdownModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatChipsModule
+  ],
 
   entryComponents: [
     DeleteCampComponent,
