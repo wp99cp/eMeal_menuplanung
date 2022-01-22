@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "angular-build-info && ng serve --ssl",
+    "start:local-newtork": "angular-build-info && ng serve --host 0.0.0.0 --ssl",
     "start:prod": "angular-build-info && ng serve --prod --ssl",
     "build": "angular-build-info && ng build",
     "analize-bundle": "angular-build-info && ng build --stats-json && webpack-bundle-analyzer dist/eMeal/stats.json",
