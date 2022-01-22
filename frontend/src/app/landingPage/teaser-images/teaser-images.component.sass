@@ -1,21 +1,46 @@
 
 h1
-  position: absolute
-  top: 80px
-  margin-left: 100px
+  margin-left: 25px
+  margin-right: 25px
   font-size: 75px
   line-height: 1.1em
   max-width: 1250px
   text-align: left
   color: #97bf0d
+  margin-bottom: 25px
 
 #caption_text
-  position: absolute
-  margin-left: 100px
+  margin-left: 25px
+  margin-right: 25px
   line-height: 1.5em
   max-width: 500px
   text-align: left
-  top: 290px
+
+.sign-in-button-wrapper
+  margin-left: 25px
+  margin-right: 25px
+  width: 100%
+  display: flex
+
+  #get-started
+    color: white
+    background-color: #e5342b
+    border-width: 0
+
+  #get-started:hover
+    box-shadow: 0 7px 8px -4px #0003, 0 12px 17px 2px #00000024, 0 5px 22px 4px #0000001f
+
+
+
+@media (min-width: 950px)
+  h1
+    margin-left: 100px
+  #caption_text
+    margin-left: 100px
+
+  .sign-in-button-wrapper
+    margin-left: 100px
+
 
 
 @keyframes pulse
@@ -43,17 +68,13 @@ h1
   width: 310px
 
 #table_of_ingredients_img
-  width: 600px
+  width: 100%
   box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12)
-  margin: 10px
   position: absolute
-  display: none
   animation: 1.25s ease forwards pulse
   opacity: 0
   transition: 0.3s
-
-#table_of_ingredients_img:hover
-  width: 620px
+  top: 380px
 
 #day_overview
   width: 200px
@@ -75,18 +96,19 @@ h1
     top: 457px
     display: block
 
-
   #table_of_ingredients_img
     right: -84px
     top: 388px
-    display: block
+    margin: 10px
+    width: 600px
 
+  #table_of_ingredients_img:hover
+    width: 620px
 
   #day_overview
     right: 63px
     top: 48px
     display: block
-
 
 
 @media (min-width: 1100px)
@@ -142,22 +164,4 @@ h1
   #day_overview
     right: 100px
     top: 50px
-
-
-
-.sign-in-button-wrapper
-  width: 100%
-  display: flex
-  position: absolute
-  top: 385px
-
-  margin-left: 100px
-
-  #get-started
-    color: white
-    background-color: #e5342b
-    border-width: 0
-
-  #get-started:hover
-    box-shadow: 0 7px 8px -4px #0003, 0 12px 17px 2px #00000024, 0 5px 22px 4px #0000001f
 
