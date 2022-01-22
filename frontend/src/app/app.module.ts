@@ -35,6 +35,9 @@ import {AccessGuard} from './AccessGuard';
 import {DateAdapter} from '@angular/material/core';
 import {SwissDateAdapter} from './utils/format-datapicker';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { EmealFeaturesComponent } from './landingPage/emeal-features/emeal-features.component';
+import { FeatureItemComponent } from './landingPage/emeal-features/feature-item/feature-item.component';
+import { TeaserImagesComponent } from './landingPage/teaser-images/teaser-images.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     SignInComponent,
     SignInCallbackComponent,
     ErrorPageComponent,
+    EmealFeaturesComponent,
+    FeatureItemComponent,
+    TeaserImagesComponent,
   ],
     imports: [
 

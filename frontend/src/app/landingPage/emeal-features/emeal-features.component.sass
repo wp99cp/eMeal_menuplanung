@@ -1,0 +1,39 @@
+.colored-background
+  text-align: center
+  background-color: #f3f5f7
+  padding: 100px 25px
+
+  p
+    margin: 0 auto 10px auto
+    max-width: 650px
+
+@media(min-width: 500px)
+  .colored-background
+    padding: 100px
+
+.feature-grid
+  display: grid
+  grid-row-gap: 40px
+  max-width: 1400px
+  margin: auto
+
+.two-columns,  .three-columns
+    grid-template-columns: 100%
+    grid-row-gap: 25px
+    margin: 40px auto
+
+@media(min-width: 1000px)
+
+  .two-columns,  .three-columns
+    grid-template-columns: 50% 50%
+
+@media(min-width: 1800px)
+  .two-columns
+    grid-template-columns: 50% 50%
+    max-width: 1000px
+
+  .three-columns
+    grid-template-columns: 33% 33% 33%
+
+.feature-grid:first-of-type
+  margin-top: 100px

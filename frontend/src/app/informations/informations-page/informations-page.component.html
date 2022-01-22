@@ -2,8 +2,107 @@
 
   <span class="page-title">Über eMeal - Menüplanung</span>
 
-  <article>
-    <div markdown [src]="'./assets/contends/infos.md'"></div>
-  </article>
+  <h1>Lagerküche online planen.</h1>
+
+  <h2>Informationen zu Menüplanungs-App eMeal.</h2>
+
+  <p>
+    Eine gute Lagerküche ist für den Erfolg eines Lagers zentral. Denn feines Essen sorgt nicht nur für gute Stimmung im
+    Team, sondern eine ausgewogene Ernährung versorgt die Teilnehmer auch mit genügend Power, um einen langen Lagertag
+    zu überstehen. Doch ein Essensplan für ein ganzes Lager zusammenzustellen, ohne dabei die Übersicht über die
+    Einkaufslisten zu verlieren, ist nicht ganz einfach. Zum Glück gibt es mittlerweilen Alternativen zur Planung mit
+    Stift und Papier: Unsere Software eMeal - Menüplanung ist eine davon. <a routerLink="/app">Jetzt mit Planen
+    loslegen.</a>
+  </p>
+
+  <figure>
+    <img alt="Feiner Hamburger aus dem GLK3." class="fullscreen" src="/assets/img/Hamburger.1125w.jpg "
+         srcset="/assets/img/Hamburger.450w.jpg 450w, /assets/img/Hamburger.760w.jpg 760w, /assets/img/Hamburger.1125w.jpg 1125w, /assets/img/Hamburger.1200w.jpg 1200w">
+    <figcaption> Hamburger - Gekocht im J+S-Gruppenleiterkurs (GLK3, Cevi Region Zürich).</figcaption>
+  </figure>
+
+
+  <p>
+    eMeal - Menüplanung ermöglicht es die Essensplanung für ein Lager oder Anlass zu automatisieren. Denn bei eMeal
+    handelt es sich um eine Webseite, die dir alle mühsamen Aufgaben, wie das zusammentragen von Einkaufslisten abnimmt
+    und dabei erst noch die Zusammenarbeit erleichtert.
+  </p>
+
+  <p>
+    Die Küchenchefin erstellt hierzu als erstes ein neues Lager. Bereits beim Erstellen
+    können die wichtigsten Informationen hinterlegt werden, wie Datum, die Anzahl der Teilnehmer und Leiterinnen oder
+    eine kurze Beschreibung. Das Lager kann anschliessend mit allen Küchenmitarbeitern geteilt werden, sobald sich diese
+    auf eMeal registriert haben. Jeder Mitarbeiter kann nun den Menüplan bearbeiten, Rezepte und Mahlzeiten hinzufügen
+    und verändern.
+  </p>
+
+  <p>
+    Das Lagerhandbuch wird hierzu in der Cloud gespeichert, somit steht es überall und auf allen Geräten zur
+    Verfügung. Natürlich kannst du deine Broschüre vor dem Lager ausdrucken und/oder als PDF herunterladen.
+  </p>
+
+
+  <figure>
+    <img alt="Feiner Hamburger aus dem GLK3." class="fullscreen" src="/assets/img/Wochenplan.1125w.jpg "
+         srcset="/assets/img/Wochenplan.450w.jpg 450w, /assets/img/Wochenplan.760w.jpg 760w, /assets/img/Wochenplan.1125w.jpg 1125w, /assets/img/Wochenplan.1200w.jpg 1200w">
+
+    <figcaption> Menüplan für ein Pfingstlager. Die Mahlzeiten können per Drag-And-Drop verschoben werden.</figcaption>
+  </figure>
+
+
+  <p>
+    Eine breite Palette an erprobten Lager-Rezepten ermöglicht es dir binnen Minuten einen Wochenplan zu erstellen.
+    Herzlichen Dank an dieser Stelle an die Autoren des Kochbuchs «Feine Lagerküche» für die Bereitstellung ihrer
+    Rezepte. <a href="https://www.lagerkueche.ch/">Kochbuch bestellen!</a>
+  </p>
+
+
+  <p>
+    eMeal unterscheidet dabei zwischen Lagern, Mahlzeiten und Rezepten, vor allem die Unterscheidung letzterer scheint
+    auf den ersten Blick etwas verwirrend, hat aber bei genauerem Hinschauen einen praktischen Grund: Jede Mahlzeit
+    besteht aus verschiedenen Rezepten. So betsteht die Mahlzeit “Hörndli & G’hacktes” aus den vier Rezepten “Hörndli
+    und G’hacktes”, “Selbstgemachtes Apfelmuss”, “Salat als Beilage” und “Französische Salatsauce”. Soll es an einem
+    weiteren Lagertag ebenfalls Salat geben, so können die bereits erstellten Rezepte
+    wiederverwendet werden. Dies natürlich in beliebiger Kombination, also auch als “Salat als Beilage” mit
+    “Italienische Salatsauce”.
+  </p>
+
+
+  <p>
+    Natürlich garantiert dir eMeal alleine noch keine erfolgreiche Lagerplanung, doch sie erleichtert diese enorm. Wenn
+    du du eMeal für dein nächstes Lager verwenden möchtest, so kannst du noch heute damit loslegen. Von und für Cevianer
+    entwickelt ist die Nutzung für alle Cevi-Abteilungen kostenlos. <a routerLink="/app">Jetzt mit Planen loslegen.</a>
+  </p>
+
+
+  <h2>Ideen und Unterstützung zur Lagerküche</h2>
+
+
+  <p>
+    Im <a href="https://wiki.cevi.ch">Cevi-Wiki</a> findest du viele nützliche Tipps und Tricks rund um das Kochen in
+    einem Lager. Weitere Informationen zur Lagerküche findest du auch in der Jugend+Sport-Broschüre "Kochen im
+    Lager".
+  </p>
+
+  <app-download [changeDate]="change_date_kochen_im_lager" [name]="'J+S-Broschüre Kochen im Lager'"
+                [docPath]="'https://www.jugendundsport.ch/content/jus-internet/de/sportarten/lagersport-trekking-uebersicht/aus-und-weiterbildung/_jcr_content/contentPar/tabs_copy/items/dokumente/tabPar/downloadlist_2028361_521363757/downloadItems/1229_1460466353407.download/merkblatt_kochen_im_lager_d.pdf'"></app-download>
+
+  <h2>Entstehungsgeschichte von eMeal</h2>
+
+  <p>
+    Bereits seit einigen Jahren plante der <a href="https://zh11.ch">Cevi Züri 11</a> seine Lagerküche mithilfe eines
+    Excel-Sheets. Dieses Excel fasst unter anderem die Zutaten automatisch zu einer Einkaufsliste für das gesamte Lager
+    zusammen. Dies funktionierte gut, allerdings dauerten die aufwendigen Berechnungen jeweils sehr lange.
+  </p>
+  <p>
+    Bald schon entstand die Idee, eine eigene Software zu schreiben.
+    So entstand die Web-Applikation eMeal - Menüplanung, die es von nun an ermöglicht Lager online zu planen.
+    eMeal wird zur Zeit von Cyrill Püntener v/o JPG entwickelt und unterhalten.
+  </p>
+  <p>
+    Der <a href="https://github.com/wp99cp/eMeal_menuplanung">Quellcode von eMeal - Menüplanung</a> ist open-source und
+    unter der AGPL-Lizenz frei verfügbar. Für Auskünfte stehe ich gerne zur Verfügung. <a routerLink="/infos/kontakt">Kontakt
+    aufnehmen.</a>
+  </p>
 
 </div>
