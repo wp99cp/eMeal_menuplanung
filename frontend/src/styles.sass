@@ -27,6 +27,7 @@ html, body
   font: $default-font
   height: 100%
 
+
 *
   outline: none
 
@@ -50,10 +51,11 @@ app-main-menu
   z-index: 300
   display: none
   position: fixed
-  height: 100vh
+  height: calc(100vh -  75px)
   width: 280px
   grid-template-rows: 101px auto
   overscroll-behavior: contain
+  padding-bottom: 75px
 
 app-main-menu.show-menu
   display: grid

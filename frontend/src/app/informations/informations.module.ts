@@ -14,20 +14,22 @@ import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {HelpComponent} from './help/help.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {DownloadModule} from "../modules/download/download.module";
 
 
 @NgModule({
-    imports: [
-        CommonModule,
-        InformationsRoutingModule,
-        VersionHistoryModule,
-        // mat design
-        MatButtonModule,
-        MatCardModule,
-        MarkdownModule,
-        MatExpansionModule,
-        MatProgressBarModule,
-    ],
+  imports: [
+    CommonModule,
+    InformationsRoutingModule,
+    VersionHistoryModule,
+    // mat design
+    MatButtonModule,
+    MatCardModule,
+    MarkdownModule,
+    MatExpansionModule,
+    MatProgressBarModule,
+    DownloadModule
+  ],
   declarations: [
     InformationspageComponent,
     ImpressumComponent,

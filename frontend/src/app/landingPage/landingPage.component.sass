@@ -1,8 +1,16 @@
-.sign-in-button-wrapper
-  width: 100%
-  display: flex
+.page
+  overflow: hidden
+  width: 100vw
 
-  button
-    margin: 25px auto
-    border-color: #96bf10
-    border-width: 2px
+  margin: 100px -12px -70px -12px
+  @media (min-width: 600px)
+    margin: 100px -25px -70px -25px
+  @media (min-width: 1200px)
+    margin: 100px -25px -70px -25px
+    width: calc(100vw - 280px)
+
+#teaser-section
+  height: 600px
+  margin: 0 auto
+  max-width: 1600px
+  position: relative
