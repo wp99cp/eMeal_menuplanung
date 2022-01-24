@@ -95,6 +95,7 @@ class ShoppingList:
         words = food_name.lower().split(' ')
 
         for w in words:
+            w = w.replace(',', '')
             if w in keys:
                 index = keys.index(w)
                 correct_food_name = list_of_keys[index]
