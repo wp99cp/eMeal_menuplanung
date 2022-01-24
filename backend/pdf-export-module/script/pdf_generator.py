@@ -18,7 +18,7 @@ from google.oauth2 import service_account
 from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 from pages.feedback_survey import add_feedback_survey_page
 from pages.meals import add_meals
 from pages.shopping_list import add_shopping_lists
@@ -68,7 +68,7 @@ def upload_blob(source_file_path, source_file_name, camp_id):
         source_file_name + '.pdf', destination_blob_name + '.pdf'))
 
 
-def generate_document(parts: List, camp: Camp, args: argparse.Namespace):
+def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # set language to german, e.g. used for strftime()
     locale.setlocale(locale.LC_TIME, "de_CH.utf8")
 
@@ -131,12 +131,12 @@ def main(args: argparse.Namespace):
 
     # camp object that stores the exported date
     # '16fXu6siwVDX1OOb38P3', 'CKsbjuHkJQUstW1YULeAepDe9Wl1'
-    camp = Camp(args)
+    camp = CampClass(args)
 
     create_pdf(camp, args)
 
 
-def create_pdf(camp: Camp, args: argparse.Namespace):
+def create_pdf(camp: CampClass, args: argparse.Namespace):
     # global settings
     parts = [add_title_page]
     if args.wv:

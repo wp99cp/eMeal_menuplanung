@@ -1,0 +1,64 @@
+<div class="centered">
+
+  <span class="page-title">Hilfe und Erklärungen </span>
+
+  <h1>Auf dieser Seite erfährst du alles wichtige zur Bedienung von eMeal.</h1>
+
+  <p>eMeal - Menüplanung ist eine freie Software des Cevi Züri 11. Sie steht allen Cevi-Abteilungen der Schweiz
+    kostenlos zur Verfügung. Auf dieser Seite findest du Infos und Hilfe-Texte zu den wichtigsten Funktionen von eMeal.
+  </p>
+  <p>
+    <b> Tipp:</b> Du kannst die Hilfe jeder Zeit auch über die Taste F1 aufrufen.
+  </p>
+
+
+  <ng-container *ngIf="(helpMessagesByCat | async) as helpMessByCat else showLoadingBar">
+    <mat-accordion class="help-textes" *ngFor="let cat of Object.keys(helpMessByCat)">
+
+      <h3>{{cat}}</h3>
+
+      <mat-expansion-panel hideToggle *ngFor="let mess of helpMessByCat[cat]">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{mess.title}}</mat-panel-title>
+          <mat-panel-description *ngIf="mess.description" class="help-description">
+            {{mess.description}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div [innerHTML]="mess.message"></div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </ng-container>
+
+  <ng-template #showLoadingBar>
+    <mat-progress-bar mode="waiting"></mat-progress-bar>
+  </ng-template>
+
+
+</div>
+
+<!--
+
+
+  <ng-container *ngIf="false && (helpMessagesByCat | async) as helpMessagesByCat">
+    <mat-accordion class="help-page-textes" *ngFor="let item of helpMessagesByCat">
+
+
+      <mat-expansion-panel hideToggle *ngFor="let mess of helpMessagesByCat[item]">
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{mess.title}}</mat-panel-title>
+          <mat-panel-description *ngIf="mess.description">
+            {{mess.description}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div [innerHTML]="mess.message"></div>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </ng-container>
+
+  -->

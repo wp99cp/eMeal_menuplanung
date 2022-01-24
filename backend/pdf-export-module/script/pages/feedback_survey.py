@@ -2,10 +2,10 @@ from argparse import Namespace
 
 from pylatex import Document, Section, Tabularx, NoEscape, Package
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 
 
-def any_evaluable_meals_exist(camp: Camp):
+def any_evaluable_meals_exist(camp: CampClass):
 
     for meal in camp.get_meal_names_for_feedback():
         if meal['meal_used_as'] in ['Zmittag', 'Znacht']:
@@ -14,7 +14,7 @@ def any_evaluable_meals_exist(camp: Camp):
     return False
 
 
-def add_feedback_survey_page(doc: Document, camp: Camp, args: Namespace):
+def add_feedback_survey_page(doc: Document, camp: CampClass, args: Namespace):
 
     # check if any meal exist that should be evaluated (only 'Zmittag' and 'Znacht' will be listed)
     if not any_evaluable_meals_exist(camp):

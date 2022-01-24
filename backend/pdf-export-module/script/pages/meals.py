@@ -7,7 +7,7 @@ import exportData.camp
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
 
 
-def add_meals(doc: Document, camp: exportData.camp.Camp, args: Namespace):
+def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
     doc.packages.append(Package('xcolor'))
     doc.packages.append(Package('tabularx'))
     doc.packages.append(Package('colortbl'))

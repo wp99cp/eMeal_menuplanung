@@ -4,13 +4,13 @@ from datetime import timedelta
 from pylatex import Command, Package, Document, NoEscape, Section, MiniPage, Itemize
 from pylatex.utils import bold
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 from pages.enviroments import Multicols
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
 from shopping_list.shopping_list import ShoppingList
 
 
-def add_shopping_lists(doc: Document, camp: Camp, args: Namespace):
+def add_shopping_lists(doc: Document, camp: CampClass, args: Namespace):
     shoppingList = ShoppingList(camp)
 
     add_full_shopping_list(args, doc, shoppingList)

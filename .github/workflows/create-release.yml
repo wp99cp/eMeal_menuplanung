@@ -1,6 +1,6 @@
 name: Create Release
 
-# See docu/Continuous Integration And_General_Tests.md for detailed information.
+# See docu/Continuous Integration And_General_Tests.md for detailed information-module.
 on:
   push:
     branches:

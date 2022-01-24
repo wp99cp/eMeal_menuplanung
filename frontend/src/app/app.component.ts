@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {TemplateHeaderComponent} from './_template/template-header/template-header.component';
+import {TemplateHeaderComponent} from './shared/components/template-header/template-header.component';
 
 @Component({
   selector: 'app-root',

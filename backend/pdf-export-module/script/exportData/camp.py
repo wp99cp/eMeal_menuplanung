@@ -2,7 +2,7 @@ from exportData.data_fetcher import DataFetcher, meal_types
 from exportData.ingredients_calculator import IngredientsCalculator
 
 
-class Camp(IngredientsCalculator, DataFetcher):
+class CampClass(IngredientsCalculator, DataFetcher):
     """
 
     Represents a camp in the database.
@@ -13,7 +13,7 @@ class Camp(IngredientsCalculator, DataFetcher):
     * ------------------------------------- *
     |              PDF creator              |
     * ------------------------------------- *
-    |           this class `Camp`           |
+    |           this class `CampClass`           |
     * ------------------------------------- *
 
     * ------------------------------------- *

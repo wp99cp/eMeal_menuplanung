@@ -8,7 +8,7 @@ from functools import reduce
 import firebase_admin
 from firebase_admin import credentials
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 from pdf_generator import create_pdf
 from shopping_list.shopping_list import ShoppingList
 from utils.commandline_args_parser import setup_parser
@@ -22,7 +22,7 @@ class MockDataTester(unittest.TestCase):
         parser = setup_parser()
         args = parser.parse_args(['None', 'None', '--mock_data'])
 
-        cls.camp = Camp(args=args)
+        cls.camp = CampClass(args=args)
 
         mock_data = cls.load_mock_data()
 

@@ -5,7 +5,7 @@ import * as functions from 'firebase-functions';
  * This function deletes the recources of an camp (when it got deleted).
  * Deletes the specific recipes and meals of the deleted camp.
  * 
- * TODO: neu auch die Camp spezifischen Daten eines Rezeptes oder einer Mahlzeit?
+ * TODO: neu auch die CampClass spezifischen Daten eines Rezeptes oder einer Mahlzeit?
  *
  * @param snapshot containing the id of the camp "{id: campId}"
  * @param context fn context (not used)
