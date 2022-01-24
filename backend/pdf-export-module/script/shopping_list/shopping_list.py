@@ -194,7 +194,7 @@ class ShoppingList:
         min_number_of_ings = int(args.minNIng) if int(args.minNIng) else 1
         final_categories = {}
         for cat_names in ingredients_categorized.keys():
-            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) <= min_number_of_ings:
+            if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) < min_number_of_ings:
                 if 'Diverses' in final_categories:
                     final_categories['Diverses'].extend(ingredients_categorized[cat_names])
                 else:
