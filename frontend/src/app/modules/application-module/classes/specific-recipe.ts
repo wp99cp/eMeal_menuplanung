@@ -1,6 +1,5 @@
-import { FirestoreSpecificRecipe, UserGroups } from '../interfaces/firestoreDatatypes';
-import { FirestoreObject, ExportableObject } from './firebaseObject';
-import { Recipe } from './recipe';
+import {FirestoreSpecificRecipe, UserGroups} from '../interfaces/firestoreDatatypes';
+import {ExportableObject, FirestoreObject} from './firebaseObject';
 
 export class SpecificRecipe extends FirestoreObject implements ExportableObject {
 
