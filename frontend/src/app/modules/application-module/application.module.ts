@@ -154,7 +154,7 @@ import {EditSingleRecipePageComponent} from "./pages/edit-single-recipe-page/edi
   imports: [
     CommonModule,
     ApplicationRoutingModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menuplanung'),
+    AngularFireModule.initializeApp(environment.firebaseConfig, 'eMeal - Menüplanung'),
     AngularFireFunctionsModule,
     AngularFireStorageModule,
     AngularFirestoreModule,
