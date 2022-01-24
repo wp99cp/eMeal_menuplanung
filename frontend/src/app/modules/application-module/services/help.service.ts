@@ -23,7 +23,7 @@ export class HelpService {
     message: `Für diese Seite sind noch keine Tipps, Tricks und/oder Hilfetexte verfügbar. Gerne aber kannst du uns
                   über die Feedback-Funktion dein Anliegen schildern. Wir bemühen uns um eine Antwort/Lösung des Problems.<br>
                 <br>
-                <img width="100%" src="/assets/img/help_info_messages/Feedback_erfassen.png">`,
+                <img alt="Feedback zu eMeal geben." width="100%" src="/assets/img/help_info_messages/Feedback_erfassen.png">`,
     urls: [],
     ref: 'default'
   };
