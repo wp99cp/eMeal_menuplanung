@@ -94,7 +94,7 @@
     "deprecation": {"severity": "warning"},
 
     // -- Light Warnings --
-    // These rules are intended to help developers use better style. Simpler code has fewer bugs. These would be "info"
+    // These rules are intended to help-page developers use better style. Simpler code has fewer bugs. These would be "info"
     // if TSLint supported such a level.
 
     // prefer for( ... of ... ) to an index loop when the index is only used to fetch an object from an array.

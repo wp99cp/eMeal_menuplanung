@@ -4,11 +4,11 @@ from datetime import timedelta
 from pylatex import NoEscape, Package, Tabularx, Command, Document, Figure
 from pylatex.base_classes import Arguments
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 from pages.enviroments import Sidewaystable, Landscape
 
 
-def weekview_table(doc: Document, camp: Camp, args: Namespace):
+def weekview_table(doc: Document, camp: CampClass, args: Namespace):
     # content for this page
     days = camp.get_days()
     days = list(map(lambda d: NoEscape(
@@ -31,7 +31,7 @@ def weekview_table(doc: Document, camp: Camp, args: Namespace):
             add_table(camp, days, doc, args)
 
 
-def prepareMealsForWeekview(camp: Camp, args: Namespace):
+def prepareMealsForWeekview(camp: CampClass, args: Namespace):
     day_as_dates = camp.get_days_as_dates()
     meal_weekview = {}
 

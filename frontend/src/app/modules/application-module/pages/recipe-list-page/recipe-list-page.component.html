@@ -1,0 +1,29 @@
+<span class="big-page-title">Meine Rezepte</span>
+
+
+<mat-form-field class="mat-form-field full-width">
+  <mat-chip-list #chipList *ngIf="(route.queryParams | async) as params">
+    <mat-chip *ngIf="params.vorlagen == '1'"> Vorlagen
+      <mat-icon routerLink="." [queryParams]="{'vorlagen': 0}">cancel</mat-icon>
+    </mat-chip>
+    <input matInput [matChipInputFor]="chipList" (keyup)="applyFilter($event.target.value)"
+           placeholder="Rezept suchen..." id="search-field">
+  </mat-chip-list>
+</mat-form-field>
+
+<div id="recipesList" *ngIf="filteredElements as recipes else loading_preview">
+
+  <app-list-card *ngFor="let recipe of recipes" [cardElement]="recipe"
+                 [access]="access[recipe.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
+
+  <app-new-list-element>
+    <h3>Neues Rezept erstellen</h3>
+    <button (click)="newElement()" mat-raised-button color="save">Rezept erstellen</button>
+  </app-new-list-element>
+
+</div>
+
+<ng-template #loading_preview>
+  <app-list-card *ngFor="let number of [0, 0, 0, 0, 0]" class="templateStyle"></app-list-card>
+</ng-template>
+

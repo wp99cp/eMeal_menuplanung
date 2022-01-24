@@ -1,0 +1,47 @@
+<h3>Mahlzeit an einem anderen Tag vorbereiten</h3>
+
+<div class="mat-dialog-content">
+  <p>Gewisse Mahlzeiten müssen bereits am Vortag vorbereitet werden. In diesem Fall werden die Zutaten bereits am Tag
+    der Vorbereitung in der Tageseinkaufsliste aufgeführt. Mahlzeiten können nur an Tagen vorbereitet werden, die auch
+    in deiner Woche-Übersicht enthalten sind
+    (<a (click)="helpService.openHelpPopup('mahlzeit-vorbereiten')">mehr Erfahren</a>).
+  </p>
+
+  <br>
+
+  <p *ngIf="prepareForm.value.hasPrepareDate">
+    <b>Vorbereiten: </b>Diese Mahlzeit ({{data.specificMeal.weekTitle}}) wird vorbereitet.
+  </p>
+  <p *ngIf="!prepareForm.value.hasPrepareDate">
+    <b>Vorbereiten: </b>Diese Mahlzeit ({{data.specificMeal.weekTitle}}) muss nicht vorbereitet werden.
+  </p>
+
+  <form [formGroup]="prepareForm">
+
+    <mat-checkbox formControlName="hasPrepareDate" class="checkbox full-width">
+      Mahlzeit an einem anderen Tag vorbereiten
+      <ng-container *ngIf="dayBeforeDate == undefined">(Diese Mahlzeit kann nicht vorbereitet werden).</ng-container>
+    </mat-checkbox>
+
+    <ng-container *ngIf="prepareForm.value.hasPrepareDate">
+      <mat-form-field class="date-picker">
+        <input matInput [matDatepicker]="matDatePicker" [matDatepickerFilter]="dateFilter"
+               placeholder="Vorbereitungsdatum" (click)="matDatePicker.open()"
+               formControlName="prepareDate">
+        <mat-datepicker-toggle matSuffix [for]="matDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #matDatePicker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <p><a (click)="helpService.openHelpPopup('mahlzeit-vorbereiten')">Hilfe zum Vorbereiten</a></p>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="returnsSpecificMeal()"
+          [disabled]="dataHasNotChanged || !prepareForm.valid" color="save">
+    Speichern
+  </button>
+</div>

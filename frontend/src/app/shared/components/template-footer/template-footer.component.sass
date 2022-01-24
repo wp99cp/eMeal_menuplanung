@@ -1,0 +1,62 @@
+@import '../../../../sass/colors'
+@import '../../../../sass/fonts'
+
+.footer-menu-area
+  background-color: #1c3964
+  padding: 50px 25px 50px 25px
+  display: grid
+
+  hr
+    border: none
+    border-left: solid 2px #203f6d
+
+  .footer-menu
+    display: flex
+    margin: auto
+
+  @media screen and (max-width: 850px)
+    .footer-menu
+      flex-direction: column
+      text-align: center
+
+  .submenu
+    width: 200px
+    height: 200px
+    margin: 30px
+    text-align: center
+
+  h4
+    color: #637CA1
+    font: $footer-font
+    font-weight: 800
+    margin-bottom: 8px
+
+  span:hover, a:hover
+    color: #7393c2 !important
+
+  span
+    color: #4e6c99
+    font: $footer-font
+    margin: 6px 0 0 0
+    line-height: 18px
+    font-weight: 500
+    width: 100%
+    display: block
+    transition: color 0.2s
+
+    a
+      color: #4e6c99
+
+.footer
+  display: grid
+  background-color: #0e274c
+  padding: 25px 25px 20px 25px
+
+  span, a
+    text-align: center
+    color: #4e6c99
+    font: $footer-font
+    line-height: 2rem
+
+  a:hover
+    color: #7393c2

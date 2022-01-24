@@ -1,0 +1,36 @@
+<h3 mat-dialog-title>Rezept erstellen.</h3>
+
+<form [formGroup]="newRecipeForm">
+
+  <mat-form-field class="full-width">
+    <input matInput required formControlName="title" placeholder="Name der Mahlzeit">
+  </mat-form-field>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="Beschreibung" formControlName="description"></textarea>
+  </mat-form-field>
+
+  <p class="info">
+    Eine gute Beschreibung enthält Angaben zum Alter der TNs.
+    Sowie weitere wichtige Informationen zur Mahlzeit.
+  </p>
+
+  <mat-form-field class="full-width">
+    <textarea matInput placeholder="Notizen" formControlName="notes"></textarea>
+  </mat-form-field>
+
+</form>
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <div class="additional-buttons">
+    <button mat-stroked-button (click)="dialogRef.closeAll()" routerLink="/app/recipes" [queryParams]="{vorlagen: 1}"
+            id="create-from-template">Aus Vorlage
+      erstellen
+    </button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="close()">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="create()" routerLink="/app/recipes" [queryParams]="{vorlagen: 0}"
+          color="save"
+          [disabled]="newRecipeForm.value.title == ''">Rezept erstellen
+  </button>
+</div>

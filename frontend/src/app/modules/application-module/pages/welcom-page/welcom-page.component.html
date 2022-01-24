@@ -1,0 +1,54 @@
+<div class="centered">
+  <span class="page-title">Jetzt loslegen!</span>
+
+  <h1 class="mat-h1">{{title}}</h1>
+
+  <article>
+    <!-- fast actions: overview -->
+    <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
+
+      <div class="cards">
+
+        <div class="card" >
+          <img src="/frontend/src/assets/img/camps_square_link.240w.jpg" routerLink="/app/camps"
+               srcset="/frontend/src/assets/img/camps_square_link.240w.jpg 240w, /assets/img/camps_square_link.300w.jpg 300w, /assets/img/camps_square_link.420w.jpg 420w"
+               alt="CampClass Link Image">
+          <div class="cardDescription">
+            <p><b>Meine Lager</b></p>
+            <a (click)="help.openHelpPopup('was-ist-ein-lager')">Hilfe: Was ist ein Lager in eMeal?</a>
+          </div>
+        </div>
+
+        <div class="card" >
+          <img src="/frontend/src/assets/img/meal_square_link.240w.jpg" routerLink="/app/meals"
+               srcset="/frontend/src/assets/img/meal_square_link.240w.jpg 240w, /assets/img/meal_square_link.300w.jpg 300w, /assets/img/meal_square_link.420w.jpg 420w"
+               alt="Meal Link Image">
+          <div class="cardDescription"><p><b>Meine Mahlzeiten</b></p>
+            <a (click)="help.openHelpPopup('was-ist-eine-mahlzeit')">Hilfe: Was ist eine Mahlzeit in eMeal?</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <img src="/frontend/src/assets/img/recipes_square_link.240w.jpg" routerLink="/app/recipes"
+               srcset="//assets/img/recipes_square_link.240w.jpg 240w, /frontend/src/assets/img/recipes_square_link.300w.jpg 300w, /assets/img/recipes_square_link.420w.jpg 420w"
+               alt="Recipe Link Image">
+          <div class="cardDescription"><p><b>Meine Rezepte</b></p>
+            <a (click)="help.openHelpPopup('was-ist-ein-rezept')">Hilfe: Was ist ein Rezept in eMeal?</a>
+          </div>
+        </div>
+
+      </div>
+
+    </ng-container>
+
+    <!-- Loading Animation -->
+    <ng-template #loadingUserData>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </ng-template>
+
+  </article>
+
+
+  <app-version-info></app-version-info>
+
+</div>

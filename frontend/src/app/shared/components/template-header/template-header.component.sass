@@ -1,0 +1,79 @@
+
+@import '../../../../sass/colors'
+@import '../../../../sass/fonts'
+
+// Allgemeines zum Header
+.header
+  background-color: white
+  color: #757575
+  // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12)
+  grid-template-columns: 50px auto auto
+  z-index: 100
+  height: 100%
+  width: 100%
+  display: grid
+
+.header.show-menu
+  grid-template-columns: auto auto
+  width: calc(100% - 280px)
+  margin-left: 280px
+
+  .header-nav
+    margin: 0 15px
+
+
+.mat-icon.show-menu
+  display: none
+
+.user-name
+  text-align: right
+  line-height: 50px
+  margin-right: 15px
+  font-size: 14px
+  font-weight: 500
+  width: auto
+  margin-left: auto
+  user-select: none
+
+
+.nav-icon
+  color: unset
+  display: block
+  margin: 0
+  font-size: 20px !important
+  padding-right: 5px
+  line-height: 50px
+  padding-left: 10px
+
+// Seitennavigation im Header
+.nav-link-list
+  float: right
+  width: auto
+  margin-left: auto
+  font: $header-nav-font
+  margin-right: 15px
+  display: flex
+
+  p
+    line-height: 50px
+    margin: 0
+
+  // Saparator '·' between the navigation in the header
+  .nav-separator
+    line-height: 50px
+    margin: 0 5px
+
+.show-main-menu
+  margin: auto
+  font-size: 28px
+  line-height: 28px
+  color: #757575
+  width: 28px
+  height: 28px
+  cursor: pointer !important
+
+
+
+.show-main-menu.show-menu
+  opacity: 0

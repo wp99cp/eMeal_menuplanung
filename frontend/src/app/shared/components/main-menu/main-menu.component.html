@@ -1,0 +1,132 @@
+<div class="logo-container">
+  <a class="iconText" routerLink="/">
+    <img class="logo" src="/assets/icons/logo.svg" width="30" alt="Logo Cevi Züri 11">
+    <span class="logoName">Cevi Züri 11</span>
+    <span class="logoSubname">8052 Zürich</span>
+  </a>
+  <hr/>
+
+</div>
+
+<div *ngIf="isInsideApp() else notInsideApp" class="nav" (click)="closeMenu()">
+
+  <ul class="top">
+
+    <ng-container *ngIf="lastCamp?.documentId">
+      <h4> {{lastCamp.name}} </h4>
+      <li routerLink="/app/camps/{{lastCamp.documentId}}" routerLinkActive="active-link">
+        <mat-icon class="nav-icon">edit_calendar</mat-icon>
+        <a> Wochenübersicht </a>
+      </li>
+    </ng-container>
+
+    <h4> Meine Bibliothek </h4>
+    <li routerLink="/app/camps" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+      <mat-icon class="nav-icon">nature_people</mat-icon>
+      <a> Alle Lager </a>
+    </li>
+    <li routerLink="/app/meals" routerLinkActive="active-link">
+      <mat-icon class="nav-icon">fastfood</mat-icon>
+      <a> Alle Mahlzeiten </a>
+    </li>
+    <li routerLink="/app/recipes" routerLinkActive="active-link">
+      <mat-icon class="nav-icon"> menu_book</mat-icon>
+      <a> Alle Rezepte </a>
+    </li>
+
+  </ul>
+
+  <ul class="bottom">
+    <hr/>
+
+    <h4> Hilfestellung und Feedback </h4>
+
+    <li (click)="this.helpService.openHelpPopup()">
+      <mat-icon class="nav-icon">help</mat-icon>
+      <a matTooltip="Hilfe und Erklärungen (F1)">Erklärungen</a>
+    </li>
+    <li (click)="openFeedbackDialog()">
+      <mat-icon class="nav-icon">feedback</mat-icon>
+      <a matTooltip="Melde einen Fehler">Fehler melden</a>
+    </li>
+
+    <li routerLink="/infos/eMeal">
+      <mat-icon class="nav-icon">info</mat-icon>
+      <a matTooltip="Informationen">Über eMeal - Menüplanung</a>
+    </li>
+
+    <hr/>
+
+    <h4> Einstellungen und Konto </h4>
+
+    <li routerLink="/app/settings" routerLinkActive="active-link">
+      <mat-icon class="nav-icon">settings</mat-icon>
+      <a matTooltip="Einstellungen / Infos zu meinem Konto">Konto / Einstellungen</a>
+    </li>
+
+    <li routerLink="/app/admin" routerLinkActive="active-link" *ngIf="isAdmin">
+      <mat-icon class="nav-icon">dashboard</mat-icon>
+      <a>Admin Dashboard</a>
+    </li>
+
+    <li routerLink="/">
+      <mat-icon class="nav-icon">logout</mat-icon>
+      <a (click)="signOut()">Abmelden</a>
+    </li>
+  </ul>
+
+</div>
+
+<ng-template #notInsideApp>
+  <div class="nav" (click)="closeMenu()">
+
+    <ul class="top">
+      <li routerLink="/">
+        <a matTooltip="Über eMeal">Startseite</a>
+      </li>
+      <li routerLink="/infos/eMeal" routerLinkActive="active-link">
+        <a matTooltip="Weitere Informationen">Über eMeal - Menüplanung</a>
+      </li>
+      <li routerLink="/infos/hilfe" routerLinkActive="active-link">
+        <a matTooltip="Hilfe und Erklärungen zu eMeal Menüplanung">Hilfe / Erklärungen</a>
+      </li>
+    </ul>
+
+    <ul class="bottom">
+      <li routerLink="/infos/changeLog" routerLinkActive="active-link">
+        <mat-icon class="nav-icon">view_list</mat-icon>
+        <a matTooltip="Neue Funktionen">Neue Funktionen</a>
+      </li>
+      <li routerLink="/infos/kontakt" routerLinkActive="active-link">
+        <mat-icon class="nav-icon">feedback</mat-icon>
+        <a matTooltip="Kontakt aufnehmen">Kontakt</a>
+      </li>
+      <hr/>
+
+      <ng-container *ngIf="!isSignedIn else userIsSignedIn">
+        <h4> Anmelden und loslegen </h4>
+
+        <li routerLink="/login" routerLinkActive="active-link">
+          <mat-icon class="nav-icon">login</mat-icon>
+          <a matTooltip="Registrieren">Anmelden / Registrieren</a>
+        </li>
+      </ng-container>
+
+      <ng-template #userIsSignedIn>
+
+        <h4> Mein eMeal - Menüplanung </h4>
+
+        <li routerLink="/app" routerLinkActive="active-link">
+          <mat-icon class="nav-icon">launch</mat-icon>
+          <a>zur App wechseln</a>
+        </li>
+        <li routerLink="/">
+          <mat-icon class="nav-icon">logout</mat-icon>
+          <a (click)="signOut()">Abmelden</a>
+        </li>
+      </ng-template>
+
+    </ul>
+
+  </div>
+</ng-template>

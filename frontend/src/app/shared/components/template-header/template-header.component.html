@@ -1,0 +1,18 @@
+<div class="header">
+
+  <mat-icon class="show-main-menu" matTooltip="Hauptmenü" (click)="showMenu()">menu</mat-icon>
+
+  <app-header-nav class="header-nav"></app-header-nav>
+
+
+  <ng-container *ngIf=" (auth.getCurrentUser() | async) as user">
+    <ng-container *ngIf="innerWidth > 1500 else iconOnly">
+      <span matTooltip="Du bist angemeldet als {{user.displayName}}" class="user-name"> {{user.displayName}}</span>
+    </ng-container>
+    <ng-template #iconOnly>
+     <!--  <span matTooltip="Du bist angemeldet als {{user.displayName}}" class="user-name"> {{user.displayName.substring(0, 1)}}</span> -->
+    </ng-template>
+  </ng-container>
+
+
+</div>
