@@ -41,7 +41,7 @@ export abstract class FirestoreObject implements ExportableObject {
    * creates a new FirestoreObject from a FirestoreDocument
    *
    */
-  constructor(document: FirestoreDocument) {
+  protected constructor(document: FirestoreDocument) {
 
     if (document === undefined) {
       throw new Error('Invalid firestore document!');
