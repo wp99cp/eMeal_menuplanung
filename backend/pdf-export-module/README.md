@@ -1,4 +1,4 @@
-# Docker Container for Exporting a Camp
+# Docker Container for Exporting a CampClass
 
 This Docker container contains the functionality for the PDF export of a camp.
 

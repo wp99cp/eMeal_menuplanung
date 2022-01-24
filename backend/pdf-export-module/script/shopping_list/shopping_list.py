@@ -7,7 +7,7 @@ import firebase_admin
 from argparse import Namespace
 from firebase_admin import firestore, credentials
 
-from exportData.camp import Camp
+from exportData.camp import CampClass
 from shopping_list.spelling_corrector import SpellingCorrector
 
 """
@@ -56,7 +56,7 @@ class ShoppingList:
     Helper class for creating a shopping list from a camp.
     """
 
-    def __init__(self, camp: Camp):
+    def __init__(self, camp: CampClass):
         self.full_shopping_list = None
         self._camp = camp
         self.checked_spelling = False

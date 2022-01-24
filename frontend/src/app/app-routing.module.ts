@@ -2,11 +2,11 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {MarkdownModule} from 'ngx-markdown';
 import {HttpClient} from '@angular/common/http';
-import {LandingPage} from './landingPage/landingPage.component';
-import {SignInComponent} from './sign-in/sign-in.component';
-import {SignInCallbackComponent} from './sign-in-callback/sign-in-callback.component';
-import {ErrorPageComponent} from './error-page/error-page.component';
-import {AccessGuard} from './AccessGuard';
+import {LandingPage} from "./pages/landing-page/landingPage.component";
+import {SignInComponent} from "./pages/sign-in-page/sign-in.component";
+import {AccessGuard} from "./guards/AccessGuard";
+import {SignInCallbackComponent} from "./pages/sign-in-callback-page/sign-in-callback.component";
+import {ErrorPageComponent} from "./pages/error-page/error-page.component";
 
 
 const routes: Routes = [
@@ -29,17 +29,17 @@ const routes: Routes = [
   },
   {
     path: 'infos',
-    loadChildren: () => import('./informations/informations.module').then(mod => mod.InformationsModule)
+    loadChildren: () => import('./modules/information-module/information.module').then(mod => mod.InformationModule)
   },
   {
     path: 'app',
-    loadChildren: () => import('./application/application.module').then(mod => mod.ApplicationModule),
+    loadChildren: () => import('./modules/application-module/application.module').then(mod => mod.ApplicationModule),
     data: {requiresLogin: true, redirectURL: '/login'},
     canActivate: [AccessGuard]
   },
   {
     path: 'app/admin',
-    loadChildren: () => import('./admin-pages/admin-pages.module').then(mod => mod.AdminPagesModule),
+    loadChildren: () => import('./modules/admin-module/admin-pages.module').then(mod => mod.AdminPagesModule),
     data: {requiresLogin: true, requiresAdminRights: true, redirectURL: '/app'},
     canActivate: [AccessGuard]
   },

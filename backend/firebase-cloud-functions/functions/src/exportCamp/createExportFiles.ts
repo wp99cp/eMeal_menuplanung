@@ -122,7 +122,7 @@ async function saveAsHTML(page: any, filePath: string) {
     });
 
     const htmlFile = getCloudStorage().file(filePath + '.html');
-    const fileMetadata = {contentType: 'application/html'};
+    const fileMetadata = {contentType: 'application-module/html'};
     htmlFile.save(html, fileMetadata, (err) => {
         console.log(err);
     });
@@ -163,7 +163,7 @@ async function saveAsCSV(camp: ExportedCamp, filePath: string) {
     const csv = parser.parse(list);
 
     const csvFile = getCloudStorage().file(filePath + '.csv');
-    const fileMetadata = {contentType: 'application/csv'};
+    const fileMetadata = {contentType: 'application-module/csv'};
     csvFile.save(csv, fileMetadata, (err) => {
         console.log(err);
     });
@@ -208,7 +208,7 @@ async function saveAsPDF(page: any, filePath: string, callback: any) {
 
     // saves the file in the cloudStorage
     const pdfFile = getCloudStorage().file(filePath + '.pdf');
-    const fileMetadata = {contentType: 'application/pdf'};
+    const fileMetadata = {contentType: 'application-module/pdf'};
     pdfFile.save(pdfBuffer, fileMetadata, callback);
 
 }

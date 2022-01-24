@@ -31,7 +31,7 @@ function createAccessToken2(access_code: any): Promise<string> {
     const oauthAccessData = require('../keys/cevi-db-oauth.json');
     console.log(oauthAccessData)
 
-    const headers = {'Accept': 'application/json'};
+    const headers = {'Accept': 'application-module/json'};
     const dataString = 'grant_type=authorization_code&client_id=' + oauthAccessData.client_id +
         '&redirect_uri=' + oauthAccessData.redirect_uri +
         '&client_secret=' + oauthAccessData.client_secret +
@@ -60,7 +60,7 @@ function createAccessToken2(access_code: any): Promise<string> {
 
 /**
  *
- * Requests the user information form db.cevi.ch related to the given access_token.
+ * Requests the user information-module form db.cevi.ch related to the given access_token.
  *
  * @param access_token for db.cevi.ch
  * @returns the user data
@@ -115,7 +115,7 @@ export async function createAccessToken(req: express.Request, resp: express.Resp
     console.log(access_code);
 
     resp.set('Access-Control-Allow-Origin', 'https://emeal.zh11.ch');
-    resp.setHeader('Content-Type', 'application/json')
+    resp.setHeader('Content-Type', 'application-module/json')
 
     if (!access_code) {
         resp.status(401).send(JSON.stringify({error: 'Invalid Parameters!'}))
@@ -158,7 +158,7 @@ export async function createAccessToken(req: express.Request, resp: express.Resp
 
             auth.createUser(userData)
                 .then(async (userRecord: { uid: any; }) => {
-                    resp.setHeader('Content-Type', 'application/json')
+                    resp.setHeader('Content-Type', 'application-module/json')
                     resp.send(JSON.stringify({data: await auth.createCustomToken(userRecord.uid)}))
                     returnPromise();
                 })

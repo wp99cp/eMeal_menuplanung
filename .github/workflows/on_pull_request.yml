@@ -18,7 +18,7 @@ jobs:
           Todos before releasing a new version \n \n
 
           - [ ] Check release notes: All new features/changes included? Date correct? \n
-          - [ ] Check help messages: Are they all up to date? Update screenshots. Is the date correct? \n
+          - [ ] Check help-page messages: Are they all up to date? Update screenshots. Is the date correct? \n
           - [ ] Check preview build and test it with the productive database. \n
           - [ ] Deploy new revision of the PDF-Export Service \n
           "

@@ -7,6 +7,6 @@ copying the help messages form the dev DB to the prod DB. Deployment scripts are
 ### List of active build scripts
 
 ```shell
-# Copy help messages form dev to prod DB
+# Copy help-page messages form dev to prod DB
 python copy_help_messages_to_production_DB.py
 ```

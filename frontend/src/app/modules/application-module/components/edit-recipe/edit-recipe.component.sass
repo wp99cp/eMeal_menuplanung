@@ -1,0 +1,188 @@
+@import '../../../../../sass/fonts'
+
+\:host
+  display: inline-block
+
+.used-info
+  font-size: 12px
+  font-style: italic
+
+.recipe
+  width: 100%
+  font-size: 15px
+
+.recipe-header
+  display: flex
+  height: 50px
+  margin-bottom: 10px
+  margin-top: 50px
+
+  .recipe-name
+    width: 30%
+    margin: 0
+    line-height: 50px
+    height: 50px
+    color: black
+    font-size: 20px
+    font-weight: bold
+
+  .recipe-info
+    margin: auto 0
+    line-height: 20px
+
+  .recipe-participants-info
+    width: 20%
+    line-height: 50px
+    text-align: right
+    margin: 0 0 0 auto
+
+.recipe-table-area
+  position: relative
+  display: block
+
+.recipe-table
+  border-collapse: collapse
+  table-layout: fixed
+  width: 100%
+
+  .ingredient-number-column
+    width: 4%
+    text-align: center
+
+  .ingredient-fresh-column
+    width: 12%
+    text-align: center
+    cursor: pointer
+
+    .mat-icon
+      color: #93c47d
+
+  .ingredient-measure-column
+    width: 15%
+    text-align: center
+
+  .ingredient-comment-column
+    width: 22.5%
+    text-align: left
+    text-overflow: ellipsis
+    white-space: nowrap
+
+  .ingredient-unit-column
+    width: 15%
+    text-align: center
+
+  .ingredient-food-column
+    width: 22.5%
+    text-align: left
+
+  .ingredient-delete-column
+    width: 4%
+    text-align: center
+    cursor: pointer
+
+  td, th
+    padding: 3px
+    margin: 1px
+    background-color: white
+    border: 1px solid #d9d9d9
+    height: 29.5px
+    user-select: none
+    font: $default-font
+    font-size: 15px
+
+    data
+      pointer-events: none
+      overflow: hidden
+      line-height: 30px
+      height: 30px
+      text-overflow: ellipsis
+      display: block
+
+  th
+    font-weight: bold
+
+  .ingredient-template td
+    border: 1px dotted #d9d9d9
+    opacity: 0.3
+
+  .recipe-table-headers, .ingredient
+    height: 37.5px
+
+  .recipe-table-header
+    font-size: 16px
+    background-color: #f0f2f7
+
+  .recipe-table-index-bar
+    background-color: #f0f2f7
+    font-weight: bold
+
+  .recipe-table-index-bar.overwriting
+    background-color: transparent
+    border-left: none
+
+  .ingredient-overwritting .recipe-table-index-bar
+    background-color: white
+    border: none
+
+    .mat-icon
+      color: #8699ba
+
+  .ingredient
+    td
+      color: #c9daf8
+      text-decoration: line-through
+
+    .mat-icon
+      font-size: 24px
+      opacity: 0.3
+
+  .ingredient:last-child
+    td
+      text-decoration: none
+      color: black
+
+    .mat-icon
+      opacity: 1
+
+  .ingredient-number
+    font-size: 8.5px
+    text-align: center
+    text-decoration: none !important
+    color: black !important
+
+
+.focus-overlay
+  position: absolute
+  border: 2px solid #1a73e8
+  visibility: hidden
+
+  .input-field
+    font: $default-font
+    font-size: 15px
+    visibility: hidden
+    border: none
+    background-color: white
+    line-height: 16px
+    height: 30.5px
+    padding: 2.5px 2px
+
+.area-overlay
+  position: absolute
+  border: 1px solid #1a73e8
+  visibility: hidden
+  background-color: #1a73e8
+  color: #1a73e8
+  opacity: 0.075
+  pointer-events: none
+
+.recipe-info-form-fields
+  margin-top: 25px
+
+.not-editable, .recipe-info-form-fields textarea:read-only
+  opacity: 0.6
+
+.no-access-info
+  text-align: right
+  font-size: 12px
+  color: lightgray
+  line-height: 32px

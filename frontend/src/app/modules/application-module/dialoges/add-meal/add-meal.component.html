@@ -1,0 +1,91 @@
+<h3 mat-dialog-title>Mahlzeiten hinzufügen.</h3>
+
+<div class="meal-search-table">
+
+  <mat-form-field class="mat-form-field full-width">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Mahlzeit suchen..." id="search-field" autocomplete="off">
+  </mat-form-field>
+
+
+  <table mat-table [dataSource]="mealTableSource" matSort matSortActive="title" matSortDirection="asc"
+         class="full-width">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+
+      <th mat-header-cell *matHeaderCellDef class="selection-header">
+        <!--
+      <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selectedMeal.hasValue() && isAllSelected()"
+                    [indeterminate]="selectedMeal.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+         -->
+      </th>
+
+      <td mat-cell *matCellDef="let row; let element">
+        <mat-checkbox (click)="$event.stopPropagation(); this.selectedMeal.clear()"
+                      (change)="$event ? selectedMeal.toggle(row) : null"
+                      [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)"
+                      [disabled]="element.usedAs === undefined && element.lastMeal === undefined"
+                      matTooltip="{{element.useAs === undefined && element.lastMeal === undefined? 'wähle eine Verwendung' : 'auswählen'}}">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="title-header"> Name</th>
+      <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- lastname Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="description-header"> Beschreibung</th>
+      <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="useAs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="use-as-header" matTooltip="letzte Verwendung">
+        Verwenden als
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-form-field matTooltip="wähle Verwendung" *ngIf="data.usage === undefined else useProvidedUsage">
+          <select matNativeControl #select (input)="selected(element, select.value)"
+                  [value]="element.lastMeal !== undefined ? element.lastMeal : ''">
+            <option value="Zmorgen">Zmorgen</option>
+            <option value="Zmittag">Zmittag</option>
+            <option value="Znacht">Znacht</option>
+            <option value="Znüni">Znüni</option>
+            <option value="Zvieri">Zvieri</option>
+            <option value="Leitersnack">Leitersnack</option>
+          </select>
+        </mat-form-field>
+        <ng-template #useProvidedUsage>
+          <span>{{data.usage}}</span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+  </table>
+
+  <p *ngIf="mealTableSource.data.length == 0" class="info">
+    Du hast noch keine Mahlzeiten erstellt. Erstelle oder importiere zuerst eine Mahlzeit.
+  </p>
+
+</div>
+
+<mat-paginator [pageSize]="6"></mat-paginator>
+
+
+<div mat-dialog-actions class="custom-mat-buttons">
+  <div class="additional-buttons">
+    <button mat-stroked-button (click)="newMeal()" id="add-meal">Mahlzeit erstellen</button>
+    <button mat-stroked-button (click)="import()" matTooltip="Importieren von Mahlzeiten">Importieren</button>
+  </div>
+  <button mat-stroked-button [mat-dialog-close]="null"> Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="selectedMeal" color="save" [disabled]="!selectedMeal.hasValue()"
+          (click)="addLastMeal()">Mahlzeiten hinzufügen
+  </button>
+</div>

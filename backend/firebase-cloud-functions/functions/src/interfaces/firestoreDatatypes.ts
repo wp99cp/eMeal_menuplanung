@@ -55,7 +55,7 @@ export interface DayData {
 }
 
 /**
- * Representiert ein FirestoreCamp, d.h. ein Camp in der Datenbank.
+ * Representiert ein FirestoreCamp, d.h. ein CampClass in der Datenbank.
  *
  */
 export interface FirestoreCamp extends FirestoreDocument {
