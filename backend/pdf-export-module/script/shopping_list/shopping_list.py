@@ -2,12 +2,11 @@ import copy
 import random
 import string
 import time
+from argparse import Namespace
 
 import firebase_admin
-from argparse import Namespace
-from firebase_admin import firestore, credentials
-
 from exportData.camp import CampClass
+from firebase_admin import firestore, credentials
 from shopping_list.spelling_corrector import SpellingCorrector
 
 """
@@ -56,6 +55,8 @@ class ShoppingList:
     Helper class for creating a shopping list from a camp.
     """
 
+    categories = {}
+
     def __init__(self, camp: CampClass):
         self.full_shopping_list = None
         self._camp = camp
@@ -78,6 +79,28 @@ class ShoppingList:
         ShoppingList.categories = ShoppingList.__db.document('sharedData/categories').get().to_dict()
 
         self._spellingCorrector = SpellingCorrector(ShoppingList.__db)
+
+    @classmethod
+    def get_category(cls, food_name):
+
+        list_of_keys = list(cls.categories.keys())
+
+        keys = [x.lower() for x in list_of_keys]
+
+        if food_name.lower() in keys:
+            index = keys.index(food_name.lower())
+            correct_food_name = list_of_keys[index]
+            return cls.categories[correct_food_name]
+
+        words = food_name.lower().split(' ')
+
+        for w in words:
+            if w in keys:
+                index = keys.index(w)
+                correct_food_name = list_of_keys[index]
+                return cls.categories[correct_food_name]
+
+        return None
 
     @classmethod
     def combine_ingredients(cls, ingredients):
@@ -169,8 +192,14 @@ class ShoppingList:
 
         for ing in ingredients:
             # Add ingredients to the corresponding category
-            if ing['food'] in cls.categories.keys():
-                ing_category = cls.categories[ing['food']]
+
+            ing_category = cls.get_category(ing['food'])
+            if ing_category:
+                print(ing['food'], " --> ", ing_category['category_name'])
+            else:
+                print(ing['food'], " --> ", "No Category found!")
+
+            if ing_category:
                 if ing_category['category_name'] in ingredients_categorized.keys():
                     ingredients_categorized[ing_category['category_name']].append(ing)
                 else:
@@ -188,7 +217,6 @@ class ShoppingList:
         if len(category_unknown) > 0:
             cls.__db.document('sharedData/foodCategories') \
                 .update({'uncategorised': firestore.ArrayUnion(category_unknown)})
-
 
         # Merge categories with less than args.minNIng elements
         min_number_of_ings = int(args.minNIng) if int(args.minNIng) else 1
