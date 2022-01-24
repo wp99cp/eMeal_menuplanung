@@ -33,18 +33,18 @@
 
     <!-- firstName Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="title-header"> Name</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="title-header"> Name</th>
       <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.name}} </td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="description-header"> Beschreibung</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="description-header"> Beschreibung</th>
       <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.description}} </td>
     </ng-container>
 
     <ng-container matColumnDef="useAs">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header class="use-as-header" matTooltip="letzte Verwendung">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="use-as-header" matTooltip="letzte Verwendung">
         Verwenden als
       </th>
       <td mat-cell *matCellDef="let element">
