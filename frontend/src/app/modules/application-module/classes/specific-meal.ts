@@ -19,7 +19,7 @@ export class SpecificMeal extends FirestoreObject implements ExportableObject {
   public prepareAsDate: Date;
   public prepare: boolean;
   public date: Timestamp;
-  private mealId;
+  private readonly mealId;
 
   constructor(meal: FirestoreSpecificMeal, path: string) {
 
