@@ -11,7 +11,25 @@ importMeal({url: "https://fooby.ch/en/recipes/13305/spring-bean-salad?startAuto1
     });
 */
 
+/**
+ *  This function checks whether the url is a supported URL or not.
+ *  Currently, ony fooby and swissmilk are supported.
+ *
+ *  @returns true if the URL is supported
+ */
+function notASupportedURL(url_as_str: string) {
+
+    const supportedURLS = ['swissmilk.ch', 'fooby.ch'];
+
+    const url = new URL(url_as_str);
+    return !supportedURLS.includes(url.hostname)
+
+}
+
 export async function importMeal(requestData: { url: string }): Promise<any> {
+
+    if (notASupportedURL(requestData.url))
+        return {error: 'Url not supported!'};
 
     // load dependencies
     const jsdom = require('jsdom');
@@ -32,6 +50,7 @@ export async function importMeal(requestData: { url: string }): Promise<any> {
         // Parse page (Supported pages: swissmilk.ch, fooby.ch)
         if (requestData.url.includes('swissmilk.ch'))
             return parseSwissmilk(document);
+
         if (requestData.url.includes('fooby.ch'))
             return parseFooby(document);
 
@@ -261,7 +280,7 @@ function parseSwissmilk(document: any): any {
             // parses food string. Normally after a comma follows a description (i.g. the comment)
             const foodAndComment = food.split(',')
             food = foodAndComment[0].trim();
-            const  comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
+            const comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
             comment.replace(":", " ");
 
             // test for null and calc for 1 person
