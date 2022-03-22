@@ -121,4 +121,4 @@ def add_recipe(doc, recipe):
                     if recipe['recipe_description'] != '':
                         table_content.add_row(['Beschreibung: ', recipe['recipe_description']])
                     if recipe['recipe_notes'] != '':
-                        table_content.add_row(['Notizen:', recipe['recipe_notes']])
+                        table_content.add_row(['Notizen:', recipe['recipe_notes'].strip('\n')])
