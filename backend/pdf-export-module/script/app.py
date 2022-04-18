@@ -2,12 +2,13 @@ import functools
 import os
 
 from flask import Flask, request
+from flask_cors import CORS
 
 import script.pdf_generator
 from script.utils.commandline_args_parser import setup_parser
 
 app = Flask(__name__)
-
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/export/camp/<campID>/user/<userID>/")
 def pdf_export(campID, userID):

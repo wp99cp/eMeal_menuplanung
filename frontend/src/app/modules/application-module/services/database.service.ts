@@ -434,8 +434,6 @@ export class DatabaseService {
   }
 
   /**
-   *   * TODO: auto unsubscription
-
    * @param recipeId
    */
   public getMealIDsThatIncludes(recipeId: string) {
@@ -456,7 +454,7 @@ export class DatabaseService {
 
     return new Promise((resolve, reject) => {
 
-      this.authService.getCurrentUser().subscribe(user => {
+      this.authService.getCurrentUser().pipe(take(1)).subscribe(user => {
 
         let queryStr = '?';
 
@@ -472,6 +470,9 @@ export class DatabaseService {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url);
         xhr.onload = () => {
+
+          console.log('Export status: ', xhr.status);
+
           if (xhr.status === 200) {
             resolve(xhr.responseText);
           } else {
