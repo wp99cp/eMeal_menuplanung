@@ -65,7 +65,6 @@ import {CopyCampComponent} from './dialoges/copy-camp/copy-camp.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
 import {MatRadioModule} from '@angular/material/radio';
-import {MarkdownModule} from 'ngx-markdown';
 import {EditRecipeComponent} from './components/edit-recipe/edit-recipe.component';
 import {ContextMenuService} from './services/context-menu.service';
 import {ShortcutService} from './services/shortcut.service';
@@ -192,7 +191,6 @@ import {EditSingleRecipePageComponent} from "./pages/edit-single-recipe-page/edi
     FormsModule,
     ReactiveFormsModule,
     DownloadModule,
-    MarkdownModule,
     MatProgressSpinnerModule,
     MatSelectModule,
     MatChipsModule

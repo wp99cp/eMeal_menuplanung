@@ -106,7 +106,6 @@ export class ExportCampPageComponent implements OnInit {
         return this.dbService.createPDF(result.campId, result.optionalArgs);
 
       }))
-      .pipe(delay(250))
       .subscribe(() => {
         this.exportIsRunning = false;
       }, (err) => {

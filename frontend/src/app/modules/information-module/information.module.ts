@@ -2,7 +2,6 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {MarkdownModule} from 'ngx-markdown';
 import {DatenschutzComponent} from './pages/datenschutz-page/datenschutz.component';
 import {InformationspageComponent} from './pages/informations-page/informations-page.component';
 import {ImpressumComponent} from './pages/impressum-page/impressum.component';
@@ -25,7 +24,6 @@ import {DownloadModule} from "../download-module/download.module";
     // mat design
     MatButtonModule,
     MatCardModule,
-    MarkdownModule,
     MatExpansionModule,
     MatProgressBarModule,
     DownloadModule

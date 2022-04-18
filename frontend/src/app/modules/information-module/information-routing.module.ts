@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {MarkdownModule} from 'ngx-markdown';
 import {DatenschutzComponent} from './pages/datenschutz-page/datenschutz.component';
 import {InformationspageComponent} from './pages/informations-page/informations-page.component';
 import {ImpressumComponent} from './pages/impressum-page/impressum.component';
@@ -46,8 +45,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes),
-    MarkdownModule.forChild()
+    RouterModule.forChild(routes)
   ],
   exports: [RouterModule]
 })

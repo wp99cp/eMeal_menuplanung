@@ -12,7 +12,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatIconModule} from '@angular/material/icon';
 import {LandingPage} from './pages/landing-page/landingPage.component';
-import {MarkdownModule} from 'ngx-markdown';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/compat/auth';
 import {AuthenticationService} from './modules/application-module/services/authentication.service';
 import {AngularFireModule} from '@angular/fire/compat';
@@ -69,7 +68,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatTooltipModule,
     MatButtonModule,
     MatIconModule,
-    MarkdownModule,
     MatInputModule,
     MatSlideToggleModule,
     MatDialogModule,
