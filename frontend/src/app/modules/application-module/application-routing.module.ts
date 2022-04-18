@@ -11,7 +11,6 @@ import {ExportCampPageComponent} from './pages/export-camp-page/export-camp-page
 import {RecipeListPageComponent} from './pages/recipe-list-page/recipe-list-page.component';
 import {EditSingleRecipePageComponent} from './pages/edit-single-recipe-page/edit-single-recipe-page.component';
 import {MealListPageComponent} from './pages/meal-list-page/meal-list-page.component';
-import {MarkdownModule} from 'ngx-markdown';
 import {EditSingleMealPageComponent} from './pages/edit-single-meal-page/edit-single-meal-page.component';
 
 
@@ -67,7 +66,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes), MarkdownModule.forChild()],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class ApplicationRoutingModule {

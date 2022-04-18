@@ -1,7 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {MarkdownModule} from 'ngx-markdown';
-import {HttpClient} from '@angular/common/http';
 import {LandingPage} from "./pages/landing-page/landingPage.component";
 import {SignInComponent} from "./pages/sign-in-page/sign-in.component";
 import {AccessGuard} from "./guards/AccessGuard";
@@ -50,10 +48,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
-    MarkdownModule.forRoot({loader: HttpClient}),
-    MarkdownModule.forChild()
-  ],
+  imports: [RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
