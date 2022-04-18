@@ -5,6 +5,11 @@
   width: 380px
   margin: auto
 
+  @media screen and (max-width: 380px)
+    grid-template-columns: 80px auto
+    width: 100%
+
+
   ::ng-deep .mat-icon
     grid-row-start: 1
     font-size: 40px
@@ -24,6 +29,10 @@
     line-height: 80px
     margin-top: 0
     text-align: left
+
+    @media screen and (max-width: 380px)
+      line-height: 24px
+      margin-top: 12px
 
   ::ng-deep p
     grid-row-start: 2
