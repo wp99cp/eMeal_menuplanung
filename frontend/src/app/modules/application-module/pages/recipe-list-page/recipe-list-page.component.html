@@ -13,13 +13,14 @@
 
 <div id="recipesList" *ngIf="filteredElements as recipes else loading_preview">
 
-  <app-list-card *ngFor="let recipe of recipes" [cardElement]="recipe"
-                 [access]="access[recipe.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
-
   <app-new-list-element>
     <h3>Neues Rezept erstellen</h3>
     <button (click)="newElement()" mat-raised-button color="save">Rezept erstellen</button>
   </app-new-list-element>
+
+
+  <app-list-card *ngFor="let recipe of recipes" [cardElement]="recipe"
+                 [access]="access[recipe.documentId]" (copy)="copy($event)" (delete)="delete($event)"></app-list-card>
 
 </div>
 
