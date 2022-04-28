@@ -13,7 +13,7 @@ def weekview_table(doc: Document, camp: CampClass, args: Namespace):
     days = camp.get_days()
     days = list(map(lambda d: NoEscape(
         (d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y") +
-        ((r'\par (' + d['day_description'] + ')') if d['day_description'] is not '' else '')), days))
+        ((r'\par (' + d['day_description'] + ')') if d['day_description'] != '' else '')), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
