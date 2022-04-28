@@ -157,7 +157,10 @@ def create_pdf(camp: CampClass, args: argparse.Namespace):
     # filename = export_{camp_id}_{timestamp}
     file_name = '/export' + ('_' + args.camp_id + '_' + str(time.time()) if not args.dfn else '')
     file_path = dir_path + file_name
-    document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
+    try:
+        document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
+    except UnicodeDecodeError as err:
+        print(err)
 
     # uncomment for uploading to bucket
     upload_blob(file_path, file_name, args.camp_id)
