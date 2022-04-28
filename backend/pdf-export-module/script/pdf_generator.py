@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import json
 import locale
 import logging
 import os
@@ -7,8 +8,6 @@ import random
 import string
 import time
 from typing import List
-import json
-
 
 import firebase_admin
 from dateutil.relativedelta import relativedelta
@@ -38,7 +37,7 @@ def upload_blob(source_file_path, source_file_name, camp_id):
     destination_blob_name = "eMeal-export" + source_file_name
 
     credentials = service_account.Credentials.from_service_account_file(
-        '../keys/firebase/cevizh11-firebase-adminsdk.json')
+        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
     storage_client = storage.Client(credentials=credentials, project=project_and_bucket_name)
 
     bucket = storage_client.bucket(bucket_name)
@@ -47,7 +46,8 @@ def upload_blob(source_file_path, source_file_name, camp_id):
     blob.upload_from_filename(source_file_path + '.pdf')
 
     # Use the application default credentials
-    cred = firebase_admin.credentials.Certificate('../keys/firebase/cevizh11-firebase-adminsdk.json')
+    cred = firebase_admin.credentials.Certificate(
+        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
     app = firebase_admin.initialize_app(
         cred,
         name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
@@ -157,7 +157,10 @@ def create_pdf(camp: CampClass, args: argparse.Namespace):
     # filename = export_{camp_id}_{timestamp}
     file_name = '/export' + ('_' + args.camp_id + '_' + str(time.time()) if not args.dfn else '')
     file_path = dir_path + file_name
-    document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
+    try:
+        document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
+    except UnicodeDecodeError as err:
+        print(err)
 
     # uncomment for uploading to bucket
     upload_blob(file_path, file_name, args.camp_id)
