@@ -8,7 +8,8 @@
     <h2>Benutzerkonto</h2>
     <form [formGroup]="userDataForm" style="display: grid" *ngIf="userDataForm !== undefined else loadingUserSettings">
 
-      <mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
         <input matInput placeholder="Name" formControlName="displayName">
       </mat-form-field>
 
@@ -25,7 +26,8 @@
       <p *ngIf="userDataForm.value.visibility == 'hidden'" class="info">
         Andere Nutzer von eMeal können dich nicht finden und keine Lager mit dir teilen: </p>
 
-      <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
+      <mat-form-field appearance="fill">
+        <mat-label>Sichtbarkeit für andere Nutzer</mat-label>
         <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit für andere Nutzer"
                 (input)="visibilityChanged(visibilitySelect.value)">
           <option value="hidden">versteckt</option>
@@ -45,8 +47,9 @@
       Vorlagen sind grün markiert und können für den eigenen Gebrauch kopiert werden. <a
         (click)="help.openHelpPopup('kochbuch-rezeptvorlagen')">Hilfe zu den Rezeptvorlagen.</a></p>
 
-    <mat-form-field matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width"
+    <mat-form-field appearance="fill" matTooltip="Vorlagen für Rezepte und Mahlzeiten" class="full-width"
                     *ngIf="(settings.globalSettings | async) as settings">
+      <mat-label>Sichtbarkeit von Vorlagen</mat-label>
       <select #includeTemplates matNativeControl [value]="settings.show_templates"
               placeholder="Sichtbarkeit von Vorlagen"
               (input)="changeIncludeTemplates(includeTemplates.value)">
@@ -58,8 +61,9 @@
     <p class="info">Rezepte können auch ausserhalb eines Lagers bearbeitet werden. Mit dieser Einstellung kannst du
       festlegen, für wie viele Personen Rezepte standartmässig berechnet werden.</p>
 
-    <mat-form-field matTooltip="Anzahl Personen für Rezept" class="full-width"
+    <mat-form-field appearance="fill" class="full-width"
                     *ngIf="(settings.globalSettings | async) as settings">
+      <mat-label>Anzahl Personen für Rezept</mat-label>
       <input #defaultParticipants matInput placeholder="Anzahl Personen" [value]="settings.default_participants"
              type="number" (input)="changeDefaultParticipants(defaultParticipants.value)">
     </mat-form-field>
