@@ -14,6 +14,7 @@
   grid-template-columns: 25% auto 10%
   grid-template-rows: 50px auto 20px
   grid-gap: 12px
+  max-width: calc(100% - 60px)
 
   .title
     grid-area: name
@@ -30,7 +31,7 @@
       text-align: left
       width: auto
       float: left
-      margin: 0 8px
+      margin: 0 0 0 35px
       max-width: 220px
       min-width: 50px
       overflow: hidden
@@ -39,6 +40,7 @@
       display: -webkit-box
       -webkit-line-clamp: 2
       -webkit-box-orient: vertical
+      float: initial
 
     .accept-changes
       visibility: hidden
