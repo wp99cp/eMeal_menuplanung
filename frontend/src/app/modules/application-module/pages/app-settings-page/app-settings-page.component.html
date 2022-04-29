@@ -26,7 +26,7 @@
         Andere Nutzer von eMeal können dich nicht finden und keine Lager mit dir teilen: </p>
 
       <mat-form-field matTooltip="Sichtbarkeit für andere Nutzer">
-        <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit"
+        <select #visibilitySelect matNativeControl [value]="userDataForm.value.visibility" placeholder="Sichtbarkeit für andere Nutzer"
                 (input)="visibilityChanged(visibilitySelect.value)">
           <option value="hidden">versteckt</option>
           <option value="visible">sichtbar</option>
