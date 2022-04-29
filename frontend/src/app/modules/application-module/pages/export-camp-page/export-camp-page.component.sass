@@ -5,12 +5,16 @@
 
 .camp-export
   margin: 25px 0
-  max-width: 350px
+  max-width: 420px
 
 .camp-export-list
   display: grid
   grid-template-columns: auto auto
   max-width: 1200px
+
+  @media only screen and (max-width: 750px)
+    grid-template-columns: auto
+
 
 
 .create-first-export

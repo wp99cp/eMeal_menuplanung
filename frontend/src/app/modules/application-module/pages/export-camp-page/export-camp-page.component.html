@@ -15,10 +15,10 @@
 <ng-container *ngIf="showExports && (exports | async); let exports else noExports">
   <div *ngIf="exports.length > 0 else noExports" class="camp-export-list">
     <div class="docs camp-export" *ngFor="let export of exports">
-      <h3>Lagerhandbuch und Einkaufsliste</h3>
-      <app-download *ngFor="let path of export.paths" [changeDate]="getDate(export.exportDate)"
-                    [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')"
-                    [docPath]="path"></app-download>
+      <h3>Export vom {{swissDateAdapter.format_time(getDate(export.exportDate))}}</h3>
+        <app-download [changeDate]="getDate(export.exportDate)" *ngFor="let path of export.paths"
+                      [name]="(path.includes('.csv') ? 'Einkaufsliste' : 'Lagerhandbuch')"
+                      [docPath]="path"></app-download>
     </div>
   </div>
 </ng-container>
