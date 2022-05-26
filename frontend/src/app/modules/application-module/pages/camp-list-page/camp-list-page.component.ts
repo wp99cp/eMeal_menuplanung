@@ -11,6 +11,7 @@ import {FirestoreCamp} from '../../interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../services/database.service';
 import {TileListPage} from '../tile_page';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {HistoryService} from "../../../../services/history.service";
 
 /**
  * CampListPageComponent
@@ -30,7 +31,8 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
     public dbService: DatabaseService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private historyService: HistoryService) {
 
     super(dbService, snackBar, dbService.getCampsWithAccess(), dialog);
 
@@ -101,7 +103,7 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
 
   deleteElement(camp: Camp) {
 
-
+    this.historyService.addToHistory(undefined);
     this.dbService.deleteDocument(camp);
     this.dbService.deleteAllMealsAndRecipes(camp.documentId);
 

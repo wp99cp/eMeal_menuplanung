@@ -1,6 +1,6 @@
-import {Component, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {filter, mergeMap, take, tap} from 'rxjs/operators';
 
 import {Camp} from '../../classes/camp';
@@ -11,7 +11,7 @@ import {DatabaseService} from '../../services/database.service';
 import {WeekOverviewComponent} from '../../components/week-overview/week-overview.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {CurrentlyUsedMealService} from "../../../../services/currently-used-meal.service";
+import {HistoryService} from "../../../../services/history.service";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
@@ -19,7 +19,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
   templateUrl: './edit-camp-page.component.html',
   styleUrls: ['./edit-camp-page.component.sass']
 })
-export class EditCampPageComponent implements OnInit, Saveable {
+export class EditCampPageComponent implements OnInit, Saveable, OnDestroy {
 
   // TODO: neue Funktion erstellen: 'automatisch Zusammenstellen'
   // diese Funktion erstellt automatisch eine Wochenübersicht
@@ -33,6 +33,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
   // camp Data from server
   public camp: Observable<Camp>;
+  private campSubscription: Subscription;
   public campAngular: Observable<Camp>;
 
   public errorOnLoad = false;
@@ -45,7 +46,7 @@ export class EditCampPageComponent implements OnInit, Saveable {
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private autosave: AutoSaveService,
-    private lastUsedService: CurrentlyUsedMealService) {
+    private historyService: HistoryService) {
 
     autosave.register(this);
 
@@ -54,11 +55,6 @@ export class EditCampPageComponent implements OnInit, Saveable {
       mergeMap(url => this.dbService.getCampById(url[1].path)),
       tap(camp => camp.loadMeals(this.dbService))
     );
-
-    this.camp.subscribe(() => {
-    }, err => {
-      this.errorOnLoad = true;
-    });
 
     this.campAngular = this.camp.pipe(
       filter(camp => !this.oldCamp?.isEqual(camp)),
@@ -77,13 +73,15 @@ export class EditCampPageComponent implements OnInit, Saveable {
       if (access) {
         HeaderNavComponent.turnOn('Mitarbeiter');
       }
+    }, err => {
+      this.errorOnLoad = true;
     });
 
     // set as last used
-    this.camp
-      .subscribe(camp =>
-        this.lastUsedService.addToHistory(camp)
-      );
+    this.campSubscription = this.camp.subscribe(
+      camp => this.historyService.addToHistory(camp),
+      error => console.log(error)
+    );
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
@@ -193,6 +191,12 @@ export class EditCampPageComponent implements OnInit, Saveable {
 
     this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
     this.dbService.updateDocument(camp);
+
+  }
+
+  ngOnDestroy(): void {
+
+    this.campSubscription.unsubscribe();
 
   }
 

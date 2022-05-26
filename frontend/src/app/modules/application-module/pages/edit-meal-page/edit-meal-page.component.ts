@@ -18,7 +18,7 @@ import {SettingsService} from '../../services/settings.service';
 import {EditRecipeInCampComponent} from '../../components/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {MatDialog} from '@angular/material/dialog';
 import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
-import {CurrentlyUsedMealService} from "../../../../services/currently-used-meal.service";
+import {HistoryService} from "../../../../services/history.service";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
@@ -46,7 +46,7 @@ export class EditMealPageComponent implements OnInit, Saveable {
     private router: Router,
     public swissDateAdapter: SwissDateAdapter,
     private autosave: AutoSaveService,
-    private lastUsedService: CurrentlyUsedMealService) {
+    private lastUsedService: HistoryService) {
 
 
     autosave.register(this);

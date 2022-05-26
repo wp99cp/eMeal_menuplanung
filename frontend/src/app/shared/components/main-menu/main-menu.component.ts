@@ -5,7 +5,7 @@ import {Location} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {HelpService} from "../../../modules/application-module/services/help.service";
 import {AuthenticationService} from "../../../modules/application-module/services/authentication.service";
-import {CurrentlyUsedMealService} from "../../../services/currently-used-meal.service";
+import {HistoryService} from "../../../services/history.service";
 import {Camp} from "../../../modules/application-module/classes/camp";
 import {
   FeedbackDialogComponent
@@ -28,11 +28,11 @@ export class MainMenuComponent implements OnInit {
               private location: Location,
               public helpService: HelpService,
               private dialog: MatDialog,
-              public main: CurrentlyUsedMealService) {
+              public historyService: HistoryService) {
 
     this.helpService.addDialog(dialog);
 
-    main.lastUsedCamp.subscribe(camp => {
+    historyService.lastUsedCamp.subscribe(camp => {
       this.lastCamp = camp;
     });
 
