@@ -1,5 +1,5 @@
 import {SelectionModel} from '@angular/cdk/collections';
-import {Component, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {combineLatest, Observable, of} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
@@ -14,8 +14,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MealUsage} from '../../interfaces/firestoreDatatypes';
 import {DayOverviewComponent} from '../day-overview/day-overview.component';
 import firebase from "firebase/compat/app";
-import Timestamp = firebase.firestore.Timestamp;
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
+import Timestamp = firebase.firestore.Timestamp;
 
 /**
  * Week-Overview of a camp: This component renders the week-overview of a camp.
@@ -30,7 +30,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
   templateUrl: './week-overview.component.html',
   styleUrls: ['./week-view.component.sass'],
 })
-export class WeekOverviewComponent implements OnInit, Saveable {
+export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
 
 
   /** The camp for which this component should create the week-overview. */
@@ -42,6 +42,9 @@ export class WeekOverviewComponent implements OnInit, Saveable {
   public hasWriteAccess = false;
   /** Stores a list of all meals that get prepared on another day */
   public mealToPrepare: Observable<SpecificMeal[]>;
+
+  @ViewChild('weekViewElement', {static: false}) weekViewElement: ElementRef<HTMLElement>;
+
 
   /** List of all day-overview */
   @ViewChildren(DayOverviewComponent) dayOverviews: QueryList<DayOverviewComponent>;
@@ -97,6 +100,18 @@ export class WeekOverviewComponent implements OnInit, Saveable {
 
   }
 
+  ngAfterViewInit() {
+
+    // Restores the X scroll position of the week view element.
+    const scrollPositionX = Number.parseInt(localStorage.getItem(this.getLocalStorageName('scrollPosition')))
+    this.weekViewElement.nativeElement.scrollTo(scrollPositionX, 0)
+
+  }
+
+
+  private getLocalStorageName(fieldName: string) {
+    return 'weekOverview.' + fieldName + '.' + String(this.camp.documentId);
+  }
 
   /**
    * Saves the camp.
@@ -364,6 +379,21 @@ export class WeekOverviewComponent implements OnInit, Saveable {
 
   private updateContextMenus() {
     this.dayOverviews.forEach(el => el.setContextMenu());
+  }
+
+  /**
+   * Saves the current X position of the week view to the local storage.
+   * This enables a restore of the scroll position after a rout event.
+   *
+   * @param $event
+   */
+  public week_view_scroll($event: Event) {
+
+    let scrollPosition = ($event.target as HTMLElement).scrollLeft
+    scrollPosition = Math.round(scrollPosition)
+
+    localStorage.setItem(this.getLocalStorageName('scrollPosition'), String(scrollPosition));
+
   }
 
 }

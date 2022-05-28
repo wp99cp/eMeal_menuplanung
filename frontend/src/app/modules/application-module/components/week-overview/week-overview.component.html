@@ -1,4 +1,4 @@
-<div class="week-view" cdkDropListGroup>
+<div class="week-view" cdkDropListGroup (scroll)="week_view_scroll($event)" #weekViewElement>
 
   <div class="mat-elevation-z3 day-container" *ngFor="let day of camp.days; let i = index">
     <app-day-overview [day]="day" [days]="camp.days"

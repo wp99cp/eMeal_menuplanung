@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {delay, map, mergeMap, take, tap} from 'rxjs/operators';
+import {map, mergeMap, take, tap} from 'rxjs/operators';
 
 import {DatabaseService} from '../../services/database.service';
 import {HelpService} from '../../services/help.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ExportSettingsComponent} from '../../dialoges/export-settings/export-settings.component';
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
+import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 
 @Component({
   selector: 'app-export-camp-page',
@@ -26,6 +27,7 @@ export class ExportCampPageComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private dbService: DatabaseService,
               private router: Router,
+              public swissDateAdapter: SwissDateAdapter,
               public helpService: HelpService,
               private dialog: MatDialog) {
 

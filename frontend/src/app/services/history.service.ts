@@ -5,7 +5,7 @@ import {Camp} from "../modules/application-module/classes/camp";
 @Injectable({
   providedIn: 'root'
 })
-export class CurrentlyUsedMealService {
+export class HistoryService {
 
   public lastUsedCamp: BehaviorSubject<Camp>;
 

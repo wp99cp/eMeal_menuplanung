@@ -1,4 +1,5 @@
 import copy
+import json
 import random
 import string
 import time
@@ -63,8 +64,11 @@ class ShoppingList:
         self.checked_spelling = False
         self.meals = None
 
+        with open('../keys/environment/environment.json') as json_file:
+            project_and_bucket_name = json.load(json_file)['storage_bucket_name']
+
         # Use the application default credentials
-        cred = credentials.Certificate('../keys/firebase/cevizh11-firebase-adminsdk.json')
+        cred = credentials.Certificate('../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
         app = firebase_admin.initialize_app(
             cred,
             name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))

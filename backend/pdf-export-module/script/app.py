@@ -4,8 +4,8 @@ import os
 from flask import Flask, request
 from flask_cors import CORS
 
-import script.pdf_generator
-from script.utils.commandline_args_parser import setup_parser
+import pdf_generator
+from utils.commandline_args_parser import setup_parser
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -19,7 +19,7 @@ def pdf_export(campID, userID):
     args = list(filter(lambda x: x != '', args))
 
     args = parser.parse_args([userID, campID] + args)
-    script.pdf_generator.main(args)
+    pdf_generator.main(args)
 
     return "PDF created successfully!"
 
