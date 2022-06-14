@@ -22,10 +22,11 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
     # for each meal
     for meal in camp.get_specific_meals():
 
-        doc.append(NoEscape(r' \fancyhf{ \lhead{' + meal['meal_name'] + r'} \cfoot{\thepage}}'))
-        doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
-
         add_header(doc, meal)
+
+        doc.append(NoEscape(
+            r'\fancypagestyle{recipestyle}{ \lhead{' + meal['meal_name'] + ' als ' + meal[
+                'meal_used_as'] + r' (Fortsetzung)} \cfoot{\thepage}}'))
 
         # general Infos
         with doc.create(Description()) as enum:
@@ -45,9 +46,7 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
         else:
             doc.append('Diese Mahlzeit enthält keine Rezepte.')
 
-        doc.append(Command(r'clearpage'))
-        doc.append(NoEscape(r' \pagestyle{plain}'))
-        doc.append(Command(r'pagebreak'))
+        doc.append(NoEscape(r' \clearpage \pagebreak'))
 
 
 def add_header(doc, meal):
@@ -97,6 +96,9 @@ def add_recipe(doc, recipe):
 
     if 'ingredients' in recipe and len(recipe['ingredients']) > 0:
         with doc.create(Table(position='h')) as table:
+
+            doc.packages.append(Package('floatpag'))
+            doc.append(NoEscape(r' \floatpagestyle{recipestyle}'))
 
             table.add_caption(recipe['recipe_name'] + ' (' + get_participants_description(recipe) + ', ' + str(
                 recipe['recipe_participants']) + ' Per.)')

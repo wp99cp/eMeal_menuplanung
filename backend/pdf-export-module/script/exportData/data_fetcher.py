@@ -113,7 +113,7 @@ class DataFetcher(object):
         if not self._meals_loaded:
             self._fetch_meals()
 
-        meal_ids = list(map(lambda m: m['meal_id'], self._specific_meals))
+        meal_ids = list(dict.fromkeys(map(lambda m: m['meal_id'], self._specific_meals)))
 
         recipes = []
 
@@ -124,10 +124,18 @@ class DataFetcher(object):
             recipe_query_ref = recipe_refs.where(u'used_in_meals', u'array_contains_any', meal_ids_max_10)
             recipes = recipes + list(map(lambda doc: convert_document(doc), recipe_query_ref.stream()))
 
+        added_meals = []
+
         for recipe in recipes:
+
+            # Used to check if the recipe is already added
+            if recipe['doc_id'] in added_meals:
+                continue
+
+            added_meals.append(recipe['doc_id'])
+
             for meal in self._specific_meals:
                 if meal['meal_id'] in recipe['used_in_meals']:
-
                     recipe = copy.deepcopy(recipe)
 
                     if 'recipe' in meal:
