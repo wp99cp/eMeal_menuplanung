@@ -62,8 +62,9 @@ def add_shopping_list(args: Namespace,
     """
 
     # set page header for next page
-    doc.append(NoEscape(r' \fancyhf{ \lhead{' + shopping_list_name + r' (Fortsetzung)} \cfoot{\thepage}}'))
-    doc.append(NoEscape(r' \clearpage \pagestyle{fancy}'))
+    doc.append(NoEscape(r' \fancypagestyle{specialstyle}{ \lhead{' + shopping_list_name + r' (Fortsetzung)} \cfoot{\thepage}}'))
+    doc.append(NoEscape(r' \fancypagestyle{noheader}{ \lhead{}}'))
+    doc.append(NoEscape(r' \clearpage \pagestyle{specialstyle} \thispagestyle{noheader} '))
 
     # add shopping list title
     doc.append(Section(shopping_list_name, numbering=False))
@@ -85,7 +86,7 @@ def add_shopping_list(args: Namespace,
             doc.append(NoEscape(r' \newline \vspace{0.75cm} \noindent'))
         append_category_columns(category_name, doc, shopping_list, args, include_fresh)
 
-    doc.append(NoEscape(r' \clearpage \pagestyle{plain}'))
+    doc.append(NoEscape(r' \clearpage \pagestyle{noheader}'))
 
 
 def append_category_columns(category_name, doc, shopping_list, args, include_fresh):

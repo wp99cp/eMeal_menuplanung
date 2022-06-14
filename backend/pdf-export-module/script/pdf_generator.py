@@ -73,7 +73,7 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     locale.setlocale(locale.LC_TIME, "de_CH.utf8")
 
     # create basic document
-    geometry_options = {"left": "2.5cm", "right": "2.5cm", "top": "3cm", "bottom": "3cm"}
+    geometry_options = {"left": "2cm", "right": "2cm", "top": "3cm", "bottom": "3cm"}
     document = Document(inputenc='utf8x', lmodern=True, geometry_options=geometry_options)
     document.documentclass = Command(
         'documentclass',
@@ -90,8 +90,10 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # page style, font, page numbers, etc.
     document.packages.add(Package('fancyhdr'))
     document.packages.add(Package('floatpag'))
+    document.preamble.append(NoEscape(r'\fancypagestyle{plain}{ \lfoot{{\small ' +
+                                      camp.get_camp_name() + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
+                                                             r'\small Export vom {\today} \currenttime}}}'))
 
-    document.preamble.append(Command('floatpagestyle', arguments='plain'))
     document.preamble.append(Command('pagestyle', arguments='plain'))
 
     document.preamble.append(Command('renewcommand', arguments=Command('headrulewidth'), extra_arguments='0pt'))
@@ -103,10 +105,18 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
                              '}, pdfauthor = {' + camp.get_full_author_name() + '}}'))
 
     # add sections according to export settings
+
+    time_log = ["Time \tDocument part"]
+
     for part in parts:
         logging.log(logging.INFO, 'append ' + part.__name__)
+        start_time = time.time()
         part(document, camp, args)
         document.append(NoEscape(r'\newpage'))
+        time_log.append("{}s \t{}".format(round(time.time() - start_time, 2), part.__name__))
+
+    for log in time_log:
+        logging.log(logging.INFO, log)
 
     return document
 
