@@ -1,4 +1,7 @@
-from collections import Counter
+import difflib
+
+from Levenshtein import distance as lev
+from google.cloud import firestore
 
 
 class SpellingCorrector:
@@ -9,66 +12,34 @@ class SpellingCorrector:
 
         # Load all known food names
         food_dictionary = self.__db.document('sharedData/categories').get().to_dict().keys()
-        self._WORDS = Counter(food_dictionary)
+        self._WORDS = food_dictionary
 
     def fix_spelling_mistakes(self, ingredients):
+        correction_logs = []
         for ing in ingredients:
-            ing['food'] = self._correction(ing['food'])
+            ing['food'], correction_log = self._correction(ing['food'])
 
-    def _P(self, word, n=None):
-        """
-        Probability of `word`.
-        """
+            if correction_log is not None:
+                correction_logs.append(correction_log)
 
-        if n is None:
-            n = sum(self._WORDS.values())
+        self.__db.document('sharedData/foodCategories').update(
+            {"resentCorrections": firestore.ArrayUnion(correction_logs)})
 
-        return self._WORDS[word] / n
-
-    def _correction(self, word):
+    def _correction(self, input_word):
         """
         Most probable spelling correction for word.
         """
 
-        new_word = max(self._candidates(word), key=self._P)
+        # Nothing to correct
+        if input_word in self._WORDS:
+            return input_word, None
 
-        if new_word != word:
-            self.__db.document('sharedData/foodCategories').set(
-                {"resentCorrections": [{"from": word, "to": new_word}]},
-                merge=True)
+        # Try to find a close match
+        new_words = difflib.get_close_matches(input_word, self._WORDS, n=1, cutoff=0.2)
 
-        return new_word
+        # The word is unknown
+        if len(new_words) == 0 or lev(input_word, new_words[0]) >= 2:
+            return input_word, None
 
-    def _candidates(self, word):
-        """
-        Generate possible spelling corrections for word.
-        """
-
-        return self._known([word]) or self._known(self._edits1(word)) or self._known(self._edits2(word)) or [word]
-
-    def _known(self, wds):
-        """
-        The subset of `words` that appear in the dictionary of WORDS.
-        """
-
-        return set(w for w in wds if w in self._WORDS)
-
-    def _edits1(self, word):
-        """
-        All edits that are one edit away from `word`.
-        """
-
-        letters = 'abcdefghijklmnopqrstuvwxyz'
-        splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
-        deletes = [L + R[1:] for L, R in splits if R]
-        transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R) > 1]
-        replaces = [L + c + R[1:] for L, R in splits if R for c in letters]
-        inserts = [L + c + R for L, R in splits for c in letters]
-        return set(deletes + transposes + replaces + inserts)
-
-    def _edits2(self, word):
-        """
-        All edits that are two edits away from `word`.
-        """
-
-        return (e2 for e1 in self._edits1(word) for e2 in self._edits1(e1))
+        new_word = new_words[0]
+        return new_word, {"from": input_word, "to": new_word}
