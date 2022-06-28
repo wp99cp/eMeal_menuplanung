@@ -36,7 +36,7 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
                                   "%A %d. %b %Y"))
 
             if meal['meal_description'] != '':
-                enum.add_item('Notizen:', meal['meal_description'])
+                enum.add_item('Notizen:', meal['meal_description'].strip('\n'))
 
         # add recipes
         if 'recipe' in meal:
@@ -121,6 +121,6 @@ def add_recipe(doc, recipe):
             if recipe['recipe_description'] + recipe['recipe_notes'] != '':
                 with table.create(Tabularx('l X', width_argument=NoEscape(r'\textwidth'))) as table_content:
                     if recipe['recipe_description'] != '':
-                        table_content.add_row(['Beschreibung: ', recipe['recipe_description']])
+                        table_content.add_row(['Beschreibung: ', recipe['recipe_description'].strip('\n')])
                     if recipe['recipe_notes'] != '':
                         table_content.add_row(['Notizen:', recipe['recipe_notes'].strip('\n')])
