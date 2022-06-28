@@ -168,6 +168,12 @@ class DataFetcher(object):
                         if 'fresh' not in _ing:
                             _ing.update({'fresh': False})
 
+                        # Escape special characters in _ing['food']
+                        _ing['food'] = _ing['food'].replace('&', '\&')
+
+                    # filter out ingredients with empty food value
+                    recipe['ingredients'] = list(filter(lambda i: i['food'] != '', recipe['ingredients']))
+
                     recipe['unique_id'] = meal['doc_id'] + '::' + recipe['doc_id']
                     recipe['recipe_used_for'] = spec_recipe['recipe_used_for']
                     recipe['recipe_participants'] = spec_recipe['recipe_participants']
