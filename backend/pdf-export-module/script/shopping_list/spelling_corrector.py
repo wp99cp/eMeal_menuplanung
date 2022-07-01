@@ -22,8 +22,9 @@ class SpellingCorrector:
             if correction_log is not None:
                 correction_logs.append(correction_log)
 
-        self.__db.document('sharedData/foodCategories').update(
-            {"resentCorrections": firestore.ArrayUnion(correction_logs)})
+        if correction_logs and len(correction_logs) > 0:
+            self.__db.document('sharedData/foodCategories').update(
+                {"resentCorrections": firestore.ArrayUnion(correction_logs)})
 
     def _correction(self, input_word):
         """
