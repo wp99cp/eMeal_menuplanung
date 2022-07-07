@@ -35,7 +35,7 @@
     "@schematics/angular": "^13.3.3",
     "cross": "^1.0.0",
     "firebase": "^9.6.4",
-    "moment": "^2.29.3",
+    "moment": "^2.29.4",
     "rxfire": "^6.0.3",
     "rxjs": "^6.6.3",
     "tslib": "^1.14.1",
