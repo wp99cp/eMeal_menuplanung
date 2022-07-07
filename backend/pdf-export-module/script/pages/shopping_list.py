@@ -104,8 +104,13 @@ def append_category_columns(category_name, doc, shopping_list, args, include_fre
 
 def append_category(args, category_name, doc, include_fresh, shopping_list):
     doc.append(Command('small'))
+
+    # check if the shopping_list has at least one non-fresh ingredient if include_fresh is False
+    # we can safely skip such a category
+    if not include_fresh and sum(1 for ing in shopping_list[category_name] if not ing['fresh']) == 0:
+        return
+
     with doc.create(Itemize(options='leftmargin=0.5cm, itemsep=4pt')) as itemize:
-        # space between colums
         itemize.append(Command('setlength', arguments=Command('itemsep'), extra_arguments='0pt'))
         itemize.append(Command('setlength', arguments=Command('parskip'), extra_arguments='0pt'))
 
