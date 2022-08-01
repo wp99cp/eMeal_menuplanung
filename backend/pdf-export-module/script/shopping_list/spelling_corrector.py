@@ -35,6 +35,10 @@ class SpellingCorrector:
         if input_word in self._WORDS:
             return input_word, None
 
+        # Check if special characters are present in the word
+        if any(s in input_word for s in ['\\&']):
+            return input_word, None
+
         # Try to find a close match
         new_words = difflib.get_close_matches(input_word, self._WORDS, n=1, cutoff=0.2)
 

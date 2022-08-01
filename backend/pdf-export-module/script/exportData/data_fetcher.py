@@ -169,7 +169,7 @@ class DataFetcher(object):
                             _ing.update({'fresh': False})
 
                         # Escape special characters in _ing['food']
-                        _ing['food'] = _ing['food'].replace('&', '\&')
+                        _ing['food'] = _ing['food'].replace('&', '\\&')
 
                     # filter out ingredients with empty food value
                     recipe['ingredients'] = list(filter(lambda i: i['food'] != '', recipe['ingredients']))
