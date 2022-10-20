@@ -7,6 +7,7 @@ import os
 import random
 import string
 import time
+from subprocess import CalledProcessError
 from typing import List
 
 import firebase_admin
@@ -171,6 +172,12 @@ def create_pdf(camp: CampClass, args: argparse.Namespace):
         document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
     except UnicodeDecodeError as err:
         print(err)
+    except CalledProcessError as err:
+        # check if pdf in file_path exists
+        if os.path.isfile(file_path + '.pdf'):
+            print("PDF file created (but with some errors)")
+        else:
+            raise err
 
     # uncomment for uploading to bucket
     upload_blob(file_path, file_name, args.camp_id)
