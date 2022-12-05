@@ -1,6 +1,6 @@
 {
   "name": "@emeal/menuplanung",
-  "version": "1.14.6",
+  "version": "1.14.7",
   "license": "MIT",
   "copyrights": "© 2019 - 2022 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
@@ -72,6 +72,6 @@
     "protractor": "^7.0.0",
     "sass": "^1.49.0",
     "ts-node": "~7.0.0",
-    "typescript": "4.4"
+    "typescript": "^4.6.0"
   }
 }
