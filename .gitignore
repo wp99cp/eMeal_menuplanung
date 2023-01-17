@@ -1,3 +1,10 @@
 # Editor
 .idea
 .vscode
+
+
+# Config files
+**/.env
+.env.local
+**/!.env.example
+**/!.env.*.example

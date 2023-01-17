@@ -10,4 +10,4 @@ RUN npm ci
 # Copy project directory
 COPY ./ /app/
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["bash", "entrypoint.sh"]
