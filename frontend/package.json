@@ -12,6 +12,7 @@
     "schema": "./src/prisma/schema.prisma"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.4",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@next/font": "13.1.2",
     "@prisma/client": "^4.8.1",
@@ -20,6 +21,7 @@
     "@types/react-dom": "18.0.10",
     "eslint": "8.32.0",
     "eslint-config-next": "^13.1.2",
+    "graphql": "^16.6.0",
     "next": "^13.1.2",
     "next-auth": "^4.18.8",
     "typescript": "4.9.4"

@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
 
     environment:
-      - ENV_FILE_PATH=.env.local
+      - ENV_FILE_PATH=/app/.env.local
 
     volumes:
       - ./frontend/src:/app/src
@@ -21,12 +21,31 @@ services:
     depends_on:
       - mongo-db
 
+  graphql:
+
+    build:
+      context: ./backend/graphQL
+      dockerfile: Dockerfile
+
+    environment:
+      - ENV_FILE_PATH=.env.local
+
+    volumes:
+      - ./.env.local:/app/.env.local:ro
+      - ./backend/graphQL/src:/app/src
+
+    ports:
+      - "4000:4000"
+
+    depends_on:
+      - mongo-db
+
   mongo-db:
 
     image: mongo
 
     build:
-      context: ./backend/database
+      context: backend/mongoDB
       dockerfile: Dockerfile
 
     ports:
@@ -43,6 +62,6 @@ services:
     depends_on:
       - mongo-db
     volumes:
-      - ./backend/database:/scripts:ro
+      - ./backend/mongoDB:/scripts:ro
     restart: "no"
     entrypoint: [ "bash", "/scripts/mongo_setup.sh" ]

@@ -9,4 +9,4 @@ openssl rand -base64 756 > /database.key
 chmod 400 /database.key
 
 # Run the mongo entrypoint script
-/usr/bin/mongod --replSet rs0 --bind_ip_all
+/usr/bin/mongod --replSet rs0 --bind_ip_all --quiet --logpath /dev/null

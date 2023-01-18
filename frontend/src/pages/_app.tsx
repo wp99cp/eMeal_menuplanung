@@ -1,19 +1,16 @@
 import {AppProps} from "next/app";
-import {getSession, SessionProvider} from "next-auth/react"
-import {NextPageContext} from "next";
+import {SessionProvider} from "next-auth/react"
+import {ApolloProvider} from "@apollo/client";
+import {apollo_client} from "@/graphql/apollo-client";
 
-export async function getServerSideProps(context: NextPageContext) {
-    const session = await getSession(context);
-    return {
-        props: { session },
-    };
-}
 
 export default function App({Component, pageProps: {session, ...pageProps}}: AppProps) {
 
     return (
         <SessionProvider session={session}>
-            <Component {...pageProps} />
+            <ApolloProvider client={apollo_client}>
+                <Component {...pageProps} />
+            </ApolloProvider>
         </SessionProvider>
     );
 
