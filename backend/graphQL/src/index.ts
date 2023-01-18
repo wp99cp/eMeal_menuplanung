@@ -7,14 +7,12 @@ import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 import cors from "cors";
 import {json} from "body-parser";
+import {getSession, useSession} from "next-auth/react";
+import {GraphQLContext} from "./util/types";
+import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
+
 
 const main = async () => {
-
-
-    // Create an Express app and HTTP server; we will attach both the WebSocket
-    // server and the ApolloServer to this HTTP server.
-    const app = express();
-    const httpServer = createServer(app);
 
     const schema = makeExecutableSchema({
         typeDefs,
@@ -22,15 +20,24 @@ const main = async () => {
     });
 
 
-    const server = new ApolloServer({
+    // Create an Express app and HTTP server; we will attach both the WebSocket
+    // server and the ApolloServer to this HTTP server.
+    const app = express();
+    const httpServer = createServer(app);
+
+
+    const server = new ApolloServer<GraphQLContext>({
         schema,
+        csrfPrevention: true,
+        plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
+
     });
 
     await server.start();
 
     const corsOptions = {
         origin: process.env.GRAPHQL_CORS_ORIGIN,
-        credentials: true,
+        credentials: true
     };
 
     app.use(
@@ -38,14 +45,17 @@ const main = async () => {
         cors<cors.CorsRequest>(corsOptions),
         json(),
         expressMiddleware(server, {
-            context: async ({req}): Promise<any> => {
-                return {};
-            },
-        })
+            context: async ({req, res}): Promise<GraphQLContext> => {
+                const session = await getSession({req});
+                return {session};
+            }
+        }),
     );
 
-    await new Promise<void>((resolve) => httpServer.listen({port: 4000}, resolve));
-    console.log(`🚀 GraphQL server ready!`);
+    await new Promise<void>((resolve) =>
+        httpServer.listen({port: process.env.GRAPHQL_PORT}, resolve));
+
+    console.log(`🚀 GraphQL server ready (at ${process.env.GRAPHQL_URL})`);
 
 }
 

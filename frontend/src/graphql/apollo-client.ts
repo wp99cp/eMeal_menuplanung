@@ -4,7 +4,7 @@ console.log("URI: ", process.env.GRAPHQL_URL);
 
 const httpLink = new HttpLink({
     uri: process.env.GRAPHQL_URL,
-    credentials: 'include',
+    credentials: "include",
 });
 
 export const apollo_client = new ApolloClient({

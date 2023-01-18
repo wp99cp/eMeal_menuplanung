@@ -5,7 +5,6 @@ export interface CreateUserNameData {
     }
 }
 
-
 export interface CreateUserNameVars {
     username: string
 }

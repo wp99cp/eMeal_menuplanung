@@ -1,26 +1,29 @@
-const typeDefs = `#graphql
+import gql from "graphql-tag";
 
-type User {
-    id: String
-    username: String
-}
 
-type Query {
-    searchUser(username: String): [User]
-}
+const typeDefs = gql`
 
-type Mutation {
-    createUser(username: String): CreateUserNameResponse
-}
+    type User {
+        id: String
+        username: String
+    }
 
-type Subscription {
-    userCreated: User
-}
+    type Query {
+        searchUser(username: String): [User]
+    }
 
-type CreateUserNameResponse {
-    success: Boolean
-    error: String
-}
+    type Mutation {
+        createUser(username: String): CreateUserNameResponse
+    }
+
+    type Subscription {
+        userCreated: User
+    }
+
+    type CreateUserNameResponse {
+        success: Boolean
+        error: String
+    }
 
 `;
 

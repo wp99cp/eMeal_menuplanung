@@ -1,3 +1,5 @@
+import {CreateUserNameResponse, GraphQLContext} from "../../util/types";
+
 const resolvers = {
     Query: {
         searchUser: () => {
@@ -10,10 +12,12 @@ const resolvers = {
         }
     },
     Mutation: {
-        createUser: (_: any, args: { username: string }) => {
+        createUser: (_: any, args: { username: string }, context: GraphQLContext): Promise<CreateUserNameResponse> => {
+
             const {username} = args;
-            console.log("Username: ", username);
-            return {success: false, error: "No Database configured!"};
+            console.log("Username updated to: ", username, "of user ", context.session?.user?.email);
+            return new Promise(res => res({success: false, error: "No Database configured!"}));
+
         },
     },
     Subscription: {},
