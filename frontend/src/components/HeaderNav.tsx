@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import { ProfileDropdown } from '@/components/ProfileDropdown';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import useColorMode from '@/hocks/useColorMode';
 
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
@@ -19,6 +20,7 @@ function classNames(...classes: string[]) {
 const HeaderNav: NextPage = () => {
   const router = useRouter();
   const session = useSession();
+  const [colorMode, setColorMode] = useColorMode();
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -76,6 +78,9 @@ const HeaderNav: NextPage = () => {
                 <>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                     <button
+                      onClick={() =>
+                        setColorMode(colorMode === 'light' ? 'dark' : 'light')
+                      }
                       type="button"
                       className="rounded-full bg-gray-800 p-1 m-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-0 focus:ring-offset-gray-800"
                     >
