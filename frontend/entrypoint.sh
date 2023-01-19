@@ -9,4 +9,5 @@ dotenv -e "$ENV_FILE_PATH" -- npx prisma generate --schema=./src/prisma/schema.p
 dotenv -e "$ENV_FILE_PATH" -- npx prisma db push
 
 # Start the NextJS in dev mode
+npm run lint
 npm run dev

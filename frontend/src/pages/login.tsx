@@ -1,15 +1,12 @@
-import {NextPage} from "next";
-import Auth from "@/components/Auth";
-import {useSession} from "next-auth/react";
+import { NextPage } from 'next';
+import Auth from '@/components/Auth';
 
 const Login: NextPage = () => {
-
-    const {data: session} = useSession();
-    
-    return <>
-        <Auth/>
-    </>;
-
+  return (
+    <>
+      <Auth />
+    </>
+  );
 };
 
 export default Login;
