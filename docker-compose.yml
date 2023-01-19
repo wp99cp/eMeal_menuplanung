@@ -42,8 +42,6 @@ services:
 
   mongo-db:
 
-    image: mongo
-
     build:
       context: backend/mongoDB
       dockerfile: Dockerfile
