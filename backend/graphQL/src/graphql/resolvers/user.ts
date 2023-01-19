@@ -12,11 +12,48 @@ const resolvers = {
         }
     },
     Mutation: {
-        createUser: (_: any, args: { username: string }, context: GraphQLContext): Promise<CreateUserNameResponse> => {
+        createUser: async (_: any, args: { username: string }, context: GraphQLContext): Promise<CreateUserNameResponse> => {
 
             const {username} = args;
-            console.log("Username updated to: ", username, "of user ", context.session?.user?.email);
-            return new Promise(res => res({success: false, error: "No Database configured!"}));
+            const {session, prisma} = context;
+
+            if (!session?.user) {
+                return new Promise(res => res({error: "Not authenticated"}));
+            }
+
+            const {id: user_id} = session.user;
+
+            try {
+
+                // Check that username is unique
+                const existingUser = await prisma.user.findUnique({
+                    where: {
+                        username
+                    }
+                });
+
+                if (existingUser) {
+                    return {error: "Username already exists"};
+                }
+
+                // Update user
+                await prisma.user.update({
+                    where: {
+                        id: user_id
+                    },
+                    data: {
+                        username
+                    }
+                });
+
+                return {success: true};
+
+            } catch (error: any) {
+                console.log("Error creating user", error);
+                return {
+                    error: error?.message
+                };
+            }
 
         },
     },

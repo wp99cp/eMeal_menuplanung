@@ -1,5 +1,5 @@
 export interface CreateUserNameData {
-    createUsername: {
+    createUser: {
         success: boolean,
         errors: string
     }

@@ -7,9 +7,10 @@ import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 import cors from "cors";
 import {json} from "body-parser";
-import {getSession, useSession} from "next-auth/react";
-import {GraphQLContext} from "./util/types";
+import {getSession} from "next-auth/react";
+import {GraphQLContext, Session} from "./util/types";
 import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
+import {PrismaClient} from "@prisma/client";
 
 
 const main = async () => {
@@ -40,14 +41,16 @@ const main = async () => {
         credentials: true
     };
 
+    const prisma = new PrismaClient();
+
     app.use(
         process.env.GRAPHQL_ENDPOINT as string,
         cors<cors.CorsRequest>(corsOptions),
         json(),
         expressMiddleware(server, {
             context: async ({req, res}): Promise<GraphQLContext> => {
-                const session = await getSession({req});
-                return {session};
+                const session = await getSession({req}) as Session;
+                return {session, prisma};
             }
         }),
     );

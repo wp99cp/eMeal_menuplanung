@@ -3,6 +3,7 @@ datasource db {
   url      = env("DATABASE_URL_MONGODB")
 }
 
+
 generator client {
   provider = "prisma-client-js"
 }
