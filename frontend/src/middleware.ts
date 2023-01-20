@@ -1,22 +1,21 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getSession } from 'next-auth/react';
-import { Session } from 'next-auth';
-import { session } from 'next-auth/core/routes';
 
-function redirectToSignInPage(req: NextRequest) {
+const redirectToSignInPage = (req: NextRequest) => {
+  // check for infinite redirects by checking if the request is for the signin page
+  if (req.url.includes('/auth/signin')) {
+    return NextResponse.next();
+  }
+
   // the user is not logged in, redirect to the sign-in page
   const signInPage = '/api/auth/signin';
   const signInUrl = new URL(signInPage, req.nextUrl.origin);
   signInUrl.searchParams.append('callbackUrl', req.url);
   return NextResponse.redirect(signInUrl);
-}
+};
 
-function validateSession(session: Session): boolean {
-  return !!session?.user;
-}
-
-export async function middleware(req: NextRequest) {
+const isAuthorized = async (req: NextRequest): Promise<boolean> => {
   const requestForNextAuth = {
     headers: {
       cookie: req.headers.get('cookie'),
@@ -25,7 +24,18 @@ export async function middleware(req: NextRequest) {
 
   //@ts-ignore Validate session
   const session = await getSession({ req: requestForNextAuth });
-  if (!session || !validateSession(session)) return redirectToSignInPage(req);
+
+  console.log('Session: ', !!session?.user);
+
+  return !!session?.user;
+};
+
+export const config = {
+  matcher: ['/app/:path*', '/auth/signin'], //  '/auth/your-profile'
+};
+
+export const middleware = async (req: NextRequest) => {
+  if (!(await isAuthorized(req))) return redirectToSignInPage(req);
 
   switch (req.nextUrl.pathname) {
     case '/auth/signin': {
@@ -38,8 +48,4 @@ export async function middleware(req: NextRequest) {
 
   // Continue to requested page
   return NextResponse.next();
-}
-
-export const config = {
-  matcher: ['/app/:path*', '/auth/signin'], //  '/auth/your-profile'
 };
