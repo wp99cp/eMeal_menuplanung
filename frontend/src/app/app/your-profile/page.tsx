@@ -4,7 +4,7 @@ import { CreateUserNameData, CreateUserNameVars } from '@/util/types';
 import UserOperations from '@/graphql/operations/user';
 import { useSession } from 'next-auth/react';
 
-const YourProfile: NextPage = () => {
+const Page: NextPage = () => {
   // redirect to login page if not logged in
 
   const [createUsername, {}] = useMutation<
@@ -105,4 +105,4 @@ const YourProfile: NextPage = () => {
   );
 };
 
-export default YourProfile;
+export default Page;
