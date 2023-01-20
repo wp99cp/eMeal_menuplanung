@@ -1,5 +1,8 @@
 FROM mongo
 
+# Copy Configuration File
+COPY ./mongo.conf /etc/mongo/mongo.conf
+
 # Copy entrypoint.sh
 COPY entrypoint.sh /entrypoint.sh
 

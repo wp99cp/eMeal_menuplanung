@@ -1,16 +1,18 @@
 import { AppProps } from 'next/app';
-import { SessionProvider } from 'next-auth/react';
+import { getSession, SessionProvider } from 'next-auth/react';
 import { ApolloProvider } from '@apollo/client';
 import { apollo_client } from '@/graphql/apollo-client';
 import '@/styles/global.css';
 
 // default font of the app
 import HeaderNav from '@/components/HeaderNav';
+import { NextPageContext } from 'next';
+import { Session } from 'next-auth';
 
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
-}: AppProps) {
+}: AppProps<{ session: Session }>) {
   return (
     <SessionProvider session={session}>
       <ApolloProvider client={apollo_client}>
@@ -34,4 +36,14 @@ export default function App({
       </ApolloProvider>
     </SessionProvider>
   );
+}
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const session = await getSession(ctx);
+
+  return {
+    props: {
+      session,
+    },
+  };
 }

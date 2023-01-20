@@ -11,6 +11,8 @@ const useColorMode = () => {
     colorMode === 'dark'
       ? bodyClass.add(className)
       : bodyClass.remove(className);
+
+    // TODO: if signed in, save the color mode to the Database
   }, [colorMode]);
 
   return [colorMode, setColorMode];

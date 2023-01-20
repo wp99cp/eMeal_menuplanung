@@ -5,13 +5,10 @@ import { ProfileDropdown } from '@/components/ProfileDropdown';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import useColorMode from '@/hocks/useColorMode';
+import Image from 'next/image';
+import logo from '@/assets/logo.svg';
 
-const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
-];
+const navigation = [{ name: 'Dashboard', href: '#', current: true }];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -20,6 +17,7 @@ function classNames(...classes: string[]) {
 const HeaderNav: NextPage = () => {
   const router = useRouter();
   const session = useSession();
+
   const [colorMode, setColorMode] = useColorMode();
 
   return (
@@ -42,14 +40,18 @@ const HeaderNav: NextPage = () => {
 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
+                  <Image
+                    width="167"
+                    height="32"
                     className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src={logo}
                     alt="Your Company"
                   />
-                  <img
+                  <Image
+                    width="167"
+                    height="32"
                     className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src={logo}
                     alt="Your Company"
                   />
                 </div>
@@ -74,75 +76,83 @@ const HeaderNav: NextPage = () => {
                 </div>
               </div>
 
-              {session.data?.user ? (
-                <>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                    <button
-                      onClick={() =>
-                        setColorMode(colorMode === 'light' ? 'dark' : 'light')
-                      }
-                      type="button"
-                      className="rounded-full bg-gray-800 p-1 m-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-0 focus:ring-offset-gray-800"
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <MoonIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-
-                    {/* Profile dropdown */}
-                    <ProfileDropdown
-                      element={({ active }) => (
-                        <a
-                          onClick={() => router.push('your-profile')}
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
-                          )}
-                        >
-                          {' '}
-                          Dein Profile{' '}
-                        </a>
-                      )}
-                      element1={({ active }) => (
-                        <a
-                          href="#"
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
-                          )}
-                        >
-                          Settings
-                        </a>
-                      )}
-                      element2={({ active }) => (
-                        <a
-                          onClick={() => signOut()}
-                          className={classNames(
-                            active ? 'bg-gray-100' : '',
-                            'block px-4 py-2 text-sm text-gray-700'
-                          )}
-                        >
-                          Sign out
-                        </a>
-                      )}
-                    />
-                  </div>
-                </>
+              {session.status === 'loading' ? (
+                <></>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    className="p-1 m-2 inline-flex justify-center rounded-md border border-transparent bg-gray-800 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2"
-                    onClick={() => router.push('/login')}
-                  >
-                    Login
-                  </button>
+                  {session.data?.user ? (
+                    <>
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        <button
+                          onClick={() =>
+                            setColorMode(
+                              colorMode === 'light' ? 'dark' : 'light'
+                            )
+                          }
+                          type="button"
+                          className="rounded-full bg-gray-800 p-1 m-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-0 focus:ring-offset-gray-800"
+                        >
+                          <span className="sr-only">View notifications</span>
+                          <MoonIcon className="h-6 w-6" aria-hidden="true" />
+                        </button>
 
-                  <button
-                    type="button"
-                    className="p-1 m-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Sign Up
-                  </button>
+                        {/* Profile dropdown */}
+                        <ProfileDropdown
+                          element={({ active }) => (
+                            <a
+                              onClick={() => router.push('/app/your-profile')}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700'
+                              )}
+                            >
+                              {' '}
+                              Dein Profile{' '}
+                            </a>
+                          )}
+                          element1={({ active }) => (
+                            <a
+                              href="#"
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700'
+                              )}
+                            >
+                              Settings
+                            </a>
+                          )}
+                          element2={({ active }) => (
+                            <a
+                              onClick={() => signOut()}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block px-4 py-2 text-sm text-gray-700'
+                              )}
+                            >
+                              Sign out
+                            </a>
+                          )}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="p-1 m-2 inline-flex justify-center rounded-md border border-transparent bg-gray-800 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2"
+                        onClick={() => router.push('/api/auth/signin')}
+                      >
+                        Login
+                      </button>
+
+                      <button
+                        type="button"
+                        className="p-1 m-2 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >
+                        Sign Up
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>

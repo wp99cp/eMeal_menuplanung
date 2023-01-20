@@ -48,18 +48,10 @@ services:
 
     ports:
       - "27017:27017"
+
     restart: always
 
     environment:
       - ENV_FILE_PATH=/etc/mongo/.env.local
     volumes:
       - ./.env.local:/etc/mongo/.env.local:ro
-
-  mongo-setup:
-    image: mongo
-    depends_on:
-      - mongo-db
-    volumes:
-      - ./backend/mongoDB:/scripts:ro
-    restart: "no"
-    entrypoint: [ "bash", "/scripts/mongo_setup.sh" ]

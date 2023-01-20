@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export default {
+const user = {
   Queries: {},
   Mutation: {
     createUser: gql`
@@ -13,3 +13,5 @@ export default {
     `,
   },
 };
+
+export default user;

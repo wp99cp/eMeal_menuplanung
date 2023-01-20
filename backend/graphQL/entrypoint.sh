@@ -1,10 +1,6 @@
-# export environment variables from .env file
-set -a
-# shellcheck disable=SC1090
-source "$ENV_FILE_PATH"
-set +a
 
-ls -a
+echo "Wait for 20 seconds to make sure the MongoDB server is up and running..."
+sleep 20
 
 # Prepare the database
 dotenv -e "$ENV_FILE_PATH" -- npx prisma generate --schema=./src/prisma/schema.prisma
