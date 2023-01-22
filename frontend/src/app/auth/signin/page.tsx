@@ -1,14 +1,15 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import React from 'react';
+import SignInForm from '@/components/layout/SignInForm';
 
-const LoginPage = () => {
+const SignInPage = () => {
   return (
     <>
-      <h1>Sign In</h1>
-      <button onClick={() => signIn('google')}>Sign In</button>
+      <div className="flex place-content-center h-full">
+        <SignInForm />
+      </div>
     </>
   );
 };
-export default LoginPage;
+export default SignInPage;

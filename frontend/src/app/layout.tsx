@@ -5,15 +5,19 @@ import './globals.css';
 
 import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
+import Header from '@/components/navigation/Header';
+import { Footer } from '@/components/surfaces/Footer';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className="min-h-full h-full">
-      <body className="bg-gray-100 dark:bg-gray-800 flex flex-col h-screen">
+      <body className="bg-gray-100 dark:bg-gray-800 flex flex-col h-screen justify-between">
         <SessionProvider>
-          <h1 className="text-3xl font-bold underline">Root Layout</h1>
-          {children}
-          <footer>Global Footer</footer>
+          <Header />
+
+          <main className="mb-auto h-screen">{children}</main>
+
+          <Footer />
         </SessionProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
 const pages = {
   signIn: '/auth/signin',
   verifyRequest: '/auth/verify-request',
-  newUser: '/auth/new-user',
+  newUser: '/app/profile/onboarding',
 };
 
 const callbacks: Partial<CallbacksOptions> = {
