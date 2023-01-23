@@ -1,4 +1,4 @@
-import { TextLink } from '@/components/basics/TextLink';
+import { TextLink } from '@/components/elements/TextLink';
 
 interface AnnouncementBadgeProps {
   caption: string;

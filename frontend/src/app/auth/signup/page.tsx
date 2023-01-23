@@ -1,12 +1,14 @@
-import { SmallLayout } from '@/components/layout/SmallLayout';
-import { Text } from '@/components/basics/Text';
+'use client';
+
+import SignUpForm from '@/components/surfaces/SignUpForm';
+import React from 'react';
 
 export default function LandingPage() {
   return (
     <>
-      <SmallLayout>
-        <Text>Sign up for new users.</Text>
-      </SmallLayout>
+      <div className="flex place-content-center h-full">
+        <SignUpForm />
+      </div>
     </>
   );
 }

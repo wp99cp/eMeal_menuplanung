@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Text } from '@/components/basics/Text';
+import { Text } from '@/components/elements/Text';
 
 interface TitleProps {
   children?: ReactNode;

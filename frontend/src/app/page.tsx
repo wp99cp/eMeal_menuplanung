@@ -1,18 +1,18 @@
 'use client';
 
-import { AnnouncementBadge } from '@/components/basics/Badges/AnnouncementBadge';
+import { AnnouncementBadge } from '@/components/elements/Badges/AnnouncementBadge';
 import { SmallLayout } from '@/components/layout/SmallLayout';
-import { TextLink } from '@/components/basics/TextLink';
-import { PrimaryLink } from '@/components/basics/Buttons/PrimaryLink';
+import { TextLink } from '@/components/elements/TextLink';
+import { PrimaryLink } from '@/components/elements/Buttons/PrimaryLink';
 import {
   AdjustmentsHorizontalIcon,
   CheckBadgeIcon,
   RocketLaunchIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline';
-import { StrokedLink } from '@/components/basics/Buttons/StrokedLink';
-import { Title } from '@/components/basics/Title';
-import { Text } from '@/components/basics/Text';
+import { StrokedLink } from '@/components/elements/Buttons/StrokedLink';
+import { Title } from '@/components/elements/Title';
+import { Text } from '@/components/elements/Text';
 
 const features = [
   {

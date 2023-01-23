@@ -1,6 +1,6 @@
-import { Text } from '@/components/basics/Text';
-import { TextLink } from '@/components/basics/TextLink';
-import { Title } from '@/components/basics/Title';
+import { Text } from '@/components/elements/Text';
+import { TextLink } from '@/components/elements/TextLink';
+import { Title } from '@/components/elements/Title';
 
 export default function AboutPage() {
   return (

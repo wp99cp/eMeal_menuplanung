@@ -9,9 +9,10 @@ import {
   Squares2X2Icon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { PrimaryLink } from '@/components/basics/Buttons/PrimaryLink';
+import { PrimaryLink } from '@/components/elements/Buttons/PrimaryLink';
 import logo from '../../assets/logo.svg';
 import Image from 'next/image';
+import { TextLink } from '@/components/elements/TextLink';
 
 const solutions = [
   {
@@ -50,9 +51,9 @@ const solutions = [
 
 export default function Header() {
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative bg-white border-b-2 border-gray-200 z-20 sticky top-0">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
+        <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <a href="/">
               <span className="sr-only">Cevi.Tools</span>
@@ -91,7 +92,7 @@ export default function Header() {
       >
         <Popover.Panel
           focus
-          className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+          className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden z-50"
         >
           <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="px-5 pt-5 pb-6">
@@ -113,16 +114,14 @@ export default function Header() {
             <div className="space-y-6 py-6 px-5">
               <div>
                 <a
-                  href="#"
+                  href="/auth/signup"
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-accent-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-accent-700"
                 >
                   Registrieren
                 </a>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
                   Bestehendes Konto?{' '}
-                  <a href="#" className="text-accent-600 hover:text-indigo-500">
-                    Anmelden
-                  </a>
+                  <TextLink href="/auth/signin">Anmelden</TextLink>
                 </p>
               </div>
             </div>

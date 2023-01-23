@@ -17,6 +17,22 @@ export const CeviDBProvider: any = {
   clientSecret: process.env.CEVI_DB_CLIENT_SECRET,
 };
 
+export const MiDataProvider: any = {
+  id: 'mi-data',
+  name: 'MiData',
+  type: 'oauth',
+  version: '2.0',
+  state: true,
+  params: { grant_type: 'authorization_code' },
+  idToken: true,
+  authorizationUrl:
+    process.env.CEVI_DB_INSTANCE_URI + '/oauth/authorize?response_type=code',
+  accessTokenUrl: process.env.CEVI_DB_INSTANCE_URI + '/oauth/token',
+  requestTokenUrl: process.env.CEVI_DB_INSTANCE_URI + '/oauth/profile',
+  clientId: process.env.CEVI_DB_CLIENT_ID,
+  clientSecret: process.env.CEVI_DB_CLIENT_SECRET,
+};
+
 export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> =
   GoogleProvider({
     clientId: process.env.GOOGLE_CLIENT_ID as string,

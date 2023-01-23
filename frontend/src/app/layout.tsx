@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <SessionProvider>
           <Header />
 
-          <main className="mb-auto h-screen">{children}</main>
+          <main className="mb-auto">{children}</main>
 
           <Footer />
         </SessionProvider>

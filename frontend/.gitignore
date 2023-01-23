@@ -1,8 +1,12 @@
 node_modules
 .next
 
+# Build Info
+./src/build.ts
+
 # Environment variables
 .env
 ../.env.local
 !.env.example
 !.env.*.example
+/src/build.ts

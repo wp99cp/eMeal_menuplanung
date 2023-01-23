@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import {
   CeviDBProvider,
   GoogleProviderWithCustomProfile,
+  MiDataProvider,
 } from '@/lib/auth/next-auth-providers';
 import { eventCallbacks } from '@/lib/logging/next-auth';
 
@@ -32,7 +33,7 @@ const callbacks: Partial<CallbacksOptions> = {
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
-  providers: [GoogleProviderWithCustomProfile, CeviDBProvider],
+  providers: [GoogleProviderWithCustomProfile, CeviDBProvider, MiDataProvider],
   secret: process.env.NEXTAUTH_SECRET,
   session: {},
   callbacks,
