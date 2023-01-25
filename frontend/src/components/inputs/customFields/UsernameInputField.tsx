@@ -24,7 +24,7 @@ const validateUsername = async (
   // A username must be between 5 and 20 characters long
   // and can only contain letters, numbers, underscores, and hyphens
   if (username === '') {
-    setUsernameState(['default', '']);
+    setUsernameState(['error', 'Der Benutzername darf nicht leer sein']);
     return;
   }
 

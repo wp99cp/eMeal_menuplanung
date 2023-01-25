@@ -14,8 +14,6 @@ export const AccountSetupStepAction: (
   const [username] = usernameHook;
   const [shareEmail] = shareEmailHook;
 
-  console.log('AccountSetupStepAction', username, shareEmail);
-
   // Update the user's username and share_email field in the database
   const res = await graphql.mutate<UpdateUserData, UpdateUserVars>({
     mutation: UserOperations.Mutation.updateUser,

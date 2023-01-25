@@ -4,7 +4,7 @@ interface StrokedButtonProps {
   external?: boolean;
   children: ReactNode;
   className?: string;
-  onClick?: (() => void) & (() => Promise<void>);
+  onClick?: (() => any) | (() => Promise<any>);
 }
 
 export const StrokedButton = ({

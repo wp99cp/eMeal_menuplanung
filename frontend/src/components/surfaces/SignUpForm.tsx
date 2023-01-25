@@ -8,10 +8,13 @@ import SignInOptions from '@/components/elements/SignInOptions';
 import { NamedDivider } from '@/components/elements/Divider/NamedDivider';
 import TextInput from '@/components/inputs/TextInput';
 import Checkbox from '@/components/inputs/Checkbox';
-import { signIn } from 'next-auth/react';
-import { Card } from '@/components/layout/Card';
+import { Card, CardState, DefaultCardState } from '@/components/layout/Card';
+import { LoadingSpinner } from '@/components/surfaces/LoadingSpinner';
+import { useState } from 'react';
 
 export default function SignUpForm() {
+  const [cardState, setCardState] = useState<CardState>(DefaultCardState);
+
   return (
     <>
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 w-full">
@@ -33,7 +36,10 @@ export default function SignUpForm() {
             </p>
           </div>
 
-          <Card>
+          <Card
+            cardStateHook={[cardState, setCardState]}
+            loadingScreen={<LoadingSpinner />}
+          >
             <h3 className="block text-lg font-bold text-gray-500 my-6 text-center">
               Neuer Account erstellen
             </h3>
@@ -73,10 +79,7 @@ export default function SignUpForm() {
                   description="Ich akzeptiere die AGB und Datenschutzbestimmungen."
                 />
 
-                <PrimaryButton
-                  className="flex w-full justify-center"
-                  onClick={() => signIn()}
-                >
+                <PrimaryButton className="flex w-full justify-center">
                   Registrieren
                 </PrimaryButton>
               </form>
@@ -84,7 +87,7 @@ export default function SignUpForm() {
 
             <NamedDivider text="oder anmelden mit" />
 
-            <SignInOptions />
+            <SignInOptions onClick={() => setCardState('loading')} />
           </Card>
         </div>
       </div>

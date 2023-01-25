@@ -25,8 +25,6 @@ const isAuthorized = async (req: NextRequest): Promise<boolean> => {
   //@ts-ignore Validate session
   const session = await getSession({ req: requestForNextAuth });
 
-  console.log('Session: ', !!session?.user);
-
   return !!session?.user;
 };
 

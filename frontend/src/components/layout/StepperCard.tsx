@@ -133,7 +133,6 @@ const render_completed_step = (
       </div>
       <div
         onClick={async () => {
-          console.log(baseUrl + steps[stepIdx].step_name);
           await router.push(baseUrl + steps[stepIdx]?.step_name);
         }}
         className="relative flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 hover:bg-accent-900"

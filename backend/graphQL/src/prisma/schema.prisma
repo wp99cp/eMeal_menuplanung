@@ -20,6 +20,7 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
+  created_at        Int?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -38,9 +39,9 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  username      String?   @unique
-  emailVerified DateTime?
+  username      String?   @unique @default("")
   shareEmail    Boolean   @default(false)
+  emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]

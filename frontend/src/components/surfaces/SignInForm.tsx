@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import logo from '@/assets/logo.svg';
 import { TextLink } from '@/components/elements/TextLink';
-import { signIn } from 'next-auth/react';
 import { PrimaryButton } from '@/components/elements/Buttons/PrimaryButton';
 import TextInput from '@/components/inputs/TextInput';
 import Checkbox from '@/components/inputs/Checkbox';
@@ -11,11 +10,14 @@ import SignInOptions from '@/components/elements/SignInOptions';
 import { NamedDivider } from '@/components/elements/Divider/NamedDivider';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Alert from '@/components/elements/Notification/Alert';
-import { Card } from '@/components/layout/Card';
+import { Card, CardState, DefaultCardState } from '@/components/layout/Card';
+import { useState } from 'react';
+import { LoadingSpinner } from '@/components/surfaces/LoadingSpinner';
 
 export default function SignInForm() {
   const readOnlySearchParams = useSearchParams();
-  const hasOAuthError = readOnlySearchParams.get('error') === 'OAuthSignin';
+  const hasOAuthError: string | null =
+    readOnlySearchParams.get('error') || null;
 
   const pathname = usePathname();
   const router = useRouter();
@@ -26,12 +28,31 @@ export default function SignInForm() {
     router.replace(pathname + '?' + searchParams.toString());
   };
 
+  const [cardState, setCardState] = useState<CardState>(DefaultCardState);
+
   return (
     <>
-      {hasOAuthError && (
+      {hasOAuthError === 'OAuthCallback' && (
+        <Alert
+          title="Anmeldung fehlgeschlagen"
+          description="Das Login ist fehlgeschlagen, versuche es erneut oder wende dich an den Support."
+          type="error"
+          onClose={() => removeQueryParam('error')}
+        />
+      )}
+      {hasOAuthError === 'OAuthSignin' && (
         <Alert
           title="Anmeldung fehlgeschlagen"
           description="Dieser Account wird zur Zeit (noch) nicht unterstützt. Melde dich mit einem anderen Account an."
+          type="error"
+          onClose={() => removeQueryParam('error')}
+        />
+      )}
+
+      {hasOAuthError === 'OAuthAccountNotLinked' && (
+        <Alert
+          title="Anmeldung fehlgeschlagen"
+          description="Du meldest dich normalerweise mit einem andern Account an. Bitte versuche es erneut."
           type="error"
           onClose={() => removeQueryParam('error')}
         />
@@ -54,12 +75,15 @@ export default function SignInForm() {
               erstellen.
             </p>
           </div>
-          <Card>
+          <Card
+            cardStateHook={[cardState, setCardState]}
+            loadingScreen={<LoadingSpinner />}
+          >
             <h3 className="block text-lg font-bold text-gray-500 my-6 text-center">
               Anmelden mit
             </h3>
 
-            <SignInOptions />
+            <SignInOptions onClick={() => setCardState('loading')} />
 
             <NamedDivider text="oder mit Benutzername und Passwort" />
 
@@ -97,12 +121,8 @@ export default function SignInForm() {
                   </div>
                 </div>
 
-                <PrimaryButton
-                  className="flex w-full justify-center"
-                  onClick={() => signIn()}
-                >
-                  {' '}
-                  Anmelden{' '}
+                <PrimaryButton className="flex w-full justify-center">
+                  Anmelden
                 </PrimaryButton>
               </form>
             </div>

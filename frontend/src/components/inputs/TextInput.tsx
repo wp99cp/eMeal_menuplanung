@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import {
   ArrowPathIcon,
   CheckCircleIcon,
@@ -36,7 +36,7 @@ const TextInput = ({
   description,
   required = false,
   prefix = '',
-  stateHook: [inputValue, setInputValue] = ['', () => {}],
+  stateHook: [inputValue, setInputValue] = useState(''),
   fieldState: [[state, errorMessage]] = [['default', ''], () => {}],
 }: TextInputProps) => {
   let classes =
