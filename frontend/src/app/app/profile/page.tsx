@@ -1,20 +1,7 @@
-'use client';
-
 import { NextPage } from 'next';
-import { useMutation } from '@apollo/client';
-import { CreateUserNameData, CreateUserNameVars } from '@/util/types';
-import UserOperations from '@/graphql/operations/user';
-import { useSession } from 'next-auth/react';
 
 const Page: NextPage = () => {
   // redirect to login page if not logged in
-
-  const [createUsername, {}] = useMutation<
-    CreateUserNameData,
-    CreateUserNameVars
-  >(UserOperations.Mutation.createUser);
-
-  const session = useSession();
 
   return (
     <>

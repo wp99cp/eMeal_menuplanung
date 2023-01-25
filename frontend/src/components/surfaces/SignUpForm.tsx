@@ -1,17 +1,5 @@
-/*
-  This example requires some changes to your config:
+'use client';
 
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import Image from 'next/image';
 import logo from '@/assets/logo.svg';
 import { TextLink } from '@/components/elements/TextLink';

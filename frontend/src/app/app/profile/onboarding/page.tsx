@@ -1,98 +1,102 @@
 'use client';
 
-import StepperNav from '@/components/navigation/StepperNav';
-import { useSearchParams } from 'next/navigation';
-import { SmallLayout } from '@/components/layout/SmallLayout';
-import { Title } from '@/components/elements/Title';
-import { PrimaryLink } from '@/components/elements/Buttons/PrimaryLink';
-import { StrokedLink } from '@/components/elements/Buttons/StrokedLink';
-import { Card } from '@/components/layout/Card';
+import StepperCard, {
+  StepperCardSettings,
+  StepperCardSteps,
+} from '@/components/layout/StepperCard';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
+import { GraphQLClient } from '@/graphql/apollo-client';
+import { useApolloClient } from '@apollo/client';
+import {
+  WelcomeStepAction,
+  WelcomeStepContent,
+} from '@/app/app/profile/onboarding/WelcomStep';
+import {
+  AccountSetupStepAction,
+  AccountSetupStepContent,
+} from '@/app/app/profile/onboarding/AccountSetupStep';
+import {
+  MigrationStepAction,
+  MigrationStepContent,
+} from '@/app/app/profile/onboarding/MigrationStep';
 
-const steps = [
-  {
-    id: '01',
-    name: 'Willkommen bei eMeal',
-    step_name: 'welcome',
-    status: 'current',
-  },
-  {
-    id: '01',
-    name: 'Account vervollständigen',
-    step_name: 'account',
-    status: 'upcoming',
-  },
-  {
-    id: '02',
-    name: 'Daten übernehmen',
-    step_name: 'data-migration',
-    status: 'upcoming',
-  },
-  {
-    id: '03',
-    name: 'Einführung und Loslegen',
-    step_name: 'get-started',
-    status: 'upcoming',
-  },
-];
+export interface StepperCardArgs {
+  usernameHook: [string, Dispatch<SetStateAction<string>>];
+  shareEmailHook: [boolean, Dispatch<SetStateAction<boolean>>];
+  graphql: GraphQLClient;
+}
 
-const onboardingStep = (currentStep: string) => {
-  switch (currentStep) {
-    case 'welcome':
-      return (
-        <SmallLayout>
-          <Title heading="Willkommen bei eMeal - Menüplanung." />
-          <p>Welcome to eMeal v2</p>
-        </SmallLayout>
-      );
-    case 'account':
-      return (
-        <>
-          <p>Account vervollständigen</p>
-        </>
-      );
-    case 'data-migration':
-      return (
-        <>
-          <p>Daten aus dem alten eMeal migrieren</p>
-        </>
-      );
-    case 'get-started':
-      return (
-        <>
-          <p>Einführung und loslegen</p>
-        </>
-      );
+const getDefaultUsername = (session: Session | null): string => {
+  let username = session?.user?.email?.split('@')[0] || '';
+  username = username.replace(/[^a-zA-Z0-9_-]/g, '');
+
+  if (username.length > 20) {
+    username = username.substring(0, 20);
+  } else if (username.length < 5) {
+    username = '';
   }
+
+  return username;
 };
 
 const OnboardingPage = () => {
-  const searchParams = useSearchParams();
-  const currentStep = searchParams.get('step') || steps[0].step_name;
+  const graphql: GraphQLClient = useApolloClient();
+  const { data: session } = useSession();
 
-  return (
-    <>
-      <Card>
-        <div className="my-6">
-          <StepperNav steps={steps} />
-        </div>
+  const [username, setUsername] = useState<string>('');
+  const shareEmailHook = useState<boolean>(true);
 
-        {onboardingStep(currentStep)}
-        <div className="mt-2 grid grid-cols-3 gap-3">
-          <div></div>
-          <div className="grid place-content-end">
-            <StrokedLink href="/app/profile/onboarding?step=account">
-              Zurück
-            </StrokedLink>
-          </div>
-          <div className="grid place-content-start">
-            <PrimaryLink href="/app/profile/onboarding/welcome">
-              Weiter
-            </PrimaryLink>
-          </div>
-        </div>
-      </Card>
-    </>
-  );
+  // Once the session is loaded, set the default username
+  useEffect(() => {
+    const defaultUsername = getDefaultUsername(session);
+    if (username == '') setUsername(defaultUsername);
+  }, [session]);
+
+  const settings: StepperCardSettings<StepperCardArgs> = {
+    step_fnc_args: {
+      graphql,
+      usernameHook: [username, setUsername],
+      shareEmailHook,
+    },
+    stepper_nav_config: {
+      first_nav: {
+        forwards_button_name: 'Account einrichten',
+      },
+      middle_nav: {
+        backwards_button_name: 'Zurück',
+        forwards_button_name: 'Weiter',
+      },
+      last_nav: {
+        backwards_button_name: 'Zurück',
+        forwards_button_name: 'Abschliessen',
+        continuation_link: '/app',
+      },
+    },
+  };
+  const steps: StepperCardSteps<StepperCardArgs>[] = [
+    {
+      name: 'Willkommen bei eMeal',
+      step_name: 'welcome',
+      step_action: WelcomeStepAction,
+      content: WelcomeStepContent,
+    },
+    {
+      name: 'Account vervollständigen',
+      step_name: 'account',
+      step_action: AccountSetupStepAction,
+      content: AccountSetupStepContent,
+    },
+    {
+      name: 'Daten übernehmen',
+      step_name: 'data-migration',
+      step_action: MigrationStepAction,
+      content: MigrationStepContent,
+    },
+  ];
+
+  return <StepperCard settings={settings} steps={steps} />;
 };
 
 export default OnboardingPage;

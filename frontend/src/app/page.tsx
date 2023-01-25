@@ -1,5 +1,3 @@
-'use client';
-
 import { AnnouncementBadge } from '@/components/elements/Badges/AnnouncementBadge';
 import { SmallLayout } from '@/components/layout/SmallLayout';
 import { TextLink } from '@/components/elements/TextLink';

@@ -1,12 +1,10 @@
-'use client';
-
 // These styles apply to every route in the application
 import './globals.css';
 
-import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
 import Header from '@/components/navigation/Header';
 import { Footer } from '@/components/surfaces/Footer';
+import SessionProvider from '@/components/provider/SessionProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

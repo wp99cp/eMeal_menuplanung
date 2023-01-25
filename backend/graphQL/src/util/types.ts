@@ -18,14 +18,15 @@ export interface Session {
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
-  image?: string;
-  username?: string;
-  emailVerified?: boolean;
+  name: string | null;
+  email: string | null;
+  shareEmail: boolean;
+  image: string | null;
+  username: string | null;
+  emailVerified: Date | null;
 }
 
-export interface CreateUserNameResponse {
-  success?: boolean;
+export interface UpdateUserResponse {
+  success: boolean;
   error?: string;
 }

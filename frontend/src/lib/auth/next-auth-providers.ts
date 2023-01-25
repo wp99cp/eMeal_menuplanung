@@ -45,7 +45,7 @@ export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> =
         id: profile.sub,
         name: profile.name,
         email: profile.email,
-        username: profile.email,
+        username: profile.sub,
         image: profile.picture,
         emailVerified: profile.email_verified,
       };

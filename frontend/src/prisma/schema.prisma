@@ -39,6 +39,7 @@ model User {
   name          String?
   email         String?   @unique
   username      String?   @unique @default("")
+  shareEmail    Boolean   @default(false)
   emailVerified DateTime?
   image         String?
   accounts      Account[]

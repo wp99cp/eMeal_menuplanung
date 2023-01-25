@@ -1,5 +1,3 @@
-'use client';
-
 import SignUpForm from '@/components/surfaces/SignUpForm';
 import React from 'react';
 

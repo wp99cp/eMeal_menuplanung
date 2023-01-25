@@ -1,7 +1,7 @@
-import { getCurrentUser } from '@/lib/auth/session';
+import { getUser } from '@/util/session';
 
 export default async function Page() {
-  const session = await getCurrentUser();
+  const user = await getUser();
 
   return (
     <>
@@ -9,7 +9,7 @@ export default async function Page() {
         <div className="px-4 py-6 sm:px-0">
           <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 p-2">
             <h1>Hello, App Dashboatd Page!</h1>
-            <pre>{JSON.stringify(session, null, 2)}</pre>
+            <pre>{JSON.stringify(user, null, 2)}</pre>
           </div>
         </div>
       </div>

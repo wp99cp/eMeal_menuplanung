@@ -1,30 +1,33 @@
 import gql from "graphql-tag";
 
-
 const typeDefs = gql`
+  type User {
+    id: String
+    username: String
+  }
 
-    type User {
-        id: String
-        username: String
-    }
+  type Query {
+    searchUser(username: String): [User]
+    checkUsername(username: String): UpdateUserResponse
+  }
 
-    type Query {
-        searchUser(username: String): [User]
-    }
+  type Mutation {
+    updateUser(username: String, shareEmail: Boolean): UpdateUserResponse
+  }
 
-    type Mutation {
-        createUser(username: String): CreateUserNameResponse
-    }
+  type Subscription {
+    userCreated: User
+  }
 
-    type Subscription {
-        userCreated: User
-    }
+  type UpdateUserResponse {
+    success: Boolean
+    error: String
+  }
 
-    type CreateUserNameResponse {
-        success: Boolean
-        error: String
-    }
-
+  type CheckUsernameMutation {
+    success: Boolean
+    error: String
+  }
 `;
 
 export default typeDefs;

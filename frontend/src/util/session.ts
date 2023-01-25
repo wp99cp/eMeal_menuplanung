@@ -11,7 +11,7 @@ export async function getSession() {
   return await unstable_getServerSession(authOptions);
 }
 
-export async function getCurrentUser() {
+export async function getUser() {
   const session = await getSession();
 
   return session?.user;
