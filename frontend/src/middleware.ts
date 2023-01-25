@@ -35,13 +35,19 @@ export const config = {
 export const middleware = async (req: NextRequest) => {
   if (!(await isAuthorized(req))) return redirectToSignInPage(req);
 
+  function redirectToApp() {
+    const redirectUrl =
+      req.nextUrl.searchParams.get('callbackUrl') ||
+      req.nextUrl.origin + '/app';
+    return NextResponse.redirect(redirectUrl);
+  }
+
   switch (req.nextUrl.pathname) {
-    case '/app/signup':
+    case '/auth/signup': {
+      return redirectToApp();
+    }
     case '/auth/signin': {
-      const redirectUrl =
-        req.nextUrl.searchParams.get('callbackUrl') ||
-        req.nextUrl.origin + '/app';
-      return NextResponse.redirect(redirectUrl);
+      return redirectToApp();
     }
   }
 
