@@ -3,9 +3,7 @@
     "moduleResolution": "node",
     "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -21,23 +19,13 @@
     "forceConsistentCasingInFileNames": true,
     "declarationDir": "./dist",
     "outDir": "./dist",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "baseUrl": ".",
     "paths": {
-      "@prisma/client": [
-        "./src/util/generated/prisma/client"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+      "@prisma/client": ["./src/util/generated/prisma/client"],
+      "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modues"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modues"]
 }

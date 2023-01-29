@@ -80,8 +80,8 @@ export const MiDataProvider: any = {
   clientSecret: process.env.CEVI_DB_CLIENT_SECRET,
 };
 
-export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> =
-  GoogleProvider({
+export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> = GoogleProvider(
+  {
     clientId: process.env.GOOGLE_CLIENT_ID as string,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     httpOptions: {
@@ -98,4 +98,5 @@ export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> =
         shareEmail: false,
       };
     },
-  });
+  }
+);

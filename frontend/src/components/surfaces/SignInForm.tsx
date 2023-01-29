@@ -16,8 +16,7 @@ import { LoadingSpinner } from '@/components/surfaces/LoadingSpinner';
 
 export default function SignInForm() {
   const readOnlySearchParams = useSearchParams();
-  const hasOAuthError: string | null =
-    readOnlySearchParams.get('error') || null;
+  const hasOAuthError: string | null = readOnlySearchParams.get('error') || null;
 
   const pathname = usePathname();
   const router = useRouter();
@@ -71,8 +70,7 @@ export default function SignInForm() {
               Anmelden und loslegen
             </h2>
             <p className="text-center text-gray-600">
-              Oder ein <TextLink href="/auth/signup">neuer Account</TextLink>{' '}
-              erstellen.
+              Oder ein <TextLink href="/auth/signup">neuer Account</TextLink> erstellen.
             </p>
           </div>
           <Card
@@ -115,9 +113,7 @@ export default function SignInForm() {
                   />
 
                   <div className="text-sm">
-                    <TextLink href="/auth/forgot-password">
-                      Passwort vergessen?
-                    </TextLink>
+                    <TextLink href="/auth/forgot-password">Passwort vergessen?</TextLink>
                   </div>
                 </div>
 

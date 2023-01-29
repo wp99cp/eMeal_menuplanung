@@ -4,11 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": [
-    "next",
-    "next/core-web-vitals",
-    "eslint:recommended"
-  ],
+  "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
   "globals": {
     "React": "readonly",
     "JSX": "readonly"
@@ -18,9 +14,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react"],
   "rules": {
     "no-unused-vars": [
       1,
@@ -30,7 +24,5 @@
       }
     ]
   },
-  "ignorePatterns": [
-    "src/util/generated/*"
-  ]
+  "ignorePatterns": ["src/util/generated/*"]
 }

@@ -1,9 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Transition } from '@headlessui/react';
-import {
-  CheckCircleIcon,
-  ExclamationTriangleIcon,
-} from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 
 interface AlertProps {
@@ -13,12 +10,7 @@ interface AlertProps {
   onClose?: () => void;
 }
 
-export default function Alert({
-  title,
-  description,
-  type,
-  onClose,
-}: AlertProps) {
+export default function Alert({ title, description, type, onClose }: AlertProps) {
   const [show, setShow] = useState(true);
 
   return (

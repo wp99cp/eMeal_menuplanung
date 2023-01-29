@@ -54,8 +54,7 @@ function MobileNavigation() {
                   Registrieren
                 </a>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  Bestehendes Konto?{' '}
-                  <TextLink href="/auth/signin">Anmelden</TextLink>
+                  Bestehendes Konto? <TextLink href="/auth/signin">Anmelden</TextLink>
                 </p>
               </div>
             )}

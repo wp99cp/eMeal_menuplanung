@@ -69,9 +69,7 @@ const render_nav_buttons = (
   if (index === 0) {
     return (
       <>
-        <PrimaryButton
-          onClick={step_forward(steps, index, settings, baseUrl, router)}
-        >
+        <PrimaryButton onClick={step_forward(steps, index, settings, baseUrl, router)}>
           {settings.stepper_nav_config.first_nav.forwards_button_name}
         </PrimaryButton>
       </>
@@ -88,9 +86,7 @@ const render_nav_buttons = (
         >
           {settings.stepper_nav_config.last_nav.backwards_button_name}
         </StrokedButton>
-        <PrimaryButton
-          onClick={continuation_step(steps, index, settings, router)}
-        >
+        <PrimaryButton onClick={continuation_step(steps, index, settings, router)}>
           {settings.stepper_nav_config.last_nav.forwards_button_name}
         </PrimaryButton>
       </>
@@ -106,9 +102,7 @@ const render_nav_buttons = (
       >
         {settings.stepper_nav_config.middle_nav.backwards_button_name}
       </StrokedButton>
-      <PrimaryButton
-        onClick={step_forward(steps, index, settings, baseUrl, router)}
-      >
+      <PrimaryButton onClick={step_forward(steps, index, settings, baseUrl, router)}>
         {settings.stepper_nav_config.middle_nav.forwards_button_name}
       </PrimaryButton>
     </>
@@ -154,10 +148,7 @@ const render_current_step = (step: StepperCardSteps<any>) => {
         className="relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-accent-600 bg-white"
         aria-current="step"
       >
-        <span
-          className="h-1.5 w-1.5 rounded-full bg-accent-600"
-          aria-hidden="true"
-        />
+        <span className="h-1.5 w-1.5 rounded-full bg-accent-600" aria-hidden="true" />
         <span className="sr-only">{step.name}</span>
       </div>
     </>
@@ -171,10 +162,7 @@ const render_upcoming_step = (step: StepperCardSteps<any>) => {
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       <div className="group relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 bg-white">
-        <span
-          className="h-1.5 w-1.5 rounded-full bg-transparent"
-          aria-hidden="true"
-        />
+        <span className="h-1.5 w-1.5 rounded-full bg-transparent" aria-hidden="true" />
         <span className="sr-only">{step.name}</span>
       </div>
     </>

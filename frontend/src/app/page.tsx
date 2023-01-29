@@ -57,9 +57,9 @@ export default function LandingPage() {
         <section className="sm:text-center">
           <Title heading="eMeal - Menüplanung. Lagerküche online planen."></Title>
           <Text>
-            Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze
-            Lager online erstellen, verwalten und zu einer Broschüre
-            zusammenstellen. <TextLink href="/about">Mehr Erfahren.</TextLink>
+            Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze Lager online
+            erstellen, verwalten und zu einer Broschüre zusammenstellen.{' '}
+            <TextLink href="/about">Mehr Erfahren.</TextLink>
           </Text>
 
           <div className="mt-8 flex gap-x-4 sm:justify-center">
@@ -67,10 +67,7 @@ export default function LandingPage() {
               Anmelden
             </PrimaryLink>
 
-            <StrokedLink
-              href="/auth/signin?with-demo-user=true"
-              external={true}
-            >
+            <StrokedLink href="/auth/signin?with-demo-user=true" external={true}>
               {' '}
               Live Demo
             </StrokedLink>
@@ -89,12 +86,11 @@ export default function LandingPage() {
                 Der beste Weg deine Lagerküche zu planen.
               </p>
               <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-                eMeal - Menüplanung ist ein interaktives Planungstool für die
-                Lagerküche. Sei es für das Cevi-, Pfadi- oder Klassenlager mit
-                eMeal kannst du deine Menüpläne direkt im Browser erstellen.
-                Verwalten deine Rezepte und Mahlzeiten online und erstelle mit
-                einem Klick eine Lager-Broschüre. Die Planung des Essens für ein
-                Lager, war noch nie so einfach!
+                eMeal - Menüplanung ist ein interaktives Planungstool für die Lagerküche.
+                Sei es für das Cevi-, Pfadi- oder Klassenlager mit eMeal kannst du deine
+                Menüpläne direkt im Browser erstellen. Verwalten deine Rezepte und
+                Mahlzeiten online und erstelle mit einem Klick eine Lager-Broschüre. Die
+                Planung des Essens für ein Lager, war noch nie so einfach!
               </p>
             </div>
 

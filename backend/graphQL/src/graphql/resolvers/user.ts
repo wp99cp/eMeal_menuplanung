@@ -1,8 +1,5 @@
 import { isValidUsername } from '@/util/functions';
-import {
-  MutationResolvers,
-  QueryResolvers,
-} from '@/util/generated/types/graphql';
+import { MutationResolvers, QueryResolvers } from '@/util/generated/types/graphql';
 import * as console from 'console';
 
 export const userQueries: QueryResolvers = {

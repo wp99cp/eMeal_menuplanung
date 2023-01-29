@@ -20,9 +20,7 @@ const useLocalStorage = (key: string, initialValue: string) => {
     try {
       // Allow value to be a function, so we have same API as useState
       const valueToStore =
-        typeof storedValue === 'function'
-          ? storedValue(storedValue)
-          : storedValue;
+        typeof storedValue === 'function' ? storedValue(storedValue) : storedValue;
       // Save state
       window?.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {

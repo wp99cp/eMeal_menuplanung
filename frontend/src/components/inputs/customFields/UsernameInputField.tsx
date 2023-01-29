@@ -47,10 +47,7 @@ const validateUsername = async (
     return;
   }
 
-  const res = await graphql.query<
-    CheckUsernameQuery,
-    CheckUsernameQueryVariables
-  >({
+  const res = await graphql.query<CheckUsernameQuery, CheckUsernameQueryVariables>({
     query: CheckUsernameDocument,
     variables: { username },
   });
@@ -63,10 +60,7 @@ const validateUsername = async (
     status = 'error';
   }
 
-  setUsernameState([
-    status,
-    'Benutzername ist ungültig oder nicht mehr verfügbar',
-  ]);
+  setUsernameState([status, 'Benutzername ist ungültig oder nicht mehr verfügbar']);
 };
 
 const UsernameInputField = ({
@@ -74,9 +68,8 @@ const UsernameInputField = ({
 }: UsernameInputFieldProps) => {
   const graphql = useApolloClient();
 
-  const [usernameState, setUsernameState] = useState<InputFieldState>(
-    InputFieldLoadingState
-  );
+  const [usernameState, setUsernameState] =
+    useState<InputFieldState>(InputFieldLoadingState);
 
   // Validate the username on every change
   useEffect(() => {

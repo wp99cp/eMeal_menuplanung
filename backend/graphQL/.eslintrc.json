@@ -23,7 +23,5 @@
       }
     ]
   },
-  "ignorePatterns": [
-    "src/util/generated/*"
-  ]
+  "ignorePatterns": ["src/util/generated/*"]
 }

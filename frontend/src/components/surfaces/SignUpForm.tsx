@@ -31,8 +31,7 @@ export default function SignUpForm() {
             </h2>
 
             <p className="text-center text-gray-600">
-              <TextLink href="/auth/signin"> Bestehenden Account</TextLink>{' '}
-              verwenden.
+              <TextLink href="/auth/signin"> Bestehenden Account</TextLink> verwenden.
             </p>
           </div>
 

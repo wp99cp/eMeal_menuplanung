@@ -69,9 +69,8 @@ export const Footer = () => {
             <div className="space-y-8">
               <Image className="h-8 w-auto sm:h-10" src={logo} alt="" />
               <p className="text-sm leading-6 text-gray-600">
-                Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie
-                ganze Lager online erstellen, verwalten und zu einer Broschüre
-                zusammenstellen.
+                Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze Lager
+                online erstellen, verwalten und zu einer Broschüre zusammenstellen.
               </p>
               <div className="flex space-x-6"></div>
             </div>

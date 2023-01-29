@@ -22,10 +22,7 @@ interface TextInputProps {
   prefix?: string;
   required?: boolean | undefined;
   stateHook?: [string, Dispatch<SetStateAction<string>>];
-  fieldState?: [
-    [FieldState, string],
-    Dispatch<SetStateAction<[FieldState, string]>>
-  ];
+  fieldState?: [[FieldState, string], Dispatch<SetStateAction<[FieldState, string]>>];
 }
 
 const TextInput = ({
@@ -78,18 +75,12 @@ const TextInput = ({
         />
         {state === 'error' && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <ExclamationCircleIcon
-              className="h-5 w-5 text-red-500"
-              aria-hidden="true"
-            />
+            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
           </div>
         )}
         {state === 'success' && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <CheckCircleIcon
-              className="h-5 w-5 text-green-500"
-              aria-hidden="true"
-            />
+            <CheckCircleIcon className="h-5 w-5 text-green-500" aria-hidden="true" />
           </div>
         )}
         {state === 'loading' && (

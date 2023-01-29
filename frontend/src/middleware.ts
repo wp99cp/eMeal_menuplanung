@@ -37,8 +37,7 @@ export const middleware = async (req: NextRequest) => {
 
   function redirectToApp() {
     const redirectUrl =
-      req.nextUrl.searchParams.get('callbackUrl') ||
-      req.nextUrl.origin + '/app';
+      req.nextUrl.searchParams.get('callbackUrl') || req.nextUrl.origin + '/app';
     return NextResponse.redirect(redirectUrl);
   }
 

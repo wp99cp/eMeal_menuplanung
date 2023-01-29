@@ -7,15 +7,15 @@ const MigrationStepContent: () => JSX.Element = () => (
       Daten aus dem &quot;alten&quot; eMeal - Menüplanung übernehmen.
     </p>
     <p className="text-gray-600 my-2 font-medium">
-      Die Lager, Mahlzeiten und Rezepte aus dem "alten" eMeal - Menüplanung
-      werden automatisch übernommen.
+      Die Lager, Mahlzeiten und Rezepte aus dem "alten" eMeal - Menüplanung werden
+      automatisch übernommen.
     </p>
 
     <p></p>
 
     <p className="text-gray-700">
-      Achtung: Wenn du diesen Schritt überspringst, können die Daten zu einem
-      späteren Zeitpunkt nicht mehr übernommen werden.
+      Achtung: Wenn du diesen Schritt überspringst, können die Daten zu einem späteren
+      Zeitpunkt nicht mehr übernommen werden.
     </p>
   </>
 );

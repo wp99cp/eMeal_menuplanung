@@ -1,2 +1,6 @@
 .next
 node_modules
+
+# Auto generated files
+src/util/generated
+src/build.ts
