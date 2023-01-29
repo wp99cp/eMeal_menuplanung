@@ -20,7 +20,7 @@ services:
       - ./.git/refs/heads/:/app/frontend/.git/refs/heads/
 
     ports:
-      - "3000:3000"
+      - "3000:3000" # GraphQL server
 
     depends_on:
       - mongo-db
@@ -39,7 +39,8 @@ services:
       - ./backend/graphQL/src:/app/backend/graphQL/src
 
     ports:
-      - "4000:4000"
+      - "4000:4000" # Frontend as Webpage
+      - "5555:5555" # Prisma Studio
 
     depends_on:
       - mongo-db

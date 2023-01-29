@@ -2,7 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { User } from '@/util/generated/prisma/client';
 
 export interface GraphQLContext {
-  session: Session | null;
+  user_id?: string;
+  session?: Session;
   prisma: PrismaClient;
   // pubsub
 }

@@ -5,13 +5,10 @@ import * as console from 'console';
 export const userQueries: QueryResolvers = {
   checkUsername: async (_, args, context) => {
     const { username } = args;
-    const { session, prisma } = context;
+    const { user_id, prisma } = context;
 
-    if (!session?.user) {
-      return { success: false, error: 'Not authenticated' };
-    }
-
-    const { id: user_id } = session.user;
+    if (!user_id)
+      return { success: false, error: 'No user_id set. Are you using a api key?' };
 
     if (!username) {
       return {
@@ -39,15 +36,10 @@ export const userQueries: QueryResolvers = {
 export const userMutations: MutationResolvers = {
   updateUser: async (_, args, context) => {
     const { username, shareEmail, newUser } = args;
-    const { session, prisma } = context;
+    const { user_id, prisma } = context;
 
-    console.log('updateUser', args);
-
-    if (!session?.user) {
-      return { success: false, error: 'Not authenticated' };
-    }
-
-    const { id: user_id } = session.user;
+    if (!user_id)
+      return { success: false, error: 'No user_id set. Are you using a api key?' };
 
     if (!username) {
       return {
@@ -76,7 +68,6 @@ export const userMutations: MutationResolvers = {
         },
       });
     } catch (error: any) {
-      console.log('Error creating user', error);
       return { success: false, error: error?.message };
     }
 

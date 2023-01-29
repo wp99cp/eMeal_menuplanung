@@ -1,4 +1,3 @@
-
 echo "Wait for 20 seconds to make sure the MongoDB server is up and running..."
 sleep 20
 
@@ -6,6 +5,9 @@ sleep 20
 export PRISMA_OUTPUT="../../backend/graphQL/src/util/generated/prisma/client/"
 dotenv -e "$ENV_FILE_PATH" -- npx prisma generate --schema=../../common/prisma/schema.prisma
 dotenv -e "$ENV_FILE_PATH" -- npx prisma db push --schema=../../common/prisma/schema.prisma
+
+# Start Prisma Studio in the background
+dotenv -e "$ENV_FILE_PATH" -- npx prisma studio --schema=../../common/prisma/schema.prisma &
 
 # Generate the GraphQL schema types
 dotenv -e "$ENV_FILE_PATH" -- npm run generate
