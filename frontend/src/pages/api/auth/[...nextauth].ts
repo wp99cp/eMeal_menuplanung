@@ -17,7 +17,7 @@ const pages = {
 };
 
 const callbacks: Partial<CallbacksOptions> = {
-  async signIn({}) {
+  async signIn() {
     return true;
   },
 

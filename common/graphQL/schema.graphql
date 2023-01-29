@@ -9,7 +9,7 @@ type Query {
 }
 
 type Mutation {
-    updateUser(username: String, shareEmail: Boolean): UpdateUserResponse
+    updateUser(username: String, shareEmail: Boolean, newUser: Boolean): UpdateUserResponse
 }
 
 type Subscription {

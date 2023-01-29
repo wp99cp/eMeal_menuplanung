@@ -4,8 +4,8 @@ query checkUsername($username: String) {
   }
 }
 
-mutation updateUser($username: String, $shareEmail: Boolean) {
-  updateUser(username: $username, shareEmail: $shareEmail) {
+mutation updateUser($username: String, $shareEmail: Boolean, $newUser: Boolean) {
+  updateUser(username: $username, shareEmail: $shareEmail, newUser: $newUser) {
     ...UpdateUserResponse
   }
 }

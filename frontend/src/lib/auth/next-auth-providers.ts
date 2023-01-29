@@ -58,6 +58,7 @@ export const CeviDBProvider: OAuthConfig<HitobitoProfile> = {
       image: null,
       emailVerified: null,
       shareEmail: false,
+      newUser: true,
     };
   },
   clientId: process.env.CEVI_DB_CLIENT_ID as string,
@@ -87,8 +88,10 @@ export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> = Googl
     httpOptions: {
       timeout: 10_000,
     },
+    allowDangerousEmailAccountLinking: true,
     profile(profile: GoogleProfile): User {
       return {
+        newUser: true,
         id: profile.sub,
         name: profile.name,
         email: profile.email,

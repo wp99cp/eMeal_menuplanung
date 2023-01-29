@@ -38,7 +38,7 @@ export const userQueries: QueryResolvers = {
 
 export const userMutations: MutationResolvers = {
   updateUser: async (_, args, context) => {
-    const { username, shareEmail } = args;
+    const { username, shareEmail, newUser } = args;
     const { session, prisma } = context;
 
     console.log('updateUser', args);
@@ -71,9 +71,8 @@ export const userMutations: MutationResolvers = {
         },
         data: {
           username,
-          ...(shareEmail !== undefined && {
-            shareEmail: shareEmail?.valueOf(),
-          }),
+          ...(shareEmail !== undefined && { shareEmail: shareEmail?.valueOf() }),
+          ...(newUser !== undefined && { newUser: newUser?.valueOf() }),
         },
       });
     } catch (error: any) {

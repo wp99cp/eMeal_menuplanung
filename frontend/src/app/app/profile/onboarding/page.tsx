@@ -21,6 +21,11 @@ import {
   MigrationStepAction,
   MigrationStepContent,
 } from '@/app/app/profile/onboarding/MigrationStep';
+import {
+  UpdateUserDocument,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
+} from '@/util/generated/graphql/graphql';
 
 export interface StepperCardArgs {
   usernameHook: [string, Dispatch<SetStateAction<string>>];
@@ -93,6 +98,34 @@ const OnboardingPage = () => {
       step_name: 'data-migration',
       step_action: MigrationStepAction,
       content: MigrationStepContent,
+    },
+    {
+      name: 'Fertig',
+      step_name: 'done',
+      step_action: async () => {
+        // Update the user's username and share_email field in the database
+        const res = await graphql.mutate<UpdateUserMutation, UpdateUserMutationVariables>(
+          {
+            mutation: UpdateUserDocument,
+            variables: { username, newUser: false },
+          }
+        );
+
+        return !!res.data?.updateUser?.success;
+      },
+      content: () => (
+        <>
+          <p className="text-accent-500 font-bold mt-8 mb-2">
+            Dein Konto ist eingerichtet!
+          </p>
+          <p className="font-bold text-2xl mb-4">
+            Herzlich willkommen bei eMeal - Menüplanung.
+          </p>
+          <p className="text-gray-600 my-2 font-medium">
+            Du kannst nun mit der Planung deines Lagers beginnen.
+          </p>
+        </>
+      ),
     },
   ];
 
