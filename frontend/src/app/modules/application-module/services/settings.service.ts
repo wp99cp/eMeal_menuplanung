@@ -1,6 +1,6 @@
 import {FirestoreSettings, UserGroups} from '../interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
-import {map, mergeMap} from 'rxjs/operators';
+import {filter, map, mergeMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
@@ -23,8 +23,10 @@ export class SettingsService {
 
   constructor(private db: AngularFirestore, authService: AuthenticationService) {
 
-    this.globalSettings = authService.getCurrentUser().pipe(mergeMap(user =>
-      this.loadUserSettings(user.uid)));
+    this.globalSettings = authService.getCurrentUser()
+      .pipe(tap(console.log))
+      .pipe(filter(user => !!user?.uid))
+      .pipe(mergeMap(user => this.loadUserSettings(user.uid)));
 
   }
 

@@ -42,11 +42,11 @@ export class AuthenticationService {
    * Authenticates a Firebase client using a full-page redirect flow with the GoogleAuthProvider
    *
    */
-  signInWithGoogle() {
+  async signInWithGoogle() {
 
     this.location.replaceState('login/oauth-callback?method=google');
-    this.fireAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-      .then(console.log)
+    this.fireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(() => this.router.navigate(['/app']))
       .catch(console.error);
 
   }
