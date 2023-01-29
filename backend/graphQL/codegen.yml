@@ -1,0 +1,11 @@
+schema: ../../common/graphQL/schema.graphql
+generates:
+  "./src/util/generated/types/graphql.ts":
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      useIndexSignature: true
+      # Note, this file path starts from the location of the
+      # file where you generate types.
+      contextType: "../../types/types#GraphQLContext"

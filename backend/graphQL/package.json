@@ -5,12 +5,29 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon",
+    "lint": "next lint",
+    "prettier": "prettier --write .",
+    "generate": "graphql-codegen --config codegen.yml"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "node -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "ext": "ts, js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.2.1",
+    "@graphql-tools/graphql-file-loader": "^7.5.14",
     "@graphql-tools/schema": "^8.5.0",
     "@prisma/client": "^4.9.0",
     "body-parser": "^1.20.1",
@@ -22,16 +39,28 @@
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^5.9.1",
     "lodash.merge": "^4.6.2",
-    "next-auth": "^4.18.8",
+    "next-auth": "^4.18.10",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.1.2",
     "ws": "^8.8.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.4",
+    "@graphql-codegen/typescript": "^2.8.7",
+    "@graphql-codegen/typescript-resolvers": "^2.7.12",
     "@types/cors": "^2.8.12",
     "@types/lodash.merge": "^4.6.7",
     "@types/ws": "^8.5.3",
+    "eslint": "^8.32.0",
+    "eslint-config-standard-with-typescript": "^31.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.1",
     "nodemon": "^2.0.18",
+    "prettier": "^2.8.3",
     "prisma": "^4.9.0",
-    "ts-node": "^10.8.2",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.3"
   }
 }

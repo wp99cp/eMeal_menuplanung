@@ -1,0 +1,21 @@
+query checkUsername($username: String) {
+    checkUsername(username: $username) {
+        ...CheckUsernameResponse
+    }
+}
+
+mutation updateUser($username: String, $shareEmail: Boolean) {
+    updateUser(username: $username, shareEmail: $shareEmail) {
+        ...UpdateUserResponse
+    }
+}
+
+fragment UpdateUserResponse on UpdateUserResponse {
+    success
+    error
+}
+
+fragment CheckUsernameResponse on UpdateUserResponse {
+    success
+    error
+}

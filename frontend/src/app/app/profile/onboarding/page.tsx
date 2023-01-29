@@ -52,7 +52,7 @@ const OnboardingPage = () => {
   useEffect(() => {
     const defaultUsername = getDefaultUsername(session);
     if (username == '') setUsername(defaultUsername);
-  }, [session]);
+  }, [session, username]);
 
   const settings: StepperCardSettings<StepperCardArgs> = {
     step_fnc_args: {

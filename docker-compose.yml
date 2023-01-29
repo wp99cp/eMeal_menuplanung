@@ -5,19 +5,19 @@ services:
   frontend:
 
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
 
     environment:
-      - ENV_FILE_PATH=/app/.env.local
+      - ENV_FILE_PATH=.env.local
 
     volumes:
-      - ./frontend/src:/app/src
-      - ./.env.local:/app/.env.local:ro
+      - ./frontend/src:/app/frontend/src
+      - ./.env.local:/app/frontend/.env.local:ro
 
       # Mount git info to container
-      - ./.git/HEAD:/app/.git/HEAD
-      - ./.git/refs/heads/:/app/.git/refs/heads/
+      - ./.git/HEAD:/app/frontend/.git/HEAD
+      - ./.git/refs/heads/:/app/frontend/.git/refs/heads/
 
     ports:
       - "3000:3000"
@@ -28,15 +28,15 @@ services:
   graphql:
 
     build:
-      context: ./backend/graphQL
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./backend/graphQL/Dockerfile
 
     environment:
       - ENV_FILE_PATH=.env.local
 
     volumes:
-      - ./.env.local:/app/.env.local:ro
-      - ./backend/graphQL/src:/app/src
+      - ./.env.local:/app/backend/graphQL/.env.local:ro
+      - ./backend/graphQL/src:/app/backend/graphQL/src
 
     ports:
       - "4000:4000"

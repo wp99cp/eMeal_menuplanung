@@ -1,14 +1,15 @@
 FROM node:18
-WORKDIR /app
+WORKDIR /app/frontend
 
 # Install app dependencies
-COPY ./package.json ./package-lock.json ./
+COPY ./frontend/package.json ./frontend/package-lock.json ./
 
 # Install all the dependencies from package-lock.json
 RUN npm ci
 RUN npm install -g dotenv-cli
 
 # Copy project directory
-COPY ./ /app/
+COPY ./frontend ./
+COPY ./common /app/common
 
 ENTRYPOINT ["bash", "entrypoint.sh"]

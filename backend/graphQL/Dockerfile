@@ -1,14 +1,15 @@
 FROM node:18
-WORKDIR /app
+WORKDIR /app/backend/graphQL
 
 # Install app dependencies
-COPY ./package.json ./package-lock.json ./
+COPY ./backend/graphQL/package.json ./backend/graphQL/package-lock.json ./
 
 # Install all the dependencies from package-lock.json
 RUN npm ci
 RUN npm install -g dotenv-cli
 
 # Copy project directory
-COPY ./ /app/
+COPY ./backend/graphQL ./
+COPY ./common /app/common
 
 ENTRYPOINT ["bash", "entrypoint.sh"]

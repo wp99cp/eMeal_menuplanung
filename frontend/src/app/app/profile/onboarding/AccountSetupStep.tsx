@@ -1,8 +1,11 @@
-import { UserOperations } from '@/graphql/operations/user';
 import { StepperCardArgs } from '@/app/app/profile/onboarding/page';
 import Checkbox from '@/components/inputs/Checkbox';
 import UsernameInputField from '@/components/inputs/customFields/UsernameInputField';
-import { UpdateUserData, UpdateUserVars } from '@/util/types';
+import {
+  UpdateUserDocument,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
+} from '@/util/generated/graphql/graphql';
 
 export const AccountSetupStepAction: (
   args: StepperCardArgs
@@ -15,12 +18,15 @@ export const AccountSetupStepAction: (
   const [shareEmail] = shareEmailHook;
 
   // Update the user's username and share_email field in the database
-  const res = await graphql.mutate<UpdateUserData, UpdateUserVars>({
-    mutation: UserOperations.Mutation.updateUser,
+  const res = await graphql.mutate<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >({
+    mutation: UpdateUserDocument,
     variables: { username, shareEmail: shareEmail },
   });
 
-  return !!res.data?.updateUser.success;
+  return !!res.data?.updateUser?.success;
 };
 
 export const AccountSetupStepContent: (

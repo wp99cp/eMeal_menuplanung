@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { User } from "./types";
+import { PrismaClient } from '@prisma/client';
+import { User } from 'next-auth';
 
 export async function isValidUsername(
   prisma: PrismaClient,

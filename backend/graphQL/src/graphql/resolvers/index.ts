@@ -1,6 +1,19 @@
-import userResolver from './user';
-import merge from 'lodash.merge';
+import {
+  MutationResolvers,
+  QueryResolvers,
+  Resolvers,
+} from '@/util/generated/types/graphql';
+import { userMutations, userQueries } from '@/graphql/resolvers/user';
 
-const resolvers = merge({}, userResolver);
+const queries: QueryResolvers = {
+  ...userQueries,
+};
 
-export default resolvers;
+const mutations: MutationResolvers = {
+  ...userMutations,
+};
+
+export const resolvers: Resolvers = {
+  Query: { ...queries },
+  Mutation: { ...mutations },
+};

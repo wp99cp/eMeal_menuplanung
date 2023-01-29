@@ -5,8 +5,12 @@ import TextInput, {
 } from '@/components/inputs/TextInput';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { GraphQLClient } from '@/graphql/apollo-client';
-import { UserOperations } from '@/graphql/operations/user';
 import { useApolloClient } from '@apollo/client';
+import {
+  CheckUsernameDocument,
+  CheckUsernameQuery,
+  CheckUsernameQueryVariables,
+} from '@/util/generated/graphql/graphql';
 
 export interface UsernameInputFieldProps {
   usernameHook: [string, Dispatch<SetStateAction<string>>];
@@ -43,16 +47,19 @@ const validateUsername = async (
     return;
   }
 
-  const res = await graphql.query({
-    query: UserOperations.Queries.checkUsername,
+  const res = await graphql.query<
+    CheckUsernameQuery,
+    CheckUsernameQueryVariables
+  >({
+    query: CheckUsernameDocument,
     variables: { username },
   });
 
   let status: FieldState = 'default';
 
-  if (res.data?.checkUsername.success) {
+  if (res.data?.checkUsername?.success) {
     status = 'success';
-  } else if (!res.data?.checkUsername.success) {
+  } else if (!res.data?.checkUsername?.success) {
     status = 'error';
   }
 

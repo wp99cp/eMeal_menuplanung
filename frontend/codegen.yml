@@ -1,0 +1,10 @@
+schema: ../common/graphQL/schema.graphql
+generates:
+  "./src/util/generated/graphql/graphql.ts":
+    documents: ./src/**/*.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+
+ignoreNoDocuments: true

@@ -7,15 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier --write ."
-  },
-  "prisma": {
-    "schema": "./src/prisma/schema.prisma"
+    "prettier": "prettier --write .",
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@graphql-codegen/typescript": "^2.8.7",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -32,6 +31,11 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.4",
+    "@graphql-codegen/client-preset": "^1.2.6",
+    "@graphql-codegen/typescript-operations": "^2.5.12",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@graphql-codegen/typescript-resolvers": "^2.7.12",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.32.0",
