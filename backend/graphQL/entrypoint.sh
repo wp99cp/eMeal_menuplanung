@@ -1,5 +1,5 @@
-echo "Wait for 20 seconds to make sure the MongoDB server is up and running..."
-sleep 20
+echo "Wait for MongoDB to be ready..."
+until </dev/tcp/mongo-db/27018; do sleep 1; done
 
 # Prepare the database
 export PRISMA_OUTPUT="../../backend/graphQL/src/util/generated/prisma/client/"

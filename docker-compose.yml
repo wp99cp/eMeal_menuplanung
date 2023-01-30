@@ -67,10 +67,20 @@ services:
 
     ports:
       - "27017:27017"
+      - "27018:27018"
 
     restart: always
 
     environment:
       - ENV_FILE_PATH=/etc/mongo/.env.local
+
     volumes:
       - ./.env.local:/etc/mongo/.env.local:ro
+      - mongo-db-data:/data/db
+      - mongo-db-config:/data/configdb
+
+volumes:
+    mongo-db-data:
+      driver: local
+    mongo-db-config:
+      driver: local
