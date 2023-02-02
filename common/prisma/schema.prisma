@@ -14,6 +14,8 @@ model Account {
   type              String
   provider          String
   providerAccountId String
+  password          String?
+  emailVerified     Boolean? @default(false)
   refresh_token     String? @db.String
   access_token      String? @db.String
   expires_at        Int?

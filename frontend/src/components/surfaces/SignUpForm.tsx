@@ -10,10 +10,41 @@ import TextInput from '@/components/inputs/TextInput';
 import Checkbox from '@/components/inputs/Checkbox';
 import { Card, CardState, DefaultCardState } from '@/components/layout/Card';
 import { LoadingSpinner } from '@/components/surfaces/LoadingSpinner';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { useApolloClient } from '@apollo/client';
+import {
+  CreateNewUserDocument,
+  CreateNewUserMutation,
+  CreateNewUserMutationVariables,
+} from '@/util/generated/graphql/graphql';
 
 export default function SignUpForm() {
   const [cardState, setCardState] = useState<CardState>(DefaultCardState);
+
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+
+  const graphql = useApolloClient();
+
+  const register = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setCardState('loading');
+
+    const res = await graphql.mutate<
+      CreateNewUserMutation,
+      CreateNewUserMutationVariables
+    >({
+      mutation: CreateNewUserDocument,
+      variables: {
+        email,
+        name,
+        password,
+      },
+    });
+
+    console.log(res);
+  };
 
   return (
     <>
@@ -44,39 +75,44 @@ export default function SignUpForm() {
             </h3>
 
             <div className="my-6">
-              <form className="space-y-6">
-                <TextInput
-                  id="email"
-                  name="email"
-                  description="E-Mail-Adresse"
-                  type="email"
-                  autoComplete="email"
-                  required
-                />
+              <form className="space-y-6" onSubmit={register}>
+                <div>
+                  <TextInput
+                    id="email"
+                    name="email"
+                    description="E-Mail-Adresse"
+                    type="email"
+                    autoComplete="email"
+                    stateHook={[email, setEmail]}
+                    required
+                  />
 
-                <TextInput
-                  id="name"
-                  name="name"
-                  description="Name"
-                  type="name"
-                  autoComplete="name"
-                  required
-                />
+                  <TextInput
+                    id="name"
+                    name="name"
+                    description="Name"
+                    type="name"
+                    autoComplete="name"
+                    stateHook={[name, setName]}
+                    required
+                  />
 
-                <TextInput
-                  id="password"
-                  name="password"
-                  description="Passwort"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                />
+                  <TextInput
+                    id="password"
+                    name="password"
+                    description="Passwort"
+                    type="password"
+                    stateHook={[password, setPassword]}
+                    autoComplete="current-password"
+                    required
+                  />
 
-                <Checkbox
-                  id="accept-agbs"
-                  name="accept-agbs"
-                  description="Ich akzeptiere die AGB und Datenschutzbestimmungen."
-                />
+                  <Checkbox
+                    id="accept-agbs"
+                    name="accept-agbs"
+                    description="Ich akzeptiere die AGB und Datenschutzbestimmungen."
+                  />
+                </div>
 
                 <PrimaryButton className="flex w-full justify-center">
                   Registrieren

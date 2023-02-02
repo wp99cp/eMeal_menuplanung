@@ -1,21 +1,22 @@
 query checkUsername($username: String) {
   checkUsername(username: $username) {
-    ...CheckUsernameResponse
+    ...Acknowledgement
   }
 }
 
 mutation updateUser($username: String, $shareEmail: Boolean, $newUser: Boolean) {
   updateUser(username: $username, shareEmail: $shareEmail, newUser: $newUser) {
-    ...UpdateUserResponse
+    ...Acknowledgement
   }
 }
 
-fragment UpdateUserResponse on UpdateUserResponse {
-  success
-  error
+mutation createNewUser($name: String, $email: String, $password: String) {
+  createNewUser(name: $name, email: $email, password: $password) {
+    ...Acknowledgement
+  }
 }
 
-fragment CheckUsernameResponse on UpdateUserResponse {
+fragment Acknowledgement on Acknowledgement {
   success
   error
 }

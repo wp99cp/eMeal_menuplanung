@@ -26,6 +26,11 @@ const isAuthenticated = (session: Session, req: Request) => {
   return apiKey === (process.env.GRAPHQL_API_KEY as string);
 };
 
+const isPublicOperation = (req: Request) => {
+  const publicOperations = ['createNewUser'];
+  return req.body.operationName && publicOperations.includes(req.body.operationName);
+};
+
 const main = async () => {
   const typeDefs = readFileSync('../../common/graphQL/schema.graphql', {
     encoding: 'utf-8',
@@ -61,7 +66,7 @@ const main = async () => {
         const session = (await getSession({ req })) as unknown as Session;
 
         // We block all unauthorized requests here
-        if (!isAuthenticated(session, req))
+        if (!isAuthenticated(session, req) && !isPublicOperation(req))
           // throwing a `GraphQLError` here allows us to specify an HTTP status code,
           // standard `Error`s will have a 500 status code by default
           throw new GraphQLError('User is not authenticated', {

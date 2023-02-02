@@ -1,6 +1,7 @@
 import { isValidUsername } from '@/util/functions';
 import { MutationResolvers, QueryResolvers } from '@/util/generated/types/graphql';
 import * as console from 'console';
+import bcrypt from 'bcryptjs';
 
 export const userQueries: QueryResolvers = {
   checkUsername: async (_, args, context) => {
@@ -67,6 +68,45 @@ export const userMutations: MutationResolvers = {
           ...(newUser !== undefined && { newUser: newUser?.valueOf() }),
         },
       });
+    } catch (error: any) {
+      return { success: false, error: error?.message };
+    }
+
+    return { success: true };
+  },
+
+  createNewUser: async (_, args, context) => {
+    const { name, email, password } = args;
+    const { prisma } = context;
+
+    if (!name) return { success: false, error: 'Name is required' };
+    if (!email) return { success: false, error: 'Email is required' };
+    if (!password) return { success: false, error: 'Password is required' };
+
+    try {
+      // Check if user with that email already exists
+      const user = await prisma.user.findUnique({ where: { email } });
+      if (user) return { success: false, error: 'User already exists' };
+
+      const account = await prisma.account.create({
+        data: {
+          user: {
+            create: {
+              name,
+              email,
+              username: email,
+              shareEmail: false,
+              newUser: true,
+            },
+          },
+          type: 'credentials',
+          provider: 'email',
+          providerAccountId: email,
+          password: bcrypt.hashSync(password, 10),
+        },
+      });
+
+      if (!account) return { success: false, error: 'Account not created' };
     } catch (error: any) {
       return { success: false, error: error?.message };
     }

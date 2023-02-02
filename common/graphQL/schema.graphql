@@ -5,18 +5,19 @@ type User {
 
 type Query {
     searchUser(username: String): [User]
-    checkUsername(username: String): UpdateUserResponse
+    checkUsername(username: String): Acknowledgement
 }
 
 type Mutation {
-    updateUser(username: String, shareEmail: Boolean, newUser: Boolean): UpdateUserResponse
+    updateUser(username: String, shareEmail: Boolean, newUser: Boolean): Acknowledgement
+    createNewUser(name: String, email: String, password: String): Acknowledgement
 }
 
 type Subscription {
     userCreated: User
 }
 
-type UpdateUserResponse {
+type Acknowledgement {
     success: Boolean
     error: String
 }

@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import {
   ArrowPathIcon,
   CheckCircleIcon,
@@ -33,7 +33,7 @@ const TextInput = ({
   description,
   required = false,
   prefix = '',
-  stateHook: [inputValue, setInputValue] = ['', () => {}],
+  stateHook: [inputValue, setInputValue] = useState(''),
   fieldState: [[state, errorMessage]] = [['default', ''], () => {}],
 }: TextInputProps) => {
   let classes =
@@ -92,7 +92,7 @@ const TextInput = ({
           </div>
         )}
       </div>
-      <p className="mt-2 text-sm text-accent-600" id="email-error">
+      <p className="mt-1 text-sm text-accent-600" id="email-error">
         {state === 'error' ? errorMessage : ''}
       </p>
     </div>
