@@ -59,7 +59,7 @@ const TextInput = ({
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
         {description}
       </label>
-      <div className="mt-1 relative rounded-md shadow-sm">
+      <div className="relative mt-1 rounded-md shadow-sm">
         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
           <span className="text-gray-500 sm:text-sm">{prefix}</span>
         </div>
@@ -86,7 +86,7 @@ const TextInput = ({
         {state === 'loading' && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <ArrowPathIcon
-              className="h-5 w-5 text-gray-400 animate-spin"
+              className="h-5 w-5 animate-spin text-gray-400"
               aria-hidden="true"
             />
           </div>

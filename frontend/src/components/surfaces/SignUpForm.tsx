@@ -48,11 +48,11 @@ export default function SignUpForm() {
 
   return (
     <>
-      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 w-full">
+      <div className="flex min-h-full w-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <Image
-              className="mx-auto h-12 w-auto hidden sm:flex"
+              className="mx-auto hidden h-12 w-auto sm:flex"
               src={logo}
               alt="Cevi.Tools Logo"
             />
@@ -70,7 +70,7 @@ export default function SignUpForm() {
             cardStateHook={[cardState, setCardState]}
             loadingScreen={<LoadingSpinner />}
           >
-            <h3 className="block text-lg font-bold text-gray-500 my-6 text-center">
+            <h3 className="my-6 block text-center text-lg font-bold text-gray-500">
               Neuer Account erstellen
             </h3>
 

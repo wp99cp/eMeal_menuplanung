@@ -4,7 +4,7 @@ import SignInForm from '@/components/surfaces/SignInForm';
 const SignInPage = () => {
   return (
     <>
-      <div className="flex place-content-center h-full">
+      <div className="flex h-full place-content-center">
         <SignInForm />
       </div>
     </>

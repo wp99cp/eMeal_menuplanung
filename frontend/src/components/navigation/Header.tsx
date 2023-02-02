@@ -25,7 +25,7 @@ function MobileNavigation() {
     >
       <Popover.Panel
         focus
-        className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden z-50"
+        className="absolute inset-x-0 top-0 z-50 origin-top-right transform p-2 transition md:hidden"
       >
         <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="px-5 pt-5 pb-6">
@@ -69,7 +69,7 @@ export default function Header() {
   const { data } = useSession();
 
   return (
-    <Popover className="relative bg-white border-b-2 border-gray-200 z-20 sticky top-0">
+    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">

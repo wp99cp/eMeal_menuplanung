@@ -115,13 +115,13 @@ const OnboardingPage = () => {
       },
       content: () => (
         <>
-          <p className="text-accent-500 font-bold mt-8 mb-2">
+          <p className="mt-8 mb-2 font-bold text-accent-500">
             Dein Konto ist eingerichtet!
           </p>
-          <p className="font-bold text-2xl mb-4">
+          <p className="mb-4 text-2xl font-bold">
             Herzlich willkommen bei eMeal - Menüplanung.
           </p>
-          <p className="text-gray-600 my-2 font-medium">
+          <p className="my-2 font-medium text-gray-600">
             Du kannst nun mit der Planung deines Lagers beginnen.
           </p>
         </>

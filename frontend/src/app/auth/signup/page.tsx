@@ -4,7 +4,7 @@ import React from 'react';
 export default function LandingPage() {
   return (
     <>
-      <div className="flex place-content-center h-full">
+      <div className="flex h-full place-content-center">
         <SignUpForm />
       </div>
     </>

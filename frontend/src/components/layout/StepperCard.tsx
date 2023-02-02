@@ -221,7 +221,7 @@ const StepperCard = ({ steps, settings: settings }: StepperCardProps<any>) => {
 
           {steps[index].content(settings.step_fnc_args)}
 
-          <span className="flex space-x-4 mt-10">
+          <span className="mt-10 flex space-x-4">
             {render_nav_buttons(index, steps, settings, baseUrl, router)}
           </span>
         </Card>

@@ -8,8 +8,8 @@ import SessionProvider from '@/components/provider/SessionProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html className="min-h-full h-full">
-      <body className="bg-gray-100 dark:bg-gray-800 flex flex-col h-screen justify-between">
+    <html className="h-full min-h-full">
+      <body className="flex h-screen flex-col justify-between bg-gray-100 dark:bg-gray-800">
         <SessionProvider>
           <Header />
 

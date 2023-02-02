@@ -28,14 +28,14 @@ export const AccountSetupStepContent: (args: StepperCardArgs) => JSX.Element = (
 }) => {
   return (
     <>
-      <p className="text-accent-500 font-bold mt-8 mb-2">Account Vervollständigen</p>
-      <p className="font-bold text-2xl mb-4">Einrichten deines Accounts</p>
-      <p className="text-gray-500 mb-4">
+      <p className="mt-8 mb-2 font-bold text-accent-500">Account Vervollständigen</p>
+      <p className="mb-4 text-2xl font-bold">Einrichten deines Accounts</p>
+      <p className="mb-4 text-gray-500">
         Wähle einen Benutzername. Dieser wird allen Nutzern angezeigt, so dass sie Lager
         und Rezepte mit dir teilen können.
       </p>
       <UsernameInputField usernameHook={usernameHook}></UsernameInputField>
-      <p className="text-gray-500 my-4">
+      <p className="my-4 text-gray-500">
         Damit andere dich einfacher finden können, verwenden wir zusätzlich deine E-Mail
         Adresse. Möchtest du, dass andere Nutzer deine E-Mail Adresse sehen können?
       </p>

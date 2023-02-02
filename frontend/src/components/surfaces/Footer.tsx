@@ -58,7 +58,7 @@ export const Footer = () => {
   return (
     <>
       <footer
-        className="bg-white border-t-2 border-gray-200 "
+        className="border-t-2 border-gray-200 bg-white "
         aria-labelledby="footer-heading"
       >
         <h2 id="footer-heading" className="sr-only">
@@ -74,10 +74,10 @@ export const Footer = () => {
               </p>
               <div className="flex space-x-6"></div>
             </div>
-            <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4 xl:mt-0 xl:col-span-2">
+            <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:col-span-2 xl:mt-0 xl:grid-cols-4">
               {navigation.map((section) => (
                 <div key={section.title}>
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900 mt-6">
+                  <h3 className="mt-6 text-sm font-semibold leading-6 text-gray-900">
                     {section.title}
                   </h3>
                   <ul role="list" className="mt-4 space-y-2">
@@ -97,7 +97,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
-            <p className="text-xs leading-5 text-gray-500 font-bold mb-8">
+            <p className="mb-8 text-xs font-bold leading-5 text-gray-500">
               &copy; {today.getFullYear()} Cevi.Tools - eMeal Menüplanung
             </p>
             <p className="text-xs leading-5 text-gray-500">
