@@ -4,6 +4,7 @@ import { Switch } from '@headlessui/react';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { toggleDarkMode, useColorMode } from '@/hocks/useColorMode';
 
 const Page: NextPage = () => {
   // redirect to login page if not logged in
@@ -22,6 +23,8 @@ const Page: NextPage = () => {
 
   const [autoUpdateApplicantDataEnabled, setAutoUpdateApplicantDataEnabled] =
     useState(user?.shareEmail || false);
+
+  const [darkMode, setDarkMode] = useColorMode();
 
   return user ? (
     <>
@@ -177,50 +180,22 @@ const Page: NextPage = () => {
                 </div>
                 <div className='mt-6'>
                   <dl className='divide-y divide-gray-200'>
-                    <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5'>
-                      <dt className='text-sm font-medium text-gray-500'>Name</dt>
-                      <dd className='mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
-                        <span className='flex-grow'>{user.name}</span>
-                        <span className='ml-4 flex-shrink-0'>
-                          <button
-                            type='button'
-                            className='rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2'
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div>
 
-                    <Switch.Group
-                      as='div' className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:pt-5'>
-                      <dt className='text-sm font-medium text-gray-500'>Email</dt>
-                      <dd className='mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
-                        <span className='flex-grow'>{user.email}</span>
-                        <span className='ml-4 flex-shrink-0'>
-                          <button
-                            type='button'
-                            className='rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2'
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-
+                    <Switch.Group as='div' className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:pt-5'>
 
                       <Switch.Label
                         as='dt'
                         className='text-sm font-medium text-gray-500'
                         passive
                       >
-                        Share Email together with Username
+                        Dark-Mode
                       </Switch.Label>
                       <dd className='mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
                         <Switch
-                          checked={autoUpdateApplicantDataEnabled}
-                          onChange={setAutoUpdateApplicantDataEnabled}
+                          checked={darkMode === 'dark'}
+                          onChange={() => setDarkMode(toggleDarkMode(darkMode))}
                           className={classNames(
-                            autoUpdateApplicantDataEnabled
+                            darkMode === 'dark'
                               ? 'bg-accent-600'
                               : 'bg-gray-200',
                             'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 sm:ml-auto',
@@ -229,7 +204,7 @@ const Page: NextPage = () => {
                           <span
                             aria-hidden='true'
                             className={classNames(
-                              autoUpdateApplicantDataEnabled
+                              darkMode === 'dark'
                                 ? 'translate-x-5'
                                 : 'translate-x-0',
                               'inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
@@ -238,20 +213,7 @@ const Page: NextPage = () => {
                         </Switch>
                       </dd>
                     </Switch.Group>
-                    <div className='py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-b sm:border-gray-200 sm:py-5'>
-                      <dt className='text-sm font-medium text-gray-500'>Benutzername</dt>
-                      <dd className='mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0'>
-                        <span className='flex-grow'>@{user.username}</span>
-                        <span className='ml-4 flex-shrink-0'>
-                          <button
-                            type='button'
-                            className='rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2'
-                          >
-                            Update
-                          </button>
-                        </span>
-                      </dd>
-                    </div>
+
                   </dl>
                 </div>
               </div>
