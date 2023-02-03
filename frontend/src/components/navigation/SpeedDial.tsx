@@ -5,7 +5,7 @@ import { EllipsisHorizontalIcon, MoonIcon, SunIcon } from '@heroicons/react/24/o
 import useColorMode from '@/hocks/useColorMode';
 
 const SpeedDial = () => {
-  const [isMenuOpen, setMenuOpen] = useState(true);
+  const [isMenuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useColorMode();
 
   return (
