@@ -6,7 +6,7 @@ const useColorMode = () => {
 
   useEffect(() => {
     const className = 'dark';
-    const bodyClass = window?.document.body.classList;
+    const bodyClass = (window?.document.body.parentNode as HTMLElement).classList;
 
     colorMode === 'dark' ? bodyClass.add(className) : bodyClass.remove(className);
 
