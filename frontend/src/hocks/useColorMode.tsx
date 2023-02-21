@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
 import useLocalStorage from '@/hocks/useLocalStorage';
 
-
 const toggleDarkMode = (colorMode: string) => (colorMode === 'light' ? 'dark' : 'light');
 
-
 const useColorMode = () => {
-
   const [colorMode, setColorMode] = useLocalStorage('color-theme', 'light');
 
   useEffect(() => {

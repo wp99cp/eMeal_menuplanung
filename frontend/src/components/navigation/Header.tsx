@@ -27,7 +27,7 @@ function MobileNavigation() {
         focus
         className="absolute inset-x-0 top-0 z-30 origin-top-right transform p-2 transition md:hidden"
       >
-        <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+        <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800">
           <div className="px-5 pt-5 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -37,7 +37,7 @@ function MobileNavigation() {
                 </a>
               </div>
               <div className="-mr-2">
-                <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500">
+                <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500 dark:bg-gray-800">
                   <span className="sr-only">Close menu</span>
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
@@ -69,7 +69,7 @@ export default function Header() {
   const { data } = useSession();
 
   return (
-    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white">
+    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white dark:bg-gray-800">
       <header className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
