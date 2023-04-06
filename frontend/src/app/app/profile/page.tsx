@@ -30,7 +30,7 @@ const Page: NextPage = () => {
   return user ? (
     <>
       <div className="relative mx-auto max-w-4xl md:px-8 xl:px-0">
-        <div className="pt-10 pb-16">
+        <div className="pb-16 pt-10">
           <div className="px-4 sm:px-6 md:px-0">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Einstellungen
@@ -65,7 +65,7 @@ const Page: NextPage = () => {
                           tab.current
                             ? 'border-accent-500 text-accent-600'
                             : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                          'whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium'
+                          'whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium'
                         )}
                       >
                         {tab.name}

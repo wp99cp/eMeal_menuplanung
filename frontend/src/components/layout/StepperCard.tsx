@@ -209,7 +209,7 @@ const StepperCard = ({ steps, settings: settings }: StepperCardProps<any>) => {
 
   return (
     <>
-      <div className="my-8 mx-4">
+      <div className="mx-4 my-8">
         <Card>
           <div className="my-6">
             <nav aria-label="Progress" className="grid place-content-center">

@@ -4,7 +4,7 @@ const WelcomeStepAction: () => boolean | Promise<boolean> = async () => true;
 
 const WelcomeStepContent: (args: StepperCardArgs) => JSX.Element = () => (
   <>
-    <p className="mt-8 mb-2 font-bold text-accent-500">Willkommen!</p>
+    <p className="mb-2 mt-8 font-bold text-accent-500">Willkommen!</p>
     <p className="mb-4 text-2xl font-bold">Neu bei eMeal - Menüplanung</p>
     <p className="my-2 font-medium text-gray-600">
       Du meldest dich das erste Mal an. Im Folgenden werden wir ein paar Dinge für dich

@@ -12,7 +12,7 @@ function SignInOptions({ onClick = () => {} }) {
           onClick();
           await signIn('cevi-db');
         }}
-        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-gray-500 hover:bg-gray-50"
+        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit CeviDB anmelden</span>
         <CeviIcon />
@@ -23,7 +23,7 @@ function SignInOptions({ onClick = () => {} }) {
           onClick();
           await signIn('mi-data');
         }}
-        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-gray-500 hover:bg-gray-50"
+        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit MiData anmelden</span>
         <PfadiIcon />
@@ -34,7 +34,7 @@ function SignInOptions({ onClick = () => {} }) {
           onClick();
           await signIn('google');
         }}
-        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-gray-500 hover:bg-gray-50"
+        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit Google anmelden</span>
         <GoogleIcon />

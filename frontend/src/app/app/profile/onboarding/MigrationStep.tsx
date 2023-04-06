@@ -2,7 +2,7 @@ const MigrationStepAction: () => boolean | Promise<boolean> = async () => true;
 
 const MigrationStepContent: () => JSX.Element = () => (
   <>
-    <p className="mt-8 mb-2 font-bold text-accent-500">Daten übernehmen</p>
+    <p className="mb-2 mt-8 font-bold text-accent-500">Daten übernehmen</p>
     <p className="mb-4 text-2xl font-bold">
       Daten aus dem &quot;alten&quot; eMeal - Menüplanung übernehmen.
     </p>

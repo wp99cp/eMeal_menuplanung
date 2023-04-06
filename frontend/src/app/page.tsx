@@ -86,11 +86,13 @@ export default function LandingPage() {
                 Der beste Weg deine Lagerküche zu planen.
               </p>
               <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-                eMeal - Menüplanung ist ein interaktives Planungstool für die Lagerküche.
-                Sei es für das Cevi-, Pfadi- oder Klassenlager mit eMeal kannst du deine
-                Menüpläne direkt im Browser erstellen. Verwalten deine Rezepte und
-                Mahlzeiten online und erstelle mit einem Klick eine Lager-Broschüre. Die
-                Planung des Essens für ein Lager, war noch nie so einfach!
+                Willkommen bei eMeal, dem interaktiven Planungstool für die perfekte
+                Lagerküche! Egal, ob du für dein Cevi-, Pfadi- oder Klassenlager planst,
+                mit eMeal kannst du deine Menüpläne direkt im Browser erstellen. Verwalte
+                deine Rezepte und Mahlzeiten online und erstelle mit nur einem Klick eine
+                übersichtliche Lager-Broschüre. Mit eMeal war die Planung des Essens für
+                dein Lager noch nie so einfach! Mach es dir leichter und probiere eMeal
+                jetzt aus.
               </p>
             </div>
 

@@ -12,7 +12,7 @@ export const AnnouncementBadge = ({
   href,
 }: AnnouncementBadgeProps) => {
   return (
-    <div className="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+    <div className="relative overflow-hidden rounded-full px-4 py-1.5 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
       <span className="text-gray-600">
         {caption}{' '}
         <TextLink href={href}>

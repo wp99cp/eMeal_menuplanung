@@ -18,7 +18,7 @@ export const Card = ({
 }) => {
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="rounded-md bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div className="rounded-md bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
         {cardState === 'loading' && loadingScreen}
         {cardState === 'default' && children}
       </div>
