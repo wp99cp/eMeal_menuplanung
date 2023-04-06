@@ -43,7 +43,7 @@ const TourPopup = ({ over: ref }: { over: RefObject<HTMLDivElement> }) => {
             <svg
               height="100%"
               width="100%"
-              className="fixed top-0 z-40 flex h-screen w-screen w-screen items-center justify-center"
+              className="fixed top-0 left-0 z-40 flex h-screen w-screen w-screen items-center justify-center"
               style={{ pointerEvents: 'none' }}
             >
               <defs>

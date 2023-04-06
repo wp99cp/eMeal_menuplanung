@@ -33,7 +33,7 @@ const BreadcrumbsNav = () => {
   }
 
   return (
-    <div className="border-b border-gray-200 bg-white px-4 dark:bg-gray-800 sm:px-6">
+    <div className="border-b border-gray-200 bg-white px-4 dark:bg-footer_blue-700 sm:px-6 dark:border-gray-600">
       <div className="py-3">
         <nav className="flex" aria-label="Breadcrumb">
           {segments.length > 0 ? (

@@ -69,7 +69,7 @@ export default function Header() {
   const { data } = useSession();
 
   return (
-    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white dark:bg-gray-800">
+    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white dark:bg-footer_blue-700 dark:border-gray-600">
       <header className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">

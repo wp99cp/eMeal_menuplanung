@@ -8,7 +8,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     <>
       <BreadcrumbsNav />
 
-      <div className="relative flex-1">
+      <div className="relative flex-1 p-2 pt-6 pb-12">
         <section>
           {/* Include shared UI here e.g. a header or sidebar */}
           <ApolloProvider>{children}</ApolloProvider>

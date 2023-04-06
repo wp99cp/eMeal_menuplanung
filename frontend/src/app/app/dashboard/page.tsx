@@ -5,11 +5,18 @@ export default async function Page() {
 
   return (
     <>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 p-2">
-            <h1>Hello, App Dashboatd Page!</h1>
-            <pre>{JSON.stringify(user, null, 2)}</pre>
+      <div className="mx-auto max-w-7xl">
+        <div>
+          <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 dark:border-gray-600 p-2">
+
+            <h1 className="mb-6">
+              Hello, App Dashboard Page!
+            </h1>
+
+            <pre className="text-sm">
+              {JSON.stringify(user, null, 2)}
+            </pre>
+
           </div>
         </div>
       </div>

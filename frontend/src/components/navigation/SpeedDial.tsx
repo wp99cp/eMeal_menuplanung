@@ -10,7 +10,7 @@ const SpeedDial = () => {
 
   return (
     <div
-      className="group absolute bottom-6 right-6"
+      className="group absolute bottom-2 right-2 lg:bottom-6 lg:right-6"
       onMouseEnter={() => setMenuOpen(true)}
       onMouseLeave={() => setMenuOpen(false)}
     >
