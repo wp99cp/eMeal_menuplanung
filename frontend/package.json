@@ -10,7 +10,7 @@
     "start:prod": "angular-build-info && ng serve --configuration production --ssl",
     "build": "angular-build-info && ng build",
     "analize-bundle": "angular-build-info && ng build --stats-json && webpack-bundle-analyzer dist/eMeal/stats.json",
-    "build:prod": "angular-build-info && ng build --configuration production --aot=true --buildOptimizer=true --progress=true\n",
+    "build:prod": "angular-build-info && ng build --configuration production --aot=true --progress=true\n",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
