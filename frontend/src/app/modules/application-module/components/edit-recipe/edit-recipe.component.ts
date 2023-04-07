@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Recipe} from '../../classes/recipe';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {DatabaseService} from '../../services/database.service';
 import {OverwritenIngredient} from '../../classes/overwritableIngredient';
 import {Ingredient} from '../../interfaces/firestoreDatatypes';
@@ -24,7 +24,7 @@ export class EditRecipeComponent implements OnInit {
   Math = Math;
   Number = Number;
 
-  public recipeForm: FormGroup;
+  public recipeForm: UntypedFormGroup;
   public ingredients: OverwritenIngredient[];
 
   @Input() public recipe: Recipe;
@@ -43,7 +43,7 @@ export class EditRecipeComponent implements OnInit {
   private selectedIngredientID = '';
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private databaseService: DatabaseService,
     private dialog: MatDialog,
     private router: Router,

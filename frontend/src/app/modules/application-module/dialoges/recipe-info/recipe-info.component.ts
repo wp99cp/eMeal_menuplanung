@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 
 import {Camp} from '../../classes/camp';
 import {Recipe} from '../../classes/recipe';
@@ -19,14 +19,14 @@ export class RecipeInfoComponent implements OnInit {
   public camp: Camp;
   public specificMeal: SpecificMeal;
   public recipe: Recipe;
-  public recipeForm: FormGroup;
+  public recipeForm: UntypedFormGroup;
 
   public calcRecipeParticipants = SettingsService.calcRecipeParticipants;
   public infoHasNotChanged = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp, specificMeal: SpecificMeal, recipe: Recipe, specificRecipe: SpecificRecipe },
-    private formBuilder: FormBuilder) {
+    private formBuilder: UntypedFormBuilder) {
 
     this.camp = data.camp;
     this.recipe = data.recipe;

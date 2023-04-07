@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Camp} from '../../classes/camp';
 import {Meal} from '../../classes/meal';
@@ -13,14 +13,14 @@ import {DatabaseService} from '../../services/database.service';
 })
 export class MealInfoWithoutCampComponent implements OnInit {
 
-  public mealInfo: FormGroup;
+  public mealInfo: UntypedFormGroup;
   public meal: Meal;
   public mealAccess = false;
   public valueHasChanged = false;
 
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp, meal: Meal, specificMeal: SpecificMeal },
     private db: DatabaseService) {
 

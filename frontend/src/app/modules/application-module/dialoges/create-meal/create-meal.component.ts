@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { empty } from 'rxjs';
 import { FirestoreMeal } from '../../interfaces/firestoreDatatypes';
 import { FirestoreObject } from '../../classes/firebaseObject';
@@ -16,11 +16,11 @@ import {Router} from '@angular/router';
 })
 export class CreateMealComponent implements OnInit {
 
-  public newMealForm: FormGroup;
+  public newMealForm: UntypedFormGroup;
 
   constructor(
     private authService: AuthenticationService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     public router: Router,
     public dialogRef: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { mealName: string }) {

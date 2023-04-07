@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import {Day} from '../../classes/day';
@@ -31,12 +31,12 @@ import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 })
 export class EditDayComponent implements OnInit {
 
-  public dayInfo: FormGroup;
+  public dayInfo: UntypedFormGroup;
   private currentDate;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { day: Day, specificMeals: SpecificMeal[], days: Day[], access: boolean },
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public swissDateAdapter: SwissDateAdapter) {
   }
 

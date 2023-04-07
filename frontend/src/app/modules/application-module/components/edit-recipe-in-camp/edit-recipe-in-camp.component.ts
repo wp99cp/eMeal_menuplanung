@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {UntypedFormBuilder} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../classes/camp';
@@ -42,7 +42,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
   private recipeChanged = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private databaseService: DatabaseService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar) {

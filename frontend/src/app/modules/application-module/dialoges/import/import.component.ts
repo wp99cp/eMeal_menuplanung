@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {DatabaseService} from '../../services/database.service';
 import {FirestoreMeal, FirestoreRecipe} from '../../interfaces/firestoreDatatypes';
 import {AuthenticationService} from '../../services/authentication.service';
@@ -22,7 +22,7 @@ import {FirestoreObject} from '../../classes/firebaseObject';
 })
 export class ImportComponent implements OnInit {
 
-  public input: FormGroup;
+  public input: UntypedFormGroup;
   public readyForImport = false;
 
   public mealStr = '';
@@ -37,7 +37,7 @@ export class ImportComponent implements OnInit {
   public recipes: FirestoreRecipe[] = [];
 
 
-  constructor(private formBuilder: FormBuilder, private dbService: DatabaseService, private authService: AuthenticationService) {
+  constructor(private formBuilder: UntypedFormBuilder, private dbService: DatabaseService, private authService: AuthenticationService) {
 
     this.input = this.formBuilder.group({
       url: ''
