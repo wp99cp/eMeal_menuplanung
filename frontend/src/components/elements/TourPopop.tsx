@@ -43,7 +43,7 @@ const TourPopup = ({ over: ref }: { over: RefObject<HTMLDivElement> }) => {
             <svg
               height="100%"
               width="100%"
-              className="fixed top-0 left-0 z-40 flex h-screen w-screen w-screen items-center justify-center"
+              className="fixed left-0 top-0 z-40 flex h-screen w-screen w-screen items-center justify-center"
               style={{ pointerEvents: 'none' }}
             >
               <defs>
@@ -128,7 +128,7 @@ const TourPopup = ({ over: ref }: { over: RefObject<HTMLDivElement> }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+              <Dialog.Panel className="fixed bottom-0 m-4 transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:relative sm:bottom-0 sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <div>
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
                     <InformationCircleIcon

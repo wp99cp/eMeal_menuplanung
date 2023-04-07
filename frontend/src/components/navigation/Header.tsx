@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Fragment } from 'react';
-import { Popover, Transition } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { PrimaryLink } from '@/components/elements/Buttons/PrimaryLink';
-import logo from '../../assets/logo.svg';
-import Image from 'next/image';
-import { TextLink } from '@/components/elements/TextLink';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
+import { Fragment } from "react";
+import { Popover, Transition } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { PrimaryLink } from "@/components/elements/Buttons/PrimaryLink";
+import logo from "../../assets/logo.svg";
+import Image from "next/image";
+import { TextLink } from "@/components/elements/TextLink";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 function MobileNavigation() {
   const { data } = useSession();
@@ -16,28 +16,24 @@ function MobileNavigation() {
   return (
     <Transition
       as={Fragment}
-      enter="duration-200 ease-out"
-      enterFrom="opacity-0 scale-95"
-      enterTo="opacity-100 scale-100"
-      leave="duration-100 ease-in"
-      leaveFrom="opacity-100 scale-100"
-      leaveTo="opacity-0 scale-95"
     >
       <Popover.Panel
         focus
         className="absolute inset-x-0 top-0 z-30 origin-top-right transform p-2 transition md:hidden"
       >
-        <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800">
+        <div
+          className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 h-96">
           <div className="px-5 pb-6 pt-5">
             <div className="flex items-center justify-between">
               <div>
                 <a href="/">
                   <span className="sr-only">Cevi.Tools</span>
-                  <Image className="h-8 w-auto sm:h-10" src={logo} alt="" />
+                  <Image className="h-8 w-auto sm:h-10 focus:no-underline" src={logo} alt="" />
                 </a>
               </div>
               <div className="-mr-2">
-                <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500 dark:bg-gray-800">
+                <Popover.Button
+                  className="inline-flex items-center justify-center rounded-md  p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none dark:bg-gray-800">
                   <span className="sr-only">Close menu</span>
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </Popover.Button>
@@ -69,17 +65,20 @@ export default function Header() {
   const { data } = useSession();
 
   return (
-    <Popover className="relative sticky top-0 z-20 border-b-2 border-gray-200 bg-white dark:bg-footer_blue-700 dark:border-gray-600">
+    <Popover
+      className="sticky top-0 z-20 border-b-2  border-gray-200 bg-gray-100/95 backdrop-blur-sm dark:border-gray-600 dark:bg-footer_blue-700">
       <header className="mx-auto max-w-7xl px-6">
-        <div className="flex items-center justify-between py-4 md:justify-start md:space-x-10">
+        <div className="flex items-center justify-between py-2 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <a href="/">
               <span className="sr-only">Cevi.Tools</span>
               <Image className="h-8 w-auto sm:h-10" src={logo} alt="" />
             </a>
           </div>
+
           <div className="-my-2 -mr-2 md:hidden">
-            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500">
+            <Popover.Button
+              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
               <span className="sr-only">Open menu</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
