@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Observable, empty } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,11 +15,11 @@ import {Router} from '@angular/router';
 })
 export class CreateRecipeComponent implements OnInit {
 
-  public newRecipeForm: FormGroup;
+  public newRecipeForm: UntypedFormGroup;
 
   constructor(
     private authService: AuthenticationService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     public router: Router,
     public dialogRef: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { recipeName: string }) {

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {HelpService} from '../../services/help.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {MatStepperIntl} from '@angular/material/stepper';
 
 @Component({
@@ -12,13 +12,13 @@ import {MatStepperIntl} from '@angular/material/stepper';
 })
 export class ExportSettingsComponent implements OnInit {
 
-  formGroup: FormGroup;
+  formGroup: UntypedFormGroup;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public campId: string,
     public dialogRef: MatDialogRef<ExportSettingsComponent>,
     public helpService: HelpService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     private _matStepperIntl: MatStepperIntl
   ) {
 

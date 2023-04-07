@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Camp } from '../../classes/camp';
 import { DatabaseService } from '../../services/database.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import {HelpService} from '../../services/help.service';
 })
 export class CampInfoComponent {
 
-  public campInfosForm: FormGroup;
+  public campInfosForm: UntypedFormGroup;
   public camp: Camp;
 
   public hasAccess: Promise<boolean>
@@ -23,7 +23,7 @@ export class CampInfoComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: { camp: Camp },
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     dbService: DatabaseService,
     public helpService: HelpService) {
 

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import firebase from 'firebase/compat/app';
 import {map} from 'rxjs/operators';
 import {FirestoreObject} from '../../classes/firebaseObject';
@@ -34,10 +34,10 @@ import Timestamp = firebase.firestore.Timestamp;
 export class CreateCampComponent {
 
   // Form data to create new CampClass
-  public newCampInfos: FormGroup;
-  public newCampParticipants: FormGroup;
+  public newCampInfos: UntypedFormGroup;
+  public newCampParticipants: UntypedFormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: UntypedFormBuilder,
               public dbService: DatabaseService,
               private authService: AuthenticationService,
               public helpService: HelpService) {

@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormControl, UntypedFormGroup} from '@angular/forms';
 
 import {SpecificMeal} from '../../classes/specific-meal';
 import {Day} from '../../classes/day';
@@ -13,13 +13,13 @@ import {HelpService} from "../../services/help.service";
 })
 export class MealPrepareComponent {
 
-  public prepareForm: FormGroup;
+  public prepareForm: UntypedFormGroup;
   public dataHasNotChanged = true;
   public readonly dayBeforeDate: Date | undefined;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public readonly data: { specificMeal: SpecificMeal, days: Day[] },
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public helpService: HelpService) {
 
     // Select the day before the current day. Only days in the week view are considered
@@ -33,7 +33,7 @@ export class MealPrepareComponent {
     const condition = !this.data.specificMeal.prepare && !this.dayBeforeDate;
 
     this.prepareForm = this.formBuilder.group({
-      hasPrepareDate: new FormControl({value: hasPrepareDate, disabled: condition}),
+      hasPrepareDate: new UntypedFormControl({value: hasPrepareDate, disabled: condition}),
       prepareDate: prepareDate
     });
 

@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {Recipe} from '../../classes/recipe';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {DatabaseService} from '../../services/database.service';
 import {HelpService} from '../../services/help.service';
 
@@ -12,7 +12,7 @@ import {HelpService} from '../../services/help.service';
 })
 export class SingleRecipeInfoComponent {
 
-  public recipeInfo: FormGroup;
+  public recipeInfo: UntypedFormGroup;
 
   public valueHasChanged = false;
 
@@ -20,7 +20,7 @@ export class SingleRecipeInfoComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private recipe: Recipe,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     db: DatabaseService,
     public helpService: HelpService) {
 

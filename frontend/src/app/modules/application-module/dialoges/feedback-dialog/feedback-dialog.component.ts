@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {TemplateHeaderComponent as Header} from '../../../../shared/components/template-header/template-header.component';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
@@ -14,11 +14,11 @@ import FieldValue = firebase.firestore.FieldValue;
   styleUrls: ['./feedback-dialog.component.sass']
 })
 export class FeedbackDialogComponent {
-  public feedbackForm: FormGroup;
+  public feedbackForm: UntypedFormGroup;
   public valueHasNotChanged = true;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public snackBar: MatSnackBar,
     public fireAuth: AngularFireAuth,
     private db: AngularFirestore,

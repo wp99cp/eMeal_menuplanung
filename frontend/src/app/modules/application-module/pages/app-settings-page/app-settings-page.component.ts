@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import packageJSON from '../../../../../../package.json';
@@ -27,11 +27,11 @@ export class AppSettingsPageComponent {
   public version: string = packageJSON.version;
   public copyrights: string = packageJSON.copyrights;
 
-  public userDataForm: FormGroup;
+  public userDataForm: UntypedFormGroup;
 
   constructor(private auth: AuthenticationService,
               private dbService: DatabaseService,
-              formBuilder: FormBuilder,
+              formBuilder: UntypedFormBuilder,
               public settings: SettingsService,
               public help: HelpService) {
 
