@@ -6,6 +6,43 @@ import Header from '@/components/navigation/Header';
 import { Footer } from '@/components/surfaces/Footer';
 import SessionProvider from '@/components/provider/SessionProvider';
 
+// either Static metadata
+export const metadata = {
+  title: 'eMeal - Menüplanung',
+  description:
+    'Mit eMeal - Menüplanung kannst du Rezepte, ' +
+    'Mahlzeiten sowie ganze Lager online erstellen, verwalten und ' +
+    'zu einer Broschüre zusammenstellen.',
+  applicationName: 'eMeal - Menüplanung',
+  publisher: 'Cevi.Tools',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  keywords: [
+    'eMeal',
+    'Menüplanung',
+    'Rezepte',
+    'Lager',
+    'Cevi',
+    'Cevi.Tools',
+    'Pfadi',
+    'Jubla',
+  ],
+
+  // TODO: add Icon
+  // TODO: add robots and robots.txt
+  // TODO: add themeColor
+  // TODO: add manifest
+
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html className="h-full min-h-full">
