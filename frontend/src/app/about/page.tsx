@@ -1,6 +1,6 @@
 import { Text } from '@/components/elements/Text';
 import { TextLink } from '@/components/elements/TextLink';
-import { Title } from '@/components/elements/Title';
+import { Subtitle, Title } from '@/components/elements/Title';
 
 export default function AboutPage() {
   return (
@@ -21,23 +21,23 @@ export default function AboutPage() {
         Software eMeal - Menüplanung ist eine davon.{' '}
         <TextLink href="/app"> Jetzt mit Planen loslegen.</TextLink>
       </Text>
+
+      <Subtitle>Automatisches Lagerdossier</Subtitle>
       <Text>
         eMeal - Menüplanung ermöglicht es die Essensplanung für ein Lager oder Anlass zu
         automatisieren. Denn bei eMeal handelt es sich um eine Webseite, die dir alle
         mühsamen Aufgaben, wie das zusammentragen von Einkaufslisten abnimmt und dabei
         erst noch die Zusammenarbeit erleichtert.
       </Text>
-      <Text>
-        eMeal - Menüplanung ermöglicht es die Essensplanung für ein Lager oder Anlass zu
-        automatisieren. Denn bei eMeal handelt es sich um eine Webseite, die dir alle
-        mühsamen Aufgaben, wie das zusammentragen von Einkaufslisten abnimmt und dabei
-        erst noch die Zusammenarbeit erleichtert.
-      </Text>
+
+      <Subtitle>Gemeinsam Bearbeiten</Subtitle>
       <Text>
         Das Lagerhandbuch wird hierzu in der Cloud gespeichert, somit steht es überall und
         auf allen Geräten zur Verfügung. Natürlich kannst du dein Lagerhandbuch vor dem
         Lager ausdrucken und/oder als PDF herunterladen.
       </Text>
+
+      <Subtitle>Automatische Imports und Geprüfte Vorlagen</Subtitle>
       <Text>
         Eine breite Palette an erprobten Lager-Rezepten ermöglicht es dir binnen Minuten
         einen Wochenplan zu erstellen. Herzlichen Dank an dieser Stelle an die Autoren des
