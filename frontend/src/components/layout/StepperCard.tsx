@@ -198,7 +198,7 @@ const render_step_overview = (
 
 const StepperCard = ({ steps, settings: settings }: StepperCardProps<any>) => {
   const searchParams = useSearchParams();
-  const currentStep = searchParams.get('step') || steps[0].step_name;
+  const currentStep = searchParams?.get('step') || steps[0].step_name;
 
   const index = steps.findIndex((step) => step.step_name === currentStep);
 
