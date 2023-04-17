@@ -20,13 +20,13 @@ import { signIn } from 'next-auth/react';
 
 export default function SignInForm() {
   const readOnlySearchParams = useSearchParams();
-  const authErrorMgs: string | null = readOnlySearchParams.get('error') || null;
+  const authErrorMgs: string | null = readOnlySearchParams?.get('error') || null;
 
   const pathname = usePathname();
   const router = useRouter();
 
   const removeQueryParam = (paramToRemove: string) => {
-    const searchParams = new URLSearchParams(readOnlySearchParams.toString());
+    const searchParams = new URLSearchParams(readOnlySearchParams?.toString());
     searchParams.delete(paramToRemove);
     router.replace(pathname + '?' + searchParams.toString());
   };
@@ -34,7 +34,7 @@ export default function SignInForm() {
   // remove cyclic callbackUrl
   const signInUrl = 'http://localhost:3000/auth/signin';
   useEffect(() => {
-    if (readOnlySearchParams.get('callbackUrl')?.startsWith(signInUrl))
+    if (readOnlySearchParams?.get('callbackUrl')?.startsWith(signInUrl))
       removeQueryParam('callbackUrl');
   });
 
@@ -43,7 +43,7 @@ export default function SignInForm() {
       ? ['error', 'E-Mail oder Passwort falsch.']
       : InputFieldDefaultState;
   const [pwdFieldState, setPwdFieldState] = useState(initialFieldState);
-  const [email, setEmail] = useState(readOnlySearchParams.get('email') || '');
+  const [email, setEmail] = useState(readOnlySearchParams?.get('email') || '');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
