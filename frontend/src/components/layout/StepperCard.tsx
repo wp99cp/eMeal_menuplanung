@@ -129,7 +129,7 @@ const render_completed_step = (
         onClick={async () => {
           await router.push(baseUrl + steps[stepIdx]?.step_name);
         }}
-        className="relative flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 hover:bg-accent-900"
+        className="relative flex h-5 w-5 items-center justify-center rounded-full bg-accent-600 hover:bg-accent-900 cursor-pointer"
       >
         <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
         <span className="sr-only">{step.name}</span>
