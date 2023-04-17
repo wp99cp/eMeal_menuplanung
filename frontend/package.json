@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier --write .",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "prepare": "cd ../ && husky install ./frontend/.husky"
   },
   "dependencies": {
     "@apollo/client": "^3.7.4",
@@ -49,6 +50,8 @@
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.1",
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
     "prettier-plugin-tailwindcss": "^0.2.2",
