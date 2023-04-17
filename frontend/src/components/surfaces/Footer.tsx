@@ -15,7 +15,7 @@ const navigation = [
     links: [
       { name: 'Kontakt', href: '#' },
       { name: 'Datenschutzbestimmungen', href: '#' },
-      { name: 'Impressum', href: '#' },
+      { name: 'Impressum', href: '/impressum' },
     ],
   },
   {

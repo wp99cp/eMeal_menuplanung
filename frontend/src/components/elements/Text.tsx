@@ -8,7 +8,7 @@ export const Text = ({
   className?: string;
 }) => {
   return (
-    <p className={className.concat(' ', 'mt-6 text-lg leading-8 text-gray-600')}>
+    <p className={className.concat(' ', 'mt-2 text-lg leading-8 text-gray-600')}>
       {children}
     </p>
   );

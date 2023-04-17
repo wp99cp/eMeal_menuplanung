@@ -5,12 +5,14 @@ import { Title } from '@/components/elements/Title';
 export default function AboutPage() {
   return (
     <>
-      <Title heading="Lagerküche online planen.">
+      <Title>Lagerküche online planen. </Title>
+
+      <Text>
         Eine gute Lagerküche ist für den Erfolg eines Lagers zentral. Denn feines Essen
         sorgt nicht nur für gute Stimmung im Team, sondern eine ausgewogene Ernährung
         versorgt die Teilnehmer auch mit genügend Power, um einen langen Lagertag zu
         überstehen.
-      </Title>
+      </Text>
 
       <Text>
         Doch ein Essensplan für ein ganzes Lager zusammenzustellen, ohne dabei die
