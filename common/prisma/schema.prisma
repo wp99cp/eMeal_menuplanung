@@ -9,19 +9,19 @@ generator client {
 }
 
 model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
   type              String
   provider          String
   providerAccountId String
   password          String?
   emailVerified     Boolean? @default(false)
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String?  @db.String
+  access_token      String?  @db.String
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
+  id_token          String?  @db.String
   session_state     String?
   created_at        Int?
 
@@ -43,13 +43,17 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  username      String?   @unique @default("")
+  username      String?   @unique @default(cuid())
   shareEmail    Boolean   @default(false)
+  /// date of the last email verification, null if not verified
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  /// new users may have not finished the onboarding process
   newUser       Boolean   @default(true)
+  /// the date and time of account creation
+  registeredAt  DateTime  @default(now())
 }
 
 model VerificationToken {

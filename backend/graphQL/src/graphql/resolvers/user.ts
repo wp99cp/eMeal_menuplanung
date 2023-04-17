@@ -93,16 +93,12 @@ export const userMutations: MutationResolvers = {
           error: 'User already exists! Sign in or use another email.',
         };
 
-      // replace all special characters with an underscore
-      let username = Math.random().toString(36).substring(2, 16);
-
       const account = await prisma.account.create({
         data: {
           user: {
             create: {
               name,
               email: preprocessed_email,
-              username: username,
               shareEmail: false,
               newUser: true,
             },
