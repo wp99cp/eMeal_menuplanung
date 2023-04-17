@@ -1,4 +1,4 @@
-import { isValidUsername } from '@/util/functions';
+import { isValidUsername, verifyPassword } from '@/util/functions';
 import { MutationResolvers, QueryResolvers } from '@/util/generated/types/graphql';
 import * as console from 'console';
 import bcrypt from 'bcryptjs';
@@ -42,15 +42,9 @@ export const userMutations: MutationResolvers = {
     if (!user_id)
       return { success: false, error: 'No user_id set. Are you using a api key?' };
 
-    if (!username) {
-      return {
-        success: false,
-        error: 'Username is required',
-      };
-    }
-
     try {
-      if (!(await isValidUsername(prisma, username, user_id))) {
+      // validate username if it gets modified
+      if (username && !(await isValidUsername(prisma, username, user_id))) {
         return {
           success: false,
           error: 'Username already exists or is invalid',
@@ -63,7 +57,7 @@ export const userMutations: MutationResolvers = {
           id: user_id,
         },
         data: {
-          username,
+          ...(username !== undefined && { username }),
           ...(shareEmail !== undefined && { shareEmail: shareEmail?.valueOf() }),
           ...(newUser !== undefined && { newUser: newUser?.valueOf() }),
         },
@@ -81,27 +75,41 @@ export const userMutations: MutationResolvers = {
 
     if (!name) return { success: false, error: 'Name is required' };
     if (!email) return { success: false, error: 'Email is required' };
+
+    // trim and lowercase email, to prevent duplicate accounts
+    const preprocessed_email = email.toLowerCase().trim();
+
     if (!password) return { success: false, error: 'Password is required' };
+
+    let verifiedPassword = verifyPassword(password);
+    if (!verifiedPassword.success) return verifiedPassword;
 
     try {
       // Check if user with that email already exists
-      const user = await prisma.user.findUnique({ where: { email } });
-      if (user) return { success: false, error: 'User already exists' };
+      const user = await prisma.user.findUnique({ where: { email: preprocessed_email } });
+      if (user)
+        return {
+          success: false,
+          error: 'User already exists! Sign in or use another email.',
+        };
+
+      // replace all special characters with an underscore
+      let username = Math.random().toString(36).substring(2, 16);
 
       const account = await prisma.account.create({
         data: {
           user: {
             create: {
               name,
-              email,
-              username: email,
+              email: preprocessed_email,
+              username: username,
               shareEmail: false,
               newUser: true,
             },
           },
           type: 'credentials',
           provider: 'email',
-          providerAccountId: email,
+          providerAccountId: preprocessed_email,
           password: bcrypt.hashSync(password, 10),
         },
       });

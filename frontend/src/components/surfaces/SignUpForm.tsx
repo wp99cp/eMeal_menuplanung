@@ -6,7 +6,10 @@ import { TextLink } from '@/components/elements/TextLink';
 import { PrimaryButton } from '@/components/elements/Buttons/PrimaryButton';
 import SignInOptions from '@/components/elements/SignInOptions';
 import { NamedDivider } from '@/components/elements/Divider/NamedDivider';
-import TextInput from '@/components/inputs/TextInput';
+import TextInput, {
+  InputFieldDefaultState,
+  InputFieldState,
+} from '@/components/inputs/TextInput';
 import Checkbox from '@/components/inputs/Checkbox';
 import { Card, CardState, DefaultCardState } from '@/components/layout/Card';
 import { LoadingSpinner } from '@/components/surfaces/LoadingSpinner';
@@ -17,13 +20,21 @@ import {
   CreateNewUserMutation,
   CreateNewUserMutationVariables,
 } from '@/util/generated/graphql/graphql';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpForm() {
+  const router = useRouter();
+
   const [cardState, setCardState] = useState<CardState>(DefaultCardState);
 
   const [email, setEmail] = useState('');
+  const [emailState, setEmailState] = useState<InputFieldState>(InputFieldDefaultState);
+
   const [name, setName] = useState('');
+
   const [password, setPassword] = useState('');
+  const [passwordState, setPasswordState] =
+    useState<InputFieldState>(InputFieldDefaultState);
 
   const graphql = useApolloClient();
 
@@ -44,6 +55,26 @@ export default function SignUpForm() {
     });
 
     console.log(res);
+
+    if (!res?.data?.createNewUser?.success) {
+      setCardState(DefaultCardState);
+
+      if (res?.data?.createNewUser?.error?.includes('email')) {
+        setEmailState([
+          'error',
+          res?.data?.createNewUser?.error || 'Email bereits registriert',
+        ]);
+      } else {
+        setPasswordState([
+          'error',
+          res?.data?.createNewUser?.error || 'Unbekannter Fehler',
+        ]);
+      }
+    } else {
+      // User successfully registered
+      // forwards to /app
+      router.push('/app');
+    }
   };
 
   return (
@@ -84,6 +115,7 @@ export default function SignUpForm() {
                     type="email"
                     autoComplete="email"
                     stateHook={[email, setEmail]}
+                    fieldState={[emailState, setEmailState]}
                     required
                   />
 
@@ -103,6 +135,7 @@ export default function SignUpForm() {
                     description="Passwort"
                     type="password"
                     stateHook={[password, setPassword]}
+                    fieldState={[passwordState, setPasswordState]}
                     autoComplete="current-password"
                     required
                   />
@@ -110,7 +143,8 @@ export default function SignUpForm() {
                   <Checkbox
                     id="accept-agbs"
                     name="accept-agbs"
-                    description="Ich akzeptiere die AGB und Datenschutzbestimmungen."
+                    description="Ich akzeptiere die Datenschutzbestimmungen."
+                    required
                   />
                 </div>
 

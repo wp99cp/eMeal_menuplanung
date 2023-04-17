@@ -107,7 +107,7 @@ const OnboardingPage = () => {
         const res = await graphql.mutate<UpdateUserMutation, UpdateUserMutationVariables>(
           {
             mutation: UpdateUserDocument,
-            variables: { username, newUser: false },
+            variables: { newUser: false },
           }
         );
 
