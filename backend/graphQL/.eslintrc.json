@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["next", "next/core-web-vitals", "eslint:recommended"],
+  "extends": ["eslint:recommended"],
   "globals": {
     "React": "readonly"
   },
