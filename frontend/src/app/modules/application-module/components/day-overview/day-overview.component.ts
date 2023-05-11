@@ -13,8 +13,8 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable, Subscription} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 import Timeout = NodeJS.Timeout;
-import {DatabaseService} from "../../services/database.service";
-import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
+import {DatabaseService} from '../../services/database.service';
+import {SwissDateAdapter} from '../../../../shared/utils/format-datapicker';
 
 @Component({
   selector: 'app-day-overview',
@@ -55,7 +55,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.specificMealsSubscription.unsubscribe();
+    this.specificMealsSubscription?.unsubscribe();
   }
 
 
@@ -96,10 +96,17 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     const empties = this.dayElement?.nativeElement.querySelectorAll('[data-add-note="true"]');
 
+    // TODO: including this leads to performance issues
+    /*
     if (empties === undefined || empties.length === 0) {
-      setTimeout(() => this.setContextMenu(), 250);
+      setTimeout(() => {
+        console.log("setContextMenu_timeout2");
+        this.setContextMenu();
+      }, 250);
       return;
     }
+    */
+
 
     empties.forEach(empty => {
 
@@ -136,10 +143,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     });
 
-    if (this.specificMealsSubscription) {
-      this.specificMealsSubscription.unsubscribe();
-    }
-
+    this.specificMealsSubscription?.unsubscribe();
     this.specificMealsSubscription = this.specificMeals.subscribe(meals => meals.forEach(meal => {
 
       const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
