@@ -378,7 +378,10 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
   }
 
   private updateContextMenus() {
-    this.dayOverviews.forEach(el => el.setContextMenu());
+    this.dayOverviews.forEach(el => {
+      console.log('update context menu');
+      el.setContextMenu();
+    });
   }
 
   /**
