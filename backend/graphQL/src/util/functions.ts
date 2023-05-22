@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-import { User } from 'next-auth';
+import { PrismaClient, User } from '@prisma/client';
 import { Acknowledgement, MutationResolvers } from '@/util/generated/types/graphql';
 
 export async function isValidUsername(

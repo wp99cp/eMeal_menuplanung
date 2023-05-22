@@ -4,14 +4,12 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import { json } from 'body-parser';
-import { getSession } from 'next-auth/react';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { GraphQLContext, Session } from '@/util/types/types';
 import { readFileSync } from 'fs';
 import { resolvers } from '@/graphql/resolvers';
 import { PrismaClient } from '@prisma/client';
 import { GraphQLError } from 'graphql/error';
-import * as console from 'console';
 
 const isAuthenticated = (session: Session, req: Request) => {
   // if user is authenticated via next-auth, we allow the request
@@ -63,7 +61,13 @@ const main = async () => {
     json(),
     expressMiddleware(server, {
       context: async ({ req }): Promise<GraphQLContext> => {
-        const session = (await getSession({ req })) as unknown as Session;
+        // retrieve the session
+        const session = await fetch(
+          `${process.env.NEXTAUTH_URL_INTERNAL}/api/auth/session`,
+          { headers: { cookie: req.headers.cookie as string } }
+        )
+          .then((res: any) => (res.ok ? res.json() : null))
+          .catch((err: any) => console.error);
 
         // We block all unauthorized requests here
         if (!isAuthenticated(session, req) && !isPublicOperation(req))

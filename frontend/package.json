@@ -30,7 +30,7 @@
     "eslint-config-next": "^13.3.0",
     "graphql": "^16.6.0",
     "next": "^13.3.0",
-    "next-auth": "^4.18.8",
+    "next-auth": "^4.22.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
