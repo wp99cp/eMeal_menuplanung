@@ -65,6 +65,8 @@ services:
       context: backend/mongoDB
       dockerfile: Dockerfile
 
+    hostname: mongo-db
+
     ports:
       - "27017:27017"
       - "27018:27018"
