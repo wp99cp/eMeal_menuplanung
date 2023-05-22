@@ -4,7 +4,11 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["eslint:recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "globals": {
     "React": "readonly"
   },
@@ -13,7 +17,10 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "rules": {
     "no-unused-vars": [
       1,
@@ -23,5 +30,7 @@
       }
     ]
   },
-  "ignorePatterns": ["src/util/generated/*"]
+  "ignorePatterns": [
+    "src/util/generated/*"
+  ]
 }
