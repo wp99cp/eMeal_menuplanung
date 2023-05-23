@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StrokedLink } from '@/components/elements/Buttons/StrokedLink';
 import { Title } from '@/components/elements/Title';
-import { Text } from '@/components/elements/Text';
+import { Text } from '@ui/Text';
 
 const features = [
   {
@@ -55,7 +55,7 @@ export default function LandingPage() {
         </div>
 
         <section className="sm:text-center">
-          <Title heading="eMeal - Menüplanung. Lagerküche online planen."></Title>
+          <Title>eMeal - Menüplanung. Lagerküche online planen.</Title>
           <Text>
             Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze Lager online
             erstellen, verwalten und zu einer Broschüre zusammenstellen.{' '}

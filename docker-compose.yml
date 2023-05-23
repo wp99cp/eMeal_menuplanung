@@ -34,7 +34,8 @@ services:
       - ./.git/refs/heads/:/app/frontend/.git/refs/heads/
 
     ports:
-      - "3000:3000" # GraphQL server
+      - "3000:3000" # NextJS page
+      - "6006:6006" # Storybook
 
     depends_on:
       - mongo-db

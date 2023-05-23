@@ -1,7 +1,7 @@
 import React from 'react';
 import { Title } from '@/components/elements/Title';
 import { SmallLayout } from '@/components/layout/SmallLayout';
-import { Text } from '@/components/elements/Text';
+import { Text } from '@ui/Text';
 
 export default function ForgotPassword() {
   return (
