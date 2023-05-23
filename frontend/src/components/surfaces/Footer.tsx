@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import logo_footer from '@/assets/logo_footer.svg';
 import build from '@/build';
+import Link from 'next/link';
 
 const navigation = [
   {
@@ -58,16 +59,16 @@ export const Footer = () => {
   return (
     <>
       <footer
-        className="bg-footer_blue-700 text-footer_blue-50"
+        className="flow-root bg-footer_blue-700 text-footer_blue-50"
         aria-labelledby="footer-heading"
       >
         <h2 id="footer-heading" className="sr-only">
           Footer
         </h2>
-        <div className="mx-auto max-w-7xl px-6 pb-16 pt-16 sm:pt-24 lg:px-8 lg:pt-32 xl:grid xl:grid-cols-3 xl:gap-8">
+        <div className="mx-auto max-w-7xl px-6 pb-16 pt-16 sm:pt-24 lg:mt-16 lg:px-8 lg:pt-16 xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <Image className="h-8 w-auto sm:h-10" src={logo_footer} alt="" />
-            <p className="text-sm leading-6">
+            <p className="max-w-[500px] text-sm leading-6">
               Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze Lager
               online erstellen, verwalten und zu einer Broschüre zusammenstellen.
             </p>
@@ -76,13 +77,18 @@ export const Footer = () => {
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:col-span-2 xl:mt-0 xl:grid-cols-4">
             {navigation.map((section) => (
               <div key={section.title}>
-                <h3 className="mt-6 text-sm font-semibold leading-6">{section.title}</h3>
-                <ul role="list" className="mt-4 space-y-2">
+                <h3 className="mb-4 mt-8 text-sm font-semibold leading-6">
+                  {section.title}
+                </h3>
+                <ul role="list" className="space-y-4">
                   {section.links.map((item) => (
-                    <li key={item.name}>
-                      <a href={item.href} className="text-sm leading-6 hover:text-white">
+                    <li key={item.name} className="leading-tight">
+                      <Link
+                        href={item.href}
+                        className="text-sm leading-tight hover:text-white"
+                      >
                         {item.name}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -96,9 +102,9 @@ export const Footer = () => {
               &copy; {today.getFullYear()} Cevi.Tools - eMeal Menüplanung
             </p>
             <p className="text-xs leading-5">
-              <a href="https://github.com/wp99cp/eMeal_menuplanung">
+              <Link href="https://github.com/wp99cp/eMeal_menuplanung">
                 Source code available under AGPL.
-              </a>
+              </Link>
             </p>
             <p className="text-xs leading-5">
               Version: <b>{build.version}</b>
