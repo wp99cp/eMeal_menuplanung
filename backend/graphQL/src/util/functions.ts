@@ -1,29 +1,6 @@
-import { PrismaClient, User } from '@prisma/client';
-import { Acknowledgement, MutationResolvers } from '@/util/generated/types/graphql';
-
-export async function isValidUsername(
-  prisma: PrismaClient,
-  username: string,
-  id: string
-): Promise<boolean> {
-  // A username must be between 5 and 20 characters long
-  // and can only contain letters, numbers, underscores, and hyphens
-  if (!/^[A-Za-z0-9_-]{5,20}$/.test(username)) {
-    return false;
-  }
-
-  if (!username) return false;
-
-  const existingUser: User | null = await prisma.user.findUnique({
-    where: {
-      username,
-    },
-  });
-
-  if (existingUser?.id === id) return true;
-
-  return !existingUser;
-}
+import { Acknowledgement } from '@/util/generated/types/graphql';
+import { GraphQLContext } from '@/util/types/types';
+import { User } from '@prisma/client';
 
 export function verifyPassword(password: string): Acknowledgement {
   // minimum password length
@@ -54,3 +31,19 @@ export function verifyPassword(password: string): Acknowledgement {
 
   return { success: true };
 }
+
+export const isUsernameUnique = async (
+  username: string | undefined,
+  ctx: GraphQLContext
+) => {
+  if (!username) return false;
+  if (!ctx?.user_id) return false;
+
+  const existingUser: User | null = await ctx.prisma.user.findUnique({
+    where: {
+      username,
+    },
+  });
+  if (existingUser?.id === ctx.user_id) return true;
+  return !existingUser;
+};

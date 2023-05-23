@@ -1,3 +1,5 @@
+scalar JSON
+
 type User {
     id: String
     username: String
