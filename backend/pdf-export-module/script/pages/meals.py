@@ -54,6 +54,12 @@ def add_header(doc, meal):
     doc.append(NoEscape(r'\definecolor{light-gray}{gray}{0.85}'))
     doc.append(Command('arrayrulecolor', arguments=NoEscape(r'light-gray')))
     with doc.create(Center()) as centered_section:
+
+        if 'meal_name' not in meal:
+            meal['meal_name'] = ''
+            meal['meal_description'] = ''
+            print('Warning: meal_name not found in meal: ' + str(meal['meal_id']))
+
         centered_section.append(NoEscape(r' \center \LARGE \textbf{' + meal['meal_name'] + r'} \par %'))
         centered_section.append(NoEscape(r'\color{gray} \large \textbf{' +
                                          (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(

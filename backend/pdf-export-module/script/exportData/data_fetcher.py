@@ -75,6 +75,9 @@ class DataFetcher(object):
             query_ref = meal_refs.where(u'used_in_camp', u'==', self.camp_id)
             self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
+            for meal in self._specific_meals:
+                meal['meal_weekview_name'] = meal['meal_weekview_name'].replace('&', '\&')
+
         self._specific_meals_loaded = True
 
     def _fetch_meals(self):
@@ -96,9 +99,13 @@ class DataFetcher(object):
         meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
         for meal in meals:
+
+            meal['meal_name'] = meal['meal_name'].replace('&', ' und ')
+
             for specMeal in self._specific_meals:
                 if specMeal['meal_id'] == meal['doc_id']:
                     specMeal['meal_name'] = meal['meal_name']
+                    print(specMeal['meal_name'])
                     specMeal['meal_description'] = meal['meal_description']
 
         self._meals_loaded = True
