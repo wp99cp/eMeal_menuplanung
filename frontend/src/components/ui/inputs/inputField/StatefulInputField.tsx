@@ -1,5 +1,7 @@
-import SimpleInputField, { SimpleInputFieldPropsType } from '@ui/inputs/SimpleInputField';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import SimpleInputField, {
+  SimpleInputFieldPropsType,
+} from '@ui/inputs/inputField/SimpleInputField';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
   ArrowPathIcon,
   CheckCircleIcon,
@@ -7,19 +9,8 @@ import {
 } from '@heroicons/react/20/solid';
 import useDebounce from '@ui/utils/debounce';
 import { useWithDefaultHook } from '@ui/utils/useWithDefaultHook';
-
-export enum FieldState {
-  LOADING = 'loading', // eslint-disable-line no-unused-vars
-  ERROR = 'error', // eslint-disable-line no-unused-vars
-  SUCCESS = 'success', // eslint-disable-line no-unused-vars
-  DEFAULT = 'default', // eslint-disable-line no-unused-vars
-}
-
-export type ErrorMsgString = string;
-export type InputFieldState = {
-  state: FieldState;
-  stateMsg: ErrorMsgString;
-};
+import { FieldState, StatefullFieldState } from '@ui/utils/statefullness';
+import { useInputValidation } from '@ui/utils/inputValidation';
 
 /*
  * We omit the postfix property from the SimpleInputFieldProps type
@@ -34,39 +25,13 @@ interface StatefulInputFieldProps extends SimpleInputFieldPropsType {
   title?: never; // This enforces that title cannot be passed, use the stateMsg instead
 
   valueHook?: [string, Dispatch<SetStateAction<string>>];
-  stateHook?: [InputFieldState, Dispatch<SetStateAction<InputFieldState>>];
+  stateHook?: [StatefullFieldState, Dispatch<SetStateAction<StatefullFieldState>>];
 
-  strokeValidation?: (_: string) => Promise<InputFieldState>;
-  inputValidation?: (_: string) => Promise<InputFieldState>;
+  strokeValidation?: (_: string) => Promise<StatefullFieldState>;
+  inputValidation?: (_: string) => Promise<StatefullFieldState>;
 }
 
 export type StatefulInputFieldPropsType = StatefulInputFieldProps;
-
-const useInputValidation = (
-  [state, setState]: [InputFieldState, Dispatch<SetStateAction<InputFieldState>>],
-  value: string,
-  valFunc: ((_: string) => Promise<InputFieldState>) | undefined
-) => {
-  const prevValueRef = useRef(value);
-
-  useEffect(() => {
-    if (value === prevValueRef.current) return;
-    if (valFunc === undefined) return;
-    valFunc(value).then((newState) => {
-      // if the error has not changed, we do not need to update the state
-      // otherwise we would get an infinite loop
-      const errorHasNotChanged =
-        (newState.state === state.state &&
-          state.state === FieldState.ERROR &&
-          state.stateMsg === newState.stateMsg) ||
-        (newState.state === state.state && state.state !== FieldState.ERROR);
-      if (errorHasNotChanged) return;
-
-      setState(newState);
-      prevValueRef.current = value;
-    });
-  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
-};
 
 /**
  *
@@ -78,7 +43,7 @@ const useInputValidation = (
  * */
 const getDefaultValidation: (
   _: SimpleInputFieldPropsType
-) => (_: string) => Promise<InputFieldState> = (props) => {
+) => (_: string) => Promise<StatefullFieldState> = (props) => {
   const dummyInput = document.createElement('input');
   if (props.max) dummyInput.max = props.max;
   if (props.min) dummyInput.min = props.min;
@@ -103,7 +68,7 @@ const StatefulInputField = ({
   stateHook: stateHookOrUndefined,
   ...simpleInputFieldProps
 }: StatefulInputFieldPropsType) => {
-  const stateHook = useWithDefaultHook<InputFieldState>(stateHookOrUndefined, {
+  const stateHook = useWithDefaultHook<StatefullFieldState>(stateHookOrUndefined, {
     state: FieldState.DEFAULT,
     stateMsg: '',
   });

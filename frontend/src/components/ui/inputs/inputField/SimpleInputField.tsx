@@ -346,10 +346,10 @@ const SimpleInputField = ({
     ['absolute inset-y-0 flex items-center', 'overflow-y-hidden', 'select-none'],
     {
       variants: {
-        isPrefix: {
+        hasPrefix: {
           true: ['left-0 pl-3', 'pointer-events-none'],
         },
-        isPostfix: {
+        hasPostfix: {
           true: ['right-0 pr-3'],
         },
         hasTitle: {
@@ -373,13 +373,13 @@ const SimpleInputField = ({
 
       <div className="relative mt-1 rounded-md shadow-sm">
         {prefix && typeof prefix === 'string' && prefix !== '' && (
-          <div className={postAndPrefixStyles({ isPrefix: true })}>
+          <div className={postAndPrefixStyles({ hasPrefix: true })}>
             <span className="text-gray-500 sm:text-sm">{prefix}</span>
           </div>
         )}
 
         {prefix && typeof prefix !== 'string' && (
-          <div className={postAndPrefixStyles({ isPrefix: true })}>{<>{prefix}</>}</div>
+          <div className={postAndPrefixStyles({ hasPrefix: true })}>{<>{prefix}</>}</div>
         )}
 
         <input
@@ -404,7 +404,7 @@ const SimpleInputField = ({
 
         {postfix && typeof postfix === 'string' && postfix !== '' && (
           <div
-            className={postAndPrefixStyles({ isPostfix: true, hasTitle: title !== '' })}
+            className={postAndPrefixStyles({ hasPostfix: true, hasTitle: title !== '' })}
             title={title}
           >
             <span className="text-gray-500 sm:text-sm">{postfix}</span>
@@ -413,7 +413,7 @@ const SimpleInputField = ({
 
         {postfix && typeof postfix !== 'string' && (
           <div
-            className={postAndPrefixStyles({ isPostfix: true, hasTitle: title !== '' })}
+            className={postAndPrefixStyles({ hasPostfix: true, hasTitle: title !== '' })}
             title={title}
           >
             {<>{postfix}</>}

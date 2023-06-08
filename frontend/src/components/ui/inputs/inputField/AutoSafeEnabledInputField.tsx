@@ -1,10 +1,9 @@
 import StatefulInputField, {
-  FieldState,
-  InputFieldState,
   StatefulInputFieldPropsType,
-} from '@ui/inputs/StatefulInputField';
+} from '@ui/inputs/inputField/StatefulInputField';
 import { useState } from 'react';
 import { useWithDefaultHook } from '@ui/utils/useWithDefaultHook';
+import { FieldState, StatefullFieldState } from '@ui/utils/statefullness';
 
 interface AutoSafeEnabledInputFieldProps extends StatefulInputFieldPropsType {
   /**
@@ -14,7 +13,7 @@ interface AutoSafeEnabledInputFieldProps extends StatefulInputFieldPropsType {
    * the autoSaveCallback is executed.
    *
    */
-  inputValidation: (_: string) => Promise<InputFieldState>;
+  inputValidation: (_: string) => Promise<StatefullFieldState>;
   autoSaveCallback?: (_: string) => Promise<void>;
 }
 
@@ -40,7 +39,7 @@ const AutoSafeEnabledInputField = ({
     () => strokeValidation || (async () => ({ state: FieldState.DEFAULT, stateMsg: '' }))
   );
 
-  const stateHook = useWithDefaultHook<InputFieldState>(stateHookOrUndefined, {
+  const stateHook = useWithDefaultHook<StatefullFieldState>(stateHookOrUndefined, {
     state: FieldState.DEFAULT,
     stateMsg: '',
   });
@@ -49,7 +48,7 @@ const AutoSafeEnabledInputField = ({
 
   const [inputValidationWithDefault] = useState(() => {
     return async (value: string) => {
-      const inputValidationState: InputFieldState = await inputValidation(value);
+      const inputValidationState: StatefullFieldState = await inputValidation(value);
 
       if (
         simpleInputFieldProps.autoSaveCallback !== undefined &&
