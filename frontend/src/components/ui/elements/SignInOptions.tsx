@@ -1,44 +1,43 @@
-import { StrokedButton } from '@/components/elements/Buttons/StrokedButton';
 import { CeviIcon } from '@/components/elements/Icons/CeviIcon';
 import { PfadiIcon } from '@/components/elements/Icons/PfadiIcon';
 import { GoogleIcon } from '@/components/elements/Icons/GoogleIcon';
-import { signIn } from 'next-auth/react';
+import { Button } from '@ui/components/Button';
+import { Provider } from '@/util/types/next-auth';
 
-function SignInOptions({ onClick = () => {} }) {
+function SignInOptions({
+  signInHandler = async (provider) =>
+    console.log('SignIn not implemented! Would sign in with: ', provider),
+}: {
+  signInHandler?: (_: Provider) => Promise<void>;
+}) {
   return (
     <div className="mt-2 grid grid-cols-3 gap-3">
-      <StrokedButton
-        onClick={async () => {
-          onClick();
-          await signIn('cevi-db');
-        }}
-        className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
+      <Button
+        intent="stroked"
+        onClick={() => signInHandler(Provider.CEVI_DB)}
+        className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit CeviDB anmelden</span>
         <CeviIcon />
-      </StrokedButton>
+      </Button>
 
-      <StrokedButton
-        onClick={async () => {
-          onClick();
-          await signIn('mi-data');
-        }}
+      <Button
+        intent="stroked"
+        onClick={() => signInHandler(Provider.MI_DATA)}
         className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit MiData anmelden</span>
         <PfadiIcon />
-      </StrokedButton>
+      </Button>
 
-      <StrokedButton
-        onClick={async () => {
-          onClick();
-          await signIn('google');
-        }}
+      <Button
+        intent="stroked"
+        onClick={() => signInHandler(Provider.GOOGLE)}
         className="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-500 hover:bg-gray-50"
       >
         <span className="sr-only">Mit Google anmelden</span>
         <GoogleIcon />
-      </StrokedButton>
+      </Button>
     </div>
   );
 }

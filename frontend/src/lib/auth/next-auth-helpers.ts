@@ -8,12 +8,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { randomUUID } from 'crypto';
 import Cookies from 'cookies';
 import { decode, encode, JWTOptions } from 'next-auth/jwt';
-import { HitobitoProfile } from '@/util/types/next-auth';
+import { HitobitoProfile, Provider } from '@/util/types/next-auth';
 
 const prisma = new PrismaClient();
 
 export const CeviDBProvider: OAuthConfig<HitobitoProfile> = {
-  id: 'cevi-db',
+  id: Provider.CEVI_DB,
   name: 'CeviDB',
   authorization: {
     url: process.env.CEVI_DB_INSTANCE_URI + '/oauth/authorize',
@@ -68,7 +68,7 @@ export const CeviDBProvider: OAuthConfig<HitobitoProfile> = {
 };
 
 export const MiDataProvider: any = {
-  id: 'mi-data',
+  id: Provider.MI_DATA,
   name: 'MiData',
   type: 'oauth',
   version: '2.0',
@@ -84,6 +84,7 @@ export const MiDataProvider: any = {
 
 export const GoogleProviderWithCustomProfile: OAuthConfig<GoogleProfile> = GoogleProvider(
   {
+    id: Provider.GOOGLE,
     clientId: process.env.GOOGLE_CLIENT_ID as string,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     httpOptions: {
@@ -200,6 +201,7 @@ export const getJwtOptions = (
 });
 
 export const NextAuthCredentialProvider = CredentialsProvider({
+  id: Provider.CREDENTIALS,
   name: 'Credentials',
   credentials: {
     email: { label: 'Email', type: 'email' },

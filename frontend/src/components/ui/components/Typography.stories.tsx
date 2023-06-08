@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Paragraph } from '@ui/Text';
-import { Subsubtitle, Subtitle, Title } from '@ui/titles';
+import { Paragraph } from '@ui/components/Text';
+import { Subsubtitle, Subtitle, Title } from '@ui/components/titles';
 
 const meta: Meta<typeof Paragraph> = {
   component: Paragraph,

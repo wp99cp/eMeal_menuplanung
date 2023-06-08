@@ -1,4 +1,4 @@
-import { Text } from '@ui/Text';
+import { Text } from '@ui/components/Text';
 import { TextLink } from '@/components/elements/TextLink';
 import { Subtitle, Title } from '@/components/elements/Title';
 

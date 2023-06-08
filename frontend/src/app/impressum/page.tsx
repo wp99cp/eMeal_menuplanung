@@ -1,5 +1,5 @@
 import { Subtitle, Title } from '@/components/elements/Title';
-import { Text } from '@ui/Text';
+import { Text } from '@ui/components/Text';
 import { SmallLayout } from '@/components/layout/SmallLayout';
 
 export default function LandingPage() {

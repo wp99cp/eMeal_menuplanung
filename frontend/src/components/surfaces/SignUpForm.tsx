@@ -3,9 +3,7 @@
 import Image from 'next/image';
 import logo from '@/assets/logo.svg';
 import { TextLink } from '@/components/elements/TextLink';
-import { PrimaryButton } from '@/components/elements/Buttons/PrimaryButton';
-import SignInOptions from '@/components/elements/SignInOptions';
-import { NamedDivider } from '@/components/elements/Divider/NamedDivider';
+import SignInOptions from '@ui/elements/SignInOptions';
 import TextInput, {
   InputFieldDefaultState,
   InputFieldState,
@@ -21,6 +19,9 @@ import {
   CreateNewUserMutationVariables,
 } from '@/util/generated/graphql/graphql';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { Button } from '@ui/components/Button';
+import { Divider } from '@ui/components/Divider';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -148,15 +149,20 @@ export default function SignUpForm() {
                   />
                 </div>
 
-                <PrimaryButton className="flex w-full justify-center">
+                <Button intent="primary" className="flex w-full justify-center">
                   Registrieren
-                </PrimaryButton>
+                </Button>
               </form>
             </div>
 
-            <NamedDivider text="oder anmelden mit" />
+            <Divider>oder anmelden mit</Divider>
 
-            <SignInOptions onClick={() => setCardState('loading')} />
+            <SignInOptions
+              signInHandler={async (provider) => {
+                setCardState('loading');
+                await signIn(provider);
+              }}
+            />
           </Card>
         </div>
       </div>

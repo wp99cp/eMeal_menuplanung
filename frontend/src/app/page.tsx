@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { StrokedLink } from '@/components/elements/Buttons/StrokedLink';
 import { Title } from '@/components/elements/Title';
-import { Text } from '@ui/Text';
+import { Text } from '@ui/components/Text';
 
 const features = [
   {

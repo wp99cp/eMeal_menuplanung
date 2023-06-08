@@ -3,7 +3,7 @@ import './globals.css';
 
 import { ReactNode } from 'react';
 import Header from '@/components/navigation/Header';
-import { Footer } from '@/components/surfaces/Footer';
+import { Footer } from '@ui/surfaces/Footer';
 import SessionProvider from '@/components/provider/SessionProvider';
 
 // either Static metadata

@@ -5,3 +5,10 @@ export interface HitobitoProfile {
   last_name: string;
   nickname: string;
 }
+
+export enum Provider {
+  CEVI_DB = 'cevi-db',
+  MI_DATA = 'mi-data',
+  GOOGLE = 'google',
+  CREDENTIALS = 'credentials',
+}
