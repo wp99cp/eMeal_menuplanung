@@ -1,0 +1,8 @@
+# Build directories
+**/.next
+
+# Node Modules are ignored by default
+
+# Auto generated files
+**/src/util/generated
+**/src/build.ts

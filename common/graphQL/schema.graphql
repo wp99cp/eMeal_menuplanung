@@ -1,25 +1,25 @@
 scalar JSON
 
 type User {
-    id: String
-    username: String
+  id: String
+  username: String
 }
 
 type Query {
-    searchUser(username: String): [User]
-    checkUsername(username: String): Acknowledgement
+  searchUser(username: String): [User]
+  checkUsername(username: String): Acknowledgement
 }
 
 type Mutation {
-    updateUser(username: String, shareEmail: Boolean, newUser: Boolean): Acknowledgement
-    createNewUser(name: String, email: String, password: String): Acknowledgement
+  updateUser(username: String, shareEmail: Boolean, newUser: Boolean): Acknowledgement
+  createNewUser(name: String, email: String, password: String): Acknowledgement
 }
 
 type Subscription {
-    userCreated: User
+  userCreated: User
 }
 
 type Acknowledgement {
-    success: Boolean
-    error: String
+  success: Boolean
+  error: String
 }

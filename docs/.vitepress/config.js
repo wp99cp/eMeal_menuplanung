@@ -1,5 +1,5 @@
-import { defineConfig } from "vitepress";
-import MermaidRenderer from "./mermaid-markdown-all";
+import { defineConfig } from 'vitepress';
+import MermaidRenderer from './mermaid-markdown-all';
 
 const allMarkdownTransformers = {
   config: async (md) => {
@@ -8,43 +8,43 @@ const allMarkdownTransformers = {
 };
 
 export default defineConfig({
-  lang: "en-US",
+  lang: 'en-US',
 
-  title: "Cevi.Tools",
-  description: "eMeal - Menüplanung",
+  title: 'Cevi.Tools',
+  description: 'eMeal - Menüplanung',
 
-  srcDir: "./src",
-  ignoreDeadLinks: "localhostLinks",
+  srcDir: './src',
+  ignoreDeadLinks: 'localhostLinks',
 
   markdown: allMarkdownTransformers,
 
   themeConfig: {
     sidebar: {
-      "/": [
+      '/': [
         {
-          text: "Introduction",
+          text: 'Introduction',
           items: [
             {
-              text: "About the Project",
-              link: "/",
+              text: 'About the Project',
+              link: '/',
             },
 
             {
-              text: "Getting Started",
-              link: "/getting-started",
+              text: 'Getting Started',
+              link: '/getting-started',
             },
             {
-              text: "Project Structure",
-              link: "/project-structure",
+              text: 'Project Structure',
+              link: '/project-structure',
             },
           ],
         },
         {
-          text: "Documentation",
+          text: 'Documentation',
           items: [
             {
-              text: "Introduction",
-              link: "/docs/",
+              text: 'Introduction',
+              link: '/docs/',
             },
           ],
         },

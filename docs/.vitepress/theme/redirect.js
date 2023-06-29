@@ -5,70 +5,70 @@
 const getBaseFile = (link) => {
   const url = new URL(link);
   if (
-    url.hostname !== "mermaid-js.github.io" &&
-    url.hostname !== "mermaid.js.org" &&
-    url.hostname !== "localhost"
+    url.hostname !== 'mermaid-js.github.io' &&
+    url.hostname !== 'mermaid.js.org' &&
+    url.hostname !== 'localhost'
   ) {
-    throw new Error("Not mermaidjs url");
+    throw new Error('Not mermaidjs url');
   }
   const [path, params] = url.hash
     .toLowerCase()
-    .replace(".md", "")
-    .replace(/^#\/?/g, "")
-    .replace(/^\.\//g, "")
-    .split("?");
+    .replace('.md', '')
+    .replace(/^#\/?/g, '')
+    .replace(/^\.\//g, '')
+    .split('?');
 
   // Find id in params
   const id = params
-    ?.split("&")
-    .find((param) => param.startsWith("id="))
-    ?.split("=")[1];
+    ?.split('&')
+    .find((param) => param.startsWith('id='))
+    ?.split('=')[1];
 
   return { path, id };
 };
 
 const redirectMap = {
-  "8.6.0_docs": "",
-  accessibility: "config/theming",
-  breakingchanges: "",
-  c4c: "syntax/c4c",
-  classdiagram: "syntax/classDiagram",
-  configuration: "config/configuration",
-  demos: "misc/integrations",
-  development: "community/development",
-  directives: "config/directives",
-  entityrelationshipdiagram: "syntax/entityRelationshipDiagram",
-  examples: "syntax/examples",
-  faq: "misc/faq",
-  flowchart: "syntax/flowchart",
-  gantt: "syntax/gantt",
-  gitgraph: "syntax/gitgraph",
-  integrations: "misc/integrations",
-  "language-highlight": "",
-  markdown: "",
-  mermaidapi: "config/usage",
-  mermaidcli: "config/mermaidCLI",
-  mindmap: "syntax/mindmap",
-  "more-pages": "",
-  "n00b-advanced": "config/n00b-advanced",
-  "n00b-gettingstarted": "intro/n00b-gettingStarted",
-  "n00b-overview": "community/n00b-overview",
-  "n00b-syntaxreference": "",
-  newdiagram: "community/newDiagram",
-  pie: "syntax/pie",
-  plugins: "",
-  quickstart: "intro/n00b-gettingStarted",
-  requirementdiagram: "syntax/requirementDiagram",
-  security: "community/security",
-  sequencediagram: "syntax/sequenceDiagram",
-  setup: "config/setup/README",
-  statediagram: "syntax/stateDiagram",
-  themes: "config/theming",
-  theming: "config/theming",
-  tutorials: "config/Tutorials",
-  upgrading: "",
-  usage: "config/usage",
-  "user-journey": "syntax/userJourney",
+  '8.6.0_docs': '',
+  accessibility: 'config/theming',
+  breakingchanges: '',
+  c4c: 'syntax/c4c',
+  classdiagram: 'syntax/classDiagram',
+  configuration: 'config/configuration',
+  demos: 'misc/integrations',
+  development: 'community/development',
+  directives: 'config/directives',
+  entityrelationshipdiagram: 'syntax/entityRelationshipDiagram',
+  examples: 'syntax/examples',
+  faq: 'misc/faq',
+  flowchart: 'syntax/flowchart',
+  gantt: 'syntax/gantt',
+  gitgraph: 'syntax/gitgraph',
+  integrations: 'misc/integrations',
+  'language-highlight': '',
+  markdown: '',
+  mermaidapi: 'config/usage',
+  mermaidcli: 'config/mermaidCLI',
+  mindmap: 'syntax/mindmap',
+  'more-pages': '',
+  'n00b-advanced': 'config/n00b-advanced',
+  'n00b-gettingstarted': 'intro/n00b-gettingStarted',
+  'n00b-overview': 'community/n00b-overview',
+  'n00b-syntaxreference': '',
+  newdiagram: 'community/newDiagram',
+  pie: 'syntax/pie',
+  plugins: '',
+  quickstart: 'intro/n00b-gettingStarted',
+  requirementdiagram: 'syntax/requirementDiagram',
+  security: 'community/security',
+  sequencediagram: 'syntax/sequenceDiagram',
+  setup: 'config/setup/README',
+  statediagram: 'syntax/stateDiagram',
+  themes: 'config/theming',
+  theming: 'config/theming',
+  tutorials: 'config/Tutorials',
+  upgrading: '',
+  usage: 'config/usage',
+  'user-journey': 'syntax/userJourney',
 };
 
 /**
@@ -81,5 +81,5 @@ export const getRedirect = (link) => {
   if (!(path in redirectMap)) {
     return;
   }
-  return `${redirectMap[path]}.html${id ? `#${id}` : ""}`;
+  return `${redirectMap[path]}.html${id ? `#${id}` : ''}`;
 };

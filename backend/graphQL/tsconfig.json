@@ -3,10 +3,7 @@
     "moduleResolution": "node",
     "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "esnext",
-      "dom"
-    ],
+    "lib": ["esnext", "dom"],
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,

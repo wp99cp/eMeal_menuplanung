@@ -34,7 +34,12 @@ const TextInput = ({
   required = false,
   prefix = '',
   stateHook: [inputValue, setInputValue] = useState(''),
-  fieldState: [[state, errorMessage]] = [['default', ''], () => {}],
+  fieldState: [[state, errorMessage]] = [
+    ['default', ''],
+    () => {
+      throw new Error('Not Implemented');
+    },
+  ],
 }: TextInputProps) => {
   let classes =
     'block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 ' +
@@ -92,7 +97,7 @@ const TextInput = ({
           </div>
         )}
       </div>
-      <p className="mt-1 text-sm text-accent-600" id="email-error">
+      <p className="text-accent-600 mt-1 text-sm" id="email-error">
         {state === 'error' ? errorMessage : ''}
       </p>
     </div>

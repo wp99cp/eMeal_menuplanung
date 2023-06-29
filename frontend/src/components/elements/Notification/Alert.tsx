@@ -63,7 +63,7 @@ export default function Alert({ title, description, type, onClose }: AlertProps)
                   <div className="ml-4 flex flex-shrink-0">
                     <button
                       type="button"
-                      className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                      className="focus:ring-accent-500 inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2"
                       onClick={() => {
                         setShow(false);
                         if (onClose) {

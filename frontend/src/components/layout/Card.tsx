@@ -10,7 +10,12 @@ export const Card = ({
       <span>Loading...</span>
     </>
   ),
-  cardStateHook: [cardState] = [DefaultCardState, () => {}],
+  cardStateHook: [cardState] = [
+    DefaultCardState,
+    () => {
+      throw new Error('Not Implemented');
+    },
+  ],
 }: {
   children: ReactNode;
   loadingScreen?: JSX.Element;

@@ -1,4 +1,4 @@
-# Editor
+# Editor configs
 .idea
 .vscode
 
@@ -8,3 +8,6 @@
 .env.local
 **/!.env.example
 **/!.env.*.example
+
+# node Modules
+**/node_modules/**/*

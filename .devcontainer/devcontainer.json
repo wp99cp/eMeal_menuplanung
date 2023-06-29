@@ -1,0 +1,13 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+  "name": "emeal_menuplanung",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "postStartCommand": "npm install && npm run start"
+}

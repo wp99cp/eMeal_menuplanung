@@ -115,7 +115,7 @@ const OnboardingPage = () => {
       },
       content: () => (
         <>
-          <p className="mb-2 mt-8 font-bold text-accent-500">
+          <p className="text-accent-500 mb-2 mt-8 font-bold">
             Dein Konto ist eingerichtet!
           </p>
           <p className="mb-4 text-2xl font-bold">

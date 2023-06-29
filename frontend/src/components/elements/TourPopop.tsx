@@ -112,7 +112,7 @@ const TourPopup = ({ over: ref }: { over: RefObject<HTMLDivElement> }) => {
             </>
           )}
           <Dialog
-            onClose={() => {}}
+            onClose={() => console.log('Close')}
             className="fixed inset-0 z-50 overflow-y-auto"
             style={{
               top: bounds.y + bounds.height,

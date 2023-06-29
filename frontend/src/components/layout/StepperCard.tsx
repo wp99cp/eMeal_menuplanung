@@ -123,13 +123,13 @@ const render_completed_step = (
   return (
     <>
       <div className="absolute inset-0 flex items-center" aria-hidden="true">
-        <div className="h-0.5 w-full bg-accent-600" />
+        <div className="bg-accent-600 h-0.5 w-full" />
       </div>
       <div
         onClick={async () => {
           await router.push(baseUrl + steps[stepIdx]?.step_name);
         }}
-        className="relative flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-accent-600 hover:bg-accent-900"
+        className="bg-accent-600 hover:bg-accent-900 relative flex h-5 w-5 cursor-pointer items-center justify-center rounded-full"
       >
         <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
         <span className="sr-only">{step.name}</span>
@@ -145,10 +145,10 @@ const render_current_step = (step: StepperCardSteps<any>) => {
         <div className="h-0.5 w-full bg-gray-200" />
       </div>
       <div
-        className="relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-accent-600 bg-white"
+        className="border-accent-600 relative flex h-5 w-5 items-center justify-center rounded-full border-2 bg-white"
         aria-current="step"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-accent-600" aria-hidden="true" />
+        <span className="bg-accent-600 h-1.5 w-1.5 rounded-full" aria-hidden="true" />
         <span className="sr-only">{step.name}</span>
       </div>
     </>

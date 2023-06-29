@@ -1,15 +1,15 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:@next/next/recommended", "plugin:storybook/recommended"],
-  "settings": {
-    "next": {
-      "rootDir": "frontend/src/"
-    }
-  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "globals": {
     "React": "readonly",
     "JSX": "readonly"
@@ -19,7 +19,8 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "no-unused-vars": [
       1,
@@ -29,5 +30,5 @@
       }
     ]
   },
-  "ignorePatterns": ["src/util/generated/*"]
+  "ignorePatterns": ["**/src/util/generated", "**/src/build.ts"]
 }

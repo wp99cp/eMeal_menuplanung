@@ -43,7 +43,6 @@ const getSessionFromRequest = async (req: NextRequest) => {
     },
   };
 
-  //@ts-ignore Validate session
   return await getSession({ req: requestForNextAuth });
 };
 

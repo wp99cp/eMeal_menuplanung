@@ -1,14 +1,13 @@
-version: "3.7"
+version: '3.7'
 
 services:
-
   docs:
     build:
       context: docs/.
       dockerfile: Dockerfile
 
     ports:
-      - "8000:8000" # Documentation
+      - '8000:8000' # Documentation
 
     volumes:
       - ./docs/src:/app/src
@@ -17,7 +16,6 @@ services:
       - .env.local
 
   frontend:
-
     build:
       context: .
       dockerfile: frontend/Dockerfile
@@ -34,14 +32,13 @@ services:
       - ./.git/refs/heads/:/app/frontend/.git/refs/heads/
 
     ports:
-      - "3000:3000" # NextJS page
-      - "6006:6006" # Storybook
+      - '3000:3000' # NextJS page
+      - '6006:6006' # Storybook
 
     depends_on:
       - mongo-db
 
   graphql:
-
     build:
       context: .
       dockerfile: ./backend/graphQL/Dockerfile
@@ -54,14 +51,13 @@ services:
       - ./backend/graphQL/src:/app/backend/graphQL/src
 
     ports:
-      - "4000:4000" # Frontend as Webpage
-      - "5555:5555" # Prisma Studio
+      - '4000:4000' # Frontend as Webpage
+      - '5555:5555' # Prisma Studio
 
     depends_on:
       - mongo-db
 
   mongo-db:
-
     build:
       context: backend/mongoDB
       dockerfile: Dockerfile
@@ -69,8 +65,8 @@ services:
     hostname: mongo-db
 
     ports:
-      - "27017:27017"
-      - "27018:27018"
+      - '27017:27017'
+      - '27018:27018'
 
     restart: always
 
@@ -83,7 +79,7 @@ services:
       - mongo-db-config:/data/configdb
 
 volumes:
-    mongo-db-data:
-      driver: local
-    mongo-db-config:
-      driver: local
+  mongo-db-data:
+    driver: local
+  mongo-db-config:
+    driver: local

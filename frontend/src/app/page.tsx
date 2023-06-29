@@ -79,7 +79,7 @@ export default function LandingPage() {
         <div className="py-24 sm:py-32 lg:py-40">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="sm:text-center">
-              <h2 className="text-lg font-semibold leading-8 text-accent-600">
+              <h2 className="text-accent-600 text-lg font-semibold leading-8">
                 eMeal - Menüplanung
               </h2>
               <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -103,7 +103,7 @@ export default function LandingPage() {
                     key={feature.name}
                     className="relative flex flex-col gap-6 sm:flex-row md:flex-col lg:flex-row"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500 text-white sm:shrink-0">
+                    <div className="bg-accent-500 flex h-12 w-12 items-center justify-center rounded-xl text-white sm:shrink-0">
                       <feature.icon className="h-8 w-8" aria-hidden="true" />
                     </div>
                     <div className="sm:min-w-0 sm:flex-1">

@@ -7,7 +7,7 @@ interface TextLinkProps {
 
 export const TextLink = ({ href, children }: TextLinkProps & LinkProps) => {
   return (
-    <Link href={href} className="font-semibold text-accent-500">
+    <Link href={href} className="text-accent-500 font-semibold">
       {children}
     </Link>
   );

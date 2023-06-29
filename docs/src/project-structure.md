@@ -44,9 +44,9 @@ The GraphQL API can be accessed at [http://localhost:4000/graphql](http://localh
 this URL in your browser, you will see a GraphQL Playground, which allows you to interact with the API.
 :::
 
-The graphql API is developed using [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
-and [Prisma](https://www.prisma.io/). It is written in TypeScript using GraphQL Code Generator to generate a type-safe
-API. The schema of the GraphQL API is defined in the `common/graphQL` folder.
+The graphql API is developed using [Apollo Server](https://www.apollographql.com/docs/apollo-server/). It is written in
+TypeScript using GraphQL Code Generator to generate a type-safe API. The schema of the GraphQL API is defined in
+the `common/graphQL` folder.
 
 #### Authentication
 
@@ -60,7 +60,7 @@ All requests to the GraphQL API must be authenticated. Two types of authenticati
 
 If you are using the GraphQL Playground, you can use an API Key to authenticate yourself.
 
-### Primary Database - MongoDB
+### Primary Database - MongoDB & Prisma
 
 ::: info
 You can connect to the database using MongoDB Compass at [mongodb://localhost:27017](mongodb://localhost:27017).
@@ -69,18 +69,42 @@ environment file: [Learn more](/docs/development-environment#environment-variabl
 :::
 
 We are using MongoDB as our primary database. It is used to store the data of the users and the recipes.
-The application is using [Prisma](https://www.prisma.io/) to interact with the database.
+In order to get typed access to the database, we are using [Prisma](https://www.prisma.io/) as an ORM. For that we
+define the schema of the database in the `common/prisma` folder. The schema is then used to generate
+the Prisma client. The Prisma client is used to interact with the database.
+
+#### MongoDB Replica Set
+
+Prisma requires a MongoDB instance running in replica set mode. Your docker environment should automatically start a
+MongoDB instance in replica set mode, nevertheless we are using a single MongoDB instance. More details can be found in
+the [Prisma documentation](https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/mongodb-node-mongodb#prerequisites).
+
+#### Usage of Prisma Extensions
+
+As of Prisma 4.16.0, Prisma
+supports [extensions](https://www.prisma.io/docs/concepts/components/prisma-client/client-extensions). Extensions allow
+to add custom functionality to the Prisma client. To follow common patterns, we have decided to not use such extensions
+only for specific use cases:
+
+- For logging and performance monitoring
+- Implementing something like [soft delete](https://zenstack.dev/blog/prisma-client-extensions#1-soft-delete)
+- Setting up change listeners for serving GraphQL subscriptions, e.g. we could hock into every write operation and
+  trigger an update to all active subscriptions using pubsub.
+- Enforcing access control
+
+However, we do not plan to use extensions to implement business logic. For example, we will not use extensions for
+implementing complex database transactions like adding a meal to a specific camp, implementing queries like fetching all
+meals of a camp or for complex aggregations like creating the shopping list / week view of a camp, as those operations
+are only used within a single graphql resolver.
 
 #### Persistent Data
 
 We are using Docker volumes to persist the data of the database. The volumes are defined in the
-`docker-compose.yml` file. You can reset the database by removing the volumes: 
+`docker-compose.yml` file. You can reset the database by removing the volumes:
 
 ```bash
 docker-compose down --volumes
 ```
-
-
 
 ### Print Service
 
