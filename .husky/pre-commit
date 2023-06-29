@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
+
+echo "Run eslint"
 npm run lint
+
+echo "Run prettier"
 npm run prettier
