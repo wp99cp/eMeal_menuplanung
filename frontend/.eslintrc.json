@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["next", "next/core-web-vitals", "plugin:storybook/recommended"],
+  "extends": ["plugin:@next/next/recommended", "plugin:storybook/recommended"],
   "settings": {
     "next": {
       "rootDir": "frontend/src/"

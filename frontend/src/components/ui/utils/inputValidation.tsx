@@ -24,5 +24,5 @@ export const useInputValidation = (
       setState(newState);
       prevValueRef.current = value;
     });
-  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [value]);
 };

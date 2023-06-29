@@ -6,7 +6,8 @@
     "start": "docker compose up --build -d",
     "lint": "eslint .",
     "prettier": "prettier --write .",
-    "postinstall": "(cd docs && npm install); (cd frontend && npm install); (cd backend/graphQL && npm install)"
+    "postinstall": "(cd docs && npm install); (cd frontend && npm install); (cd backend/graphQL && npm install)",
+    "prepare": "husky install"
   },
   "author": "Cyrill Püntener v/o JPG",
   "license": "AGPL-3.0",

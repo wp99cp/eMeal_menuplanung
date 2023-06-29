@@ -7,7 +7,6 @@
     "build": "next build --precompile",
     "start": "next start",
     "generate": "graphql-codegen",
-    "prepare": "cd ../ && husky install ./frontend/.husky",
     "storybook": "storybook dev -p 6006 --quiet --disable-telemetry",
     "build-storybook": "storybook build"
   },

@@ -13,7 +13,12 @@ function Checkbox({
   name,
   required = false,
   description,
-  stateHook: [inputValue, setInputValue] = [false, () => {}],
+  stateHook: [inputValue, setInputValue] = [
+    false,
+    () => {
+      throw new Error('Not implemented');
+    },
+  ],
 }: CheckboxProps) {
   return (
     <div className="flex items-center">
