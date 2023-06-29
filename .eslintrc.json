@@ -29,5 +29,6 @@
         "argsIgnorePattern": "^_"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["**/src/util/generated", "**/src/build.ts"]
 }
