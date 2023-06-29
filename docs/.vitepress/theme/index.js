@@ -1,14 +1,14 @@
-import DefaultTheme from "vitepress/theme";
-import Mermaid from "./Mermaid.vue";
-import { getRedirect } from "./redirect";
+import DefaultTheme from 'vitepress/theme';
+import Mermaid from './Mermaid.vue';
+import { getRedirect } from './redirect';
 
 export default {
   ...DefaultTheme,
   enhanceApp({ app, router }) {
     // register global components
-    app.component("Mermaid", Mermaid);
+    app.component('Mermaid', Mermaid);
     router.onBeforeRouteChange = (to) => {
-      if (router.route.path !== "/") {
+      if (router.route.path !== '/') {
         return;
       }
       try {

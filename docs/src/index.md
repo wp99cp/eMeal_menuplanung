@@ -43,4 +43,3 @@ application. You don't necessarily need all the files for development, many thin
 
 A full overview of the project structure can be found in the [Project Structure](project-structure.md) section of these
 docs.
-

@@ -45,7 +45,7 @@ function MobileNavigation() {
               <div>
                 <a
                   href="/auth/signup"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-accent-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-accent-700"
+                  className="bg-accent-600 hover:bg-accent-700 flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm"
                 >
                   Registrieren
                 </a>
@@ -65,7 +65,7 @@ export default function Header() {
   const { data } = useSession();
 
   return (
-    <Popover className="sticky top-0 z-20 border-b-2  border-gray-200 bg-gray-100/95 backdrop-blur-sm dark:border-gray-600 dark:bg-footer_blue-700">
+    <Popover className="dark:bg-footer_blue-700 sticky top-0 z-20  border-b-2 border-gray-200 bg-gray-100/95 backdrop-blur-sm dark:border-gray-600">
       <header className="mx-auto max-w-7xl px-6">
         <div className="flex items-center justify-between py-2 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">

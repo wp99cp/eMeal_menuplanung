@@ -92,7 +92,7 @@ const TextInput = ({
           </div>
         )}
       </div>
-      <p className="mt-1 text-sm text-accent-600" id="email-error">
+      <p className="text-accent-600 mt-1 text-sm" id="email-error">
         {state === 'error' ? errorMessage : ''}
       </p>
     </div>

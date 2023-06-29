@@ -8,7 +8,7 @@ on [Vue.js](https://vuejs.org/).
 The documentation is written in Markdown. You can find a good introduction to Markdown in the
 [Markdown Guide](https://www.markdownguide.org/).
 
-We have configured VitePress to support [Mermaid](https://mermaid-js.github.io/mermaid/#/), a markdown-based diagram    
+We have configured VitePress to support [Mermaid](https://mermaid-js.github.io/mermaid/#/), a markdown-based diagram  
 generator. You can use it to create diagrams like this one:
 
 ```mermaid

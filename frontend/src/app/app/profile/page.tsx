@@ -46,7 +46,7 @@ const Page: NextPage = () => {
                 <select
                   id="selected-tab"
                   name="selected-tab"
-                  className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-accent-500 focus:outline-none focus:ring-accent-500 sm:text-sm"
+                  className="focus:border-accent-500 focus:ring-accent-500 mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:outline-none sm:text-sm"
                   defaultValue={tabs.find((tab) => tab.current)?.name}
                 >
                   {tabs.map((tab) => (
@@ -95,7 +95,7 @@ const Page: NextPage = () => {
                         <span className="ml-4 flex-shrink-0">
                           <button
                             type="button"
-                            className="rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                            className="text-accent-600 hover:text-accent-500 focus:ring-accent-500 rounded-md bg-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
                             Update
                           </button>
@@ -113,7 +113,7 @@ const Page: NextPage = () => {
                         <span className="ml-4 flex-shrink-0">
                           <button
                             type="button"
-                            className="rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                            className="text-accent-600 hover:text-accent-500 focus:ring-accent-500 rounded-md bg-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
                             Update
                           </button>
@@ -135,7 +135,7 @@ const Page: NextPage = () => {
                             autoUpdateApplicantDataEnabled
                               ? 'bg-accent-600'
                               : 'bg-gray-200',
-                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 sm:ml-auto'
+                            'focus:ring-accent-500 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-auto'
                           )}
                         >
                           <span
@@ -157,7 +157,7 @@ const Page: NextPage = () => {
                         <span className="ml-4 flex-shrink-0">
                           <button
                             type="button"
-                            className="rounded-md bg-white font-medium text-accent-600 hover:text-accent-500 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2"
+                            className="text-accent-600 hover:text-accent-500 focus:ring-accent-500 rounded-md bg-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                           >
                             Update
                           </button>
@@ -197,7 +197,7 @@ const Page: NextPage = () => {
                           onChange={() => setDarkMode(toggleDarkMode(darkMode))}
                           className={classNames(
                             darkMode === 'dark' ? 'bg-accent-600' : 'bg-gray-200',
-                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 sm:ml-auto'
+                            'focus:ring-accent-500 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-auto'
                           )}
                         >
                           <span

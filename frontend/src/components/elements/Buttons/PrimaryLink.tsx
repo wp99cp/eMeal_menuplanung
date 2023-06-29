@@ -18,7 +18,7 @@ export const PrimaryLink = ({
       href={href}
       className={className.concat(
         ' ',
-        'inline-block rounded-lg bg-accent-500 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-accent-600 hover:bg-accent-600 hover:ring-accent-700'
+        'bg-accent-500 ring-accent-600 hover:bg-accent-600 hover:ring-accent-700 inline-block rounded-lg px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1'
       )}
     >
       {children}

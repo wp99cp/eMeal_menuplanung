@@ -28,7 +28,7 @@ export const AccountSetupStepContent: (args: StepperCardArgs) => JSX.Element = (
 }) => {
   return (
     <>
-      <p className="mb-2 mt-8 font-bold text-accent-500">Account Vervollständigen</p>
+      <p className="text-accent-500 mb-2 mt-8 font-bold">Account Vervollständigen</p>
       <p className="mb-4 text-2xl font-bold">Einrichten deines Accounts</p>
       <p className="mb-4 text-gray-500">
         Wähle einen Benutzername. Dieser wird allen Nutzern angezeigt, so dass sie Lager

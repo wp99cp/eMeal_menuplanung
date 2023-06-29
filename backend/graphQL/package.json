@@ -6,8 +6,6 @@
   "scripts": {
     "compile": "tsc",
     "dev": "nodemon",
-    "lint": "next lint",
-    "prettier": "prettier --write .",
     "generate": "graphql-codegen --config codegen.yml"
   },
   "prisma": {

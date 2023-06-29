@@ -1,0 +1,24 @@
+{
+  "name": "emeal_menuplanung",
+  "version": "2.0.0-alpha-01",
+  "description": "A complete rewrite of the eMeal - Menüplanung.",
+  "scripts": {
+    "start": "docker compose up --build -d",
+    "lint": "eslint .",
+    "prettier": "prettier --write ."
+  },
+  "author": "Cyrill Püntener v/o JPG",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0"
+  }
+}

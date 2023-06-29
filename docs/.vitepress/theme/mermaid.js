@@ -1,5 +1,5 @@
-import mermaid from "mermaid";
-import mindmap from "@mermaid-js/mermaid-mindmap";
+import mermaid from 'mermaid';
+import mindmap from '@mermaid-js/mermaid-mindmap';
 
 const init = (async () => {
   try {

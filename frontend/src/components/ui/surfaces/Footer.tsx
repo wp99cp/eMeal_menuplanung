@@ -59,7 +59,7 @@ export const Footer = () => {
   return (
     <>
       <footer
-        className="flow-root bg-footer_blue-700 text-footer_blue-50"
+        className="bg-footer_blue-700 text-footer_blue-50 flow-root"
         aria-labelledby="footer-heading"
       >
         <h2 id="footer-heading" className="sr-only">
@@ -96,7 +96,7 @@ export const Footer = () => {
             ))}
           </div>
         </div>
-        <div className="bg-footer_blue-900 px-6 pb-8 pt-12 text-footer_blue-100 sm:mt-20 lg:mt-24 lg:px-8">
+        <div className="bg-footer_blue-900 text-footer_blue-100 px-6 pb-8 pt-12 sm:mt-20 lg:mt-24 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <p className="mb-8 text-xs font-bold leading-5">
               &copy; {today.getFullYear()} Cevi.Tools - eMeal Menüplanung
