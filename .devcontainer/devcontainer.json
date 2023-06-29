@@ -1,0 +1,15 @@
+{
+	"name": "eMeal Dev Container",
+
+	"service": "devcontainer",
+	"dockerComposeFile": [
+		"../docker-compose.yml",
+		"./docker-compose.dev-container.yml"
+	],
+
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+	"shutdownAction": "stopCompose"
+
+
+}
