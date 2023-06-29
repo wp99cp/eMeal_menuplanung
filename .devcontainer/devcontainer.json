@@ -25,8 +25,5 @@
 	// "forwardPorts": [  ],
 
 	// Uncomment the next line if you want to keep your containers running after VS Code shuts down.
-	"shutdownAction": "stopCompose",
-
-	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "git checkout version-2/main"
+	"shutdownAction": "stopCompose"
 }
