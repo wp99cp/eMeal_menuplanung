@@ -62,10 +62,16 @@ model User {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // base data of the user
-  name       String?
-  email      String? @unique
-  username   String? @unique @default(cuid())
+  name     String?
+  email    String? @unique
+  username String? @unique @default(cuid())
+
+  // if set to true, the email address will be publically visible
   shareEmail Boolean @default(false)
+
+  // if the user is hidden, he will not be visible in the user list
+  // you can only share a camp with that user by entering the email address
+  isHiddenUser Boolean @default(false)
 
   emailVerified DateTime? /// date of the last email verification, null if not verified
 
@@ -85,8 +91,8 @@ model User {
   campsOwned Camp[] @relation("CampOwner")
 
   /// a user may be a member of multiple camps
-  accessableCampIds String[] @db.ObjectId
-  accessableCamps   Camp[]   @relation("CampMembers", fields: [accessableCampIds], references: [id])
+  accessibleCampsIds String[] @db.ObjectId
+  accessibleCamps    Camp[]   @relation("CampMembers", fields: [accessibleCampsIds], references: [id])
 
   /// a user may have multiple camps for which he as read access
   viewableCampIds String[] @db.ObjectId
@@ -341,6 +347,9 @@ type RecipeIngredient {
   amount      Amount
   description String?
 
+  /// if true, the ingredient is a fresh product and should be bought shortly before the meal
+  isFreshProduct Boolean @default(false)
+
   /// a short description, where the ingredient can be bought / where it comes from
   /// this could be a specific store, or something like "private material"
   /// if left empty, the ingredient gets listed on the main shopping list
@@ -357,8 +366,11 @@ type RecipeIngredientModification {
   // name       String the name is not overridable
   amount      Amount?
   description String?
-  deleted     Boolean @default(false) /// if the ingredient is deleted, it will not be used in the recipe
-  storeName   String?
+
+  isFreshProduct Boolean?
+
+  deleted   Boolean @default(false) /// if the ingredient is deleted, it will not be used in the recipe
+  storeName String?
 }
 
 /// describes a distinct section of a meal

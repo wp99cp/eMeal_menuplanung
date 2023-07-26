@@ -9,8 +9,8 @@ import { IOptionsConstructor } from 'graphql-shield/typings/types';
  *
  */
 const shieldOptions: IOptionsConstructor = {
-  allowExternalErrors: false,
-  debug: false,
+  allowExternalErrors: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === 'development',
   fallbackRule: apiKeyOnly,
   fallbackError: 'Not authorised or not enough index to access this resource!',
 };

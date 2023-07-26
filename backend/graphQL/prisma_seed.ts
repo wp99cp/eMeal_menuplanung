@@ -1,9 +1,7 @@
-import { MealUsageTypes, Prisma, PrismaClient } from './src/util/generated/prisma/client';
+import { MealUsageTypes, PrismaClient } from './src/util/generated/prisma/client';
 import * as crypto from 'crypto';
-import { hashSync } from 'bcrypt';
-import CampExtension from './src/util/prisma/extensions/CampExtension';
 
-const prisma = new PrismaClient().$extends(CampExtension);
+const prisma = new PrismaClient();
 
 /**
  *
@@ -38,111 +36,276 @@ const deterministicObjectIdGenerator = (key: string) => {
   return twelveByteObjectId.toString('hex');
 };
 
-const createDemoUsers = async (number_of_users: number) => {
-  const DEMO_USER_PASSWORD = 'demo_user_123';
+async function main() {
+  console.log('Start seeding ...');
 
-  const ids = [];
+  const userID = deterministicObjectIdGenerator('demo_user@zh11.ch');
+  const user = await prisma.user.upsert({
+    create: {
+      id: userID,
+      name: 'Test User',
+      email: 'demo_user@zh11.ch',
+    },
+    update: {},
+    where: {
+      id: userID,
+    },
+  });
 
-  for (let i = 1; i <= number_of_users; i++) {
-    const username = `demo_user_${i}`;
-    const email = `${username}@demo.emeal.ch`;
-    const name = `Demo User ${i}`;
+  const campID = deterministicObjectIdGenerator('demo_camp');
+  const day1_date = new Date('2023-06-28T12:00:00.000Z');
+  const day2_date = new Date('2023-06-29T12:00:00.000Z');
 
-    const id = deterministicObjectIdGenerator(username);
+  await prisma.camp.upsert({
+    create: {
+      id: campID,
+      name: 'Demo Camp',
+      description: 'This is a demo camp',
+      year: 2023,
 
-    const data: Prisma.UserCreateInput = {
-      email,
-      name,
-      username,
-      emailVerified: new Date(),
-      registeredAt: new Date(),
-    };
+      days: [
+        {
+          description: 'Day 1',
+          notes: 'This is a note',
+          date: day1_date,
+        },
+        {
+          description: 'Day 2',
+          notes: 'This is a note',
+          date: day2_date,
+        },
+      ],
 
-    await prisma.user.upsert({
-      where: { id },
-      update: data,
-      create: {
-        id,
-        ...data,
-        accounts: {
-          create: {
-            provider: 'email',
-            providerAccountId: email,
-            type: 'credentials',
-            // this is the hash of the password using the bcrypt algorithm
-            password: hashSync(DEMO_USER_PASSWORD, 10),
-            emailVerified: true,
+      participantCount: {
+        total: 100,
+      },
+
+      campSettings: {
+        exportSettings: {},
+      },
+
+      owner: {
+        connect: {
+          id: user.id,
+        },
+      },
+    },
+    update: {},
+    where: {
+      id: campID,
+    },
+  });
+
+  const mealID = deterministicObjectIdGenerator('demo_meal_1');
+  await prisma.meal.upsert({
+    create: {
+      id: mealID,
+
+      name: 'Demo Meal 1',
+      description: 'This is a demo meal',
+      keywords: [],
+
+      preferredMealUsageTypes: [MealUsageTypes.BREAKFAST],
+
+      mealUsages: [
+        {
+          campId: campID,
+          date: day1_date,
+          type: MealUsageTypes.BREAKFAST,
+        },
+        {
+          campId: campID,
+          date: day2_date,
+          type: MealUsageTypes.BREAKFAST,
+        },
+      ],
+
+      owner: {
+        connect: {
+          id: user.id,
+        },
+      },
+
+      camps: {
+        connect: {
+          id: campID,
+        },
+      },
+
+      recipes: {
+        create: {
+          id: deterministicObjectIdGenerator('demo_recipe_1'),
+
+          name: 'Demo Recipe 1',
+          description: 'This is a demo recipe',
+          keywords: [],
+
+          ingredients: [
+            {
+              name: 'Demo Ingredient 1',
+              amount: {
+                value: 10,
+                unit: 'g',
+              },
+            },
+
+            {
+              name: 'Demo Ingredient 2',
+              amount: {
+                value: 10,
+                unit: 'dl',
+              },
+            },
+          ],
+
+          owner: {
+            connect: {
+              id: user.id,
+            },
+          },
+
+          camps: {
+            connect: {
+              id: campID,
+            },
           },
         },
       },
-    });
-
-    ids.push(id);
-  }
-
-  return ids;
-};
-
-const REALISTIC_CAMP_NAMES = [
-  'Sommerlager 2023',
-  'Pfila 2023 - Sinai',
-  'HELA Cevi Züri 11',
-];
-
-const createMeal = async (campId: string, date: string, type: MealUsageTypes) => {
-  const meal_name = 'Demo Meal 1';
-  const owner_email = 'demo_user_1@demo.emeal.ch';
-
-  const id = deterministicObjectIdGenerator(meal_name);
-
-  const data: Prisma.MealCreateInput = {
-    name: meal_name,
-    description: 'This is a demo camp.',
-    mealUsages: {
-      campId: campId,
-      date: date,
-      type: type,
     },
-  };
 
-  await prisma.meal.upsert({
-    where: { id: id },
-    update: data,
+    update: {},
+    where: {
+      id: mealID,
+    },
+  });
+
+
+
+  const campID2 = deterministicObjectIdGenerator('demo_camp_2');
+
+  await prisma.camp.upsert({
     create: {
-      id: id,
-      ...data,
+      id: campID2,
+      name: 'Demo Camp 2',
+      description: 'This is a demo camp 2',
+      year: 2023,
+
+      days: [
+        {
+          description: 'Day 1',
+          notes: 'This is a note',
+          date: day2_date,
+        },
+      ],
+
+      participantCount: {
+        total: 100,
+      },
+
+      campSettings: {
+        exportSettings: {},
+      },
+
       owner: {
-        connect: { email: owner_email },
+        connect: {
+          id: user.id,
+        },
       },
-      camps: {
-        connect: { id: campId },
-      },
+    },
+    update: {},
+    where: {
+      id: campID2,
     },
   });
 
-  return id;
-};
+  const mealID2 = deterministicObjectIdGenerator('demo_meal_2');
+  await prisma.meal.upsert({
+    create: {
+      id: mealID2,
 
-async function main() {
-  const ids = await createDemoUsers(4);
+      name: 'Demo Meal 2',
+      description: 'This is a demo meal',
+      keywords: [],
 
-  const camp_name = REALISTIC_CAMP_NAMES[0];
+      preferredMealUsageTypes: [MealUsageTypes.BREAKFAST],
 
-  const camp = await prisma.camp.createCamp(camp_name, ids[0], {
-    id: deterministicObjectIdGenerator(camp_name),
-    description: 'This is a demo camp.',
+      mealUsages: [
+        {
+          campId: campID2,
+          date: day2_date,
+          type: MealUsageTypes.LUNCH,
+        },
+      ],
+
+      owner: {
+        connect: {
+          id: user.id,
+        },
+      },
+
+      camps: {
+        connect: {
+          id: campID2,
+        },
+      },
+
+      recipes: {
+        create: {
+          id: deterministicObjectIdGenerator('demo_recipe_2'),
+
+          name: 'Demo Recipe 2',
+          description: 'This is a demo recipe',
+          keywords: [],
+
+          ingredients: [
+            {
+              name: 'Demo Ingredient 1',
+              amount: {
+                value: 10,
+                unit: 'g',
+              },
+            },
+
+            {
+              name: 'Demo Ingredient 2',
+              amount: {
+                value: 10,
+                unit: 'dl',
+              },
+            },
+
+              {
+              name: 'Demo Ingredient 2',
+              amount: {
+                value: 10,
+                unit: 'dl',
+              },
+            },
+          ],
+
+          owner: {
+            connect: {
+              id: user.id,
+            },
+          },
+
+          camps: {
+            connect: {
+              id: campID2,
+            },
+          },
+        },
+      },
+    },
+
+    update: {},
+    where: {
+      id: mealID2,
+    },
   });
 
-  const { id } = await prisma.camp.createCamp(REALISTIC_CAMP_NAMES[1], ids[0]);
-  const camp_data = await prisma.camp.findUnique({ where: { id } });
 
-  console.log(typeof camp_data);
-
-  //         const id = deterministicObjectIdGenerator(camp_name);
-  // const campId = await createCamp(camp_name, dates);
-  // console.log(`Created demo camp with id ${campId}`);
-
-  // const mealId = await createMeal(campId, dates[0], MealUsageTypes.BREAKFAST);
+  console.log('Seeding finished.');
 }
 
 main()

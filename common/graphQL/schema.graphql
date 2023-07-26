@@ -1,13 +1,188 @@
 scalar JSON
+scalar Date
 
+"""
+A user of eMeal - Menuplanung, who can be a participant or a leader of a camp.
+"""
 type User {
-  id: String
+  id: ID! # is never null
   username: String
+  """
+  The email may not be shared with other users if it is not explicitly allowed. In such cases, the email field is null.
+  """
+  email: String
+}
+
+"""
+The number of participants for a camp, meal, ..., e.g. 10 total, 3 vegetarians, 2 vegans, 1 leader.
+"""
+type ParticipantCount {
+  total: Int!
+  vegetarians: Int!
+  vegans: Int!
+  leaders: Int!
+}
+
+"""
+A meal can be used in different ways, e.g. as breakfast, lunch, dinner, ...
+"""
+enum MealUsageType {
+  BREAKFAST
+  MORNING_SNACK
+  LUNCH
+  AFTERNOON_SNACK
+  DINNER
+  EVENING_SNACK
+}
+
+"""
+Defines the amount of an ingredient, e.g. 1.5 kg, 2.5 l, 3 pieces, ...
+The multiplication factor is used to calculate the amount of an ingredient for a meal, for all participants.
+The multiplication factor can be adjusted at a per ingredient level, e.g. if the ingredient is only used for vegetarians.
+By default the multiplication factor is inherited from the one of the recipe.
+"""
+type Amount {
+  value: Float
+  unit: String
+
+  multiplicationFactorOverride: MultiplicationFactorTypes
+}
+
+"""
+Represents an single ingredient of a recipe.
+"""
+type RecipeIngredient {
+  uuid: ID! # is never null
+  amount: Amount
+  description: String
+
+  """
+  Indicates if the ingredient has been overriden for that specific usage of the meal.
+  """
+  isOverriden: Boolean
+
+  """
+  Indicates if the ingredient has been deleted for that specific usage of the meal.
+  """
+  isDeleted: Boolean
+  isFreshProduct: Boolean
+
+  """
+  The name of the store where the ingredient should be bought, is optional.
+  """
+  storeName: String
+}
+
+"""
+Represents a recipe, which is a list of ingredients forming a part of a meal, e.g. a salad sauce.
+"""
+type Recipe {
+  id: ID! # is never null
+  name: String
+  description: String
+  keywords: [String]
+
+  creationDate: Date
+  lastModification: Date
+
+  """
+  The ingredients of the recipe.
+  """
+  ingredients: [RecipeIngredient]
+}
+
+enum MultiplicationFactorTypes {
+  FIXED
+  TOTAL
+  VEGETARIANS
+  VEGANS
+  LEADERS
+}
+
+"""
+Represents a full meal, e.g. spaghetti bolognese with salad and sauce.
+"""
+type Meal {
+  id: ID! # is never null
+  name: String
+  description: String
+  keywords: [String]
+
+  """
+  usage of that meal within the day, e.g. as LUNCH
+  """
+  usageType: MealUsageType
+
+  """
+  the multiplication factor for the meal, e.g. FIXED, TOTAL, VEGETARIANS, VEGANS, or LEADERS
+  """
+  multiplicationFactor: MultiplicationFactorTypes
+  """
+  indicates if the multiplication factor has been adjusted for that usage
+  """
+  multiplicationFactorAdjusted: Boolean
+
+  """
+  the number of participants for that meal
+  """
+  participantCount: ParticipantCount
+  """
+  indicates if the participant count has been adjusted for that usage
+  """
+  participantCountAdjusted: Boolean
+
+  """
+  if true, the meal must be prepared the day before
+  """
+  needsPreparation: Boolean
+
+  creationDate: Date
+  lastModification: Date
+
+  recipes: [Recipe]
+}
+
+type CampDay {
+  date: Date
+
+  """
+  a short description of the day, e.g. "Arrival day"
+  """
+  description: String
+
+  """
+  some longer notes about the day, e.g. "We will meet at the train station at 10:00, lunch must be ready by then"
+  """
+  notes: String
+
+  meals: [Meal] # meals served on this day
+}
+
+# Camp
+type Camp {
+  id: ID! # is never null
+  name: String
+  description: String
+  year: Int
+
+  participantCount: ParticipantCount
+
+  creationDate: Date
+  lastModification: Date
+
+  # represents the days of the camp
+  days: [CampDay]
 }
 
 type Query {
   searchUser(username: String): [User]
   checkUsername(username: String): Acknowledgement
+
+  # returns a list of camps according to the search criteria
+  camps: [Camp]
+
+  # returns a list of meals according to the search criteria
+  meals: [Meal]
 }
 
 type Mutation {
