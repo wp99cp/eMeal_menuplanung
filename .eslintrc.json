@@ -30,5 +30,5 @@
       }
     ]
   },
-  "ignorePatterns": ["**/src/util/generated", "**/src/build.ts"]
+  "ignorePatterns": ["**/src/util/generated", "**/src/build.ts", "*.prisma", "*.graphql"]
 }
