@@ -27,9 +27,20 @@ export const contextFunction: ContextFunction<
   const session = await retrieveSession(req);
   const apiKey = req.headers['x-api-key'] as string;
   const has_valid_api_key = isAuthenticatedUsingAPIToken(apiKey);
+
+  const user_id = getUserId(session, has_valid_api_key, req.headers);
+
+  /*
+   * The header 'x-treat-as-user' allows authentication using an API key,
+   * If this header is set and the user_id is passed using the x-user-id header,
+   * the backend treats that request as if it was made by the user with the provided user_id
+   * (i.g. without using an API key for authentication).
+   */
+  const treat_as_user = !!user_id && req.headers['x-treat-as-user'] === 'true';
+
   return {
-    user_id: getUserId(session, has_valid_api_key, req.headers),
-    api_key: has_valid_api_key,
+    user_id,
+    api_key: has_valid_api_key && !treat_as_user,
     prisma,
     pubsub,
   };

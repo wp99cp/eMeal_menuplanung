@@ -7,15 +7,33 @@
 import { RateLimiterMemory } from 'rate-limiter-flexible';
 import {
   defaultKeyGenerator,
+  defaultPointsCalculator,
   rateLimitDirective,
   RateLimitKeyGenerator,
   RateLimitOnLimit,
+  RateLimitPointsCalculator,
 } from 'graphql-rate-limit-directive';
 import { GraphQLContext } from '@/util/types/types';
 
 /**
+ * Calculate the number of points to consume.
+ *
+ */
+const pointsCalculator: RateLimitPointsCalculator<GraphQLContext> = (
+  directiveArgs,
+  source,
+  args,
+  context,
+  info
+) => {
+  // we don't want to rate limit the api key
+  if (context.api_key) return 0;
+  return defaultPointsCalculator(directiveArgs, source, args, context, info);
+};
+
+/**
  * Specify how a rate limited field should determine uniqueness/isolation of operations
- * Uses the combination of user specific data (their ip) along the type and field being accessed
+ * Uses the combination of user specific data (their ip) along the type and field being accessed.
  */
 const keyGenerator: RateLimitKeyGenerator<GraphQLContext> = (
   directiveArgs,
@@ -58,6 +76,7 @@ const onLimit: RateLimitOnLimit<GraphQLContext> = (resource) => {
 
 export const { rateLimitDirectiveTransformer } = rateLimitDirective({
   keyGenerator,
+  pointsCalculator,
   onLimit,
   limiterClass: RateLimiterMemory,
 });
