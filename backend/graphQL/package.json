@@ -49,6 +49,7 @@
     "ws": "^8.8.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@graphql-codegen/cli": "^2.16.4",
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-resolvers": "^2.7.12",

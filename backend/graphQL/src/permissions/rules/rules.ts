@@ -88,3 +88,15 @@ export const passedValidUsername = inputRuleWithContext()(
     }),
   { abortEarly: true }
 );
+
+export const paginationLimitation = (limit_max = 10) =>
+  inputRuleWithContext()(
+    (yup) =>
+      yup.object({
+        pagination: yup.object({
+          limit: yup.number().min(1).max(limit_max),
+          offset: yup.number().min(0).default(0),
+        }),
+      }),
+    { abortEarly: true }
+  );

@@ -2,7 +2,6 @@ import { QueryResolvers } from '@/util/generated/types/graphql';
 
 export const campQueries: QueryResolvers = {
   camps: async (_, args, context) => {
-
     const { user_id, prisma } = context;
 
     const user = await prisma.user.findUnique({

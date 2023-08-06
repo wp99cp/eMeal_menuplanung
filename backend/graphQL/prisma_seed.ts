@@ -1,5 +1,6 @@
 import { MealUsageTypes, PrismaClient } from './src/util/generated/prisma/client';
 import * as crypto from 'crypto';
+import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
@@ -39,18 +40,36 @@ const deterministicObjectIdGenerator = (key: string) => {
 async function main() {
   console.log('Start seeding ...');
 
-  const userID = deterministicObjectIdGenerator('demo_user@zh11.ch');
-  const user = await prisma.user.upsert({
-    create: {
-      id: userID,
-      name: 'Test User',
-      email: 'demo_user@zh11.ch',
-    },
-    update: {},
-    where: {
-      id: userID,
-    },
-  });
+  // seed faker
+  faker.seed(42);
+
+  let first_user_id = undefined;
+
+  const NUM_USERS = 10_000;
+  for (let i = 0; i < NUM_USERS; i++) {
+    const first_name = faker.person.firstName();
+    const last_name = faker.person.lastName();
+
+    const username = `${first_name}.${last_name}`.toLowerCase();
+    const email = `${username}@zh11.ch`;
+
+    const userID = deterministicObjectIdGenerator(email);
+
+    if (first_user_id === undefined) first_user_id = userID;
+
+    await prisma.user.upsert({
+      create: {
+        id: userID,
+        name: `${first_name} ${last_name}`,
+        username: username,
+        email: email,
+      },
+      update: {},
+      where: {
+        id: userID,
+      },
+    });
+  }
 
   const campID = deterministicObjectIdGenerator('demo_camp');
   const day1_date = new Date('2023-06-28T12:00:00.000Z');
@@ -86,7 +105,7 @@ async function main() {
 
       owner: {
         connect: {
-          id: user.id,
+          id: first_user_id,
         },
       },
     },
@@ -122,7 +141,7 @@ async function main() {
 
       owner: {
         connect: {
-          id: user.id,
+          id: first_user_id,
         },
       },
 
@@ -160,7 +179,7 @@ async function main() {
 
           owner: {
             connect: {
-              id: user.id,
+              id: first_user_id,
             },
           },
 
@@ -179,10 +198,7 @@ async function main() {
     },
   });
 
-
-
   const campID2 = deterministicObjectIdGenerator('demo_camp_2');
-
   await prisma.camp.upsert({
     create: {
       id: campID2,
@@ -208,7 +224,7 @@ async function main() {
 
       owner: {
         connect: {
-          id: user.id,
+          id: first_user_id,
         },
       },
     },
@@ -239,7 +255,7 @@ async function main() {
 
       owner: {
         connect: {
-          id: user.id,
+          id: first_user_id,
         },
       },
 
@@ -274,7 +290,7 @@ async function main() {
               },
             },
 
-              {
+            {
               name: 'Demo Ingredient 2',
               amount: {
                 value: 10,
@@ -285,7 +301,7 @@ async function main() {
 
           owner: {
             connect: {
-              id: user.id,
+              id: first_user_id,
             },
           },
 
@@ -303,7 +319,6 @@ async function main() {
       id: mealID2,
     },
   });
-
 
   console.log('Seeding finished.');
 }

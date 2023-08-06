@@ -174,15 +174,43 @@ type Camp {
   days: [CampDay]
 }
 
+"""
+Defines the pagination for a list of items.
+"""
+input Pagination {
+  offset: Int!
+  limit: Int!
+}
+
+"""
+Defines the search criteria for users.
+"""
+input UserSearchCriteria {
+  partialUsername: String
+}
+
 type Query {
-  searchUser(username: String): [User]
   checkUsername(username: String): Acknowledgement
+
+  """
+  Returns a list of users according to the search criteria. The result is a list of users
+  matching the search criteria, only users with isHiddenUser set to false are returned.
+
+  If no search criteria are provided, all users are returned according to the pagination.
+  If no pagination is provided, the first 10 users are returned.
+
+  You the limit is capped at 100 users. This API endpoint has a rate limit of 20 requests per minute.
+  """
+  users(criteria: UserSearchCriteria, pagination: Pagination): [User]
+  user(id: ID!): User
 
   # returns a list of camps according to the search criteria
   camps: [Camp]
+  camp(id: ID!): Camp
 
   # returns a list of meals according to the search criteria
   meals: [Meal]
+  meal(id: ID!): Meal
 }
 
 type Mutation {

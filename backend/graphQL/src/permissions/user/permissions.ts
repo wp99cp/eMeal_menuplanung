@@ -2,12 +2,14 @@ import { allow, and, IRules } from 'graphql-shield';
 import {
   hasUserId,
   isAuthenticated,
+  paginationLimitation,
   passedValidUsername,
 } from '@/permissions/rules/rules';
 
+// Fallback rule for all other rules: apiKeyOnly
 export const userRules: IRules = {
   Query: {
-    checkUsername: and(isAuthenticated, hasUserId, passedValidUsername),
+    users: and(isAuthenticated, paginationLimitation(100)),
   },
 
   Mutation: {
