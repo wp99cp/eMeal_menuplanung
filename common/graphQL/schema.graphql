@@ -2,11 +2,9 @@ scalar JSON
 scalar Date
 
 """
-
 A directive to limit the number of requests to a field or an object.
 
 This is implemented using https://github.com/ravangen/graphql-rate-limit
-
 """
 directive @rateLimit(
   """
