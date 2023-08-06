@@ -20,8 +20,6 @@ export const userQueries: QueryResolvers = {
 
     if (!user_id) throw new Error('No user_id set. Are you using a api key?');
 
-    // TODO: implement rate limit
-
     const users = await prisma.user.findMany({
       where: {
         username: { contains: criteria?.partialUsername || '', mode: 'insensitive' },

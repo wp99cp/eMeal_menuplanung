@@ -4,6 +4,7 @@ import { graphqlResolver } from '@/resolvers';
 import { GraphQLSchema } from 'graphql/type';
 import { applyMiddleware } from 'graphql-middleware';
 import { graphQLShield } from '@/permissions';
+import { rateLimitDirectiveTransformer } from '@/apolloServer/rateLimiter';
 
 const typeDefs = readFileSync('../../common/graphQL/schema.graphql', {
   encoding: 'utf-8',
@@ -13,4 +14,10 @@ const schemaWithoutShield = makeExecutableSchema({
   typeDefs,
   resolvers: graphqlResolver,
 });
-export const schema: GraphQLSchema = applyMiddleware(schemaWithoutShield, graphQLShield);
+
+const schemaWithRateLimiter = rateLimitDirectiveTransformer(schemaWithoutShield);
+
+export const schema: GraphQLSchema = applyMiddleware(
+  schemaWithRateLimiter,
+  graphQLShield
+);

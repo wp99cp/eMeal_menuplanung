@@ -2,6 +2,24 @@ scalar JSON
 scalar Date
 
 """
+
+A directive to limit the number of requests to a field or an object.
+
+This is implemented using https://github.com/ravangen/graphql-rate-limit
+
+"""
+directive @rateLimit(
+  """
+  Number of occurrences allowed over duration.
+  """
+  limit: Int! = 60
+  """
+  Number of seconds before limit is reset.
+  """
+  duration: Int! = 60
+) on OBJECT | FIELD_DEFINITION
+
+"""
 A user of eMeal - Menuplanung, who can be a participant or a leader of a camp.
 """
 type User {
@@ -189,7 +207,7 @@ input UserSearchCriteria {
   partialUsername: String
 }
 
-type Query {
+type Query @rateLimit(limit: 100, duration: 60) {
   checkUsername(username: String): Acknowledgement
 
   """
@@ -213,7 +231,7 @@ type Query {
   meal(id: ID!): Meal
 }
 
-type Mutation {
+type Mutation @rateLimit(limit: 10, duration: 60) {
   updateUser(username: String, shareEmail: Boolean, newUser: Boolean): Acknowledgement
   createNewUser(name: String, email: String, password: String): Acknowledgement
 }

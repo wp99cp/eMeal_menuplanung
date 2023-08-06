@@ -60,6 +60,14 @@ All requests to the GraphQL API must be authenticated. Two types of authenticati
 
 If you are using the GraphQL Playground, you can use an API Key to authenticate yourself.
 
+#### Rate Limiting
+
+The GraphQL API uses graphql-rate-limit to limit the number of requests.
+
+#### Input Verification
+
+The GraphQL API uses Yup to verify the input of the GraphQL mutations. This is implemented using graphql-shield.
+
 ### Primary Database - MongoDB & Prisma
 
 ::: info
