@@ -1,4 +1,5 @@
 import { QueryResolvers } from '@/util/generated/types/graphql';
+import { prisma_pagination_filer } from '@/util/prisma/utils/pagination_filter';
 
 export const userQueries: QueryResolvers = {
   checkUsername: async (_, args, context) => {
@@ -27,8 +28,7 @@ export const userQueries: QueryResolvers = {
         ...(!!user_id && { id: { not: user_id } }),
         ...(!!api_key && { isHiddenUser: false }),
       },
-      skip: pagination?.offset ?? 0,
-      take: pagination?.limit ?? 10,
+      ...prisma_pagination_filer(pagination),
     });
 
     return (

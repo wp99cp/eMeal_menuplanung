@@ -1,10 +1,9 @@
 import { allow, and, IRules } from 'graphql-shield';
+import { hasUserId, isAuthenticated } from '@/permissions/rules/rules';
 import {
-  hasUserId,
-  isAuthenticated,
   paginationLimitation,
   passedValidUsername,
-} from '@/permissions/rules/rules';
+} from '@/permissions/rules/input_validation';
 
 // Fallback rule for all other rules: apiKeyOnly
 export const userRules: IRules = {
