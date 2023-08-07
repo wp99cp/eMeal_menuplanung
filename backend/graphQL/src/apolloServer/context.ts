@@ -69,3 +69,7 @@ export const subscriptionContextFunction = (ctx: SubscriptionContext) => {
     pubsub,
   };
 };
+
+export const metricsContextFunction = () => {
+  return { prisma };
+};

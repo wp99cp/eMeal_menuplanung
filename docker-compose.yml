@@ -78,8 +78,36 @@ services:
       - mongo-db-data:/data/db
       - mongo-db-config:/data/configdb
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-storage:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - '9090:9090'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning
+
+    environment:
+      - GF_LOG_LEVEL=error
+    ports:
+      - '9000:3000' # localhost:9000 for accessing grafana
+
 volumes:
   mongo-db-data:
     driver: local
   mongo-db-config:
+    driver: local
+  prometheus-storage:
+    driver: local
+  grafana-storage:
     driver: local
