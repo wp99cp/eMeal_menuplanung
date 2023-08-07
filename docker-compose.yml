@@ -91,6 +91,18 @@ services:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
 
+  # To eventually offload to Tempo...
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo/tempo.yml" ]
+    volumes:
+      - ./observability/tempo/tempo.yml:/etc/tempo/tempo.yml
+      - tempo-data:/tmp/tempo
+    ports:
+      - "3200"   # tempo
+      - "4317"  # otlp grpc
+      - "4318"  # otlp http
+
   grafana:
     image: grafana/grafana
     volumes:
@@ -110,4 +122,6 @@ volumes:
   prometheus-storage:
     driver: local
   grafana-storage:
+    driver: local
+  tempo-data:
     driver: local

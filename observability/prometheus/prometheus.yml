@@ -7,3 +7,7 @@ scrape_configs:
         labels:
           service: 'prisma-engine'
           group: 'development'
+
+  - job_name: 'tempo'
+    static_configs:
+      - targets: [ 'tempo:3200' ]
