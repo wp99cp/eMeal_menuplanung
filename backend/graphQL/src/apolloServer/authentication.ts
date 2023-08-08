@@ -29,6 +29,8 @@ export const isAuthenticatedUsingAPIToken = (api_token: string | undefined): boo
 export const retrieveSession = async (
   req: ExpressContextFunctionArgument['req']
 ): Promise<Session> => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return fetch(`${process.env.NEXTAUTH_URL_INTERNAL}/api/auth/session`, {
     headers: { cookie: req.headers.cookie as string },
   })

@@ -9,7 +9,7 @@ import {
 import { ContextFunction } from '@apollo/server';
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 
-import { asyncTraceWrapper, traceWrapper } from '@/tracing/traceWrapper';
+import { traceWrapper } from '@/tracing/traceWrapper';
 
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
@@ -25,7 +25,7 @@ const pubsub = new PubSub();
 export const contextFunction: ContextFunction<
   [ExpressContextFunctionArgument],
   GraphQLContext
-> = asyncTraceWrapper(async ({ req }) => {
+> = traceWrapper(async ({ req }) => {
   const apiKey = req.headers['x-api-key'] as string;
   const has_valid_api_key = isAuthenticatedUsingAPIToken(apiKey);
 
