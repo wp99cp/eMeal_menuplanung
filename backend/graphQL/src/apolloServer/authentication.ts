@@ -37,7 +37,7 @@ export const retrieveSession = async (
   })
     .then((res) => (res.ok ? res.json() : null))
     .catch((err) => {
-      logger.error(`Error retrieving session: ${err.error()}`);
+      logger.error(`Error retrieving session: ${err.toString()}`);
       return null;
     });
 };
