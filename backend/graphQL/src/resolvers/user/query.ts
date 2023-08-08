@@ -37,4 +37,35 @@ export const userQueries: QueryResolvers = {
       })) || []
     );
   },
+
+  user: async (_, args, context) => {
+    const { id } = args;
+    const { user_id, prisma, api_key } = context;
+
+    if (!user_id) throw new Error('No user_id set. Are you using a api key?');
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        shareEmail: true,
+        isHiddenUser: true,
+      },
+    });
+
+    if (!user) throw new Error('User not found');
+
+    if (user.isHiddenUser && !api_key)
+      throw new Error(
+        'Not authorised to access this resource! Please provide an API key.'
+      );
+
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.shareEmail ? user.email : null,
+    };
+  },
 };
