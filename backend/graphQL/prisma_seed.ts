@@ -38,6 +38,7 @@ const deterministicObjectIdGenerator = (key: string) => {
 };
 
 async function main() {
+  // eslint-disable-next-line no-console
   console.log('Start seeding ...');
 
   // seed faker
@@ -320,12 +321,14 @@ async function main() {
     },
   });
 
+  // eslint-disable-next-line no-console
   console.log('Seeding finished.');
 }
 
 main()
   .then(async () => await prisma.$disconnect())
   .catch(async (e) => {
+    // eslint-disable-next-line no-console
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);

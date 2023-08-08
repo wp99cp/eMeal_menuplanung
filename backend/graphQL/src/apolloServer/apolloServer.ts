@@ -8,7 +8,11 @@ import { Server } from 'http';
 import { Disposable } from 'graphql-ws';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { ApolloServerPluginDrainWebSocketServer } from '@/apolloServer/plugins';
-import { ApolloErrorFormatter } from '@/apolloServer/formater';
+import {
+  ApolloErrorFormatter,
+  formatterComposer,
+  WinstonApolloErrorExporter,
+} from '@/apolloServer/formater';
 
 /**
  *
@@ -39,7 +43,7 @@ export const createApolloServer = (httpServer: Server): ApolloServer<GraphQLCont
   return new ApolloServer<GraphQLContext>({
     schema,
     csrfPrevention: true,
-    formatError: ApolloErrorFormatter,
+    formatError: formatterComposer(WinstonApolloErrorExporter, ApolloErrorFormatter),
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginDrainWebSocketServer({ disposableServer }),

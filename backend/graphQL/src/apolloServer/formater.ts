@@ -1,4 +1,5 @@
 import { GraphQLFormattedError } from 'graphql/error';
+import logger from '@/logger/logger';
 
 /**
  *
@@ -17,11 +18,41 @@ export const ApolloErrorFormatter = (
     return new Error('Internal server error');
   }
 
-  // Clear out stack trace to avoid exposing sensitive information
-  if (formattedError.extensions?.stacktrace) {
-    delete formattedError.extensions.stacktrace;
-  }
+  // Return only the message
+  return {
+    message: formattedError.message,
+  };
+};
 
-  // Return the original error
+/**
+ * Exports the error to the logger.
+ *
+ * This function is used to export the error to the logger.
+ *
+ * @param formattedError - The formatted error object.
+ */
+export const WinstonApolloErrorExporter = (
+  formattedError: GraphQLFormattedError
+): GraphQLFormattedError => {
+  logger.error(formattedError);
   return formattedError;
+};
+
+/**
+ *
+ * Composes multiple formatters into a single formatter.
+ * The formatters are applied in the order they are passed in.
+ *
+ * @param formatters - The formatters to compose.
+ *
+ */
+export const formatterComposer = (
+  ...formatters: ((_: GraphQLFormattedError) => GraphQLFormattedError)[]
+) => {
+  return (formattedError: GraphQLFormattedError) => {
+    return formatters.reduce(
+      (formattedError, formatter) => formatter(formattedError),
+      formattedError
+    );
+  };
 };

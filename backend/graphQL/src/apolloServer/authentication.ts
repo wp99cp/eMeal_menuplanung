@@ -1,6 +1,7 @@
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 import { Session, SubscriptionContext } from '@/util/types/types';
 import { IncomingHttpHeaders } from 'http';
+import logger from '@/logger/logger';
 
 /**
  * Checks if the request is authenticated using an API token.
@@ -36,7 +37,7 @@ export const retrieveSession = async (
   })
     .then((res) => (res.ok ? res.json() : null))
     .catch((err) => {
-      console.error(err);
+      logger.error(`Error retrieving session: ${err.error()}`);
       return null;
     });
 };

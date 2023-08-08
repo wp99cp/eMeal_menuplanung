@@ -1,13 +1,16 @@
 import winston, { format, transports } from 'winston';
 import LokiTransport from 'winston-loki';
 
+const messageOnly = format.printf(({ level, message }) => {
+  return `[${level.toUpperCase()}]: ${message}`;
+});
+
 const logger = winston.createLogger({
   level: 'debug',
+  levels: winston.config.npm.levels,
   format: winston.format.json(),
   transports: [
-    new transports.Console({
-      format: winston.format.combine(format.simple(), format.colorize()),
-    }),
+    new transports.Console({ format: messageOnly }),
     new LokiTransport({
       host: 'http://loki:3100',
       interval: 5,
@@ -21,4 +24,4 @@ const logger = winston.createLogger({
   ],
 });
 
-export default logger;
+export default logger as winston.Logger;

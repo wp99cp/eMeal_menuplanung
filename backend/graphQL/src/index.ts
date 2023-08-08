@@ -7,6 +7,7 @@ import { contextFunction } from '@/apolloServer/context';
 import { createApolloServer } from '@/apolloServer/apolloServer';
 import { createServer, Server } from 'http';
 import { addRouteHandlers } from '@/apolloServer/routeHandler';
+import logger from '@/logger/logger';
 
 /**
  *
@@ -45,8 +46,7 @@ const main = async (): Promise<void> => {
 
   // Add additional route handlers if needed
   addRouteHandlers(app);
-
-  console.log(`🚀 GraphQL server ready (at ${process.env.GRAPHQL_URL})`);
+  logger.info(`🚀 GraphQL server ready (at ${process.env.GRAPHQL_URL})`);
 };
 
-main().catch((err) => console.log(err));
+main().catch((err) => logger.error(err));

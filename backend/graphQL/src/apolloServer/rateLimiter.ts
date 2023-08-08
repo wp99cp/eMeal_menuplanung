@@ -14,6 +14,7 @@ import {
   RateLimitPointsCalculator,
 } from 'graphql-rate-limit-directive';
 import { GraphQLContext } from '@/util/types/types';
+import logger from '@/logger/logger';
 
 /**
  * Calculate the number of points to consume.
@@ -57,21 +58,24 @@ const keyGenerator: RateLimitKeyGenerator<GraphQLContext> = (
  *
  */
 class RateLimitError extends Error {
-  constructor(msBeforeNextReset: number) {
+  constructor(msBeforeNextReset: number, user_id?: string) {
     // Determine when the rate limit will be reset so the client can try again
     const resetAt = new Date();
     resetAt.setTime(resetAt.getTime() + msBeforeNextReset);
 
     super(
-      `Too many requests, try again at ${resetAt.toISOString()}! This incident will be reported.`
+      `Too many requests. Try again at ${resetAt.toISOString()}! This incident will be reported.`
     );
 
-    // TODO: log this incident
+    logger.warn(`Too many requests of user ${user_id}!`, {
+      is_incident_report: true,
+      incident_time: new Date().toISOString(),
+    });
   }
 }
 
-const onLimit: RateLimitOnLimit<GraphQLContext> = (resource) => {
-  throw new RateLimitError(resource.msBeforeNext);
+const onLimit: RateLimitOnLimit<GraphQLContext> = (resource, _, __, ___, context) => {
+  throw new RateLimitError(resource.msBeforeNext, context.user_id);
 };
 
 export const { rateLimitDirectiveTransformer } = rateLimitDirective({
