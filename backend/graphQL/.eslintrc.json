@@ -1,1 +1,5 @@
-{}
+{
+  "rules": {
+    "no-console": "error"
+  }
+}
