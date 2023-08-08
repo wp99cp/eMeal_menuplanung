@@ -11,6 +11,7 @@ import packageVersion from '../../package.json';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
 import { context } from '@opentelemetry/api';
+import { WinstonInstrumentation } from '@opentelemetry/instrumentation-winston';
 
 // Export the tracing
 const contextManager = new AsyncHooksContextManager().enable();
@@ -23,6 +24,7 @@ const provider = new NodeTracerProvider({
     new Resource({
       // Replace with any string to identify this service in your system
       'service.name': 'graphQL-backend',
+      job: 'graphQL-backend',
       'service.version': packageVersion.version,
     })
   ),
@@ -42,6 +44,7 @@ registerInstrumentations({
     new GraphQLInstrumentation(),
     new PrismaInstrumentation(),
     new FetchInstrumentation(),
+    new WinstonInstrumentation(),
   ],
 });
 

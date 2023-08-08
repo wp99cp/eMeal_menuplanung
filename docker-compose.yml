@@ -103,6 +103,16 @@ services:
       - '4317' # otlp grpc
       - '4318' # otlp http
 
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - '3100:3100'
+    command:
+      - --config.file=/mnt/config/loki-config.yml
+    volumes:
+      - ./observability/loki/loki-config.yml:/mnt/config/loki-config.yml:ro
+
   grafana:
     image: grafana/grafana
     volumes:

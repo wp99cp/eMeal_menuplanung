@@ -21,3 +21,26 @@ datasources:
       httpMethod: GET
       serviceMap:
         datasourceUid: prometheus
+
+      tracesToLogs:
+        datasourceUid: 'Loki'
+        spanEndTimeShift: '30m'
+        spanStartTimeShift: '-30m'
+        filterByTraceID: true
+        filterBySpanID: true
+        tags: ['job']
+
+  - name: 'Loki'
+    type: loki
+    url: http://loki:3100
+
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        # Field with internal link pointing to data source in Grafana.
+        # Right now, Grafana supports only Jaeger and Zipkin data sources as link targets.
+        - datasourceUid: 'Tempo' # not a uid, bug
+          matcherRegex: 'trace_id\":\"(\w+)\"'
+          name: traceId
+          # url will be interpreted as query for the datasource
+          url: '$${__value.raw}'
