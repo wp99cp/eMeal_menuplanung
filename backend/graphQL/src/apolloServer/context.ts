@@ -8,9 +8,7 @@ import {
 } from '@/apolloServer/authentication';
 import { ContextFunction } from '@apollo/server';
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
-import { otlpSetup } from '@/util/prisma/utils/tracing';
 
-otlpSetup(); // sets up tracing for prisma
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
 

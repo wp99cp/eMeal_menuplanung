@@ -1,3 +1,4 @@
+import '@/util/prisma/utils/tracing';
 import express from 'express';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
