@@ -1,19 +1,20 @@
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { AsyncHooksContextManager } from '@opentelemetry/context-async-hooks';
-import * as api from '@opentelemetry/api';
 import { PrismaInstrumentation } from '@prisma/instrumentation';
 import { Resource } from '@opentelemetry/resources';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { GraphQLInstrumentation } from '@opentelemetry/instrumentation-graphql';
-import packageVersion from '../../../../package.json';
+import packageVersion from '../../package.json';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
+import { context } from '@opentelemetry/api';
 
 // Export the tracing
 const contextManager = new AsyncHooksContextManager().enable();
-api.context.setGlobalContextManager(contextManager);
+context.setGlobalContextManager(contextManager);
 
 // Initialize provider and identify this particular service
 // (in this case, we're implementing a federated gateway)
@@ -35,16 +36,12 @@ registerInstrumentations({
   instrumentations: [
     new ExpressInstrumentation(),
     new HttpInstrumentation({
-      ignoreIncomingRequestHook(req) {
-        // ignore the metrics endpoint
-        return !!req.url?.match(/metrics/);
-      },
-      requestHook: (span, request) => {
-        span.setAttribute('custom request hook attribute', 'request');
-      },
+      // ignore the metrics endpoint
+      ignoreIncomingRequestHook: (req) => !!req.url?.match(/metrics/),
     }),
     new GraphQLInstrumentation(),
     new PrismaInstrumentation(),
+    new FetchInstrumentation(),
   ],
 });
 

@@ -9,6 +9,8 @@ import {
 import { ContextFunction } from '@apollo/server';
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 
+import { asyncTraceWrapper, traceWrapper } from '@/tracing/traceWrapper';
+
 const prisma = new PrismaClient();
 const pubsub = new PubSub();
 
@@ -23,11 +25,11 @@ const pubsub = new PubSub();
 export const contextFunction: ContextFunction<
   [ExpressContextFunctionArgument],
   GraphQLContext
-> = async ({ req }) => {
-  const session = await retrieveSession(req);
+> = asyncTraceWrapper(async ({ req }) => {
   const apiKey = req.headers['x-api-key'] as string;
   const has_valid_api_key = isAuthenticatedUsingAPIToken(apiKey);
 
+  const session = !has_valid_api_key ? await traceWrapper(retrieveSession)(req) : null;
   const user_id = getUserId(session, has_valid_api_key, req.headers);
 
   /*
@@ -44,7 +46,7 @@ export const contextFunction: ContextFunction<
     prisma,
     pubsub,
   };
-};
+}, 'contextFunction');
 
 /**
  *
