@@ -14,7 +14,7 @@ export const useWithDefaultHook = <T,>(
   optionalHook: [T, Dispatch<SetStateAction<T>>] | undefined,
   defaultValue: T
 ): [T, Dispatch<SetStateAction<T>>] => {
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(optionalHook?.[0] || defaultValue);
 
   const prevValueRef = useRef<T>(value);
   const prevValueOptionalRef = useRef<T>(
