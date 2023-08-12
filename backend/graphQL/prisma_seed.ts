@@ -52,7 +52,7 @@ async function main() {
     const last_name = faker.person.lastName();
 
     const username = `${first_name}.${last_name}`.toLowerCase();
-    const email = `${username}@zh11.ch`;
+    const email = `${username}@emeal.ch`;
 
     const userID = deterministicObjectIdGenerator(email);
 
@@ -64,6 +64,8 @@ async function main() {
         name: `${first_name} ${last_name}`,
         username: username,
         email: email,
+        isHiddenUser: faker.datatype.boolean(),
+        shareEmail: faker.datatype.boolean(),
       },
       update: {},
       where: {
