@@ -69,6 +69,7 @@ Represents an single ingredient of a recipe.
 """
 type RecipeIngredient {
   uuid: ID! # is never null
+  name: String
   amount: Amount
   description: String
 
@@ -205,6 +206,18 @@ input UserSearchCriteria {
   partialUsername: String
 }
 
+enum CampAccessLevels {
+  OWNER
+  MEMBER
+  VIEWER
+  ANY
+}
+
+input CampSearchCriteria {
+  partialCampName: String
+  access: CampAccessLevels
+}
+
 type Query @rateLimit(limit: 100, duration: 60) {
   checkUsername(username: String): Acknowledgement
 
@@ -220,8 +233,10 @@ type Query @rateLimit(limit: 100, duration: 60) {
   users(criteria: UserSearchCriteria, pagination: Pagination): [User]
   user(id: ID!): User
 
-  # returns a list of camps according to the search criteria
-  camps: [Camp]
+  """
+  Returns a list of all camps of the current user according to the pagination.
+  """
+  camps(criteria: CampSearchCriteria, pagination: Pagination): [Camp]
   camp(id: ID!): Camp
 
   # returns a list of meals according to the search criteria

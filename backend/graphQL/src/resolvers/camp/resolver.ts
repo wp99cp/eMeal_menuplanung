@@ -28,18 +28,18 @@ export const campResolvers: Resolvers = {
       const camp_id = parent.campId as string;
 
       const { prisma } = context;
-      return (
-        await prisma.meal.findMany({
-          where: {
-            mealUsages: {
-              some: {
-                campId: camp_id,
-                date: parent.date,
-              },
+      const meals = await prisma.meal.findMany({
+        where: {
+          mealUsages: {
+            some: {
+              campId: camp_id,
+              date: parent.date,
             },
           },
-        })
-      ).map((meal) => {
+        },
+      });
+
+      return meals.map((meal) => {
         const mealUsage = meal.mealUsages?.find(
           (usage) =>
             usage.campId == camp_id &&
