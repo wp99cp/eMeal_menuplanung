@@ -12,6 +12,7 @@ import { campQueries } from '@/resolvers/camp/query';
 import { campResolvers } from '@/resolvers/camp/resolver';
 import { customScalars } from '@/resolvers/customScalar';
 import { mealResolvers } from '@/resolvers/meal/resolver';
+import { campSubscriptions } from '@/resolvers/camp/subscription';
 
 const queries: QueryResolvers = {
   ...userQueries,
@@ -29,6 +30,7 @@ const mutations: MutationResolvers = {
 
 const subscriptions: SubscriptionResolvers = {
   ...userSubscriptions,
+  ...campSubscriptions,
 };
 
 export const graphqlResolver: Resolvers = {

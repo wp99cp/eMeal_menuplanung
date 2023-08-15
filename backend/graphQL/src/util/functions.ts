@@ -1,6 +1,6 @@
 import { Acknowledgement } from '@/util/generated/types/graphql';
-import { GraphQLContext } from '@/util/types/types';
 import { User } from '@prisma/client';
+import { GraphQLContext } from '@/apolloServer/context';
 
 export function verifyPassword(password: string): Acknowledgement {
   // minimum password length

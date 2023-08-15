@@ -250,7 +250,8 @@ type Mutation @rateLimit(limit: 10, duration: 60) {
 }
 
 type Subscription {
-  userCreated: User
+  user: User
+  camp(id: ID!): Camp
 }
 
 type Acknowledgement {

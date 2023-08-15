@@ -8,4 +8,4 @@ generates:
       useIndexSignature: true
       # Note, this file path starts from the location of the
       # file where you generate types.
-      contextType: '../../types/types#GraphQLContext'
+      contextType: '../../../apolloServer/context#GraphQLContext'

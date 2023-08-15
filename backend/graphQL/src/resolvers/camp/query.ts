@@ -2,13 +2,16 @@ import { CampAccessLevels, QueryResolvers } from '@/util/generated/types/graphql
 import logger from '@/logger/logger';
 import { prisma_pagination_filer } from '@/util/prisma/utils/pagination_filter';
 import { Prisma } from '@prisma/client';
+import { getCampById } from '@/resolvers/camp/common';
 import CampWhereInput = Prisma.CampWhereInput;
 
 const campAccessFilter = (
   access: CampAccessLevels | null | undefined,
   user_id: string | undefined
 ) => {
-  const filter: { OR: CampWhereInput[] } = { OR: [] };
+  const filter: {
+    OR: CampWhereInput[];
+  } = { OR: [] };
 
   switch (access) {
     case CampAccessLevels.Owner:
@@ -52,20 +55,8 @@ export const campQueries: QueryResolvers = {
     return camps;
   },
 
-  camp: async (_, args, context) => {
-    const { id } = args;
-    const { user_id, prisma } = context;
-
-    logger.debug(`Fetching camp ${id} for user ${user_id}`);
-
-    const camp = await prisma.camp.findUnique({
-      where: {
-        id,
-        ...campAccessFilter(CampAccessLevels.Any, user_id),
-      },
-    });
-
-    if (!camp) throw new Error('Camp not found');
-    return camp;
-  },
+  /*
+   * Access Control is handled by the graphql-shield middleware
+   */
+  camp: async (_, { id }, { prisma }) => getCampById(id, prisma),
 };

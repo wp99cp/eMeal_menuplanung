@@ -3,6 +3,7 @@ import { userRules } from '@/permissions/user/permissions';
 import { apiKeyOnly } from '@/permissions/rules/rules';
 import { IOptionsConstructor } from 'graphql-shield/typings/types';
 import { paginationLimitation } from '@/permissions/rules/input_validation';
+import { campRules } from '@/permissions/camp/permissions';
 
 /**
  *
@@ -29,6 +30,7 @@ const default_rules: IRules = {
 export const graphQLShield = shield(
   {
     ...userRules,
+    ...campRules,
 
     // add default rules:
     ...default_rules,

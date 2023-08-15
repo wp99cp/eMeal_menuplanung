@@ -13,8 +13,8 @@ import {
   RateLimitOnLimit,
   RateLimitPointsCalculator,
 } from 'graphql-rate-limit-directive';
-import { GraphQLContext } from '@/util/types/types';
 import logger from '@/logger/logger';
+import { GraphQLContext } from '@/apolloServer/context';
 
 /**
  * Calculate the number of points to consume.

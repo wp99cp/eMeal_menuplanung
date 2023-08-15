@@ -1,7 +1,8 @@
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
-import { Session, SubscriptionContext } from '@/util/types/types';
+import { Session } from '@/util/types/types';
 import { IncomingHttpHeaders } from 'http';
 import logger from '@/logger/logger';
+import { SubscriptionContext } from '@/apolloServer/context';
 
 /**
  * Checks if the request is authenticated using an API token.

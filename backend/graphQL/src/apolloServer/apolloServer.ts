@@ -1,8 +1,11 @@
 import { ApolloServer } from '@apollo/server';
-import { GraphQLContext } from '@/util/types/types';
 import { schema } from '@/apolloServer/schema';
 import { useServer } from 'graphql-ws/lib/use/ws';
-import { subscriptionContextFunction } from '@/apolloServer/context';
+import {
+  closeDBConnections,
+  GraphQLContext,
+  subscriptionContextFunction,
+} from '@/apolloServer/context';
 import { WebSocketServer } from 'ws';
 import { Server } from 'http';
 import { Disposable } from 'graphql-ws';
@@ -13,6 +16,7 @@ import {
   formatterComposer,
   WinstonApolloErrorExporter,
 } from '@/apolloServer/formater';
+import logger from '@/logger/logger';
 
 /**
  *
@@ -47,6 +51,17 @@ export const createApolloServer = (httpServer: Server): ApolloServer<GraphQLCont
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       ApolloServerPluginDrainWebSocketServer({ disposableServer }),
+      {
+        async serverWillStart() {
+          return {
+            async drainServer() {
+              logger.info('💥 Stopping the server...');
+              logger.info('Closing the database connections...');
+              await closeDBConnections();
+            },
+          };
+        },
+      },
     ],
   });
 };

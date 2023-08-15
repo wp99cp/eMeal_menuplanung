@@ -1,7 +1,7 @@
 import { inputRule } from 'graphql-shield';
 import { InputRule } from 'graphql-shield/typings/rules';
-import { GraphQLContext } from '../types/types';
 import * as Yup from 'yup';
+import { GraphQLContext } from '@/apolloServer/context';
 
 /**
  *
