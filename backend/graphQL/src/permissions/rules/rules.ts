@@ -1,6 +1,6 @@
 import { rule } from 'graphql-shield';
-import { GraphQLContext } from '@/util/types/types';
 import { Rule } from 'graphql-shield/typings/rules';
+import { GraphQLContext } from '@/apolloServer/context';
 
 /**
  *

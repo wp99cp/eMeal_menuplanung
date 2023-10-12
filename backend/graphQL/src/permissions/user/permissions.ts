@@ -1,4 +1,4 @@
-import { allow, and, IRules } from 'graphql-shield';
+import { allow, and, deny, IRules } from 'graphql-shield';
 import { hasUserId, isAuthenticated } from '@/permissions/rules/rules';
 import {
   paginationLimitation,
@@ -15,6 +15,8 @@ export const userRules: IRules = {
     updateUser: and(isAuthenticated, hasUserId, passedValidUsername),
     createNewUser: allow,
   },
+
+  Subscription: deny,
 
   User: allow,
 };

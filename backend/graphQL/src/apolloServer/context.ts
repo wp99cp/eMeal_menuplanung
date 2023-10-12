@@ -44,6 +44,7 @@ export type SubscriptionContext = {
     session?: Session;
     'x-api-key'?: string;
     'x-user-id'?: string;
+    'x-treat-as-user'?: 'true' | 'false';
   };
 };
 
@@ -71,7 +72,7 @@ export const contextFunction: ContextFunction<
    * the backend treats that request as if it was made by the user with the provided user_id
    * (i.g. without using an API key for authentication).
    */
-  const treat_as_user = !!user_id && req.headers['§'] === 'true';
+  const treat_as_user = !!user_id && req.headers['x-treat-as-user'] === 'true';
 
   return {
     user_id,
@@ -88,22 +89,33 @@ export const contextFunction: ContextFunction<
  * @returns The context object.
  *
  */
-export const subscriptionContextFunction = async (
-  ctx: SubscriptionContext
-): Promise<GraphQLContext> => {
-  const api_token: string | undefined = ctx.connectionParams?.['x-api-key'];
-  const has_valid_api_key = isAuthenticatedUsingAPIToken(api_token);
+export const subscriptionContextFunction = traceWrapper(
+  async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
+    const api_token: string | undefined = ctx.connectionParams?.['x-api-key'];
+    const has_valid_api_key = isAuthenticatedUsingAPIToken(api_token);
 
-  return {
-    user_id: getUserId(
+    const user_id = getUserId(
       ctx?.connectionParams?.session,
       has_valid_api_key,
       ctx?.connectionParams
-    ),
-    api_key: has_valid_api_key,
-    prisma: prisma,
-  };
-};
+    );
+
+    /*
+     * The header 'x-treat-as-user' allows authentication using an API key,
+     * If this header is set and the user_id is passed using the x-user-id header,
+     * the backend treats that request as if it was made by the user with the provided user_id
+     * (i.g. without using an API key for authentication).
+     */
+    const treat_as_user =
+      !!user_id && ctx?.connectionParams?.['x-treat-as-user'] === 'true';
+
+    return {
+      user_id,
+      api_key: has_valid_api_key && !treat_as_user,
+      prisma: prisma,
+    };
+  }
+);
 
 export const metricsContextFunction = () => {
   return { prisma: defaultPrisma };
