@@ -6,6 +6,7 @@
     "docs:serve": "vitepress build && vitepress serve --port 8000"
   },
   "author": "Cyrill Püntener",
+  "type": "module",
   "dependencies": {
     "vitepress": "^1.0.0-alpha.43",
     "vue": "^3.2.45"

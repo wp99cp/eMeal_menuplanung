@@ -1,4 +1,15 @@
-# Getting Started - How to run the Project Locally for Development?
+# Getting Started
+
+How to run the project locally for development?
+
+::: tip An Easy Start
+
+One of our biggest goals is to make it as easy as possible to get started with the project. If you face any issues,
+please let us know by opening an issue on [GitHub](https://github.com/wp99cp/emeal_menuplanung).
+
+:::
+
+## Using Dev Containers
 
 The simplest way to get started is using the
 provided [Dev Container](https://code.visualstudio.com/docs/devcontainers/containers). This requires minimal setup and
@@ -8,7 +19,19 @@ starts the project and all its dependencies.
 Just open the project in your favorite IDE (e.g. [VS Code](https://code.visualstudio.com/)) and in dev container mode,
 and you are ready to go!
 
-::: tip Manuall Restart After Configuration Changes
+::: details Limited Support for Jetbrains IDEAs
+
+As for now, IntelliJ does not support dev containers fully. However, you can still use IntelliJ to develop the project.
+However, you have to follow the steps below to get the project running locally on your machine (i.g. without the help of
+a dev container).
+
+State of the IntelliJ support:
+https://youtrack.jetbrains.com/issue/IDEA-321768
+
+:::
+
+### Manuall Restart After Configuration Changes
+
 By default, the application is served locally. It will rebuild/reload the container automatically if you make changes to
 the code paced in the `src` folder. If you modify any configuration files, e.g. `docker-compose.yml`, `package.json`,
 etc., normally a restart and rebuild of the container is required.
@@ -22,20 +45,15 @@ docker compose up --build
 
 The optional `--volumes` flag will remove all volumes, which is useful if you want to start with a clean database.
 
+::: warning Compose Watch
+Using the new [Use Compose Watch command](https://docs.docker.com/compose/file-watch/) feature, you can automatically
+restart the application if you make changes to the configuration files.
+
+For now, we have not yet configured this feature. Refer to the corresponding issue [_Use Docker Compose Watch
+#222_](https://github.com/wp99cp/eMeal_menuplanung/issues/222) to track the progress.
 :::
 
-::: info Limited Support for IntelliJ
-
-As for now, IntelliJ does not support dev containers fully. However, you can still use IntelliJ to develop the project.
-However, you have to follow the steps below to get the project running locally on your machine (i.g. without the help of
-a dev container).
-
-State of the IntelliJ support:
-https://youtrack.jetbrains.com/issue/IDEA-321768
-
-:::
-
-## Getting Started - A Step-by-Step Guide
+## Using Docker
 
 This guide will walk you through the steps to get the project running locally on your machine (i.g. without the help of
 a dev container). However, we will still use docker to start the project. If you want to use a different
@@ -51,7 +69,6 @@ commands to your system.
 Make sure you have the following tools installed on your system:
 
 - Docker
-- Docker Compose
 - Git
 - Node and NPM
 
@@ -71,13 +88,13 @@ provide code completion. If you do not install node and npm locally, you will ge
 Clone the project from GitHub:
 
 ```bash
-git clone https://github.com/cevi/automatic_walk-time_tables
+git clone https://github.com/wp99cp/emeal_menuplanung
 ```
 
 Once the project is cloned, change into the project directory and checkout the `version-2/main` branch:
 
 ```bash
-cd automatic_walk-time_tables
+cd emeal_menuplanung
 git checkout version-2/main
 ```
 

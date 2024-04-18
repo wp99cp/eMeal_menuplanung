@@ -6,12 +6,12 @@ contact us via [GitHub](https://github.com/wp99cp/eMeal_Menuplanung).
 
 ![Banner Image](imgs/banner_image.png)
 
-::: tip
+::: tip User Documentation
 If you have questions regarding usage, consider looking at the [User Documentation](https://emeal.zh11.ch/infos/hilfe)
 instead.
 :::
 
-::: danger
+::: danger WVersion 2 is Under Active Development
 eMeal - Menüplanung version 2 is currently in development and not yet ready for production use! If you want to use
 our project, please use the [stable version 1](https://emeal.zh11.ch) instead. The source code of the stable version 1
 can be found on [GitHub](https://github.com/wp99cp/eMeal_Menuplanung).

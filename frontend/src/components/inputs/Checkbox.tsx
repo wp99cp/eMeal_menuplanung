@@ -10,7 +10,7 @@ interface CheckboxProps {
 
 function Checkbox({
   id,
-  name,
+     name,
   required = false,
   description,
   stateHook: [inputValue, setInputValue] = [

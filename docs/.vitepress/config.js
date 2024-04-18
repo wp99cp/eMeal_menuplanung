@@ -40,6 +40,45 @@ export default defineConfig({
           ],
         },
         {
+          text: 'Frontend',
+          items: [
+            {
+              text: 'Frontend Architecture',
+              link: '/frontend/',
+            },
+          ],
+        },
+        {
+          text: 'Backend',
+          items: [
+            {
+              text: 'GraphQL Server',
+              link: '/backend/graphql',
+            },
+            {
+              text: 'Prisma',
+              link: '/backend/prisma',
+            },
+            {
+              text: 'MongoDB',
+              link: '/backend/mongodb',
+            },
+            {
+              text: 'Print Server',
+              link: '/backend/print-server',
+            },
+          ],
+        },
+        {
+          text: 'Observability',
+          items: [
+            {
+              text: 'Observability',
+              link: '/observability/',
+            },
+          ],
+        },
+        {
           text: 'Documentation',
           items: [
             {
