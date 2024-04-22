@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   docs:
     build:
@@ -36,7 +34,7 @@ services:
       - '6006:6006' # Storybook
 
     depends_on:
-      - mongo-db
+      - postgres
 
   graphql:
     build:
@@ -55,28 +53,21 @@ services:
       - '5555:5555' # Prisma Studio
 
     depends_on:
-      - mongo-db
+      - postgres
 
-  mongo-db:
-    build:
-      context: backend/mongoDB
-      dockerfile: Dockerfile
-
-    hostname: mongo-db
+  postgres:
+    image: postgres:latest
 
     ports:
-      - '27017:27017'
-      - '27018:27018'
-
-    restart: always
+      - '5432:5432'
 
     environment:
-      - ENV_FILE_PATH=/etc/mongo/.env.local
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: myTopSecretPassword
+      POSTGRES_DB: eMeal_menuplanung
 
     volumes:
-      - ./.env.local:/etc/mongo/.env.local:ro
-      - mongo-db-data:/data/db
-      - mongo-db-config:/data/configdb
+      - postgress-data_new2:/var/lib/postgresql/data
 
   prometheus:
     image: prom/prometheus
@@ -125,9 +116,7 @@ services:
       - '9000:3000' # localhost:9000 for accessing grafana
 
 volumes:
-  mongo-db-data:
-    driver: local
-  mongo-db-config:
+  postgress-data_new2:
     driver: local
   prometheus-storage:
     driver: local

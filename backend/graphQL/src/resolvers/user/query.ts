@@ -1,5 +1,6 @@
 import { QueryResolvers } from '@/util/generated/types/graphql';
 import { prisma_pagination_filer } from '@/util/prisma/utils/pagination_filter';
+import logger from '@/logger/logger';
 
 export const userQueries: QueryResolvers = {
   checkUsername: async (_, args, context) => {
@@ -39,6 +40,8 @@ export const userQueries: QueryResolvers = {
   },
 
   user: async (_, args, context) => {
+    logger.debug('user query', args);
+
     const { id } = args;
     const { user_id, prisma, api_key } = context;
 

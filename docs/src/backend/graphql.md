@@ -77,6 +77,8 @@ https://www.reddit.com/r/graphql/comments/gfc5w2/best_practices_for_permissions_
 
 ::: warning
 Role based access control vs. attribute based access control
+
+--> we use an attribute based access control
 :::
 
 ## Rate Limiting
@@ -90,6 +92,10 @@ See https://xuorig.medium.com/a-guide-to-graphql-rate-limiting-security-e62a86ef
 ## Input Verification
 
 The GraphQL API uses Yup to verify the input of the GraphQL mutations. This is implemented using graphql-shield.
+
+::: warning
+We should switch to ZOD instead --> better typescript support
+:::
 
 ## Using fragments
 

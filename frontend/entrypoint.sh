@@ -1,7 +1,3 @@
-echo "Wait for MongoDB to be ready..."
-# shellcheck disable=SC2188
-until </dev/tcp/mongo-db/27018; do sleep 1; done
-
 # Generates the Prisma client for the frontend
 # We use Prisma for NextAuth, all other operations are done via the backend graphql server
 export PRISMA_OUTPUT="../../frontend/src/util/generated/prisma/client/"

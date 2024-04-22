@@ -19,6 +19,9 @@ export default defineConfig({
   markdown: allMarkdownTransformers,
 
   themeConfig: {
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/wp99cp/eMeal_menuplanung' },
+    ],
     sidebar: {
       '/': [
         {
@@ -60,8 +63,8 @@ export default defineConfig({
               link: '/backend/prisma',
             },
             {
-              text: 'MongoDB',
-              link: '/backend/mongodb',
+              text: 'Postgres',
+              link: '/backend/postgres',
             },
             {
               text: 'Print Server',

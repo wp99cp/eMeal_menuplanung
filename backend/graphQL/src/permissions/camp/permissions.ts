@@ -10,7 +10,17 @@ export const campRules: IRules = {
       return true;
     }),
   },
-  Mutation: {},
+  Mutation: {
+    updateDay: rule()(async (_, __, ctx: GraphQLContext) => {
+      logger.debug('Mutation.updateDay rule');
+      return true;
+    }),
+
+    updateCamp: rule()(async (_, __, ctx: GraphQLContext) => {
+      logger.debug('Mutation.updateCamp rule');
+      return true;
+    }),
+  },
 
   Subscription: allow, // the access checks are done on type level
 
@@ -20,10 +30,6 @@ export const campRules: IRules = {
     if (!user_id) throw new Error('Not authorised to access this resource!');
 
     // check if userId is in ownerId, memberIds or viewerIds
-    return (
-      user_id === parent.ownerId ||
-      parent.memberIds.includes(user_id) ||
-      parent.viewerIds.includes(user_id)
-    );
+    return user_id !== parent.ownerId;
   }),
 };

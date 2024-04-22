@@ -13,6 +13,8 @@ import { campResolvers } from '@/resolvers/camp/resolver';
 import { customScalars } from '@/resolvers/customScalar';
 import { mealResolvers } from '@/resolvers/meal/resolver';
 import { campSubscriptions } from '@/resolvers/camp/subscription';
+import { campMutations } from '@/resolvers/camp/mutations';
+import { mealMutations } from '@/resolvers/meal/mutations';
 
 const queries: QueryResolvers = {
   ...userQueries,
@@ -26,6 +28,8 @@ const resolvers: Resolvers = {
 
 const mutations: MutationResolvers = {
   ...userMutations,
+  ...campMutations,
+  ...mealMutations,
 };
 
 const subscriptions: SubscriptionResolvers = {

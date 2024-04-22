@@ -8,28 +8,19 @@ import { ContextFunction } from '@apollo/server';
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 
 import { traceWrapper } from '@/tracing/traceWrapper';
-import { MongoClient } from 'mongodb';
 import { Session } from '@/util/types/types';
-import { withChangeListener } from '@/util/prisma/extensions/subscribe';
-
-const mongoClient = new MongoClient(process.env.DATABASE_URL_MONGODB as string, {});
-const connectedMongoDBClient = mongoClient
-  .connect()
-  .then((db) => db.db('eMeal_menuplanung'));
+import { withSubscriptions } from '@/util/prisma/extensions/subscribe';
 
 const defaultPrisma = new PrismaDefaultClient();
-const prisma = defaultPrisma.$extends(
-  withChangeListener({ mongoClient: connectedMongoDBClient })
-);
+const prisma = defaultPrisma.$extends(withSubscriptions());
 
 export type PrismaClient = typeof prisma;
 
 /**
- * Closes the database connections for Prisma and MongoDB-Client
+ * Closes the database connections for Prisma
  *
  */
 export const closeDBConnections = async (): Promise<void> => {
-  await mongoClient.close();
   await prisma.$disconnect();
 };
 

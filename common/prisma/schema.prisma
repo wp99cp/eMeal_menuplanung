@@ -1,12 +1,12 @@
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL_MONGODB")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider        = "prisma-client-js"
   output          = env("PRISMA_OUTPUT")
-  previewFeatures = ["fullTextIndex", "metrics", "tracing"]
+  previewFeatures = ["fullTextIndex", "metrics", "tracing", "views"]
 }
 
 // ##############################
@@ -29,19 +29,19 @@ generator client {
 //
 
 model Account {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String   @db.ObjectId
+  id                String   @id @default(cuid())
+  userId            String
   type              String
   provider          String
   providerAccountId String
   password          String?
   emailVerified     Boolean? @default(false)
-  refresh_token     String?  @db.String
-  access_token      String?  @db.String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?  @db.String
+  id_token          String? // @db.Text
   session_state     String?
   created_at        Int?
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -50,16 +50,16 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String   @db.ObjectId
+  userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 /// Represents a user account
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(cuid())
 
   // base data of the user
   name     String?
@@ -82,349 +82,150 @@ model User {
   // registration meta data
   newUser      Boolean  @default(true) /// new users may have not finished the onboarding process
   registeredAt DateTime @default(now()) /// the date and time of account creation
-
-  // #################################
-  // ## Access control
-  // #################################
-
-  /// a user may own multiple camps
-  campsOwned Camp[] @relation("CampOwner")
-
-  /// a user may be a member of multiple camps
-  accessibleCampsIds String[] @db.ObjectId
-  accessibleCamps    Camp[]   @relation("CampMembers", fields: [accessibleCampsIds], references: [id])
-
-  /// a user may have multiple camps for which he as read access
-  viewableCampIds String[] @db.ObjectId
-  viewableCamps   Camp[]   @relation("CampViewers", fields: [viewableCampIds], references: [id])
-
-  mealsOwned Meal[] @relation("MealOwner")
-
-  /// a user may have multiple meals for which he as read access
-  viewableMealIds String[] @db.ObjectId
-  viewableMeals   Meal[]   @relation("MealViewers", fields: [viewableMealIds], references: [id])
-
-  recipeOwned Recipe[] @relation("RecipeOwner")
+  Camp         Camp[]
+  Meal         Meal[]
 }
 
-type Day {
-  date DateTime
+model ParticipantCount {
+  // could be a campId, mealId, dayId, ...
+  id String @id @default(cuid())
 
-  /// a short description of the day
-  description String @default("")
+  lastModification DateTime @updatedAt /// the date and time of the last modification
 
-  /// longer notes, e.g. details about the program
-  notes String @default("")
-}
+  // number of participants
+  participantCount Int @default(0) /// the number of participants (including vegetarians and vegans)
+  vegetarianCount  Int @default(0) /// the number of vegetarians
+  veganCount       Int @default(0) /// the number of vegans
 
-type CampExportSettings {
-  includeShoppingList Boolean @default(true)
-}
+  /// if true, the count is relative to the total number of participants of the parent object
+  isRelative Boolean @default(false)
 
-type CampSettings {
-  exportSettings CampExportSettings
-}
+  /// will not be updated if true
+  isFixed Boolean @default(false)
 
-/// participant count for a camp
-type CampParticipantCount {
-  total       Int
-  vegetarians Int @default(0)
-  vegans      Int @default(0)
-  leaders     Int @default(0)
+  Camp      Camp?
+  Day       Day?
+  MealUsage MealUsage?
 }
 
 /// This is the main data model of the app.
 model Camp {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(cuid())
 
   name        String /// the name of the camp
-  description String /// the description of the camp
+  description String? /// the description of the camp
   year        Int /// the year of the camp
-
-  participantCount CampParticipantCount
-  campSettings     CampSettings
-  days             Day[]
-
-  // additional items that are used for the complete camp
-  // e.g. drying cloths, cleaning stuff, ...
-  shoppingList RecipeIngredient[]
-
-  // #################################
-  // ## History and meta data
-  // #################################
-
-  /// indecates that the camp was migrated from firebase
-  migratedFromFirebase Boolean @default(false)
 
   creationDate     DateTime @default(now())
   lastModification DateTime @updatedAt
 
-  // #################################
-  // ## Relationships
-  // #################################
+  // each camp has exactly one participant count
+  participantCountId String           @unique /// the id of the participant count @unique
+  participantCount   ParticipantCount @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  /// a camp may have multiple meals each consisting of multiple recipes
-  mealIds String[] @db.ObjectId
-  meals   Meal[]   @relation(fields: [mealIds], references: [id])
+  // each camp has maximum one owner
+  ownerId String?
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  /// a camp may have multiple recipes grouped in meals
-  recipeIds String[] @db.ObjectId
-  recipes   Recipe[] @relation(fields: [recipeIds], references: [id])
-
-  // #################################
-  // ## Access control
-  // #################################
-
-  /// Every camp has exactly one owner.
-  /// If the user is deleted, the camp is not deleted but looses its owner, then any member can take over.
-  /// Only the owner can delete the camp
-  ownerId String? @db.ObjectId
-  owner   User?   @relation("CampOwner", fields: [ownerId], references: [id], onDelete: SetNull)
-
-  /// Every camp can be accessed by multiple users (called members).
-  /// Members can edit the camp and the meals, however they can not delete the camp.
-  /// For the latter they can only modify the the corresponding meal usages / delete them.
-  /// Members have read-only access to the base recipes of the meals.
-  memberIds String[] @db.ObjectId
-  members   User[]   @relation("CampMembers", fields: [memberIds], references: [id])
-
-  /// Every camp can be viewed by multiple users.
-  viewerIds String[] @db.ObjectId
-  viewer    User[]   @relation("CampViewers", fields: [viewerIds], references: [id])
-  public    Boolean  @default(false) /// if true, the camp is public and can be viewed by everyone
-
-  // #################################
-  // ## Search
-  // #################################
-  @@fulltext([name, description])
+  days      Day[]
+  mealUsage MealUsage[]
 }
 
-/// defines the usage of a meal
-enum MealUsageTypes {
-  BREAKFAST
-  MORNING_SNACK
-  LUNCH
-  AFTERNOON_SNACK
-  DINNER
-  EVENING_SNACK
+model Day {
+  id String @id @default(cuid())
+
+  date        DateTime @db.Date /// the date of the day
+  description String? /// the description of the day
+
+  creationDate     DateTime @default(now())
+  lastModification DateTime @updatedAt
+
+  // each day belongs to exactly one camp
+  campId    String /// the id of the camp
+  camp      Camp        @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  mealUsage MealUsage[]
+
+  // each camp has exactly one participant count
+  participantCountId String?           @unique /// the id of the participant count @unique
+  participantCount   ParticipantCount? @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // the tuple day and campId is unique
+  @@unique([campId, date])
 }
 
-/// The adjustment of the participant count can either be a total overwrite
-/// or can be done by specifying the diff to the inferred value.
-type ParticipantCountAdjustment {
-  totalOverwrite       Int?
-  vegetariansOverwrite Int?
-  vegansOverwrite      Int?
-  leadersOverwrite     Int?
+model MealUsage {
+  id String @id @default(cuid())
 
-  totalDiff       Int?
-  vegetariansDiff Int?
-  vegansDiff      Int?
-  leadersDiff     Int?
-}
+  campId String /// the id of the camp
+  date   DateTime @db.Date
+  mealId String /// the id of the meal
 
-/// a recipe may be modified for a specific meal usecase
-/// e.g. the amount of ingredients may be adjusted
-type RecipeModifications {
-  recipeId String @db.ObjectId
+  // each camp has exactly one participant count
+  participantCountId String?           @unique /// the id of the participant count @unique
+  participantCount   ParticipantCount? @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  /// modified ingredients get completely overwritten
-  modifiedIngredients RecipeIngredientModification[]
-}
-
-type MealUsage {
-  /// meals may need preparation at the day before
-  needsPreparation Boolean @default(false)
-
-  /// you may want to overwrite the participant count for a specific meal
-  participantCountAdjustment ParticipantCountAdjustment?
-
-  multiplicationFactorOverride MultiplicationFactorTypes? /// overrides the default multiplication factor of the meal
-  recipeModifications          RecipeModifications[] /// optional modifications of the recipes' ingredients
-
-  // #################################
-  // # Usage Details
-  // #################################
-  campId String         @db.ObjectId
-  date   DateTime
-  type   MealUsageTypes
+  day  Day  @relation(fields: [campId, date], references: [campId, date], onDelete: Cascade, onUpdate: Cascade)
+  camp Camp @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Meal {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(cuid())
 
   name        String
-  description String
+  description String?
   keywords    String[]
-
-  /// defines the prefered meal usage type (e.g. breakfast, lunch, dinner)
-  /// this field may be useful for sorting the meals / making suggestions
-  preferredMealUsageTypes MealUsageTypes[]
-
-  mealUsages MealUsage[]
-
-  /// defines the default multiplication factor for the ingredients
-  /// the multiplication factor is used to adjust the amount by the participant count
-  /// setting the multiplication factor to FIXED will ignore the participant count
-  /// the default multicpliation factor can be overwritten for each meal usage,
-  /// each recipe can also overwrite the multiplication factor of its meal
-  /// and finally each ingredient can overwrite the multiplication factor of its recipe
-  /// all overwrites are optional, by default the one of the meal is used
-  multiplicationFactor MultiplicationFactorTypes @default(TOTAL)
-
-  // #################################
-  // ## History and meta data
-  // #################################
-
-  /// indecates that the meal was migrated from firebase
-  migratedFromFirebase Boolean @default(false)
 
   creationDate     DateTime @default(now())
   lastModification DateTime @updatedAt
 
-  // #################################
-  // ## Relationships
-  // #################################
+  // each meal has max one owner
+  ownerId String?
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  /// each meal may be used in multiple camps
-  campIds String[] @db.ObjectId
-  camps   Camp[]   @relation(fields: [campIds], references: [id])
-
-  /// each meal may has multiple recipes
-  recipeIds String[] @db.ObjectId
   recipes   Recipe[]
-
-  // #################################
-  // ## Access control
-  // #################################
-
-  /// Every meal has exactly one owner.
-  /// If the user is deleted, the meal is not deleted but looses its owner.
-  /// Only the owner can delete the meal, and only if it is never used.
-  ownerId String? @db.ObjectId
-  owner   User?   @relation("MealOwner", fields: [ownerId], references: [id], onDelete: SetNull)
-
-  /// Every meal can be viewed by multiple users.
-  /// If a meal is used in a camp, and a (new) user get's view or member access to the camp,
-  /// The user also get's view access to every meal used in that camp.
-  /// A viewer can copy the meal to his own account, he is then the owner of the copy.
-  /// A viewer may modify the meal usage if he as access to the corresponding camp,
-  /// however he can not modify or delete the meal itself.
-  /// A viewer can not use this meal in his own camp unless the owner of
-  /// the meal is also a member (or the owner) of the camp the user wants to add the meal to.
-  viewerIds String[] @db.ObjectId
-  viewer    User[]   @relation("MealViewers", fields: [viewerIds], references: [id])
-  public    Boolean  @default(false) /// if true, the meal is public and can be viewed by everyone
-
-  // #################################
-  // ## Search
-  // #################################
-  @@fulltext([name, description])
+  mealUsage MealUsage[]
 }
 
-enum MultiplicationFactorTypes {
-  FIXED /// the amount is fixed and does not change
-  TOTAL /// the amount is multiplied by the total participant count
-  VEGETARIANS /// the amount is multiplied by the number of vegetarians
-  VEGANS /// the amount is multiplied by the number of vegans
-  LEADERS /// the amount is multiplied by the number of leaders
-}
-
-/// describes the amount of an ingredient
-/// the value is optional, because some ingredients may be used as a spice
-/// and therefore have no amount, or the unit is something as "many"
-type Amount {
-  value                        Float?
-  unit                         String // we do not use an enum here, because there are too many units
-  multiplicationFactorOverride MultiplicationFactorTypes? /// overrides the default multiplication factor of the meal
-}
-
-/// A recipe is a collection of ingredients
-type RecipeIngredient {
-  /// used for referencing the ingredient, e.g. for overwriting the amount
-  uuid        String  @default(cuid())
-  name        String
-  amount      Amount
-  description String?
-
-  /// if true, the ingredient is a fresh product and should be bought shortly before the meal
-  isFreshProduct Boolean @default(false)
-
-  /// a short description, where the ingredient can be bought / where it comes from
-  /// this could be a specific store, or something like "private material"
-  /// if left empty, the ingredient gets listed on the main shopping list
-  storeName String?
-}
-
-/// An ingredient may be modified for a specific meal usecase
-/// an overriden ingredient can partially overwrite the original ingredient
-/// e.g. the amount of the ingredient may be adjusted
-/// it is also possible to delete the ingredient from the recipe within a specific meal usage
-type RecipeIngredientModification {
-  /// used for referencing the ingredient, e.g. for overwriting the amount
-  uuid        String  @default(cuid())
-  // name       String the name is not overridable
-  amount      Amount?
-  description String?
-
-  isFreshProduct Boolean?
-
-  deleted   Boolean @default(false) /// if the ingredient is deleted, it will not be used in the recipe
-  storeName String?
-}
-
-/// describes a distinct section of a meal
-/// the owner or a user with reade access may use this recipe in another meal,
-/// however the recipe will be copied and the copy will be used in the new meal.
-/// there is no linking of recipes between meals.
 model Recipe {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(cuid())
+
+  creationDate     DateTime @default(now()) /// the date and time of the creation
+  lastModification DateTime @updatedAt /// the date and time of the last modification
+
+  order Int @default(autoincrement()) /// the order of the recipe in the meal
 
   name        String
-  description String
+  description String?
   keywords    String[]
 
-  ingredients RecipeIngredient[]
+  /// the ingredients of the recipe
+  ingredients Ingredient[]
 
-  multiplicationFactorOverride MultiplicationFactorTypes? /// overrides the default multiplication factor of the meal
+  // each recipe belongs to exactly one meal
+  mealId String /// the id of the meal
+  meal   Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  // #################################
-  // ## History and meta data
-  // #################################
+  // the tuple order mealId is unique
+  @@unique([mealId, order])
+}
 
-  /// indecates that the camp was migrated from firebase
-  migratedFromFirebase Boolean @default(false)
+model Ingredient {
+  order Int @default(autoincrement()) /// the order of the ingredient in the recipe
 
-  creationDate     DateTime @default(now())
-  lastModification DateTime @updatedAt
+  creationDate     DateTime @default(now()) /// the date and time of the creation
+  lastModification DateTime @updatedAt /// the date and time of the last modification
 
-  // #################################
-  // ## Relationships
-  // #################################
+  // defines the the ingredient
+  amount  Float
+  unit    String
+  name    String
+  isFresh Boolean @default(false)
 
-  /// recipes can only be used in a single meal
-  /// if a recipe is used in multiple meals, it is copied
-  mealId String @db.ObjectId
-  meal   Meal   @relation(fields: [mealId], references: [id])
+  // each ingredient belongs to to exactly one recipe
+  recipeId String /// the id of the recipe
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  /// recipe may be used in multiple camps (via its meals)
-  campIds String[] @db.ObjectId
-  camps   Camp[]   @relation(fields: [campIds], references: [id])
-
-  // #################################
-  // ## Access control
-  // #################################
-
-  // every user that has read access to a meal, can also read all recipes used in that meal
-  // however only the owner of the meal can modify the recipe
-
-  /// Every recipe has exactly one owner.
-  /// only the owner can edit the recipe
-  ownerId String? @db.ObjectId
-  owner   User?   @relation("RecipeOwner", fields: [ownerId], references: [id], onDelete: SetNull)
-
-  // #################################
-  // ## Search
-  // #################################
-  @@fulltext([name, description, ingredients.name, ingredients.description])
+  // the index is formed by the tuple of the recipeId and the order
+  @@id([recipeId, order])
 }

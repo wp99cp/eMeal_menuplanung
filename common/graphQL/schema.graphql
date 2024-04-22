@@ -68,7 +68,6 @@ type Amount {
 Represents an single ingredient of a recipe.
 """
 type RecipeIngredient {
-  uuid: ID! # is never null
   name: String
   amount: Amount
   description: String
@@ -247,6 +246,9 @@ type Query @rateLimit(limit: 100, duration: 60) {
 type Mutation @rateLimit(limit: 10, duration: 60) {
   updateUser(username: String, shareEmail: Boolean, newUser: Boolean): Acknowledgement
   createNewUser(name: String, email: String, password: String): Acknowledgement
+  updateCamp(id: ID!, name: String, description: String, year: Int): Acknowledgement
+  updateDay(camp_id: ID!, date: Date, description: String): Acknowledgement
+  updateMeal(id: ID!, name: String, description: String): Acknowledgement
 }
 
 type Subscription {

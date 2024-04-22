@@ -1,29 +1,4 @@
-import {
-  Meal,
-  MultiplicationFactorTypes as MultiplicationFactorTypesGraphQL,
-  Resolvers,
-} from '@/util/generated/types/graphql';
-import { MultiplicationFactorTypes as MultiplicationFactorTypesPrisma } from '@prisma/client';
-
-export const multiplicationFactorToGraphqlType = (
-  multiplicationFactor: MultiplicationFactorTypesPrisma | null | undefined
-): MultiplicationFactorTypesGraphQL => {
-  const multiplicationFactorMap = {
-    [MultiplicationFactorTypesPrisma.TOTAL]: MultiplicationFactorTypesGraphQL.Total,
-    [MultiplicationFactorTypesPrisma.FIXED]: MultiplicationFactorTypesGraphQL.Fixed,
-    [MultiplicationFactorTypesPrisma.VEGETARIANS]:
-      MultiplicationFactorTypesGraphQL.Vegetarians,
-    [MultiplicationFactorTypesPrisma.VEGANS]: MultiplicationFactorTypesGraphQL.Vegans,
-    [MultiplicationFactorTypesPrisma.LEADERS]: MultiplicationFactorTypesGraphQL.Leaders,
-  };
-
-  if (multiplicationFactor && multiplicationFactor in multiplicationFactorMap) {
-    return multiplicationFactorMap[multiplicationFactor];
-  }
-
-  // default to total
-  return MultiplicationFactorTypesGraphQL.Total;
-};
+import { Meal, Resolvers } from '@/util/generated/types/graphql';
 
 export const mealResolvers: Resolvers = {
   Meal: {
@@ -35,25 +10,20 @@ export const mealResolvers: Resolvers = {
           where: {
             mealId: parent.id,
           },
+          include: {
+            ingredients: true,
+          },
         })
       ).map((recipe) => ({
         ...recipe,
         ingredients: recipe.ingredients?.map((ingredient) => ({
-          uuid: ingredient.uuid,
           name: ingredient?.name || '',
           amount: {
-            value: ingredient?.amount?.value,
-            unit: ingredient?.amount?.unit,
-            multiplicationFactorOverride: multiplicationFactorToGraphqlType(
-              ingredient?.amount?.multiplicationFactorOverride
-            ),
+            value: ingredient?.amount,
+            unit: ingredient?.unit,
           },
-          description: ingredient?.description || '',
 
-          isFreshProduct: ingredient?.isFreshProduct,
-          storeName: ingredient?.storeName,
-          isOverriden: false,
-          isDeleted: false,
+          isFreshProduct: ingredient?.isFresh,
         })),
       }));
     },

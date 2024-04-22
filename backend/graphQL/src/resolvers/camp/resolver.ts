@@ -1,21 +1,7 @@
 import { Camp, CampDay, MealUsageType, Resolvers } from '@/util/generated/types/graphql';
-import { MealUsage, MealUsageTypes } from '@prisma/client';
-import { multiplicationFactorToGraphqlType } from '@/resolvers/meal/resolver';
+import { MealUsage } from '@prisma/client';
 
 const getMealUsageGraphqlType = (mealUsage?: MealUsage): MealUsageType => {
-  const mealUsageTypeMap = {
-    [MealUsageTypes.BREAKFAST]: MealUsageType.Breakfast,
-    [MealUsageTypes.MORNING_SNACK]: MealUsageType.MorningSnack,
-    [MealUsageTypes.LUNCH]: MealUsageType.Lunch,
-    [MealUsageTypes.DINNER]: MealUsageType.Dinner,
-    [MealUsageTypes.AFTERNOON_SNACK]: MealUsageType.AfternoonSnack,
-    [MealUsageTypes.EVENING_SNACK]: MealUsageType.EveningSnack,
-  };
-
-  if (mealUsage?.type && mealUsage.type in mealUsageTypeMap) {
-    return mealUsageTypeMap[mealUsage.type];
-  }
-
   throw new Error('Unknown meal usage type');
 };
 
@@ -30,7 +16,7 @@ export const campResolvers: Resolvers = {
       const { prisma } = context;
       const meals = await prisma.meal.findMany({
         where: {
-          mealUsages: {
+          mealUsage: {
             some: {
               campId: camp_id,
               date: parent.date,
@@ -40,20 +26,8 @@ export const campResolvers: Resolvers = {
       });
 
       return meals.map((meal) => {
-        const mealUsage = meal.mealUsages?.find(
-          (usage) =>
-            usage.campId == camp_id &&
-            usage.date.toISOString() == parent.date.toISOString()
-        );
-
         return {
           ...meal,
-          multiplicationFactor: multiplicationFactorToGraphqlType(
-            meal.multiplicationFactor
-          ),
-          multiplicationFactorAdjusted: false,
-          usageType: getMealUsageGraphqlType(mealUsage),
-          needsPreparation: mealUsage?.needsPreparation || false,
           campId: camp_id,
         };
       });
