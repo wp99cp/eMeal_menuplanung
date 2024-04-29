@@ -67,7 +67,7 @@ services:
       POSTGRES_DB: eMeal_menuplanung
 
     volumes:
-      - postgress-data_new2:/var/lib/postgresql/data
+      - postgress-data:/var/lib/postgresql/data
 
   prometheus:
     image: prom/prometheus
@@ -116,7 +116,7 @@ services:
       - '9000:3000' # localhost:9000 for accessing grafana
 
 volumes:
-  postgress-data_new2:
+  postgress-data:
     driver: local
   prometheus-storage:
     driver: local
