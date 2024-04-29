@@ -1,14 +1,16 @@
 import React from 'react';
-import { Title } from '@/components/elements/Title';
 import { SmallLayout } from '@/components/layout/SmallLayout';
-import { Text } from '@ui/components/Text';
+import { Paragraph } from '@ui/components/Text';
+import { Title } from '@ui/components/titles';
 
 export default function ForgotPassword() {
   return (
     <>
       <SmallLayout>
         <Title>Passwort vergessen?</Title>
-        <Text>Zur Zeit kann das Passwort leider noch nicht zurückgesetzt werden.</Text>
+        <Paragraph>
+          Zur Zeit kann das Passwort leider noch nicht zurückgesetzt werden.
+        </Paragraph>
       </SmallLayout>
     </>
   );

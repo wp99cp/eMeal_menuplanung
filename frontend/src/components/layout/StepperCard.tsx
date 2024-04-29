@@ -2,10 +2,9 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Card } from '@/components/layout/Card';
-import { PrimaryButton } from '@/components/elements/Buttons/PrimaryButton';
 import { CheckIcon } from '@heroicons/react/24/solid';
-import { StrokedButton } from '@/components/elements/Buttons/StrokedButton';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Button } from '@ui/components/Button';
 
 export interface StepperCardSteps<T> {
   name: string;
@@ -69,9 +68,9 @@ const render_nav_buttons = (
   if (index === 0) {
     return (
       <>
-        <PrimaryButton onClick={step_forward(steps, index, settings, baseUrl, router)}>
+        <Button onClick={step_forward(steps, index, settings, baseUrl, router)}>
           {settings.stepper_nav_config.first_nav.forwards_button_name}
-        </PrimaryButton>
+        </Button>
       </>
     );
   }
@@ -79,32 +78,32 @@ const render_nav_buttons = (
   if (index === steps.length - 1) {
     return (
       <>
-        <StrokedButton
+        <Button
           onClick={async () => {
             await router.push(baseUrl + steps[index - 1]?.step_name);
           }}
         >
           {settings.stepper_nav_config.last_nav.backwards_button_name}
-        </StrokedButton>
-        <PrimaryButton onClick={continuation_step(steps, index, settings, router)}>
+        </Button>
+        <Button onClick={continuation_step(steps, index, settings, router)}>
           {settings.stepper_nav_config.last_nav.forwards_button_name}
-        </PrimaryButton>
+        </Button>
       </>
     );
   }
 
   return (
     <>
-      <StrokedButton
+      <Button
         onClick={async () => {
           await router.push(baseUrl + steps[index - 1]?.step_name);
         }}
       >
         {settings.stepper_nav_config.middle_nav.backwards_button_name}
-      </StrokedButton>
-      <PrimaryButton onClick={step_forward(steps, index, settings, baseUrl, router)}>
+      </Button>
+      <Button onClick={step_forward(steps, index, settings, baseUrl, router)}>
         {settings.stepper_nav_config.middle_nav.forwards_button_name}
-      </PrimaryButton>
+      </Button>
     </>
   );
 };

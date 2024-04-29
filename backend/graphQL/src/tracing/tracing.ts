@@ -50,6 +50,7 @@ registerInstrumentations({
 
 // Configure how spans are processed and exported. In this case we're sending spans
 // as we receive them to the console
+
 provider.addSpanProcessor(
   new BatchSpanProcessor(
     new OTLPTraceExporter({

@@ -9,8 +9,8 @@ import {
   UsersIcon,
 } from '@heroicons/react/24/outline';
 import { StrokedLink } from '@/components/elements/Buttons/StrokedLink';
-import { Title } from '@/components/elements/Title';
-import { Text } from '@ui/components/Text';
+import { Paragraph } from '@ui/components/Text';
+import { Title } from '@ui/components/titles';
 
 const features = [
   {
@@ -56,11 +56,11 @@ export default function LandingPage() {
 
         <section className="sm:text-center">
           <Title>eMeal - Menüplanung. Lagerküche online planen.</Title>
-          <Text>
+          <Paragraph>
             Mit eMeal - Menüplanung kannst du Rezepte, Mahlzeiten sowie ganze Lager online
             erstellen, verwalten und zu einer Broschüre zusammenstellen.{' '}
             <TextLink href="/about">Mehr Erfahren.</TextLink>
-          </Text>
+          </Paragraph>
 
           <div className="mt-8 flex gap-x-4 sm:justify-center">
             <PrimaryLink href="/auth/signin" external={true}>

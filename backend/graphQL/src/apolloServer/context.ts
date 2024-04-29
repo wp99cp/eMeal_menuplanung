@@ -8,7 +8,6 @@ import { ContextFunction } from '@apollo/server';
 import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 
 import { traceWrapper } from '@/tracing/traceWrapper';
-import { Session } from '@/util/types/types';
 import { withSubscriptions } from '@/util/prisma/extensions/subscribe';
 
 const defaultPrisma = new PrismaDefaultClient();
@@ -32,7 +31,7 @@ export type GraphQLContext = {
 
 export type SubscriptionContext = {
   connectionParams: {
-    session?: Session;
+    session_token?: string;
     'x-api-key'?: string;
     'x-user-id'?: string;
     'x-treat-as-user'?: 'true' | 'false';
@@ -54,7 +53,9 @@ export const contextFunction: ContextFunction<
   const apiKey = req.headers['x-api-key'] as string;
   const has_valid_api_key = isAuthenticatedUsingAPIToken(apiKey);
 
-  const session = !has_valid_api_key ? await traceWrapper(retrieveSession)(req) : null;
+  const session = !has_valid_api_key
+    ? await traceWrapper(retrieveSession)(req, prisma)
+    : null;
   const user_id = getUserId(session, has_valid_api_key, req.headers);
 
   /*
@@ -85,11 +86,10 @@ export const subscriptionContextFunction = traceWrapper(
     const api_token: string | undefined = ctx.connectionParams?.['x-api-key'];
     const has_valid_api_key = isAuthenticatedUsingAPIToken(api_token);
 
-    const user_id = getUserId(
-      ctx?.connectionParams?.session,
-      has_valid_api_key,
-      ctx?.connectionParams
-    );
+    const session = !has_valid_api_key
+      ? await traceWrapper(retrieveSession)(ctx.connectionParams, prisma)
+      : null;
+    const user_id = getUserId(session, has_valid_api_key, ctx.connectionParams);
 
     /*
      * The header 'x-treat-as-user' allows authentication using an API key,

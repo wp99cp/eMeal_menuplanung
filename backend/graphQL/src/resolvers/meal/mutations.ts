@@ -5,7 +5,9 @@ export const mealMutations: MutationResolvers = {
     await prisma.meal.update({
       where: { id: args.id },
       data: {
-        description: args.description,
+        ...(args.description !== undefined && {
+          description: args.description?.toString(),
+        }),
         ...(args.name !== undefined && { name: args.name?.toString() }),
       },
     });

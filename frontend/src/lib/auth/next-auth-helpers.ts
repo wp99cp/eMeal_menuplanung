@@ -7,7 +7,6 @@ import bcrypt from 'bcryptjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { randomUUID } from 'crypto';
 import Cookies from 'cookies';
-import { decode, encode, JWTOptions } from 'next-auth/jwt';
 import { HitobitoProfile, Provider } from '@/util/types/next-auth';
 
 const prisma = new PrismaClient();
@@ -159,44 +158,15 @@ export const getCallbacksOptions = (
   },
 
   async session({ session, user }) {
+    console.log('Request Session!', req.headers.cookie);
+
+    const cookies = new Cookies(req, res);
     const sessionUser = { ...session.user, ...user };
     return Promise.resolve({
       ...session,
+      'next-auth.session-token': cookies.get('next-auth.session-token'),
       user: sessionUser,
     });
-  },
-});
-
-export const getJwtOptions = (
-  req: NextApiRequest,
-  res: NextApiResponse
-): Partial<JWTOptions> => ({
-  encode: async ({ token, secret, maxAge }) => {
-    if (
-      req.query.nextauth!.includes('callback') &&
-      req.query.nextauth!.includes('credentials') &&
-      req.method === 'POST'
-    ) {
-      const cookies = new Cookies(req, res);
-      const cookie = cookies.get('next-auth.session-token');
-
-      if (cookie) return cookie;
-      else return '';
-    }
-    // Revert to default behaviour when not in the credentials provider callback flow
-    return encode({ token, secret, maxAge });
-  },
-  decode: async ({ token, secret }) => {
-    if (
-      req.query.nextauth!.includes('callback') &&
-      req.query.nextauth!.includes('credentials') &&
-      req.method === 'POST'
-    ) {
-      return null;
-    }
-
-    // Revert to default behaviour when not in the credentials provider callback flow
-    return decode({ token, secret });
   },
 });
 

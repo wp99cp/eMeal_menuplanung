@@ -5,6 +5,13 @@ import { ReactNode } from 'react';
 import Header from '@/components/navigation/Header';
 import { Footer } from '@ui/surfaces/Footer';
 import SessionProvider from '@/components/provider/SessionProvider';
+import { getCookies } from 'cookies-next';
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 // either Static metadata
 export const metadata = {
@@ -35,12 +42,6 @@ export const metadata = {
   // TODO: add robots and robots.txt
   // TODO: add themeColor
   // TODO: add manifest
-
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

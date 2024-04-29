@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import SignInForm from '@ui/surfaces/SignInForm';
 import Alert from '@/components/elements/Notification/Alert';

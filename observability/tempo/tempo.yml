@@ -20,9 +20,9 @@ storage:
   trace:
     backend: local # backend configuration to use
     wal:
-      path: /tmp/tempo/wal # where to store the wal locally
+      path: /etc/tempo/wal # where to store the wal locally
     local:
-      path: /tmp/tempo/blocks
+      path: /etc/tempo/blocks
 
 overrides:
   metrics_generator_processors: [service-graphs, span-metrics] # enables metrics generator

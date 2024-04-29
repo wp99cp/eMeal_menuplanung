@@ -4,7 +4,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import {
   CeviDBProvider,
   getCallbacksOptions,
-  getJwtOptions,
   GoogleProviderWithCustomProfile,
   MiDataProvider,
   NextAuthCredentialProvider,
@@ -37,6 +36,5 @@ export const authOptions: NextAuthOptions = {
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   authOptions.callbacks = getCallbacksOptions(req, res);
-  authOptions.jwt = getJwtOptions(req, res);
   return await NextAuth(req, res, authOptions);
 }

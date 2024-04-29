@@ -4,6 +4,13 @@ query checkUsername($username: String) {
   }
 }
 
+query getCampList {
+  camps {
+    id
+    name
+  }
+}
+
 mutation updateUser($username: String, $shareEmail: Boolean, $newUser: Boolean) {
   updateUser(username: $username, shareEmail: $shareEmail, newUser: $newUser) {
     ...Acknowledgement
@@ -13,6 +20,21 @@ mutation updateUser($username: String, $shareEmail: Boolean, $newUser: Boolean) 
 mutation createNewUser($name: String, $email: String, $password: String) {
   createNewUser(name: $name, email: $email, password: $password) {
     ...Acknowledgement
+  }
+}
+
+subscription camp($camp_id: ID!) {
+  camp(id: $camp_id) {
+    id
+    name
+    days {
+      date
+      meals {
+        id
+        name
+        description
+      }
+    }
   }
 }
 

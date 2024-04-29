@@ -11,6 +11,8 @@ const mapSegmentToTitle = (segment: string, segements: string[]) => {
       return 'Profile';
     case 'onboarding':
       return 'Account Einrichten';
+    case 'camps':
+      return 'Lager';
     default:
       return segment;
   }

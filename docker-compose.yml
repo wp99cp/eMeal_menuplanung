@@ -84,11 +84,12 @@ services:
 
   # To eventually offload to Tempo...
   tempo:
+    user: '0:0'
     image: grafana/tempo:latest
     command: ['-config.file=/etc/tempo/tempo.yml']
     volumes:
       - ./observability/tempo/tempo.yml:/etc/tempo/tempo.yml
-      - tempo-data:/tmp/tempo
+      - tempo-data:/etc/tempo
     ports:
       - '3200' # tempo
       - '4317' # otlp grpc

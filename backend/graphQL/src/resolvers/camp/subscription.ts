@@ -1,13 +1,21 @@
 import { SubscriptionResolvers } from '@/util/generated/types/graphql';
 import { GraphQLContext } from '@/apolloServer/context';
 import { getCampById } from '@/resolvers/camp/common';
+import logger from '@/logger/logger';
 
 export const campSubscriptions: SubscriptionResolvers = {
   camp: {
-    subscribe: (_, { id: camp_id }, { prisma }: GraphQLContext) =>
-      prisma.camp.eventStream(camp_id),
+    subscribe: (_, args, { prisma }: GraphQLContext) => {
+      logger.debug('Subscribing to camp with id: ', args);
+      logger.debug(JSON.stringify(args));
+      // logger.debug('Subscribing to camp with id: ', camp_id);
+      return prisma.camp.eventStream(args.id);
+    },
 
-    resolve: ({ camp_id }: { camp_id: string }, _: any, { prisma }: GraphQLContext) =>
-      getCampById(camp_id, prisma),
+    resolve: (
+      _: undefined,
+      { id: camp_id }: { id: string },
+      { prisma }: GraphQLContext
+    ) => getCampById(camp_id, prisma),
   },
 };

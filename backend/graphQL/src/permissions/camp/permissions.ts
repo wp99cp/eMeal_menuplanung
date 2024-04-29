@@ -1,35 +1,45 @@
 import { allow, IRules, rule } from 'graphql-shield';
 import { GraphQLContext } from '@/apolloServer/context';
-import logger from '@/logger/logger';
 
 // Fallback rule for all other rules: apiKeyOnly
 export const campRules: IRules = {
   Query: {
-    camp: rule()(async (_, __, ctx: GraphQLContext) => {
-      logger.debug('Query.camp rule');
+    // the check will be done at object level
+    camp: allow,
+
+    camps: rule()(async (_, __, { user_id, api_key }: GraphQLContext) => {
+      if (api_key) return true;
+      if (!user_id) throw new Error('Not authorised to access this resource!');
+
       return true;
     }),
   },
   Mutation: {
-    updateDay: rule()(async (_, __, ctx: GraphQLContext) => {
-      logger.debug('Mutation.updateDay rule');
-      return true;
+    updateDay: rule()(async (_, __, { api_key }: GraphQLContext) => {
+      if (api_key) return true;
+
+      return false;
     }),
 
-    updateCamp: rule()(async (_, __, ctx: GraphQLContext) => {
-      logger.debug('Mutation.updateCamp rule');
-      return true;
+    updateCamp: rule()(async (parent, __, { user_id, api_key }: GraphQLContext) => {
+      if (api_key) return true;
+      if (!user_id) throw new Error('Not authorised to access this resource!');
+
+      // check if userId is in ownerId, memberIds or viewerIds
+      return user_id === parent.ownerId;
     }),
   },
 
-  Subscription: allow, // the access checks are done on type level
+  Subscription: {
+    // the check will be done at object level
+    camp: allow,
+  },
 
   Camp: rule()(async (parent, _, { user_id, api_key }: GraphQLContext) => {
     // allow if api_key is set
     if (api_key) return true;
-    if (!user_id) throw new Error('Not authorised to access this resource!');
 
     // check if userId is in ownerId, memberIds or viewerIds
-    return user_id !== parent.ownerId;
+    return user_id === parent.ownerId;
   }),
 };
