@@ -1,5 +1,6 @@
 import winston, { format, transports } from 'winston';
 import LokiTransport from 'winston-loki';
+import build from '@/build';
 
 const messageOnly = format.printf(({ level, message }) => {
   return `[${level.toUpperCase()}]: ${message}`;
@@ -16,6 +17,9 @@ const logger = winston.createLogger({
       interval: 5,
       labels: {
         job: 'graphQL-backend',
+        version: build.version,
+        branch: build.git.branch,
+        commit: build.git.hash,
       },
       json: true,
       format: format.json(),
