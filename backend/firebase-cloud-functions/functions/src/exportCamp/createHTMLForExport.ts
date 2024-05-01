@@ -114,7 +114,7 @@ export const createHTML = (camp: ExportedCamp) => {
          */
         const createWeekView = function () {
 
-            const mealUsages = ["Leitersnack", "Znacht", "Zvieri", "Zmittag", "Znüni", "Zmorgen"];
+            const mealUsages = ["Dessert", "Leitersnack", "Znacht", "Zvieri", "Zmittag", "Znüni", "Zmorgen"];
 
             let innerHTMLStr = '<table id="weekTable">';
 

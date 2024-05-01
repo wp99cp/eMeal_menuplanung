@@ -10,7 +10,7 @@ from firebase_admin import credentials, firestore
 from exportData.utils import convert_document
 
 # defines order of meal types
-meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten']
+meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten']
 
 
 class DataFetcher(object):

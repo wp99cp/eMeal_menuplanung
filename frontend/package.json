@@ -1,8 +1,8 @@
 {
   "name": "@emeal/menuplanung",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "license": "MIT",
-  "copyrights": "© 2019 - 2023 Cevi Züri 11 - eMeal Menüplanung",
+  "copyrights": "© 2019 - 2024 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
     "start": "angular-build-info && ng serve --ssl",

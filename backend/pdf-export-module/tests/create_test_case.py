@@ -71,7 +71,7 @@ def load_recipe_data(db, specific_meals, test_case_data):
                 recipe['recipe_override_participants'] = spec_recipe['recipe_override_participants']
 
     # defines order of meal types
-    meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten']
+    meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten']
 
     # sort meals
     specific_meals = sorted(specific_meals, key=lambda x: meal_types.index(x['meal_used_as']))

@@ -84,7 +84,7 @@ export interface FirestoreSettings {
  * Verwendung einer Mahlziet als Zmorgen, Zmittag, Znacht, Zvieri usw.
  *
  */
-export type MealUsage = 'Zmorgen' | 'Zmittag' | 'Znacht' | 'Zvieri' | 'Znüni' | 'Leitersnack';
+export type MealUsage = 'Zmorgen' | 'Zmittag' | 'Znacht' | 'Zvieri' | 'Znüni' | 'Leitersnack' | 'Dessert';
 
 /**
  * Representiert ein FirestoreMeal, d.h. ein Meal in der Datenbank
