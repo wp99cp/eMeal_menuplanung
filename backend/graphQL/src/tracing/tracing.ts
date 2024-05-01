@@ -24,7 +24,7 @@ const provider = new NodeTracerProvider({
     new Resource({
       // Replace with any string to identify this service in your system
       'service.name': 'graphQL-backend',
-      job: 'graphQL-backend',
+      container: 'graphQL-backend',
       'service.version': packageVersion.version,
     })
   ),

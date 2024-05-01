@@ -2,6 +2,7 @@ import Image from 'next/image';
 import logo_footer from '@/assets/logo_footer.svg';
 import build from '@/build';
 import Link from 'next/link';
+import logger from '@/logger';
 
 const navigation = [
   {
@@ -45,6 +46,8 @@ const navigation = [
 ];
 
 export const Footer = () => {
+  logger.info('Footer 123');
+
   const today = new Date();
 
   const format: Intl.DateTimeFormatOptions = {

@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import Header from '@/components/navigation/Header';
 import { Footer } from '@ui/surfaces/Footer';
 import SessionProvider from '@/components/provider/SessionProvider';
-import { getCookies } from 'cookies-next';
+import logger from '@/logger';
 
 export const viewport = {
   width: 'device-width',
@@ -45,6 +45,8 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  logger.info('RootLayout 123');
+
   return (
     <html className="h-full min-h-full">
       <body className="flex h-screen flex-col justify-between bg-gray-100 dark:bg-zinc-800 dark:text-gray-200">

@@ -16,7 +16,7 @@ const logger = winston.createLogger({
       host: 'http://loki:3100',
       interval: 5,
       labels: {
-        job: 'graphQL-backend',
+        container: 'graphQL-backend',
         version: build.version,
         branch: build.git.branch,
         commit: build.git.hash,

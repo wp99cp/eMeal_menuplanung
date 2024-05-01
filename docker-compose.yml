@@ -73,7 +73,7 @@ services:
     image: prom/prometheus
     volumes:
       - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-storage:/prometheus
+      - logging-prometheus:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -89,7 +89,7 @@ services:
     command: ['-config.file=/etc/tempo/tempo.yml']
     volumes:
       - ./observability/tempo/tempo.yml:/etc/tempo/tempo.yml
-      - tempo-data:/etc/tempo
+      - logging-tempo:/etc/tempo
     ports:
       - '3200' # tempo
       - '4317' # otlp grpc
@@ -108,8 +108,8 @@ services:
   grafana:
     image: grafana/grafana
     volumes:
-      - grafana-storage:/var/lib/grafana
-      - ./observability/grafana/provisioning:/etc/grafana/provisioning
+      - logging-grafana:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
 
     environment:
       - GF_LOG_LEVEL=error
@@ -119,9 +119,9 @@ services:
 volumes:
   postgress-data:
     driver: local
-  prometheus-storage:
+  logging-prometheus:
     driver: local
-  grafana-storage:
+  logging-grafana:
     driver: local
-  tempo-data:
+  logging-tempo:
     driver: local

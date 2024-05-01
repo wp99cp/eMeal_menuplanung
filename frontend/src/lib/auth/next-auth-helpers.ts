@@ -158,8 +158,6 @@ export const getCallbacksOptions = (
   },
 
   async session({ session, user }) {
-    console.log('Request Session!', req.headers.cookie);
-
     const cookies = new Cookies(req, res);
     const sessionUser = { ...session.user, ...user };
     return Promise.resolve({
