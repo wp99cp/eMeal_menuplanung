@@ -79,7 +79,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   getMealNames() {
 
-    return ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
+    return ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten'];
 
   }
 
