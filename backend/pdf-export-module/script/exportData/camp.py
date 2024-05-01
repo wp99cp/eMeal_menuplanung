@@ -46,7 +46,7 @@ class CampClass(IngredientsCalculator, DataFetcher):
         """
 
         Creates a list of all used meal type names. The resulting list is ordered
-        according as follows: Zmorgen, Znüni, Zmittag, Zvieri, Znacht, Leitersnack,
+        according as follows: Zmorgen, Znüni, Zmittag, Zvieri, Znacht, Dessert, Leitersnack,
         Vorbereiten. The three main meals, i.g., Zmorgen, Zmittag, Znacht, are always included.
 
         :return: an array of meal type names.

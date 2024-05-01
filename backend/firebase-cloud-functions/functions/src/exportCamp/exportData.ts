@@ -149,7 +149,7 @@ async function loadDay(camp: ExportedCamp, day: ExportedDay, categories: Categor
  */
 function mealCompareFn(a: ExportedMeal, b: ExportedMeal) {
 
-    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Leitersnack', 'Vorbereiten'];
+    const orderOfMahlzeiten = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten'];
 
     // sortiert nach Verwendung
     if (a.meal_data_as_date.getTime() === b.meal_data_as_date.getTime()) {
