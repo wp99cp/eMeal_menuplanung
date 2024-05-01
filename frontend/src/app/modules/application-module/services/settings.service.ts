@@ -54,6 +54,7 @@ export class SettingsService {
   public static calcRecipeParticipants(
     campPart: number,
     campVegis: number,
+    campLeaders: number,
     mealPart: number,
     recipePart: number,
     mealOver: boolean,
@@ -74,7 +75,7 @@ export class SettingsService {
 
     } else if (vegiState === 'leaders') {
 
-      return 0;
+      return campLeaders;
     }
 
     return calcRecipePart;

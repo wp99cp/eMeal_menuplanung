@@ -272,6 +272,7 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
       this.mealPart = SettingsService.calcRecipeParticipants(
         this.camp.participants,
         this.camp.vegetarians,
+        this.camp.leaders,
         this.specificMeal.participants,
         specificRecipe.participants,
         this.specificMeal.overrideParticipants,
