@@ -28,7 +28,7 @@
       camp.vegetarians,
       camp.leaders,
       specificMeal.participants,
-      this.recipeForm.get('overrideParticipants').value,
+      this.recipeForm.get('overrideParticipants').value ? this.recipeForm.get('participants') : 0,
       specificMeal.overrideParticipants,
       this.recipeForm.get('overrideParticipants').value,
       this.recipeForm.get('vegi').value)
