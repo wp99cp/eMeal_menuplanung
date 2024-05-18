@@ -6,7 +6,7 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   output          = env("PRISMA_OUTPUT")
-  previewFeatures = ["fullTextIndex", "metrics", "tracing", "views"]
+  previewFeatures = ["fullTextSearch", "metrics", "tracing", "views"]
 }
 
 // ##############################
@@ -75,6 +75,10 @@ model User {
 
   emailVerified DateTime? /// date of the last email verification, null if not verified
 
+  // indecation if the user has used the previous version of the app
+  // if set to true, the user may be allowed to transfer data from the old version
+  usedOldVersion Boolean @default(false)
+
   image    String?
   accounts Account[]
   sessions Session[]
@@ -82,8 +86,13 @@ model User {
   // registration meta data
   newUser      Boolean  @default(true) /// new users may have not finished the onboarding process
   registeredAt DateTime @default(now()) /// the date and time of account creation
-  Camp         Camp[]
-  Meal         Meal[]
+  meals        Meal[]
+
+  // a list of camps the user has access to (excluding the ones he owns)
+  campAccess CampAccessRight[] @relation(name: "access")
+  gaveAccess CampAccessRight[] @relation(name: "gaveAccess")
+
+  camps Camp[] @relation(name: "campOwnership")
 }
 
 model ParticipantCount {
@@ -103,33 +112,100 @@ model ParticipantCount {
   /// will not be updated if true
   isFixed Boolean @default(false)
 
-  Camp      Camp?
-  Day       Day?
-  MealUsage MealUsage?
+  camp Camp?
+  day  Day?
+  meal Meal?
+}
+
+enum CampAccessRightLevel {
+  /// the owner has all rights to the camp, can edit all MealUsages
+  /// editing the meal usages does not mean, that the user can edit the meals or recipes itselfs
+  /// but only the usage of the meal in the camp
+  OWNER
+
+  /// the manager can edit the camp and the camp access rights, can edit all MealUsages
+  MANAGER
+
+  /// the editor can edit the camp, can edit all MealUsages
+  EDITOR
+
+  /// the viewer can only view the camp, can view all MealUsages
+  VIEWER
+}
+
+// the access rights to a camp
+model CampAccessRight {
+  id String @id @default(cuid())
+
+  creationDate     DateTime @default(now()) /// the date and time of the creation
+  lastModification DateTime @updatedAt /// the date and time of the last modification
+
+  // the user who has the right
+  userId String /// the id of the user
+  user   User   @relation(name: "access", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // the user who gave the right
+  hasGivenUserId String? /// the id of the user who gave the right; null if the user is the owner
+  hasGivenUser   User?   @relation(name: "gaveAccess", fields: [hasGivenUserId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  // the camp to which the right belongs
+  campId String /// the id of the camp
+  camp   Camp   @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // the level of the right
+  level   CampAccessRightLevel @default(VIEWER)
+  isOwner Boolean? // null if the user is not the owner, true if the user is the owner
+
+  @@unique([userId, campId], name: "uniqueUserCampAccessLevel")
+  @@unique([campId, isOwner], name: "uniqueCampOwner")
+  // the index is used to search for the access rights of a user
+  @@index([userId], name: "userIndex")
+  @@index([campId], name: "campIndex")
+  @@index([userId, campId], name: "campAccessIndex")
 }
 
 /// This is the main data model of the app.
 model Camp {
   id String @id @default(cuid())
 
+  // an archived camp cannot be edited by any usser
+  // only the owner can archive a camp or unarchive it
+  // the camp will be automatically archived if the owner deletes his account
+  // the camp will be automatically archived one month after the last camp day
+  is_archived Boolean @default(false)
+
   name        String /// the name of the camp
   description String? /// the description of the camp
   year        Int /// the year of the camp
 
-  creationDate     DateTime @default(now())
+  creationDate DateTime @default(now())
+
+  // the modification date is updated whenever the camp is modified
+  // or a child object is modified (e.g. a day, meal, ...)
   lastModification DateTime @updatedAt
 
   // each camp has exactly one participant count
   participantCountId String           @unique /// the id of the participant count @unique
   participantCount   ParticipantCount @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  // each camp has maximum one owner
-  ownerId String?
-  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  // each camp has a list of days and a list of meal usages
+  days  Day[]
+  meals Meal[]
 
-  days       Day[]
-  mealUsage  MealUsage[]
-  CampExport CampExport[]
+  // each camp has one owner, the owner is the user who created the camp
+  // the owner has all rights to the camp, if the owner is deleted, the camp will be archived
+  // any editor can be promoted to owner and unarchive the camp
+  ownerUserId String?
+  owner       User?   @relation(name: "campOwnership", fields: [ownerUserId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  campExports CampExport[]
+
+  // each camp has a list of users who have access to the camp
+  // this list includes the owner (access is granted based on that list)
+  userAccess CampAccessRight[]
+
+  // index for camp search
+  @@index([year], name: "yearIndex")
 }
 
 model Day {
@@ -142,9 +218,9 @@ model Day {
   lastModification DateTime @updatedAt
 
   // each day belongs to exactly one camp
-  campId    String /// the id of the camp
-  camp      Camp        @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  mealUsage MealUsage[]
+  campId String /// the id of the camp
+  camp   Camp   @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  meals  Meal[]
 
   // each camp has exactly one participant count
   participantCountId String?           @unique /// the id of the participant count @unique
@@ -157,22 +233,12 @@ model Day {
   @@unique([campId, date])
 }
 
-model MealUsage {
-  id String @id @default(cuid())
-
-  campId String /// the id of the camp
-  date   DateTime @db.Date
-  mealId String /// the id of the meal
-
-  // each camp has exactly one participant count
-  participantCountId String?           @unique /// the id of the participant count @unique
-  participantCount   ParticipantCount? @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  day  Day  @relation(fields: [campId, date], references: [campId, date], onDelete: Cascade, onUpdate: Cascade)
-  camp Camp @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  meal Meal @relation(fields: [mealId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-}
-
+// How does the meal access work
+// - each template has exactly one owner, the owner can edit the meal (and all associated recipes and ingredients).
+// - everytime the meal is used in a camp, a new copy is created, the template meal is linked as the original meal
+// - this meal usage is shared accoring to the access rights of the camp
+// - the owner can merge the meal usages back to the template meal, a warning if any of the meal usages has been modified
+// ask for confirmation to merge the meals back to the template meal
 model Meal {
   id String @id @default(cuid())
 
@@ -184,13 +250,41 @@ model Meal {
   lastModification DateTime @updatedAt
 
   // each meal has max one owner
+  // we only set ownerId if the meal is a template, but not if it is a concrete meal usage
   ownerId String?
   owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  recipes   Recipe[]
-  mealUsage MealUsage[]
+  // each meal has a list of recipes
+  recipes Recipe[]
+
+  // each meal is either a template or a concrete meal usage
+  isTemplate   Boolean @default(true) /// if true, the meal is a template and cannot be used in a camp
+  templateId   String? /// the id of the original meal
+  templateMeal Meal?   @relation(name: "originalMeal", fields: [templateId], references: [id])
+  mealUsages   Meal[]  @relation(name: "originalMeal")
+
+  // indecation if the meal has unmerged derivations
+  // this is used to show a warning if the meal is merged back to the template meal
+  // false for templates
+  hasUnmergedDerivations Boolean @default(false)
+
+  campId String /// the id of the camp
+  date   DateTime @db.Date
+  mealId String /// the id of the meal
+
+  // each camp has exactly one participant count
+  participantCountId String?           @unique /// the id of the participant count @unique
+  participantCount   ParticipantCount? @relation(fields: [participantCountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  // each meal can be used in exactly one (camp, day) tuple
+  day  Day?  @relation(fields: [campId, date], references: [campId, date], onDelete: Cascade, onUpdate: Cascade)
+  camp Camp? @relation(fields: [campId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
+// each recipe belongs to exactly one meal
+// we separate meals from recipes to make them searchable
+// recipes have no separate access rights, but are always associated with a meal
+/// Represents a recipe
 model Recipe {
   id String @id @default(cuid())
 
@@ -214,6 +308,7 @@ model Recipe {
   @@unique([mealId, order])
 }
 
+/// Represents an ingredient of a recipe
 model Ingredient {
   id    String @id @default(cuid())
   order Int    @default(autoincrement()) /// the order of the ingredient in the recipe
