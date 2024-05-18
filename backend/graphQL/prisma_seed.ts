@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from './src/util/generated/prisma/client';
-import { faker } from '@faker-js/faker';
+import { eMealFaker as faker } from './src/util/faker/eMeal_faker';
 
 const logging = (...message: unknown[]) => {
   // eslint-disable-next-line no-console
@@ -69,7 +69,9 @@ async function create_camp(
   await prisma.camp.upsert({
     create: {
       id: campID,
-      name: faker.company.name(),
+      creationDate: faker.date.past({ years: 5 }),
+      lastModification: faker.date.recent(),
+      name: faker.camp.name(),
       description: faker.company.catchPhrase(),
       year: faker.date.future().getFullYear(),
 
@@ -111,6 +113,11 @@ async function create_camp(
           id: dayID,
           date: date,
           campId: campID,
+          description: faker.datatype.boolean({ probability: 0.8 })
+            ? faker.lorem.sentence()
+            : '',
+          lastModification: faker.date.recent(),
+          creationDate: faker.date.past({ years: 5 }),
         },
         update: {},
         where: {
@@ -153,20 +160,43 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
       recipes.push({
         id: recipeID,
         name: faker.food.dish(),
-        description: faker.food.description(),
+        description: faker.datatype.boolean({ probability: 0.8 })
+          ? faker.food.description()
+          : '',
         mealId: mealID,
       });
 
       const ingredient_count = faker.number.int({ min: 0, max: 20 });
       for (let j = 0; j < ingredient_count; j++) {
-        ingredients.push({
+        // sometimes ingredients are missing
+        if (faker.datatype.boolean({ probability: 0.01 })) continue;
+
+        // ingredients
+        const ingredient = {
           name: faker.food.ingredient(),
           amount: faker.number.float({ min: 0, max: 100 }),
           unit: faker.helpers.arrayElement(['g', 'kg', 'ml', 'l', 'pcs']),
 
           order: j,
           recipeId: recipeID,
-        });
+        };
+
+        // sometimes ingredients have no amount
+        if (faker.datatype.boolean({ probability: 0.01 })) {
+          ingredient.amount = null;
+        }
+
+        // sometimes ingredients have no unit
+        if (faker.datatype.boolean({ probability: 0.01 })) {
+          ingredient.unit = null;
+        }
+
+        // sometimes ingredients have no name
+        if (faker.datatype.boolean({ probability: 0.01 })) {
+          ingredient.name = null;
+        }
+
+        ingredients.push(ingredient);
       }
     }
 
