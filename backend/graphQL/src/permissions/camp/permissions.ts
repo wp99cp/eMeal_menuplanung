@@ -16,9 +16,7 @@ export const campRules: IRules = {
   },
   Mutation: {
     updateDay: rule()(async (_, __, { api_key }: GraphQLContext) => {
-      if (api_key) return true;
-
-      return false;
+      return !!api_key;
     }),
 
     updateCamp: rule()(async (parent, __, { user_id, api_key }: GraphQLContext) => {
