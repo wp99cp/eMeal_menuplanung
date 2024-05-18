@@ -49,4 +49,8 @@ const main = async (): Promise<void> => {
   logger.info(`🚀 GraphQL server ready (at ${process.env.GRAPHQL_URL})`);
 };
 
-main().catch((err) => logger.error(err));
+main().catch((err) => {
+  logger.error('Unhandled error: ', err);
+  logger.error(err.stack);
+  logger.error('Shutting down server');
+});
