@@ -19,3 +19,7 @@ However, we do not plan to use extensions to implement business logic. For examp
 
 as those operations are only used within a single graphql resolver and should be implemented in the business logic of
 the resolver rather than on database level.
+
+## Database model
+
+TODO: use https://github.com/samchon/prisma-markdown?tab=readme-ov-file or https://github.com/pantharshit00/prisma-docs-generator
