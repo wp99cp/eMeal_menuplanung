@@ -112,7 +112,7 @@ services:
       - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
 
     environment:
-      - GF_LOG_LEVEL=error
+      - GF_LOG_LEVEL=critical
     ports:
       - '9000:3000' # localhost:9000 for accessing grafana
 
