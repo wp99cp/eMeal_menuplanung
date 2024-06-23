@@ -18,7 +18,7 @@ const shieldOptions: IOptionsConstructor = {
 };
 
 const default_rules: IRules = {
-  Pagination: paginationLimitation(10), // default pagination limitation
+  Query: paginationLimitation(10), // default pagination limitation
   Acknowledgement: allow,
 };
 

@@ -1,5 +1,7 @@
 import { inputRuleWithContext } from '@/util/shield/customFunctions';
 import { isUsernameUnique } from '@/util/functions';
+import logger from '@/logger/logger';
+import { inputRule } from 'graphql-shield';
 
 /**
  *
@@ -43,7 +45,7 @@ export const passedValidUsername = inputRuleWithContext()(
  *
  */
 export const paginationLimitation = (limit_max = 10) =>
-  inputRuleWithContext()(
+  inputRule()(
     (yup) =>
       yup.object({
         pagination: yup.object({
