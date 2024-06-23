@@ -239,6 +239,8 @@ model Day {
 // - this meal usage is shared accoring to the access rights of the camp
 // - the owner can merge the meal usages back to the template meal, a warning if any of the meal usages has been modified
 // ask for confirmation to merge the meals back to the template meal
+// TODO: use https://www.prisma.io/docs/orm/prisma-schema/data-model/table-inheritance
+//   to separate the template meal from the meal usage
 model Meal {
   id String @id @default(cuid())
 
@@ -270,7 +272,6 @@ model Meal {
 
   campId String /// the id of the camp
   date   DateTime @db.Date
-  mealId String /// the id of the meal
 
   // each camp has exactly one participant count
   participantCountId String?           @unique /// the id of the participant count @unique
@@ -317,10 +318,10 @@ model Ingredient {
   lastModification DateTime @updatedAt /// the date and time of the last modification
 
   // defines the the ingredient
-  amount  Float
-  unit    String
+  amount  Decimal?
+  unit    String?
   name    String
-  isFresh Boolean @default(false)
+  isFresh Boolean  @default(false)
 
   // each ingredient belongs to to exactly one recipe
   recipeId                     String /// the id of the recipe

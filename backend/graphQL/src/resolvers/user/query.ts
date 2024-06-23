@@ -19,8 +19,6 @@ export const userQueries: QueryResolvers = {
     const { criteria, pagination } = args;
     const { user_id, prisma, api_key } = context;
 
-    if (!user_id) throw new Error('No user_id set. Are you using a api key?');
-
     const users = await prisma.user.findMany({
       where: {
         username: { contains: criteria?.partialUsername || '', mode: 'insensitive' },
@@ -28,6 +26,7 @@ export const userQueries: QueryResolvers = {
         ...(!!api_key && { isHiddenUser: false }),
       },
       ...prisma_pagination_filer(pagination),
+      orderBy: [{ id: 'asc' }],
     });
 
     return (

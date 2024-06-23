@@ -106,43 +106,6 @@ export const withSubscriptions = () =>
 
         meal: {
           // unimplemented
-          async update({ args, query }) {
-            const meal = await query(args);
-            if (!meal || !meal.id) throw new Error('meal not found');
-
-            // get meal usages
-            const mealUsages = await client.mealUsage.findMany({
-              where: { mealId: meal.id },
-            });
-
-            // get camp ids
-            await Promise.all(
-              mealUsages.map((mu) =>
-                pubsub.publish(`camp_${mu.campId}`, {
-                  camp_id: mu.campId,
-                  operation: 'update',
-                })
-              )
-            );
-
-            return meal;
-          },
-          delete: () => {
-            throw new Error('Not implemented');
-          },
-          updateMany: () => {
-            throw new Error('Not implemented');
-          },
-          deleteMany: () => {
-            throw new Error('Not implemented');
-          },
-          upsert: () => {
-            throw new Error('Not implemented');
-          },
-        },
-
-        mealUsage: {
-          // unimplemented
           update: () => {
             throw new Error('Not implemented');
           },

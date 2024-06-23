@@ -1,9 +1,4 @@
-import { Camp, CampDay, MealUsageType, Resolvers } from '@/util/generated/types/graphql';
-import { MealUsage } from '@prisma/client';
-
-const getMealUsageGraphqlType = (mealUsage?: MealUsage): MealUsageType => {
-  throw new Error('Unknown meal usage type');
-};
+import { Camp, CampDay, Resolvers } from '@/util/generated/types/graphql';
 
 export const campResolvers: Resolvers = {
   CampDay: {
@@ -14,22 +9,12 @@ export const campResolvers: Resolvers = {
       const camp_id = parent.campId as string;
 
       const { prisma } = context;
-      const meals = await prisma.meal.findMany({
+      return await prisma.meal.findMany({
         where: {
-          mealUsage: {
-            some: {
-              campId: camp_id,
-              date: parent.date,
-            },
-          },
-        },
-      });
-
-      return meals.map((meal) => {
-        return {
-          ...meal,
           campId: camp_id,
-        };
+          date: parent.date,
+        },
+        orderBy: [{ date: 'asc' }, { id: 'asc' }],
       });
     },
   },

@@ -8,6 +8,7 @@ export const campQueries: QueryResolvers = {
     const { criteria, pagination } = args;
     const { user_id, prisma } = context;
 
+    if (!user_id) throw new Error('No user_id set. Are you using a api key?');
     logger.debug(`Fetching camps for user ${user_id}`);
 
     const { partialCampName } = criteria || {};
@@ -15,13 +16,15 @@ export const campQueries: QueryResolvers = {
     const camps = await prisma.camp.findMany({
       where: {
         name: { contains: partialCampName || '', mode: 'insensitive' },
-        ownerId: user_id,
+        ownerUserId: user_id,
       },
       include: {
-        days: { orderBy: { date: 'asc' } },
+        days: {
+          orderBy: [{ date: 'asc' }, { id: 'asc' }],
+        },
       },
       ...prisma_pagination_filer(pagination),
-      orderBy: { year: 'desc' },
+      orderBy: [{ year: 'desc' }, { id: 'asc' }],
     });
 
     logger.debug(`Found ${camps.length} camps for user ${user_id}`);

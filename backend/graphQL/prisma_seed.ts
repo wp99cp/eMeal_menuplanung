@@ -17,7 +17,7 @@ const logging = (...message: unknown[]) => {
 async function createUsers(prisma: PrismaClient, num_users: number) {
   const uids: string[] = [];
 
-  const promises = [];
+  const promises: unknown[] = [];
   for (let i = 0; i < num_users; i++) {
     const first_name = faker.person.firstName();
     const last_name = faker.person.lastName();
@@ -98,7 +98,7 @@ async function create_camp(
   const day_count = faker.number.int({ min: 0, max: 10 });
   let date = faker.date.future();
   const dates: Date[] = [];
-  const days_promises = [];
+  const days_promises: unknown[] = [];
   for (let o = 0; o < day_count; o++) {
     // increment date by one day
     date = new Date(date);
@@ -144,6 +144,8 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
   }
   await Promise.all(camp_promises);
 
+  if (campIds.length === 0) return;
+
   const mealIds: string[] = [];
   const ingredients: Prisma.IngredientCreateManyInput[] = [];
 
@@ -181,24 +183,25 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
           recipeId: recipeID,
         };
 
-        // sometimes ingredients have no amount
-        if (faker.datatype.boolean({ probability: 0.01 })) {
-          ingredient.amount = null;
-        }
-
-        // sometimes ingredients have no unit
-        if (faker.datatype.boolean({ probability: 0.01 })) {
-          ingredient.unit = null;
-        }
-
-        // sometimes ingredients have no name
-        if (faker.datatype.boolean({ probability: 0.01 })) {
-          ingredient.name = null;
-        }
-
         ingredients.push(ingredient);
       }
     }
+
+    const campID = faker.helpers.arrayElement(campIds);
+    const camp = await prisma.camp.findFirstOrThrow({
+      where: {
+        id: campID,
+      },
+      include: {
+        days: {
+          select: {
+            date: true,
+          },
+        },
+      },
+    });
+
+    if (!camp || camp.days.length === 0) continue;
 
     await prisma.meal.upsert({
       create: {
@@ -206,7 +209,28 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
         name: faker.food.dish(),
         description: faker.food.description(),
 
-        ownerId: uid,
+        isTemplate: true,
+
+        owner: {
+          connect: {
+            id: uid,
+          },
+        },
+
+        camp: {
+          connect: {
+            id: campID,
+          },
+        },
+
+        day: {
+          connect: {
+            campId_date: {
+              campId: campID,
+              date: faker.helpers.arrayElement(camp.days.map((d) => d.date)),
+            },
+          },
+        },
 
         keywords: [
           faker.food.ingredient(),
@@ -245,7 +269,7 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
           },
         })
       )
-    );
+    ).catch(() => logging('Error creating ingredients'));
 
     // generate random pairs between mealIds and campIds
     if (campIds.length === 0) continue;
@@ -255,31 +279,50 @@ async function create_user_data(prisma: PrismaClient, uid: string) {
       )
     );
 
-    const ingredients_promises = [];
+    const promises: unknown[] = [];
     for (const [mealId, campId] of pairs) {
-      const mealUsageId = faker.string.uuid();
-
       const dates = camp_day_map.get(campId) as Date[];
       if (dates.length === 0) continue;
 
       const date = faker.helpers.arrayElement(dates);
 
-      ingredients_promises.push(
-        prisma.mealUsage.upsert({
-          create: {
-            id: mealUsageId,
-            mealId: mealId,
-            campId: campId,
-            date: date,
+      const templateMeals = await prisma.meal.findMany({
+        where: {
+          owner: { id: uid },
+          isTemplate: true,
+          mealUsages: { none: {} },
+        },
+        select: { id: true },
+      });
+
+      if (templateMeals.length === 0) continue;
+      const templateMeal = faker.helpers.arrayElement(templateMeals);
+
+      await prisma.meal.update({
+        where: {
+          id: mealId,
+        },
+        data: {
+          day: {
+            connect: {
+              campId_date: {
+                campId: campId,
+                date: date,
+              },
+            },
           },
-          update: {},
-          where: {
-            id: mealUsageId,
+          isTemplate: false,
+          hasUnmergedDerivations: faker.datatype.boolean(),
+
+          templateMeal: {
+            connect: {
+              id: templateMeal.id,
+            },
           },
-        })
-      );
+        },
+      });
     }
-    await Promise.all(ingredients_promises);
+    await Promise.all(promises);
   }
 }
 
@@ -298,7 +341,7 @@ async function main() {
   }
 
   // create users in parallel
-  const uids: string[] = await createUsers(prisma, 1_000);
+  const uids: string[] = await createUsers(prisma, 10);
   await Promise.all(uids.map((uid) => create_user_data(prisma, uid)));
 
   logging('Seeding finished.');
