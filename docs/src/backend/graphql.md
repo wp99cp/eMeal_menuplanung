@@ -93,9 +93,6 @@ See https://xuorig.medium.com/a-guide-to-graphql-rate-limiting-security-e62a86ef
 
 The GraphQL API uses Yup to verify the input of the GraphQL mutations. This is implemented using graphql-shield.
 
-::: warning
-We should switch to ZOD instead --> better typescript support
-:::
 
 ## Using fragments
 
