@@ -1,4 +1,4 @@
-schema: ../common/graphQL/schema.graphql
+schema: ../common/graphQL/*.graphql
 
 # This file generates types for the frontend.
 # It utilizes the schema from the /common folder as wel as

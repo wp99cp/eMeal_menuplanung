@@ -1,0 +1,111 @@
+type Camp implements Node {
+  id: ID! # is never null
+  name: String
+  description: String
+  year: Int
+
+  participantCount: ParticipantCount
+
+  creationDate: Date
+  lastModification: Date
+
+  owner: CampOwner
+  days: DayConnection
+}
+
+enum CampAccessLevels {
+  OWNER
+  MEMBER
+  VIEWER
+  ANY
+}
+
+input CampSearchCriteria {
+  partialCampName: String
+  access: CampAccessLevels
+}
+
+"""
+An edge in a connection.
+"""
+type CampEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Camp!
+}
+
+"""
+A list of repositories owned by the subject.
+"""
+type CampConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [CampEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+
+"""
+Possible directions in which to order a list of items when provided an `orderBy` argument.
+"""
+enum OrderDirection {
+  """
+  Specifies an ascending order for a given `orderBy` argument.
+  """
+  ASC
+
+  """
+  Specifies a descending order for a given `orderBy` argument.
+  """
+  DESC
+}
+
+"""
+Ordering options for repository connections
+"""
+input CampOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection!
+
+  """
+  The field to order repositories by.
+  """
+  field: CampOrderField!
+}
+
+"""
+Properties by which repository connections can be ordered.
+"""
+enum CampOrderField {
+  """
+  Order repositories by creation time
+  """
+  CREATED_AT
+
+  """
+  Order repositories by name
+  """
+  NAME
+
+  """
+  Order repositories by update time
+  """
+  UPDATED_AT
+}

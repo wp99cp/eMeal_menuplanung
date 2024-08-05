@@ -43,6 +43,7 @@ services:
 
     environment:
       - ENV_FILE_PATH=.env.local
+      - SEEDED=false
 
     volumes:
       - ./.env.local:/app/backend/graphQL/.env.local:ro
@@ -51,6 +52,11 @@ services:
     ports:
       - '4000:4000' # Frontend as Webpage
       - '5555:5555' # Prisma Studio
+
+    develop:
+      watch:
+        - action: rebuild
+          path: ./common
 
     depends_on:
       - postgres

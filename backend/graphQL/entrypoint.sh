@@ -4,7 +4,9 @@ dotenv -e "$ENV_FILE_PATH" -- npx prisma generate --schema=../../common/prisma/s
 dotenv -e "$ENV_FILE_PATH" -- npx prisma db push --schema=../../common/prisma/schema.prisma
 
 # Seed the database
-dotenv -e "$ENV_FILE_PATH" -- npx prisma db seed
+if [ "$SEEDED" = "true" ]; then
+  dotenv -e "$ENV_FILE_PATH" -- npx prisma db seed
+fi
 
 # Start Prisma Studio in the background
 dotenv -e "$ENV_FILE_PATH" -- npx prisma studio --schema=../../common/prisma/schema.prisma &

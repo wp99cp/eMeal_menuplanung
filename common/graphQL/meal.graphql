@@ -1,0 +1,83 @@
+"""
+A meal can be used in different ways, e.g. as breakfast, lunch, dinner, ...
+"""
+enum MealUsageType {
+  BREAKFAST
+  MORNING_SNACK
+  LUNCH
+  AFTERNOON_SNACK
+  DINNER
+  EVENING_SNACK
+}
+
+"""
+Represents a full meal, e.g. spaghetti bolognese with salad and sauce.
+"""
+type Meal implements Node {
+  id: ID! # is never null
+  name: String
+  description: String
+  keywords: [String]
+
+  """
+  usage of that meal within the day, e.g. as LUNCH
+  """
+  usageType: MealUsageType
+
+  """
+  the multiplication factor for the meal, e.g. FIXED, TOTAL, VEGETARIANS, VEGANS, or LEADERS
+  """
+  multiplicationFactor: MultiplicationFactorTypes
+  """
+  indicates if the multiplication factor has been adjusted for that usage
+  """
+  multiplicationFactorAdjusted: Boolean
+
+  """
+  the number of participants for that meal
+  """
+  participantCount: ParticipantCount
+  """
+  indicates if the participant count has been adjusted for that usage
+  """
+  participantCountAdjusted: Boolean
+
+  """
+  if true, the meal must be prepared the day before
+  """
+  needsPreparation: Boolean
+
+  creationDate: Date
+  lastModification: Date
+
+  recipes: RecipeConnection
+}
+
+type MealEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Meal!
+}
+
+type MealConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [MealEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}

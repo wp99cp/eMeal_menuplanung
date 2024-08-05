@@ -1,0 +1,46 @@
+"""
+Represents a recipe, which is a list of ingredients forming a part of a meal, e.g. a salad sauce.
+"""
+type Recipe implements Node {
+  id: ID!
+  name: String
+  description: String
+  keywords: [String]
+
+  creationDate: Date
+  lastModification: Date
+
+  """
+  The ingredients of the recipe.
+  """
+  ingredients: RecipeIngredientConnection
+}
+
+type RecipeEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Recipe!
+}
+
+type RecipeConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [RecipeEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}

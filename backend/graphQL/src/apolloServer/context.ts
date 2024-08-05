@@ -9,9 +9,10 @@ import { ExpressContextFunctionArgument } from '@apollo/server/express4';
 
 import { traceWrapper } from '@/tracing/traceWrapper';
 import { withSubscriptions } from '@/util/prisma/extensions/subscribe';
+import { findManyAndCount } from '@/util/prisma/extensions/findManyAndCount';
 
 const defaultPrisma = new PrismaDefaultClient();
-const prisma = defaultPrisma.$extends(withSubscriptions());
+const prisma = defaultPrisma.$extends(withSubscriptions).$extends(findManyAndCount);
 
 export type PrismaClient = typeof prisma;
 

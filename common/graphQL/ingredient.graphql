@@ -1,0 +1,74 @@
+enum MultiplicationFactorTypes {
+  FIXED
+  TOTAL
+  VEGETARIANS
+  VEGANS
+  LEADERS
+}
+
+"""
+Defines the amount of an ingredient, e.g. 1.5 kg, 2.5 l, 3 pieces, ...
+The multiplication factor is used to calculate the amount of an ingredient for a meal, for all participants.
+The multiplication factor can be adjusted at a per ingredient level, e.g. if the ingredient is only used for vegetarians.
+By default the multiplication factor is inherited from the one of the recipe.
+"""
+type Amount {
+  value: Float
+  unit: String
+  multiplicationFactorOverride: MultiplicationFactorTypes
+}
+
+"""
+Represents an single ingredient of a recipe.
+"""
+type RecipeIngredient implements Node {
+  id: ID!
+  name: String
+  amount: Amount
+  description: String
+
+  """
+  Indicates if the ingredient has been overriden for that specific usage of the meal.
+  """
+  isOverriden: Boolean
+
+  """
+  Indicates if the ingredient has been deleted for that specific usage of the meal.
+  """
+  isDeleted: Boolean
+  isFreshProduct: Boolean
+
+  """
+  The name of the store where the ingredient should be bought, is optional.
+  """
+  storeName: String
+}
+
+type RecipeIngredientEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: RecipeIngredient!
+}
+
+type RecipeIngredientConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [RecipeIngredientEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}

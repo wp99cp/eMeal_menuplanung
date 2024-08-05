@@ -22,5 +22,8 @@
     "husky": "^8.0.3",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0"
+  },
+  "dependencies": {
+    "jest": "^29.7.0"
   }
 }

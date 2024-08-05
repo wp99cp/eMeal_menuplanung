@@ -1,14 +1,27 @@
+import * as fs from 'fs';
 import { readFileSync } from 'fs';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { graphqlResolver } from '@/resolvers';
+import { graphqlResolver } from 'src/resolver';
 import { GraphQLSchema } from 'graphql/type';
 import { applyMiddleware } from 'graphql-middleware';
-import { graphQLShield } from '@/permissions';
 import { rateLimitDirectiveTransformer } from '@/apolloServer/rateLimiter';
+import * as path from 'path';
 
-const typeDefs = readFileSync('../../common/graphQL/schema.graphql', {
-  encoding: 'utf-8',
-});
+import { input_validator_shield } from 'src/middleware/input_validation';
+import { access_validation_shield } from 'src/middleware/permissions';
+import { global_rules_shield } from '@/middleware/global_rules';
+
+const folderName = '../../common/graphQL';
+const schemaFiles = fs
+  .readdirSync(folderName)
+  .filter((file) => file.endsWith('.graphql'));
+const typeDefs = schemaFiles
+  .map((file) => {
+    return readFileSync(path.join(folderName, file), {
+      encoding: 'utf-8',
+    });
+  })
+  .join('\n');
 
 const schemaWithoutShield = makeExecutableSchema({
   typeDefs,
@@ -17,7 +30,13 @@ const schemaWithoutShield = makeExecutableSchema({
 
 const schemaWithRateLimiter = rateLimitDirectiveTransformer(schemaWithoutShield);
 
+const middlewares = [
+  input_validator_shield,
+  access_validation_shield,
+  global_rules_shield,
+];
+
 export const schema: GraphQLSchema = applyMiddleware(
   schemaWithRateLimiter,
-  graphQLShield
+  ...middlewares
 );

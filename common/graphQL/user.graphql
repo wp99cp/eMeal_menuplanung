@@ -1,0 +1,55 @@
+interface CampOwner {
+  """
+  The user who owns the camp.
+  """
+  username: String
+}
+
+"""
+A user of eMeal - Menuplanung, who can be a participant or a leader of a camp.
+"""
+type User implements CampOwner & Node {
+  id: ID!
+  username: String
+
+  """
+  The email may not be shared with other users if it is not explicitly allowed. In such cases, the email field is null.
+  """
+  email: String
+
+  camps: CampConnection
+  meals: MealConnection
+  recipes: RecipeConnection
+}
+
+type UserEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: User!
+}
+
+"""
+A list of repositories owned by the subject.
+"""
+type UserConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [UserEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}

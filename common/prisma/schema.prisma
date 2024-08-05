@@ -29,7 +29,7 @@ generator client {
 //
 
 model Account {
-  id                String   @id @default(cuid())
+  id                String   @id @default(uuid())
   userId            String
   type              String
   provider          String
@@ -50,7 +50,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -59,12 +59,12 @@ model Session {
 
 /// Represents a user account
 model User {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   // base data of the user
   name     String?
   email    String? @unique
-  username String? @unique @default(cuid())
+  username String? @unique @default(uuid())
 
   // if set to true, the email address will be publically visible
   shareEmail Boolean @default(false)
@@ -77,7 +77,7 @@ model User {
 
   // indecation if the user has used the previous version of the app
   // if set to true, the user may be allowed to transfer data from the old version
-  usedOldVersion Boolean @default(false)
+  hasUsedV1 Boolean @default(false) /// indecates whether the user has used the previous version of the app
 
   image    String?
   accounts Account[]
@@ -86,18 +86,18 @@ model User {
   // registration meta data
   newUser      Boolean  @default(true) /// new users may have not finished the onboarding process
   registeredAt DateTime @default(now()) /// the date and time of account creation
-  meals        Meal[]
 
   // a list of camps the user has access to (excluding the ones he owns)
   campAccess CampAccessRight[] @relation(name: "access")
   gaveAccess CampAccessRight[] @relation(name: "gaveAccess")
 
   camps Camp[] @relation(name: "campOwnership")
+  meals Meal[]
 }
 
 model ParticipantCount {
   // could be a campId, mealId, dayId, ...
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   lastModification DateTime @updatedAt /// the date and time of the last modification
 
@@ -135,7 +135,7 @@ enum CampAccessRightLevel {
 
 // the access rights to a camp
 model CampAccessRight {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate     DateTime @default(now()) /// the date and time of the creation
   lastModification DateTime @updatedAt /// the date and time of the last modification
@@ -158,6 +158,7 @@ model CampAccessRight {
 
   @@unique([userId, campId], name: "uniqueUserCampAccessLevel")
   @@unique([campId, isOwner], name: "uniqueCampOwner")
+
   // the index is used to search for the access rights of a user
   @@index([userId], name: "userIndex")
   @@index([campId], name: "campIndex")
@@ -166,7 +167,7 @@ model CampAccessRight {
 
 /// This is the main data model of the app.
 model Camp {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   // an archived camp cannot be edited by any usser
   // only the owner can archive a camp or unarchive it
@@ -209,7 +210,7 @@ model Camp {
 }
 
 model Day {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   date        DateTime @db.Date /// the date of the day
   description String? /// the description of the day
@@ -242,7 +243,7 @@ model Day {
 // TODO: use https://www.prisma.io/docs/orm/prisma-schema/data-model/table-inheritance
 //   to separate the template meal from the meal usage
 model Meal {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   name        String
   description String?
@@ -287,7 +288,7 @@ model Meal {
 // recipes have no separate access rights, but are always associated with a meal
 /// Represents a recipe
 model Recipe {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate     DateTime @default(now()) /// the date and time of the creation
   lastModification DateTime @updatedAt /// the date and time of the last modification
@@ -311,7 +312,7 @@ model Recipe {
 
 /// Represents an ingredient of a recipe
 model Ingredient {
-  id    String @id @default(cuid())
+  id    String @id @default(uuid())
   order Int    @default(autoincrement()) /// the order of the ingredient in the recipe
 
   creationDate     DateTime @default(now()) /// the date and time of the creation
@@ -340,7 +341,7 @@ enum CampExportState {
 }
 
 model CampExport {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now())
 
@@ -365,7 +366,7 @@ enum ShoppingListType {
 }
 
 model ShoppingList {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now()) /// the date and time of the creation
   // we do not store the last modification date, as the item is not modified
@@ -385,7 +386,7 @@ model ShoppingList {
 }
 
 model ShoppingListToDay {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now()) /// the date and time of the creation
   // we do not store the last modification date, as the item is not modified
@@ -400,7 +401,7 @@ model ShoppingListToDay {
 }
 
 model ShoppingListCategory {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   // we do not store any timestamps, as the category is not modified and defined by the system
   name String
@@ -414,7 +415,7 @@ model ShoppingListCategory {
 }
 
 model ShoppingListCategoryToShoppingListItem {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now()) /// the date and time of the creation
   // we do not store the last modification date, as the item is not modified
@@ -430,7 +431,7 @@ model ShoppingListCategoryToShoppingListItem {
 /// a shopping list can be the accumulation of ingredients from multiple meals
 /// e.g. the sum of all bananas from all meals
 model ShoppingListItem {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now()) /// the date and time of the creation
   // we do not store the last modification date, as the item is not modified
@@ -458,7 +459,7 @@ model ShoppingListItem {
 }
 
 model ShoppingListItemToIngredient {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   creationDate DateTime @default(now()) /// the date and time of the creation
   // we do not store the last modification date, as the item is not modified

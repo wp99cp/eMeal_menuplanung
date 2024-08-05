@@ -1,0 +1,46 @@
+type Day implements Node {
+  id: ID!
+  date: Date
+
+  """
+  a short description of the day, e.g. "Arrival day"
+  """
+  description: String
+
+  """
+  some longer notes about the day, e.g. "We will meet at the train station at 10:00, lunch must be ready by then"
+  """
+  notes: String
+
+  usedIn: Camp
+  meals: MealConnection
+}
+
+type DayEdge implements Edge {
+  """
+  A cursor for use in pagination.
+  """
+  cursor: String!
+
+  """
+  The item at the end of the edge.
+  """
+  node: Day!
+}
+
+type DayConnection implements Connection {
+  """
+  A list of edges.
+  """
+  edges: [DayEdge]
+
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
