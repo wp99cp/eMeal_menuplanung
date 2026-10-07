@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 
 export interface HeaderNav {
@@ -66,7 +67,11 @@ export class HeaderNavComponent {
 
   constructor(router: Router) {
 
-    router.events.subscribe(() => (HeaderNavComponent.headerNav = []));
+    // The entries get removed as soon as the user leaves the page. Only the start of a navigation is used,
+    // since later router events can fire after the new page has already added its entries.
+    router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe(() => (HeaderNavComponent.headerNav = []));
 
   }
 

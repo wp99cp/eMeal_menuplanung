@@ -109,6 +109,11 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
     */
 
 
+    // the view is not rendered yet
+    if (empties === undefined) {
+      return;
+    }
+
     empties.forEach(empty => {
 
       const node: ContextMenuNode = {
