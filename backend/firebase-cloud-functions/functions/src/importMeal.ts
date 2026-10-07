@@ -33,13 +33,11 @@ export async function importMeal(requestData: { url: string }): Promise<any> {
 
     // load dependencies
     const jsdom = require('jsdom');
-    const request = require('request');
 
     // request html source code of page
-    const htmlBody = await new Promise(resolve =>
-        request(requestData.url, function (err: any, res: any, body: string) {
-            resolve(body);
-        }));
+    const htmlBody = await fetch(requestData.url)
+        .then(res => res.text())
+        .catch(() => undefined);
 
     if (typeof htmlBody === "string") {
 
