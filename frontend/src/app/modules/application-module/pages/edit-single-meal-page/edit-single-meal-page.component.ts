@@ -16,6 +16,7 @@ import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
+  standalone: false,
   selector: 'app-edit-single-meal-page',
   templateUrl: './edit-single-meal-page.component.html',
   styleUrls: ['./edit-single-meal-page.component.sass']

@@ -7,6 +7,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {HelpService} from "../../services/help.service";
 
 @Component({
+  standalone: false,
   selector: 'app-meal-prepare',
   templateUrl: './meal-prepare.component.html',
   styleUrls: ['./meal-prepare.component.sass']

@@ -11,6 +11,7 @@ import {HelpService} from '../../services/help.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-app-settings-page',
   templateUrl: './app-settings-page.component.html',
   styleUrls: ['./app-settings-page.component.sass']

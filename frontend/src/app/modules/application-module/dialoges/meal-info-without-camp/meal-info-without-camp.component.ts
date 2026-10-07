@@ -7,6 +7,7 @@ import {SpecificMeal} from '../../classes/specific-meal';
 import {DatabaseService} from '../../services/database.service';
 
 @Component({
+  standalone: false,
   selector: 'app-meal-info-without-camp',
   templateUrl: './meal-info-without-camp.component.html',
   styleUrls: ['./meal-info-without-camp.component.sass']

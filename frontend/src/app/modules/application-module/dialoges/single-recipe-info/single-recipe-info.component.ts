@@ -6,6 +6,7 @@ import {DatabaseService} from '../../services/database.service';
 import {HelpService} from '../../services/help.service';
 
 @Component({
+  standalone: false,
   selector: 'app-single-recipe-info',
   templateUrl: './single-recipe-info.component.html',
   styleUrls: ['./single-recipe-info.component.sass']

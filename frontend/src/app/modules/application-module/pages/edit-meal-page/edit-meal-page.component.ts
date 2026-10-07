@@ -22,6 +22,7 @@ import {HistoryService} from "../../../../services/history.service";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
+  standalone: false,
   selector: 'app-edit-meal-page',
   templateUrl: './edit-meal-page.component.html',
   styleUrls: ['./edit-meal-page.component.sass']

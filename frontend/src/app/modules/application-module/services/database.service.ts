@@ -33,7 +33,7 @@ import {
   Ingredient
 } from '../interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
-import {NavigationEnd, NavigationStart, Params, Router} from '@angular/router';
+import {NavigationStart, Params, Router} from '@angular/router';
 import {SettingsService} from './settings.service';
 import {environment} from '../../../../environments/environment';
 import firebase from "firebase/compat/app";
@@ -53,7 +53,7 @@ import Timestamp = firebase.firestore.Timestamp;
 })
 export class DatabaseService {
 
-  private routerChanges = new Subject();
+  private routerChanges = new Subject<void>();
 
   /**
    * An angular service to provide data form the AngularFirestore database.
@@ -74,7 +74,7 @@ export class DatabaseService {
       .pipe(
         filter(event => event instanceof NavigationStart), // triggers once every navigation event
         skip(1) // ignore first change (on load page)
-      ).subscribe((changeRoute: NavigationEnd) => {
+      ).subscribe((changeRoute: NavigationStart) => {
       console.log('Trigger unsubscription! URL changed to: ' + changeRoute.url);
       this.routerChanges.next();
     });

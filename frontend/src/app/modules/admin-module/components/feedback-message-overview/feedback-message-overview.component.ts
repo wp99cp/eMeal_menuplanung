@@ -5,6 +5,7 @@ import {DatabaseService} from "../../../application-module/services/database.ser
 import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 
 @Component({
+  standalone: false,
   selector: 'app-feedback-message-overview',
   templateUrl: './feedback-message-overview.component.html',
   styleUrls: ['./feedback-message-overview.component.sass']

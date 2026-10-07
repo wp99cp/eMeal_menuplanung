@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {TemplateHeaderComponent} from './shared/components/template-header/template-header.component';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']

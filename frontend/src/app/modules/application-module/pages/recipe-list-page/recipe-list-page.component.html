@@ -2,13 +2,13 @@
 
 
 <mat-form-field class="mat-form-field full-width">
-  <mat-chip-list #chipList *ngIf="(route.queryParams | async) as params">
-    <mat-chip *ngIf="params.vorlagen == '1'"> Vorlagen
+  <mat-chip-grid #chipList *ngIf="(route.queryParams | async) as params">
+    <mat-chip-row *ngIf="params.vorlagen == '1'"> Vorlagen
       <mat-icon routerLink="." [queryParams]="{'vorlagen': 0}">cancel</mat-icon>
-    </mat-chip>
+    </mat-chip-row>
     <input matInput [matChipInputFor]="chipList" (keyup)="applyFilter($event.target.value)"
            placeholder="Rezept suchen..." id="search-field">
-  </mat-chip-list>
+  </mat-chip-grid>
 </mat-form-field>
 
 <div id="recipesList" *ngIf="filteredElements as recipes else loading_preview">

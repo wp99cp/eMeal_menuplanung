@@ -11,6 +11,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
 import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 
 @Component({
+  standalone: false,
   selector: 'app-export-camp-page',
   templateUrl: './export-camp-page.component.html',
   styleUrls: ['./export-camp-page.component.sass']

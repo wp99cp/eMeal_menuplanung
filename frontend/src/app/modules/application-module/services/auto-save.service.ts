@@ -1,6 +1,6 @@
 import {Injectable, NgZone} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {CanDeactivate} from '@angular/router';
+
 
 
 export interface Saveable {
@@ -24,7 +24,7 @@ export interface Saveable {
  *  Aktiviertung:
  *  Muss im module-rooting aktiviert werden und der entsprechende Component muss das Interface Saveable implemntieren
  */
-export class AutoSaveService implements CanDeactivate<Saveable> {
+export class AutoSaveService  {
 
   private autosaveOnComponents: Saveable[] = [];
 

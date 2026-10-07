@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Ingredient} from '../../interfaces/firestoreDatatypes';
 
 @Component({
+  standalone: false,
   selector: 'app-import-ingredients',
   templateUrl: './import-ingredients.component.html',
   styleUrls: ['./import-ingredients.component.sass']

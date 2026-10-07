@@ -4,6 +4,7 @@ import buildInfo from '../../../../build';
 import {SwissDateAdapter} from '../../utils/format-datapicker';
 
 @Component({
+  standalone: false,
   selector: 'app-template-footer',
   templateUrl: './template-footer.component.html',
   styleUrls: ['./template-footer.component.sass']

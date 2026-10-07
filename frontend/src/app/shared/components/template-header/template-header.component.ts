@@ -8,6 +8,7 @@ import {AuthenticationService} from "../../../modules/application-module/service
  *
  */
 @Component({
+  standalone: false,
   selector: 'app-template-header',
   templateUrl: './template-header.component.html',
   styleUrls: ['./template-header.component.sass']

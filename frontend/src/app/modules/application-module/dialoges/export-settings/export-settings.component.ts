@@ -5,6 +5,7 @@ import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {MatStepperIntl} from '@angular/material/stepper';
 
 @Component({
+  standalone: false,
   selector: 'app-export-settings',
   templateUrl: './export-settings.component.html',
   styleUrls: ['./export-settings.component.sass'],

@@ -12,6 +12,7 @@ document.addEventListener('copy', function(e){
 
 
 @Component({
+  standalone: false,
   selector: 'ingredient',
   templateUrl: './ingredient-field.component.html',
   styleUrls: ['./ingredient-field.component.sass']

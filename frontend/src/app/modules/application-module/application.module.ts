@@ -87,6 +87,7 @@ import {VersionHistoryModule} from "../change-log-module/version-history.module"
 import {DownloadModule} from "../download-module/download.module";
 import buildInfo from '../../../build';
 import {EditSingleRecipePageComponent} from "./pages/edit-single-recipe-page/edit-single-recipe-page.component";
+import {InjectionContextFirestore} from '../../shared/injection-context-firestore';
 
 @NgModule({
   declarations: [
@@ -135,7 +136,7 @@ import {EditSingleRecipePageComponent} from "./pages/edit-single-recipe-page/edi
     ImportIngredientsComponent,
   ],
   providers: [
-    AngularFirestore,
+    {provide: AngularFirestore, useClass: InjectionContextFirestore},
     AngularFireAuth,
     AuthenticationService,
     DatabaseService,
