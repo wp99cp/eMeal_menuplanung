@@ -9,6 +9,7 @@ import {SettingsService} from '../../services/settings.service';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
+  standalone: false,
   selector: 'app-recipe-info',
   templateUrl: './recipe-info.component.html',
   styleUrls: ['./recipe-info.component.sass']

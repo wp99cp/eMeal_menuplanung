@@ -9,6 +9,7 @@ import {HelpService} from '../../services/help.service';
  * CampInfoComponent ist ein Dialog zum bearbeiten der CampClass-Infos
  */
 @Component({
+  standalone: false,
   selector: 'app-camp-info',
   templateUrl: './camp-info.component.html',
   styleUrls: ['./camp-info.component.sass']

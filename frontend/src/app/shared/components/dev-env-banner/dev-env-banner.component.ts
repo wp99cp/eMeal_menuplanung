@@ -3,6 +3,7 @@ import buildInfo from '../../../../build';
 import {environment} from '../../../../environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'app-dev-env-banner',
   templateUrl: './dev-env-banner.component.html',
   styleUrls: ['./dev-env-banner.component.sass']

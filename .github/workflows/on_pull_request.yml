@@ -9,10 +9,10 @@ jobs:
     name: Add release todo-list
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v7
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@main
+        uses: thollander/actions-comment-pull-request@v3
         with:
           message: "
           Todos before releasing a new version \n \n
@@ -22,4 +22,4 @@ jobs:
           - [ ] Check preview build and test it with the productive database. \n
           - [ ] Deploy new revision of the PDF-Export Service \n
           "
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

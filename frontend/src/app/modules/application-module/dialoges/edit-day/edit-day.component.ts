@@ -16,6 +16,7 @@ import {Moment} from "moment";
 import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 
 @Component({
+  standalone: false,
   selector: 'app-edit-day',
   templateUrl: './edit-day.component.html',
   styleUrls: ['./edit-day.component.sass'],

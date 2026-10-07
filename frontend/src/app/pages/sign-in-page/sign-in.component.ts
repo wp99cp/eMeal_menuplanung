@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AuthenticationService} from "../../modules/application-module/services/authentication.service";
 
 @Component({
+  standalone: false,
   selector: 'app-sign-in-page',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.sass']

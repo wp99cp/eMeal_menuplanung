@@ -1,9 +1,9 @@
-@import 'sass/colors'
-@import 'sass/fonts'
-@import 'sass/animations'
+@use 'sass/colors' as *
+@use 'sass/fonts' as *
+@use 'sass/animations' as *
+@use 'app_theme'
 
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap')
-@import 'app_theme'
 
 ///////////////////////////////////////////////////////////////
 // Grundlegende Einstellungen zum Hauptfenster der Applikation
@@ -301,26 +301,26 @@ a
 ///////////////////////////////////////////////////////////////
 
 .custom-mat-buttons
-  .mat-button, .mat-raised-button
+  .mat-mdc-button, .mat-mdc-raised-button
     margin: 15px !important
 
-.mat-button, .mat-raised-button
+.mat-mdc-button, .mat-mdc-raised-button
   user-select: none
   opacity: 0.9
 
-.mat-button-focus-overlay
+.mat-mdc-button-persistent-ripple
   opacity: 0 !important
 
-.mat-raised-button:hover
+.mat-mdc-raised-button:hover
   opacity: 1
 
-.mat-stroked-button:hover
+.mat-mdc-outlined-button:hover
   background-color: #f7f7f7
 
-.mat-raised-button[disabled]
+.mat-mdc-raised-button[disabled]
   background-color: #dceec3 !important
 
-.mat-save
+.mat-save, .mat-mdc-button-base.mat-save:not(:disabled)
   background-color: $prime-color
   color: $prime-text-color
 
@@ -415,8 +415,39 @@ tbody
 // Dialoge
 ///////////////////////////////////////////////////////////////
 
-.mat-dialog-container
+// the dialogs are laid out for a padded container, with the title, content and actions placed inside of it
+.mat-mdc-dialog-container
+  --mat-dialog-headline-padding: 0
+  --mat-dialog-content-padding: 0 24px
+  --mat-dialog-with-actions-content-padding: 0 24px
+  --mat-dialog-actions-padding: 8px 0
+  --mat-dialog-actions-alignment: normal
   font: $dialog-font
+
+  .mat-mdc-dialog-surface
+    display: block
+    padding: 24px
+    overflow: auto
+    color: rgba(0, 0, 0, .87)
+
+  .mat-mdc-dialog-title
+    margin: 0 0 20px
+
+    &::before
+      display: none
+
+  .mat-mdc-dialog-surface .mat-mdc-dialog-title
+    letter-spacing: normal
+
+  .mat-mdc-dialog-surface .mat-mdc-dialog-content
+    margin: 0 -24px
+    color: inherit
+    font: inherit
+    letter-spacing: normal
+
+  .mat-mdc-dialog-actions
+    box-sizing: content-box
+    margin-bottom: -24px
 
   h3
     margin-bottom: 18px
@@ -426,10 +457,16 @@ tbody
     margin-top: 3px
     margin-bottom: 7px
 
-.mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background
-  background-color: $prime-color
+.mat-mdc-checkbox.mat-accent
+  --mat-checkbox-selected-icon-color: #{$prime-color}
+  --mat-checkbox-selected-hover-icon-color: #{$prime-color}
+  --mat-checkbox-selected-focus-icon-color: #{$prime-color}
+  --mat-checkbox-selected-pressed-icon-color: #{$prime-color}
+  --mat-checkbox-selected-hover-state-layer-color: #{$prime-color}
+  --mat-checkbox-selected-focus-state-layer-color: #{$prime-color}
+  --mat-checkbox-selected-pressed-state-layer-color: #{$prime-color}
 
-.mat-ripple-element, .mat-checkbox-persistent-ripple
+.mat-ripple-element
   background-color: $prime-color
   opacity: 0.25
 
@@ -465,10 +502,10 @@ textarea
 .mat-step-text-label
   line-height: 1.25em
 
-.mat-input-element
+.mat-mdc-input-element
   font: $p-font !important
 
-.mat-form-field
+.mat-mdc-form-field
   font-size: 14px
 
 ///////////////////////////////////////////////////////////////

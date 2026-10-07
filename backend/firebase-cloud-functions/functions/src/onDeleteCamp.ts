@@ -1,5 +1,5 @@
 import { db } from '.';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 
 /**
  * This function deletes the recources of an camp (when it got deleted).

@@ -4,6 +4,7 @@ import {Meal} from '../../classes/meal';
 import {DatabaseService} from '../../services/database.service';
 
 @Component({
+  standalone: false,
   selector: 'app-deep-copy-meal',
   templateUrl: './deep-copy-meal.component.html',
   styleUrls: ['./deep-copy-meal.component.sass']

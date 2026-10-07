@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HelpService} from '../../services/help.service';
 
 @Component({
+  standalone: false,
   selector: 'app-copy-recipe',
   templateUrl: './copy-recipe.component.html',
   styleUrls: ['./copy-recipe.component.sass']

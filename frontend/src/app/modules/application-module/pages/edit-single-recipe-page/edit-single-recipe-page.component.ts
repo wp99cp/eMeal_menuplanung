@@ -12,6 +12,7 @@ import {SettingsService} from '../../services/settings.service';
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
+  standalone: false,
   selector: 'app-edit-single-recipe-page',
   templateUrl: './edit-single-recipe-page.component.html',
   styleUrls: ['./edit-single-recipe-page.component.sass']

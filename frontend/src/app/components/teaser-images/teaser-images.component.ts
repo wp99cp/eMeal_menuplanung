@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-teaser-images',
   templateUrl: './teaser-images.component.html',
   styleUrls: ['./teaser-images.component.sass']

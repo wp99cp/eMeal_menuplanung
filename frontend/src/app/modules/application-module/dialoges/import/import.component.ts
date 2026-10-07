@@ -16,6 +16,7 @@ import {FirestoreObject} from '../../classes/firebaseObject';
  *
  */
 @Component({
+  standalone: false,
   selector: 'app-import',
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.sass']

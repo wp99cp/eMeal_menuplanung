@@ -52,7 +52,7 @@ export async function createExportFiles(requestData: { campId: string }): Promis
     await page.goto(path.join('file://' + __dirname, '..', '..', '/res/lagerhandbuch.html'));
 
     // use print media for print css
-    await page.emulateMedia("print");
+    await page.emulateMediaType("print");
 
     // Update the data from the template...
     const exportData = await exportDataPromise;

@@ -7,6 +7,7 @@ import {HelpService} from '../../services/help.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
+  standalone: false,
   selector: 'app-share-dialog',
   templateUrl: './share-dialog.component.html',
   styleUrls: ['./share-dialog.component.sass']

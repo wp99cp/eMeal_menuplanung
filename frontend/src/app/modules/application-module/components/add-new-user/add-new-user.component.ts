@@ -13,6 +13,7 @@ export interface UserWithAccess extends User {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-new-user',
   templateUrl: './add-new-user.component.html',
   styleUrls: ['./add-new-user.component.sass']

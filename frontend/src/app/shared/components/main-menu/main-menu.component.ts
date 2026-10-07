@@ -12,6 +12,7 @@ import {
 } from "../../../modules/application-module/dialoges/feedback-dialog/feedback-dialog.component";
 
 @Component({
+  standalone: false,
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.sass']

@@ -25,9 +25,8 @@ import * as express from "express";
  *
  */
 
-function createAccessToken2(access_code: any): Promise<string> {
+async function createAccessToken2(access_code: any): Promise<string> {
 
-    const request = require('request');
     const oauthAccessData = require('../keys/cevi-db-oauth.json');
     console.log(oauthAccessData)
 
@@ -37,23 +36,13 @@ function createAccessToken2(access_code: any): Promise<string> {
         '&client_secret=' + oauthAccessData.client_secret +
         '&code=' + access_code;
 
-    const options = {
-        url: oauthAccessData.token_url,
+    const response = await fetch(oauthAccessData.token_url, {
         method: 'POST',
         headers: headers,
         body: dataString
-    };
-
-    return new Promise<string>(res => {
-
-        function callback(error: any, response: any, body: any) {
-            res(JSON.parse(body).access_token);
-        }
-
-        request(options, callback);
-
     });
 
+    return (await response.json()).access_token;
 
 }
 
@@ -67,9 +56,8 @@ function createAccessToken2(access_code: any): Promise<string> {
  *
  */
 
-function requestUserData(access_token: string): Promise<any> {
+async function requestUserData(access_token: string): Promise<any> {
 
-    const request = require('request');
     const oauthAccessData = require('../keys/cevi-db-oauth.json');
 
     const headers = {
@@ -77,22 +65,9 @@ function requestUserData(access_token: string): Promise<any> {
         'X-Scope': 'name'
     };
 
-    const options = {
-        url: oauthAccessData.profile_url,
-        headers: headers
-    };
+    const response = await fetch(oauthAccessData.profile_url, {headers: headers});
 
-    return new Promise<any>(res => {
-
-        function callback(error: any, response: any, body: any) {
-
-            res(JSON.parse(body));
-        }
-
-        request(options, callback);
-
-    });
-
+    return response.json();
 
 }
 

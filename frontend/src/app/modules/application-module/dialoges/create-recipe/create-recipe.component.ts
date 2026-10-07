@@ -9,6 +9,7 @@ import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-create-recipe',
   templateUrl: './create-recipe.component.html',
   styleUrls: ['./create-recipe.component.sass']

@@ -37,6 +37,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {InjectionContextFirestore} from './shared/injection-context-firestore';
 
 @NgModule({
   declarations: [
@@ -78,7 +79,7 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
   ],
   providers: [
     AngularFireAuth,
-    AngularFirestore,
+    {provide: AngularFirestore, useClass: InjectionContextFirestore},
     AuthenticationService,
     AngularFireFunctions,
     AngularFirestoreModule,

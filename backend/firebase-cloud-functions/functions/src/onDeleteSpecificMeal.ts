@@ -1,5 +1,5 @@
 import { db } from '.';
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import { FirestoreSpecificMeal } from './interfaces/firestoreDatatypes';
 import { firestore } from 'firebase-admin';
 

@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import * as admin from "firebase-admin";
 
 type CloudFunction = (requestData: any, context: functions.https.CallableContext) => Promise<ResponseData>;

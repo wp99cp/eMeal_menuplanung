@@ -1,7 +1,37 @@
 @use '@angular/material' as mat;
 
-$custom-typography: mat.define-typography-config(
-  $font-family: 'inherit'
+// same sizes as before the switch to the MDC based components, without any letter spacing
+$custom-typography: mat.m2-define-typography-config(
+  $font-family: 'inherit',
+  $subtitle-1: mat.m2-define-typography-level(16px, 28px, 400, $letter-spacing: normal),
+  $subtitle-2: mat.m2-define-typography-level(14px, 24px, 500, $letter-spacing: normal),
+  $body-1: mat.m2-define-typography-level(14px, 20px, 400, $letter-spacing: normal),
+  $body-2: mat.m2-define-typography-level(14px, 20px, 400, $letter-spacing: normal),
+  $caption: mat.m2-define-typography-level(12px, 20px, 400, $letter-spacing: normal),
+  $button: mat.m2-define-typography-level(14px, 36px, 500, $letter-spacing: normal)
 );
 
-@include mat.core($custom-typography);
+@include mat.all-component-typographies($custom-typography);
+@include mat.elevation-classes();
+@include mat.app-background();
+
+// Form fields without an explicit appearance used to be rendered as a plain underlined input.
+// The MDC based form field only knows the "fill" and "outline" appearance, thus the old look is restored here.
+mat-form-field:not([appearance]) {
+  @include mat.form-field-density(-4);
+  --mat-form-field-filled-container-color: transparent;
+  --mat-form-field-filled-disabled-container-color: transparent;
+  --mat-form-field-hover-state-layer-opacity: 0;
+  --mat-form-field-focus-state-layer-opacity: 0;
+
+  .mat-mdc-text-field-wrapper,
+  .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-error-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.mat-mdc-button-base {
+  white-space: nowrap;
+}

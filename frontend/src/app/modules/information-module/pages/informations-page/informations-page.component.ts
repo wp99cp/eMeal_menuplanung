@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   templateUrl: './informations-page.component.html',
   styleUrls: ['./informations-page.component.sass']
 })

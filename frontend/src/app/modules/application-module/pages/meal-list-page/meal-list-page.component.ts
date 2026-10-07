@@ -14,6 +14,7 @@ import {ImportComponent} from '../../dialoges/import/import.component';
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
+  standalone: false,
   selector: 'app-meal-list-page',
   templateUrl: './meal-list-page.component.html',
   styleUrls: ['./meal-list-page.component.sass']

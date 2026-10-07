@@ -15,6 +15,7 @@ import {ImportComponent} from '../import/import.component';
 import {take} from 'rxjs/operators';
 
 @Component({
+  standalone: false,
   selector: 'app-add-meal',
   templateUrl: './add-meal.component.html',
   styleUrls: ['./add-meal.component.sass'],

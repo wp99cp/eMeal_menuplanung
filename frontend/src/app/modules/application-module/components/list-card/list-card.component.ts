@@ -11,6 +11,7 @@ import {DatabaseService} from '../../services/database.service';
 
 
 @Component({
+  standalone: false,
   selector: 'app-list-card',
   templateUrl: './list-card.component.html',
   styleUrls: ['./list-card.component.sass']

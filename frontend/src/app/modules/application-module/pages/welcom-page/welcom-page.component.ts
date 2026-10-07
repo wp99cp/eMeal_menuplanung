@@ -11,6 +11,7 @@ import User = firebase.User;
  * Provides some fast action (fast action overview).
  */
 @Component({
+  standalone: false,
   selector: 'app-welcom-page',
   templateUrl: './welcom-page.component.html',
   styleUrls: ['./welcom-page.component.sass']

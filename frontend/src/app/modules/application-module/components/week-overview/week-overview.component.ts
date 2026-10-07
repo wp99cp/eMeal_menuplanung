@@ -26,6 +26,7 @@ import Timestamp = firebase.firestore.Timestamp;
  *
  */
 @Component({
+  standalone: false,
   selector: 'app-week-overview',
   templateUrl: './week-overview.component.html',
   styleUrls: ['./week-view.component.sass'],

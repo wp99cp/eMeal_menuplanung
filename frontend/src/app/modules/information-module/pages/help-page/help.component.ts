@@ -8,6 +8,7 @@ type HelpMessages = HelpMessage[];
 
 
 @Component({
+  standalone: false,
   selector: 'app-help-page',
   templateUrl: './help.component.html',
   styleUrls: ['./help.component.sass']

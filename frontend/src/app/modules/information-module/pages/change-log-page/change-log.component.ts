@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-change-log-page-module',
   templateUrl: './change-log.component.html',
   styleUrls: ['./change-log.component.sass']

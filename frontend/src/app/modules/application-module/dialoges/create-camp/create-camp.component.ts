@@ -18,6 +18,7 @@ import 'moment/locale/de';
 import Timestamp = firebase.firestore.Timestamp;
 
 @Component({
+  standalone: false,
   selector: 'app-create-camp',
   templateUrl: './create-camp.component.html',
   styleUrls: ['./create-camp.component.sass'],

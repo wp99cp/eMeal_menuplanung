@@ -9,6 +9,7 @@ import firebase from 'firebase/compat/app';
 import FieldValue = firebase.firestore.FieldValue;
 
 @Component({
+  standalone: false,
   selector: 'app-feedback-dialog',
   templateUrl: './feedback-dialog.component.html',
   styleUrls: ['./feedback-dialog.component.sass']

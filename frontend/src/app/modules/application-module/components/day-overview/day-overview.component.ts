@@ -17,6 +17,7 @@ import {DatabaseService} from '../../services/database.service';
 import {SwissDateAdapter} from '../../../../shared/utils/format-datapicker';
 
 @Component({
+  standalone: false,
   selector: 'app-day-overview',
   templateUrl: './day-overview.component.html',
   styleUrls: ['./day-overview.component.sass'],
@@ -107,6 +108,11 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
     }
     */
 
+
+    // the view is not rendered yet
+    if (empties === undefined) {
+      return;
+    }
 
     empties.forEach(empty => {
 

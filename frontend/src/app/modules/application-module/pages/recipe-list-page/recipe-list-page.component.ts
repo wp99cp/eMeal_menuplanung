@@ -12,6 +12,7 @@ import {FirestoreRecipe} from "../../interfaces/firestoreDatatypes";
 import {Observable} from "rxjs";
 
 @Component({
+  standalone: false,
   selector: 'app-recipe-list-page',
   templateUrl: './recipe-list-page.component.html',
   styleUrls: ['./recipe-list-page.component.sass']

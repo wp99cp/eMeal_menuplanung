@@ -10,6 +10,7 @@ import {MAT_DIALOG_DATA, MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-create-meal',
   templateUrl: './create-meal.component.html',
   styleUrls: ['./create-meal.component.sass']

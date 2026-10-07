@@ -17,6 +17,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
 
 
 @Component({
+  standalone: false,
   selector: 'app-edit-recipe-in-camp',
   templateUrl: './edit-recipe-in-camp.component.html',
   styleUrls: ['./edit-recipe-in-camp.component.sass']

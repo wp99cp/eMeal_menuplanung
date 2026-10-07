@@ -13,15 +13,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v7
         with:
-          node-version: '16'
+          node-version: '22'
 
       - name: Load Version of Latest Release
         id: check # This will be the reference for getting the outputs.
-        uses: EndBug/version-check@v1
+        uses: EndBug/version-check@v3
         with:
           file-name: ./frontend/package.json
           file-url: ::before
@@ -29,12 +29,10 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.check.outputs.version }}
-          release_name: Version ${{ steps.check.outputs.version }}
+          name: Version ${{ steps.check.outputs.version }}
           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
@@ -42,7 +40,12 @@ jobs:
   build_and_deploy_frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
       - run: npm ci && npm run build:prod
         working-directory: frontend
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -59,13 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo content
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       #install the python needed
       - name: setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v7
         with:
-          python-version: 3.8
+          python-version: '3.13'
 
       - name: install packages
         run: |

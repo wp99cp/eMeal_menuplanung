@@ -7,6 +7,7 @@ import {AccessData} from '../../interfaces/firestoreDatatypes';
 import {DatabaseService} from '../../services/database.service';
 
 @Component({
+  standalone: false,
   selector: 'app-list-of-user-with-access',
   templateUrl: './list-of-users.component.html',
   styleUrls: ['./list-of-users.component.sass']

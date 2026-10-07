@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {SwissDateAdapter} from "../../../../shared/utils/format-datapicker";
 
 @Component({
+  standalone: false,
   selector: 'app-download',
   templateUrl: './download.component.html',
   styleUrls: ['./download.component.sass']

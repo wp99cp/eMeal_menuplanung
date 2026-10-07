@@ -14,6 +14,7 @@ import {HelpComponent} from './pages/help-page/help.component';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {VersionHistoryModule} from "../change-log-module/version-history.module";
 import {DownloadModule} from "../download-module/download.module";
+import {InjectionContextFirestore} from '../../shared/injection-context-firestore';
 
 
 @NgModule({
@@ -37,7 +38,7 @@ import {DownloadModule} from "../download-module/download.module";
     HelpComponent
   ],
   providers: [
-    AngularFirestore
+    {provide: AngularFirestore, useClass: InjectionContextFirestore}
   ]
 })
 export class InformationModule {

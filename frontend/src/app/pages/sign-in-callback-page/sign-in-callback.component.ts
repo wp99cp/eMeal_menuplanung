@@ -6,6 +6,7 @@ import {AuthenticationService} from "../../modules/application-module/services/a
 import {HelpService} from "../../modules/application-module/services/help.service";
 
 @Component({
+  standalone: false,
   selector: 'app-sign-in-page-callback',
   templateUrl: './sign-in-callback.component.html',
   styleUrls: ['./sign-in-callback.component.sass']

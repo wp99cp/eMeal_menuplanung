@@ -28,6 +28,7 @@ export function CustomPaginator() {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-add-recipe',
   templateUrl: './add-recipe.component.html',
   styleUrls: ['./add-recipe.component.sass'],

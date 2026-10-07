@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {HelpMessage} from '../../services/help.service';
 
 @Component({
+  standalone: false,
   selector: 'app-help-page',
   templateUrl: './help.component.html',
   styleUrls: ['./help.component.sass']

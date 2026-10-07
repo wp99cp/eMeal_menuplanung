@@ -1,6 +1,6 @@
 import {AccessData, FirestoreDocument, FirestoreMeal, FirestoreRecipe, Rules} from "./interfaces/firestoreDatatypes";
 import {db} from "./index";
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v1';
 import {ResponseData} from "./CloudFunction";
 
 /**

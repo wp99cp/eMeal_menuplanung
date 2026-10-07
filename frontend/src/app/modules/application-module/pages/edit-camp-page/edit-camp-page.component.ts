@@ -15,6 +15,7 @@ import {HistoryService} from "../../../../services/history.service";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
 @Component({
+  standalone: false,
   selector: 'app-edit-camp-page',
   templateUrl: './edit-camp-page.component.html',
   styleUrls: ['./edit-camp-page.component.sass']

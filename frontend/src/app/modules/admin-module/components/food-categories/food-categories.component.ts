@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {DatabaseService} from "../../../application-module/services/database.service";
 
 @Component({
+  standalone: false,
   selector: 'app-food-categories',
   templateUrl: './food-categories.component.html',
   styleUrls: ['./food-categories.component.sass']
