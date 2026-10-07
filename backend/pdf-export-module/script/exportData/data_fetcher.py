@@ -76,7 +76,7 @@ class DataFetcher(object):
             self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
             for meal in self._specific_meals:
-                meal['meal_weekview_name'] = meal['meal_weekview_name'].replace('&', '\&')
+                meal['meal_weekview_name'] = meal['meal_weekview_name'].replace('&', '\\&')
 
         self._specific_meals_loaded = True
 
