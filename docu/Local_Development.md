@@ -96,7 +96,5 @@ page comes from `frontend/src/environments/environment.emulator.ts`.
 
 - **Sign in with Cevi.DB**: it needs the secret `CEVI_DB_OAUTH` with the OAuth client of db.cevi.ch and a redirect
   to emeal.zh11.ch.
-- **Legacy PDF export** (cloud function `createPDF`): it needs a browser for puppeteer, which is not installed in the
-  emulator image.
 - **Scheduled functions** (backup, weekly report, clean up of old exports): there is no Pub/Sub emulator configured.
 - **Importing a meal from a webpage** works, but fetches the real webpage and therefore needs internet access.

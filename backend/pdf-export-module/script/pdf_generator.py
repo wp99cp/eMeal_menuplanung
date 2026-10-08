@@ -19,8 +19,9 @@ from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
 from utils.commandline_args_parser import setup_parser
-from utils.latex import tex
+from utils.export_args import validate_args
 from utils.firebase_clients import get_firestore_client, get_project_name, get_storage_client
+from utils.latex import run_pdflatex, tex
 from utils.telegraf_logger import TelegrafLogger
 
 
@@ -82,8 +83,8 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     document.packages.add(Package('fancyhdr'))
     document.packages.add(Package('floatpag'))
     document.preamble.append(NoEscape(r'\fancypagestyle{plain}{ \lfoot{{\small ' +
-                                      tex(camp.get_camp_name()) + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
-                                                             r'\small Export vom {\today} ' +
+                                      tex(camp.get_camp_name(), single_line=True) +
+                                      r'}} \cfoot{\textbf{\thepage}} \rfoot{{\small Export vom {\today} ' +
                                       now.strftime('%H:%M') + '}}}'))
 
     document.preamble.append(Command('pagestyle', arguments='plain'))
@@ -93,11 +94,12 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # TODO: Option for sans serif font
     # document.preamble.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
 
-    # babel uses the quotation mark for german shorthands, e.g. "a for ä, which changes the texts of the users
+    # babel uses the quotation mark for german shorthands, e.g. "a for ä. This also applies to the texts that
+    # are escaped by pylatex, which does not know about it.
     document.append(NoEscape(r'\shorthandoff{"}'))
 
-    document.append(NoEscape(r'\hypersetup{pdftitle = {' + tex(camp.get_camp_name()) +
-                             '}, pdfauthor = {' + tex(camp.get_full_author_name()) + '}}'))
+    document.append(NoEscape(r'\hypersetup{pdftitle = {' + tex(camp.get_camp_name(), single_line=True) +
+                             '}, pdfauthor = {' + tex(camp.get_full_author_name(), single_line=True) + '}}'))
 
     # add sections according to export settings
 
@@ -162,10 +164,9 @@ def create_pdf(camp: CampClass, args: argparse.Namespace):
     # filename = export_{camp_id}_{timestamp}
     file_name = '/export' + ('_' + args.camp_id + '_' + str(time.time()) if not args.dfn else '')
     file_path = dir_path + file_name
+    document.generate_tex(file_path)
     try:
-        document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
-    except UnicodeDecodeError as err:
-        print(err)
+        run_pdflatex(dir_path, file_name.lstrip('/'))
     except CalledProcessError as err:
         # check if pdf in file_path exists
         if os.path.isfile(file_path + '.pdf'):
@@ -186,7 +187,7 @@ def parse_args():
     parser = setup_parser()
     args = parser.parse_args()
 
-    return args
+    return validate_args(args)
 
 
 if __name__ == '__main__':

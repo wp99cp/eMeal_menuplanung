@@ -65,6 +65,7 @@ services:
       HOME: /tmp
       GCLOUD_PROJECT: demo-emeal
       FIRESTORE_EMULATOR_HOST: emulators:8080
+      FIREBASE_AUTH_EMULATOR_HOST: emulators:9099
       STORAGE_EMULATOR_HOST: http://emulators:9199
     volumes:
       - ./backend/pdf-export-module/script:/usr/src/app/script

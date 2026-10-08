@@ -26,8 +26,8 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
         add_header(doc, meal)
 
         doc.append(NoEscape(
-            r'\fancypagestyle{recipestyle}{ \lhead{' + tex(meal['meal_name']) + ' als ' + tex(meal[
-                'meal_used_as']) + r' (Fortsetzung)} \cfoot{\thepage}}'))
+            r'\fancypagestyle{recipestyle}{ \lhead{' + tex(meal['meal_name'], single_line=True) + ' als ' +
+            tex(meal['meal_used_as'], single_line=True) + r' (Fortsetzung)} \cfoot{\thepage}}'))
 
         # general Infos
         with doc.create(Description()) as enum:
@@ -56,11 +56,11 @@ def add_header(doc, meal):
     doc.append(Command('arrayrulecolor', arguments=NoEscape(r'light-gray')))
     with doc.create(Center()) as centered_section:
 
-        centered_section.append(NoEscape(r' \center \LARGE \textbf{' + tex(meal['meal_name']) + r'} \par %'))
+        centered_section.append(NoEscape(r' \center \LARGE \textbf{' + tex(meal['meal_name'], single_line=True) + r'} \par %'))
         centered_section.append(NoEscape(r'\color{gray} \large \textbf{' +
                                          (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
                                              "%A, %d. %b") + r'} / '))
-        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' + tex(meal['meal_used_as']) + r'} \par'))
+        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' + tex(meal['meal_used_as'], single_line=True) + r'} \par'))
 
 
 def add_ingredient(table_content, ingredient):
@@ -68,7 +68,7 @@ def add_ingredient(table_content, ingredient):
         round(ingredient['measure'], 2) if ingredient['measure'] != 0 else '',
         round(ingredient['measure_calc'], 2) if ingredient['measure'] != 0 else '',
         ingredient['unit'],
-        NoEscape(tex(ingredient['food']) + ((r' (%s)' % FRESH_PRODUCT_SYMBOL) if ingredient['fresh'] else '')),
+        NoEscape(tex(ingredient['food'], single_line=True) + ((r' (%s)' % FRESH_PRODUCT_SYMBOL) if ingredient['fresh'] else '')),
         ingredient['comment']
     ])
 

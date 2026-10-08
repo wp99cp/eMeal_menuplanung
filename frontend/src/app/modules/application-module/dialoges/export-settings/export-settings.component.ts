@@ -83,14 +83,9 @@ export class ExportSettingsComponent implements OnInit {
 
     }
 
-    this.dialogRef.close({legacy: false, campId: this.campId, optionalArgs});
+    this.dialogRef.close({campId: this.campId, optionalArgs});
 
   }
 
-  legacyPDCreation() {
-
-    this.dialogRef.close({legacy: true, campId: this.campId});
-
-  }
 
 }

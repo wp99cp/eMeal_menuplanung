@@ -454,11 +454,10 @@ export class DatabaseService {
 
     return new Promise((resolve, reject) => {
 
-      this.authService.getCurrentUser().pipe(take(1)).subscribe(user => {
+      this.authService.getCurrentUser().pipe(take(1)).subscribe(async user => {
 
         let queryStr = '?';
 
-        // the values are free text, e.g. the message of the feedback page may contain '&' or '#'
         Object.entries(optionalSettings).forEach(([k, v]) => {
           queryStr += encodeURIComponent(k) + '=' + encodeURIComponent(v) + '&';
         });
@@ -470,6 +469,8 @@ export class DatabaseService {
 
         const xhr = new XMLHttpRequest();
         xhr.open('GET', url);
+        // the export service checks the access to the camp with the ID token of the user
+        xhr.setRequestHeader('Authorization', 'Bearer ' + await user.getIdToken());
         xhr.onload = () => {
 
           console.log('Export status: ', xhr.status);
@@ -480,6 +481,7 @@ export class DatabaseService {
             reject(new Error(xhr.responseText));
           }
         };
+        xhr.onerror = () => reject(new Error('Export request failed'));
         xhr.send();
 
       });
@@ -963,10 +965,6 @@ export class DatabaseService {
       .snapshotChanges()
       .pipe(FirestoreObject.createObjects<FirestoreSpecificMeal, SpecificMeal>(SpecificMeal));
 
-  }
-
-  legacyPDFCreation(campId) {
-    return this.functions.httpsCallable('createPDF')({campId});
   }
 
   /**

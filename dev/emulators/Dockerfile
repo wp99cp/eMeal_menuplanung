@@ -24,8 +24,5 @@ RUN mkdir -p ${HOME} && \
     firebase setup:emulators:ui && \
     chmod -R a+rwX ${HOME}
 
-# no browser needed, only the legacy export uses puppeteer
-ENV PUPPETEER_SKIP_DOWNLOAD=true
-
 COPY entrypoint.sh /usr/local/bin/emulators-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/emulators-entrypoint.sh"]

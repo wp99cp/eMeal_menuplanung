@@ -15,11 +15,11 @@ def add_title_page(doc: Document, camp: CampClass, args: Namespace):
     # create content
     doc.preamble.append(
         Command('title', NoEscape(r'\Huge \textbf{' +
-                                  tex(camp.get_camp_name()) +
+                                  tex(camp.get_camp_name(), single_line=True) +
                                   r'} \\ \vspace{1.65cm} \Large \textbf{Handbuch Lagerküche}'
                                   r'\\ \vspace{11cm}')))
 
-    doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + tex(camp.get_full_author_name()))))
+    doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + tex(camp.get_full_author_name(), single_line=True))))
     doc.preamble.append(Command('date', NoEscape(r'\normalsize Version vom \today')))
 
     # no page numbers

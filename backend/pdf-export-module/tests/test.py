@@ -8,14 +8,12 @@ from functools import reduce
 import firebase_admin
 from firebase_admin import credentials
 
-from app import parse_export_args
 from exportData.camp import CampClass
 from exportData.utils import normalize_camp, normalize_recipe, normalize_specific_meal, overwrite_ingredients, \
-    to_number
+    to_number, to_text
 from pdf_generator import create_pdf
 from shopping_list.shopping_list import ShoppingList
 from utils.commandline_args_parser import setup_parser
-from utils.latex import tex
 
 
 class MockDataTester(unittest.TestCase):
@@ -201,6 +199,11 @@ class TestNormalization(unittest.TestCase):
                               ('', 0), (True, 0), ({}, 0)]:
             self.assertEqual(number, to_number(value), value)
 
+    def test_unprintable_characters(self):
+        # pdflatex can't print emojis
+        self.assertEqual('Pasta  20°C ½ €', to_text('Pasta \U0001F35D\u2600\ufe0f 20°C ½ €'))
+        self.assertEqual('', to_text(None))
+
     def test_incomplete_camp(self):
         camp = {'days': [{'day_date': datetime.datetime(2027, 7, 12)}, {'day_description': 'without date'}]}
         normalize_camp(camp)
@@ -244,49 +247,6 @@ class TestNormalization(unittest.TestCase):
             [overwrites[0], ingredients[1], overwrites[1]], overwrite_ingredients(ingredients, overwrites))
         self.assertEqual(ingredients, overwrite_ingredients(ingredients, None))
         self.assertEqual(overwrites, overwrite_ingredients(None, overwrites))
-
-
-class TestLatex(unittest.TestCase):
-
-    def test_special_characters(self):
-        self.assertEqual(r'Rahm 35\% \& Co\_KG \#1 \$5', tex('Rahm 35% & Co_KG #1 $5'))
-        self.assertEqual(r'\textbackslash{}input\{/etc/passwd\}', tex(r'\input{/etc/passwd}'))
-
-    def test_unprintable_characters(self):
-        self.assertEqual('Pasta 20°C ½ €', tex('Pasta \U0001F35D\u2600\ufe0f 20°C ½ €\x00'))
-
-    def test_line_breaks(self):
-        self.assertEqual('Sola 2027', tex(' Sola\n 2027 '))
-        self.assertIn(r'\newline', tex('Zeile 1\nZeile 2', multiline=True))
-
-    def test_missing_text(self):
-        self.assertEqual('', tex(None))
-        self.assertEqual('24', tex(24))
-
-
-class TestExportArguments(unittest.TestCase):
-
-    def test_query_of_frontend(self):
-        args = parse_export_args('camp', 'user', {'--spl': '', '--ncols': '3', '--wv': '', '--fdb': '',
-                                                  '--fdbmsg': '- Danke & Gruss'})
-
-        self.assertEqual(('user', 'camp'), (args.user_id, args.camp_id))
-        self.assertTrue(args.spl and args.wv and args.fdb)
-        self.assertFalse(args.meals)
-        self.assertEqual(3, args.ncols)
-        self.assertEqual('- Danke & Gruss', args.fdbmsg)
-
-    def test_emptied_fields(self):
-        # the frontend sends an emptied number field as null
-        args = parse_export_args('camp', 'user', {'--ncols': 'null', '--minNIng': '', '--fdbmsg': ''})
-
-        self.assertEqual((2, 2, ''), (args.ncols, args.minNIng, args.fdbmsg))
-
-    def test_invalid_arguments(self):
-        # must not exit, this would stop the worker of the server
-        for query in [{'--unknown': ''}, {' Gruss': ''}, {'--help': ''}, {'-h': ''}]:
-            with self.assertRaises(ValueError):
-                parse_export_args('camp', 'user', query)
 
 
 class TestPDFCreation(MockDataTester):

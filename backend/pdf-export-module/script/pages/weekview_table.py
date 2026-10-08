@@ -15,7 +15,7 @@ def weekview_table(doc: Document, camp: CampClass, args: Namespace):
     days = camp.get_days()
     days = list(map(lambda d: NoEscape(
         (d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y") +
-        ((r'\par (' + tex(d['day_description']) + ')') if d['day_description'].strip() != '' else '')), days))
+        ((r'\par (' + tex(d['day_description'], single_line=True) + ')') if d['day_description'].strip() != '' else '')), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
@@ -48,8 +48,7 @@ def prepareMealsForWeekview(camp: CampClass, args: Namespace):
                             meal.get('doc_id'))
             continue
 
-        weekview_name = tex(meal.get('meal_weekview_name'))
-
+        weekview_name = tex(meal.get('meal_weekview_name'), single_line=True)
         meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += weekview_name
 
         if meal.get('meal_gets_prepared') and args.mp:
@@ -71,7 +70,7 @@ def add_table(camp, days, doc, args: Namespace):
 
     # define table look
     doc.append(Command('caption*', arguments=Arguments(
-        NoEscape(r'\centering \textbf{Wochenplan ' + tex(camp.get_camp_name()) + r' }'))))
+        NoEscape(r'\centering \textbf{Wochenplan ' + tex(camp.get_camp_name(), single_line=True) + r' }'))))
     doc.append(Command('centering'))
     doc.append(Command('newcolumntype', arguments='Y',
                        extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
@@ -101,7 +100,7 @@ def add_table(camp, days, doc, args: Namespace):
 
         # add meals
         for meal_name in meals.keys():
-            table_content.add_row([tex(meal_name)] + meals[meal_name])
+            table_content.add_row([meal_name] + meals[meal_name])
             table_content.add_hline()
 
     doc.append(Command('thisfloatpagestyle', arguments='empty'))
