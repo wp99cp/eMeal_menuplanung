@@ -49,15 +49,43 @@ service cloud.firestore {
     	allow read, write: if request.auth.uid == userID
     
     }
-    // shared data can be read but not write to it
-    match /sharedData/{document=**} {
-        allow read, list: if isAuth();
+    // check's if the user is an admin
+    function isAdmin() {
+        return isAuth() && request.auth.token.isAdmin == true;
     }
-    
-     // shared data can be read but not write to it
-    match /sharedData/feedback/messages/{document=**} {
-        allow create: if isAuth();
-        allow write, delete: if request.auth.token.isAdmin;
+    // shared data can be read but not write to it
+    // the feedback messages are excluded, they contain the names and emails of the senders
+    match /sharedData/{docID}/{document=**} {
+        allow read, list: if isAuth() && docID != 'feedback';
+    }
+
+    // feedback messages can be created by every user but only an admin can read and resolve them
+    match /sharedData/feedback/messages/{messageID} {
+        function validMessage(){
+            return
+                // only this fields are allowed
+                request.resource.data.keys().hasAll(['uid', 'email', 'message', 'date_added']) &&
+                request.resource.data.keys().hasOnly(
+                    ['uid', 'displayName', 'email', 'message', 'title', 'currentURL', 'date_added', 'access']) &&
+                // can't send a message in the name of another user
+                request.resource.data.uid == request.auth.uid &&
+                request.resource.data.email == request.auth.token.get('email', null) &&
+                request.resource.data.date_added == request.time &&
+                request.resource.data.message is string &&
+                request.resource.data.message.size() <= 10000 &&
+                // the optional fields are limited in size
+                (request.resource.data.get('displayName', null) == null ||
+                    request.resource.data.displayName.size() <= 200) &&
+                (request.resource.data.get('title', null) == null ||
+                    request.resource.data.title.size() <= 200) &&
+                (request.resource.data.get('currentURL', null) == null ||
+                    request.resource.data.currentURL.size() <= 2000) &&
+                (!('access' in request.resource.data) ||
+                    (request.resource.data.access.keys().hasOnly([request.auth.uid]) &&
+                    request.resource.data.access[request.auth.uid] == 'owner'));
+        }
+        allow create: if isAuth() && validMessage();
+        allow read, list, update, delete: if isAdmin();
     }
     
     // Help messages can be read by all users
@@ -82,10 +110,15 @@ service cloud.firestore {
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow list, get: if hasAccess();
         allow delete: if isOwner(resource.data);
-        // has currently no access field
+        // the exports have no access field, the access of the camp is used
         match /exports/{docID} {
-            allow read, list;
-            allow delete;
+            function campAccess() {
+                return get(/databases/$(database)/documents/camps/$(campID)).data.access;
+            }
+            allow read, list: if isAuth() &&
+                (campAccess()[request.auth.uid] in ['editor', 'owner', 'collaborator', 'viewer'] ||
+                campAccess().get('all_users', null) == 'viewer');
+            allow delete: if isAuth() && campAccess()[request.auth.uid] in ['editor', 'owner', 'collaborator'];
         }
     }
     // group query for delete specificRecipes
