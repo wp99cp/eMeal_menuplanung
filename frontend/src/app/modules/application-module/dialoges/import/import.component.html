@@ -7,8 +7,7 @@
   <div class="source" [formGroup]="input">
 
     <mat-form-field>
-      <input matInput placeholder="URL der Webseite (swissmilk.ch oder fooby.ch)" formControlName="url"
-             (input)="loadMealFromURL()">
+      <input matInput placeholder="URL der Webseite (swissmilk.ch oder fooby.ch)" formControlName="url">
     </mat-form-field>
 
     <mat-spinner class="spinner" *ngIf="showSpinner" diameter="25"></mat-spinner>
