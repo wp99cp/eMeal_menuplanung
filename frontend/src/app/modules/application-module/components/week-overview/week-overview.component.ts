@@ -150,7 +150,15 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
       this.snackBar.open('Vorbereitung der Mahlzeit wurde deaktiviert!', '', {duration: 2000});
     }
 
-    await this.dbService.updateDocument(specificMeal);
+    // The days already show the meal at its new place. They keep it there until the move is written, the state of
+    // the database from before the move would put the meal back to its old place for a moment.
+    const releaseUpdates = DayOverviewComponent.holdUpdates();
+
+    try {
+      await this.dbService.updateDocument(specificMeal);
+    } finally {
+      releaseUpdates();
+    }
 
   }
 

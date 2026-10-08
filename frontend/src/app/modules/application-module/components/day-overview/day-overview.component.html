@@ -10,22 +10,23 @@
 <div class="meal-list" id="{{day.getTimestamp().toMillis()}}" #dayElement>
 
   <!-- create boxes for Zmorgen, Znüni, Zmittag, ... -->
-  <ng-container *ngFor="let nameOfMeal of getMealNames(); let i = index">
+  <ng-container *ngFor="let slot of slots">
 
-    <ng-container *ngIf="this.specificMealsByName && (this.specificMealsByName[nameOfMeal] | async) as meals">
-      <div cdkDropList [cdkDropListEnterPredicate]="predicate"
-           class="meal-card {{nameOfMeal}}"
+    <ng-container *ngIf="slot.meals as meals">
+      <div cdkDropList [cdkDropListData]="slot" [cdkDropListEnterPredicate]="predicate"
+           class="meal-card {{slot.usage}}"
            [ngClass]="{'has-a-meal': meals.length >= 1}"
-           [attr.data-meal-name]="nameOfMeal" [attr.is-full]="meals.length > 0">
+           [attr.data-meal-name]="slot.usage">
 
-        <span class="meal-card-name">{{nameOfMeal}}</span>
+        <span class="meal-card-name">{{slot.usage}}</span>
 
         <div class="meals" *ngIf="(meals.length >= 1) else noMeal"
-             [ngClass]="{'moveable': nameOfMeal !== 'Vorbereiten' && access}">
-          <div *ngFor="let meal of meals" [attr.data-meal-id]="'ID-' + meal.documentId"
-               cdkDrag class="meal-element" (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
+             [ngClass]="{'moveable': slot.usage !== 'Vorbereiten' && access}">
+          <div *ngFor="let meal of meals; trackBy: trackByMealId" [attr.data-meal-id]="'ID-' + meal.documentId"
+               cdkDrag [cdkDragData]="meal" class="meal-element"
+               (cdkDragStarted)="dragStarted($event)" (cdkDragEnded)="dragStopped($event)"
                [cdkDragDisabled]="(meal.prepare && meals[0].prepareAsDate.getDay() === day.dateAsTypeDate.getDay()) || !access"
-               (cdkDragDropped)="mealDroppedAction([meal, $event]);"
+               (cdkDragDropped)="mealDroppedAction($event);"
                routerLink="meals/{{ meal.getMealId() }}/{{meal.documentId}}">
             <span>{{meal.weekTitle}}</span>
             <span
@@ -38,12 +39,12 @@
         </div>
 
         <ng-template #noMeal>
-          <div *ngIf="nameOfMeal != 'Vorbereiten'" class="meals no-meal meal-addable clickable" [attr.data-add-note]="'true'"
-               (click)="addMealToUsage([day, nameOfMeal])">
+          <div *ngIf="slot.usage !== 'Vorbereiten'" class="meals no-meal meal-addable clickable" [attr.data-add-note]="'true'"
+               (click)="addMealToUsage([day, slot.usage])">
             <mat-icon class="clickable add_button" matTooltip="Mahlzeit hinzufügen">
               add_circle_outline
             </mat-icon>          </div>
-          <div *ngIf="nameOfMeal == 'Vorbereiten'" class="meals no-meal" [attr.data-add-note]="'true'"></div>
+          <div *ngIf="slot.usage === 'Vorbereiten'" class="meals no-meal" [attr.data-add-note]="'true'"></div>
         </ng-template>
 
         <!-- No add button visible
