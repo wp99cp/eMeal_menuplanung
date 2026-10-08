@@ -8,6 +8,7 @@ from exportData.camp import CampClass
 from pages.enviroments import Multicols
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
 from shopping_list.shopping_list import ShoppingList
+from utils.latex import tex
 
 
 def add_shopping_lists(doc: Document, camp: CampClass, args: Namespace):
@@ -93,11 +94,12 @@ def append_category_columns(category_name, doc, shopping_list, args, include_fre
     with doc.create(MiniPage()):
         doc.append(bold(category_name))
 
-        if int(args.ncols) == 1:
+        n_cols = args.ncols if args.ncols in [1, 2, 3, 4] else 2
+
+        if n_cols == 1:
             append_category(args, category_name, doc, include_fresh, shopping_list)
             return
 
-        n_cols = int(args.ncols) if int(args.ncols) in [1, 2, 3, 4] else 2
         with doc.create(Multicols(arguments=str(n_cols))):
             append_category(args, category_name, doc, include_fresh, shopping_list)
 
@@ -123,12 +125,12 @@ def append_ingredients(category_name, shopping_list, itemize, args, include_fres
         if not include_fresh and ing['fresh']:
             continue
 
-        food_name = ing['food'] + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
+        food_name = tex(ing['food']) + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
         measure_as_str = str(round(ing['measure_calc'], 2))
 
         if args.invm:
             itemize.add_item(NoEscape(
-                food_name + ((', ' + measure_as_str + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')))
+                food_name + ((', ' + measure_as_str + ' ' + tex(ing['unit'])) if ing['measure_calc'] > 0 else '')))
         else:
             itemize.add_item(NoEscape(
-                ((measure_as_str + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + food_name))
+                ((measure_as_str + ' ' + tex(ing['unit']) + ' ') if ing['measure_calc'] > 0 else '') + food_name))

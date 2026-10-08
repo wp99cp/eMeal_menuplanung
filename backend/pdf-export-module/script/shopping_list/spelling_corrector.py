@@ -23,8 +23,8 @@ class SpellingCorrector:
                 correction_logs.append(correction_log)
 
         if correction_logs and len(correction_logs) > 0:
-            self.__db.document('sharedData/foodCategories').update(
-                {"resentCorrections": firestore.ArrayUnion(correction_logs)})
+            self.__db.document('sharedData/foodCategories').set(
+                {"resentCorrections": firestore.ArrayUnion(correction_logs)}, merge=True)
 
     def _correction(self, input_word):
         """
@@ -36,7 +36,7 @@ class SpellingCorrector:
             return input_word, None
 
         # Check if special characters are present in the word
-        if any(s in input_word for s in ['\\&']):
+        if any(s in input_word for s in ['&']):
             return input_word, None
 
         # Try to find a close match

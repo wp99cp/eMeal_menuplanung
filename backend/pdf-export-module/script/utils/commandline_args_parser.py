@@ -1,6 +1,21 @@
 import argparse
 
 
+def number(default: int):
+    """
+    :return: type of an argument that is a whole number. The frontend sends an emptied number field as `null`,
+    in this case and for any other text that is not a number the default value is used.
+    """
+
+    def parse(value: str) -> int:
+        try:
+            return int(float(value))
+        except (ValueError, OverflowError):
+            return default
+
+    return parse
+
+
 def setup_parser():
     # Initialize parser
     msg = "Arguments for pdf export."
@@ -27,7 +42,7 @@ def setup_parser():
     parser.add_argument('--invm', help='Invert order of the ingredients and measurement in the shopping-list. '
                                        'Default "2kg Mehl" or with this flag "Mehl, 2kg"',
                         default=False, action='store_true')
-    parser.add_argument('--ncols', help='Number of columns in shopping list.', default=2)
-    parser.add_argument('--minNIng', help='Minimal number of ingredients per category. If the number of ingredients in a category is below this threshold, they get listed onder "Diverses" in the shopping list.', default=2)
+    parser.add_argument('--ncols', help='Number of columns in shopping list.', default=2, type=number(2))
+    parser.add_argument('--minNIng', help='Minimal number of ingredients per category. If the number of ingredients in a category is below this threshold, they get listed onder "Diverses" in the shopping list.', default=2, type=number(2))
 
     return parser

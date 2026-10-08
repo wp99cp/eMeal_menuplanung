@@ -1,4 +1,5 @@
-from exportData.data_fetcher import DataFetcher, meal_types
+from exportData.data_fetcher import DataFetcher
+from exportData.utils import meal_type_order
 from exportData.ingredients_calculator import IngredientsCalculator
 
 
@@ -69,7 +70,7 @@ class CampClass(IngredientsCalculator, DataFetcher):
                     self._used_meal_types += ['Vorbereiten']
                     break
 
-        self._used_meal_types = sorted(self._used_meal_types, key=lambda x: meal_types.index(x))
+        self._used_meal_types = sorted(self._used_meal_types, key=meal_type_order)
 
         return self._used_meal_types
 

@@ -210,10 +210,10 @@ class ShoppingList:
         # write unknown ingredients to the database
         if len(category_unknown) > 0:
             cls.__db.document('sharedData/foodCategories') \
-                .update({'uncategorised': firestore.ArrayUnion(category_unknown)})
+                .set({'uncategorised': firestore.ArrayUnion(category_unknown)}, merge=True)
 
         # Merge categories with less than args.minNIng elements
-        min_number_of_ings = int(args.minNIng) if int(args.minNIng) else 1
+        min_number_of_ings = max(1, args.minNIng)
         final_categories = {}
         for cat_names in ingredients_categorized.keys():
             if cat_names == 'Diverses' or len(ingredients_categorized[cat_names]) < min_number_of_ings:

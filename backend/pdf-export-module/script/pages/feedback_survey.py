@@ -3,6 +3,7 @@ from argparse import Namespace
 from pylatex import Document, Section, Tabularx, NoEscape, Package
 
 from exportData.camp import CampClass
+from utils.latex import tex
 
 
 def any_evaluable_meals_exist(camp: CampClass):
@@ -29,7 +30,7 @@ def add_feedback_survey_page(doc: Document, camp: CampClass, args: Namespace):
         'Damit wir im nächsten Lager noch feiner kochen können, '
         'bitten wir dich die folgende Umfrage auszufüllen. '
         r'Bewerte die folgenden Mahlzeiten von \ding{172} bis \ding{176}'
-        ' (schrecklich bis ausgezeichnet). ' if not args.fdbmsg else args.fdbmsg))
+        ' (schrecklich bis ausgezeichnet). ' if not args.fdbmsg.strip() else tex(args.fdbmsg, multiline=True)))
 
     doc.append(NoEscape(r'\vspace{2cm} \newline '))
 

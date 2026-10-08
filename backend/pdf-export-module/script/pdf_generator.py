@@ -19,6 +19,7 @@ from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
 from utils.commandline_args_parser import setup_parser
+from utils.latex import tex
 from utils.firebase_clients import get_firestore_client, get_project_name, get_storage_client
 from utils.telegraf_logger import TelegrafLogger
 
@@ -81,7 +82,7 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     document.packages.add(Package('fancyhdr'))
     document.packages.add(Package('floatpag'))
     document.preamble.append(NoEscape(r'\fancypagestyle{plain}{ \lfoot{{\small ' +
-                                      camp.get_camp_name() + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
+                                      tex(camp.get_camp_name()) + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
                                                              r'\small Export vom {\today} ' +
                                       now.strftime('%H:%M') + '}}}'))
 
@@ -92,8 +93,11 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # TODO: Option for sans serif font
     # document.preamble.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
 
-    document.append(NoEscape(r'\hypersetup{pdftitle = {' + camp.get_camp_name() +
-                             '}, pdfauthor = {' + camp.get_full_author_name() + '}}'))
+    # babel uses the quotation mark for german shorthands, e.g. "a for ä, which changes the texts of the users
+    document.append(NoEscape(r'\shorthandoff{"}'))
+
+    document.append(NoEscape(r'\hypersetup{pdftitle = {' + tex(camp.get_camp_name()) +
+                             '}, pdfauthor = {' + tex(camp.get_full_author_name()) + '}}'))
 
     # add sections according to export settings
 

@@ -3,6 +3,7 @@ from argparse import Namespace
 from pylatex import Package, Command, NoEscape, SmallText, Subsubsection, Document
 
 from exportData.camp import CampClass
+from utils.latex import tex
 
 
 def add_title_page(doc: Document, camp: CampClass, args: Namespace):
@@ -14,11 +15,11 @@ def add_title_page(doc: Document, camp: CampClass, args: Namespace):
     # create content
     doc.preamble.append(
         Command('title', NoEscape(r'\Huge \textbf{' +
-                                  camp.get_camp_name() +
+                                  tex(camp.get_camp_name()) +
                                   r'} \\ \vspace{1.65cm} \Large \textbf{Handbuch Lagerküche}'
                                   r'\\ \vspace{11cm}')))
 
-    doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + camp.get_full_author_name())))
+    doc.preamble.append(Command('author', NoEscape(r'\normalsize ' + tex(camp.get_full_author_name()))))
     doc.preamble.append(Command('date', NoEscape(r'\normalsize Version vom \today')))
 
     # no page numbers

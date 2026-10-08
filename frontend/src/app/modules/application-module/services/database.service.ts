@@ -458,8 +458,9 @@ export class DatabaseService {
 
         let queryStr = '?';
 
+        // the values are free text, e.g. the message of the feedback page may contain '&' or '#'
         Object.entries(optionalSettings).forEach(([k, v]) => {
-          queryStr += k + '=' + v + '&';
+          queryStr += encodeURIComponent(k) + '=' + encodeURIComponent(v) + '&';
         });
 
         const url = environment.exportEndpoint + '/export/camp/'
