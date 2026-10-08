@@ -38,6 +38,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {InjectionContextFirestore} from './shared/injection-context-firestore';
+import {emulatorProviders} from './shared/emulator-providers';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import {InjectionContextFirestore} from './shared/injection-context-firestore';
     AccessGuard,
     SwissDateAdapter,
     {provide: DateAdapter, useClass: SwissDateAdapter},
+    ...emulatorProviders,
 
   ],
   bootstrap: [AppComponent]

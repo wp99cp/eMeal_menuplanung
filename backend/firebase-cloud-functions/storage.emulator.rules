@@ -1,0 +1,14 @@
+rules_version = '2';
+
+// Storage rules for the local emulator only (see /docu/Local_Development.md).
+// The rules of the hosted projects are managed in the Firebase console, this file never gets deployed.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // exports get written by the PDF export module, which bypasses these rules
+    match /{allPaths=**} {
+      allow read;
+    }
+
+  }
+}

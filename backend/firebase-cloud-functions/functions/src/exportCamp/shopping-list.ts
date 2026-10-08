@@ -1,4 +1,4 @@
-import admin = require('firebase-admin');
+import {FieldValue} from 'firebase-admin/firestore';
 
 import { db } from '..';
 import { ExportedRecipe } from '../interfaces/exportDatatypes';
@@ -134,7 +134,7 @@ export class ShoppingListCreator {
 
             // write unknown unit to document in 'sharedData/unknownUnits'
             db.doc('sharedData/unknownUnits')
-                .update({ uncategorised: admin.firestore.FieldValue.arrayUnion(ing.unit) })
+                .update({ uncategorised: FieldValue.arrayUnion(ing.unit) })
                 .catch(e => console.error(e));
 
         }
@@ -175,7 +175,7 @@ export class ShoppingListCreator {
 
         // write unknown unit to document in 'sharedData/foodCategories'
         db.doc('sharedData/foodCategories')
-            .update({ uncategorised: admin.firestore.FieldValue.arrayUnion(ing.food) })
+            .update({ uncategorised: FieldValue.arrayUnion(ing.food) })
             .catch(e => console.error(e));
 
         // Default Kategorie

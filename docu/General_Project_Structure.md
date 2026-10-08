@@ -7,6 +7,10 @@ The backend modules can be divided into the database ([Cloud Firestore](https://
 The hosted instance [eMeal.zh11.ch](eMeal.zh11.ch) is hosted on [Firebase Hosting](https://firebase.google.com/docs/hosting) and automatically build and deployed form the master branch of this project (see [Continuous Integration and General Tests](/docu/Continuous_Integration_And_General_Tests.md)). You can host your own incance by changing/adding your API-keys respectively your project-ids to each of component (including backends, frontend components).
 
 
+## Local Development
+
+The whole application can be run locally with the firebase emulators, see [Local Development](/docu/Local_Development.md).
+
 ## Git / GitHub Setup for eMeal
 This project using continuous integration (CI) with github actions. 
 See [Continuous Integration and General Tests](/docu/Continuous_Integration_And_General_Tests.md).

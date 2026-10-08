@@ -1,20 +1,13 @@
 import argparse
 import datetime
-import json
 import locale
 import logging
 import os
-import random
-import string
 import time
 from subprocess import CalledProcessError
 from typing import List
 
-import firebase_admin
 from dateutil.relativedelta import relativedelta
-from firebase_admin import firestore
-from google.cloud import storage
-from google.oauth2 import service_account
 from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
@@ -25,34 +18,24 @@ from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
 from utils.commandline_args_parser import setup_parser
+from utils.firebase_clients import get_firestore_client, get_project_name, get_storage_client
 from utils.telegraf_logger import TelegrafLogger
 
 
 def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
-    with open('../keys/environment/environment.json') as json_file:
-        project_and_bucket_name = json.load(json_file)['storage_bucket_name']
-
-    bucket_name = project_and_bucket_name + ".appspot.com"
+    bucket_name = get_project_name() + ".appspot.com"
     destination_blob_name = "eMeal-export" + source_file_name
 
-    credentials = service_account.Credentials.from_service_account_file(
-        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-    storage_client = storage.Client(credentials=credentials, project=project_and_bucket_name)
+    storage_client = get_storage_client()
 
     bucket = storage_client.bucket(bucket_name)
 
     blob = bucket.blob(destination_blob_name + '.pdf')
     blob.upload_from_filename(source_file_path + '.pdf')
 
-    # Use the application default credentials
-    cred = firebase_admin.credentials.Certificate(
-        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-    app = firebase_admin.initialize_app(
-        cred,
-        name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
-    db = firestore.client(app)
+    db = get_firestore_client()
 
     data = {
         u'docs': [u'pdf'],

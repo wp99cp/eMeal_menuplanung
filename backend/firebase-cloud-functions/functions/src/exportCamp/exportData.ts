@@ -2,7 +2,7 @@ import {db, projectId} from '..';
 import {ExportedCamp, ExportedDay, ExportedMeal, ExportedRecipe} from '../interfaces/exportDatatypes';
 import {FirestoreSpecificMeal, FirestoreSpecificRecipe} from '../interfaces/firestoreDatatypes';
 import {Categories, ShoppingListCreator, Units} from './shopping-list';
-import {firestore} from 'firebase-admin';
+import {FieldValue} from 'firebase-admin/firestore';
 
 export class InvalidDocumentPath extends Error {
 }
@@ -222,8 +222,8 @@ async function loadRecipe(camp: ExportedCamp, recipeRef: FirebaseFirestore.Query
             recipe_specificId: '',
             used_in_camp: '',
             access: {},
-            date_added: firestore.FieldValue.serverTimestamp(),
-            date_modified: firestore.FieldValue.serverTimestamp()
+            date_added: FieldValue.serverTimestamp(),
+            date_modified: FieldValue.serverTimestamp()
         };
     }
 

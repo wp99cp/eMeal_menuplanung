@@ -1,14 +1,11 @@
 import copy
-import json
-import random
-import string
 import time
 from argparse import Namespace
 
-import firebase_admin
 from exportData.camp import CampClass
-from firebase_admin import firestore, credentials
+from firebase_admin import firestore
 from shopping_list.spelling_corrector import SpellingCorrector
+from utils.firebase_clients import get_firestore_client
 
 """
 
@@ -64,15 +61,7 @@ class ShoppingList:
         self.checked_spelling = False
         self.meals = None
 
-        with open('../keys/environment/environment.json') as json_file:
-            project_and_bucket_name = json.load(json_file)['storage_bucket_name']
-
-        # Use the application default credentials
-        cred = credentials.Certificate('../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-        app = firebase_admin.initialize_app(
-            cred,
-            name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
-        ShoppingList.__db = firestore.client(app)
+        ShoppingList.__db = get_firestore_client()
 
         # load data for unit conversion
         unit_conversions = ShoppingList.__db.document('sharedData/units').get().to_dict()

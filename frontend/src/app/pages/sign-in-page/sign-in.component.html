@@ -6,6 +6,18 @@
   <p>Um eMeal - Menüplanung zu verwenden musst du dich anmelden. Hierzu stehen dir die verschiedene Möglichkeiten zur
     Verfügung.</p>
 
+  <div class="dev-accounts" *ngIf="devAccounts.length > 0">
+
+    <h3>Lokale Testkonten</h3>
+    <p>Diese Konten existieren nur im Firebase Emulator.</p>
+
+    <button class="sign-in-button" *ngFor="let account of devAccounts"
+            (click)="signInWithDevAccount(account)" [attr.data-dev-account]="account.email">
+      <span class="button-text"><b>{{account.email}}</b><br>{{account.description}}</span>
+    </button>
+
+  </div>
+
   <div class="login-with-third-party">
 
     <button class="sign-in-button" (click)="auth.signInWithGoogle()">
