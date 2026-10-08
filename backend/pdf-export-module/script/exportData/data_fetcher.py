@@ -62,9 +62,6 @@ class DataFetcher(object):
             query_ref = meal_refs.where(u'used_in_camp', u'==', self.camp_id)
             self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
-            for meal in self._specific_meals:
-                meal['meal_weekview_name'] = meal['meal_weekview_name'].replace('&', '\\&')
-
         self._specific_meals_loaded = True
 
     def _fetch_meals(self):
@@ -86,8 +83,6 @@ class DataFetcher(object):
         meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
         for meal in meals:
-
-            meal['meal_name'] = meal['meal_name'].replace('&', ' und ')
 
             for specMeal in self._specific_meals:
                 if specMeal['meal_id'] == meal['doc_id']:
@@ -161,9 +156,6 @@ class DataFetcher(object):
                     for _ing in recipe['ingredients']:
                         if 'fresh' not in _ing:
                             _ing.update({'fresh': False})
-
-                        # Escape special characters in _ing['food']
-                        _ing['food'] = _ing['food'].replace('&', '\\&')
 
                     # filter out ingredients with empty food value
                     recipe['ingredients'] = list(filter(lambda i: i['food'] != '', recipe['ingredients']))

@@ -5,6 +5,7 @@ from pylatex import NoEscape, Command, Document, Package, Tabularx, Table, Descr
 
 import exportData.camp
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
+from utils.latex import tex
 
 
 def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
@@ -25,8 +26,8 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
         add_header(doc, meal)
 
         doc.append(NoEscape(
-            r'\fancypagestyle{recipestyle}{ \lhead{' + meal['meal_name'] + ' als ' + meal[
-                'meal_used_as'] + r' (Fortsetzung)} \cfoot{\thepage}}'))
+            r'\fancypagestyle{recipestyle}{ \lhead{' + tex(meal['meal_name'], single_line=True) + ' als ' +
+            tex(meal['meal_used_as'], single_line=True) + r' (Fortsetzung)} \cfoot{\thepage}}'))
 
         # general Infos
         with doc.create(Description()) as enum:
@@ -60,11 +61,11 @@ def add_header(doc, meal):
             meal['meal_description'] = ''
             print('Warning: meal_name not found in meal: ' + str(meal['meal_id']))
 
-        centered_section.append(NoEscape(r' \center \LARGE \textbf{' + meal['meal_name'] + r'} \par %'))
+        centered_section.append(NoEscape(r' \center \LARGE \textbf{' + tex(meal['meal_name'], single_line=True) + r'} \par %'))
         centered_section.append(NoEscape(r'\color{gray} \large \textbf{' +
                                          (meal['meal_date'] + datetime.timedelta(hours=2)).strftime(
                                              "%A, %d. %b") + r'} / '))
-        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' + meal['meal_used_as'] + r'} \par'))
+        centered_section.append(NoEscape(r'\color{gray} \large \textbf{' + tex(meal['meal_used_as'], single_line=True) + r'} \par'))
 
 
 def add_ingredient(table_content, ingredient):
@@ -72,7 +73,7 @@ def add_ingredient(table_content, ingredient):
         round(ingredient['measure'], 2) if ingredient['measure'] != 0 else '',
         round(ingredient['measure_calc'], 2) if ingredient['measure'] != 0 else '',
         ingredient['unit'],
-        NoEscape(ingredient['food'] + ((r' (%s)' % FRESH_PRODUCT_SYMBOL) if ingredient['fresh'] else '')),
+        NoEscape(tex(ingredient['food'], single_line=True) + ((r' (%s)' % FRESH_PRODUCT_SYMBOL) if ingredient['fresh'] else '')),
         ingredient['comment']
     ])
 
