@@ -1,4 +1,4 @@
-# Builds and deploys the cloud functions to the firebase project the build runs in.
+# Deploys the Firestore rules and the cloud functions to the firebase project the build runs in.
 #
 # Used by the Cloud Build triggers of the projects cevizh11 (branch develop) and
 # cevizh11-menuplanung (branch master). It can also be started manually from the repository root:
@@ -13,9 +13,17 @@ steps:
     entrypoint: npm
     args: [ 'ci' ]
 
+  # compiles and releases the firestore.rules, the build fails if they do not compile;
+  # runs before the functions, such that a failed deployment of the functions cannot hold back the rules
+  - id: Deploy rules
+    name: node:22
+    dir: backend/firebase-cloud-functions
+    entrypoint: functions/node_modules/.bin/firebase
+    args: [ 'deploy', '--only', 'firestore:rules', '--project', '$PROJECT_ID', '--non-interactive' ]
+
   # lints and compiles the functions (predeploy hooks of the firebase.json) and deploys them,
   # functions that no longer exist in the source code get deleted (--force)
-  - id: Deploy
+  - id: Deploy functions
     name: node:22
     dir: backend/firebase-cloud-functions
     entrypoint: functions/node_modules/.bin/firebase
