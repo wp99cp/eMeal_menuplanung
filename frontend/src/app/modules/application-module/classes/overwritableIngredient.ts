@@ -87,6 +87,19 @@ export class OverwritableIngredient {
   }
 
   /**
+   * Returns the overwriting of a document without removing it.
+   *
+   * @param documentId id of the document
+   * @returns the overwriting or null if the document does not overwrite this ingredient
+   */
+  public getOverwriting(documentId: string): Ingredient {
+
+    const index = this.sourceIdStack.indexOf(documentId);
+    return index > 0 ? this.ingStack[index] : null;
+
+  }
+
+  /**
    * Adds a new Layer over overwiten data
    *
    */

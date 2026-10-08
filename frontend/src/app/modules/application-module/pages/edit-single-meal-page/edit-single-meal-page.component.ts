@@ -4,7 +4,8 @@ import {empty, Observable} from 'rxjs';
 import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {Meal} from '../../classes/meal';
 import {Recipe} from '../../classes/recipe';
-import {AutoSaveService} from '../../services/auto-save.service';
+import {keepEditedObjects} from '../../classes/keep-edited-objects';
+import {AutoSaveService, Saveable} from '../../services/auto-save.service';
 import {DatabaseService} from '../../services/database.service';
 import {EditRecipeInCampComponent} from '../../components/edit-recipe-in-camp/edit-recipe-in-camp.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -21,7 +22,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
   templateUrl: './edit-single-meal-page.component.html',
   styleUrls: ['./edit-single-meal-page.component.sass']
 })
-export class EditSingleMealPageComponent implements OnInit {
+export class EditSingleMealPageComponent implements OnInit, Saveable {
 
   public meal: Observable<Meal>;
   public recipes: Observable<Recipe[]>;
@@ -92,17 +93,10 @@ export class EditSingleMealPageComponent implements OnInit {
 
     this.recipes = this.urlPathData.pipe(
       this.loadIDFromURL('meals'),
-      mergeMap(mealId => this.dbService.getRecipes(mealId))
+      mergeMap(mealId => this.dbService.getRecipes(mealId)),
+      keepEditedObjects(recipe => recipe.documentId in this.unsavedChanges)
     );
 
-
-    HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Änderungen speichern',
-      name: 'Speichern',
-      action: (() => this.saveButton()),
-      icon: 'save',
-    });
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
@@ -192,45 +186,33 @@ export class EditSingleMealPageComponent implements OnInit {
 
   }
 
-  save(): Promise<boolean> {
+  async save(): Promise<boolean> {
 
-    HeaderNavComponent.turnOff('Speichern');
+    // changes made while the recipes get written have to be saved again
+    const recipes = this.unsavedChanges;
+    this.unsavedChanges = {};
 
-    return new Promise<boolean>(async resolve => {
+    try {
+      await Promise.all(Object.values(recipes).map(recipe => this.dbService.saveDocument(recipe)));
+    } catch (error) {
+      this.unsavedChanges = {...recipes, ...this.unsavedChanges};
+      throw error;
+    }
 
-      if (Object.keys(this.unsavedChanges).length > 0) {
-
-        for (const rec of Object.values(this.unsavedChanges)) {
-          await this.dbService.updateDocument(rec);
-        }
-        resolve(true);
-
-      }
-
-      resolve(false);
-
-    });
+    return Object.keys(recipes).length > 0;
 
   }
 
   newUnsavedChanges(recipe: Recipe) {
 
-    HeaderNavComponent.turnOn('Speichern');
     this.unsavedChanges[recipe.documentId] = recipe;
+    this.autosave.newUnsavedChanges();
 
   }
 
   newRecipe() {
 
   }
-
-  private saveButton() {
-
-    HeaderNavComponent.turnOff('Speichern');
-    this.save();
-
-  }
-
 
   private share() {
 

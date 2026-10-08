@@ -1,0 +1,71 @@
+.save-status
+  margin-right: 15px
+  white-space: nowrap
+
+.pill
+  display: inline-flex
+  align-items: center
+  height: 30px
+  padding: 0 12px 0 8px
+  border: 1px solid transparent
+  border-radius: 15px
+  font: inherit
+  font-size: 13px
+  font-weight: 500
+  line-height: 30px
+  user-select: none
+
+  .mat-icon
+    width: 18px
+    height: 18px
+    margin: 0 6px 0 0
+    font-size: 18px
+    line-height: 18px
+    color: inherit
+
+.saving
+  background-color: #f1f3f4
+  color: #3c4043
+
+  .mat-icon
+    animation: save-status-rotate 1.5s linear infinite
+
+.saved
+  background-color: #e6f4ea
+  color: #0d652d
+
+.offline
+  background-color: #fef7e0
+  border-color: #f9dc8c
+  color: #7a4f01
+
+.error
+  background-color: #fce8e6
+  border-color: #f4b4ae
+  color: #a50e0e
+  cursor: pointer
+
+  &:hover
+    background-color: #fad2cf
+
+  &:focus-visible
+    outline: 2px solid #a50e0e
+    outline-offset: 2px
+
+@keyframes save-status-rotate
+  to
+    transform: rotate(-360deg)
+
+@media (prefers-reduced-motion: reduce)
+  .saving .mat-icon
+    animation: none
+
+@media (max-width: 950px)
+  .pill
+    padding: 0 6px
+
+    .mat-icon
+      margin: 0
+
+  .label
+    display: none

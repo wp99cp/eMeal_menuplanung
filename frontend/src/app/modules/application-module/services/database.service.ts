@@ -35,6 +35,7 @@ import {
 import {AuthenticationService} from './authentication.service';
 import {NavigationStart, Params, Router} from '@angular/router';
 import {SettingsService} from './settings.service';
+import {SaveStatusService} from './save-status.service';
 import {environment} from '../../../../environments/environment';
 import firebase from "firebase/compat/app";
 import FieldValue = firebase.firestore.FieldValue;
@@ -67,7 +68,8 @@ export class DatabaseService {
     private functions: AngularFireFunctions,
     private cloud: AngularFireStorage,
     private router: Router,
-    private settings: SettingsService) {
+    private settings: SettingsService,
+    private saveStatus: SaveStatusService) {
 
     // used for automatically unsubscribe if the user changes the page, i.g. leaves the edit section.
     router.events
@@ -242,7 +244,7 @@ export class DatabaseService {
         .pipe(take(1))
         .subscribe(docRefs => {
           docRefs.forEach(docRef => batch.delete(docRef.ref));
-          resolve(batch.commit());
+          resolve(this.saveStatus.track(() => batch.commit()));
         });
 
     });
@@ -285,13 +287,15 @@ export class DatabaseService {
    */
   public deleteSpecificMealAndRecipes(campId: string, mealId: string, specificMealId: string) {
 
-    this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
+    this.saveStatus.track(() => this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete())
+      .catch(() => null);
 
     // https://stackoverflow.com/questions/56149601/firestore-collection-group-query-on-documentid
     // this is a bug in the firestore api...
     this.db.collectionGroup('specificRecipes',
       query => query.where('recipe_specificId', '==', specificMealId).where('used_in_camp', '==', campId))
-      .get().subscribe(docRefs => docRefs.forEach(docRef => docRef.ref.delete()));
+      .get().subscribe(docRefs => docRefs.forEach(docRef =>
+      this.saveStatus.track(() => docRef.ref.delete()).catch(() => null)));
 
   }
 
@@ -341,8 +345,8 @@ export class DatabaseService {
 
     await recipe.createSpecificRecipe(camp, recipe.documentId, mealId, specificId, this);
 
-    return this.db.doc('recipes/' + recipe.documentId)
-      .update({used_in_meals: FieldValue.arrayUnion(mealId)});
+    return this.saveStatus.track(() => this.db.doc('recipes/' + recipe.documentId)
+      .update({used_in_meals: FieldValue.arrayUnion(mealId)}));
 
   }
 
@@ -672,7 +676,27 @@ export class DatabaseService {
     console.log('Update document: ' + firebaseObject.path);
     console.log(firebaseObject.toFirestoreDocument());
 
-    return this.db.doc(firebaseObject.path).update(firebaseObject.toFirestoreDocument());
+    return this.saveStatus.track(
+      () => this.db.doc(firebaseObject.path).update(firebaseObject.toFirestoreDocument()), firebaseObject.path);
+
+  }
+
+  /**
+   * Writes the changes a user made to an element. In contrast to updateDocument the promise rejects
+   * if the user is not allowed to write, as the changes would get lost unnoticed.
+   *
+   */
+  public saveDocument(firebaseObject: FirestoreObject) {
+
+    return this.saveStatus.track(async () => {
+
+      if (!await this.canWrite(firebaseObject)) {
+        throw new Error('No write access to ' + firebaseObject.path);
+      }
+
+      await this.db.doc(firebaseObject.path).update(firebaseObject.toFirestoreDocument());
+
+    }, firebaseObject.path);
 
   }
 
@@ -789,7 +813,7 @@ export class DatabaseService {
    */
   public deleteDocument(obj: FirestoreObject) {
 
-    return this.db.doc(obj.path).delete();
+    return this.saveStatus.track(() => this.db.doc(obj.path).delete());
 
   }
 
@@ -903,10 +927,10 @@ export class DatabaseService {
    */
   async saveOverwrites(ingredients: Ingredient[], recipeId: string, writer: string) {
 
-    await this.db.doc('recipes/' + recipeId + '/overwrites/' + writer)
+    await this.saveStatus.track(() => this.db.doc('recipes/' + recipeId + '/overwrites/' + writer)
       .update({
         ingredients
-      });
+      }));
 
   }
 

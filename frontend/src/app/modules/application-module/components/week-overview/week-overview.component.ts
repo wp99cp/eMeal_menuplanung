@@ -43,6 +43,8 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
   public hasWriteAccess = false;
   /** Stores a list of all meals that get prepared on another day */
   public mealToPrepare: Observable<SpecificMeal[]>;
+  /** The camp as it got loaded or saved the last time. */
+  private savedCamp: string;
 
   @ViewChild('weekViewElement', {static: false}) weekViewElement: ElementRef<HTMLElement>;
 
@@ -71,20 +73,14 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
 
   ngOnInit() {
 
+    this.savedCamp = this.campAsString();
+
     // Check whether the user as write-access to the camp.
     // The result get sored in the local var hasWriteAccess on top of that
     // if the user has access, the "Speichern" "Mahlzeiten" button are created.
     this.dbService.canWrite(this.camp).then(hasAccess => {
 
       this.hasWriteAccess = hasAccess;
-
-      HeaderNavComponent.addToHeaderNav({
-        active: false,
-        description: 'Änderungen Speichern',
-        name: 'Speichern',
-        action: (() => this.save()),
-        icon: 'save'
-      }, 0);
 
       HeaderNavComponent.addToHeaderNav({
         active: this.hasWriteAccess,
@@ -121,11 +117,33 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
    */
   public async save() {
 
+    const camp = this.campAsString();
+
     // Speichert das Lager
     await this.dbService.updateDocument(this.camp);
-    HeaderNavComponent.turnOff('Speichern');
+    this.savedCamp = camp;
 
     return true;
+  }
+
+  /**
+   * Saves the camp if it has changes that are not saved yet.
+   * @returns: Promise<boolean> resolving with true if the camp got saved.
+   */
+  public async saveChanges() {
+
+    if (this.savedCamp === this.campAsString()) {
+      return false;
+    }
+
+    return this.save();
+
+  }
+
+  private campAsString() {
+
+    return JSON.stringify(this.camp.toFirestoreDocument());
+
   }
 
   /**
@@ -140,8 +158,6 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
     // update meal date, i.g. move the meal to the correct day
     specificMeal.date = Timestamp.fromMillis(Number.parseInt(mealDateAsString, 10));
     specificMeal.usedAs = usedAs as MealUsage;
-
-    HeaderNavComponent.turnOn('Speichern');
 
     // check if meal gets prepared, if so, check if the prepare date is older than the meal usage.
     // If that is the case the prepare will be deactivated
@@ -196,7 +212,7 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
    */
   public saveCamp(): Observable<Camp> {
 
-    this.dbService.updateDocument(this.camp);
+    this.save();
 
     return of(this.camp);
 

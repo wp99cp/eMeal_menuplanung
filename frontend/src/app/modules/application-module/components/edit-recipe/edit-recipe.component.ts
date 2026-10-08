@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Recipe} from '../../classes/recipe';
 import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
 import {DatabaseService} from '../../services/database.service';
@@ -10,6 +10,7 @@ import {ImportIngredientsComponent} from '../../dialoges/import-ingredients/impo
 import {MatDialog} from '@angular/material/dialog';
 import {SettingsService} from '../../services/settings.service';
 import {take} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
@@ -19,7 +20,7 @@ import {HeaderNavComponent} from "../../../../shared/components/header-nav/heade
   templateUrl: './edit-recipe.component.html',
   styleUrls: ['./edit-recipe.component.sass']
 })
-export class EditRecipeComponent implements OnInit {
+export class EditRecipeComponent implements OnInit, OnChanges {
 
   Arr = Array; // Array type captured in a variable
   Math = Math;
@@ -38,6 +39,7 @@ export class EditRecipeComponent implements OnInit {
 
   private oldValue;
   private isCurrentCellEditable = false;
+  private ingredientsSubscription: Subscription;
 
   private multipleCellsSelected = false;
   private clipboardValue = '';
@@ -55,17 +57,38 @@ export class EditRecipeComponent implements OnInit {
 
   }
 
-  async ngOnInit() {
+  /**
+   * The recipe gets replaced if somebody else changes it. The table has to work with the new recipe then,
+   * otherwise the changes of the user would be made in the replaced recipe and get lost.
+   */
+  async ngOnChanges(changes: SimpleChanges) {
 
-    this.recipe.getIngredients().subscribe(ings => this.ingredients = ings as OverwritenIngredient[]);
-    this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
+    if (!changes.recipe) {
+      return;
+    }
+
+    // the selected cell belongs to the rows of the replaced recipe
+    if (!changes.recipe.firstChange) {
+      this.clearSelection(changes.recipe.previousValue);
+    }
+
+    this.ingredientsSubscription?.unsubscribe();
+    this.ingredientsSubscription =
+      this.recipe.getIngredients().subscribe(ings => this.ingredients = ings as OverwritenIngredient[]);
+
+    this.recipeForm?.setValue({notes: this.recipe.notes}, {emitEvent: false});
 
     // check if the current user has access
     this.hasAccess = await this.databaseService.canWrite(this.recipe);
 
+  }
+
+  async ngOnInit() {
+
+    this.recipeForm = this.formBuilder.group({notes: this.recipe.notes});
+
     this.recipeForm.statusChanges.subscribe(() => {
       this.newUnsavedChanges.emit();
-      HeaderNavComponent.turnOn('Speichern');
       this.recipe.notes = this.recipeForm.value.notes;
     });
 
@@ -157,7 +180,6 @@ export class EditRecipeComponent implements OnInit {
     window.blur();
 
     this.recipe.removeIngredient(uniqueId, 'a_unique_id');
-    HeaderNavComponent.turnOn('Speichern');
 
     this.newUnsavedChanges.emit();
 
@@ -195,7 +217,6 @@ export class EditRecipeComponent implements OnInit {
     }, 20);
 
     this.newUnsavedChanges.emit();
-    HeaderNavComponent.turnOn('Speichern');
 
   }
 
@@ -259,7 +280,6 @@ export class EditRecipeComponent implements OnInit {
 
 
     this.newUnsavedChanges.emit();
-    HeaderNavComponent.turnOn('Speichern');
 
 
   }
@@ -487,7 +507,6 @@ export class EditRecipeComponent implements OnInit {
     const ingredientId = this.selectedTableCell.parentElement.parentElement.id;
     this.updateValue((event as HTMLInputElement).value, ingredientId);
 
-    HeaderNavComponent.turnOn('Speichern');
     this.newUnsavedChanges.emit();
 
   }
@@ -500,7 +519,6 @@ export class EditRecipeComponent implements OnInit {
 
     ingredient.fresh = !ingredient.fresh;
 
-    HeaderNavComponent.turnOn('Speichern');
     this.newUnsavedChanges.emit();
 
   }
@@ -669,9 +687,26 @@ export class EditRecipeComponent implements OnInit {
         }
 
         this.newUnsavedChanges.emit();
-        HeaderNavComponent.turnOn('Speichern');
 
       });
+  }
+
+  private clearSelection(recipe: Recipe) {
+
+    this.isCurrentCellEditable = false;
+    this.currentEditedField = null;
+    this.selectedTableCell = null;
+
+    const overlay = document.getElementById(recipe.documentId + '-focus-overlay');
+
+    if (overlay) {
+      // the input field is made visible on its own when a cell gets selected
+      const inputField = overlay.querySelector('.input-field') as HTMLInputElement;
+      inputField.style.visibility = 'hidden';
+      inputField.blur();
+      overlay.style.visibility = 'hidden';
+    }
+
   }
 
   private clearField() {
@@ -682,7 +717,6 @@ export class EditRecipeComponent implements OnInit {
     this.newValue(this.selectedTableCell);
 
     this.newUnsavedChanges.emit();
-    HeaderNavComponent.turnOn('Speichern');
 
   }
 
