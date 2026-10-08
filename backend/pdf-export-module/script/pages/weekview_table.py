@@ -6,6 +6,7 @@ from pylatex.base_classes import Arguments
 
 from exportData.camp import CampClass
 from pages.enviroments import Sidewaystable, Landscape
+from utils.latex import tex
 
 
 def weekview_table(doc: Document, camp: CampClass, args: Namespace):
@@ -13,7 +14,7 @@ def weekview_table(doc: Document, camp: CampClass, args: Namespace):
     days = camp.get_days()
     days = list(map(lambda d: NoEscape(
         (d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y") +
-        ((r'\par (' + d['day_description'] + ')') if d['day_description'] != '' else '')), days))
+        ((r'\par (' + tex(d['day_description'], single_line=True) + ')') if d['day_description'] != '' else '')), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
@@ -39,8 +40,8 @@ def prepareMealsForWeekview(camp: CampClass, args: Namespace):
         meal_weekview[meal_type] = [NoEscape('')] * len(day_as_dates)
 
     for meal in camp.get_meals_for_weekview():
-        meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += NoEscape(
-            meal.get('meal_weekview_name'))
+        weekview_name = tex(meal.get('meal_weekview_name'), single_line=True)
+        meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += weekview_name
 
         if meal.get('meal_gets_prepared') and args.mp:
 
@@ -49,7 +50,7 @@ def prepareMealsForWeekview(camp: CampClass, args: Namespace):
             if prepare_date in day_as_dates:
                 day_index = day_as_dates.index(prepare_date)
                 meal_weekview.get('Vorbereiten')[day_index] += \
-                    NoEscape(meal.get('meal_weekview_name') + r" \par \vspace{0.1cm} {\tiny \textit{für " +
+                    NoEscape(weekview_name + r" \par \vspace{0.1cm} {\tiny \textit{für " +
                              (meal.get('meal_date') + timedelta(hours=2)).strftime("%A") +
                              r'}} \vspace{0.20cm}  \par ')
 
@@ -61,7 +62,7 @@ def add_table(camp, days, doc, args: Namespace):
 
     # define table look
     doc.append(Command('caption*', arguments=Arguments(
-        NoEscape(r'\centering \textbf{Wochenplan ' + camp.get_camp_name() + r' }'))))
+        NoEscape(r'\centering \textbf{Wochenplan ' + tex(camp.get_camp_name(), single_line=True) + r' }'))))
     doc.append(Command('centering'))
     doc.append(Command('newcolumntype', arguments='Y',
                        extra_arguments=Arguments(NoEscape(r'>{\centering\arraybackslash}X'))))
@@ -91,7 +92,7 @@ def add_table(camp, days, doc, args: Namespace):
 
         # add meals
         for meal_name in meals.keys():
-            table_content.add_row([NoEscape(meal_name)] + meals[meal_name])
+            table_content.add_row([meal_name] + meals[meal_name])
             table_content.add_hline()
 
     doc.append(Command('thisfloatpagestyle', arguments='empty'))

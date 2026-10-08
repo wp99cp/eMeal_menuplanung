@@ -36,7 +36,7 @@ class SpellingCorrector:
             return input_word, None
 
         # Check if special characters are present in the word
-        if any(s in input_word for s in ['\\&']):
+        if any(s in input_word for s in ['&']):
             return input_word, None
 
         # Try to find a close match
