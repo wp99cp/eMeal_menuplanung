@@ -72,6 +72,14 @@
                 }
               ],
               "serviceWorker": "ngsw-config.json"
+            },
+            "emulator": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.emulator.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -84,6 +92,9 @@
           "configurations": {
             "production": {
               "buildTarget": "eMeal:build:production"
+            },
+            "emulator": {
+              "buildTarget": "eMeal:build:emulator"
             }
           }
         },

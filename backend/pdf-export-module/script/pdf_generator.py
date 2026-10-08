@@ -1,20 +1,14 @@
 import argparse
 import datetime
-import json
 import locale
 import logging
 import os
-import random
-import string
 import time
 from subprocess import CalledProcessError
 from typing import List
+from zoneinfo import ZoneInfo
 
-import firebase_admin
 from dateutil.relativedelta import relativedelta
-from firebase_admin import firestore
-from google.cloud import storage
-from google.oauth2 import service_account
 from pylatex import Command, NoEscape, Package
 from pylatex import Document
 
@@ -25,34 +19,26 @@ from pages.shopping_list import add_shopping_lists
 from pages.title_page import add_title_page
 from pages.weekview_table import weekview_table
 from utils.commandline_args_parser import setup_parser
+from utils.export_args import validate_args
+from utils.firebase_clients import get_firestore_client, get_project_name, get_storage_client
+from utils.latex import run_pdflatex, tex
 from utils.telegraf_logger import TelegrafLogger
 
 
 def upload_blob(source_file_path, source_file_name, camp_id):
     """Uploads a file to the bucket."""
 
-    with open('../keys/environment/environment.json') as json_file:
-        project_and_bucket_name = json.load(json_file)['storage_bucket_name']
-
-    bucket_name = project_and_bucket_name + ".appspot.com"
+    bucket_name = get_project_name() + ".appspot.com"
     destination_blob_name = "eMeal-export" + source_file_name
 
-    credentials = service_account.Credentials.from_service_account_file(
-        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-    storage_client = storage.Client(credentials=credentials, project=project_and_bucket_name)
+    storage_client = get_storage_client()
 
     bucket = storage_client.bucket(bucket_name)
 
     blob = bucket.blob(destination_blob_name + '.pdf')
     blob.upload_from_filename(source_file_path + '.pdf')
 
-    # Use the application default credentials
-    cred = firebase_admin.credentials.Certificate(
-        '../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-    app = firebase_admin.initialize_app(
-        cred,
-        name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
-    db = firestore.client(app)
+    db = get_firestore_client()
 
     data = {
         u'docs': [u'pdf'],
@@ -88,12 +74,18 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # globally packages
     document.packages.add(Package('babel', options='german'))
 
+    # The clock of the server runs in UTC, the export date should be in Swiss local time. The date is
+    # printed by \today, the time is set here, as \currenttime is fixed once the package datetime is loaded.
+    now = datetime.datetime.now(ZoneInfo('Europe/Zurich'))
+    document.preamble.append(NoEscape(r'\year={} \month={} \day={}'.format(now.year, now.month, now.day)))
+
     # page style, font, page numbers, etc.
     document.packages.add(Package('fancyhdr'))
     document.packages.add(Package('floatpag'))
     document.preamble.append(NoEscape(r'\fancypagestyle{plain}{ \lfoot{{\small ' +
-                                      camp.get_camp_name() + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
-                                                             r'\small Export vom {\today} \currenttime}}}'))
+                                      tex(camp.get_camp_name(), single_line=True) +
+                                      r'}} \cfoot{\textbf{\thepage}} \rfoot{{\small Export vom {\today} ' +
+                                      now.strftime('%H:%M') + '}}}'))
 
     document.preamble.append(Command('pagestyle', arguments='plain'))
 
@@ -102,8 +94,12 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # TODO: Option for sans serif font
     # document.preamble.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
 
-    document.append(NoEscape(r'\hypersetup{pdftitle = {' + camp.get_camp_name() +
-                             '}, pdfauthor = {' + camp.get_full_author_name() + '}}'))
+    # babel uses the quotation mark for german shorthands, e.g. "a for ä. This also applies to the texts that
+    # are escaped by pylatex, which does not know about it.
+    document.append(NoEscape(r'\shorthandoff{"}'))
+
+    document.append(NoEscape(r'\hypersetup{pdftitle = {' + tex(camp.get_camp_name(), single_line=True) +
+                             '}, pdfauthor = {' + tex(camp.get_full_author_name(), single_line=True) + '}}'))
 
     # add sections according to export settings
 
@@ -168,10 +164,9 @@ def create_pdf(camp: CampClass, args: argparse.Namespace):
     # filename = export_{camp_id}_{timestamp}
     file_name = '/export' + ('_' + args.camp_id + '_' + str(time.time()) if not args.dfn else '')
     file_path = dir_path + file_name
+    document.generate_tex(file_path)
     try:
-        document.generate_pdf(clean_tex=False, filepath=file_path, compiler='pdflatex')
-    except UnicodeDecodeError as err:
-        print(err)
+        run_pdflatex(dir_path, file_name.lstrip('/'))
     except CalledProcessError as err:
         # check if pdf in file_path exists
         if os.path.isfile(file_path + '.pdf'):
@@ -192,7 +187,7 @@ def parse_args():
     parser = setup_parser()
     args = parser.parse_args()
 
-    return args
+    return validate_args(args)
 
 
 if __name__ == '__main__':

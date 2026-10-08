@@ -1,0 +1,52 @@
+# Builds the PDF export container and deploys it to Cloud Run as the new default revision.
+#
+# Used by the Cloud Build triggers of the projects cevizh11 (branch develop) and
+# cevizh11-menuplanung (branch master). The triggers set the substitutions below.
+#
+# Rollback: every deployment creates a new revision and the old ones are kept. To go back, run
+#
+#   gcloud run services update-traffic <service> --region europe-west6 --to-revisions <revision>=100
+#
+# The traffic stays on that revision until the next deployment switches it back to the latest one.
+
+substitutions:
+  _SERVICE_NAME: emeal-pdf-export-develop
+  _IMAGE: gcr.io/cevizh11/github.com/wp99cp/emeal_menuplanung-pdf-export
+  _DEPLOY_REGION: europe-west6
+
+steps:
+
+  - id: Build
+    name: gcr.io/cloud-builders/docker
+    args: [ 'build', '-t', '$_IMAGE:$COMMIT_SHA', '-f', 'backend/pdf-export-module/Dockerfile', 'backend/pdf-export-module' ]
+
+  - id: Push
+    name: gcr.io/cloud-builders/docker
+    args: [ 'push', '$_IMAGE:$COMMIT_SHA' ]
+
+  # creates a new revision, the secrets and all other settings of the service are kept
+  - id: Deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - $_SERVICE_NAME
+      - --image=$_IMAGE:$COMMIT_SHA
+      - --region=$_DEPLOY_REGION
+      - --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID
+      - --quiet
+
+  # marks the new revision as the default one, i.e. it serves all the traffic
+  - id: Route traffic
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args: [ 'run', 'services', 'update-traffic', '$_SERVICE_NAME', '--region=$_DEPLOY_REGION', '--to-latest', '--quiet' ]
+
+images:
+  - $_IMAGE:$COMMIT_SHA
+
+timeout: 3600s
+
+options:
+  logging: CLOUD_LOGGING_ONLY

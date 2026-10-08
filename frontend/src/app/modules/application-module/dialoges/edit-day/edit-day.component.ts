@@ -75,7 +75,9 @@ export class EditDayComponent implements OnInit {
 
   saveDayData() {
 
-    this.data.day.dateAsTypeDate = this.dayInfo.value.date.toDate();
+    // The form holds the initial Date until the datepicker replaces it with a Moment.
+    const date: Moment | Date = this.dayInfo.value.date;
+    this.data.day.dateAsTypeDate = date instanceof Date ? date : date.toDate();
     this.data.day.description = this.dayInfo.value.description;
     this.data.day.notes = this.dayInfo.value.notes;
 

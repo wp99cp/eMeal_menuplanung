@@ -1,0 +1,110 @@
+# Local development environment: the frontend, the PDF export module and the firebase emulator
+# suite with some seeded example data. Start it with `npm run dev` (or pnpm), which calls
+# dev/compose.sh, see docu/Local_Development.md
+#
+# The project "demo-emeal" only exists inside the emulators, nothing here talks to a hosted project.
+name: emeal-dev
+
+x-emulators-image: &emulators-image
+  image: emeal-dev-emulators
+  build: ./dev/emulators
+  # files created in the mounted repository should belong to the host user
+  user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+  volumes:
+    - .:/workspace
+
+services:
+
+  # auth, firestore, storage and the cloud functions (rebuilt on every change)
+  emulators:
+    <<: *emulators-image
+    environment:
+      GCLOUD_PROJECT: demo-emeal
+    ports:
+      - "127.0.0.1:4000:4000" # emulator UI
+      - "127.0.0.1:4400:4400" # emulator hub
+      - "127.0.0.1:4500:4500" # logging
+      - "127.0.0.1:5001:5001" # cloud functions
+      - "127.0.0.1:8080:8080" # firestore
+      - "127.0.0.1:9150:9150" # firestore websocket, used by the emulator UI
+      - "127.0.0.1:9099:9099" # auth
+      - "127.0.0.1:9199:9199" # storage
+    healthcheck:
+      # auth, firestore and storage are reachable and the cloud functions are loaded
+      test: >
+        curl -sf http://localhost:9099 > /dev/null &&
+        curl -sf http://localhost:8080 > /dev/null &&
+        curl -s http://localhost:9199 > /dev/null &&
+        curl -sf http://localhost:5001/backends | grep -q entryPoint
+      interval: 5s
+      timeout: 5s
+      retries: 6
+      # the first start installs the dependencies of the cloud functions
+      start_period: 10m
+      start_interval: 3s
+
+  # creates the fake accounts and the example data, then exits
+  seed:
+    <<: *emulators-image
+    entrypoint: ["node", "/workspace/dev/seed/seed.js"]
+    environment:
+      GCLOUD_PROJECT: demo-emeal
+      FIRESTORE_EMULATOR_HOST: emulators:8080
+      FIREBASE_AUTH_EMULATOR_HOST: emulators:9099
+      NODE_PATH: /workspace/backend/firebase-cloud-functions/functions/node_modules
+    depends_on:
+      emulators:
+        condition: service_healthy
+    restart: "no"
+
+  pdf-export:
+    build: ./backend/pdf-export-module
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    command: gunicorn --reload --workers 1 --bind :5000 --threads 8 --timeout 0 --chdir script app:app
+    environment:
+      HOME: /tmp
+      GCLOUD_PROJECT: demo-emeal
+      FIRESTORE_EMULATOR_HOST: emulators:8080
+      FIREBASE_AUTH_EMULATOR_HOST: emulators:9099
+      STORAGE_EMULATOR_HOST: http://emulators:9199
+    volumes:
+      - ./backend/pdf-export-module/script:/usr/src/app/script
+    ports:
+      - "127.0.0.1:5000:5000"
+    depends_on:
+      emulators:
+        condition: service_healthy
+
+  frontend:
+    image: node:22-bookworm-slim
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+    working_dir: /workspace/frontend
+    # (re)installs the dependencies if package-lock.json is newer than the last installation
+    command:
+      - sh
+      - -c
+      - |
+        if [ ! -f node_modules/.package-lock.json ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
+          npm ci --no-audit --no-fund
+        fi
+        node /workspace/dev/frontend/write-build-info.js
+        exec npx ng serve --configuration emulator --host 0.0.0.0
+    environment:
+      HOME: /tmp
+      NG_CLI_ANALYTICS: "false"
+      BUILD_GIT_BRANCH: ${BUILD_GIT_BRANCH:-unknown}
+      BUILD_GIT_HASH: ${BUILD_GIT_HASH:-unknown}
+    volumes:
+      - .:/workspace
+    ports:
+      - "127.0.0.1:4200:4200"
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test: node -e "fetch('http://localhost:4200').then(r => process.exit(r.ok ? 0 :1), () => process.exit(1))"
+      interval: 5s
+      timeout: 5s
+      retries: 6
+      start_period: 10m
+      start_interval: 3s

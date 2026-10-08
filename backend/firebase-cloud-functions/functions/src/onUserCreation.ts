@@ -1,5 +1,5 @@
 import {db} from ".";
-import {firestore} from "firebase-admin";
+import {FieldValue} from 'firebase-admin/firestore';
 
 /**
  *
@@ -18,8 +18,8 @@ export function onUserCreation() {
             displayName: user.displayName,
             email: user.email,
             visibility: 'hidden',
-            date_modified: firestore.FieldValue.serverTimestamp(),
-            date_added: firestore.FieldValue.serverTimestamp(),
+            date_modified: FieldValue.serverTimestamp(),
+            date_added: FieldValue.serverTimestamp(),
             access: {[user.uid]: 'owner'}
         };
 
@@ -30,7 +30,7 @@ export function onUserCreation() {
 
         // update counter of users
         await db.doc('/sharedData/statistics').update({
-            user_count: firestore.FieldValue.increment(1)
+            user_count: FieldValue.increment(1)
         });
 
         return true;

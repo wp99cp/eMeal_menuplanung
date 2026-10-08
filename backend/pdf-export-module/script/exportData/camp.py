@@ -1,4 +1,5 @@
-from exportData.data_fetcher import DataFetcher, meal_types
+from exportData.data_fetcher import DataFetcher
+from exportData.utils import meal_type_order
 from exportData.ingredients_calculator import IngredientsCalculator
 
 
@@ -26,12 +27,13 @@ class CampClass(IngredientsCalculator, DataFetcher):
 
     def get_full_author_name(self):
         """
-        :return: name of the current user, the author of the export
+        :return: name of the current user, the author of the export. An empty string if the user has no name,
+        e.g. accounts created with an email address and a password have none until it is set in the settings.
         """
 
         self._fetch_user_data()
 
-        return self._user_data.get('displayName')
+        return (self._user_data or {}).get('displayName') or ''
 
     def get_camp_name(self):
         """
@@ -68,7 +70,7 @@ class CampClass(IngredientsCalculator, DataFetcher):
                     self._used_meal_types += ['Vorbereiten']
                     break
 
-        self._used_meal_types = sorted(self._used_meal_types, key=lambda x: meal_types.index(x))
+        self._used_meal_types = sorted(self._used_meal_types, key=meal_type_order)
 
         return self._used_meal_types
 

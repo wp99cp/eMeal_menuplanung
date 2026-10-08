@@ -3,219 +3,200 @@ rules_version = '2';
 // Security rules for eMeal Firebase Firestore Database
 service cloud.firestore {
   match /databases/{database}/documents {
-
     // checks if the user is signed in
     function isAuth(){
         return request.auth != null;
     }
-
     // check's if the user has access to this document
     // this function did not check the access level
     function hasAccess() {
         return resource.data.access[request.auth.uid] in ['editor', 'owner', 'collaborator' , 'viewer'] ||
         resource.data.access['all_users'] in ['viewer'];
     }
-
     // check's if the user has access to write to this document
     function canWrite() {
         return resource.data.access[request.auth.uid] in ['editor', 'owner', 'collaborator'];
     }
-
     // check's if the user is the owner of this document
     function isOwner(data) {
         return data.access[request.auth.uid] == 'owner';
     }
-
+    // the access map of a camp
+    function campAccess(campID) {
+        return get(/databases/$(database)/documents/camps/$(campID)).data.access;
+    }
+    // check's if the user can read a specific document (specificMeal or specificRecipe): he needs
+    // access to the document itself or to the camp it is used in. A query must be restricted
+    // accordingly, either with a filter on 'access.<uid>' or with a filter on 'used_in_camp'.
+    function canReadSpecific() {
+        return isAuth() && (
+            resource.data.access.get(request.auth.uid, null) in ['editor', 'owner', 'collaborator', 'viewer'] ||
+            campAccess(resource.data.used_in_camp).get(request.auth.uid, null) in
+                ['editor', 'owner', 'collaborator', 'viewer'] ||
+            campAccess(resource.data.used_in_camp).get('all_users', null) == 'viewer');
+    }
     // user collecion
     match /users/{userID} {
-
         // checks if the changes to a user document are valid
         function validChanges(){
-
             return
-
                 // access data did not change
                 request.resource.data.access == resource.data.access &&
-
                 request.resource.data.displayName is string &&
-
                 // can't change it's email
                 request.resource.data.email == resource.data.email &&
-
                 // can't change it's own uid
                 request.resource.data.visibility in ['visible', 'hidden'] &&
-
                 // only this 3 fields are allowed
                 request.resource.data.keys().hasAll(['displayName', 'email', 'visibility']);
-
         }
-
         // A user only can edit it's own user document
         // He can only change it's displayed name and the visibility-properity
         allow update: if userID == request.auth.uid && validChanges();
-
         // all visible user can be listed if the requesting user is signed in
         allow list, get: if (resource.data.visibility == 'visible' || userID == request.auth.uid) && isAuth();
-
     }
-
+    
     // user collecion
     match /users/{userID}/private/{document=**} {
-
+    
     	allow read, write: if request.auth.uid == userID
-
+    
     }
-
-
+    // check's if the user is an admin
+    function isAdmin() {
+        return isAuth() && request.auth.token.isAdmin == true;
+    }
     // shared data can be read but not write to it
-    match /sharedData/{document=**} {
-
-        allow read, list: if isAuth();
-
+    // the feedback messages are excluded, they contain the names and emails of the senders
+    match /sharedData/{docID}/{document=**} {
+        allow read, list: if isAuth() && docID != 'feedback';
     }
 
+    // feedback messages can be created by every user but only an admin can read and resolve them
+    match /sharedData/feedback/messages/{messageID} {
+        function validMessage(){
+            return
+                // only this fields are allowed
+                request.resource.data.keys().hasAll(['uid', 'email', 'message', 'date_added']) &&
+                request.resource.data.keys().hasOnly(
+                    ['uid', 'displayName', 'email', 'message', 'title', 'currentURL', 'date_added', 'access']) &&
+                // can't send a message in the name of another user
+                request.resource.data.uid == request.auth.uid &&
+                request.resource.data.email == request.auth.token.get('email', null) &&
+                request.resource.data.date_added == request.time &&
+                request.resource.data.message is string &&
+                request.resource.data.message.size() <= 10000 &&
+                // the optional fields are limited in size
+                (request.resource.data.get('displayName', null) == null ||
+                    request.resource.data.displayName.size() <= 200) &&
+                (request.resource.data.get('title', null) == null ||
+                    request.resource.data.title.size() <= 200) &&
+                (request.resource.data.get('currentURL', null) == null ||
+                    request.resource.data.currentURL.size() <= 2000) &&
+                (!('access' in request.resource.data) ||
+                    (request.resource.data.access.keys().hasOnly([request.auth.uid]) &&
+                    request.resource.data.access[request.auth.uid] == 'owner'));
+        }
+        allow create: if isAuth() && validMessage();
+        allow read, list, update, delete: if isAdmin();
+    }
+    
     // Help messages can be read by all users
     match /sharedData/helpMessages/messages/{document=**} {
-
+    
         allow read, list;
-
+        
     }
-
-
     // camps collection
     match /camps/{campID} {
-
         function validChanges(){
-
             return
                 // participants fields are numbers
                 request.resource.data.camp_participants is number &&
                 request.resource.data.camp_vegetarians is number &&
                 request.resource.data.camp_leaders is number &&
-
                 // has name
                 request.resource.data.camp_name.size() > 0;
-
         }
-
         // every auth user can create camps on which he has access
         allow create: if isAuth() && validChanges();
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow list, get: if hasAccess();
         allow delete: if isOwner(resource.data);
-
-        // has currently no access field
+        // the exports have no access field, the access of the camp is used
         match /exports/{docID} {
-
-            allow read, list;
-            allow delete;
-
+            allow read, list: if isAuth() &&
+                (campAccess(campID)[request.auth.uid] in ['editor', 'owner', 'collaborator', 'viewer'] ||
+                campAccess(campID).get('all_users', null) == 'viewer');
+            allow delete: if isAuth() && campAccess(campID)[request.auth.uid] in ['editor', 'owner', 'collaborator'];
         }
-
     }
-
-
-    // group query for delete specificRecipes
+    // specific recipes, also matches the collection group queries
     match /{path=**}/specificRecipes/{specificRecipeId} {
-
-        // TODO: not save
-        allow read, list;
-
+        // the frontend creates a missing specific recipe, hence it has to be able to check if one exists
+        allow get: if isAuth() && (resource == null || canReadSpecific());
+        allow list: if canReadSpecific();
     }
-
-    // group query for delete specificRecipes
+    // specific meals, also matches the collection group queries
     match /{path=**}/specificMeals/{specificMealId} {
-
-        // TODO: not save
-        allow read, list;
-
+        allow get, list: if canReadSpecific();
     }
-
     // Meals
     match /meals/{mealID} {
-
         function validChanges(){
             return
                 // has name
                 request.resource.data.meal_name is string &&
                 request.resource.data.meal_name.size() > 0;
-
         }
-
         allow create: if isAuth() && isOwner(request.resource.data) && validChanges();
         allow list, get: if hasAccess();
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow delete: if isOwner(resource.data); // TODO: if never used
-
         // specific Meals
         match /specificMeals/{specificMealID} {
-
              function validChanges(){
-
                return true;
-
             }
-
             allow create:  if isAuth() && validChanges();
-            allow get, list;
+            // the owner of a meal sees all its usages, a meal which is in use can't be deleted
+            // (the other users are covered by the rule for the collection group)
+            allow get, list: if isAuth() && isOwner(get(/databases/$(database)/documents/meals/$(mealID)).data);
             allow update: if  canWrite() && validChanges() && (request.resource.data.access == resource.data.access);
             allow delete: if canWrite();
-
         }
-
     }
-
     // recipes
     match /recipes/{recipeID} {
-
         function validChanges(){
-
             return true;
-
         }
-
         allow create: if isAuth() && isOwner(request.resource.data) && validChanges();
         allow list, get: if hasAccess();
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow delete: if isOwner(resource.data); // TODO: if never used....
-
-
 		// overwrites
         match /overwrites/{id} {
-
             function validChanges(){
-
                 return true;
-
             }
-
             allow create:  if isAuth() && validChanges();
             allow get, list: if hasAccess();
             allow update: if  canWrite() && validChanges();
             allow delete: if  canWrite();
-
         }
-
         // specific recipes
         match /specificRecipes/{specificRecipeID} {
-
             function validChanges(){
-
                 return true;
-
             }
-
             // TODO: add verification or access rules
             allow create:  if isAuth() && validChanges();
-            allow get, list;
+            // reading is covered by the rule for the collection group
             allow update: if  canWrite() && validChanges();
             allow delete: if canWrite();
-
         }
-
-
     }
-
  }
-
 }

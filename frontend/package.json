@@ -1,12 +1,13 @@
 {
   "name": "@emeal/menuplanung",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "license": "MIT",
   "copyrights": "© 2019 - 2024 Cevi Züri 11 - eMeal Menüplanung",
   "scripts": {
     "ng": "ng",
     "start": "angular-build-info && ng serve --ssl",
     "start:local-newtork": "angular-build-info && ng serve --host 0.0.0.0 --ssl",
+    "start:emulator": "angular-build-info && ng serve --configuration emulator",
     "start:prod": "angular-build-info && ng serve --configuration production --ssl",
     "build": "angular-build-info && ng build",
     "analize-bundle": "angular-build-info && ng build --stats-json && npx esbuild-visualizer --metadata dist/eMeal/stats.json --open",

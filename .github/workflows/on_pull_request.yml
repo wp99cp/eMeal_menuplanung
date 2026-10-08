@@ -20,6 +20,6 @@ jobs:
           - [ ] Check release notes: All new features/changes included? Date correct? \n
           - [ ] Check help-page messages: Are they all up to date? Update screenshots. Is the date correct? \n
           - [ ] Check preview build and test it with the productive database. \n
-          - [ ] Deploy new revision of the PDF-Export Service \n
+          - [ ] Check the Cloud Build checks of the cloud functions and the PDF-Export Service after the merge. \n
           "
           github-token: ${{ secrets.GITHUB_TOKEN }}

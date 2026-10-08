@@ -19,6 +19,11 @@ class IngredientsCalculator(DataFetcher):
                                                                             18      13          5       0 (not woring)  12      7           5       0 (not woring)
         """
 
+        # The calculation changes the participants of the recipes in place, hence it must run only once. The
+        # shopping list and the pages of the meals both request the measurements.
+        if self._measurements_calculated:
+            return
+
         if not self._camp_meta_info_fetched:
             self._fetch_camp_meta_data()
 
@@ -47,7 +52,10 @@ class IngredientsCalculator(DataFetcher):
                     else:
                         raise Exception(
                             "Unknown used_for value! The used_for value must be in ['all', 'non-vegetarians',"
-                            "'vegetarians', 'leaders']. But used_for was " + recipe['recipe_used_for'])
+                            "'vegetarians', 'leaders']. But used_for was " + str(recipe['recipe_used_for']))
+
+                    # e.g. a meal for fewer persons than the camp has vegetarians
+                    recipe['recipe_participants'] = max(0, recipe['recipe_participants'])
 
                     for ing in recipe['ingredients']:
 
@@ -58,3 +66,5 @@ class IngredientsCalculator(DataFetcher):
                         else:
                             ing['measure'] = 0
                             ing['measure_calc'] = 0
+
+        self._measurements_calculated = True

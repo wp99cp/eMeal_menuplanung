@@ -8,6 +8,7 @@ from exportData.camp import CampClass
 from pages.enviroments import Multicols
 from pages.global_constants import FRESH_PRODUCT_SYMBOL
 from shopping_list.shopping_list import ShoppingList
+from utils.latex import tex
 
 
 def add_shopping_lists(doc: Document, camp: CampClass, args: Namespace):
@@ -123,12 +124,13 @@ def append_ingredients(category_name, shopping_list, itemize, args, include_fres
         if not include_fresh and ing['fresh']:
             continue
 
-        food_name = ing['food'] + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
+        food_name = tex(ing['food'], single_line=True) + (r' (%s)' % FRESH_PRODUCT_SYMBOL if ing['fresh'] else '')
         measure_as_str = str(round(ing['measure_calc'], 2))
+        unit = tex(ing['unit'], single_line=True)
 
         if args.invm:
             itemize.add_item(NoEscape(
-                food_name + ((', ' + measure_as_str + ' ' + ing['unit']) if ing['measure_calc'] > 0 else '')))
+                food_name + ((', ' + measure_as_str + ' ' + unit) if ing['measure_calc'] > 0 else '')))
         else:
             itemize.add_item(NoEscape(
-                ((measure_as_str + ' ' + ing['unit'] + ' ') if ing['measure_calc'] > 0 else '') + food_name))
+                ((measure_as_str + ' ' + unit + ' ') if ing['measure_calc'] > 0 else '') + food_name))

@@ -1,0 +1,82 @@
+% Loads every LaTeX package the export uses. The Dockerfile compiles this file,
+% such that the build fails if a package is missing in the TeX Live installation.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8x]{inputenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\usepackage{lastpage}
+\usepackage{geometry}
+\geometry{left=2cm,right=2cm,top=3cm,bottom=3cm}
+\usepackage{floatpag}
+\usepackage[pdftex]{hyperref}
+\usepackage[german]{babel}
+\usepackage{fancyhdr}
+\usepackage{datetime}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[tableposition=top]{caption}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{pifont}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{ragged2e}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{setspace}
+
+\fancypagestyle{plain}{ \lfoot{{\small Lager}} \cfoot{\textbf{\thepage}} \rfoot{{\small Export vom {\today} \currenttime}}}
+\pagestyle{plain}
+\title{\Huge \textbf{Küche für Zmörgeli, Znüni \& Zvieri} \\ \Large \textbf{Handbuch Lagerküche}}
+\author{\normalsize Maximilian Mastermind}
+\date{\normalsize Version vom \today}
+
+\begin{document}
+\maketitle
+\section{Grösse, Äpfel und Öl}
+\subsubsection{Rezept}
+Bewerte von \ding{172} bis \ding{176}. Seite \thepage{} von \pageref{LastPage}. {\small klein} \textbf{fett} \textit{kursiv}
+
+\includegraphics[height=1.25 \fontcharht\font`\B]{outline_fresh_product.png}
+
+\begin{spacing}{1.2}
+\begin{multicols}{2}
+\begin{itemize}[noitemsep]
+  \item 0.6 l Olivenöl
+  \item 24.0 Stängel Zitronengras
+\end{itemize}
+\end{multicols}
+\end{spacing}
+
+\begin{description}
+  \item[Notiz] \RaggedRight Ein Text
+\end{description}
+
+\begin{table}[H]
+\caption{Tabelle}
+\begin{tabularx}{\textwidth}{|X|X|}
+\hline
+\rowcolor{lightgray} \multirow{2}{*}{A} & B \\
+ & \cellcolor[gray]{0.9} C \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\begin{minipage}{0.4\textwidth} Text \end{minipage}
+\end{figure}
+
+\begin{landscape}
+\begin{center} Querformat \end{center}
+\end{landscape}
+
+\begin{sidewaystable}
+\thisfloatpagestyle{empty}
+\begin{tabularx}{\textwidth}{X} Gedreht \end{tabularx}
+\end{sidewaystable}
+
+\end{document}

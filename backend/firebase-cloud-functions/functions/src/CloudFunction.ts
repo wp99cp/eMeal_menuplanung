@@ -1,5 +1,8 @@
 import * as functions from 'firebase-functions/v1';
 import * as admin from "firebase-admin";
+import {defineSecret} from "firebase-functions/params";
+
+type SecretParam = ReturnType<typeof defineSecret>;
 
 type CloudFunction = (requestData: any, context: functions.https.CallableContext) => Promise<ResponseData>;
 type CloudFunctionWithAuth = (requestData: any, auth: admin.auth.Auth) => Promise<ResponseData>;
@@ -49,8 +52,9 @@ export const createCallableCloudFuncWithAuth = (fkt: CloudFunctionWithAuth, auth
 /**
  *
  * @param memory
+ * @param secrets secrets of the secret manager the function has access to
  */
-export const cloudFunction = (memory: FunctionMemory = '256MB') => {
+export const cloudFunction = (memory: FunctionMemory = '256MB', secrets: SecretParam[] = []) => {
 
     return functions
         // sets the region on which the cloud functions get exicuded.
@@ -59,6 +63,7 @@ export const cloudFunction = (memory: FunctionMemory = '256MB') => {
         // runtime setting
         .runWith({
             timeoutSeconds: 20,
-            memory: memory
+            memory: memory,
+            secrets: secrets
         });
 };

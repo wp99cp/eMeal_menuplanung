@@ -5,3 +5,6 @@ README.md
 *.pyd
 __pycache__
 .pytest_cache
+
+# private keys are mounted at runtime, never part of the image
+keys/

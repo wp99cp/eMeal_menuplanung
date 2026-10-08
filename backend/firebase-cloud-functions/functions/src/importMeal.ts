@@ -1,9 +1,12 @@
+import * as functions from 'firebase-functions/v1';
+import {db} from './index';
+
 /*
 // Used for local testing
 // Execute with the following command: tsc functions/src/importMeal.ts && node functions/src/importMeal.js
 console.log('Launch importMeal...')
 console.log()
-importMeal({url: "https://fooby.ch/en/recipes/13305/spring-bean-salad?startAuto1=0"})
+importMeal({url: "https://fooby.ch/en/recipes/13305/spring-bean-salad?startAuto1=0"}, {auth: {uid: "test"}})
     .then(res => {
         console.log(JSON.stringify(res));
         console.log();
@@ -11,33 +14,139 @@ importMeal({url: "https://fooby.ch/en/recipes/13305/spring-bean-salad?startAuto1
     });
 */
 
+// Hosts a meal can be imported from.
+const SUPPORTED_HOSTS: { [host: string]: (document: any) => any } = {
+    'swissmilk.ch': parseSwissmilk,
+    'www.swissmilk.ch': parseSwissmilk,
+    'fooby.ch': parseFooby,
+    'www.fooby.ch': parseFooby
+};
+
+// Every user can import this many pages per hour.
+const IMPORTS_PER_HOUR = 10;
+const ONE_HOUR = 60 * 60 * 1000;
+
+const MAX_URL_LENGTH = 2000;
+const MAX_REDIRECTS = 3;
+const MAX_PAGE_SIZE = 5 * 1024 * 1024;
+const FETCH_TIMEOUT = 10 * 1000;
+
 /**
- *  This function checks whether the url is a supported URL or not.
- *  Currently, ony fooby and swissmilk are supported.
+ *  Parses the url and checks whether it is a supported URL or not.
+ *  Currently, ony fooby and swissmilk are supported, and only over https on the default port.
  *
- *  @returns true if the URL is supported
+ *  @returns the parsed URL or undefined if the URL is not supported
  */
-function notASupportedURL(url_as_str: string) {
+function parseSupportedURL(url_as_str: unknown, base?: URL): URL | undefined {
 
-    const supportedURLS = ['swissmilk.ch', 'fooby.ch'];
+    if (typeof url_as_str !== 'string' || url_as_str.length > MAX_URL_LENGTH)
+        return undefined;
 
-    const url = new URL(url_as_str);
-    return !supportedURLS.includes(url.hostname)
+    let url: URL;
+    try {
+        url = new URL(url_as_str, base);
+    } catch {
+        return undefined;
+    }
+
+    const supported = url.protocol === 'https:' && url.port === '' && url.username === '' && url.password === ''
+        && Object.prototype.hasOwnProperty.call(SUPPORTED_HOSTS, url.hostname);
+
+    return supported ? url : undefined;
 
 }
 
-export async function importMeal(requestData: { url: string }): Promise<any> {
+/**
+ * Counts an import of the user, the imports of the last hour are stored in 'rateLimits/{uid}'.
+ * The collection is not covered by the firestore rules, thus it can't be accessed by the clients.
+ *
+ * @returns false if the user has reached the limit of imports per hour
+ */
+async function countImport(uid: string): Promise<boolean> {
 
-    if (notASupportedURL(requestData.url))
-        return {error: 'Url not supported!'};
+    const rateLimitRef = db.doc('rateLimits/' + uid);
+
+    return db.runTransaction(async transaction => {
+
+        const now = Date.now();
+        const imports: number[] = (await transaction.get(rateLimitRef)).data()?.importMeal ?? [];
+        const recentImports = imports.filter(time => time > now - ONE_HOUR);
+
+        if (recentImports.length >= IMPORTS_PER_HOUR)
+            return false;
+
+        transaction.set(rateLimitRef, {importMeal: [...recentImports, now]}, {merge: true});
+        return true;
+
+    });
+
+}
+
+/**
+ * Requests the html source code of the page. Redirects are only followed to supported URLs,
+ * and the size of the page is limited.
+ *
+ * @returns the html source code or undefined if the page could not be loaded
+ */
+async function loadPage(pageUrl: URL): Promise<string | undefined> {
+
+    const signal = AbortSignal.timeout(FETCH_TIMEOUT);
+    let url: URL | undefined = pageUrl;
+
+    for (let redirects = 0; url !== undefined && redirects <= MAX_REDIRECTS; redirects++) {
+
+        const res: Response = await fetch(url, {redirect: 'manual', signal});
+
+        if (res.status >= 300 && res.status < 400) {
+            await res.body?.cancel();
+            url = parseSupportedURL(res.headers.get('location'), url);
+            continue;
+        }
+
+        if (!res.ok || res.body === null)
+            return undefined;
+
+        const reader = res.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let size = 0;
+
+        for (let chunk = await reader.read(); !chunk.done; chunk = await reader.read()) {
+
+            size += chunk.value.byteLength;
+            if (size > MAX_PAGE_SIZE) {
+                await reader.cancel();
+                return undefined;
+            }
+            chunks.push(chunk.value);
+
+        }
+
+        return Buffer.concat(chunks).toString('utf8');
+
+    }
+
+    return undefined;
+
+}
+
+export async function importMeal(requestData: { url: string }, context: functions.https.CallableContext): Promise<any> {
+
+    const uid = context.auth?.uid;
+    if (uid === undefined)
+        throw new functions.https.HttpsError('unauthenticated', 'User not authenticated!');
+
+    const url = parseSupportedURL(requestData?.url);
+    if (url === undefined)
+        return {error: 'Invalid url!'};
+
+    if (!await countImport(uid))
+        throw new functions.https.HttpsError('resource-exhausted', 'Too many imports, try again later!');
 
     // load dependencies
     const jsdom = require('jsdom');
 
     // request html source code of page
-    const htmlBody = await fetch(requestData.url)
-        .then(res => res.text())
-        .catch(() => undefined);
+    const htmlBody = await loadPage(url).catch(() => undefined);
 
     if (typeof htmlBody === "string") {
 
@@ -46,14 +155,7 @@ export async function importMeal(requestData: { url: string }): Promise<any> {
         const document = dom.window.document;
 
         // Parse page (Supported pages: swissmilk.ch, fooby.ch)
-        if (requestData.url.includes('swissmilk.ch'))
-            return parseSwissmilk(document);
-
-        if (requestData.url.includes('fooby.ch'))
-            return parseFooby(document);
-
-        // Error: Url not supported
-        return {error: 'Url not supported!'};
+        return SUPPORTED_HOSTS[url.hostname](document);
 
     } else {
 
@@ -181,7 +283,13 @@ function parseSwissmilk(document: any): any {
     // Meta Data
     let duration = document.querySelector("#main > div.RecipeDetail > section > header > div.DetailPageHeader--body > div > div.DetailPageHeader--header > ul > li.RecipeFacts--fact.duration > span");
     const mealTitle = document.querySelector("#main > div.RecipeDetail > section > header > div.DetailPageHeader--body > div > div.DetailPageHeader--header > h1").innerHTML;
-    const participants = document.querySelector("#main > div.RecipeDetail > section > div.SplitView > div > div.SplitView--left > div > section > header > div > p > span > span").innerHTML;
+    const participantsElement = document.querySelector("#main > div.RecipeDetail > section > div.SplitView > div > div.SplitView--left > div > section > header > div > p > span > span");
+
+    // recipes for a baking tray or a jar have no portions, their amounts can't be calculated for one person
+    if (participantsElement === null)
+        return {error: 'No portions!'};
+
+    const participants = participantsElement.innerHTML;
 
     // extract duration if exist
     duration = duration ? duration.innerHTML : "";
@@ -280,6 +388,10 @@ function parseSwissmilk(document: any): any {
             food = foodAndComment[0].trim();
             const comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
             comment.replace(":", " ");
+
+            // empty rows are used to separate the ingredients
+            if (food === '')
+                continue;
 
             // test for null and calc for 1 person
             measure = measure ? measure / participants : 0;

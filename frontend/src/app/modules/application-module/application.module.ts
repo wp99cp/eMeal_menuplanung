@@ -5,7 +5,7 @@ import {AngularFireModule} from '@angular/fire/compat';
 import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/compat/auth';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/compat/firestore';
 import {AngularFireFunctionsModule, REGION} from '@angular/fire/compat/functions';
-import {AngularFireStorageModule} from '@angular/fire/compat/storage';
+import {AngularFireStorageModule, USE_EMULATOR as USE_STORAGE_EMULATOR} from '@angular/fire/compat/storage';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
@@ -149,6 +149,8 @@ import {InjectionContextFirestore} from '../../shared/injection-context-firestor
     SettingsService,
     AngularFirestoreModule,
     {provide: REGION, useValue: 'europe-west1'},
+    // local firebase emulator suite, see shared/emulator-providers.ts
+    ...(environment.useEmulators ? [{provide: USE_STORAGE_EMULATOR, useValue: ['localhost', 9199]}] : []),
     {provide: DateAdapter, useClass: SwissDateAdapter},
   ],
   imports: [

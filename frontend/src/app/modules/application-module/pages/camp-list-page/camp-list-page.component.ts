@@ -105,8 +105,8 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
   deleteElement(camp: Camp) {
 
     this.historyService.addToHistory(undefined);
+    // the specific meals and recipes get deleted by the cloud function 'deleteCamp'
     this.dbService.deleteDocument(camp);
-    this.dbService.deleteAllMealsAndRecipes(camp.documentId);
 
   }
 
