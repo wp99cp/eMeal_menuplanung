@@ -283,7 +283,13 @@ function parseSwissmilk(document: any): any {
     // Meta Data
     let duration = document.querySelector("#main > div.RecipeDetail > section > header > div.DetailPageHeader--body > div > div.DetailPageHeader--header > ul > li.RecipeFacts--fact.duration > span");
     const mealTitle = document.querySelector("#main > div.RecipeDetail > section > header > div.DetailPageHeader--body > div > div.DetailPageHeader--header > h1").innerHTML;
-    const participants = document.querySelector("#main > div.RecipeDetail > section > div.SplitView > div > div.SplitView--left > div > section > header > div > p > span > span").innerHTML;
+    const participantsElement = document.querySelector("#main > div.RecipeDetail > section > div.SplitView > div > div.SplitView--left > div > section > header > div > p > span > span");
+
+    // recipes for a baking tray or a jar have no portions, their amounts can't be calculated for one person
+    if (participantsElement === null)
+        return {error: 'No portions!'};
+
+    const participants = participantsElement.innerHTML;
 
     // extract duration if exist
     duration = duration ? duration.innerHTML : "";
@@ -382,6 +388,10 @@ function parseSwissmilk(document: any): any {
             food = foodAndComment[0].trim();
             const comment = foodAndComment.length > 1 ? foodAndComment[1].trim() : '';
             comment.replace(":", " ");
+
+            // empty rows are used to separate the ingredients
+            if (food === '')
+                continue;
 
             // test for null and calc for 1 person
             measure = measure ? measure / participants : 0;

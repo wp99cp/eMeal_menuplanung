@@ -81,6 +81,11 @@ export class ImportComponent implements OnInit {
               this.message = 'Ungültige URL! Diene URL ist ungültig oder diese Webseite wird (noch) nicht unterstützt.';
               break;
 
+            case 'No portions!':
+              this.showMessage = true;
+              this.message = 'Dieses Rezept kann nicht importiert werden, da es keine Anzahl Portionen angibt.';
+              break;
+
             default:
               this.showMessage = true;
               this.message = 'Ein unbekannter Fehler ist aufgetreten! Bitte versuche es erneut.';
