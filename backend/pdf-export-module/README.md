@@ -35,7 +35,7 @@ execute the export function inside a container environment.
 docker build . -t exportcamp && docker run -e PORT=5000 -p 5000:5000 exportcamp
 ```
 
-Now the webserver should run, and you can trigger a PDF creation by navigating to
+Now the webserver should run, and you can trigger a PDF creation with a request to
 
 ```
 http://localhost:5000/export/camp/<campID>/user/<userID>/?<optional_args>
@@ -45,7 +45,12 @@ For example
 ```http://localhost:5000/export/camp/16fXu6siwVDX1OOb38P3/user/CKsbjuHkJQUstW1YULeAepDe9Wl1/?--spl&--lscp&--wv```
 will create an export for camp ```16fXu6siwVDX1OOb38P3``` including the shopping list and the weekview in landscape.
 
-More export flags can be found [hier](./script/README.md).
+The request must contain the Firebase ID token of the user in the header `Authorization: Bearer <token>`. The service
+only creates the export if the token belongs to `<userID>` and if this user has access to the camp. Requests from a
+browser are only accepted from the origins listed in `ALLOWED_ORIGINS` of `script/app.py`.
+
+More export flags can be found [hier](./script/README.md). The flags `--mock_data` and `--dfn` are for debugging, they
+are only available on the command line.
 
 ### Run the export function outside a container environment
 

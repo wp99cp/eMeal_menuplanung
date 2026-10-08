@@ -27,7 +27,7 @@ class ExportArgs(BaseModel):
     meals: bool = False
     invm: bool = False
 
-    fdbmsg: str = Field(default='', max_length=2000)
+    fdbmsg: str = Field(default='', max_length=1000)
     ncols: int = Field(default=2, ge=1, le=4)
     minNIng: int = Field(default=2, ge=0, le=1000)
 

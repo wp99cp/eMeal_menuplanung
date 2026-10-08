@@ -1,7 +1,6 @@
+import functools
 import json
 import os
-import random
-import string
 
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -32,18 +31,29 @@ def get_project_name():
         return json.load(json_file)['storage_bucket_name']
 
 
-def get_firestore_client():
+@functools.lru_cache(maxsize=None)
+def get_firebase_app():
+    """
+    :return: the firebase app of the service, used to verify ID tokens and to access Firestore
+    """
+
     project_name = get_project_name()
 
-    # the emulator needs no service account
+    # the emulators need no service account, the address of the auth emulator is read from
+    # FIREBASE_AUTH_EMULATOR_HOST
     if is_emulated():
-        return google_firestore.Client(project=project_name, credentials=AnonymousCredentials())
+        return firebase_admin.initialize_app(options={'projectId': project_name})
 
     cred = credentials.Certificate('../keys/firebase/{}-firebase-adminsdk.json'.format(project_name))
-    app = firebase_admin.initialize_app(
-        cred,
-        name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
-    return firestore.client(app)
+    return firebase_admin.initialize_app(cred)
+
+
+def get_firestore_client():
+    # the emulator needs no service account
+    if is_emulated():
+        return google_firestore.Client(project=get_project_name(), credentials=AnonymousCredentials())
+
+    return firestore.client(get_firebase_app())
 
 
 def get_storage_client():

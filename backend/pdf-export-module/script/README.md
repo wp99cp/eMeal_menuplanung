@@ -13,7 +13,7 @@ Name | arguments | Description
 `--mp` |  `None` | Shows a column in the weekview containing all meals that must get prepared at the corresponding day.
 |  |
 `--fdb`| `None` | Includes a feedback form page for the participants of the camp
-`--fdbmsg` | `String`| Custom feedback message printed on the feedback page (plain text, at most 2000 characters). Only available with `--fdb`
+`--fdbmsg` | `String`| Custom feedback message printed on the feedback page (plain text, at most 1000 characters). Only available with `--fdb`
 |  |
 `--spl`| `None` | Includes the shopping list
 `--meals`| `None` | Includes all meals

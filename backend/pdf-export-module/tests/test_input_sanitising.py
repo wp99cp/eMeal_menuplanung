@@ -67,7 +67,7 @@ class TestRequestArguments(unittest.TestCase):
 
     def test_invalid_settings_are_rejected(self):
         for query in [{'--ncols': '5'}, {'--ncols': 'two'}, {'--minNIng': '-1'}, {'--wv': 'maybe'},
-                      {'--unknown': ''}, {'--fdbmsg': 'x' * 2001}]:
+                      {'--unknown': ''}, {'--fdbmsg': 'x' * 1001}]:
             with self.assertRaises(ValidationError, msg=query):
                 parse_request_args('user', 'camp', query)
 
