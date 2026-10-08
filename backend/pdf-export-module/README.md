@@ -90,6 +90,20 @@ To keep the image small, the container only includes the LaTeX packages the expo
 LaTeX package, add it to the `tlmgr install` command of the `Dockerfile` and load it in `docker/smoke_test.tex`.
 The build compiles this document and fails if a package is missing.
 
+### Food categories and unit conversions of the shopping list
+
+The shopping list sorts the ingredients into categories and converts their units. Both tables are files of this
+module, a change is deployed with the image:
+
+- `script/shopping_list/categories.csv` maps the name of a food item to its category. The lookup ignores the case. A
+  name that is not listed gets the category of its first word that is listed, and "Diverses" otherwise. The file
+  lists many names as the users typed them. A name with `yes` in the column `spelling_reference` is spelled
+  correctly: an ingredient that differs from it by one character is renamed to it.
+- `script/shopping_list/units.csv` maps a unit to its base unit, optionally for a single food item only.
+
+Names without a category are collected in the document `sharedData/foodCategories` and shown on the admin page of the
+frontend. To categorise them, add them to `categories.csv`.
+
 ## Testing
 
 Exporting the camp at the end of its creation process is one of the application's core features. Therefore, extensive
