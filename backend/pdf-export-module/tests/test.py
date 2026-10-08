@@ -9,6 +9,8 @@ import firebase_admin
 from firebase_admin import credentials
 
 from exportData.camp import CampClass
+from exportData.utils import normalize_camp, normalize_recipe, normalize_specific_meal, overwrite_ingredients, \
+    to_number, to_text
 from pdf_generator import create_pdf
 from shopping_list.shopping_list import ShoppingList
 from utils.commandline_args_parser import setup_parser
@@ -141,6 +143,110 @@ class TestDataFetcher(MockDataTester):
 
         self.camp.setMockData(self.user_data, camp_meta, self.specific_meals)
         self.assertEqual(self.camp_meta_info['days'], self.camp.get_days())
+
+
+class TestCalculation(MockDataTester):
+
+    @classmethod
+    def recipe(cls, **data):
+        return {'recipe_name': 'Bolognese', 'ingredients': [{'food': 'Hackfleisch', 'measure': 100, 'unit': 'g'}],
+                **data}
+
+    def load(self, recipes, camp=None, **meal_data):
+        meal = {**copy.deepcopy(self.specific_meals[0]), 'recipe': recipes, **meal_data}
+        camp_meta = {**copy.deepcopy(self.camp_meta_info), 'camp_participants': 20, 'camp_vegetarians': 5,
+                     'camp_leaders': 3, **(camp or {})}
+
+        self.camp.setMockData(self.user_data, camp_meta, [meal])
+
+    def participants(self):
+        return [recipe['recipe_participants'] for recipe in self.camp.get_specific_meals()[0]['recipe']]
+
+    def test_user_groups(self):
+        self.load([self.recipe(recipe_used_for=group) for group in ['all', 'non-vegetarians', 'vegetarians', 'leaders']])
+        self.assertEqual([20, 15, 5, 3], self.participants())
+
+    def test_calculation_runs_once(self):
+        # the shopping list and the pages of the meals both request the measurements
+        self.load([self.recipe(recipe_used_for='non-vegetarians', recipe_override_participants=True,
+                               recipe_participants=12)])
+
+        self.assertEqual([7], self.participants())
+        self.assertEqual([7], self.participants())
+        self.assertEqual(700, self.camp.get_specific_meals()[0]['recipe'][0]['ingredients'][0]['measure_calc'])
+
+    def test_no_negative_participants(self):
+        # a meal for fewer persons than the camp has vegetarians
+        self.load([self.recipe(recipe_used_for='non-vegetarians')], meal_override_participants=True,
+                  meal_participants=3)
+
+        self.assertEqual([0], self.participants())
+
+    def test_emptied_number_fields(self):
+        # the frontend saves an emptied number field as null
+        self.load([self.recipe(recipe_used_for='non-vegetarians', recipe_override_participants=True,
+                               recipe_participants=None)],
+                  camp={'camp_vegetarians': None, 'camp_leaders': None},
+                  meal_override_participants=True, meal_participants=None)
+
+        self.assertEqual([20], self.participants())
+
+
+class TestNormalization(unittest.TestCase):
+
+    def test_to_number(self):
+        for value, number in [(1.5, 1.5), ('1,5', 1.5), (' 120 ', 120), (None, 0), (float('nan'), 0), ('1/2', 0),
+                              ('', 0), (True, 0), ({}, 0)]:
+            self.assertEqual(number, to_number(value), value)
+
+    def test_unprintable_characters(self):
+        # pdflatex can't print emojis
+        self.assertEqual('Pasta  20°C ½ €', to_text('Pasta \U0001F35D\u2600\ufe0f 20°C ½ €'))
+        self.assertEqual('', to_text(None))
+
+    def test_incomplete_camp(self):
+        camp = {'days': [{'day_date': datetime.datetime(2027, 7, 12)}, {'day_description': 'without date'}]}
+        normalize_camp(camp)
+
+        self.assertEqual('', camp['camp_name'])
+        self.assertEqual([0, 0, 0], [camp['camp_participants'], camp['camp_vegetarians'], camp['camp_leaders']])
+        self.assertEqual([{'day_date': datetime.datetime(2027, 7, 12), 'day_description': ''}], camp['days'])
+
+    def test_incomplete_meal(self):
+        meal = {'meal_gets_prepared': True}
+        normalize_specific_meal(meal)
+
+        self.assertEqual('', meal['meal_weekview_name'])
+        self.assertEqual('', meal['meal_used_as'])
+        self.assertFalse(meal['meal_gets_prepared'], 'a meal without a date can not be prepared')
+        self.assertFalse(meal['meal_override_participants'])
+
+    def test_incomplete_recipe(self):
+        recipe = {'recipe_used_for': 'kids', 'ingredients': [
+            {'food': 'Salz'},
+            {'food': None, 'measure': 5},
+            {'food': ' Rahm 35% ', 'measure': float('nan'), 'unit': None, 'comment': None, 'fresh': None},
+            'no ingredient']}
+        normalize_recipe(recipe)
+
+        self.assertEqual('all', recipe['recipe_used_for'])
+        self.assertEqual(['', '', ''], [recipe['recipe_name'], recipe['recipe_description'], recipe['recipe_notes']])
+        self.assertEqual([
+            {'food': 'Salz', 'measure': 0, 'unit': '', 'comment': '', 'fresh': False},
+            {'food': 'Rahm 35%', 'measure': 0, 'unit': '', 'comment': '', 'fresh': False}], recipe['ingredients'])
+
+        recipe = {'ingredients': None}
+        normalize_recipe(recipe)
+        self.assertEqual([], recipe['ingredients'])
+
+    def test_overwrite_ingredients(self):
+        ingredients = [{'unique_id': 'a', 'food': 'Spaghetti', 'measure': 120}, {'unique_id': 'b', 'food': 'Salz'}]
+        overwrites = [{'unique_id': 'a', 'food': 'Spaghetti', 'measure': 150}, {'unique_id': 'c', 'food': 'Butter'}]
+
+        self.assertEqual(
+            [overwrites[0], ingredients[1], overwrites[1]], overwrite_ingredients(ingredients, overwrites))
+        self.assertEqual(ingredients, overwrite_ingredients(ingredients, None))
+        self.assertEqual(overwrites, overwrite_ingredients(None, overwrites))
 
 
 class TestPDFCreation(MockDataTester):

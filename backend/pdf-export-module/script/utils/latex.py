@@ -1,5 +1,6 @@
 import os
 import subprocess
+import unicodedata
 
 from pylatex import NoEscape
 from pylatex.utils import escape_latex
@@ -9,6 +10,30 @@ _CONTROL_CHARACTERS = {c: None for c in list(range(0x20)) + [0x7f] if chr(c) not
 
 # The package babel (german) makes the quotation mark an active character, e.g. "a prints an umlaut
 _ACTIVE_CHARACTERS = {'"': r'\dq{}'}
+
+
+def _is_printable(char: str) -> bool:
+    """
+    :return: False for characters pdflatex can't print, e.g. emojis. They would cause a LaTeX error.
+    """
+
+    if char in '\t\n\r':
+        return True
+
+    code = ord(char)
+
+    return not (code > 0xFFFF  # emojis and other characters outside the basic multilingual plane
+                or 0x2600 <= code <= 0x27BF  # miscellaneous symbols and dingbats
+                or 0xFE00 <= code <= 0xFE0F  # variation selectors
+                or unicodedata.category(char).startswith('C'))
+
+
+def printable(text: str) -> str:
+    """
+    :return: the text without the characters pdflatex can't print
+    """
+
+    return ''.join(filter(_is_printable, text))
 
 
 def tex(value, single_line=False) -> NoEscape:
@@ -29,7 +54,7 @@ def tex(value, single_line=False) -> NoEscape:
     if value is None:
         return NoEscape('')
 
-    text = str(value).replace('\r\n', '\n').replace('\r', '\n').translate(_CONTROL_CHARACTERS)
+    text = printable(str(value).replace('\r\n', '\n').replace('\r', '\n').translate(_CONTROL_CHARACTERS))
     if single_line:
         text = ' '.join(text.split())
 

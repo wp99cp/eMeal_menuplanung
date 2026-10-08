@@ -42,6 +42,10 @@ class TestLatexEscaping(unittest.TestCase):
     def test_control_characters_are_removed(self):
         self.assertEqual('ab', tex('a\x00\x07\x1b\x7fb'))
 
+    def test_emojis_are_removed(self):
+        # pdflatex can't print them
+        self.assertEqual('Pasta 20°C ½ €', tex('Pasta \U0001F35D\u2600\ufe0f 20°C ½ €', single_line=True))
+
     def test_line_breaks(self):
         self.assertEqual('a\\newline%\nb', tex('a\r\nb'))
         self.assertEqual('a b c', tex('a\n\n b\tc ', single_line=True))

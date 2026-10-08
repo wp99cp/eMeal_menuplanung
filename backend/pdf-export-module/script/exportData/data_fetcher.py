@@ -1,11 +1,16 @@
 import copy
+import logging
 from argparse import Namespace
 
-from exportData.utils import convert_document
+from exportData.utils import convert_document, meal_type_order, normalize_camp, normalize_meal_data, \
+    normalize_recipe, normalize_specific_meal, overwrite_ingredients
 from utils.firebase_clients import get_firestore_client
 
-# defines order of meal types
-meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten']
+
+class CampNotFound(Exception):
+    """
+    The camp that should get exported does not exist.
+    """
 
 
 class DataFetcher(object):
@@ -21,6 +26,7 @@ class DataFetcher(object):
         self._specific_meals_loaded = False
         self._meals_loaded = False
         self._recipes_loaded = False
+        self._measurements_calculated = False
 
         self._user_data = None
         self._used_meal_types = None
@@ -35,10 +41,19 @@ class DataFetcher(object):
         self._specific_meals_loaded = True
         self._meals_loaded = True
         self._recipes_loaded = True
+        self._measurements_calculated = False
 
         self._user_data = user_data
         self._camp_meta_info = camp_meta_info
         self._specific_meals = specific_meals
+        self._used_meal_types = None
+
+        normalize_camp(self._camp_meta_info)
+        self._sort_days()
+
+        for meal in self._specific_meals:
+            normalize_specific_meal(meal)
+            normalize_meal_data(meal)
 
     def _fetch_user_data(self):
         if not self._user_data_fetched:
@@ -51,16 +66,33 @@ class DataFetcher(object):
             camp_ref = self.__db.document(u'camps/' + self.camp_id)
             self._camp_meta_info = camp_ref.get().to_dict()
 
-        # sort days according to its dates
-        self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
+            if self._camp_meta_info is None:
+                raise CampNotFound('The camp ' + self.camp_id + ' does not exist.')
+
+            normalize_camp(self._camp_meta_info)
+
+        self._sort_days()
 
         self._camp_meta_info_fetched = True
+
+    def _sort_days(self):
+        # sort days according to its dates
+        self._camp_meta_info.get('days').sort(key=lambda d: d.get('day_date'))
 
     def _fetch_specific_meals(self):
         if not self._specific_meals_loaded:
             meal_refs = self.__db.collection_group(u'specificMeals')
             query_ref = meal_refs.where(u'used_in_camp', u'==', self.camp_id)
             self._specific_meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
+
+            # a meal without a date can't be placed anywhere in the export
+            for meal in self._specific_meals:
+                if meal.get('meal_date') is None:
+                    logging.warning('Skip specific meal %s, it has no date.', meal['doc_id'])
+            self._specific_meals = [meal for meal in self._specific_meals if meal.get('meal_date') is not None]
+
+            for meal in self._specific_meals:
+                normalize_specific_meal(meal)
 
         self._specific_meals_loaded = True
 
@@ -83,12 +115,15 @@ class DataFetcher(object):
         meals = list(map(lambda doc: convert_document(doc), query_ref.stream()))
 
         for meal in meals:
-
             for specMeal in self._specific_meals:
-                if specMeal['meal_id'] == meal['doc_id']:
-                    specMeal['meal_name'] = meal['meal_name']
-                    print(specMeal['meal_name'])
-                    specMeal['meal_description'] = meal['meal_description']
+                if specMeal.get('meal_id') == meal['doc_id']:
+                    specMeal['meal_name'] = meal.get('meal_name')
+                    specMeal['meal_description'] = meal.get('meal_description')
+
+        for specMeal in self._specific_meals:
+            if 'meal_name' not in specMeal:
+                logging.warning('Meal %s of specific meal %s not found.', specMeal.get('meal_id'), specMeal['doc_id'])
+            normalize_meal_data(specMeal)
 
         self._meals_loaded = True
 
@@ -102,7 +137,7 @@ class DataFetcher(object):
         if not self._meals_loaded:
             self._fetch_meals()
 
-        meal_ids = list(dict.fromkeys(map(lambda m: m['meal_id'], self._specific_meals)))
+        meal_ids = list(dict.fromkeys(m['meal_id'] for m in self._specific_meals if m.get('meal_id')))
 
         recipes = []
 
@@ -114,6 +149,7 @@ class DataFetcher(object):
             recipes = recipes + list(map(lambda doc: convert_document(doc), recipe_query_ref.stream()))
 
         added_meals = []
+        overwrites = {}
 
         for recipe in recipes:
 
@@ -124,7 +160,7 @@ class DataFetcher(object):
             added_meals.append(recipe['doc_id'])
 
             for meal in self._specific_meals:
-                if meal['meal_id'] in recipe['used_in_meals']:
+                if meal.get('meal_id') in (recipe.get('used_in_meals') or []):
                     recipe = copy.deepcopy(recipe)
 
                     if 'recipe' in meal:
@@ -153,20 +189,33 @@ class DataFetcher(object):
                             'recipe_override_participants': False
                         }
 
-                    for _ing in recipe['ingredients']:
-                        if 'fresh' not in _ing:
-                            _ing.update({'fresh': False})
-
-                    # filter out ingredients with empty food value
-                    recipe['ingredients'] = list(filter(lambda i: i['food'] != '', recipe['ingredients']))
+                    recipe['ingredients'] = overwrite_ingredients(
+                        recipe.get('ingredients'), self._fetch_overwrites(recipe['doc_id'], overwrites))
 
                     recipe['unique_id'] = meal['doc_id'] + '::' + recipe['doc_id']
-                    recipe['recipe_used_for'] = spec_recipe['recipe_used_for']
-                    recipe['recipe_participants'] = spec_recipe['recipe_participants']
-                    recipe['recipe_override_participants'] = spec_recipe['recipe_override_participants']
+                    recipe['recipe_used_for'] = spec_recipe.get('recipe_used_for')
+                    recipe['recipe_participants'] = spec_recipe.get('recipe_participants')
+                    recipe['recipe_override_participants'] = spec_recipe.get('recipe_override_participants')
+
+                    normalize_recipe(recipe)
 
         # sort meals
-        self._specific_meals = sorted(self._specific_meals, key=lambda x: meal_types.index(x['meal_used_as']))
+        self._specific_meals = sorted(self._specific_meals, key=lambda x: meal_type_order(x['meal_used_as']))
         self._specific_meals = sorted(self._specific_meals, key=lambda x: x['meal_date'])
 
         self._recipes_loaded = True
+
+    def _fetch_overwrites(self, recipe_id, cache):
+        """
+        Loads the ingredients of a recipe that are overwritten inside this camp.
+
+        :param recipe_id: id of the recipe
+        :param cache: overwrites that are already loaded, a recipe can be used in more than one meal
+        :return: list of the overwritten ingredients, a copy that can be modified
+        """
+
+        if recipe_id not in cache:
+            overwrite_doc = self.__db.document(u'recipes/' + recipe_id + '/overwrites/' + self.camp_id).get()
+            cache[recipe_id] = (overwrite_doc.to_dict() or {}).get('ingredients') or []
+
+        return copy.deepcopy(cache[recipe_id])

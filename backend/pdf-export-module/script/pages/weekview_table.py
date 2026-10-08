@@ -1,3 +1,4 @@
+import logging
 from argparse import Namespace
 from datetime import timedelta
 
@@ -14,7 +15,7 @@ def weekview_table(doc: Document, camp: CampClass, args: Namespace):
     days = camp.get_days()
     days = list(map(lambda d: NoEscape(
         (d['day_date'] + timedelta(hours=2)).strftime("%A, \\par %d. %b %Y") +
-        ((r'\par (' + tex(d['day_description'], single_line=True) + ')') if d['day_description'] != '' else '')), days))
+        ((r'\par (' + tex(d['day_description'], single_line=True) + ')') if d['day_description'].strip() != '' else '')), days))
 
     # add packages
     doc.packages.add(Package('caption', options='tableposition=top'))
@@ -28,7 +29,7 @@ def weekview_table(doc: Document, camp: CampClass, args: Namespace):
             with doc.create(Figure()):
                 add_table(camp, days, doc, args)
     else:
-        with doc.create(Sidewaystable(options='pH!')):
+        with doc.create(Sidewaystable(options='p!')):
             add_table(camp, days, doc, args)
 
 
@@ -40,6 +41,13 @@ def prepareMealsForWeekview(camp: CampClass, args: Namespace):
         meal_weekview[meal_type] = [NoEscape('')] * len(day_as_dates)
 
     for meal in camp.get_meals_for_weekview():
+
+        # e.g. a meal that was left behind as its day got removed from the camp
+        if meal.get('meal_date') not in day_as_dates:
+            logging.warning('Skip specific meal %s in the weekview, its date is not a day of the camp.',
+                            meal.get('doc_id'))
+            continue
+
         weekview_name = tex(meal.get('meal_weekview_name'), single_line=True)
         meal_weekview.get(meal.get('meal_used_as'))[day_as_dates.index(meal.get('meal_date'))] += weekview_name
 

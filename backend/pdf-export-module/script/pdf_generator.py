@@ -94,6 +94,10 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # TODO: Option for sans serif font
     # document.preamble.append(Command('renewcommand', arguments=Command('familydefault'), extra_arguments='sfdefault'))
 
+    # babel uses the quotation mark for german shorthands, e.g. "a for ä. This also applies to the texts that
+    # are escaped by pylatex, which does not know about it.
+    document.append(NoEscape(r'\shorthandoff{"}'))
+
     document.append(NoEscape(r'\hypersetup{pdftitle = {' + tex(camp.get_camp_name(), single_line=True) +
                              '}, pdfauthor = {' + tex(camp.get_full_author_name(), single_line=True) + '}}'))
 

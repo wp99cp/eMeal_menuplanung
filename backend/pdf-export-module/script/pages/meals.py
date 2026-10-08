@@ -36,7 +36,7 @@ def add_meals(doc: Document, camp: exportData.camp.CampClass, args: Namespace):
                               'am ' + (meal['meal_prepare_date'] + datetime.timedelta(hours=2)).strftime(
                                   "%A %d. %b %Y"))
 
-            if meal['meal_description'] != '':
+            if meal['meal_description'].strip() != '':
                 enum.add_item('Notizen:', meal['meal_description'].strip('\n'))
 
         # add recipes
@@ -55,11 +55,6 @@ def add_header(doc, meal):
     doc.append(NoEscape(r'\definecolor{light-gray}{gray}{0.85}'))
     doc.append(Command('arrayrulecolor', arguments=NoEscape(r'light-gray')))
     with doc.create(Center()) as centered_section:
-
-        if 'meal_name' not in meal:
-            meal['meal_name'] = ''
-            meal['meal_description'] = ''
-            print('Warning: meal_name not found in meal: ' + str(meal['meal_id']))
 
         centered_section.append(NoEscape(r' \center \LARGE \textbf{' + tex(meal['meal_name'], single_line=True) + r'} \par %'))
         centered_section.append(NoEscape(r'\color{gray} \large \textbf{' +
