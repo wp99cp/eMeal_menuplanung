@@ -5,6 +5,7 @@ food_item,category_name,spelling_reference
 (oder Fertig-Flammkuchen- oder Fertig-Pizzateig),Backwaren,
 (oder Fertig-Pizzateig),Backwaren,
 00 Pizzamehl Alnatura,Backwaren,
+Aelplerbrot,Backwaren,yes
 Agar Agar,Backwaren,
 Agar-Agar,Backwaren,
 Agar-Agar von Morga (erhältlich bei Coop) oder 1 ganzes Päckchen Agar-Agar von Patissier (erhältlich bei Migros)*,Backwaren,
@@ -26,8 +27,11 @@ Aufbacksemmeli,Backwaren,
 Aufbackzopf,Backwaren,
 Aufbackzüpfe,Backwaren,
 Backaroma,Backwaren,yes
+Backhefe,Backwaren,yes
 Backkakao,Backwaren,yes
 Backkakaopulver,Backwaren,
+Backmalz,Backwaren,yes
+Backmischung,Backwaren,yes
 Backnatron,Backwaren,
 Backpulver,Backwaren,yes
 Backsoda,Backwaren,
@@ -43,6 +47,7 @@ Bauernbrot,Backwaren,
 Bauernmehl,Backwaren,yes
 Baugette,Backwaren,
 Baumnuss gemahlen,Backwaren,
+Biber,Backwaren,
 Birnbrotgewürz,Backwaren,yes
 Birnenweggen-Füllung,Backwaren,
 Birrenweggenfüllung Migros,Backwaren,
@@ -72,6 +77,7 @@ Brotresten,Backwaren,
 Brotscheiben,Backwaren,yes
 Brotwürfel,Backwaren,
 Browniemischung,Backwaren,
+Brownies,Backwaren,yes
 Brownies Fertig Bachmischung,Backwaren,
 Brötchen,Backwaren,
 Brötchen (z.B. Bürli),Backwaren,
@@ -98,6 +104,12 @@ Burgerbun,Backwaren,
 Burgerg Buns,Backwaren,
 Butterblätterteig,Backwaren,
 Butterblätterteig ausgewallt rechteckig,Backwaren,
+Buttergipfel,Backwaren,yes
+Butterkuchenteig,Backwaren,yes
+Butterpastetli,Backwaren,yes
+Buttertoast,Backwaren,yes
+Butterweggli,Backwaren,yes
+Butterzopf,Backwaren,yes
 Bürgerbrote 10-12 cm Durchmesser,Backwaren,
 Büürli,Backwaren,
 Cake,Backwaren,yes
@@ -167,6 +179,7 @@ Flohsamenschalenpulver,Backwaren,
 Flour,Backwaren,
 Flutes (M-Budget) à 150g,Backwaren,
 Flutes gesalzen,Backwaren,
+Flüssighefe,Backwaren,yes
 Fondant,Backwaren,
 Fonduebrot,Backwaren,
 Fresh Yeast,Backwaren,
@@ -209,24 +222,30 @@ Grosse Brote,Backwaren,
 Grosse Dürüm Fladen,Backwaren,
 grüne Lebensmittelfarbe,Backwaren,yes
 Guetlsi,Backwaren,yes
+Haferbrot,Backwaren,yes
 Hafermehl,Backwaren,
 Hagelzucker,Backwaren,yes
+Halbweissbrot,Backwaren,yes
 Halbweissbrot vom Vortag,Backwaren,
 Halbweissmehl,Backwaren,yes
 Hamburger Brötchen,Backwaren,yes
 Hamburger-Brötli,Backwaren,
+Hamburger-Buns,Backwaren,yes
 Hamburgerbrote,Backwaren,yes
 Hamburgerbröt,Backwaren,
 Hamburgerbrötchen,Backwaren,
 Hamburgerbrötli,Backwaren,yes
 Hamburgerbun,Backwaren,
 Handvoll Cashewkerne,Backwaren,
+Haselnussrollen,Backwaren,yes
 Haselnüsse,Backwaren,yes
 "Haslenüsse, gemahlen",Backwaren,
 Hefe,Backwaren,yes
 Hefeflocken,Backwaren,
 Hefewürfel,Backwaren,
 "Hefewürfel, zerbröckelt",Backwaren,
+Holzfällerbrot,Backwaren,yes
+Holzofenbrot,Backwaren,yes
 hot dog brötchen,Backwaren,
 Hot Dog Bröttli,Backwaren,
 Hot-Dog Brötchen,Backwaren,
@@ -244,9 +263,11 @@ Hotdogbrötli,Backwaren,
 Hörnchen,Backwaren,
 Je 2Stk. franz. und ital.,Backwaren,
 Johannisbrotkernmehl,Backwaren,
+Kaiserbrötchen,Backwaren,yes
 Kakaobutter,Backwaren,
 Kerne,Backwaren,
 Kichererbsenmehl,Backwaren,
+Knoblauchbaguette,Backwaren,yes
 Knoblibrot fertig,Backwaren,
 Knäckebrot,Backwaren,
 Knäckebrot / DarVida,Backwaren,
@@ -260,6 +281,8 @@ Korinthen,Backwaren,
 krassi brioche hot dog böns,Backwaren,
 Krokant-Streusel,Backwaren,
 Kroutons,Backwaren,
+Krustenbrötchen,Backwaren,yes
+Kräuterbaguette,Backwaren,yes
 Kuchen,Backwaren,
 "Kuchen (von Monika, Claudia, evt. Barbara oder Vreni)",Backwaren,
 Kuchen für alle,Backwaren,
@@ -280,6 +303,10 @@ Lagerbrot,Backwaren,
 LaktiBrot,Backwaren,
 Laktose und Glutenfreie Brote für Hotog,Backwaren,
 laktosefreie Brötchen,Backwaren,
+Landbrot,Backwaren,yes
+Landweggen,Backwaren,yes
+Laugenbaguette,Backwaren,yes
+Laugenbrötchen,Backwaren,yes
 Laugenbrötli,Backwaren,yes
 Lebensmittelfarbe,Backwaren,yes
 Lebensmittelfarben,Backwaren,
@@ -314,8 +341,12 @@ Mandelslitter,Backwaren,
 Mandelspittler,Backwaren,
 Mandelsplitter,Backwaren,
 Mandelstifte,Backwaren,
+Manitobamehl,Backwaren,yes
+Marmorkuchen,Backwaren,yes
 Mehl,Backwaren,yes
+Mehrkornbrot,Backwaren,yes
 Meterzopf,Backwaren,
+Mischbrot,Backwaren,yes
 Mohnsamen,Backwaren,
 Muffin,Backwaren,
 Muffin Edeka,Backwaren,
@@ -347,6 +378,7 @@ Parisettbrötli,Backwaren,yes
 Parisette,Backwaren,yes
 Parisiette,Backwaren,yes
 Pastamehl,Backwaren,
+Pastateig,Backwaren,yes
 Pastete,Backwaren,yes
 Pasteten,Backwaren,yes
 Pastetli,Backwaren,yes
@@ -381,14 +413,18 @@ rechteckig ausgewallter Butterblätterteig,Backwaren,
 rechteckig ausgewallter Butterblätterteig à ca. 320 g,Backwaren,
 Reismehl,Backwaren,yes
 Reissirup,Backwaren,
+Roggenbrot,Backwaren,yes
 Roggenmehl,Backwaren,
+Roggenschrotmehl,Backwaren,yes
 Rolle Pastateig,Backwaren,
+Rosenbrötchen,Backwaren,yes
 Rosinen,Backwaren,
 Rosinen dunkel,Backwaren,
 "Rosinen, nach Belieben",Backwaren,
 rote Lebensmittelfarbe,Backwaren,yes
 Ruchbort,Backwaren,
 Ruchbrot,Backwaren,yes
+Ruchbrötli,Backwaren,yes
 Ruchmehl,Backwaren,yes
 Ruchtbrot,Backwaren,
 rund ausgewallte Blätterteige,Backwaren,
@@ -407,7 +443,9 @@ Sandwichbrot,Backwaren,
 Sandwichbrot in cm,Backwaren,
 Sandwichbrote in cm,Backwaren,
 Sandwichtaschen,Backwaren,
+Sandwichtoast,Backwaren,yes
 Sandwitchbrot,Backwaren,
+Sauerteigbrot,Backwaren,yes
 Schlagrahmfestiger,Backwaren,
 Schlangenbrot,Backwaren,
 Schlangenbrotteig für 23pers.,Backwaren,
@@ -418,6 +456,7 @@ Schoggistreusel,Backwaren,
 Schoko-Kuchen/Muffin (vom Beck),Backwaren,
 Schoko-Tortenboden,Backwaren,
 Schokolade-Späne,Backwaren,yes
+Schokoladencake,Backwaren,yes
 Schokoladenguss,Backwaren,
 Schokoladenkuchen,Backwaren,
 Schokoladenspähne,Backwaren,
@@ -438,11 +477,14 @@ Sonnenblumen-Kerne,Backwaren,
 Sonnenblumenkerne,Backwaren,yes
 Speckgugelhopf,Backwaren,
 Spritzbäutel,Backwaren,yes
+Sprossenbrot,Backwaren,yes
+Steinofenbrot,Backwaren,yes
 Streusel,Backwaren,
 Striezel,Backwaren,
 Strudelteig,Backwaren,
 Sträussel,Backwaren,
 Sultaninen,Backwaren,yes
+Sunnebrot,Backwaren,yes
 süsser Mürbteig,Backwaren,
 Tartlettes,Backwaren,
 Taschenbrot,Backwaren,
@@ -454,11 +496,14 @@ Toastbrot,Backwaren,yes
 Toastscheiben,Backwaren,
 Tortenguss rot,Backwaren,
 Trocken-Hefe,Backwaren,
+Trockenbackhefe,Backwaren,yes
 Trockenfrüchte,Backwaren,
 Trockenhefe,Backwaren,yes
 Twisterbrot,Backwaren,
 Törtchenbödeli,Backwaren,
 türkisches Fladenbrot,Backwaren,
+Urdinkelbrot,Backwaren,yes
+Urdinkelmehl,Backwaren,yes
 Vaniellepulver zum Kochen,Backwaren,
 Vaniellzucker,Backwaren,yes
 Vanilinsucker,Backwaren,
@@ -475,6 +520,11 @@ Vanillezucker,Backwaren,yes
 Vanillinzucker,Backwaren,yes
 Vanilzucker,Backwaren,
 Veganer Apfelstrudel,Backwaren,
+Vitalbrot,Backwaren,yes
+Vitaminbrot,Backwaren,yes
+Vollkornbrot,Backwaren,yes
+Vollkorntoast,Backwaren,yes
+Vollmilchbrot,Backwaren,yes
 Waffelteig,Backwaren,
 Walliserbrot,Backwaren,
 "Walnuss, gehackt",Backwaren,
@@ -483,6 +533,7 @@ Walnüsse (grob gehackt),Backwaren,
 Weggen,Backwaren,
 Weglli,Backwaren,
 weiche Hamburgerbrötchen,Backwaren,
+Weinländerbrot,Backwaren,yes
 Weismehl,Backwaren,yes
 Weissbrot,Backwaren,yes
 weisse Schokoladeflocken,Backwaren,
@@ -530,11 +581,16 @@ Aprikosenkonfiture,Brotaufstrich,
 Aprikosenkonfitüre,Brotaufstrich,
 Artischockenaufstrich (B+R),Brotaufstrich,
 Aufstreich,Brotaufstrich,
+Aufstrich,Brotaufstrich,yes
 Aufstrich vegan & glutenfrei,Brotaufstrich,
 Aufstrich vegan \& glutenfrei,Brotaufstrich,
 Beerengelee,Brotaufstrich,
+Berghonig,Brotaufstrich,yes
 Bischoff Creamy,Brotaufstrich,
 Biscoff Creme,Brotaufstrich,
+Blütenhonig,Brotaufstrich,yes
+Bonne Maman,Brotaufstrich,
+Brotaufstrich,Brotaufstrich,yes
 Brotaufstrich (z.B. Nutella),Brotaufstrich,
 Confi,Brotaufstrich,yes
 Confitüre,Brotaufstrich,yes
@@ -578,13 +634,16 @@ Hummus,Brotaufstrich,
 Hummus (vegan),Brotaufstrich,
 Humus,Brotaufstrich,
 Johannisbeergelee,Brotaufstrich,yes
+Kastanienhonig,Brotaufstrich,yes
 Konfi,Brotaufstrich,yes
 Konfiture,Brotaufstrich,yes
 Konfitüre,Brotaufstrich,yes
 Konfitüre/Schoggi Aufstrich,Brotaufstrich,
 Koro Hummus,Brotaufstrich,
+Landhonig,Brotaufstrich,yes
 Le Parfait,Brotaufstrich,yes
 Lemon Curd,Brotaufstrich,
+Lindenhonig,Brotaufstrich,yes
 Marmelade,Brotaufstrich,yes
 Marmeladen verschiedene,Brotaufstrich,
 Nussaufstrich,Brotaufstrich,
@@ -618,9 +677,12 @@ Schokoaufstrich,Brotaufstrich,yes
 Schokoladenaufstrich,Brotaufstrich,
 Schokostreusel,Brotaufstrich,
 Tartar Aufstrich,Brotaufstrich,
+Tessinerhonig,Brotaufstrich,yes
 Veganer Aufstrich,Brotaufstrich,
 versch. Gonfi,Brotaufstrich,
 versch. Marmeladen,Brotaufstrich,
+Waldhonig,Brotaufstrich,yes
+Wildblütenhonig,Brotaufstrich,yes
 Zwergenwiese,Brotaufstrich,
 (Balsamico-)Essig,Essig und Öl,
 1 Flasche French Dressing,Essig und Öl,
@@ -648,6 +710,7 @@ Dunkler Reisessig,Essig und Öl,
 Erdnuss-Öl,Essig und Öl,
 Erdnussöl,Essig und Öl,
 Essig,Essig und Öl,yes
+Essigzubereitung,Essig und Öl,yes
 Fertigsalatsauce,Essig und Öl,
 Fett,Essig und Öl,yes
 Fritierfett,Essig und Öl,
@@ -660,6 +723,7 @@ Kokosöl,Essig und Öl,
 Kresseessig,Essig und Öl,yes
 Kräuteressig,Essig und Öl,yes
 Kräuteressig Kressi,Essig und Öl,yes
+Kräuterweinessig,Essig und Öl,yes
 Kürbiskernöl,Essig und Öl,yes
 Mirin,Essig und Öl,
 neutrales Pflanzenöl,Essig und Öl,
@@ -683,6 +747,7 @@ Sesamöl,Essig und Öl,yes
 Sonnenblumenöl,Essig und Öl,yes
 Speiseöl,Essig und Öl,yes
 Sushi Vinegar,Essig und Öl,
+Tafelessig,Essig und Öl,yes
 Trüffelöl,Essig und Öl,
 Weissweinessig,Essig und Öl,yes
 Wok-Öl,Essig und Öl,
@@ -690,13 +755,23 @@ Zitronenessig,Essig und Öl,
 Öl,Essig und Öl,yes
 Ölivenöl,Essig und Öl,
 Ackerhack,Fleisch und Fisch,
+Alpenlachs,Fleisch und Fisch,yes
+Alpsteinsalami,Fleisch und Fisch,yes
 Aufschnitt,Fleisch und Fisch,yes
+Backfisch,Fleisch und Fisch,yes
 bacon,Fleisch und Fisch,
+Bauernbratwurst,Fleisch und Fisch,yes
+Bauernschinken,Fleisch und Fisch,yes
+Bauernschüblig,Fleisch und Fisch,yes
 Bauernspeck,Fleisch und Fisch,
 Bauernspeck in Tranchen,Fleisch und Fisch,
+Bauernwurst,Fleisch und Fisch,yes
 Beef Balls,Fleisch und Fisch,
+Bell,Fleisch und Fisch,
 Beyond Burger,Fleisch und Fisch,
 Beyond meat patty,Fleisch und Fisch,
+Bonesteak,Fleisch und Fisch,yes
+Borneschinken,Fleisch und Fisch,yes
 Brahtkügeli,Fleisch und Fisch,
 Bratchügeli,Fleisch und Fisch,
 Braten,Fleisch und Fisch,yes
@@ -713,6 +788,7 @@ Brätkugeln,Fleisch und Fisch,
 Brätkügelchen,Fleisch und Fisch,
 Brätkügeli,Fleisch und Fisch,yes
 Brätküggeli,Fleisch und Fisch,yes
+Bureschüblig,Fleisch und Fisch,yes
 Burger patties,Fleisch und Fisch,
 Burger Patty,Fleisch und Fisch,
 Burger Patty Vegi,Fleisch und Fisch,
@@ -738,6 +814,7 @@ Bündnerfleisch,Fleisch und Fisch,yes
 Cervalat,Fleisch und Fisch,
 Cervalats,Fleisch und Fisch,
 Cervalats (V-Love),Fleisch und Fisch,
+Cervelas,Fleisch und Fisch,yes
 Cervelat,Fleisch und Fisch,yes
 Cervellat,Fleisch und Fisch,
 Cevapcici,Fleisch und Fisch,
@@ -751,29 +828,47 @@ Chicken Tighs,Fleisch und Fisch,
 Chickennuggets,Fleisch und Fisch,yes
 Chipolata,Fleisch und Fisch,
 Chippolata,Fleisch und Fisch,
+Chorizo,Fleisch und Fisch,yes
+Chämischinken,Fleisch und Fisch,yes
+Cipollata,Fleisch und Fisch,yes
+Citterio,Fleisch und Fisch,
+Clubsteak,Fleisch und Fisch,yes
+Coppa,Fleisch und Fisch,
 Cordonbleu,Fleisch und Fisch,
 Cornatur Crispy Burger,Fleisch und Fisch,
 Cornature,Fleisch und Fisch,
 Crevetten,Fleisch und Fisch,yes
+Crevettenschwänze,Fleisch und Fisch,yes
 dicke Schinkentranchen (ca. 5 mm),Fleisch und Fisch,
 Dino Nuggets,Fleisch und Fisch,
 Dino veggi- Nuggets,Fleisch und Fisch,
 Dinonuggets,Fleisch und Fisch,
 Div. Fleischsorten,Fleisch und Fisch,
+Dorade,Fleisch und Fisch,yes
+Doradefilet,Fleisch und Fisch,yes
+Doradenfilet,Fleisch und Fisch,yes
+Dorschrückenfilet,Fleisch und Fisch,yes
 Dönerfleisch,Fleisch und Fisch,
 dünneTrutenbrustschnitzel,Fleisch und Fisch,
+Eglifilet,Fleisch und Fisch,yes
 Ente,Fleisch und Fisch,yes
+Entenbrust,Fleisch und Fisch,yes
+Entrecôte,Fleisch und Fisch,yes
 Erbsenhack,Fleisch und Fisch,
 Facon,Fleisch und Fisch,
 Fake-Poulet,Fleisch und Fisch,
 falsche Cordonbleu,Fleisch und Fisch,
+Farmersteak,Fleisch und Fisch,yes
 feine Sojaschnetzel,Fleisch und Fisch,
+Fendantwurst,Fleisch und Fisch,yes
 Filet,Fleisch und Fisch,yes
+Filetsteak,Fleisch und Fisch,yes
 Fisch,Fleisch und Fisch,yes
 Fischknusperli,Fleisch und Fisch,
 Fischstäbchen,Fleisch und Fisch,yes
 Fischstäbli,Fleisch und Fisch,
 Fischstäbli TK,Fleisch und Fisch,
+Flammlachs,Fleisch und Fisch,yes
 Fleisch,Fleisch und Fisch,yes
 Fleisch-Burgerpatty,Fleisch und Fisch,
 Fleisch-Würste,Fleisch und Fisch,
@@ -787,8 +882,11 @@ Fleischersatz deiner Wahl,Fleisch und Fisch,
 Fleischkäse,Fleisch und Fisch,yes
 Fleischkügeli,Fleisch und Fisch,
 Fleischwurst,Fleisch und Fisch,
+Forellenfilet,Fleisch und Fisch,yes
 frankfurter sausages,Fleisch und Fisch,
+Freilandpoulet,Fleisch und Fisch,yes
 Frühstücksspeck,Fleisch und Fisch,
+Fürstenschinken,Fleisch und Fisch,yes
 Garden Gourmet Balls,Fleisch und Fisch,
 Gechnätzeltes,Fleisch und Fisch,yes
 Geflügel,Fleisch und Fisch,yes
@@ -808,17 +906,22 @@ Geschnetzeltes,Fleisch und Fisch,yes
 geschnetzeltes Rind,Fleisch und Fisch,yes
 geschnezeltes Pouletfleisch,Fleisch und Fisch,
 Geschntzeltes,Fleisch und Fisch,
+Gewürzschinken,Fleisch und Fisch,yes
 Ghackets,Fleisch und Fisch,
 Ghackets (vegi),Fleisch und Fisch,
 Ghacktes,Fleisch und Fisch,yes
+Gigotsteak,Fleisch und Fisch,yes
 glutenfreie Köttbullar,Fleisch und Fisch,
 glutenfreie Köttbullar TK od. frische Fleischbälleli,Fleisch und Fisch,
 Glutenfreies Schnitzel,Fleisch und Fisch,
+Goldbuttfilet,Fleisch und Fisch,yes
 Grill für Leitende,Fleisch und Fisch,
+Grillbratwurst,Fleisch und Fisch,yes
 Grillfleisch für 23 Pers,Fleisch und Fisch,
 Grillgut,Fleisch und Fisch,
 Grillsachen (Aktionen und Resten),Fleisch und Fisch,
 Grillschnecke,Fleisch und Fisch,
+Grillsteak,Fleisch und Fisch,yes
 Grillwürste,Fleisch und Fisch,
 gschnätzletz,Fleisch und Fisch,
 Guanciale,Fleisch und Fisch,
@@ -830,16 +933,25 @@ Hackbällchen,Fleisch und Fisch,
 Hackbälleli,Fleisch und Fisch,yes
 Hackfleisch,Fleisch und Fisch,yes
 Hackfliesch,Fleisch und Fisch,
+Hacksteak,Fleisch und Fisch,yes
+Halsbraten,Fleisch und Fisch,yes
+Halssteak,Fleisch und Fisch,yes
 Hamburger,Fleisch und Fisch,yes
 Hamburgerpatty,Fleisch und Fisch,
 Hamburgerpatty 100g,Fleisch und Fisch,
 Hamburgerpettis,Fleisch und Fisch,
 Hamburgerpätties,Fleisch und Fisch,
+Hauswurst,Fleisch und Fisch,yes
+Heilbuttfilet,Fleisch und Fisch,yes
+Heringsfilet,Fleisch und Fisch,yes
 Hinterschinken,Fleisch und Fisch,
+Hobelfleisch,Fleisch und Fisch,yes
+Hohrückensteak,Fleisch und Fisch,yes
 Hot Dog,Fleisch und Fisch,
 Hotdog Poulett,Fleisch und Fisch,
 Hotdog-Würstli,Fleisch und Fisch,
 Hotdogs,Fleisch und Fisch,
+Huftsteak,Fleisch und Fisch,yes
 Huhn,Fleisch und Fisch,
 HUVUDROLL,Fleisch und Fisch,
 HUVUDROLL (Fleischbällchen),Fleisch und Fisch,
@@ -848,39 +960,66 @@ Hähnchenbrustfilet,Fleisch und Fisch,
 Hünchenbrust,Fleisch und Fisch,
 Ikea Fleischbälleli,Fleisch und Fisch,
 IKEA Vegibällchen,Fleisch und Fisch,
+Innenfilet,Fleisch und Fisch,yes
+Jägerschnitzel,Fleisch und Fisch,yes
 Kalbfleisch,Fleisch und Fisch,yes
 Kalbgeschnezelltes,Fleisch und Fisch,yes
 Kalbs-Geschnetzeltes,Fleisch und Fisch,yes
+Kalbsbacon,Fleisch und Fisch,yes
+Kalbsbraten,Fleisch und Fisch,yes
 Kalbsbratwurst,Fleisch und Fisch,yes
 Kalbsbratwürste,Fleisch und Fisch,
 Kalbsbratwürste / Cervela - mehr Cervela,Fleisch und Fisch,
 Kalbsbrät,Fleisch und Fisch,
+Kalbsfilet,Fleisch und Fisch,yes
 Kalbsfuss,Fleisch und Fisch,yes
 Kalbsfüsschen,Fleisch und Fisch,
 Kalbsfüsse,Fleisch und Fisch,
+Kalbsgeschnetzeltes,Fleisch und Fisch,yes
 Kalbsgeschnätzeltes,Fleisch und Fisch,yes
+Kalbskotelett,Fleisch und Fisch,yes
 Kalbsnierli,Fleisch und Fisch,yes
+Kalbsnierstück,Fleisch und Fisch,yes
 Kalbsplätzli,Fleisch und Fisch,yes
+Kalbsragout,Fleisch und Fisch,yes
 Kalbsschnitzel,Fleisch und Fisch,
+Kalbsspareribs,Fleisch und Fisch,yes
+Kalbssteak,Fleisch und Fisch,yes
 Kalbstbratwurst,Fleisch und Fisch,
 Kebab Fleisch,Fleisch und Fisch,yes
 Kebabfleisch,Fleisch und Fisch,
 Kinderfleisch,Fleisch und Fisch,
+Klosterschinken,Fleisch und Fisch,yes
 Klöpfer,Fleisch und Fisch,
 Knackerli,Fleisch und Fisch,
+Knoblauchwurst,Fleisch und Fisch,yes
+Knusperschinken,Fleisch und Fisch,yes
 Kochschinken,Fleisch und Fisch,
 Kochspeck,Fleisch und Fisch,yes
+Krustenbraten,Fleisch und Fisch,yes
+Krustenfleischkäse,Fleisch und Fisch,yes
+Krustenschinken,Fleisch und Fisch,yes
+Kräuterschinken,Fleisch und Fisch,yes
 Kräuterspeck,Fleisch und Fisch,
+Kräutersteak,Fleisch und Fisch,yes
 Känguruentrecôtes,Fleisch und Fisch,
 Kötbullar glutenfrei,Fleisch und Fisch,
 Köttbullar,Fleisch und Fisch,
 Köttbullar resten o.ä.,Fleisch und Fisch,
 Köttbullar Vegi/Vegan,Fleisch und Fisch,
 Lachs,Fleisch und Fisch,yes
+Lachsfilet,Fleisch und Fisch,yes
+Lachsforellenfilet,Fleisch und Fisch,yes
+Lachsrückenfilet,Fleisch und Fisch,yes
+Lamm,Fleisch und Fisch,
 Lammfleisch,Fleisch und Fisch,yes
 Lammgigot,Fleisch und Fisch,yes
+Lammkotelett,Fleisch und Fisch,yes
+Lammnierstück,Fleisch und Fisch,yes
 Landjeger,Fleisch und Fisch,
 Landjäger,Fleisch und Fisch,yes
+Landrauchschinken,Fleisch und Fisch,yes
+Landschinken,Fleisch und Fisch,yes
 Lanjäger,Fleisch und Fisch,
 Leiterfleisch,Fleisch und Fisch,
 Lioner,Fleisch und Fisch,yes
@@ -891,26 +1030,47 @@ Lyonerwurst (Kalter Aufschnitt),Fleisch und Fisch,
 Léon-Bratwurst,Fleisch und Fisch,
 M-Budget Plant-Based Schnitzel,Fleisch und Fisch,
 M-Budget Vegi Hack,Fleisch und Fisch,
+Maispoulet,Fleisch und Fisch,yes
+Malbuner,Fleisch und Fisch,
 Markbein,Fleisch und Fisch,
+Matjesfilet,Fleisch und Fisch,yes
+Meatballs,Fleisch und Fisch,yes
+Merguez,Fleisch und Fisch,yes
+Mettwurst,Fleisch und Fisch,yes
 Mini-Pic,Fleisch und Fisch,yes
+Minifilet,Fleisch und Fisch,yes
 Minipick,Fleisch und Fisch,
 Mortadella,Fleisch und Fisch,
 Mostbröckli,Fleisch und Fisch,yes
+Mühlenbratwurst,Fleisch und Fisch,yes
+Mühlenwürstchen,Fleisch und Fisch,yes
 Naturtofu,Fleisch und Fisch,
 Nierstuck,Fleisch und Fisch,
 Nierstück,Fleisch und Fisch,
+Nierstückbraten,Fleisch und Fisch,yes
+Nierstücksteak,Fleisch und Fisch,yes
 Nuggets,Fleisch und Fisch,
 Nuggets Vegi,Fleisch und Fisch,
+Oberschenkelsteak,Fleisch und Fisch,yes
+Ofenbraten,Fleisch und Fisch,yes
 Ofenfleichkäse,Fleisch und Fisch,yes
+Ofenfleischkäse,Fleisch und Fisch,yes
 Ofenschinken,Fleisch und Fisch,
 Paddies,Fleisch und Fisch,
 Pancetta,Fleisch und Fisch,
+Pangasiusfilet,Fleisch und Fisch,yes
+Parmaschinken,Fleisch und Fisch,yes
 parniertes Schnitzel,Fleisch und Fisch,
+Pastrami,Fleisch und Fisch,yes
 Patties,Fleisch und Fisch,
 Patty,Fleisch und Fisch,
 Patty vegi/vegan,Fleisch und Fisch,
 Pattys,Fleisch und Fisch,
+Pfeffersalami,Fleisch und Fisch,yes
+Pfeffersteak,Fleisch und Fisch,yes
+Pferdesteak,Fleisch und Fisch,yes
 Pfälzer und normale,Fleisch und Fisch,
+Piccata,Fleisch und Fisch,yes
 Planted,Fleisch und Fisch,
 "planted (Migros, evt. Planted anfragen))",Fleisch und Fisch,
 planted BBQ Chicken,Fleisch und Fisch,
@@ -937,21 +1097,29 @@ Pouletbrüstchen,Fleisch und Fisch,
 Pouletbrüste,Fleisch und Fisch,
 Pouletbrüstli,Fleisch und Fisch,yes
 Pouletfleisch,Fleisch und Fisch,
+Pouletflügel,Fleisch und Fisch,yes
 Pouletflügeli,Fleisch und Fisch,
 Pouletflüggeli,Fleisch und Fisch,
 Pouletgeschnetzeltes,Fleisch und Fisch,yes
 Pouletgschnetzlets,Fleisch und Fisch,
+Pouletinnenfilet,Fleisch und Fisch,yes
 Pouletminifilet,Fleisch und Fisch,
 Pouletminifilet (oder Pouletbrust im Notfall),Fleisch und Fisch,
 Pouletoberschenkel,Fleisch und Fisch,
+Pouletoberschenkelsteak,Fleisch und Fisch,yes
+Pouletrückenfilet,Fleisch und Fisch,yes
 Pouletschenkel,Fleisch und Fisch,
 Pouletschenkel (ganze),Fleisch und Fisch,
+Pouletschenkelsteak,Fleisch und Fisch,yes
 Pouletschenkelsteaks (ohne Knochen),Fleisch und Fisch,
 Pouletschnitzel panniert,Fleisch und Fisch,yes
 Pouletschnitzer,Fleisch und Fisch,
+Pouletspiessli,Fleisch und Fisch,yes
+Pouletwienerli,Fleisch und Fisch,yes
 Pouletwurst,Fleisch und Fisch,
 Prosciutto,Fleisch und Fisch,
 pulet,Fleisch und Fisch,
+Pulpo,Fleisch und Fisch,
 Puolet,Fleisch und Fisch,
 Putenaufschnitt,Fleisch und Fisch,
 Quorn,Fleisch und Fisch,
@@ -964,6 +1132,11 @@ Quorngehacktes,Fleisch und Fisch,
 Quornstäbli,Fleisch und Fisch,
 Quronhack,Fleisch und Fisch,
 Ragout,Fleisch und Fisch,
+Randenwurst,Fleisch und Fisch,yes
+Rangersteak,Fleisch und Fisch,yes
+Rauchlachs,Fleisch und Fisch,yes
+Rauchlachsfilet,Fleisch und Fisch,yes
+Rauchwürstli,Fleisch und Fisch,yes
 Reste Hamburger/Cervelat,Fleisch und Fisch,
 Resten Ghackets,Fleisch und Fisch,
 Ribs,Fleisch und Fisch,
@@ -971,31 +1144,61 @@ Rind,Fleisch und Fisch,
 Rindergehacktes,Fleisch und Fisch,
 Rinderhackfleisch,Fleisch und Fisch,yes
 Rindfleisch,Fleisch und Fisch,yes
+Rindfleischsalami,Fleisch und Fisch,yes
 Rindfleischwürfel,Fleisch und Fisch,
+Rindsbratwurst,Fleisch und Fisch,yes
 Rindsburger,Fleisch und Fisch,
 Rindsburger glutenfrei,Fleisch und Fisch,
 Rindsentrecôte,Fleisch und Fisch,
 Rindsfilet,Fleisch und Fisch,yes
+Rindsfiletsteak,Fleisch und Fisch,yes
 Rindsgeschnetzeltes,Fleisch und Fisch,yes
 Rindshack,Fleisch und Fisch,
 Rindshackfleisch,Fleisch und Fisch,yes
 Rindshamburger,Fleisch und Fisch,
+Rindshohrückensteak,Fleisch und Fisch,yes
+Rindshuft,Fleisch und Fisch,yes
+Rindshuftsteak,Fleisch und Fisch,yes
+Rindsmarkbein,Fleisch und Fisch,yes
+Rindsplätzli,Fleisch und Fisch,yes
 Rindsragout,Fleisch und Fisch,yes
+Rindssaftplätzli,Fleisch und Fisch,yes
+Rindssiedfleisch,Fleisch und Fisch,yes
+Rindsspiessli,Fleisch und Fisch,yes
+Rindssteak,Fleisch und Fisch,yes
 Rindsvoressen,Fleisch und Fisch,yes
+Roastbeef,Fleisch und Fisch,yes
 Rohess-Speck,Fleisch und Fisch,
+Rohessspeck,Fleisch und Fisch,yes
+Rohnussschinken,Fleisch und Fisch,yes
+Rohnussschinkli,Fleisch und Fisch,yes
 Rohschinken,Fleisch und Fisch,yes
+Rohwurst,Fleisch und Fisch,yes
+Rollschinkli,Fleisch und Fisch,yes
+Rostbratwurst,Fleisch und Fisch,yes
+Rotbarschfilet,Fleisch und Fisch,yes
+Rumpsteak,Fleisch und Fisch,yes
 Räuchertofu,Fleisch und Fisch,
 Räuchertofu glutenfrei,Fleisch und Fisch,
 Räuchertofu o. Vegischnitzel,Fleisch und Fisch,
 Röichertofu,Fleisch und Fisch,
+Rückenfilet,Fleisch und Fisch,yes
+Saftplätzli,Fleisch und Fisch,yes
 Saitan,Fleisch und Fisch,
 Saitan Migros,Fleisch und Fisch,
+Salametti,Fleisch und Fisch,yes
 Salamettli,Fleisch und Fisch,
 Salami,Fleisch und Fisch,yes
 Salami/ Trockenfleisch,Fleisch und Fisch,
 Salamischeiben,Fleisch und Fisch,
+Salsiccia,Fleisch und Fisch,yes
 Salsiz,Fleisch und Fisch,
+Saltimbocca,Fleisch und Fisch,yes
+Sandwichschinken,Fleisch und Fisch,yes
+Saucisse,Fleisch und Fisch,yes
+Saucisson,Fleisch und Fisch,yes
 Schaschlikspiesse,Fleisch und Fisch,
+Schenkelsteak,Fleisch und Fisch,yes
 Schinken,Fleisch und Fisch,yes
 Schinken/Aufschnitt,Fleisch und Fisch,
 Schinken/Salami,Fleisch und Fisch,
@@ -1026,27 +1229,51 @@ Schweinesteak,Fleisch und Fisch,
 Schweingschnetzeltes,Fleisch und Fisch,
 Schweins geschnetzeltes,Fleisch und Fisch,yes
 Schweins Ragout,Fleisch und Fisch,
+Schweinsbraten,Fleisch und Fisch,yes
 Schweinsbratwurst,Fleisch und Fisch,
 Schweinsbratwürste,Fleisch und Fisch,
+Schweinsbrust,Fleisch und Fisch,yes
+Schweinsfilet,Fleisch und Fisch,yes
+Schweinsgeschnetzeltes,Fleisch und Fisch,yes
+Schweinshackfleisch,Fleisch und Fisch,yes
+Schweinshals,Fleisch und Fisch,yes
 Schweinshalsbraten,Fleisch und Fisch,yes
+Schweinshalscordonbleu,Fleisch und Fisch,yes
+Schweinshalsplätzli,Fleisch und Fisch,yes
+Schweinshalssteak,Fleisch und Fisch,yes
+Schweinshohrückensteak,Fleisch und Fisch,yes
+Schweinshuftsteak,Fleisch und Fisch,yes
+Schweinskoteletts,Fleisch und Fisch,yes
 Schweinsnierstück,Fleisch und Fisch,
 Schweinsnierstück Blätzli,Fleisch und Fisch,yes
+Schweinsnierstückbraten,Fleisch und Fisch,yes
+Schweinsnierstücksteak,Fleisch und Fisch,yes
+Schweinspfeffersteak,Fleisch und Fisch,yes
 Schweinsplätzli,Fleisch und Fisch,yes
 Schweinsragout,Fleisch und Fisch,
 Schweinsschulter (1 kg ergibt gegart ca. 680 g,Fleisch und Fisch,
+Schweinsspareribs,Fleisch und Fisch,yes
+Schweinssteak,Fleisch und Fisch,yes
 Schweinsteak,Fleisch und Fisch,
 Schweinsvoressen,Fleisch und Fisch,yes
 Schweinswurst,Fleisch und Fisch,
 Schweinswürstchen,Fleisch und Fisch,
+Schweinswürstli,Fleisch und Fisch,yes
 Schweis-Geschnetzeltes,Fleisch und Fisch,yes
+Schwertfischfilet,Fleisch und Fisch,yes
 Schüblig,Fleisch und Fisch,
+Seelachs,Fleisch und Fisch,yes
+Seezungenfilet,Fleisch und Fisch,yes
 Seidentofu,Fleisch und Fisch,
 Seitan,Fleisch und Fisch,
 Seitan für Vegies,Fleisch und Fisch,
+Sennenwürstli,Fleisch und Fisch,yes
+Serrano,Fleisch und Fisch,yes
 Serranoschinken,Fleisch und Fisch,
 Servalats,Fleisch und Fisch,
 Servela,Fleisch und Fisch,
 Servelat,Fleisch und Fisch,
+Siedfleisch,Fleisch und Fisch,yes
 Soja-Hack,Fleisch und Fisch,
 Sojagehacktes,Fleisch und Fisch,
 Sojageschnetzeltes,Fleisch und Fisch,
@@ -1066,6 +1293,7 @@ Sojaschnitzel,Fleisch und Fisch,
 Sojaschnätzel,Fleisch und Fisch,
 Sojastücke Trocken,Fleisch und Fisch,
 Spanferkel,Fleisch und Fisch,
+Spareribs,Fleisch und Fisch,yes
 Speck,Fleisch und Fisch,yes
 Speck/Schinken,Fleisch und Fisch,
 Speckscheiben,Fleisch und Fisch,
@@ -1076,22 +1304,36 @@ Speckwürfel,Fleisch und Fisch,yes
 Speckwürfelchen,Fleisch und Fisch,
 Speckwürfeli,Fleisch und Fisch,yes
 Steak,Fleisch und Fisch,
+Steinbuttfilet,Fleisch und Fisch,yes
+Stotzenplätzli,Fleisch und Fisch,yes
+Streichleberwurst,Fleisch und Fisch,yes
+Stremellachs,Fleisch und Fisch,yes
 Surimi (MSC),Fleisch und Fisch,
 Tartare,Fleisch und Fisch,
+Terrine,Fleisch und Fisch,yes
+Tessinerbraten,Fleisch und Fisch,yes
+Tessinersteak,Fleisch und Fisch,yes
 Thon,Fleisch und Fisch,yes
 Thunfisch,Fleisch und Fisch,
+Thunfischfilet,Fleisch und Fisch,yes
 Tiger Kitchen Bio Seitan,Fleisch und Fisch,
 TK V-Love plant based burger (8Stk),Fleisch und Fisch,
+Toastlachs,Fleisch und Fisch,yes
 Tofu,Fleisch und Fisch,yes
 Traiteur de Paris,Fleisch und Fisch,
 Trockenfleisch,Fleisch und Fisch,
 Trockenwurst,Fleisch und Fisch,
 Truten-Ragout,Fleisch und Fisch,yes
 Trutenaufschnitt,Fleisch und Fisch,
+Trutenbraten,Fleisch und Fisch,yes
+Trutenbrust,Fleisch und Fisch,yes
+Trutenfilet,Fleisch und Fisch,yes
 Trutenplätzli,Fleisch und Fisch,
+Trutenschnitzel,Fleisch und Fisch,yes
 Truthahn,Fleisch und Fisch,
 Turnfisch,Fleisch und Fisch,
 Ufschnitt,Fleisch und Fisch,
+Unterspältenplätzli,Fleisch und Fisch,yes
 V-Love Balls,Fleisch und Fisch,
 V-love Erbsen Schnetzel,Fleisch und Fisch,
 V-Love · Stick · Vegan,Fleisch und Fisch,
@@ -1211,14 +1453,20 @@ Vegiwürstchen,Fleisch und Fisch,
 Vegiwürste,Fleisch und Fisch,
 Vegiwürstli,Fleisch und Fisch,
 vegi–patties,Fleisch und Fisch,
+Vorderschinken,Fleisch und Fisch,yes
+Weisswurst,Fleisch und Fisch,yes
 Wienerli,Fleisch und Fisch,yes
 Wiennerli,Fleisch und Fisch,
+Wildlachs,Fleisch und Fisch,yes
 Winerli oder Schweinswürstli,Fleisch und Fisch,
+Wolfsbarsch,Fleisch und Fisch,yes
+Wolfsbarschfilet,Fleisch und Fisch,yes
 Wurst,Fleisch und Fisch,yes
 Wurst/ Fleischding,Fleisch und Fisch,
 Würstchen,Fleisch und Fisch,yes
 Würste,Fleisch und Fisch,yes
 Würstli,Fleisch und Fisch,
+Zungenwurst,Fleisch und Fisch,yes
 Ananas,Früchte und Gemüse,yes
 Anannas,Früchte und Gemüse,
 Annanas,Früchte und Gemüse,
@@ -1238,6 +1486,7 @@ Avocado,Früchte und Gemüse,yes
 Baby-Ananas,Früchte und Gemüse,
 Baby-Banane,Früchte und Gemüse,
 Baby-Banane (reif),Früchte und Gemüse,
+Babykartoffeln,Früchte und Gemüse,yes
 Babykartotten,Früchte und Gemüse,
 Babyspinat,Früchte und Gemüse,
 Banana,Früchte und Gemüse,
@@ -1310,6 +1559,7 @@ Champingons,Früchte und Gemüse,
 Champinions,Früchte und Gemüse,
 Champinons,Früchte und Gemüse,
 Champions,Früchte und Gemüse,
+Charentais,Früchte und Gemüse,yes
 Chefen,Früchte und Gemüse,
 Cheritomaten,Früchte und Gemüse,
 Cherry Tomätli,Früchte und Gemüse,
@@ -1327,6 +1577,7 @@ Chnobli-Zehe,Früchte und Gemüse,yes
 Chnoblizehe,Früchte und Gemüse,
 Chnoblizehen,Früchte und Gemüse,
 Choleräbli,Früchte und Gemüse,
+Cicorino,Früchte und Gemüse,yes
 Clementinen,Früchte und Gemüse,yes
 Cocktailtomaten,Früchte und Gemüse,
 Coktailtomaten,Früchte und Gemüse,
@@ -1345,6 +1596,7 @@ Edamame,Früchte und Gemüse,yes
 Edamame/Erbsen,Früchte und Gemüse,
 Eichblatt grün,Früchte und Gemüse,
 Eichblatt rot,Früchte und Gemüse,
+Eichblattsalat,Früchte und Gemüse,yes
 Eierschwämme,Früchte und Gemüse,
 Eierschwämme (Pilze),Früchte und Gemüse,
 Eierschwämmli,Früchte und Gemüse,yes
@@ -1352,6 +1604,7 @@ Eisberg,Früchte und Gemüse,yes
 Eisberg-Salat,Früchte und Gemüse,
 Eisbergsalat,Früchte und Gemüse,yes
 Eisbergsalate,Früchte und Gemüse,
+Endivie,Früchte und Gemüse,yes
 Enoki,Früchte und Gemüse,
 Erbse,Früchte und Gemüse,yes
 Erbsen,Früchte und Gemüse,
@@ -1392,6 +1645,7 @@ Frühlingzwieben,Früchte und Gemüse,
 Fürchtete,Früchte und Gemüse,
 Gala,Früchte und Gemüse,yes
 ganze Knoblauche,Früchte und Gemüse,
+Gartensalat,Früchte und Gemüse,yes
 Gelbe Peperonie,Früchte und Gemüse,
 gemischter Salat(Leiteressen),Früchte und Gemüse,
 Gemüse,Früchte und Gemüse,yes
@@ -1415,6 +1669,7 @@ Grapefruit,Früchte und Gemüse,
 Grill-Gemüse,Früchte und Gemüse,
 Grillgemüse,Früchte und Gemüse,
 Grillmais,Früchte und Gemüse,
+Grillpeperoni,Früchte und Gemüse,yes
 grosse getrocknete Morcheln,Früchte und Gemüse,
 grosse Lauchstangen,Früchte und Gemüse,
 Gruke,Früchte und Gemüse,
@@ -1444,6 +1699,7 @@ Honigmelonen,Früchte und Gemüse,
 Härdöpfel,Früchte und Gemüse,
 Ingwer,Früchte und Gemüse,yes
 ingwerknolle,Früchte und Gemüse,
+Jungsalat,Früchte und Gemüse,yes
 Jungspinat,Früchte und Gemüse,
 Kabis,Früchte und Gemüse,yes
 Kafirlimette,Früchte und Gemüse,
@@ -1509,6 +1765,7 @@ Kopfsalatblätter,Früchte und Gemüse,
 Korianderblätchen,Früchte und Gemüse,
 Korianderblätter,Früchte und Gemüse,
 Krauskohl,Früchte und Gemüse,
+Krautstiel,Früchte und Gemüse,yes
 Kresse,Früchte und Gemüse,
 Kresse?,Früchte und Gemüse,
 Kräuterseitlinge,Früchte und Gemüse,
@@ -1551,6 +1808,7 @@ Mini-Peperoni,Früchte und Gemüse,
 Mini-Thai-Auberginen,Früchte und Gemüse,
 mirepoix,Früchte und Gemüse,
 Mischgemüse,Früchte und Gemüse,yes
+Mischpilze,Früchte und Gemüse,yes
 Mischsalat,Früchte und Gemüse,yes
 Mongosprossen,Früchte und Gemüse,
 Motaten,Früchte und Gemüse,
@@ -1684,6 +1942,7 @@ Sommergemüse,Früchte und Gemüse,
 Spargeln,Früchte und Gemüse,yes
 Spargle,Früchte und Gemüse,
 Spinat,Früchte und Gemüse,yes
+Spitzkabis,Früchte und Gemüse,yes
 Spitzpepperoni grün,Früchte und Gemüse,
 Springonions,Früchte und Gemüse,
 Sprossenmix,Früchte und Gemüse,
@@ -1736,6 +1995,7 @@ Zucetti,Früchte und Gemüse,
 Zuchetti,Früchte und Gemüse,yes
 Zuchini,Früchte und Gemüse,
 zuckererbse,Früchte und Gemüse,
+Zuckermais,Früchte und Gemüse,yes
 Zugchetti,Früchte und Gemüse,yes
 Zugetti,Früchte und Gemüse,
 Zughetti,Früchte und Gemüse,yes
@@ -1768,34 +2028,55 @@ Zwieblen,Früchte und Gemüse,
 Absolut Vodka,Getränke und Wein,
 alkoholfreier Apfelwein,Getränke und Wein,
 alkoholfreier Gin (z.B. Gordon's 0.0),Getränke und Wein,
+Alpenkräutertee,Getränke und Wein,yes
 Amaretto,Getränke und Wein,
 Ananassaft,Getränke und Wein,yes
+Apfeldirektsaft,Getränke und Wein,yes
 Apfelsaft,Getränke und Wein,yes
 Apfelschorle,Getränke und Wein,
 Apfelschorle oder anderes Spassgetränk,Getränke und Wein,
+Apfelwein,Getränke und Wein,yes
 Armagnac,Getränke und Wein,
 Barolo,Getränke und Wein,yes
 Beerensirup,Getränke und Wein,
+Bergkräutertee,Getränke und Wein,yes
 Bier,Getränke und Wein,yes
+Biermischgetränk,Getränke und Wein,yes
 Birnendicksaft,Getränke und Wein,yes
 Blutorangensaft,Getränke und Wein,
+Blütenwasser,Getränke und Wein,yes
 Brennesseltee (Beutel),Getränke und Wein,
 Brinendicksaft,Getränke und Wein,
+Calanda,Getränke und Wein,
 Calvados,Getränke und Wein,
 Campari Bitter,Getränke und Wein,
+Capri Sun,Getränke und Wein,
+Capri-Sun,Getränke und Wein,yes
 Caprisonne,Getränke und Wein,yes
+Champagne,Getränke und Wein,yes
+Champagner,Getränke und Wein,yes
+Chardonnay,Getränke und Wein,yes
+Cider,Getränke und Wein,
+Cidre,Getränke und Wein,
 Citro,Getränke und Wein,yes
+Clementinensaft,Getränke und Wein,yes
 Coca,Getränke und Wein,yes
+Coca Cola,Getränke und Wein,
 Coca-Cola,Getränke und Wein,
 Cocktail,Getränke und Wein,
+Coconutwater,Getränke und Wein,yes
 Cognac,Getränke und Wein,
 Cola,Getränke und Wein,yes
 Cranberrynektar,Getränke und Wein,
 Cranberrysaft,Getränke und Wein,
 Div. Säfte,Getränke und Wein,
 Dosenbier,Getränke und Wein,yes
+Draftbier,Getränke und Wein,yes
 dry white wine (e.g. Sauvignon blanc),Getränke und Wein,
 dunkler Rum,Getränke und Wein,
+Eichhof,Getränke und Wein,
+Eiercognac,Getränke und Wein,yes
+Eistee,Getränke und Wein,yes
 Eisteepulver,Getränke und Wein,
 Eiswasser,Getränke und Wein,
 El Toni Maté,Getränke und Wein,
@@ -1809,13 +2090,20 @@ Energydrinks,Getränke und Wein,
 English Breakfast,Getränke und Wein,
 Erdbeersirup,Getränke und Wein,
 ev. Orangen Saft,Getränke und Wein,
+Evian,Getränke und Wein,
 Exotik-Fruchtsaft,Getränke und Wein,
 Fanta,Getränke und Wein,
+Feldschlösschen,Getränke und Wein,
+Fencheltee,Getränke und Wein,yes
+Fendant,Getränke und Wein,yes
+Fever Tree,Getränke und Wein,
+Fever-Tree,Getränke und Wein,yes
 Fruchstaft,Getränke und Wein,
 Fruchtsaft,Getränke und Wein,
 Fruchtsaft (Zmorge),Getränke und Wein,
 Früchtetee,Getränke und Wein,yes
 für Lagertee,Getränke und Wein,
+Gemüsesaft,Getränke und Wein,yes
 Getränk,Getränke und Wein,
 Getränk alkoholfrei,Getränke und Wein,
 Getränke,Getränke und Wein,
@@ -1828,13 +2116,17 @@ Ginger Ale,Getränke und Wein,
 Gingerale,Getränke und Wein,
 GingerBeer,Getränke und Wein,
 Glühwein,Getränke und Wein,
+Granatapfelsaft,Getränke und Wein,yes
+Granini,Getränke und Wein,
 Grapefruitsaft,Getränke und Wein,
 Grenadienensirup,Getränke und Wein,
 Grenadinensirup,Getränke und Wein,
+Grenadinesirup,Getränke und Wein,yes
 Grüntee,Getränke und Wein,
 guter fertig glühwein,Getränke und Wein,
 Hagenbuttentee,Getränke und Wein,yes
 Hahnenwasser,Getränke und Wein,
+Heineken,Getränke und Wein,
 Heisseswasser,Getränke und Wein,
 Henniez,Getränke und Wein,yes
 "Himbeer-Sirup (2x 1,5l)",Getränke und Wein,
@@ -1843,12 +2135,16 @@ Holuderblütensirup,Getränke und Wein,
 Holunderblütensirup,Getränke und Wein,
 Holundersirup,Getränke und Wein,
 IceTea-Pulver,Getränke und Wein,yes
+Ingwersaft,Getränke und Wein,yes
 Ingwersirup,Getränke und Wein,
 Inkarom,Getränke und Wein,
 Inkarom decaf,Getränke und Wein,
 Instant Cappuccino,Getränke und Wein,
 Instant-Kaffee,Getränke und Wein,
 Instantkaffe,Getränke und Wein,yes
+Instantkaffee,Getränke und Wein,yes
+Kakaogetränk,Getränke und Wein,yes
+Karottensaft,Getränke und Wein,yes
 Kinderprosecco,Getränke und Wein,
 Kirsch,Getränke und Wein,yes
 Kirschsaft,Getränke und Wein,
@@ -1859,9 +2155,12 @@ Kohlensäurewasser,Getränke und Wein,
 Kräutertee,Getränke und Wein,
 "Kräutertee (wenn möglich, frisch vom Luzernerhof)",Getränke und Wein,
 Lagerbier,Getränke und Wein,
+Landwein,Getränke und Wein,yes
 Lemon Soda,Getränke und Wein,
+Limettensirup,Getränke und Wein,yes
 M-Budget Energy Drinks,Getränke und Wein,
 M-Budget Multifrucht Nektar,Getränke und Wein,
+Mandarinensaft,Getränke und Wein,yes
 Marsala,Getränke und Wein,
 Marsala Likör,Getränke und Wein,
 Mate,Getränke und Wein,
@@ -1869,6 +2168,7 @@ Mate (Höckfood),Getränke und Wein,
 Mate und Redbull,Getränke und Wein,
 Mate Zuckerfrei,Getränke und Wein,
 Mate Zuckerfrei (Höckfood),Getränke und Wein,
+Merlot,Getränke und Wein,yes
 Milchshake pulver,Getränke und Wein,
 Mineralwasser,Getränke und Wein,yes
 Mirin Reiswein,Getränke und Wein,
@@ -1887,6 +2187,7 @@ Multivitamin Saft,Getränke und Wein,
 Multivitaminsaft,Getränke und Wein,yes
 Nescafe,Getränke und Wein,yes
 Nescafé,Getränke und Wein,
+Nestea,Getränke und Wein,
 Noilly Prat,Getränke und Wein,
 Noilly Prat (B+R),Getränke und Wein,
 O - Saft,Getränke und Wein,
@@ -1900,26 +2201,48 @@ Orangenlikör (z.B. Cointreau),Getränke und Wein,
 Orangensaft,Getränke und Wein,yes
 Orangensaft/Multivitamin,Getränke und Wein,
 Orangensaft/Multivitaminsaft,Getränke und Wein,
+Orangensirup,Getränke und Wein,yes
 Orangina,Getränke und Wein,
 Organgensaft,Getränke und Wein,yes
 Osaft,Getränke und Wein,
+Panaché,Getränke und Wein,yes
+Pepsi,Getränke und Wein,
 Pfefferminztee,Getränke und Wein,yes
+Pinot Noir,Getränke und Wein,
 Portwein,Getränke und Wein,yes
 Powerade blau,Getränke und Wein,
+Primitivo,Getränke und Wein,yes
 Prosecco,Getränke und Wein,
 Punch,Getränke und Wein,yes
 Punsch,Getränke und Wein,
 Punsch Pulver,Getränke und Wein,
+Qualitätswein,Getränke und Wein,yes
+Radler,Getränke und Wein,yes
+Ramseier,Getränke und Wein,
 Randensaft,Getränke und Wein,
+Rauchbier,Getränke und Wein,yes
+Red Bull,Getränke und Wein,
 Regenbogenmoskato,Getränke und Wein,
+Reisbier,Getränke und Wein,yes
 Rimus,Getränke und Wein,yes
+Rioja,Getränke und Wein,
 Rivella,Getränke und Wein,yes
+Rooibos,Getränke und Wein,yes
+Rosenwasser,Getränke und Wein,yes
+Rosé,Getränke und Wein,
+Rotbier,Getränke und Wein,yes
 Rotwein,Getränke und Wein,yes
 Rum,Getränke und Wein,
 Saft,Getränke und Wein,
 Salzwasser,Getränke und Wein,yes
+San Pellegrino,Getränke und Wein,
 Saurer Most,Getränke und Wein,
+Schnitzwasser,Getränke und Wein,yes
+Schorle,Getränke und Wein,yes
+Schwarzbier,Getränke und Wein,yes
 Schwarztee,Getränke und Wein,yes
+Schweppes,Getränke und Wein,
+Sekt,Getränke und Wein,
 Shorley,Getränke und Wein,
 Sirup,Getränke und Wein,yes
 Sirup: Apfel-Kiwi,Getränke und Wein,
@@ -1930,6 +2253,7 @@ Siurp,Getränke und Wein,
 Smoothie,Getränke und Wein,
 Softgetränk,Getränke und Wein,
 Sprite,Getränke und Wein,
+Spritz,Getränke und Wein,yes
 Sprudeliwasser,Getränke und Wein,
 Sprudelwasser,Getränke und Wein,
 sugar syrup,Getränke und Wein,
@@ -1948,6 +2272,7 @@ Teebäutel,Getränke und Wein,yes
 Teebüteli,Getränke und Wein,
 Teebüütel 1Pack Normal (Früchtetee),Getränke und Wein,
 Tequila,Getränke und Wein,
+Tomatensaft,Getränke und Wein,yes
 Tonic,Getränke und Wein,
 tonic water (e.g. Fever-Tree Tonic Water),Getränke und Wein,
 Tonic Water (z.B. Fever Tree Aromatic Tonic Angostura),Getränke und Wein,
@@ -1957,22 +2282,27 @@ Tonic Water (z.B. Fever-Tree Raspberry \&amp; Rhubarb),Getränke und Wein,
 "Tonic Water, Aperitiv",Getränke und Wein,
 Traubensaft,Getränke und Wein,
 Traubensaft  (Programm),Getränke und Wein,
+Twinings,Getränke und Wein,
+Valser,Getränke und Wein,
 Verveine,Getränke und Wein,
 Verveinetee,Getränke und Wein,
 Vino Rosso,Getränke und Wein,
 Vodka,Getränke und Wein,
 Vodka (z.B. Absolut Grapefruit),Getränke und Wein,
+Volvic,Getränke und Wein,
 Wasser,Getränke und Wein,yes
 water,Getränke und Wein,
 Wein,Getränke und Wein,
 Wein rot,Getränke und Wein,
 Wein weiss,Getränke und Wein,
+Weissbier,Getränke und Wein,yes
 Weissein,Getränke und Wein,yes
 weisser Rum,Getränke und Wein,
 weisser Rum (z.B. Cachaça oder Bacardi),Getränke und Wein,
 Weisser Vermouth,Getränke und Wein,
 Weisswein,Getränke und Wein,yes
 Weiswein,Getränke und Wein,yes
+Weizenbier,Getränke und Wein,yes
 Wermut  (z.B. Martini rosso),Getränke und Wein,
 Whisky (z.B. Scotch Whisky),Getränke und Wein,
 Zitronenlikör (z.B. Limoncello),Getränke und Wein,
@@ -1980,6 +2310,7 @@ Zitronensirup,Getränke und Wein,yes
 Zuckersirup,Getränke und Wein,
 Zwetschge Schnaps,Getränke und Wein,
 Zwetschgenschnaps,Getränke und Wein,
+Zwetschgenwasser,Getränke und Wein,yes
 (Majoran),Gewürze,
 (Muskat),Gewürze,
 8 Krätermischung,Gewürze,
@@ -1995,6 +2326,7 @@ Basilicum,Gewürze,yes
 Basilikum,Gewürze,yes
 Basilikumpulver,Gewürze,
 Bergkräutersalz,Gewürze,yes
+Bergpfeffer,Gewürze,yes
 Bockshornklee,Gewürze,yes
 Bohnengewürz,Gewürze,
 Bouillion,Gewürze,
@@ -2023,6 +2355,7 @@ Buillon Würfel,Gewürze,
 Bullion,Gewürze,yes
 Bärlauch,Gewürze,
 Bärlauchpaste,Gewürze,yes
+Bärlauchsalz,Gewürze,yes
 Cayenne,Gewürze,
 Cayennenpfeffer,Gewürze,
 Cayennepfeffer,Gewürze,yes
@@ -2086,10 +2419,12 @@ Fleischbrühe,Gewürze,
 Fleischbullion,Gewürze,
 Fleischgewürz,Gewürze,yes
 Fleur de Sel,Gewürze,
+Flüssigwürze,Gewürze,yes
 Frische Peterselie,Gewürze,
 frische Pfefferminzblätter,Gewürze,
 Frischer Peterlie,Gewürze,
 Frischer Peterselie,Gewürze,
+Frühlingskräuter,Gewürze,yes
 Garam Masala,Gewürze,yes
 Garlic,Gewürze,
 Geflügelbouillon,Gewürze,
@@ -2125,6 +2460,7 @@ Gewürze,Gewürze,yes
 Gewürzmischung,Gewürze,
 Gewürzmischung mex.,Gewürze,
 Gewürzmischung Mexico,Gewürze,
+Gewürzmühle,Gewürze,yes
 Gewürznelken,Gewürze,yes
 Glühweingewürz,Gewürze,
 Glühweingewürzmischung,Gewürze,
@@ -2141,8 +2477,10 @@ Gwürz,Gewürze,yes
 Gwürze,Gewürze,
 Harissa,Gewürze,yes
 helle Soyasauce,Gewürze,
+Herbamare,Gewürze,
 herbes de provence,Gewürze,
 Herdöpfelgwürz,Gewürze,
+Himalayasalz,Gewürze,yes
 Holy Thai Basil,Gewürze,
 Härdöpfelgewürz,Gewürze,
 Härdöpfelgwürz,Gewürze,
@@ -2177,11 +2515,14 @@ Kartoffelgewürz,Gewürze,
 Kartoffelgewürz (Pommes etc.),Gewürze,
 Kartoffelgewürz spezial,Gewürze,
 Keurzkümmelpulver,Gewürze,
+Kikkoman,Gewürze,
 kleine Chilischote,Gewürze,
 Knoblauchbrot Gewürz-Mix,Gewürze,
 Knoblauchgewürz,Gewürze,
+Knoblauchpfeffer,Gewürze,yes
 Knoblauchpulver,Gewürze,
 Knoblauchpulver Grosses Glas,Gewürze,
+Knoblauchsalz,Gewürze,yes
 Knorr Vegane Braten-sauce s'Wunder,Gewürze,
 Kochsalz,Gewürze,
 Kokosraspel,Gewürze,yes
@@ -2200,6 +2541,7 @@ Kreuzkümmelpulver,Gewürze,yes
 Kreuzkümmelsamen,Gewürze,yes
 Krukuma-Pulver,Gewürze,
 Kräuter,Gewürze,yes
+Kräuterbouillon,Gewürze,yes
 Kräutergewürz,Gewürze,
 Kräutermischung,Gewürze,
 "Kräutermischung ""Italia""",Gewürze,
@@ -2245,6 +2587,7 @@ Mayonaise,Gewürze,yes
 Mayonnaise,Gewürze,yes
 Mayonniase,Gewürze,
 MBudget Mayo,Gewürze,
+McCormick,Gewürze,
 Meersalz,Gewürze,yes
 Mex Gewürzmischung,Gewürze,yes
 Mexican Poulet-Gewürz (für 1.5kg Poulet),Gewürze,
@@ -2268,9 +2611,11 @@ Muskatnusspulver,Gewürze,
 Muskatpulver,Gewürze,yes
 Myonese,Gewürze,
 Nelken,Gewürze,yes
+Nelkenpfeffer,Gewürze,yes
 Nelkenpulver,Gewürze,yes
 No-Fish-Sauce,Gewürze,
 Nägeli,Gewürze,
+Ochsenbouillon,Gewürze,yes
 Oelek,Gewürze,
 Old el Paso Gewürzmischung,Gewürze,
 Old El Passo Mix,Gewürze,
@@ -2318,7 +2663,9 @@ Racelettegewürze,Gewürze,
 Raclett-Gewürz,Gewürze,yes
 Raclettgewürz,Gewürze,yes
 Ras el Hanout,Gewürze,
+Regenbogenpfeffer,Gewürze,yes
 Rinderbouillon,Gewürze,
+Rinds-Bouillon,Gewürze,yes
 Rindsbouillon,Gewürze,yes
 rosemary,Gewürze,
 Rosenpaprika,Gewürze,
@@ -2374,9 +2721,12 @@ Sojasosse,Gewürze,
 Sojasoße,Gewürze,
 Soy Sauce / Fish Sauce,Gewürze,
 soya sauce,Gewürze,
+Speisesalz,Gewürze,yes
 Stedy Gewürtz,Gewürze,
+Steinpilzbouillon,Gewürze,yes
 Sternanis,Gewürze,yes
 Streuwürze,Gewürze,yes
+Tafelsalz,Gewürze,yes
 Tahini,Gewürze,yes
 Tamari,Gewürze,
 Tamari (oder einfach Salz),Gewürze,
@@ -2425,6 +2775,7 @@ Wasabi,Gewürze,
 Wasabi-Paste,Gewürze,
 weisse Misopaste,Gewürze,
 Wildkräuter,Gewürze,yes
+Würzmischung,Gewürze,yes
 Würzmischung Chicken Mix,Gewürze,
 Za'Atar,Gewürze,yes
 Zimmt,Gewürze,
@@ -2454,6 +2805,7 @@ Bircherflöckli,Grundnahrungsmittel,yes
 Birchermüesli,Grundnahrungsmittel,
 Birchermüeslimix,Grundnahrungsmittel,
 Birchermüeslimix (ohne Nüsse),Grundnahrungsmittel,
+Bohnenkaffee,Grundnahrungsmittel,yes
 Bonen,Grundnahrungsmittel,yes
 Bramata-Mais,Grundnahrungsmittel,
 Buchstaben,Grundnahrungsmittel,yes
@@ -2471,12 +2823,14 @@ Cannelloni,Grundnahrungsmittel,yes
 Canneloniröhren,Grundnahrungsmittel,
 Canneloniröhren (vegan!),Grundnahrungsmittel,
 Capellini,Grundnahrungsmittel,yes
+Carnaroli,Grundnahrungsmittel,yes
 Carnerolireis,Grundnahrungsmittel,
 Carolina-Reis,Grundnahrungsmittel,
 Chiasamen,Grundnahrungsmittel,
 Chili-Bohnen,Grundnahrungsmittel,yes
 Chinanudeln,Grundnahrungsmittel,
 Chnöpflimehl,Grundnahrungsmittel,yes
+Conchiglie,Grundnahrungsmittel,yes
 Conflakes,Grundnahrungsmittel,
 Conflakes/Müesli,Grundnahrungsmittel,
 Corn Flakes,Grundnahrungsmittel,yes
@@ -2489,6 +2843,7 @@ Couscous,Grundnahrungsmittel,yes
 Crunch Müsli,Grundnahrungsmittel,
 de pâtes,Grundnahrungsmittel,
 Delicio-Kapseln,Grundnahrungsmittel,
+Dinkelflöckli,Grundnahrungsmittel,yes
 Dinkelgrieß,Grundnahrungsmittel,
 div Kaffeekapseln für Nespresso,Grundnahrungsmittel,
 Dörrbohnen getrocknet,Grundnahrungsmittel,
@@ -2515,6 +2870,7 @@ Fajitas,Grundnahrungsmittel,yes
 Falafelmischung,Grundnahrungsmittel,
 Farfalle,Grundnahrungsmittel,yes
 feine Vollkorn-Haferflocken,Grundnahrungsmittel,
+Feinkristallzucker,Grundnahrungsmittel,yes
 Fertig-Flammkuchenteig,Grundnahrungsmittel,
 Fertig-Püreepulver,Grundnahrungsmittel,
 Fertigrösti,Grundnahrungsmittel,
@@ -2528,14 +2884,17 @@ Flammkuchenteig,Grundnahrungsmittel,yes
 Fläden,Grundnahrungsmittel,yes
 Flädli,Grundnahrungsmittel,
 Flöckli,Grundnahrungsmittel,yes
+Früchtemüesli,Grundnahrungsmittel,yes
 Fusilli,Grundnahrungsmittel,yes
 Fussili,Grundnahrungsmittel,
 Gelberbsen,Grundnahrungsmittel,
+Gelierzucker,Grundnahrungsmittel,yes
 Gemüsereis,Grundnahrungsmittel,
 Gerste,Grundnahrungsmittel,
 Gersten,Grundnahrungsmittel,
 Gestampfter Uhu,Grundnahrungsmittel,
 Getreideflocken,Grundnahrungsmittel,
+Getreidekaffee,Grundnahrungsmittel,yes
 Glasnudeln,Grundnahrungsmittel,
 Glutenfreie Fadennudeln / Buchweizen,Grundnahrungsmittel,
 glutenfreie Fajitafläden,Grundnahrungsmittel,
@@ -2592,11 +2951,13 @@ Kaffichapsle für Nespressomaschiene,Grundnahrungsmittel,
 Kafi,Grundnahrungsmittel,
 Kafi Pulver,Grundnahrungsmittel,
 Kafipulver,Grundnahrungsmittel,
+Kandiszucker,Grundnahrungsmittel,yes
 Kartoffelgnocchi,Grundnahrungsmittel,
 Kartoffelstock,Grundnahrungsmittel,yes
 Kartoffelstockflocken,Grundnahrungsmittel,
 Kartoffelstockà 110g,Grundnahrungsmittel,
 Kartoffelstärke (als Saucenbinder/Dickflüssig),Grundnahrungsmittel,
+Kellogg's,Grundnahrungsmittel,
 Kellogg's Smacks,Grundnahrungsmittel,
 Kellogs neutral,Grundnahrungsmittel,
 Kellogs süss,Grundnahrungsmittel,
@@ -2618,18 +2979,22 @@ Kombu Algen,Grundnahrungsmittel,
 Konbu,Grundnahrungsmittel,
 Krawättli,Grundnahrungsmittel,yes
 Kristallzucker,Grundnahrungsmittel,yes
+Kräuterhörnli,Grundnahrungsmittel,yes
 Langkornreis,Grundnahrungsmittel,yes
 Lasagne,Grundnahrungsmittel,yes
 Lasagne-Blätter,Grundnahrungsmittel,
 Lasagneblätter,Grundnahrungsmittel,yes
 Lasagneplatten,Grundnahrungsmittel,
 Lasagneplatten (ohne Kochen),Grundnahrungsmittel,
+Lavazza,Grundnahrungsmittel,
 Leinsamen,Grundnahrungsmittel,yes
 Leinsamenschrot,Grundnahrungsmittel,
 "Leiterzmorge, z. B. Müeseli",Grundnahrungsmittel,
 Linguetten/Nudeln,Grundnahrungsmittel,yes
+Linguine,Grundnahrungsmittel,yes
 Linse,Grundnahrungsmittel,yes
 Linsen,Grundnahrungsmittel,yes
+Lupinenkaffee,Grundnahrungsmittel,yes
 M-Budget Gnocci,Grundnahrungsmittel,
 M-Budget-Schokomüesli,Grundnahrungsmittel,
 Maccaronen,Grundnahrungsmittel,yes
@@ -2674,6 +3039,7 @@ Müsli,Grundnahrungsmittel,
 Müsli (M Classic),Grundnahrungsmittel,
 Müsli Divers,Grundnahrungsmittel,
 Nespresso Kaffichapsle,Grundnahrungsmittel,
+Nesquik,Grundnahrungsmittel,
 Nestnudeln,Grundnahrungsmittel,
 Noodles,Grundnahrungsmittel,
 Noodlesoup,Grundnahrungsmittel,
@@ -2700,6 +3066,7 @@ Pizzoccheri,Grundnahrungsmittel,
 Pizzoccheri (Buchweizennudeln),Grundnahrungsmittel,
 Polenta,Grundnahrungsmittel,yes
 Polenta/Maisgriess,Grundnahrungsmittel,
+Porridge,Grundnahrungsmittel,yes
 Pulvercaffee,Grundnahrungsmittel,
 Pulverkaffee,Grundnahrungsmittel,
 Pulverkaffee und Filter,Grundnahrungsmittel,
@@ -2720,6 +3087,7 @@ Reserve Döner Fläde,Grundnahrungsmittel,
 Rice-Cryspeis neutral,Grundnahrungsmittel,
 Rigatoni,Grundnahrungsmittel,yes
 Risoletto,Grundnahrungsmittel,
+Risoni,Grundnahrungsmittel,yes
 Risotto,Grundnahrungsmittel,yes
 Risotto-Reis,Grundnahrungsmittel,
 Risotto-Reis (hat es bereits vom PfiLa),Grundnahrungsmittel,
@@ -2728,6 +3096,7 @@ Rissotto für 3,Grundnahrungsmittel,
 Ristottreis,Grundnahrungsmittel,
 Roasted Sesame,Grundnahrungsmittel,
 Roggen,Grundnahrungsmittel,yes
+Rohrohrzucker,Grundnahrungsmittel,yes
 Rohrzucker,Grundnahrungsmittel,yes
 Rohzucker,Grundnahrungsmittel,yes
 Rollgerste,Grundnahrungsmittel,yes
@@ -2755,6 +3124,7 @@ Spaghetthi,Grundnahrungsmittel,yes
 Spaghetti,Grundnahrungsmittel,yes
 Spaghetti/Penne/Krawättli,Grundnahrungsmittel,
 Spaghettini,Grundnahrungsmittel,yes
+Spaghettoni,Grundnahrungsmittel,yes
 Spaghettoni (Hartweizengriess ohne Ei),Grundnahrungsmittel,
 Speisestarke,Grundnahrungsmittel,
 Speisestärke,Grundnahrungsmittel,
@@ -2763,6 +3133,7 @@ Spiralen,Grundnahrungsmittel,
 Spätzle,Grundnahrungsmittel,yes
 Spätzli,Grundnahrungsmittel,yes
 Spätzlimehl,Grundnahrungsmittel,
+Steinpilzhörnli,Grundnahrungsmittel,yes
 Sticky Rice,Grundnahrungsmittel,
 Stocki,Grundnahrungsmittel,yes
 Stocki-Mischung,Grundnahrungsmittel,
@@ -2776,6 +3147,7 @@ Suppenbuchstaben-Teigwaren,Grundnahrungsmittel,
 Suppenteigwaren,Grundnahrungsmittel,yes
 Sushi-Reis,Grundnahrungsmittel,
 Sushireis,Grundnahrungsmittel,
+Süssstoff,Grundnahrungsmittel,yes
 Taco Shells,Grundnahrungsmittel,
 Taco-Tortilla,Grundnahrungsmittel,
 Tacos,Grundnahrungsmittel,
@@ -2800,12 +3172,14 @@ Tortilla-Wraps,Grundnahrungsmittel,
 Tortillas,Grundnahrungsmittel,yes
 Tortillias,Grundnahrungsmittel,
 Trockenreis,Grundnahrungsmittel,yes
+Urdinkel,Grundnahrungsmittel,yes
 Vermicelles,Grundnahrungsmittel,
 Verschiedene Müsli je nach Budget,Grundnahrungsmittel,
 Vollkorn-Hafermehl,Grundnahrungsmittel,
 Vollkornmehl,Grundnahrungsmittel,yes
 Vollkornreis,Grundnahrungsmittel,
 Vollreis,Grundnahrungsmittel,yes
+Vollrohrzucker,Grundnahrungsmittel,yes
 Wakame,Grundnahrungsmittel,
 Weichweizengrieß,Grundnahrungsmittel,
 weisser zuker,Grundnahrungsmittel,
@@ -2820,6 +3194,7 @@ Weizentorilla,Grundnahrungsmittel,
 Weizentortilla,Grundnahrungsmittel,
 Weizentortillas,Grundnahrungsmittel,
 Weizentrotilla M-Budget,Grundnahrungsmittel,
+Wellenspätzli,Grundnahrungsmittel,yes
 Wildreis,Grundnahrungsmittel,yes
 Wraps,Grundnahrungsmittel,
 Wraps glutenfrei,Grundnahrungsmittel,
@@ -2854,6 +3229,7 @@ Basilikumpesto,Konserven,
 Birnenhälften,Konserven,
 Birnenhälften aus der Dose,Konserven,
 Bohnensalat,Konserven,
+Bonduelle,Konserven,
 Borlotti-Bohnen aus der Dose,Konserven,
 Borlottibohnen,Konserven,yes
 Brushetta Tapenade,Konserven,
@@ -2872,6 +3248,7 @@ Cornichons,Konserven,
 Cornichons geschnitten,Konserven,
 Cornichons Gürkchen,Konserven,
 Cournichons,Konserven,
+Crèmesuppe,Konserven,yes
 Dose Fruchtsalat,Konserven,
 Dosen,Konserven,yes
 Dosen Ananas,Konserven,yes
@@ -2924,12 +3301,18 @@ Fruchtsalat (Dose),Konserven,
 Fruchtsalat aus der Dose,Konserven,
 Fruchtsalat Büchse,Konserven,yes
 Früchtecoktail,Konserven,
+Frühlingssuppe,Konserven,yes
+Gemüseeintopf,Konserven,yes
+Gemüsesuppe,Konserven,yes
+Gerstensuppe,Konserven,yes
 Geschnittene Essiggürkli,Konserven,
 Gewürzgurken,Konserven,yes
 Guacamole,Konserven,
 Guacamole (TopCC),Konserven,
+Gulaschsuppe,Konserven,yes
 Gurkenwasser,Konserven,
 Görkedoodles,Konserven,
+Gürkchen,Konserven,yes
 Gürkelini,Konserven,
 Gürkli,Konserven,
 Gürkli geschnitten,Konserven,
@@ -2937,8 +3320,10 @@ Haselnusmus,Konserven,
 Haselnussmus,Konserven,
 Hero Dosenravioli 1180g,Konserven,
 Herzkirschen im Glas,Konserven,
+Hühnersuppe,Konserven,yes
 Jackfruit,Konserven,
 Kapern,Konserven,
+Kapernäpfel,Konserven,yes
 Kappern,Konserven,
 Kartoffelsalat,Konserven,
 Kidney beans,Konserven,
@@ -2949,6 +3334,7 @@ Kokosmilch,Konserven,yes
 Kokosmilch/drink,Konserven,
 Kokosnussmilch,Konserven,
 Kokosrahm,Konserven,
+Kompott,Konserven,yes
 kondensmilch,Konserven,yes
 Kondesmilch,Konserven,
 Kürbispure,Konserven,
@@ -2960,11 +3346,13 @@ Maiskolben (glas),Konserven,
 Maiskölbchen,Konserven,
 Maiskölbli,Konserven,
 Maiskörner,Konserven,yes
+Makrelenfilets,Konserven,yes
 Mandelmus,Konserven,yes
 Mango-Chutney,Konserven,
 Maronipüree,Konserven,
 Marronipüree,Konserven,
 Masikörner (Konserve),Konserven,
+Mehlsuppe,Konserven,yes
 Minestrone aus der Dose,Konserven,
 Mini-Maiskölbchen,Konserven,
 Minimaiskolben,Konserven,
@@ -2974,6 +3362,7 @@ Pasata,Konserven,
 Passata,Konserven,
 Passata (Tomatensauce),Konserven,
 Passata di Pomodoro,Konserven,
+Pastetenfüllung,Konserven,yes
 Pelati,Konserven,yes
 Pelatitomaten,Konserven,
 Pelatti,Konserven,yes
@@ -2996,6 +3385,7 @@ Pickled Gurk,Konserven,
 Pomodori Secchi,Konserven,
 Prix Garantie Süssmais,Konserven,
 Red Kidney Bohnen,Konserven,yes
+Rindersuppe,Konserven,yes
 Roasted Pepper,Konserven,
 rote Bohne,Konserven,
 rote Tapenade,Konserven,
@@ -3018,6 +3408,7 @@ Silber/roti Zwiebeli,Konserven,
 Silberzwiebel,Konserven,yes
 Silberzwiebeli,Konserven,
 Silberzwiebeln,Konserven,yes
+Spargelsuppe,Konserven,yes
 Stalden CrÃ¨me,Konserven,yes
 Stalden Crème,Konserven,
 Staldencreme,Konserven,
@@ -3031,6 +3422,7 @@ Süssmais Dose,Konserven,
 Tahin (Sesampaste),Konserven,
 Tahina,Konserven,yes
 Tahinipaste,Konserven,
+Thunfischsalat,Konserven,yes
 Tomaten-Stücke (aus der Dose),Konserven,
 Tomatenbüchse P,Konserven,
 Tomatenbüchsen,Konserven,
@@ -3040,6 +3432,7 @@ Tomatenmark,Konserven,yes
 Tomatenpassata,Konserven,
 Tomatenpaste,Konserven,
 Tomatenpelati,Konserven,yes
+Tomatenpolpa,Konserven,yes
 Tomatenpuree,Konserven,
 Tomatenpuree (TopCC),Konserven,
 Tomatenpurre,Konserven,
@@ -3052,6 +3445,7 @@ Tomatenpüree,Konserven,yes
 Tomatenpürree aus der Tube,Konserven,
 Tomatenpüüre,Konserven,
 Tomatenstücke,Konserven,
+Tomatensuppe,Konserven,yes
 TomPü,Konserven,
 Vegiravioli aus der Büchse,Konserven,
 Vermicellesmasse fertig,Konserven,
@@ -3064,6 +3458,7 @@ Weissebohnen,Konserven,
 "3,2 l Schokoladenmilch",Milchprodukte und Eier,
 Ajran,Milchprodukte und Eier,
 Alpkäse,Milchprodukte und Eier,yes
+Alpro,Milchprodukte und Eier,
 Alpro Not Milk,Milchprodukte und Eier,
 Alsan,Milchprodukte und Eier,
 Alsan/Margarine,Milchprodukte und Eier,
@@ -3080,11 +3475,21 @@ Ayran,Milchprodukte und Eier,
 Baby Bell,Milchprodukte und Eier,yes
 Babybel,Milchprodukte und Eier,
 Babybell,Milchprodukte und Eier,
+Bachtelkäse,Milchprodukte und Eier,yes
 Barista-Haferdrink,Milchprodukte und Eier,
+Bauernkäse,Milchprodukte und Eier,yes
 Beerenjoghurt,Milchprodukte und Eier,
+Bergemmentaler,Milchprodukte und Eier,yes
+Bergfeta,Milchprodukte und Eier,yes
+Bergheumilch,Milchprodukte und Eier,yes
+Bergjoghurt,Milchprodukte und Eier,yes
+Bergkräuterkäse,Milchprodukte und Eier,yes
 Bergkäse,Milchprodukte und Eier,yes
+Bergmilch,Milchprodukte und Eier,yes
+Bernerkäse,Milchprodukte und Eier,yes
 Bio Suisse Rahmjoghurt (griechische Art),Milchprodukte und Eier,
 Blanc Battu,Milchprodukte und Eier,
+Blauschimmelkäse,Milchprodukte und Eier,yes
 Bratbutter,Milchprodukte und Eier,yes
 Bratbutter/-crème,Milchprodukte und Eier,
 Bratbutter/Butter zum Rösten,Milchprodukte und Eier,
@@ -3093,6 +3498,8 @@ Bratcreme,Milchprodukte und Eier,
 Bratcrème,Milchprodukte und Eier,
 Bratcrème zum Bestreichen,Milchprodukte und Eier,
 Bratcrème zum Beträufeln,Milchprodukte und Eier,
+Brie,Milchprodukte und Eier,
+Burrata,Milchprodukte und Eier,yes
 Burrata piccola,Milchprodukte und Eier,
 Butter,Milchprodukte und Eier,yes
 "Butter, weich",Milchprodukte und Eier,yes
@@ -3104,7 +3511,9 @@ Butterersatz,Milchprodukte und Eier,
 Butterflöckli,Milchprodukte und Eier,
 Buttermilch,Milchprodukte und Eier,
 Butterschmalz,Milchprodukte und Eier,
+Camembert,Milchprodukte und Eier,yes
 Camonbert,Milchprodukte und Eier,
+Cantadou,Milchprodukte und Eier,
 Cantadou oder Chanteneige,Milchprodukte und Eier,
 Cheddar,Milchprodukte und Eier,yes
 Cheddarkäse,Milchprodukte und Eier,
@@ -3136,6 +3545,7 @@ Creme Fresh,Milchprodukte und Eier,
 Creme-Fraiche,Milchprodukte und Eier,
 Creme-fraiche laktosefrei,Milchprodukte und Eier,
 Creme-Fraise (Kräuter),Milchprodukte und Eier,
+Cremefine,Milchprodukte und Eier,yes
 Cremefraiche,Milchprodukte und Eier,yes
 Cremefraise,Milchprodukte und Eier,
 Cremfrech,Milchprodukte und Eier,
@@ -3165,6 +3575,7 @@ Dosenrahm,Milchprodukte und Eier,
 Dosenschlagrahm,Milchprodukte und Eier,
 Double Cream,Milchprodukte und Eier,yes
 Double Crème,Milchprodukte und Eier,
+Drinkjoghurt,Milchprodukte und Eier,yes
 Ei,Milchprodukte und Eier,yes
 Eier,Milchprodukte und Eier,yes
 Eierer,Milchprodukte und Eier,
@@ -3174,6 +3585,7 @@ Eiweiss,Milchprodukte und Eier,yes
 Ementaler gerieben,Milchprodukte und Eier,
 Emmentaler,Milchprodukte und Eier,yes
 Emmentalerkäse,Milchprodukte und Eier,yes
+Emmi,Milchprodukte und Eier,
 Emmi drink,Milchprodukte und Eier,
 Emmi Drink oder sonstiges,Milchprodukte und Eier,
 etwas Mehlbutter,Milchprodukte und Eier,
@@ -3187,6 +3599,7 @@ Fetablock,Milchprodukte und Eier,
 Fetakäse,Milchprodukte und Eier,
 fetthaltiger Naturjogurt,Milchprodukte und Eier,
 Filadelphia,Milchprodukte und Eier,
+Flan,Milchprodukte und Eier,
 Fondue Fertigmischung,Milchprodukte und Eier,
 Fondue Gerber,Milchprodukte und Eier,yes
 Fondue Gerber Fondue Mischung L'Original,Milchprodukte und Eier,
@@ -3195,6 +3608,7 @@ Fondue Mischung,Milchprodukte und Eier,
 Fondue-Käsemischung,Milchprodukte und Eier,
 Fonduemischung,Milchprodukte und Eier,
 Fonduemsichungen,Milchprodukte und Eier,yes
+Freilandeier,Milchprodukte und Eier,yes
 frische Eigelbe,Milchprodukte und Eier,
 frische Eiweisse,Milchprodukte und Eier,
 Frischkäse,Milchprodukte und Eier,yes
@@ -3202,9 +3616,13 @@ Frischkäse/Hummus,Milchprodukte und Eier,
 Frischkäse/o.ä. Brotbelag,Milchprodukte und Eier,
 Frischkääs,Milchprodukte und Eier,
 Fruchtjoghurt,Milchprodukte und Eier,yes
+Fruchtkäse,Milchprodukte und Eier,yes
 Früchtejoghurt,Milchprodukte und Eier,
 Früchtejogurt,Milchprodukte und Eier,
+Früchtequark,Milchprodukte und Eier,yes
 Früchteyogut,Milchprodukte und Eier,
+Galbani,Milchprodukte und Eier,
+Geisskäse,Milchprodukte und Eier,yes
 gekochte Ostereier,Milchprodukte und Eier,
 Geraffelter Käse(Cheddar),Milchprodukte und Eier,
 Gerber Chäsli,Milchprodukte und Eier,yes
@@ -3251,7 +3669,9 @@ Hafermilch 0.5lt,Milchprodukte und Eier,
 Haferrahm,Milchprodukte und Eier,
 Haffermilch,Milchprodukte und Eier,
 Haffermilch (V),Milchprodukte und Eier,
+Halbfettbutter,Milchprodukte und Eier,yes
 Halbfettquark,Milchprodukte und Eier,yes
+Halbhartkäse,Milchprodukte und Eier,yes
 Halbrahm,Milchprodukte und Eier,yes
 Halbrahn/Vegan,Milchprodukte und Eier,
 Halloumi,Milchprodukte und Eier,
@@ -3265,19 +3685,28 @@ Hartkäse,Milchprodukte und Eier,
 Hartkäse gemischt,Milchprodukte und Eier,
 Hartkäse Mild,Milchprodukte und Eier,
 Hartkäse Rezent,Milchprodukte und Eier,
+Heumilch,Milchprodukte und Eier,yes
+Heumilchbutter,Milchprodukte und Eier,yes
+Hobelkäse,Milchprodukte und Eier,yes
+Holunderkäse,Milchprodukte und Eier,yes
 Hüttenkäse,Milchprodukte und Eier,yes
 Joghurt,Milchprodukte und Eier,yes
+Joghurtdrink,Milchprodukte und Eier,yes
 Joguhrt Laktosefrei,Milchprodukte und Eier,
 Joguhrt nature,Milchprodukte und Eier,
 Jogurt,Milchprodukte und Eier,yes
 Jogurth vegan,Milchprodukte und Eier,
 Jogurth vegan (500g),Milchprodukte und Eier,
 Johgurt,Milchprodukte und Eier,
+Jurakäse,Milchprodukte und Eier,yes
 Kaffee-Rahm,Milchprodukte und Eier,
 Kaffeerahm,Milchprodukte und Eier,yes
 Kafferahm,Milchprodukte und Eier,yes
 kafirahm,Milchprodukte und Eier,
+Kefir,Milchprodukte und Eier,
+Kiri,Milchprodukte und Eier,
 Kirikäsli,Milchprodukte und Eier,
+Klosterkäse,Milchprodukte und Eier,yes
 Kochbutter,Milchprodukte und Eier,yes
 Kochrahm,Milchprodukte und Eier,
 Kokosdrink,Milchprodukte und Eier,
@@ -3310,6 +3739,7 @@ LC1 VAnillejoghurt,Milchprodukte und Eier,
 Luzerner Rahmkäse,Milchprodukte und Eier,
 Luzerner Rahmkäse gerieben,Milchprodukte und Eier,
 Magarine,Milchprodukte und Eier,
+Magermilch,Milchprodukte und Eier,yes
 Magermilchpulver,Milchprodukte und Eier,
 Magerquark,Milchprodukte und Eier,yes
 Mandeldrink,Milchprodukte und Eier,
@@ -3357,6 +3787,7 @@ Naturejogurt,Milchprodukte und Eier,yes
 Naturjoghurt,Milchprodukte und Eier,yes
 Naturjogurt oder griechischer Jogurth,Milchprodukte und Eier,
 Naturjogurth,Milchprodukte und Eier,
+Nusskäse,Milchprodukte und Eier,yes
 Oatly,Milchprodukte und Eier,
 Oatly-Rahm zum Kochen,Milchprodukte und Eier,
 Ostereier Gekocht,Milchprodukte und Eier,
@@ -3369,8 +3800,10 @@ Parmesankäse,Milchprodukte und Eier,
 Parmesanstücken,Milchprodukte und Eier,
 Parmiggiano,Milchprodukte und Eier,
 Parmigiano,Milchprodukte und Eier,
+Pastarahmkäse,Milchprodukte und Eier,yes
 Pecorino,Milchprodukte und Eier,yes
 Pecoriono romano,Milchprodukte und Eier,
+Pfannenkäse,Milchprodukte und Eier,yes
 Pflanzen-Drink (Hafer),Milchprodukte und Eier,
 Pflanzendrink,Milchprodukte und Eier,
 Pflanzendrink (Hafer),Milchprodukte und Eier,
@@ -3388,6 +3821,7 @@ Prix Garantie Grana Padano gerieben,Milchprodukte und Eier,
 Pro Montagna Berg-Vollmilch,Milchprodukte und Eier,
 Qimiq,Milchprodukte und Eier,
 Quark,Milchprodukte und Eier,yes
+Quarkcrème,Milchprodukte und Eier,yes
 Raccletkäse,Milchprodukte und Eier,
 Raclette,Milchprodukte und Eier,
 Raclette-Käse,Milchprodukte und Eier,
@@ -3404,11 +3838,15 @@ Rahmjoghurt nature (griechische Art),Milchprodukte und Eier,
 Rahmkäse,Milchprodukte und Eier,
 Rahmquark,Milchprodukte und Eier,yes
 Rahmschmelzkäse,Milchprodukte und Eier,yes
+Rahmtilsiter,Milchprodukte und Eier,yes
+Rama,Milchprodukte und Eier,
 Reibekäse vegan,Milchprodukte und Eier,
 Reibkäse,Milchprodukte und Eier,yes
 Reibkäse(Parmesan) (TopCC),Milchprodukte und Eier,
+Reibkäsemischung,Milchprodukte und Eier,yes
 Reibköse,Milchprodukte und Eier,
 Reibäse,Milchprodukte und Eier,
+Reisdrink,Milchprodukte und Eier,yes
 Reisdrink Aldi,Milchprodukte und Eier,
 Reisdrink Mathéo,Milchprodukte und Eier,
 Reismandel-Drink,Milchprodukte und Eier,
@@ -3420,6 +3858,7 @@ Riebchääääs tex mex am beste,Milchprodukte und Eier,
 Riibchääs,Milchprodukte und Eier,
 Rührei,Milchprodukte und Eier,
 Sahne,Milchprodukte und Eier,yes
+Salatkäse,Milchprodukte und Eier,yes
 Salatkäse (Fetaart),Milchprodukte und Eier,
 Salatkäse (Fetaart) laktosefrei falls möglich,Milchprodukte und Eier,
 Sandwich-Käsescheiben,Milchprodukte und Eier,
@@ -3439,6 +3878,9 @@ Sbrinz-Hobelrollen,Milchprodukte und Eier,
 Sbrinz/Parmesan gerieben,Milchprodukte und Eier,
 Schablettenkäse,Milchprodukte und Eier,
 Schabzigerstöckli,Milchprodukte und Eier,
+Schafkäse,Milchprodukte und Eier,yes
+Schafmilch,Milchprodukte und Eier,yes
+Schafmilchjoghurt,Milchprodukte und Eier,yes
 Scheiben Schweizer Schmelzkäse,Milchprodukte und Eier,
 Scheibenkäse,Milchprodukte und Eier,yes
 Scheiblettenkäse,Milchprodukte und Eier,
@@ -3449,6 +3891,7 @@ Schlagram,Milchprodukte und Eier,
 Schlagsahne,Milchprodukte und Eier,
 Schmelzkäse,Milchprodukte und Eier,
 Schmelzkäse (Tex Mex),Milchprodukte und Eier,
+Schmelzkäsescheiben,Milchprodukte und Eier,yes
 Schoggidrink,Milchprodukte und Eier,
 Schoggijoghurt,Milchprodukte und Eier,
 Schokidrink,Milchprodukte und Eier,
@@ -3457,6 +3900,7 @@ Schokomilch,Milchprodukte und Eier,
 Schokomilch/Kaffee,Milchprodukte und Eier,
 Schweizer Mozzarellaperlen oder Mozzarelline,Milchprodukte und Eier,
 Schweizer Pizzamozzarella,Milchprodukte und Eier,
+Skyr,Milchprodukte und Eier,
 Soja-Joghurt,Milchprodukte und Eier,
 Soja-Milch,Milchprodukte und Eier,
 Soja-Rahm,Milchprodukte und Eier,
@@ -3480,11 +3924,14 @@ Streichkäse,Milchprodukte und Eier,yes
 Streichkäse/Alnatura Aufstrich,Milchprodukte und Eier,
 Streukäse,Milchprodukte und Eier,
 Streukäse (für Fajitas),Milchprodukte und Eier,
+Süssrahmbutter,Milchprodukte und Eier,yes
 TexMex-Käsemischung,Milchprodukte und Eier,
 Tilsiter,Milchprodukte und Eier,yes
 Toast-Schmelzkäse,Milchprodukte und Eier,
 Toastkäse,Milchprodukte und Eier,
+Tomme,Milchprodukte und Eier,
 Tommes,Milchprodukte und Eier,yes
+Trüffelkäse,Milchprodukte und Eier,yes
 UHT,Milchprodukte und Eier,
 Vacherin,Milchprodukte und Eier,
 Valflora IP Suisse,Milchprodukte und Eier,
@@ -3513,13 +3960,19 @@ Vegikäse,Milchprodukte und Eier,
 Vollmilch,Milchprodukte und Eier,yes
 Vollrahm,Milchprodukte und Eier,yes
 Vollrahm/Laktosefrei,Milchprodukte und Eier,
+Vorzugsbutter,Milchprodukte und Eier,yes
 Weichkäse,Milchprodukte und Eier,
 "Weichkäse, z.B. Tomme, Brie Suisse",Milchprodukte und Eier,
 Weichäse,Milchprodukte und Eier,
 Yoghurt,Milchprodukte und Eier,
 Yoghurt Nature,Milchprodukte und Eier,
 Yogurt nature,Milchprodukte und Eier,
+Yoplait,Milchprodukte und Eier,
 Ziegenfrischkäse,Milchprodukte und Eier,
+Ziegenkäse,Milchprodukte und Eier,yes
+Ziegenmilch,Milchprodukte und Eier,yes
+Ziegenmilchjoghurt,Milchprodukte und Eier,yes
+Zigerbutter,Milchprodukte und Eier,yes
 (auch Glutenfreies),Non-Food,
 Abfallsack,Non-Food,yes
 Abfallsäcke,Non-Food,yes
@@ -3533,6 +3986,7 @@ Abwaschmittel,Non-Food,yes
 Abwaschschwämm,Non-Food,
 Abwaschschwümme,Non-Food,
 Abwäschschwämme,Non-Food,
+Ajax,Non-Food,
 aktionsstuff,Non-Food,
 Allzweckreiniger,Non-Food,
 Alufolfie,Non-Food,
@@ -3548,10 +4002,12 @@ Anzünder,Non-Food,
 Anzündwürfel,Non-Food,
 Apfelschnitzer/stanzer,Non-Food,
 Après-Soleil,Non-Food,
+Ariel,Non-Food,
 Aufolie,Non-Food,
 Bachtrennpapier,Non-Food,
 Backpapier,Non-Food,yes
 Backtrennpapier,Non-Food,
+Badreiniger,Non-Food,yes
 Becher,Non-Food,yes
 Belasto,Non-Food,
 Beutel,Non-Food,
@@ -3560,10 +4016,14 @@ Bialetti,Non-Food,
 Blechrein,Non-Food,yes
 Bleistifte,Non-Food,yes
 Bodenputzmittel,Non-Food,yes
+Bodentücher,Non-Food,yes
+Bodenwischtücher,Non-Food,yes
+Bratpfanne,Non-Food,yes
 Brennpaste,Non-Food,yes
 Brennsprit,Non-Food,yes
 BrettlI,Non-Food,
 Briketts,Non-Food,
+Brotmesser,Non-Food,yes
 Büchsenöffner,Non-Food,yes
 Bürsteli,Non-Food,
 Bürstelli,Non-Food,yes
@@ -3575,54 +4035,86 @@ Champgläser (vorhanden),Non-Food,
 Cherzli,Non-Food,
 chlebband und edding,Non-Food,
 Chläbi,Non-Food,
+Colorwaschmittel,Non-Food,yes
 cooles Zelt,Non-Food,
 Dachlatten,Non-Food,yes
 Dekomaterial?,Non-Food,
 Dekosachen,Non-Food,
+Desinfektionstücher,Non-Food,yes
 Dessertbecher,Non-Food,yes
+Dessertteller,Non-Food,yes
 div. Kiosk ca. 3x,Non-Food,
 Diverse Kleinigkeiten für die Leiter,Non-Food,
 "Diverse Kleinigkeiten für die Leiter (z. B. Honigmelone, Landjäger)",Non-Food,
 Dosenöffner,Non-Food,
 Drahtgitter,Non-Food,yes
 Druckerpatronen 305,Non-Food,
+Duftkerze,Non-Food,yes
+Duftmüllbeutel,Non-Food,yes
+Duftsäckchen,Non-Food,yes
 Edding,Non-Food,
+Edelstahlfilter,Non-Food,yes
 einweg lumpen,Non-Food,
+Einwegbecher,Non-Food,yes
 Einweggeschirr inkl. Besteck,Non-Food,
 Einweghandschuhe,Non-Food,
 Einweghandschuhe Schwarz XL,Non-Food,
+Einwegspritzbeutel,Non-Food,yes
+Einwegteller,Non-Food,yes
+Entkalker,Non-Food,yes
 Erde,Non-Food,
+Ersatztücher,Non-Food,yes
 Essen Falk,Non-Food,
 evtl. Spessli,Non-Food,
 Fakeln,Non-Food,yes
 farbige Stifte,Non-Food,
+Farbstopptücher,Non-Food,yes
+Feglappen,Non-Food,yes
+Feinwaschmittel,Non-Food,yes
 Fette Stohhalme!!!,Non-Food,
 Fettlöser,Non-Food,
 Feuchttücher,Non-Food,yes
 Feuerzeug,Non-Food,
+Filetiermesser,Non-Food,yes
 Filter,Non-Food,
+Fleckenentferner,Non-Food,yes
+Fleischgabel,Non-Food,yes
+Fleischmesser,Non-Food,yes
 Fliegenfuckers,Non-Food,
 Flötenkessel,Non-Food,yes
+Flügeldosenöffner,Non-Food,yes
+Flüssig-Waschmittel,Non-Food,yes
+Folienbeutel,Non-Food,yes
+Fondueteller,Non-Food,yes
 Fotodrucker,Non-Food,
+Frischhaltedose,Non-Food,yes
 Frischhaltefolie,Non-Food,yes
 Förmli,Non-Food,
 Förmli/Schäli,Non-Food,
 Gabel,Non-Food,yes
 Gaffatape,Non-Food,
+Gallseife,Non-Food,yes
 geburi cherze,Non-Food,
 Geburikerzen,Non-Food,
 Geburtstagskerze,Non-Food,
 Geburtstagskerzen,Non-Food,
 Geburtstagskerzli,Non-Food,
+Gebührenkehrichtsack,Non-Food,yes
 Gefrierbeutel,Non-Food,
 Gefrierbeutel mit Zip (1l + 3l),Non-Food,
 Geili Behälter für Geschirr (verschliessbar),Non-Food,
+Gemüsemesser,Non-Food,yes
 Gemüseraffel,Non-Food,
 Geschirrspülmittel,Non-Food,
 Gewürzbeutel,Non-Food,
 gewürzkiste,Non-Food,
 Giselle,Non-Food,
+Glaskeramikschwamm,Non-Food,yes
+Glasreiniger,Non-Food,yes
+Grabkerze,Non-Food,yes
 Grillauflagen?,Non-Food,
+Grillgabel,Non-Food,yes
+Grillhandschuhe,Non-Food,yes
 Grillschale,Non-Food,
 Grillspiesse,Non-Food,
 Grillzange,Non-Food,
@@ -3631,17 +4123,24 @@ grosse Knistersäckli,Non-Food,
 grosses Knister-seckli,Non-Food,
 Grüne Kisten,Non-Food,
 grünes Tüpper,Non-Food,
+Hakle,Non-Food,
+Handgeschirrspülmittel,Non-Food,yes
 Handmixer,Non-Food,
 Handschuhe,Non-Food,yes
 Handschuhe!!!,Non-Food,
 Handseife,Non-Food,yes
 Handseifen (Lagerkiste),Non-Food,
 Handtücher,Non-Food,
+Handwaschmittel,Non-Food,yes
+Haushalthandschuhe,Non-Food,yes
 Haushaltpapier,Non-Food,yes
 Haushaltspapier,Non-Food,
 Haushaltspapierrollen,Non-Food,yes
+Haushaltstücher,Non-Food,yes
+Henkelbecher,Non-Food,yes
 Holz Spiess,Non-Food,
 Holzgrillspies,Non-Food,
+Holzkohle,Non-Food,yes
 Holzspiese,Non-Food,yes
 Holzspiess,Non-Food,
 Holzspiesschen,Non-Food,yes
@@ -3651,13 +4150,19 @@ Hygienebeutel,Non-Food,yes
 Isolierbecher,Non-Food,
 Kaffebecher,Non-Food,
 Kaffee-Maschine,Non-Food,
+Kaffeebecher,Non-Food,yes
 Kaffeefilter,Non-Food,
+Kaffeelöffel,Non-Food,yes
 Kaffilöffel,Non-Food,yes
+Kartoffelstampfer,Non-Food,yes
 Kartoffelstampfer oder Presse,Non-Food,
+Kartonbecher,Non-Food,yes
 Kartonteller,Non-Food,
+Kehrichtsack,Non-Food,yes
 Kehrichtsäcke,Non-Food,yes
 Kerichtsack,Non-Food,yes
 Kerze,Non-Food,
+Kerzenteller,Non-Food,yes
 Kiste für Aloe,Non-Food,
 Klarsichtfolie,Non-Food,
 Klarsichtfolie (Lagerkiste),Non-Food,
@@ -3668,13 +4173,22 @@ Knisterseckli,Non-Food,yes
 Knistersäckli bizzli,Non-Food,
 Knoblauchpresse,Non-Food,
 Knuspersäcke,Non-Food,
+Kochlöffel,Non-Food,yes
+Kochmesser,Non-Food,yes
 Kochschürze,Non-Food,
+Kochtopf,Non-Food,yes
 Kohle,Non-Food,yes
 Kohlen Briketts,Non-Food,
+Kompostbeutel,Non-Food,yes
+Kompostierbeutel,Non-Food,yes
 Konditor Pinsel,Non-Food,
+Konditormesser,Non-Food,yes
 Kopierpapier,Non-Food,yes
+Kosmetiktücher,Non-Food,yes
 Kreidestift,Non-Food,
 Kugi,Non-Food,
+Kunststofffilter,Non-Food,yes
+Käsemesser,Non-Food,yes
 kübelsäcke,Non-Food,
 Küchenhilfe Kids,Non-Food,
 Küchenlappenb,Non-Food,
@@ -3698,10 +4212,13 @@ Löffel,Non-Food,yes
 Lümpe,Non-Food,
 Malerband,Non-Food,
 Mandoline,Non-Food,
+Mehrwegspritzbeutel,Non-Food,yes
 Mehrzweckbeutel,Non-Food,
+Mehrzwecktücher,Non-Food,yes
 Messbecher,Non-Food,
 Messer,Non-Food,yes
 metallspiess Ruth,Non-Food,
+Mitwaschbeutel,Non-Food,yes
 Mixer /pürierstab,Non-Food,
 Muffinformen,Non-Food,
 Muffinfömchen,Non-Food,
@@ -3709,19 +4226,28 @@ Muffinförmli,Non-Food,
 Muffinförmli Papier,Non-Food,
 Muffinpapier,Non-Food,yes
 Musikbox,Non-Food,
+Müeslilöffel,Non-Food,yes
+Müllbeutel,Non-Food,yes
 Müllstäcke gross,Non-Food,
 Müllsäcke,Non-Food,yes
 nach Anleitung zubereiten,Non-Food,
 Nicer Dicer,Non-Food,
+Palmolive,Non-Food,
 Papier,Non-Food,
 Papier für Hände,Non-Food,
 Papierbecher 2-2.5dl,Non-Food,
 Papierklebeband,Non-Food,
 Papierklebeband (Lagerkiste),Non-Food,
 Papierrolle Grooooooooooss,Non-Food,
+Pappbecher,Non-Food,yes
+Pappteller,Non-Food,yes
 Papteller,Non-Food,
+Paraffinanzünder,Non-Food,yes
+Pastateller,Non-Food,yes
 Pavillon,Non-Food,
+Persil,Non-Food,
 Pinsel,Non-Food,
+Pizzamesser,Non-Food,yes
 Plastick-Säcklein/Papiertüten,Non-Food,
 Plastikbecher,Non-Food,yes
 Plastiksack,Non-Food,
@@ -3729,6 +4255,7 @@ Plastiksäckchen,Non-Food,
 Plastiksäcke,Non-Food,yes
 Plastiksäcklein,Non-Food,
 Plastiksäckli,Non-Food,yes
+Platzteller,Non-Food,yes
 Postiliste,Non-Food,
 Postisäck,Non-Food,
 Powerbank/Kabel,Non-Food,
@@ -3740,6 +4267,10 @@ Putzmitttel Küche (Lagerkiste),Non-Food,
 Pürierstab,Non-Food,
 Rechaud-Kerzen,Non-Food,yes
 Rechaudkerzli,Non-Food,yes
+Reiniger,Non-Food,yes
+Reinigungsschwamm,Non-Food,yes
+Reinigungsschwämme,Non-Food,yes
+Reinigungstücher,Non-Food,yes
 Reste der Woche,Non-Food,
 "reste, freestyle",Non-Food,
 Resten von vergangenen Tagen,Non-Food,
@@ -3748,6 +4279,7 @@ Rollen WC Papier,Non-Food,
 rote Kleber (gluti),Non-Food,
 Rundhölzer von ca. 3cm Druchmesser,Non-Food,
 Rührkelle (gluti),Non-Food,
+Rüstmesser,Non-Food,yes
 Sachen von GLK,Non-Food,
 Sandwich Beutel,Non-Food,
 Sandwich Verpackung,Non-Food,
@@ -3755,24 +4287,37 @@ Sandwich Verpackungen,Non-Food,
 Sandwichbeutel,Non-Food,
 Sandwichsäcke,Non-Food,
 Sanitärreiniger,Non-Food,
+Santokumesser,Non-Food,yes
+Schaumlöffel,Non-Food,yes
 Schere (Lagerkiste),Non-Food,
+Scheuerschwamm,Non-Food,yes
 Schleifstein,Non-Food,
+Schmierseife,Non-Food,yes
+Schmutzfangtücher,Non-Food,yes
 Schneidebrett,Non-Food,
 Schneidebrett gross,Non-Food,
 Schnur (Lagerkiste),Non-Food,
 Schwamm,Non-Food,yes
 Schwamm\&Bürsteli,Non-Food,
+Schwammtücher,Non-Food,yes
+Schwimmkerze,Non-Food,yes
 Schwämme,Non-Food,yes
 Schwämme/Bürsteli,Non-Food,
 schürtze,Non-Food,
 Scneidebett (gluti),Non-Food,
 Seckli Tageswanderungen,Non-Food,
 Seife,Non-Food,yes
+Servierlöffel,Non-Food,yes
+Serviette,Non-Food,yes
 Servietten,Non-Food,yes
+Sicherheitsbrennpaste,Non-Food,yes
+Sicherheitsdosenöffner,Non-Food,yes
 Siehe Ideen,Non-Food,
 Smoker-Papier,Non-Food,
 Solarpanels,Non-Food,
+Somat,Non-Food,
 Sparschäler,Non-Food,
+Speiseteller,Non-Food,yes
 Spiess,Non-Food,
 Spiesse,Non-Food,
 Spiesse Holz,Non-Food,
@@ -3782,34 +4327,60 @@ Spritzsack,Non-Food,
 Spritzsack mit gezackter Tülle,Non-Food,
 Spühlmittel,Non-Food,
 Spüli,Non-Food,
+Stabfeuerzeug,Non-Food,yes
 Stahlwatte,Non-Food,
 Stahlwolle,Non-Food,yes
 Stampfer,Non-Food,
+Staubfilterbeutel,Non-Food,yes
+Steakmesser,Non-Food,yes
 Sterile Handschuehe,Non-Food,
 Sternenverzierung,Non-Food,
 Stifte,Non-Food,
 Streichhölzer oder Feuerzeug,Non-Food,
 Strohhalm,Non-Food,
+Suppenteller,Non-Food,yes
+Swiffer,Non-Food,
+Synthetikschwamm,Non-Food,yes
 Säckchen,Non-Food,
 Säcke,Non-Food,yes
 Säckli,Non-Food,
 Tafel und Stift,Non-Food,
+Tafelmesser,Non-Food,yes
+Taschenmesser,Non-Food,yes
+Taschentücher,Non-Food,yes
+Teebecher,Non-Food,yes
+Teefilter,Non-Food,yes
+Teelichter,Non-Food,yes
 Teller,Non-Food,yes
+Tempo,Non-Food,
 Tischset,Non-Food,
+Tischsets,Non-Food,yes
+Toilettenpapier,Non-Food,yes
+Tomatenmesser,Non-Food,yes
 Topflappen,Non-Food,yes
+Toppits,Non-Food,
+Tranchiermesser,Non-Food,yes
+Trinkhalmbecher,Non-Food,yes
+Trockentücher,Non-Food,yes
 Tschingächocher und inhalt,Non-Food,
 Tupper,Non-Food,
 Tupperware,Non-Food,
 Tücher,Non-Food,
 Umschlag C5,Non-Food,
+Universalmesser,Non-Food,yes
+Unterteller,Non-Food,yes
 verschliessbare Schalen,Non-Food,
 Verzierungen für Grittibänz,Non-Food,
+Vileda,Non-Food,
 Vogelfutter,Non-Food,
+Vollwaschmittel,Non-Food,yes
 Waage,Non-Food,
 Waffeleisen,Non-Food,
 Wallholz,Non-Food,
 Waschlappen,Non-Food,
 Waschmittel,Non-Food,yes
+Waschpulver,Non-Food,yes
+Wasserfilter,Non-Food,yes
 Wasserflasche,Non-Food,
 Wasserflaschen (gross),Non-Food,
 Wattenpad,Non-Food,
@@ -3818,18 +4389,26 @@ Wc Papier (grosses Pack meeeeh),Non-Food,
 Wc Papier (grosses Pack),Non-Food,
 WC-Papier,Non-Food,yes
 WC-Reiniger,Non-Food,
+Weichspüler,Non-Food,yes
+Wellenrandteller,Non-Food,yes
+Whiskybecher,Non-Food,yes
 Wunderkerzen,Non-Food,
 Wurst-Säckli,Non-Food,yes
+Wurstmesser,Non-Food,yes
 Wursttellerli karton,Non-Food,
 Wäscheklammern,Non-Food,yes
 Zahnbürstli Ersatz,Non-Food,
 Zahnstocher,Non-Food,yes
+Zangendosenöffner,Non-Food,yes
 Zeitung,Non-Food,
+Zelluloseschwamm,Non-Food,yes
 zip lock bütel,Non-Food,
 Zubehör Schnell-Creme,Non-Food,
 Zundhölzli,Non-Food,
+Zylinderkerze,Non-Food,yes
 Zyliss,Non-Food,
 Züri-Sack,Non-Food,yes
+Züribags,Non-Food,yes
 Öpfel schnitzli macher,Non-Food,
 (tabasco),Saucen,
 Aioli,Saucen,
@@ -3872,36 +4451,45 @@ Cocktailsosse,Saucen,
 Coktail Sauce,Saucen,
 Currysauce,Saucen,
 Dessertsauce,Saucen,
+Dijon-Senf,Saucen,yes
 Dip,Saucen,
 Dip verschiedene,Saucen,
 Dipsauce,Saucen,
 Dipsaucen verschiedene,Saucen,
 Dipsosse,Saucen,
+Dressing,Saucen,yes
 Fajitasauce,Saucen,
 Fertigsauce,Saucen,
 Fertigsauce (Salsa ...),Saucen,
 Fertigsose,Saucen,
+Fonduesauce,Saucen,yes
 Französiche Saltsauce,Saucen,
 Französische Sauce,Saucen,
 French Dressing,Saucen,
 "Gemüse-Dip (Haussauce, Cocktailsauce)",Saucen,
+Gewürzketchup,Saucen,yes
 Gulaschsauce,Saucen,
 Hamburgersauce,Saucen,
 Haussauce spezial,Saucen,
+Heinz,Saucen,
+Hellmann's,Saucen,
 Hoisin,Saucen,
 Hoisin Sauce (enthält Gluten!),Saucen,
+Hollandaise,Saucen,yes
 Hot Mex Sauce,Saucen,
 Hot Mex Sauce (Migros),Saucen,
 Italian Dressing,Saucen,
 italienische Grundsauce,Saucen,
 Italienische Sauce,Saucen,
 Joghurtsauce,Saucen,
+Jägersauce,Saucen,yes
 Katchup,Saucen,
 katsu sauce,Saucen,
 Ketchup,Saucen,yes
 Ketchup/Tomatensauce,Saucen,
 ketschup,Saucen,
 Kikkoman Poke Sauce,Saucen,
+Knoblauchsauce,Saucen,yes
 Knoblisauce,Saucen,
 Kräuterdip,Saucen,
 Mayognese,Saucen,yes
@@ -3909,15 +4497,18 @@ Merretich-Mousse,Saucen,
 Mexico Sauce Hot Hot Hot,Saucen,
 Mild Mex Sauce,Saucen,
 Mild Mex Sauce (Migros),Saucen,
+Morchelsauce,Saucen,yes
 Nacho Sauce mild,Saucen,
 Nacho Sauce scharf,Saucen,
 Napolisauce,Saucen,
 Pad Thai Sauce,Saucen,
+Pfeffersauce,Saucen,yes
 Pilzsauce,Saucen,
 Pizzasauce,Saucen,
 Pizzasauce Mutti,Saucen,
 Pokesauce,Saucen,
 Pokesauce (1L),Saucen,
+Rahmsauce,Saucen,yes
 Roux,Saucen,yes
 Salatsosse,Saucen,
 Salsa,Saucen,
@@ -3943,6 +4534,8 @@ Scharfe Sauce (1 Flasche),Saucen,
 Schoggi-Sauce,Saucen,
 Schoggisauce,Saucen,
 Schokoladensauce,Saucen,
+Senfsauce,Saucen,yes
+Sesamsauce,Saucen,yes
 Siraccha Sauce,Saucen,
 Siracha,Saucen,
 Slasa,Saucen,
@@ -3950,6 +4543,7 @@ Spezialsösseli,Saucen,
 Sriracha,Saucen,
 Sriracha Sauce,Saucen,
 Sriracha-Sauce,Saucen,
+Steinpilzsauce,Saucen,yes
 Sugo,Saucen,
 Sugo vom Hof,Saucen,
 Sweet Sour Sauce,Saucen,
@@ -3962,11 +4556,14 @@ Taco Salsa,Saucen,
 Tartaresauce,Saucen,
 Tartarsauce,Saucen,
 Terjakisauce (Chnobli),Saucen,
+Thomy,Saucen,
+Thomynaise,Saucen,yes
 Tomaten-Sauce,Saucen,
 Tomatensalsa,Saucen,
 Tomatensauce,Saucen,yes
 Tomatensosse,Saucen,
 Vanillesauce,Saucen,
+Vinaigrette,Saucen,yes
 weisse Grundsauce,Saucen,
 Weisse Sauce,Saucen,
 Weisse Sauce (Bon Chef),Saucen,
@@ -3997,6 +4594,7 @@ Baumnüsse,Süsses und Snacks,yes
 Berliner,Süsses und Snacks,yes
 Beutel Creme,Süsses und Snacks,
 Biberli,Süsses und Snacks,yes
+Biscuits,Süsses und Snacks,yes
 Bislibuebe,Süsses und Snacks,
 Bitterschokolade,Süsses und Snacks,yes
 Blevita,Süsses und Snacks,yes
@@ -4005,9 +4603,14 @@ Blevitta stangen,Süsses und Snacks,
 Blévita,Süsses und Snacks,
 Blévita Thymian-Meersalz (Portionen),Süsses und Snacks,
 Blévitas,Süsses und Snacks,
+Bonbons,Süsses und Snacks,yes
+Branches,Süsses und Snacks,yes
+Branchli,Süsses und Snacks,yes
+Bretzeli,Süsses und Snacks,yes
 Brezeli/ Knabberzeug,Süsses und Snacks,
 Butterguetzli,Süsses und Snacks,
 Butterkekse,Süsses und Snacks,
+Butterwaffeln,Süsses und Snacks,yes
 Butterwaffeln (M-Budget),Süsses und Snacks,
 Butterwaffeln Aldi,Süsses und Snacks,
 Bärentanzen,Süsses und Snacks,
@@ -4025,6 +4628,7 @@ Caramelwürfeli,Süsses und Snacks,
 Carma Mousse Lemon Pulver,Süsses und Snacks,
 Celebration o.Ä.,Süsses und Snacks,
 Champagner -Truffes oder Lindor-Kugeln,Süsses und Snacks,
+Chio,Süsses und Snacks,
 Chips,Süsses und Snacks,yes
 Chips/Snacks,Süsses und Snacks,
 Chips?,Süsses und Snacks,
@@ -4044,6 +4648,7 @@ creme Quick (Migros),Süsses und Snacks,
 "Cremepulver, wenn 1 Beutel = 5 Portionen",Süsses und Snacks,
 Crème Patisserie,Süsses und Snacks,
 Crèmepulver,Süsses und Snacks,
+Dar-Vida,Süsses und Snacks,yes
 Darvida,Süsses und Snacks,
 Darvida oder ähnliches,Süsses und Snacks,
 Darwida,Süsses und Snacks,
@@ -4109,6 +4714,7 @@ Glutenfreie Riegel/Blevitas,Süsses und Snacks,
 Glutenfreie Snacks,Süsses und Snacks,
 glutenfreie Waffeln,Süsses und Snacks,
 Glückskekse,Süsses und Snacks,
+Goldbären,Süsses und Snacks,yes
 Goldfischli,Süsses und Snacks,
 Grissini,Süsses und Snacks,
 Grossmutterzungen (B+R),Süsses und Snacks,
@@ -4119,6 +4725,7 @@ Gumibächen,Süsses und Snacks,yes
 Gumibärli,Süsses und Snacks,
 gumisachen,Süsses und Snacks,
 gummel,Süsses und Snacks,
+Gummibonbons,Süsses und Snacks,yes
 Gummibärchen,Süsses und Snacks,yes
 Gummibären,Süsses und Snacks,
 Gummibären Augen,Süsses und Snacks,
@@ -4142,6 +4749,7 @@ Güezi,Süsses und Snacks,
 Halsbonbons,Süsses und Snacks,
 Haribo,Süsses und Snacks,
 Haribo Apfelringe,Süsses und Snacks,
+Haribo-Goldbären,Süsses und Snacks,yes
 Herzliche für Chueche,Süsses und Snacks,
 Himbeer Roulade,Süsses und Snacks,
 Jogurette,Süsses und Snacks,yes
@@ -4149,7 +4757,9 @@ Kakao,Süsses und Snacks,yes
 Kakaonibs,Süsses und Snacks,
 Kakaopulver,Süsses und Snacks,yes
 Kakopulver,Süsses und Snacks,
+Kambly,Süsses und Snacks,
 Karamell-Creme,Süsses und Snacks,
+Kartoffelchips,Süsses und Snacks,yes
 Katjes,Süsses und Snacks,
 Kaugummi,Süsses und Snacks,
 Kaugummis,Süsses und Snacks,
@@ -4157,6 +4767,7 @@ Kekse,Süsses und Snacks,yes
 Kinder Buenos (Edeka),Süsses und Snacks,
 Kinderriegel,Süsses und Snacks,yes
 Kinderschoggi oder so,Süsses und Snacks,
+KitKat,Süsses und Snacks,
 kleine Caramelwürfelchen,Süsses und Snacks,
 kleine Waffeln,Süsses und Snacks,
 Knabbereien,Süsses und Snacks,
@@ -4166,7 +4777,9 @@ Knoppers (Migros),Süsses und Snacks,
 "Knusprige Snacks (Chips, Brezeln, Nüsse)",Süsses und Snacks,
 Kochschoggi,Süsses und Snacks,
 Kochschokolade,Süsses und Snacks,yes
+Kokoschips,Süsses und Snacks,yes
 Kuvertüre,Süsses und Snacks,
+Kägi,Süsses und Snacks,
 Kägi fret (o.ä.),Süsses und Snacks,
 Kägifret,Süsses und Snacks,yes
 Lakrize,Süsses und Snacks,
@@ -4174,7 +4787,12 @@ laktosefreie Milchschokolade,Süsses und Snacks,
 Laktosefreie Schokoalde,Süsses und Snacks,
 laktosefreie Schokolad,Süsses und Snacks,
 Lebkuchen,Süsses und Snacks,
+Leckerli,Süsses und Snacks,yes
 Leitersnacks,Süsses und Snacks,
+Lindor,Süsses und Snacks,
+Lindt,Süsses und Snacks,
+Linsenwaffel,Süsses und Snacks,yes
+Linsenwaffeln,Süsses und Snacks,yes
 Lollis,Süsses und Snacks,yes
 Lotuskekse,Süsses und Snacks,
 Löffelbiscouts,Süsses und Snacks,
@@ -4203,6 +4821,7 @@ M\&M‘s ohne Nüsse,Süsses und Snacks,
 Macadmianüsse gesalzen,Süsses und Snacks,
 Madelaine,Süsses und Snacks,
 Madelaines,Süsses und Snacks,yes
+Madeleines,Süsses und Snacks,yes
 Madleina,Süsses und Snacks,yes
 Madleinas,Süsses und Snacks,yes
 Madleines,Süsses und Snacks,yes
@@ -4210,6 +4829,7 @@ Magdalenas,Süsses und Snacks,
 Mailänder Guzli,Süsses und Snacks,
 Mais-/Reiswaffeln,Süsses und Snacks,
 Mais/Reiswaffeln (1 Pack),Süsses und Snacks,
+Maiswaffeln,Süsses und Snacks,yes
 Malteser,Süsses und Snacks,
 Marchmelows,Süsses und Snacks,yes
 Mars,Süsses und Snacks,yes
@@ -4235,29 +4855,38 @@ Milchschoggi,Süsses und Snacks,
 Milchschokolade,Süsses und Snacks,
 Milchschokolade (für Schoggibananen),Süsses und Snacks,
 Milchschokolade 100gr,Süsses und Snacks,
+Milchschokoladentafel,Süsses und Snacks,yes
+Milchschokoladetafel,Süsses und Snacks,yes
 Militärbiscuit,Süsses und Snacks,
 Militärguetzli,Süsses und Snacks,
 Militärgüetzi,Süsses und Snacks,
 Militärschoggi,Süsses und Snacks,
 Mini Madalenas (24er Packig),Süsses und Snacks,
 Minimarshmallows,Süsses und Snacks,
+Minzschokolade,Süsses und Snacks,yes
 Mohrenkopf,Süsses und Snacks,
 Mohrenköpfe,Süsses und Snacks,yes
+Munz,Süsses und Snacks,
 Munz Prügeli,Süsses und Snacks,
 Müesliriegel,Süsses und Snacks,
 Nachochips,Süsses und Snacks,
 Nachos,Süsses und Snacks,yes
 Nachoschips,Süsses und Snacks,
+Napolitains,Süsses und Snacks,yes
 Naturaplan Bio Nuss-Mix geröstet,Süsses und Snacks,
 Naturchips,Süsses und Snacks,yes
 "Nature (Chips, Zweifel)",Süsses und Snacks,
 Nature Chips,Süsses und Snacks,yes
+Nougat,Süsses und Snacks,yes
 Nussmischung gesalzen Mitsuba,Süsses und Snacks,
+Nussmix,Süsses und Snacks,yes
+Nussriegel,Süsses und Snacks,yes
 Nussrollen,Süsses und Snacks,yes
 Nussstängli,Süsses und Snacks,yes
 Nusstängeli,Süsses und Snacks,
 Onion Rings,Süsses und Snacks,yes
 Oreos,Süsses und Snacks,
+Ovenchips,Süsses und Snacks,yes
 Ovo Rocks,Süsses und Snacks,
 Ovosport,Süsses und Snacks,yes
 Pack Lilibiggs Maiswaffeln,Süsses und Snacks,
@@ -4265,19 +4894,26 @@ Paprika Chips,Süsses und Snacks,yes
 Paprikachips Familenpackung,Süsses und Snacks,
 Partymix,Süsses und Snacks,yes
 Pavesi,Süsses und Snacks,
+Pom-Bär,Süsses und Snacks,yes
 Pombären,Süsses und Snacks,
 Pommeschips,Süsses und Snacks,
 Popconrmais,Süsses und Snacks,
 Popcorn,Süsses und Snacks,yes
 Popcorn-Mais,Süsses und Snacks,
 Popcornmais,Süsses und Snacks,
+Pralinen,Süsses und Snacks,yes
+Pralinés,Süsses und Snacks,yes
 Pringels,Süsses und Snacks,yes
+Pringles,Süsses und Snacks,
 Proteinriegel,Süsses und Snacks,
 Proteinzügs,Süsses und Snacks,
 Prucienes,Süsses und Snacks,
 Prussiens,Süsses und Snacks,
+Prügeli,Süsses und Snacks,yes
 Puddingcreme,Süsses und Snacks,yes
+Ragusa,Süsses und Snacks,
 Reis-Crispies,Süsses und Snacks,
+Reiswaffel,Süsses und Snacks,yes
 Reiswaffeln,Süsses und Snacks,yes
 Riegel,Süsses und Snacks,yes
 Riiswaffle,Süsses und Snacks,
@@ -4388,6 +5024,8 @@ Schär Glutenfreie Darvida,Süsses und Snacks,
 Schöggeli,Süsses und Snacks,yes
 Schümli,Süsses und Snacks,
 Scoggistängeli,Süsses und Snacks,
+Seeberger,Süsses und Snacks,
+Shortbread,Süsses und Snacks,yes
 Silserli,Süsses und Snacks,
 Skittles,Süsses und Snacks,
 smartes regenbogen,Süsses und Snacks,
@@ -4401,7 +5039,9 @@ Snacks salzig,Süsses und Snacks,
 Snacks süss,Süsses und Snacks,
 Snicker/Mars/Twix,Süsses und Snacks,
 Snickers,Süsses und Snacks,yes
+Spitzbuben,Süsses und Snacks,yes
 Stengel (nicht Schockolade),Süsses und Snacks,
+Stimorol,Süsses und Snacks,
 Streusel/Glitzer,Süsses und Snacks,
 Studentenfutter,Süsses und Snacks,yes
 Stäbli,Süsses und Snacks,
@@ -4428,6 +5068,7 @@ Tortilla-Chips,Süsses und Snacks,
 Tortillachips,Süsses und Snacks,
 Tortillas-Chips,Süsses und Snacks,
 Traubenzucker,Süsses und Snacks,
+Trolli,Süsses und Snacks,
 Tuc,Süsses und Snacks,
 "TUC Cracker, Brezeli klein",Süsses und Snacks,
 Tuiles,Süsses und Snacks,
@@ -4447,8 +5088,10 @@ veganes Schoggimouse,Süsses und Snacks,
 Veganes Tiramisu,Süsses und Snacks,
 Vegigummibärli (Höckfood),Süsses und Snacks,
 verschiedene. Körnli,Süsses und Snacks,yes
+Villars,Süsses und Snacks,
 Vollkornreiswaffeln M Classic,Süsses und Snacks,
 Vollmilchkuvertüre,Süsses und Snacks,
+Vollreiswaffeln,Süsses und Snacks,yes
 Waffel,Süsses und Snacks,
 Waffel (glacecornet),Süsses und Snacks,
 Waffeln,Süsses und Snacks,
@@ -4459,6 +5102,7 @@ Walnüsse,Süsses und Snacks,
 weisse Toblerone,Süsses und Snacks,
 Weisseschokolade,Süsses und Snacks,
 Weitere Toppings,Süsses und Snacks,
+Wernli,Süsses und Snacks,
 Wilisauerringli,Süsses und Snacks,
 Willisauer Ringli,Süsses und Snacks,
 Würfelzucker,Süsses und Snacks,yes
@@ -4468,6 +5112,7 @@ Znüni Badi,Süsses und Snacks,
 Zoo Nuggets,Süsses und Snacks,
 Zuckerstreusel blau,Süsses und Snacks,
 Zuckerstreusel gelb,Süsses und Snacks,
+Zweifel,Süsses und Snacks,
 Zweifel Natur Chip,Süsses und Snacks,
 Zweifelchips Nature,Süsses und Snacks,
 Zwiebelringe,Süsses und Snacks,
@@ -4476,12 +5121,16 @@ Zwiebelringe,Süsses und Snacks,
 3 Glacecakes,Tiefkühlprodukte,
 Aprikosenhälften tiefgefrohren,Tiefkühlprodukte,
 Asia Thai Mix (Migros),Tiefkühlprodukte,
+Backofen-Frites,Tiefkühlprodukte,yes
+Backofenfrites,Tiefkühlprodukte,yes
 Backofenpommes,Tiefkühlprodukte,
 Beerenmischung,Tiefkühlprodukte,
 Beerenmischung (TK),Tiefkühlprodukte,
 Beerenmischung bio,Tiefkühlprodukte,
 Beerenmischung TK,Tiefkühlprodukte,
+Ben & Jerry's,Tiefkühlprodukte,
 Cornet/Stängelglace,Tiefkühlprodukte,
+Cornets,Tiefkühlprodukte,yes
 Dauphines,Tiefkühlprodukte,yes
 Dumplings,Tiefkühlprodukte,
 Eis/Glace?,Tiefkühlprodukte,
@@ -4500,12 +5149,15 @@ evtl. Sorbet → Vegan,Tiefkühlprodukte,
 Falafel,Tiefkühlprodukte,yes
 Falaffel,Tiefkühlprodukte,
 Falaffel fixfertig,Tiefkühlprodukte,
+Findus,Tiefkühlprodukte,
+Frisco,Tiefkühlprodukte,
 Frozen Yoghurt,Tiefkühlprodukte,
 Frucht-Sorbet,Tiefkühlprodukte,
 Frühlingsrolle TopCC,Tiefkühlprodukte,
 Frühlingsrollen,Tiefkühlprodukte,
 gefrorene Blaubeeren,Tiefkühlprodukte,
 gefrorene Erbsen,Tiefkühlprodukte,
+Gelato,Tiefkühlprodukte,yes
 Gemüsemix tiefgekühlt,Tiefkühlprodukte,yes
 Glace,Tiefkühlprodukte,yes
 "Glacen, diverse",Tiefkühlprodukte,
@@ -4516,14 +5168,17 @@ Glasse,Tiefkühlprodukte,
 Hackspinat,Tiefkühlprodukte,
 Heidelbeern TK,Tiefkühlprodukte,
 Himbeere (gefrohren),Tiefkühlprodukte,
+Häagen-Dazs,Tiefkühlprodukte,yes
 ice cubes,Tiefkühlprodukte,
 Kartoffeln(Pommes),Tiefkühlprodukte,
 kleine Vegane Glaces (Sorbe?),Tiefkühlprodukte,
+Knusperli,Tiefkühlprodukte,yes
 Kroketten,Tiefkühlprodukte,
 Köttbullar TK,Tiefkühlprodukte,
 M-Budget Beerenmischung,Tiefkühlprodukte,
 M-Budget Erbsen (TK),Tiefkühlprodukte,
 Marroni Geschält TK,Tiefkühlprodukte,
+McCain,Tiefkühlprodukte,
 mini Frühlingsrollen,Tiefkühlprodukte,
 Mini Pizzas,Tiefkühlprodukte,
 Mini-Falafel (gekauft),Tiefkühlprodukte,
@@ -4542,10 +5197,13 @@ Pommes,Tiefkühlprodukte,yes
 Pommesfrites,Tiefkühlprodukte,
 Potato Cuts / Wedges,Tiefkühlprodukte,
 Rahmglace,Tiefkühlprodukte,
+Rahmlutscher,Tiefkühlprodukte,yes
 Rahmspinat,Tiefkühlprodukte,yes
 Raketenglacé,Tiefkühlprodukte,
 Röstigaletten,Tiefkühlprodukte,
 Samosas gefroren für frittöse,Tiefkühlprodukte,
+Schinkengipfeli,Tiefkühlprodukte,yes
+Schlemmerfilet,Tiefkühlprodukte,yes
 Schockoladeneis,Tiefkühlprodukte,
 Schoggiglace,Tiefkühlprodukte,
 Schoggiglacee,Tiefkühlprodukte,
@@ -4553,6 +5211,8 @@ Schoggiglacé,Tiefkühlprodukte,
 Schokoladenglace,Tiefkühlprodukte,
 Sorbet,Tiefkühlprodukte,
 Sorbet vegan,Tiefkühlprodukte,
+Springrolls,Tiefkühlprodukte,yes
+Stielglace,Tiefkühlprodukte,yes
 Stängelglace,Tiefkühlprodukte,yes
 Stängeli-Glace,Tiefkühlprodukte,
 stängeliglace,Tiefkühlprodukte,
@@ -4587,3 +5247,4 @@ Vanilleglacé,Tiefkühlprodukte,
 Vanilleglacé (2l Kübel),Tiefkühlprodukte,
 Vanillieeis,Tiefkühlprodukte,
 Wasserglace,Tiefkühlprodukte,
+Zitronensorbet,Tiefkühlprodukte,yes
