@@ -236,8 +236,9 @@ export class DatabaseService {
 
     return new Promise<void>(resolve => {
 
-      this.db.collection('recipes/' + recipeId + '/specificRecipes',
-        ref => ref.where('used_in_meal', '==', mealId)).get()
+      // the rules only allow to query (and delete) the specificRecipes the user has access to
+      this.createAccessQueryFn(['editor', 'owner', 'collaborator'], ['used_in_meal', '==', mealId])
+        .pipe(mergeMap(query => this.db.collection('recipes/' + recipeId + '/specificRecipes', query).get()))
         .pipe(take(1))
         .subscribe(docRefs => {
           docRefs.forEach(docRef => batch.delete(docRef.ref));
@@ -252,18 +253,8 @@ export class DatabaseService {
    *
    *    * TODO: auto unsubscription
 
-   * TODO: hier entsteht eine Sicherheitslücke.
-   * Firestore lässt es zurzeit nicht zu, dass dem
-   * Query noch ein accessQuery mitgeschickt wird.
-   * Dadurch muss auf den accessCheck bei einem GroupQuery
-   * verzichtet werden.
-   *
-   * Dieses Sicherheitsrisiko ist kurzfristig aber
-   * vertretbar, da für den Query die Id eines bestehenden
-   * Rezeptes bekannt sein muss.
-   *
-   * In Zukunft sollt man sich hier aber Gedanken machen,
-   * wie die Situation verbessert werden kann.
+   * Der Query muss auf ein Lager eingeschränkt sein ('used_in_camp'),
+   * die Security Rules prüfen den Zugriff auf dieses Lager.
    *
    * Achtung: benötigt einen Zusammengesetzten-Index
    *
@@ -288,17 +279,18 @@ export class DatabaseService {
    * TODO: Besser als Cloud Funktion, damit auch wirklich alles gelöscht wird
    * und nicht fehlerhafte Zustände in der Datenbank entstehen...
    *
+   * @param campId id of the camp, the rules only allow a group query which is restricted to a camp
    * @param mealId
    * @param specificMealId
    */
-  public deleteSpecificMealAndRecipes(mealId: string, specificMealId: string) {
+  public deleteSpecificMealAndRecipes(campId: string, mealId: string, specificMealId: string) {
 
     this.db.doc('meals/' + mealId + '/specificMeals/' + specificMealId).delete();
 
     // https://stackoverflow.com/questions/56149601/firestore-collection-group-query-on-documentid
     // this is a bug in the firestore api...
     this.db.collectionGroup('specificRecipes',
-      query => query.where('recipe_specificId', '==', specificMealId))
+      query => query.where('recipe_specificId', '==', specificMealId).where('used_in_camp', '==', campId))
       .get().subscribe(docRefs => docRefs.forEach(docRef => docRef.ref.delete()));
 
   }
@@ -791,30 +783,6 @@ export class DatabaseService {
   }
 
   /**
-   *
-   *
-   *    * TODO: auto unsubscription
-
-
-   * Löscht alle Rezepte und Mahlzeiten eines Lagers
-   *
-   * TODO: besser als Cloud-Funktion damit fehlerhafte Zustände
-   * in der Datenbank vermieden werden könne.
-   *
-   * @param campId
-   *
-   */
-  public deleteAllMealsAndRecipes(campId: string) {
-
-    this.db.collectionGroup('specificMeals', this.createQuery(['used_in_camp', '==', campId])).get()
-      .subscribe(mealsRefs => mealsRefs.docs.forEach(docRef => docRef.ref.delete()));
-
-    this.db.collectionGroup('specificRecipes', this.createQuery(['used_in_camp', '==', campId])).get()
-      .subscribe(mealsRefs => mealsRefs.docs.forEach(docRef => docRef.ref.delete()));
-
-  }
-
-  /**
    *   * TODO: auto unsubscription
 
    * @param obj
@@ -855,7 +823,8 @@ export class DatabaseService {
    */
   public getNumberOfUses(mealId: string): Observable<number> {
 
-    return this.db.collectionGroup('specificMeals', this.createQuery(['meal_id', '==', mealId])).get()
+    // only the owner of a meal is allowed to read all its usages
+    return this.db.collection('meals/' + mealId + '/specificMeals').get()
       .pipe(map(refs => refs.docs.length));
 
   }

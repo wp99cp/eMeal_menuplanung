@@ -290,7 +290,7 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
     // versteckt das Element aus dem GUi
     document.querySelectorAll('[data-meal-id=ID-' + elementID + ']')?.forEach(el => el?.classList.add('hidden'));
 
-    this.dbService.deleteSpecificMealAndRecipes(mealId, elementID);
+    this.dbService.deleteSpecificMealAndRecipes(this.camp.documentId, mealId, elementID);
     this.updateContextMenus();
 
   }
@@ -311,18 +311,20 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
       meals.forEach(specificMeal => {
 
         const mealId = specificMeal.getMealId();
-        this.dbService.deleteSpecificMealAndRecipes(mealId, specificMeal.documentId);
+        this.dbService.deleteSpecificMealAndRecipes(this.camp.documentId, mealId, specificMeal.documentId);
 
       });
 
 
-    }
+    } else {
 
-    // Ändert das Datum aller Mahlzeiten
-    meals.forEach(specificMeal => {
-      specificMeal.date = day.getTimestamp();
-      this.dbService.updateDocument(specificMeal);
-    });
+      // Ändert das Datum aller Mahlzeiten
+      meals.forEach(specificMeal => {
+        specificMeal.date = day.getTimestamp();
+        this.dbService.updateDocument(specificMeal);
+      });
+
+    }
 
     // Ladet die Mahlzeiten neu, anstonsten führt das verschieben von Mahlzeitn zu einem Fehler
     this.camp.loadMeals(this.dbService);
