@@ -6,6 +6,7 @@ import os
 import time
 from subprocess import CalledProcessError
 from typing import List
+from zoneinfo import ZoneInfo
 
 from dateutil.relativedelta import relativedelta
 from pylatex import Command, NoEscape, Package
@@ -71,12 +72,18 @@ def generate_document(parts: List, camp: CampClass, args: argparse.Namespace):
     # globally packages
     document.packages.add(Package('babel', options='german'))
 
+    # The clock of the server runs in UTC, the export date should be in Swiss local time. The date is
+    # printed by \today, the time is set here, as \currenttime is fixed once the package datetime is loaded.
+    now = datetime.datetime.now(ZoneInfo('Europe/Zurich'))
+    document.preamble.append(NoEscape(r'\year={} \month={} \day={}'.format(now.year, now.month, now.day)))
+
     # page style, font, page numbers, etc.
     document.packages.add(Package('fancyhdr'))
     document.packages.add(Package('floatpag'))
     document.preamble.append(NoEscape(r'\fancypagestyle{plain}{ \lfoot{{\small ' +
                                       camp.get_camp_name() + r'}} \cfoot{\textbf{\thepage}} \rfoot{{'
-                                                             r'\small Export vom {\today} \currenttime}}}'))
+                                                             r'\small Export vom {\today} ' +
+                                      now.strftime('%H:%M') + '}}}'))
 
     document.preamble.append(Command('pagestyle', arguments='plain'))
 
