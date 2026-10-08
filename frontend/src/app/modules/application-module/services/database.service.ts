@@ -964,10 +964,6 @@ export class DatabaseService {
 
   }
 
-  legacyPDFCreation(campId) {
-    return this.functions.httpsCallable('createPDF')({campId});
-  }
-
   /**
    *
    * TODO: add description

@@ -12,16 +12,14 @@ steps:
     dir: backend/firebase-cloud-functions/functions
     entrypoint: npm
     args: [ 'ci' ]
-    env:
-      # the browser is not needed to lint, compile and upload the functions
-      - PUPPETEER_SKIP_DOWNLOAD=true
 
-  # lints and compiles the functions (predeploy hooks of the firebase.json) and deploys them
+  # lints and compiles the functions (predeploy hooks of the firebase.json) and deploys them,
+  # functions that no longer exist in the source code get deleted (--force)
   - id: Deploy
     name: node:22
     dir: backend/firebase-cloud-functions
     entrypoint: functions/node_modules/.bin/firebase
-    args: [ 'deploy', '--only', 'functions', '--project', '$PROJECT_ID', '--non-interactive' ]
+    args: [ 'deploy', '--only', 'functions', '--project', '$PROJECT_ID', '--non-interactive', '--force' ]
 
 timeout: 1800s
 

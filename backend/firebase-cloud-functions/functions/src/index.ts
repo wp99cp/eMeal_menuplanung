@@ -6,7 +6,6 @@ import * as functions from 'firebase-functions/v1';
 import * as express from "express";
 
 import {cloudFunction, createCallableCloudFunc} from './CloudFunction';
-import {createExportFiles} from './exportCamp/createExportFiles';
 import {onDeleteCamp} from './onDeleteCamp';
 import {onUserCreation} from './onUserCreation';
 import {onDeleteSpecificMeal} from './onDeleteSpecificMeal';
@@ -35,7 +34,6 @@ export const db = admin.firestore();
 exports.newUserCreated = cloudFunction().auth.user().onCreate(onUserCreation());
 exports.importMeal = createCallableCloudFunc(importMeal, "1GB");
 exports.createAccessToken = cloudFunction('256MB', [ceviDbOauth]).https.onRequest((req: express.Request, resp: express.Response) => createAccessToken(req, resp, admin.auth()));
-exports.createPDF = createCallableCloudFunc(createExportFiles, "2GB");
 exports.deleteCamp = cloudFunction().firestore.document('camps/{campId}').onDelete(onDeleteCamp);
 
 exports.deleteSpecificMeal = cloudFunction().firestore.document('meals/{mealId}/specificMeals/{specificID}').onDelete(onDeleteSpecificMeal);
