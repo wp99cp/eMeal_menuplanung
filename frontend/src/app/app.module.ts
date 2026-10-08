@@ -25,6 +25,7 @@ import {DateAdapter} from '@angular/material/core';
 import {TemplateHeaderComponent} from "./shared/components/template-header/template-header.component";
 import {MainMenuComponent} from "./shared/components/main-menu/main-menu.component";
 import {HeaderNavComponent} from "./shared/components/header-nav/header-nav.component";
+import {SaveStatusComponent} from './shared/components/save-status/save-status.component';
 import {EmealFeaturesComponent} from "./components/emeal-features/emeal-features.component";
 import {FeatureItemComponent} from "./components/feature-item/feature-item.component";
 import {TeaserImagesComponent} from "./components/teaser-images/teaser-images.component";
@@ -47,6 +48,7 @@ import {emulatorProviders} from './shared/emulator-providers';
     TemplateFooterComponent,
     MainMenuComponent,
     HeaderNavComponent,
+    SaveStatusComponent,
     LandingPage,
     SignInComponent,
     SignInCallbackComponent,

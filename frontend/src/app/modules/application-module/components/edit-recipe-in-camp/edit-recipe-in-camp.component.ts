@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {UntypedFormBuilder} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {firstValueFrom, Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../classes/camp';
 import {Meal} from '../../classes/meal';
@@ -8,7 +8,7 @@ import {Recipe} from '../../classes/recipe';
 import {SpecificMeal} from '../../classes/specific-meal';
 import {SpecificRecipe} from '../../classes/specific-recipe';
 import {RecipeInfoComponent} from '../../dialoges/recipe-info/recipe-info.component';
-import {Saveable} from '../../services/auto-save.service';
+import {AutoSaveService, Saveable} from '../../services/auto-save.service';
 import {DatabaseService} from '../../services/database.service';
 import {SettingsService} from '../../services/settings.service';
 import {MatDialog} from '@angular/material/dialog';
@@ -46,12 +46,20 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
     private formBuilder: UntypedFormBuilder,
     private databaseService: DatabaseService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private autosave: AutoSaveService) {
   }
 
   public newUnsavedChanges() {
 
     this.recipeChanged = true;
+    this.autosave.newUnsavedChanges();
+
+  }
+
+  public hasUnsavedChanges() {
+
+    return this.recipeChanged;
 
   }
 
@@ -176,23 +184,23 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
   public async save(): Promise<boolean> {
 
 
-    return new Promise((resolve) => {
+    if (!this.recipeChanged) {
+      return false;
+    }
 
+    // changes made while the recipe gets written have to be saved again
+    this.recipeChanged = false;
 
-      this.specificRecipe.subscribe(specificRecipe => {
+    try {
+      const specificRecipe = await firstValueFrom(this.specificRecipe);
+      this.calcPart(specificRecipe);
+      await this.saveRecipe(specificRecipe);
+    } catch (error) {
+      this.recipeChanged = true;
+      throw error;
+    }
 
-
-        this.calcPart(specificRecipe);
-
-        if (this.recipeChanged) {
-          console.log('Autosave Recipe');
-          this.saveRecipe(specificRecipe);
-          resolve(true);
-        }
-        resolve(false);
-
-      });
-    });
+    return true;
 
   }
 
@@ -207,27 +215,14 @@ export class EditRecipeInCampComponent implements OnInit, Saveable, OnChanges {
     // Remove trivial overwritings
     this.recipe.checkForTrivials();
 
-    await this.databaseService.updateDocument(this.recipe);
+    await this.databaseService.saveDocument(this.recipe);
     await this.databaseService.updateDocument(specificRecipe);
 
-    let infiniteLoopCounter = 0;
-
-    while (this.recipe.getCurrentWriter() !== this.recipe.documentId) {
-
-      if (infiniteLoopCounter > 25) {
-        throw new Error('Prevent execution of an infinite Loop! Recipe can\'t be saved');
-      }
-
-      const writer = this.recipe.getCurrentWriter();
-
-      const ingredients = this.recipe.removeOverwritingIngredients(writer);
+    // The overwritings stay in the recipe, as the user keeps working with it after an automatic save.
+    for (const writer of this.recipe.getOverwriters()) {
+      const ingredients = this.recipe.getOverwritingIngredients(writer);
       await this.databaseService.saveOverwrites(ingredients, this.recipe.documentId, writer);
-
-      infiniteLoopCounter++;
-
     }
-
-    this.recipeChanged = false;
 
   }
 

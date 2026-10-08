@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Recipe} from '../../classes/recipe';
+import {keepEditedObject} from '../../classes/keep-edited-objects';
 import {Observable} from 'rxjs';
-import {mergeMap, take} from 'rxjs/operators';
+import {mergeMap, switchMap, take} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
 import {DatabaseService} from '../../services/database.service';
 import {AutoSaveService, Saveable} from '../../services/auto-save.service';
@@ -32,15 +33,11 @@ export class EditSingleRecipePageComponent implements OnInit, Saveable {
 
     autosave.register(this);
 
-    /*
-    TODO: Zur Zeit werden die Änderungen nicht in realtime synchronisiert, da die Pipeline
-     auf ein Element beschnitten wird... Das Problem ist aber, dass ansonsten die Änderungen
-     nicht korrekt gespeichert werden, nach dem diese bereits einmal gespeichert wurden
-     (d.h. nur ein Speichervorgang funktioniert).
-   */
     // Ladet das Rezept von der URL
-    this.recipe = this.route.url.pipe(mergeMap(
-      url => this.dbService.getRecipeById(url[1].path)));
+    this.recipe = this.route.url.pipe(
+      // a recipe of a previous url must not replace the current one
+      switchMap(url => this.dbService.getRecipeById(url[1].path)),
+      keepEditedObject(() => this.unsavedChanges));
 
     // check access
     this.recipe.subscribe(async recipe => {
@@ -54,15 +51,6 @@ export class EditSingleRecipePageComponent implements OnInit, Saveable {
   }
 
   ngOnInit() {
-
-    HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Änderungen speichern',
-      name: 'Speichern',
-      action: (() => this.save()),
-      icon: 'save',
-      separatorAfter: true
-    });
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
@@ -87,6 +75,9 @@ export class EditSingleRecipePageComponent implements OnInit, Saveable {
    *
    */
   recipeInfos() {
+
+    // the dialog loads the recipe again, it has to contain the unsaved changes
+    this.autosave.saveChanges();
 
     this.recipe
       .pipe(take(1))
@@ -124,30 +115,31 @@ export class EditSingleRecipePageComponent implements OnInit, Saveable {
 
   }
 
-  save(): Promise<boolean> {
+  async save(): Promise<boolean> {
 
-    HeaderNavComponent.turnOff('Speichern');
+    if (!this.unsavedChanges) {
+      return false;
+    }
 
-    return new Promise<boolean>(async resolve => {
+    // changes made while the recipe gets written have to be saved again
+    this.unsavedChanges = false;
 
-      if (this.unsavedChanges) {
+    try {
+      await this.dbService.saveDocument(this.unsavedRecipe);
+    } catch (error) {
+      this.unsavedChanges = true;
+      throw error;
+    }
 
-        await this.dbService.updateDocument(this.unsavedRecipe);
-        resolve(true);
-
-      }
-
-      resolve(false);
-
-    });
+    return true;
 
   }
 
   newUnsavedChanges(recipe: Recipe) {
 
-    HeaderNavComponent.turnOn('Speichern');
     this.unsavedChanges = true;
     this.unsavedRecipe = recipe;
+    this.autosave.newUnsavedChanges();
 
   }
 
