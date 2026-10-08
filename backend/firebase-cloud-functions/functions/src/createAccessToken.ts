@@ -38,18 +38,30 @@ async function createAccessToken2(access_code: any): Promise<string> {
     const oauthAccessData = JSON.parse(ceviDbOauth.value());
 
     const headers = {'Accept': 'application/json'};
-    const dataString = 'grant_type=authorization_code&client_id=' + oauthAccessData.client_id +
-        '&redirect_uri=' + oauthAccessData.redirect_uri +
-        '&client_secret=' + oauthAccessData.client_secret +
-        '&code=' + access_code;
+
+    // The token endpoint expects form parameters. A URLSearchParams body is sent as
+    // application/x-www-form-urlencoded, a string body would be sent as text/plain and ignored.
+    const body = new URLSearchParams({
+        grant_type: 'authorization_code',
+        client_id: oauthAccessData.client_id,
+        client_secret: oauthAccessData.client_secret,
+        redirect_uri: oauthAccessData.redirect_uri,
+        code: String(access_code)
+    });
 
     const response = await fetch(oauthAccessData.token_url, {
         method: 'POST',
         headers: headers,
-        body: dataString
+        body: body
     });
 
-    return (await response.json()).access_token;
+    const token = await response.json();
+    if (!token.access_token) {
+        // contains the error and its description, but no secrets
+        console.error('Token request to CeviDB failed (' + response.status + '): ' + JSON.stringify(token));
+    }
+
+    return token.access_token;
 
 }
 
@@ -124,32 +136,34 @@ export async function createAccessToken(req: express.Request, resp: express.Resp
     const uid = 'CeviDB-' + crypto.SHA256(cevi_uid.toString()).toString().substring(0, 18) + '-' + cevi_uid;
     console.log(uid);
 
-    // user exist
-    return new Promise(returnPromise =>
-        auth.getUser(uid)
-            .then(async () => {
-                resp.send(JSON.stringify({data: await auth.createCustomToken(uid)}))
-                returnPromise();
-            }).catch(() => {
+    // create the user on the first sign in
+    try {
+        await auth.getUser(uid);
+    } catch {
 
-            const userData = {
-                uid,
-                displayName: user_data.first_name + ' ' + user_data.last_name + ((user_data.nickname !== '') ? (' v/o ' + user_data.nickname) : ''),
-                email: user_data.email
-            };
+        const userData = {
+            uid,
+            displayName: user_data.first_name + ' ' + user_data.last_name + ((user_data.nickname !== '') ? (' v/o ' + user_data.nickname) : ''),
+            email: user_data.email
+        };
 
-            auth.createUser(userData)
-                .then(async (userRecord: { uid: any; }) => {
-                    resp.setHeader('Content-Type', 'application/json')
-                    resp.send(JSON.stringify({data: await auth.createCustomToken(userRecord.uid)}))
-                    returnPromise();
-                })
+        try {
+            await auth.createUser(userData);
+        } catch (err) {
+            console.error('Creating the user ' + uid + ' failed', err);
+            resp.status(401).send(JSON.stringify({error: err}));
+            return;
+        }
 
-                .catch((err) => {
-                    resp.status(401).send(JSON.stringify({error: err}))
-                });
+    }
 
-        }));
-
+    // Signs the token with the service account of the cloud functions,
+    // which needs the permission iam.serviceAccounts.signBlob for it.
+    try {
+        resp.send(JSON.stringify({data: await auth.createCustomToken(uid)}));
+    } catch (err) {
+        console.error('Creating the custom token for ' + uid + ' failed', err);
+        resp.status(500).send(JSON.stringify({error: 'Creating the custom token failed!'}));
+    }
 
 }
