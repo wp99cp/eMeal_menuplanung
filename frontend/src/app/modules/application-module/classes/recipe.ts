@@ -141,6 +141,29 @@ export class Recipe extends FirestoreObject implements ExportableObject {
   }
 
   /**
+   * @returns the ids of the documents that overwrite ingredients of this recipe
+   */
+  public getOverwriters(): string[] {
+
+    return this.currentWriter.filter(writer => writer !== this.documentId);
+
+  }
+
+  /**
+   * Returns the overwriting ingredients of a document. In contrast to removeOverwritingIngredients,
+   * the recipe keeps them.
+   *
+   * @param documentId Id of the document whose overwriting ingredients are requested
+   */
+  public getOverwritingIngredients(documentId: string): Ingredient[] {
+
+    return Object.values(this.ingredients)
+      .map(ing => ing.getOverwriting(documentId))
+      .filter(ing => ing !== null);
+
+  }
+
+  /**
    *
    * Adds a new ingredient to the recipe. Depending on the current overwriter
    * the source id is set that of the recipe or overwirter.

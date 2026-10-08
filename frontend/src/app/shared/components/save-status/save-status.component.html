@@ -1,0 +1,27 @@
+<div class="save-status" role="status" *ngIf="(saveStatus.status | async) as status" [ngSwitch]="status.state">
+
+  <span *ngSwitchCase="'saving'" class="pill saving" matTooltip="Deine Änderungen werden gespeichert">
+    <mat-icon>sync</mat-icon>
+    <span class="label">Speichert …</span>
+  </span>
+
+  <span *ngSwitchCase="'saved'" class="pill saved" matTooltip="Alle Änderungen sind gespeichert">
+    <mat-icon>cloud_done</mat-icon>
+    <span class="label">Gespeichert</span>
+  </span>
+
+  <span *ngSwitchCase="'offline'" class="pill offline"
+        matTooltip="{{status.waiting
+          ? 'Keine Internetverbindung. Lass dieses Fenster offen, die Änderungen werden gespeichert, sobald du wieder online bist.'
+          : 'Keine Internetverbindung'}}">
+    <mat-icon>cloud_off</mat-icon>
+    <span class="label">{{status.waiting ? 'Offline · Änderungen warten' : 'Offline'}}</span>
+  </span>
+
+  <button *ngSwitchCase="'error'" class="pill error" type="button" (click)="saveStatus.retryFailed()"
+          matTooltip="Die Änderungen konnten nicht gespeichert werden. Klicke, um es erneut zu versuchen.">
+    <mat-icon>error_outline</mat-icon>
+    <span class="label">Nicht gespeichert · Erneut versuchen</span>
+  </button>
+
+</div>

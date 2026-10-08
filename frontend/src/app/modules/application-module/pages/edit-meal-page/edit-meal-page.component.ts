@@ -7,6 +7,7 @@ import {map, mergeMap, shareReplay, switchMap, take, tap} from 'rxjs/operators';
 import {Camp} from '../../classes/camp';
 import {Meal} from '../../classes/meal';
 import {Recipe} from '../../classes/recipe';
+import {keepEditedObjects} from '../../classes/keep-edited-objects';
 import {SpecificMeal} from '../../classes/specific-meal';
 import {SpecificRecipe} from '../../classes/specific-recipe';
 import {AddRecipeComponent} from '../../dialoges/add-recipe/add-recipe.component';
@@ -104,7 +105,9 @@ export class EditMealPageComponent implements OnInit, Saveable {
 
     this.recipes = this.urlPathData.pipe(
       this.loadIDFromURL('meals'),
-      mergeMap(mealId => this.dbService.getRecipes(mealId))
+      mergeMap(mealId => this.dbService.getRecipes(mealId)),
+      keepEditedObjects(recipe =>
+        this.editRecipes?.some(editRecipe => editRecipe.recipe === recipe && editRecipe.hasUnsavedChanges()))
     );
 
     // set as last used
@@ -124,14 +127,6 @@ export class EditMealPageComponent implements OnInit, Saveable {
         separatorAfter: true
       }, 0)
     );
-
-    HeaderNavComponent.addToHeaderNav({
-      active: false,
-      description: 'Änderungen speichern',
-      name: 'Speichern',
-      action: (() => this.saveButton()),
-      icon: 'save',
-    });
 
     HeaderNavComponent.addToHeaderNav({
       active: true,
@@ -254,16 +249,10 @@ export class EditMealPageComponent implements OnInit, Saveable {
    */
   public async save(): Promise<boolean> {
 
-    let hasChanges = false;
-
     // save childs
-    await this.editRecipes.forEach(async editRecipe => {
-      editRecipe.save().then(changes => {
-        hasChanges = hasChanges || changes;
-      });
-    });
+    const changes = await Promise.all(this.editRecipes.map(editRecipe => editRecipe.save()));
 
-    return hasChanges;
+    return changes.includes(true);
 
   }
 
@@ -328,13 +317,5 @@ export class EditMealPageComponent implements OnInit, Saveable {
     this.showOverwirtes = !this.showOverwirtes;
 
   }
-
-  private saveButton() {
-
-    HeaderNavComponent.turnOff('Speichern');
-    this.save();
-
-  }
-
 
 }

@@ -10,7 +10,6 @@ import {AutoSaveService, Saveable} from '../../services/auto-save.service';
 import {DatabaseService} from '../../services/database.service';
 import {WeekOverviewComponent} from '../../components/week-overview/week-overview.component';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {HistoryService} from "../../../../services/history.service";
 import {HeaderNavComponent} from "../../../../shared/components/header-nav/header-nav.component";
 
@@ -45,7 +44,6 @@ export class EditCampPageComponent implements OnInit, Saveable, OnDestroy {
     private dbService: DatabaseService,
     private router: Router,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     private autosave: AutoSaveService,
     private historyService: HistoryService) {
 
@@ -114,18 +112,14 @@ export class EditCampPageComponent implements OnInit, Saveable, OnDestroy {
 
   public async save(): Promise<boolean> {
 
-    let saved = false;
-
     // Das Lager selbst hat keine Änderunge zu speichern
     // Aber in der Wochenübersicht können offene
     // Änderungen bestehen
 
     // Speichert die Wochenübersicht
-    this.weekViews.forEach(async weekView => {
-      saved = await weekView.save();
-    });
+    const saved = await Promise.all(this.weekViews.map(weekView => weekView.saveChanges()));
 
-    return saved;
+    return saved.includes(true);
 
   }
 
@@ -190,7 +184,6 @@ export class EditCampPageComponent implements OnInit, Saveable, OnDestroy {
    */
   public saveCamp(camp: Camp) {
 
-    this.snackBar.open('Änderungen wurden erfolgreich gespeichert!', '', {duration: 2000});
     this.dbService.updateDocument(camp);
 
   }
