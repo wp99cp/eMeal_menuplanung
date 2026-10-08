@@ -4,7 +4,7 @@ const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
     {
-        ignores: ['lib/**', 'node_modules/**', 'eslint.config.js', '.puppeteerrc.cjs'],
+        ignores: ['lib/**', 'node_modules/**', 'eslint.config.js'],
     },
     {
         files: ['src/**/*.ts'],

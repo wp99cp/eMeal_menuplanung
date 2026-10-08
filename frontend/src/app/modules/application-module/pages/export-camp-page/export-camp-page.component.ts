@@ -101,14 +101,7 @@ export class ExportCampPageComponent implements OnInit {
         this.pending = true;
         this.message = '';
       }))
-      .pipe(mergeMap(result => {
-
-        if (result.legacy) {
-          return this.dbService.legacyPDFCreation(result.campId);
-        }
-        return this.dbService.createPDF(result.campId, result.optionalArgs);
-
-      }))
+      .pipe(mergeMap(result => this.dbService.createPDF(result.campId, result.optionalArgs)))
       .subscribe(() => {
         this.exportIsRunning = false;
       }, (err) => {
