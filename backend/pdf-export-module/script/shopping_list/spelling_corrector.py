@@ -6,13 +6,14 @@ from google.cloud import firestore
 
 class SpellingCorrector:
 
-    def __init__(self, db):
+    def __init__(self, db, food_dictionary):
+        """
+        :param db: firestore client, used to log the corrections
+        :param food_dictionary: the correctly spelled food names
+        """
 
         self.__db = db
-
-        # Load all known food names
-        food_dictionary = self.__db.document('sharedData/categories').get().to_dict().keys()
-        self._WORDS = food_dictionary
+        self._WORDS = set(food_dictionary)
 
     def fix_spelling_mistakes(self, ingredients):
         correction_logs = []

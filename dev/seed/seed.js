@@ -145,27 +145,9 @@ const MEALS = [
     }
 ];
 
-const unit = (base_from, base_unit, factor) => ({[base_from + ':']: {base_from, base_unit, factor, only_for_food_item: ''}});
-
 const SHARED_DATA = {
     statistics: {user_count: 0, removed_old_exports: 0},
-    foodCategories: {uncategorised: [], resentCorrections: []},
-    units: {
-        ...unit('g', 'kg', 0.001),
-        ...unit('kg', 'kg', 1),
-        ...unit('ml', 'l', 0.001),
-        ...unit('dl', 'l', 0.1),
-        ...unit('l', 'l', 1),
-        ...unit('Stk.', 'Stk.', 1)
-    },
-    categories: Object.fromEntries(Object.entries({
-        'Früchte und Gemüse': ['Äpfel', 'Zwiebeln', 'Kopfsalat', 'Peperoni', 'Ananas', 'Mais', 'Pelati'],
-        'Grundnahrungsmittel': ['Haferflocken', 'Spaghetti', 'Reis', 'Tortillas'],
-        'Milchprodukte und Eier': ['Milch', 'Joghurt', 'Rahm'],
-        'Fleisch und Fisch': ['Hackfleisch', 'Pouletgeschnetzeltes'],
-        'Gewürze und Saucen': ['Salz', 'Curry', 'Salatsauce']
-    }).flatMap(([category_name, foods]) =>
-        foods.map(food => [food, {category_name, sub_category: '', base_unit: ''}])))
+    foodCategories: {uncategorised: [], resentCorrections: []}
 };
 
 const HELP_MESSAGES = {

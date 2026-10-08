@@ -72,9 +72,11 @@ in the regular form. The password of all accounts is `emeal-dev`.
 New accounts can also be added in the emulator UI.
 
 The accounts and the example data are defined in [`/dev/seed/seed.js`](/dev/seed/seed.js): the camp
-"Sommerlager 2027" (id `dev-camp-sommerlager`) with three meals, a meal template visible for all users, the unit
-conversions and food categories used for the shopping list, and two help messages. The list of accounts on the sign-in
-page comes from `frontend/src/environments/environment.emulator.ts`.
+"Sommerlager 2027" (id `dev-camp-sommerlager`) with three meals, a meal template visible for all users, and two help
+messages. The list of accounts on the sign-in page comes from `frontend/src/environments/environment.emulator.ts`.
+
+The unit conversions and food categories used for the shopping list are not seeded, they are files of the PDF export
+module: `backend/pdf-export-module/script/shopping_list/units.csv` and `categories.csv`.
 
 ## How it is wired
 
