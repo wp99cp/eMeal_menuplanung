@@ -21,6 +21,20 @@ service cloud.firestore {
     function isOwner(data) {
         return data.access[request.auth.uid] == 'owner';
     }
+    // the access map of a camp
+    function campAccess(campID) {
+        return get(/databases/$(database)/documents/camps/$(campID)).data.access;
+    }
+    // check's if the user can read a specific document (specificMeal or specificRecipe): he needs
+    // access to the document itself or to the camp it is used in. A query must be restricted
+    // accordingly, either with a filter on 'access.<uid>' or with a filter on 'used_in_camp'.
+    function canReadSpecific() {
+        return isAuth() && (
+            resource.data.access.get(request.auth.uid, null) in ['editor', 'owner', 'collaborator', 'viewer'] ||
+            campAccess(resource.data.used_in_camp).get(request.auth.uid, null) in
+                ['editor', 'owner', 'collaborator', 'viewer'] ||
+            campAccess(resource.data.used_in_camp).get('all_users', null) == 'viewer');
+    }
     // user collecion
     match /users/{userID} {
         // checks if the changes to a user document are valid
@@ -112,24 +126,21 @@ service cloud.firestore {
         allow delete: if isOwner(resource.data);
         // the exports have no access field, the access of the camp is used
         match /exports/{docID} {
-            function campAccess() {
-                return get(/databases/$(database)/documents/camps/$(campID)).data.access;
-            }
             allow read, list: if isAuth() &&
-                (campAccess()[request.auth.uid] in ['editor', 'owner', 'collaborator', 'viewer'] ||
-                campAccess().get('all_users', null) == 'viewer');
-            allow delete: if isAuth() && campAccess()[request.auth.uid] in ['editor', 'owner', 'collaborator'];
+                (campAccess(campID)[request.auth.uid] in ['editor', 'owner', 'collaborator', 'viewer'] ||
+                campAccess(campID).get('all_users', null) == 'viewer');
+            allow delete: if isAuth() && campAccess(campID)[request.auth.uid] in ['editor', 'owner', 'collaborator'];
         }
     }
-    // group query for delete specificRecipes
+    // specific recipes, also matches the collection group queries
     match /{path=**}/specificRecipes/{specificRecipeId} {
-        // TODO: not save
-        allow read, list;
+        // the frontend creates a missing specific recipe, hence it has to be able to check if one exists
+        allow get: if isAuth() && (resource == null || canReadSpecific());
+        allow list: if canReadSpecific();
     }
-    // group query for delete specificRecipes
+    // specific meals, also matches the collection group queries
     match /{path=**}/specificMeals/{specificMealId} {
-        // TODO: not save
-        allow read, list;
+        allow get, list: if canReadSpecific();
     }
     // Meals
     match /meals/{mealID} {
@@ -149,7 +160,9 @@ service cloud.firestore {
                return true;
             }
             allow create:  if isAuth() && validChanges();
-            allow get, list;
+            // the owner of a meal sees all its usages, a meal which is in use can't be deleted
+            // (the other users are covered by the rule for the collection group)
+            allow get, list: if isAuth() && isOwner(get(/databases/$(database)/documents/meals/$(mealID)).data);
             allow update: if  canWrite() && validChanges() && (request.resource.data.access == resource.data.access);
             allow delete: if canWrite();
         }
@@ -180,7 +193,7 @@ service cloud.firestore {
             }
             // TODO: add verification or access rules
             allow create:  if isAuth() && validChanges();
-            allow get, list;
+            // reading is covered by the rule for the collection group
             allow update: if  canWrite() && validChanges();
             allow delete: if canWrite();
         }
