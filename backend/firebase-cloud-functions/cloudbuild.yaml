@@ -1,0 +1,29 @@
+# Builds and deploys the cloud functions to the firebase project the build runs in.
+#
+# Used by the Cloud Build triggers of the projects cevizh11 (branch develop) and
+# cevizh11-menuplanung (branch master). It can also be started manually from the repository root:
+#
+#   gcloud builds submit --project <project> --config backend/firebase-cloud-functions/cloudbuild.yaml .
+
+steps:
+
+  - id: Install
+    name: node:22
+    dir: backend/firebase-cloud-functions/functions
+    entrypoint: npm
+    args: [ 'ci' ]
+    env:
+      # the browser gets installed while the functions are built, see the gcp-build script
+      - PUPPETEER_SKIP_DOWNLOAD=true
+
+  # lints and compiles the functions (predeploy hooks of the firebase.json) and deploys them
+  - id: Deploy
+    name: node:22
+    dir: backend/firebase-cloud-functions
+    entrypoint: functions/node_modules/.bin/firebase
+    args: [ 'deploy', '--only', 'functions', '--project', '$PROJECT_ID', '--non-interactive' ]
+
+timeout: 1800s
+
+options:
+  logging: CLOUD_LOGGING_ONLY

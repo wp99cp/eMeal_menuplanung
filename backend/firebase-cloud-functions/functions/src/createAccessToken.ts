@@ -17,6 +17,14 @@ createAccessToken({access_code: 'Hla9UL7GQxZAoSkpLgcgxmZ0H5TEccSlUnBHcgghC1Q'})
 
 import * as admin from "firebase-admin";
 import * as express from "express";
+import {defineSecret} from "firebase-functions/params";
+
+/**
+ * OAuth settings for db.cevi.ch, stored as JSON in the secret manager. It contains the fields
+ * client_id, client_secret, redirect_uri, token_url and profile_url.
+ *
+ */
+export const ceviDbOauth = defineSecret('CEVI_DB_OAUTH');
 
 /**
  *
@@ -27,10 +35,9 @@ import * as express from "express";
 
 async function createAccessToken2(access_code: any): Promise<string> {
 
-    const oauthAccessData = require('../keys/cevi-db-oauth.json');
-    console.log(oauthAccessData)
+    const oauthAccessData = JSON.parse(ceviDbOauth.value());
 
-    const headers = {'Accept': 'application-module/json'};
+    const headers = {'Accept': 'application/json'};
     const dataString = 'grant_type=authorization_code&client_id=' + oauthAccessData.client_id +
         '&redirect_uri=' + oauthAccessData.redirect_uri +
         '&client_secret=' + oauthAccessData.client_secret +
@@ -58,7 +65,7 @@ async function createAccessToken2(access_code: any): Promise<string> {
 
 async function requestUserData(access_token: string): Promise<any> {
 
-    const oauthAccessData = require('../keys/cevi-db-oauth.json');
+    const oauthAccessData = JSON.parse(ceviDbOauth.value());
 
     const headers = {
         'Authorization': 'Bearer ' + access_token,
@@ -90,7 +97,7 @@ export async function createAccessToken(req: express.Request, resp: express.Resp
     console.log(access_code);
 
     resp.set('Access-Control-Allow-Origin', 'https://emeal.zh11.ch');
-    resp.setHeader('Content-Type', 'application-module/json')
+    resp.setHeader('Content-Type', 'application/json')
 
     if (!access_code) {
         resp.status(401).send(JSON.stringify({error: 'Invalid Parameters!'}))
@@ -133,7 +140,7 @@ export async function createAccessToken(req: express.Request, resp: express.Resp
 
             auth.createUser(userData)
                 .then(async (userRecord: { uid: any; }) => {
-                    resp.setHeader('Content-Type', 'application-module/json')
+                    resp.setHeader('Content-Type', 'application/json')
                     resp.send(JSON.stringify({data: await auth.createCustomToken(userRecord.uid)}))
                     returnPromise();
                 })

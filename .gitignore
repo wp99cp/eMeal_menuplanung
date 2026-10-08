@@ -1,5 +1,4 @@
 
 # exclude webstorm project folder
 .idea
-backend/firebase-cloud-functions/functions/package-lock.json
 frontend/src/build.ts
