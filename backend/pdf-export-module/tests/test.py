@@ -126,6 +126,14 @@ class TestDataFetcher(MockDataTester):
     def test_author_name(self):
         self.assertEqual('Maximilian Mastermind', self.camp.get_full_author_name())
 
+    def test_author_without_name(self):
+        # accounts created with an email address and a password have no name, see #232
+        for user_data in [{'displayName': None}, {}, None]:
+            self.camp.setMockData(user_data, self.camp_meta_info, self.specific_meals)
+            self.assertEqual('', self.camp.get_full_author_name())
+
+        self.camp.setMockData(self.user_data, self.camp_meta_info, self.specific_meals)
+
     def test_day_sort_order(self):
         # shuffle days
         camp_meta = copy.deepcopy(self.camp_meta_info)
