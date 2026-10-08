@@ -36,3 +36,8 @@ Different suborders contain different parts of the application. You don't necess
 all the files for development, many things run independently of each other.
 
 More info see: [General Project Structure](/docu/General_Project_Structure.md)
+
+### Local Development
+
+`pnpm run dev` (or `npm run dev`) starts the frontend, the PDF export module and the firebase emulators with some
+example data in docker. No keys or accounts are needed, see [Local Development](/docu/Local_Development.md).

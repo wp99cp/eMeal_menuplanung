@@ -1,7 +1,7 @@
 import { db } from '.';
 import * as functions from 'firebase-functions/v1';
 import { FirestoreSpecificMeal } from './interfaces/firestoreDatatypes';
-import { firestore } from 'firebase-admin';
+import {FieldValue} from 'firebase-admin/firestore';
 
 /**
  * 
@@ -26,7 +26,7 @@ export async function onDeleteSpecificMeal(snapshot: FirebaseFirestore.DocumentS
             throw new Error();
         
         db.doc(path).update({
-            used_in_camps: firestore.FieldValue.arrayRemove(specificMeal.used_in_camp)
+            used_in_camps: FieldValue.arrayRemove(specificMeal.used_in_camp)
         }).catch();
 
     }

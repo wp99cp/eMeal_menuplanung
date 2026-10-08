@@ -2,3 +2,8 @@
 # exclude webstorm project folder
 .idea
 frontend/src/build.ts
+
+# the package.json in the root only contains scripts, there is nothing to install or lock
+/node_modules
+/package-lock.json
+/pnpm-lock.yaml

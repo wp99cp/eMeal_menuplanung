@@ -1,0 +1,14 @@
+{
+  "name": "emeal-menuplanung-dev",
+  "description": "Commands for the local development environment, see docu/Local_Development.md",
+  "private": true,
+  "scripts": {
+    "dev": "./dev/compose.sh up --build",
+    "dev:start": "./dev/compose.sh up --build --detach --wait",
+    "dev:stop": "./dev/compose.sh down",
+    "dev:status": "./dev/compose.sh ps --all",
+    "dev:logs": "./dev/compose.sh logs --tail 200",
+    "dev:seed": "./dev/compose.sh run --rm seed",
+    "dev:reset": "./dev/compose.sh up --detach --wait --force-recreate emulators && ./dev/compose.sh run --rm seed"
+  }
+}

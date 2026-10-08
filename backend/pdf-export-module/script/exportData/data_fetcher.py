@@ -1,13 +1,8 @@
 import copy
-import json
-import random
-import string
 from argparse import Namespace
 
-import firebase_admin
-from firebase_admin import credentials, firestore
-
 from exportData.utils import convert_document
+from utils.firebase_clients import get_firestore_client
 
 # defines order of meal types
 meal_types = ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten']
@@ -32,15 +27,7 @@ class DataFetcher(object):
         self._camp_meta_info = None
         self._specific_meals = None
 
-        with open('../keys/environment/environment.json') as json_file:
-            project_and_bucket_name = json.load(json_file)['storage_bucket_name']
-
-        # Use the application default credentials
-        cred = credentials.Certificate('../keys/firebase/{}-firebase-adminsdk.json'.format(project_and_bucket_name))
-        app = firebase_admin.initialize_app(
-            cred,
-            name=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8)))
-        self.__db = firestore.client(app)
+        self.__db = get_firestore_client()
 
     def setMockData(self, user_data, camp_meta_info, specific_meals):
         self._user_data_fetched = True

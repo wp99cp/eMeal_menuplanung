@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
+  useEmulators: false,
+  devAccounts: [] as { email: string, password: string, description: string }[],
   firebaseConfig: {
     apiKey: 'AIzaSyD2ZDEVffGsZxKrnMcu39Uix-wzPxGSW3c',
     authDomain: 'cevizh11.firebaseapp.com',

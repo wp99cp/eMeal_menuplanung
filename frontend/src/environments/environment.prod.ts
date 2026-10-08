@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
+  useEmulators: false,
+  devAccounts: [] as { email: string, password: string, description: string }[],
   firebaseConfig: {
     apiKey: 'AIzaSyChmTSmnM_mC12DD3M89SVbUtT0AqItFsg',
     authDomain: 'cevizh11-menuplanung.firebaseapp.com',

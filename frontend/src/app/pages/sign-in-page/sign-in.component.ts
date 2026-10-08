@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {AuthenticationService} from "../../modules/application-module/services/authentication.service";
+import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 @Component({
   standalone: false,
@@ -9,7 +11,18 @@ import {AuthenticationService} from "../../modules/application-module/services/a
 })
 export class SignInComponent {
 
-  constructor(public auth: AuthenticationService) {
+  // fake accounts of the local emulator, empty for the hosted environments
+  public devAccounts = environment.devAccounts;
+
+  constructor(public auth: AuthenticationService, private router: Router) {
+  }
+
+  signInWithDevAccount(account: { email: string, password: string }) {
+
+    this.auth.signIn(account.email, account.password)
+      .then(() => this.router.navigate(['/app']))
+      .catch(console.error);
+
   }
 
 

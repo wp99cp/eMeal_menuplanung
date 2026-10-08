@@ -1,11 +1,17 @@
 import json
 from logging import StreamHandler
 
+from utils.firebase_clients import is_emulated
+
 
 class TelegrafLogger(StreamHandler):
 
     def __init__(self):
         StreamHandler.__init__(self)
+
+        # there is no influx database in the local emulator setup
+        if is_emulated():
+            return
 
         with open('../keys/influx/influx_settings.json') as json_file:
             data = json.load(json_file)

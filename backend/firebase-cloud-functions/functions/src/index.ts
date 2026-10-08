@@ -1,4 +1,7 @@
 import * as admin from 'firebase-admin';
+// The functions emulator wraps admin.firestore, its static members (FieldValue, v1, ...) are
+// missing there. Hence, they get imported from the firestore module directly.
+import {FieldValue, v1} from 'firebase-admin/firestore';
 import * as functions from 'firebase-functions/v1';
 import * as express from "express";
 
@@ -11,7 +14,7 @@ import {importMeal} from "./importMeal";
 import {ceviDbOauth, createAccessToken} from "./createAccessToken";
 import {changeAccessData, refreshAccessData} from "./changeAccessData";
 
-const client = new admin.firestore.v1.FirestoreAdminClient();
+const client = new v1.FirestoreAdminClient();
 
 // The correct project is automatically set by the GCLOUD_PROJECT name.
 export const projectId = process.env.GCLOUD_PROJECT as string;
@@ -69,7 +72,7 @@ exports.scheduledFirestoreExport = functions
 
             // add date of last backup
             await db.doc('/sharedData/statistics').update({
-                last_backup_created: admin.firestore.FieldValue.serverTimestamp()
+                last_backup_created: FieldValue.serverTimestamp()
             })
 
             console.log(`Operation Name: ${response['name']}`);
@@ -130,7 +133,7 @@ exports.checkForOldExports = functions
 
                 docRef.ref.delete().catch();
                 db.doc('/sharedData/statistics').update({
-                    removed_old_exports: admin.firestore.FieldValue.increment(1)
+                    removed_old_exports: FieldValue.increment(1)
                 }).catch();
 
                 console.log('Delete old document!')
