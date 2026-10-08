@@ -64,6 +64,12 @@ For example:
 python pdf_generator.py CKsbjuHkJQUstW1YULeAepDe9Wl1 16fXu6siwVDX1OOb38P3 --dfn --lscp --mp
 ```
 
+### LaTeX packages inside the container
+
+To keep the image small, the container only includes the LaTeX packages the export uses. If the export needs a new
+LaTeX package, add it to the `tlmgr install` command of the `Dockerfile` and load it in `docker/smoke_test.tex`.
+The build compiles this document and fails if a package is missing.
+
 ## Testing
 
 Exporting the camp at the end of its creation process is one of the application's core features. Therefore, extensive
