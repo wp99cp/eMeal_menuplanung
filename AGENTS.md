@@ -67,9 +67,17 @@ The dependencies are installed by the containers, so run the checks there while 
 - Frontend: open the affected page in a browser and check the browser console for errors.
 - Cloud functions: their logs are in `pnpm run dev:logs emulators` and in the emulator UI. Inside the emulator the
   static members of `admin.firestore` are undefined, import `FieldValue` etc. from `firebase-admin/firestore`.
-- PDF export: trigger an export on the page "Export" of a camp, or directly with
-  `curl 'http://localhost:5000/export/camp/dev-camp-sommerlager/user/dev-leader/?--wv&--spl&--meals'`. The PDF is
-  written to `backend/pdf-export-module/script/` and uploaded to the storage emulator.
+- PDF export: trigger an export on the page "Export" of a camp, or directly with the ID token of a fake account:
+
+  ```shell
+  TOKEN=$(curl -s 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=demo-api-key' \
+    -H 'Content-Type: application/json' \
+    -d '{"email": "leiterin@emeal.test", "password": "emeal-dev", "returnSecureToken": true}' | jq -r .idToken)
+  curl -H "Authorization: Bearer $TOKEN" \
+    'http://localhost:5000/export/camp/dev-camp-sommerlager/user/dev-leader/?--wv&--spl&--meals'
+  ```
+
+  The PDF is written to `backend/pdf-export-module/script/` and uploaded to the storage emulator.
 - Firestore rules: test them through the frontend with the fake accounts, they have different rights.
 
 ## Conventions
