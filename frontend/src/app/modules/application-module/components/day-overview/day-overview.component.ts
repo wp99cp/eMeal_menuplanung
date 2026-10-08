@@ -1,5 +1,5 @@
 import {CdkDrag, CdkDragDrop, CdkDragStart, CdkDropList} from '@angular/cdk/drag-drop';
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ViewChild} from '@angular/core';
 
 import {Day} from '../../classes/day';
 import {SpecificMeal} from '../../classes/specific-meal';
@@ -10,11 +10,19 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HelpService} from '../../services/help.service';
 import {MealUsage} from '../../interfaces/firestoreDatatypes';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable, Subscription} from 'rxjs';
-import {map, take} from 'rxjs/operators';
-import Timeout = NodeJS.Timeout;
+import {BehaviorSubject, combineLatest, Observable, of, Subscription} from 'rxjs';
+import {filter, take} from 'rxjs/operators';
 import {DatabaseService} from '../../services/database.service';
 import {SwissDateAdapter} from '../../../../shared/utils/format-datapicker';
+
+/**
+ * A place for a meal on a day, e.g. the "Zmittag". It is the data of a drop list of the week-overview.
+ */
+export interface MealSlot {
+  usage: MealUsage | 'Vorbereiten';
+  day: Day;
+  meals: SpecificMeal[];
+}
 
 @Component({
   standalone: false,
@@ -23,7 +31,7 @@ import {SwissDateAdapter} from '../../../../shared/utils/format-datapicker';
   styleUrls: ['./day-overview.component.sass'],
 
 })
-export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
+export class DayOverviewComponent implements OnChanges, OnDestroy {
 
   @Input() access: boolean;
   @Input() day: Day;
@@ -41,9 +49,16 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
   public hidden = false;
   public warning: string;
-  public specificMealsByName = {};
-  private crashChecker: Timeout;
-  private specificMealsSubscription: Subscription;
+
+  /** The places for the meals of this day with the meals as they are shown, undefined until the meals are loaded. */
+  public slots: MealSlot[];
+
+  /** Number of reasons why the meals of all days currently stay as they are shown, see holdUpdates(). */
+  private static readonly updatesOnHold = new BehaviorSubject(0);
+
+  private mealsSubscription: Subscription;
+  private shownMeals: SpecificMeal[];
+  private releaseDrag: () => void;
 
   constructor(public dialog: MatDialog,
               public swissDateAdapter: SwissDateAdapter,
@@ -55,32 +70,91 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
               private dbService: DatabaseService) {
   }
 
-  ngOnDestroy(): void {
-    this.specificMealsSubscription?.unsubscribe();
-  }
+  /**
+   * Keeps the meals of all days as they are shown until the returned function gets called. Afterwards the days
+   * show the current state of the database again.
+   *
+   * This is used while a meal is dragged and while a move is written to the database. An update of the database
+   * in between would replace the dragged element or show the state from before the move, the former leads to an
+   * ExpressionChangedAfterItHasBeenCheckedError.
+   *
+   * @returns: the function to call once the meals can be updated again
+   */
+  public static holdUpdates(): () => void {
 
+    const onHold = DayOverviewComponent.updatesOnHold;
+    let released = false;
 
-  ngOnInit(): void {
+    onHold.next(onHold.value + 1);
 
-    this.getMealNames().forEach(name => {
-
-      if (name === 'Vorbereiten') {
-        this.specificMealsByName[name] = this.mealsToPrepare;
-      } else {
-        this.specificMealsByName[name] = this.specificMeals.pipe(
-          map(meals =>
-            meals.filter(meal =>
-              meal.usedAs === name)));
+    return () => {
+      if (!released) {
+        released = true;
+        onHold.next(onHold.value - 1);
       }
-    });
+    };
 
+  }
+
+  ngOnDestroy(): void {
+
+    this.mealsSubscription?.unsubscribe();
+
+    // The day got removed during a drag. The other days are updated after the current change detection.
+    if (this.releaseDrag) {
+      Promise.resolve().then(this.releaseDrag);
+    }
 
   }
 
 
-  getMealNames() {
+  getMealNames(): (MealUsage | 'Vorbereiten')[] {
 
     return ['Zmorgen', 'Znüni', 'Zmittag', 'Zvieri', 'Znacht', 'Dessert', 'Leitersnack', 'Vorbereiten'];
+
+  }
+
+  trackByMealId(index: number, meal: SpecificMeal) {
+
+    return meal.documentId;
+
+  }
+
+  /**
+   * Shows the meals of the database, unless the meals are on hold: then the latest ones are shown afterwards.
+   */
+  private loadMeals() {
+
+    this.mealsSubscription?.unsubscribe();
+    this.slots = undefined;
+
+    if (!this.specificMeals) {
+      return;
+    }
+
+    this.mealsSubscription = combineLatest([
+      this.specificMeals,
+      this.mealsToPrepare ?? of([] as SpecificMeal[]),
+      DayOverviewComponent.updatesOnHold
+    ])
+      .pipe(filter(([, , updatesOnHold]) => updatesOnHold === 0))
+      .subscribe(([meals, mealsToPrepare]) => this.showMeals(meals, mealsToPrepare));
+
+  }
+
+  private showMeals(meals: SpecificMeal[], mealsToPrepare: SpecificMeal[]) {
+
+    this.slots = this.slots ?? this.getMealNames().map(usage => ({usage, day: this.day, meals: []}));
+
+    this.slots.forEach(slot => slot.meals = slot.usage === 'Vorbereiten' ?
+      mealsToPrepare.filter(meal => meal.prepareAsDate.getTime() === this.day.dateAsTypeDate.getTime()) :
+      meals.filter(meal => meal.usedAs === slot.usage));
+
+    // the elements of new meals need a context menu
+    if (this.shownMeals !== meals) {
+      this.shownMeals = meals;
+      this.setContextMenu();
+    }
 
   }
 
@@ -149,8 +223,7 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
 
     });
 
-    this.specificMealsSubscription?.unsubscribe();
-    this.specificMealsSubscription = this.specificMeals.subscribe(meals => meals.forEach(meal => {
+    this.shownMeals?.forEach(meal => {
 
       const elements = document.querySelectorAll('[data-meal-id=ID-' + meal.documentId + ']');
 
@@ -202,17 +275,19 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
           this.contextMenuService.addContextMenuNode(node);
         }
       });
-    }));
+    });
 
   }
 
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
 
     this.warning = '';
     this.setContextMenu();
-    this.mealsToPrepare =
-      this.mealsToPrepare?.pipe(map(meals => meals.filter(meal => meal.prepareAsDate.getTime() === this.day.dateAsTypeDate.getTime())));
+
+    if (changes.day || changes.specificMeals || changes.mealsToPrepare) {
+      this.loadMeals();
+    }
 
   }
 
@@ -259,77 +334,58 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   }
 
 
-  mealDroppedAction([meal, event]: [SpecificMeal, CdkDragDrop<any, any>]) {
+  /**
+   * Action executed after a meal has been dropped, i.g. at the end of every drag.
+   */
+  mealDroppedAction(event: CdkDragDrop<MealSlot, MealSlot, SpecificMeal>) {
 
-    console.log('mealDroppedAction');
+    try {
 
-    const mealDropUsage = event.container.element.nativeElement.dataset.mealName
+      const meal = event.item.data;
+      const oldSlot = event.previousContainer.data;
+      const newSlot = event.container.data;
 
-    // Don't update the model, if the meal has not been moved to another location.
-    if (event.container === event.previousContainer || mealDropUsage === 'Vorbereiten') {
+      // Don't update the model, if the meal has not been moved to another location.
+      if (newSlot === oldSlot) {
+        return;
+      }
 
-      if (mealDropUsage === 'Vorbereiten') {
+      if (newSlot.usage === 'Vorbereiten') {
         this.snackBar
           .open('Mahlzeit konnte nicht verschoben werden. Erfahre, wie du Mahlzeiten vorbereiten kannst.', 'Hilfe', {duration: 2500})
           .onAction().subscribe(() => {
           this.helpService.openHelpPopup('mahlzeit-vorbereiten')
         });
+        return;
       }
 
-      this.setContextMenu();
-      return;
+      // Move the meal in the view. The parent holds the updates until the move is written, so the meal does not
+      // jump back to its old place in between.
+      oldSlot.meals.splice(oldSlot.meals.indexOf(meal), 1);
+      newSlot.meals.push(meal);
+
+      // Move the meal in the model
+      this.mealDropped.emit([meal, newSlot.usage, String(newSlot.day.getTimestamp().toMillis())]);
+
+    } finally {
+
+      this.releaseDrag?.();
+      this.releaseDrag = undefined;
+
     }
-
-
-    // hide meal at old place
-    event.item.element.nativeElement.style.visibility = 'hidden';
-
-    // remove the meal form the current day. If this line is commented out
-    // a wird flicker will occur, where the meal first jumps to the correct time, e.g.
-    // form "Zmorgen" to "Znacht" before jumping to the correct day.
-    this.specificMeals = this.specificMeals.pipe(map(meals => meals.filter(m => m !== meal)));
-
-    // Move the meal in the model
-    const mealUsage: MealUsage =
-      event.container.element.nativeElement.getAttribute('data-meal-name') as MealUsage;
-    const mealDateString = event.container.element.nativeElement.parentElement.id;
-    this.mealDropped.emit([meal, mealUsage, mealDateString]);
-
-    this.setContextMenu(true);
 
   }
 
 
-  predicate(drag: CdkDrag, drop: CdkDropList): boolean {
+  predicate(drag: CdkDrag, drop: CdkDropList<MealSlot>): boolean {
 
-    return drop.element.nativeElement.getAttribute('is-full') !== 'true';
+    return drop.data.meals.length === 0;
 
   }
 
   dragStarted(event: CdkDragStart) {
 
-
-    this.crashChecker = setInterval(() => {
-
-      if (event.source.dropped.observers.length === 0) {
-
-        clearInterval(this.crashChecker);
-
-        this.router.navigate(['..'], {relativeTo: this.activeRoute}).then(() =>
-          this.activeRoute.url.subscribe(segments =>
-            this.router.navigate(['app'].concat(segments.map(seg => seg.path)))));
-
-        setTimeout(() =>
-            this.snackBar.open(
-              'Es ist ein Fehler aufgetreten. Die Seite wurde neu geladen.',
-              'Schliessen',
-              {duration: 3_500}),
-          500);
-
-      }
-
-    }, 25);
-
+    this.releaseDrag = DayOverviewComponent.holdUpdates();
 
     document.querySelectorAll('.has-a-meal, .Vorbereiten').forEach(el => {
       if (el !== event.source.dropContainer.element.nativeElement) {
@@ -343,10 +399,6 @@ export class DayOverviewComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   dragStopped(event: CdkDragStart) {
-
-    console.log('dragStopped');
-
-    clearInterval(this.crashChecker);
 
     document.querySelectorAll('.has-a-meal, .Vorbereiten').forEach(el => {
       if (el !== event.source.dropContainer.element.nativeElement) {
