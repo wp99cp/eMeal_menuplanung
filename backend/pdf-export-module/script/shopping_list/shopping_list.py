@@ -4,6 +4,7 @@ from argparse import Namespace
 
 from exportData.camp import CampClass
 from firebase_admin import firestore
+from shopping_list.reference_data import load_categories, load_spelling_references, load_unit_conversions
 from shopping_list.spelling_corrector import SpellingCorrector
 from utils.firebase_clients import get_firestore_client
 
@@ -13,7 +14,7 @@ from utils.firebase_clients import get_firestore_client
 
      * -------- *
      |          | - *
-     |  meals   |   |    ==>   fixing spelling mistakes       <--     Load list of ingredients form DB
+     |  meals   |   |    ==>   fixing spelling mistakes       <--     Load list of ingredients (categories.csv)
      |          |   |          (using editing distance)
      * -------- *   |
         * --------- *                   ||
@@ -39,9 +40,9 @@ from utils.firebase_clients import get_firestore_client
         units to ISO-base units (e.g. milliliters to liters). For some ingredients, e.g. for water,
         we also can convert between units.
 
-    (3) Next, we check if the word is in the list of known ingredients. For that we convert the name of the
-        ingredient to lower case. If so, we can return the corresponding category. If no category found, we
-        check for related ingredients in our database and check if a sub-word is in known category.
+    (3) Next, we check if the word is in the list of known ingredients (categories.csv). For that we convert the
+        name of the ingredient to lower case. If so, we can return the corresponding category. If no category
+        found, we check if a sub-word of the name is a known ingredient.
         Unknown ingredients get logged for manual categorising. In the shopping list the get shown under
         the "uncategorized" category.
 
@@ -64,35 +65,33 @@ class ShoppingList:
         ShoppingList.__db = get_firestore_client()
 
         # load data for unit conversion
-        unit_conversions = ShoppingList.__db.document('sharedData/units').get().to_dict()
+        unit_conversions = load_unit_conversions()
         ShoppingList._base_units = {k: v for (k, v) in unit_conversions.items() if v['only_for_food_item'] == ''}
         ShoppingList._special_conversions = {k: v for (k, v) in unit_conversions.items() if
                                              v['only_for_food_item'] != ''}
 
-        ShoppingList.categories = ShoppingList.__db.document('sharedData/categories').get().to_dict()
+        # the lookup is case-insensitive, the first entry wins
+        ShoppingList.categories = {}
+        for food_name, category_name in load_categories().items():
+            ShoppingList.categories.setdefault(food_name.strip().lower(), category_name)
 
-        self._spellingCorrector = SpellingCorrector(ShoppingList.__db)
+        self._spellingCorrector = SpellingCorrector(ShoppingList.__db, load_spelling_references())
 
     @classmethod
     def get_category(cls, food_name):
+        """
+        :return: the name of the category of the food item or None if it is unknown
+        """
 
-        list_of_keys = list(cls.categories.keys())
+        food_name = food_name.strip().lower()
 
-        keys = [x.lower() for x in list_of_keys]
+        if food_name in cls.categories:
+            return cls.categories[food_name]
 
-        if food_name.lower() in keys:
-            index = keys.index(food_name.lower())
-            correct_food_name = list_of_keys[index]
-            return cls.categories[correct_food_name]
-
-        words = food_name.lower().split(' ')
-
-        for w in words:
+        for w in food_name.split(' '):
             w = w.replace(',', '')
-            if w in keys:
-                index = keys.index(w)
-                correct_food_name = list_of_keys[index]
-                return cls.categories[correct_food_name]
+            if w in cls.categories:
+                return cls.categories[w]
 
         return None
 
@@ -189,15 +188,15 @@ class ShoppingList:
 
             ing_category = cls.get_category(ing['food'])
             if ing_category:
-                print(ing['food'], " --> ", ing_category['category_name'])
+                print(ing['food'], " --> ", ing_category)
             else:
                 print(ing['food'], " --> ", "No Category found!")
 
             if ing_category:
-                if ing_category['category_name'] in ingredients_categorized.keys():
-                    ingredients_categorized[ing_category['category_name']].append(ing)
+                if ing_category in ingredients_categorized.keys():
+                    ingredients_categorized[ing_category].append(ing)
                 else:
-                    ingredients_categorized[ing_category['category_name']] = [ing]
+                    ingredients_categorized[ing_category] = [ing]
 
             # Unknown ingredients will be added to the 'Diverses' category
             else:
