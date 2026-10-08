@@ -26,12 +26,13 @@ class CampClass(IngredientsCalculator, DataFetcher):
 
     def get_full_author_name(self):
         """
-        :return: name of the current user, the author of the export
+        :return: name of the current user, the author of the export. An empty string if the user has no name,
+        e.g. accounts created with an email address and a password have none until it is set in the settings.
         """
 
         self._fetch_user_data()
 
-        return self._user_data.get('displayName')
+        return (self._user_data or {}).get('displayName') or ''
 
     def get_camp_name(self):
         """
