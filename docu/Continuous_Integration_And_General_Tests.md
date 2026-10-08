@@ -16,25 +16,28 @@ the version number of the different components are identical. Adds a correspondi
 | Component | Branch `develop` | Branch `master` | Defined in |
 |---|---|---|---|
 | Frontend | - | Firebase Hosting of `cevizh11-menuplanung` (emeal.zh11.ch) | `.github/workflows/create-release.yml` |
-| Cloud functions | project `cevizh11` | project `cevizh11-menuplanung` | `backend/firebase-cloud-functions/cloudbuild.yaml` |
+| Cloud functions and Firestore rules | project `cevizh11` | project `cevizh11-menuplanung` | `backend/firebase-cloud-functions/cloudbuild.yaml` |
 | PDF export service | Cloud Run service `emeal-pdf-export-develop` | Cloud Run service `prod-emeal-menuplanung-pdf-export-service` | `backend/pdf-export-module/cloudbuild.yaml` |
 
 The frontend is deployed by GitHub Actions. A pull request to `master` additionally creates preview channels for
 both firebase projects.
 
-The cloud functions and the PDF export service are deployed by Cloud Build triggers of the corresponding Google Cloud
+The cloud functions, the Firestore rules and the PDF export service are deployed by Cloud Build triggers of the corresponding Google Cloud
 project. A trigger only runs if files of its component have changed (`backend/firebase-cloud-functions/**` or
 `backend/pdf-export-module/**`). The trigger of the PDF export service in the project `cevizh11` also runs for
 branches called `release/*`. The result of a build is reported as a check on the commit.
 
-### Cloud functions
+### Cloud functions and Firestore rules
 
 The functions use the service account of the cloud functions, no key files are needed. The OAuth settings for
 db.cevi.ch are stored in the Secret Manager of each project as secret `CEVI_DB_OAUTH`, a JSON with the fields
 `client_id`, `client_secret`, `redirect_uri`, `token_url` and `profile_url`.
 
-Only the functions are deployed. The Firestore rules in `backend/firebase-cloud-functions/firestore.rules` are not
-deployed automatically.
+The same build releases the Firestore rules in `backend/firebase-cloud-functions/firestore.rules`, before it deploys
+the functions. Rules that do not compile fail the build and nothing is deployed. The service account of the build
+needs the role `roles/firebaserules.admin` (or a role that includes it, e.g. `roles/editor`).
+
+The Firestore indexes are not deployed, they are managed in the Firebase console.
 
 ### PDF export service
 
