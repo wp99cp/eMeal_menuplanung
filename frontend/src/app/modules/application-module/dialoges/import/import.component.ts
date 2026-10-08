@@ -4,6 +4,7 @@ import {DatabaseService} from '../../services/database.service';
 import {FirestoreMeal, FirestoreRecipe} from '../../interfaces/firestoreDatatypes';
 import {AuthenticationService} from '../../services/authentication.service';
 import {FirestoreObject} from '../../classes/firebaseObject';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 
 
 /**
@@ -47,6 +48,12 @@ export class ImportComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    // waits until the user has stopped typing, every request counts towards the import limit of the user
+    this.input.get('url').valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => this.loadMealFromURL());
+
   }
 
 
@@ -110,7 +117,9 @@ export class ImportComponent implements OnInit {
 
       }, error => {
 
-        this.message = 'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.';
+        this.message = error?.code === 'functions/resource-exhausted' ?
+          'Du hast das Limit von 10 Importen pro Stunde erreicht. Bitte versuche es später erneut.' :
+          'Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.';
         this.showSpinner = false;
         this.showMessage = true;
 
