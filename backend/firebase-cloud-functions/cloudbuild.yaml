@@ -13,7 +13,7 @@ steps:
     entrypoint: npm
     args: [ 'ci' ]
     env:
-      # the browser gets installed while the functions are built, see the gcp-build script
+      # the browser is not needed to lint, compile and upload the functions
       - PUPPETEER_SKIP_DOWNLOAD=true
 
   # lints and compiles the functions (predeploy hooks of the firebase.json) and deploys them
