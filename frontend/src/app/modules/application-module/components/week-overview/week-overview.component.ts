@@ -316,13 +316,15 @@ export class WeekOverviewComponent implements OnInit, Saveable, AfterViewInit {
       });
 
 
-    }
+    } else {
 
-    // Ändert das Datum aller Mahlzeiten
-    meals.forEach(specificMeal => {
-      specificMeal.date = day.getTimestamp();
-      this.dbService.updateDocument(specificMeal);
-    });
+      // Ändert das Datum aller Mahlzeiten
+      meals.forEach(specificMeal => {
+        specificMeal.date = day.getTimestamp();
+        this.dbService.updateDocument(specificMeal);
+      });
+
+    }
 
     // Ladet die Mahlzeiten neu, anstonsten führt das verschieben von Mahlzeitn zu einem Fehler
     this.camp.loadMeals(this.dbService);

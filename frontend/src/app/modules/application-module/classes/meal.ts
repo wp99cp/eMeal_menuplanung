@@ -3,6 +3,7 @@ import {DatabaseService} from '../services/database.service';
 import {Camp} from './camp';
 import {Day} from './day';
 import {ExportableObject, FirestoreObject} from './firebaseObject';
+import {take} from 'rxjs/operators';
 
 
 /**
@@ -67,7 +68,9 @@ export class Meal extends FirestoreObject implements ExportableObject {
 
     return new Promise<void>(resolve => {
 
+      // only once, otherwise a later change of a recipe recreates the specificRecipes of a deleted meal
       databaseService.getRecipes(this.documentId)
+        .pipe(take(1))
         .subscribe(async recipes => {
 
           await Promise.all(recipes.map(recipe =>
