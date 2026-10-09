@@ -1,0 +1,63 @@
+@use '../../../../../sass/colors' as *
+@use '../../admin' as *
+
+h3
+  +section-title
+
+.hint
+  +hint
+
+  mat-icon
+    vertical-align: middle
+
+.tiles
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))
+  gap: 12px
+
+.tile
+  display: flex
+  flex-direction: column
+  padding: 16px 20px
+  font-weight: 400
+  color: $text
+  +card
+
+  .value
+    font-size: 28px
+    font-weight: 600
+    line-height: 36px
+    color: $text-strong
+
+  .name
+    font-size: 15px
+    line-height: 22px
+
+  .note
+    margin-top: 8px
+    font-size: 13px
+    line-height: 18px
+    color: $text-light
+
+    mat-icon
+      width: 16px
+      height: 16px
+      font-size: 16px
+      vertical-align: text-bottom
+
+a.tile:hover
+  border-color: $text-light
+
+.tile.open
+  border-color: $prime-color
+  background: $prime-color-light
+
+a.tile.open:hover
+  border-color: $prime-color-dark
+
+.tile.warning
+  border-color: $warning
+  background: $warning-light
+
+  .note
+    color: $warning

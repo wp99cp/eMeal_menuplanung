@@ -13,6 +13,7 @@ import {importMeal} from "./importMeal";
 import {ceviDbOauth, createAccessToken} from "./createAccessToken";
 import {changeAccessData, refreshAccessData} from "./changeAccessData";
 import {copyCamp} from "./copyCamp";
+import {findUsers} from "./findUsers";
 
 const client = new v1.FirestoreAdminClient();
 
@@ -41,6 +42,7 @@ exports.deleteSpecificMeal = cloudFunction().firestore.document('meals/{mealId}/
 exports.changeAccessData = createCallableCloudFunc(changeAccessData, "1GB");
 exports.refreshAccessData = createCallableCloudFunc(refreshAccessData, "1GB");
 exports.copyCamp = createCallableCloudFunc(copyCamp, "512MB");
+exports.findUsers = createCallableCloudFunc(findUsers);
 
 // Name of the backup bucket
 const bucket_backup = projectId === 'cevizh11' ? 'gs://backup-bucket-firebase' : 'gs://backup-bucket-firebase-prod';

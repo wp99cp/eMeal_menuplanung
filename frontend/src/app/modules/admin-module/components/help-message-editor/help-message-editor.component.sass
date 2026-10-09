@@ -1,0 +1,59 @@
+@use '../../admin' as *
+
+h3
+  +section-title
+  margin-top: 0
+
+.hint
+  +hint
+  margin-top: 12px
+
+.new-message
+  margin: 16px 0
+  padding: 18px 20px
+  +card
+
+mat-accordion
+  display: block
+  margin-top: 16px
+
+.mat-expansion-panel-header-title
+  font-weight: 500
+
+.mat-expansion-panel-header-description
+  justify-content: flex-end
+
+.form
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 8px 16px
+
+  .wide
+    grid-column: 1 / -1
+
+  textarea
+    font-family: monospace
+    font-size: 14px
+    line-height: 20px
+
+.preview
+  padding: 12px 16px
+  overflow-wrap: anywhere
+  +card
+
+.preview-label
+  display: block
+  margin-bottom: 6px
+  font-size: 12px
+  color: $text-light
+
+.action-panel
+  display: flex
+  justify-content: flex-end
+  flex-wrap: wrap
+  gap: 10px
+  margin-top: 16px
+
+.delete
+  margin-right: auto
+  color: $warning

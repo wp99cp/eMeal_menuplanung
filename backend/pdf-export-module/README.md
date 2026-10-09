@@ -101,8 +101,12 @@ module, a change is deployed with the image:
   correctly: an ingredient that differs from it by one character is renamed to it.
 - `script/shopping_list/units.csv` maps a unit to its base unit, optionally for a single food item only.
 
-Names without a category are collected in the document `sharedData/foodCategories` and shown on the admin page of the
-frontend. To categorise them, add them to `categories.csv`.
+Names without a category and the spelling corrections are collected in the document `sharedData/foodCategories`. An
+admin works through them on the tab "Einkaufsliste" of the admin dashboard of the frontend: a name gets a category or
+is ignored, a correction is confirmed or rejected. These decisions are saved in the same document and apply on top of
+`categories.csv` from the next export on, see `script/shopping_list/admin_decisions.py`. The dashboard copies the
+assigned categories as lines for `categories.csv`, once they are part of the file they can be removed there. The
+names of the categories are served by the endpoint `/shopping_list/categories`.
 
 ## Testing
 

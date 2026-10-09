@@ -4,6 +4,7 @@ from argparse import Namespace
 
 from exportData.camp import CampClass
 from firebase_admin import firestore
+from shopping_list.admin_decisions import AdminDecisions
 from shopping_list.reference_data import load_categories, load_spelling_references, load_unit_conversions
 from shopping_list.spelling_corrector import SpellingCorrector
 from utils.firebase_clients import get_firestore_client
@@ -46,6 +47,8 @@ from utils.firebase_clients import get_firestore_client
         Unknown ingredients get logged for manual categorising. In the shopping list the get shown under
         the "uncategorized" category.
 
+    The logged ingredients and corrections are reviewed in the admin dashboard, see admin_decisions.py.
+
 """
 
 
@@ -55,6 +58,7 @@ class ShoppingList:
     """
 
     categories = {}
+    _ignored = set()
 
     def __init__(self, camp: CampClass):
         self.full_shopping_list = None
@@ -75,7 +79,16 @@ class ShoppingList:
         for food_name, category_name in load_categories().items():
             ShoppingList.categories.setdefault(food_name.strip().lower(), category_name)
 
-        self._spellingCorrector = SpellingCorrector(ShoppingList.__db, load_spelling_references())
+        # the decisions of the admins apply on top of the files
+        decisions = AdminDecisions.load(ShoppingList.__db)
+        for food_name, category_name in decisions.categories.items():
+            ShoppingList.categories[food_name.strip().lower()] = category_name
+        ShoppingList._ignored = decisions.ignored
+
+        self._spellingCorrector = SpellingCorrector(
+            ShoppingList.__db, load_spelling_references(),
+            keep=decisions.rejected_corrections | set(decisions.categories.keys()),
+            reviewed=decisions.accepted_corrections)
 
     @classmethod
     def get_category(cls, food_name):
@@ -200,7 +213,8 @@ class ShoppingList:
 
             # Unknown ingredients will be added to the 'Diverses' category
             else:
-                category_unknown.append(ing['food'])
+                if ing['food'] not in cls._ignored:
+                    category_unknown.append(ing['food'])
                 if 'Diverses' in ingredients_categorized.keys():
                     ingredients_categorized['Diverses'].append(ing)
                 else:

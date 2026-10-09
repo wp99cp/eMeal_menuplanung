@@ -1088,32 +1088,6 @@ export class DatabaseService {
 
   }
 
-
-  getFeedbackMessages() {
-    return this.db.collection('/sharedData/feedback/messages',
-      ref => ref.orderBy('date_added', 'desc')).snapshotChanges();
-  }
-
-  /**
-   * Marks a feedback message as resolved. The message is kept, so it stays known what has been reported.
-   */
-  resolve_issue(docID: string) {
-    return this.db.doc('/sharedData/feedback/messages/' + docID)
-      .update({resolved: true, date_resolved: FieldValue.serverTimestamp()});
-  }
-
-  reopen_issue(docID: string) {
-    return this.db.doc('/sharedData/feedback/messages/' + docID)
-      .update({resolved: false, date_resolved: FieldValue.delete()});
-  }
-
-  getUncategorizedFood() {
-    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['uncategorised']));
-  }
-
-  getResentCorrections() {
-    return this.db.doc('/sharedData/foodCategories').get().pipe(map(doc => doc.data()['resentCorrections']));
-  }
 }
 
 

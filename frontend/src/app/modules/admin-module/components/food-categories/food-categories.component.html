@@ -1,19 +1,129 @@
-<h3>Ingredients with associated Categories</h3>
-<p><a href="https://github.com/wp99cp/eMeal_menuplanung/blob/master/backend/pdf-export-module/script/shopping_list/categories.csv">
-  <mat-icon>launch</mat-icon>
-  categories.csv</a></p>
+<ng-container *ngIf="food | async as food; else loading">
 
-
-<h3>Uncategorized Food</h3>
-<ng-container *ngIf="(uncategorizedFood | async) as uncategorizedFood">
-  <p>
-    <ng-container *ngFor="let food of uncategorizedFood">{{food}},&nbsp;</ng-container>
+  <h3>Zutaten ohne Kategorie</h3>
+  <p class="hint">
+    Diese Zutaten kennt der Export nicht, sie stehen in der Einkaufsliste unter «Diverses». Eine Zuweisung gilt
+    ab dem nächsten Export.
   </p>
+
+  <p class="hint warning" *ngIf="categoryNamesFailed">
+    Die Kategorien konnten nicht vom Export-Dienst geladen werden.
+  </p>
+
+  <p class="hint" *ngIf="food.uncategorised.length === 0">Alle Zutaten haben eine Kategorie.</p>
+
+  <ul class="rows" *ngIf="food.uncategorised.length > 0">
+    <li *ngFor="let item of food.uncategorised">
+      <span class="grow">{{item}}</span>
+      <select #category [disabled]="!categoryNames" (change)="assign(item, category.value)"
+              [attr.aria-label]="'Kategorie von ' + item">
+        <option value="">Kategorie wählen</option>
+        <option *ngFor="let name of categoryNames" [value]="name">{{name}}</option>
+      </select>
+      <button mat-button (click)="ignore(item)" matTooltip="Kein Lebensmittel, z. B. ein Tippfehler">
+        Ignorieren
+      </button>
+    </li>
+  </ul>
+
+  <h3>Rechtschreibkorrekturen</h3>
+  <p class="hint">
+    Der Export hat diese Zutaten automatisch korrigiert. Eine falsche Korrektur verändert die Einkaufsliste.
+  </p>
+
+  <p class="hint" *ngIf="food.resentCorrections.length === 0">Keine ungeprüften Korrekturen.</p>
+
+  <ul class="rows" *ngIf="food.resentCorrections.length > 0">
+    <li *ngFor="let correction of food.resentCorrections">
+      <span class="grow">
+        {{correction.from}}
+        <mat-icon class="arrow">arrow_forward</mat-icon>
+        {{correction.to}}
+      </span>
+      <button mat-button (click)="accept(correction)">Korrekt</button>
+      <button mat-button (click)="reject(correction)"
+              matTooltip="«{{correction.from}}» wird nicht mehr korrigiert">
+        Falsch korrigiert
+      </button>
+    </li>
+  </ul>
+
+  <h3>Entscheide</h3>
+  <p class="hint">
+    Die Entscheide gelten zusätzlich zur Datei
+    <a [href]="categoriesFile" target="_blank" rel="noopener">categories.csv</a>.
+    Zugewiesene Kategorien können in die Datei übernommen und danach hier entfernt werden.
+  </p>
+
+  <p class="hint" *ngIf="numberOfDecisions(food) === 0">Noch keine Entscheide.</p>
+
+  <mat-accordion multi>
+
+    <mat-expansion-panel *ngIf="food.categories.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Zugewiesene Kategorien</mat-panel-title>
+        <mat-panel-description>{{food.categories.length}}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <ul class="rows">
+        <li *ngFor="let decision of food.categories">
+          <span class="grow">{{decision.food_item}}</span>
+          <span class="category">{{decision.category_name}}</span>
+          <button mat-button (click)="remove('categories', decision)">Entfernen</button>
+        </li>
+      </ul>
+      <button mat-stroked-button (click)="copyAsCSV(food.categories)">
+        <mat-icon>content_copy</mat-icon>
+        Als CSV-Zeilen kopieren
+      </button>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="food.ignored.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Ignorierte Zutaten</mat-panel-title>
+        <mat-panel-description>{{food.ignored.length}}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <ul class="rows">
+        <li *ngFor="let item of food.ignored">
+          <span class="grow">{{item}}</span>
+          <button mat-button (click)="remove('ignored', item)">Entfernen</button>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="food.acceptedCorrections.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Bestätigte Korrekturen</mat-panel-title>
+        <mat-panel-description>{{food.acceptedCorrections.length}}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <ul class="rows">
+        <li *ngFor="let correction of food.acceptedCorrections">
+          <span class="grow">
+            {{correction.from}}
+            <mat-icon class="arrow">arrow_forward</mat-icon>
+            {{correction.to}}
+          </span>
+          <button mat-button (click)="remove('acceptedCorrections', correction)">Entfernen</button>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel *ngIf="food.rejectedCorrections.length > 0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Nicht mehr korrigiert</mat-panel-title>
+        <mat-panel-description>{{food.rejectedCorrections.length}}</mat-panel-description>
+      </mat-expansion-panel-header>
+      <ul class="rows">
+        <li *ngFor="let item of food.rejectedCorrections">
+          <span class="grow">{{item}}</span>
+          <button mat-button (click)="remove('rejectedCorrections', item)">Entfernen</button>
+        </li>
+      </ul>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
 </ng-container>
 
-<h3>Resent Corrections</h3>
-<ng-container *ngIf="(corrections | async) as corrections">
-  <p *ngFor="let corr of corrections">{{corr.from}} -> {{corr.to}} </p>
-</ng-container>
-
-
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

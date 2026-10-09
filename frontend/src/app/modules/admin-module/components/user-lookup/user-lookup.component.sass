@@ -1,0 +1,67 @@
+@use '../../admin' as *
+
+.hint
+  +hint
+  margin-top: 12px
+
+.hint.warning
+  color: $warning
+
+.search
+  display: flex
+  align-items: flex-start
+  gap: 12px
+
+  mat-form-field
+    flex: 1
+
+  button
+    height: 56px
+
+.user
+  margin: 0 0 12px 0
+  padding: 18px 20px
+  +card
+
+h3
+  +section-title
+  margin-top: 0
+
+dl
+  display: grid
+  grid-template-columns: auto 1fr
+  gap: 4px 16px
+  margin: 0
+  font-size: 14px
+  line-height: 22px
+
+dt
+  color: $text-light
+
+dd
+  margin: 0
+  overflow-wrap: anywhere
+  color: $text-strong
+
+table
+  width: 100%
+  margin-top: 16px
+  border-collapse: collapse
+  font-size: 14px
+  line-height: 22px
+
+th, td
+  padding: 6px 12px 6px 0
+  border-top: 1px solid $line
+  text-align: left
+  vertical-align: top
+
+th
+  border-top: none
+  font-weight: 500
+  color: $text-light
+
+.camp-id
+  display: block
+  font-size: 12px
+  color: $text-light

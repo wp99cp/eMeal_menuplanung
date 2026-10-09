@@ -6,21 +6,25 @@ from google.cloud import firestore
 
 class SpellingCorrector:
 
-    def __init__(self, db, food_dictionary):
+    def __init__(self, db, food_dictionary, keep=(), reviewed=()):
         """
         :param db: firestore client, used to log the corrections
         :param food_dictionary: the correctly spelled food names
+        :param keep: names that are never corrected
+        :param reviewed: corrections as tuples (from, to) that are not logged anymore
         """
 
         self.__db = db
         self._WORDS = set(food_dictionary)
+        self._keep = set(keep)
+        self._reviewed = set(reviewed)
 
     def fix_spelling_mistakes(self, ingredients):
         correction_logs = []
         for ing in ingredients:
             ing['food'], correction_log = self._correction(ing['food'])
 
-            if correction_log is not None:
+            if correction_log is not None and (correction_log['from'], correction_log['to']) not in self._reviewed:
                 correction_logs.append(correction_log)
 
         if correction_logs and len(correction_logs) > 0:
@@ -33,7 +37,7 @@ class SpellingCorrector:
         """
 
         # Nothing to correct
-        if input_word in self._WORDS:
+        if input_word in self._WORDS or input_word in self._keep:
             return input_word, None
 
         # Check if special characters are present in the word

@@ -1,28 +1,46 @@
+@use '../../admin' as *
+
 .mat-expansion-panel-header-title
   font-weight: 500
-
-.mat-expansion-panel-header-title, .mat-expansion-panel-header-description
-  line-height: 5rem
 
 .mat-expansion-panel-header-title.resolved
   text-decoration: line-through
   opacity: 0.6
 
-mat-slide-toggle
-  margin-bottom: 12px
-
 .mat-expansion-panel-header-description
-  justify-content: space-between
-  align-items: center
-  display: block
-  text-align: right
-  line-height: 2rem
+  justify-content: flex-end
+  white-space: nowrap
 
+mat-slide-toggle
+  margin: 12px 0
+
+.hint
+  +hint
+
+.message
+  max-width: none
+  white-space: pre-wrap
+  overflow-wrap: anywhere
+  color: $text-strong
+
+dl
+  display: grid
+  grid-template-columns: auto 1fr
+  gap: 4px 16px
+  margin: 0
+  font-size: 14px
+  line-height: 22px
+
+dt
+  color: $text-light
+
+dd
+  margin: 0
+  overflow-wrap: anywhere
 
 .action-panel
   display: flex
   justify-content: flex-end
-
-  button
-    margin: 10px
-
+  flex-wrap: wrap
+  gap: 10px
+  margin-top: 16px

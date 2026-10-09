@@ -1,11 +1,12 @@
 import os
 
 from firebase_admin import auth
-from flask import Flask, abort, request
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from pydantic import ValidationError
 
 import pdf_generator
+from shopping_list.reference_data import load_categories
 from utils.export_args import parse_request_args
 from utils.firebase_clients import get_firebase_app, get_firestore_client
 
@@ -68,6 +69,17 @@ def pdf_export(campID, userID):
     pdf_generator.main(args)
 
     return "PDF created successfully!"
+
+
+@app.route("/shopping_list/categories")
+def shopping_list_categories():
+    """
+    The names of the categories of the shopping list, the admin dashboard offers them for uncategorised ingredients.
+    """
+
+    get_authenticated_uid()
+
+    return jsonify(sorted(set(load_categories().values())))
 
 
 if __name__ == "__main__":

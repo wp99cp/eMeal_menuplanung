@@ -16,7 +16,7 @@ import {AngularFireAuth, AngularFireAuthModule} from '@angular/fire/compat/auth'
 import {AuthenticationService} from './modules/application-module/services/authentication.service';
 import {AngularFireModule} from '@angular/fire/compat';
 import {SignInComponent} from './pages/sign-in-page/sign-in.component';
-import {AngularFireFunctions} from '@angular/fire/compat/functions';
+import {AngularFireFunctions, REGION} from '@angular/fire/compat/functions';
 import {SignInCallbackComponent} from './pages/sign-in-callback-page/sign-in-callback.component';
 import {ErrorPageComponent} from './pages/error-page/error-page.component';
 import {AngularFirestore, AngularFirestoreModule} from '@angular/fire/compat/firestore';
@@ -85,6 +85,8 @@ import {emulatorProviders} from './shared/emulator-providers';
     {provide: AngularFirestore, useClass: InjectionContextFirestore},
     AuthenticationService,
     AngularFireFunctions,
+    // the region of the cloud functions, for the services outside of the application module (e.g. AdminService)
+    {provide: REGION, useValue: 'europe-west1'},
     AngularFirestoreModule,
     AccessGuard,
     SwissDateAdapter,

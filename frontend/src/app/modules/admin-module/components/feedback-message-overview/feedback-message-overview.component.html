@@ -1,31 +1,57 @@
-<h3>Feedback Messages</h3>
-<mat-slide-toggle [checked]="showResolved" (change)="showResolved = $event.checked" color="primary">Show resolved messages</mat-slide-toggle>
-<mat-accordion *ngIf="(feedbackMessages | async) as messages">
+<ng-container *ngIf="(feedbackMessages | async) as messages; else loading">
 
-  <p *ngIf="visibleMessages(messages).length === 0">No open feedback messages.</p>
+  <mat-slide-toggle [checked]="showResolved" (change)="showResolved = $event.checked" color="primary">
+    Erledigte Nachrichten anzeigen
+  </mat-slide-toggle>
 
-  <mat-expansion-panel hideToggle *ngFor="let feedback of visibleMessages(messages)">
-    <mat-expansion-panel-header>
-      <mat-panel-title [class.resolved]="feedback.resolved">
-        {{feedback.title}}
-      </mat-panel-title>
-      <mat-panel-description>
-        <p>{{swissDateAdapter.format_time(feedback.date_added.toDate())}}</p>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+  <p class="hint" *ngIf="visibleMessages(messages).length === 0">Keine offenen Feedback-Nachrichten.</p>
 
-    <p>
-      <b>Name: </b> {{feedback.displayName}}: (<a href="mailto:{{feedback.email}}">{{feedback.uid}}</a>)<br>
-      <b>URL: </b>{{feedback.currentURL}}<br>
-    </p>
+  <mat-accordion>
+    <mat-expansion-panel hideToggle *ngFor="let feedback of visibleMessages(messages); trackBy: trackById">
 
-    <p><b>Message: </b>{{feedback.message}}</p>
+      <mat-expansion-panel-header>
+        <mat-panel-title [class.resolved]="feedback.resolved">
+          {{feedback.title || 'Ohne Titel'}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{swissDateAdapter.format_time(feedback.date_added.toDate())}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
 
-    <div class="action-panel">
-      <button mat-stroked-button disabled>Link GitHub Issue</button>
-      <button mat-stroked-button *ngIf="!feedback.resolved" (click)="resolve_issue(feedback.id)">Resolve Issue</button>
-      <button mat-stroked-button *ngIf="feedback.resolved" (click)="reopen_issue(feedback.id)">Reopen Issue</button>
-    </div>
+      <p class="message">{{feedback.message}}</p>
 
-  </mat-expansion-panel>
-</mat-accordion>
+      <dl>
+        <dt>Von</dt>
+        <dd>
+          {{feedback.displayName}}, <a href="mailto:{{feedback.email}}">{{feedback.email}}</a>
+          (<a [routerLink]="[]" [queryParams]="{tab: 'users', q: feedback.uid}">Benutzer nachschlagen</a>)
+        </dd>
+        <dt>Seite</dt>
+        <dd>
+          <a *ngIf="pageLink(feedback) as link; else plainURL" [href]="link" target="_blank">{{link}}</a>
+          <ng-template #plainURL>{{feedback.currentURL || 'unbekannt'}}</ng-template>
+        </dd>
+        <ng-container *ngIf="feedback.resolved && feedback.date_resolved">
+          <dt>Erledigt</dt>
+          <dd>{{swissDateAdapter.format_time(feedback.date_resolved.toDate())}}</dd>
+        </ng-container>
+      </dl>
+
+      <div class="action-panel">
+        <a mat-stroked-button [href]="newIssueLink(feedback)" target="_blank" rel="noopener"
+           matTooltip="Öffnet ein vorausgefülltes Issue, ohne Name und Mailadresse">
+          <mat-icon>launch</mat-icon>
+          GitHub-Issue erstellen
+        </a>
+        <button mat-stroked-button *ngIf="!feedback.resolved" (click)="resolve(feedback)">Als erledigt markieren</button>
+        <button mat-stroked-button *ngIf="feedback.resolved" (click)="reopen(feedback)">Wieder öffnen</button>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</ng-container>
+
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

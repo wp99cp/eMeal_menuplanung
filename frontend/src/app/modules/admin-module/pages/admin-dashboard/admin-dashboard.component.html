@@ -1,20 +1,38 @@
-<mat-tab-group>
+<div class="centered">
 
-  <mat-tab label="Monitoring">
-    <h3>Monitoring</h3>
-    <p><a href="https://monitoring.emeal.ch/d/eMeal/emeal-deploy">
-      <mat-icon>launch</mat-icon>
-      Grafana Interface</a></p>
-  </mat-tab>
+  <span class="page-title">Admin Dashboard</span>
 
-  <mat-tab label="Feedback Messages">
-    <app-feedback-message-overview></app-feedback-message-overview>
-  </mat-tab>
+  <mat-tab-group [selectedIndex]="selectedTab | async" (selectedIndexChange)="selectTab($event)"
+                 animationDuration="0ms">
 
-  <mat-tab label="Food Categories">
-    <app-food-categories></app-food-categories>
-  </mat-tab>
+    <mat-tab label="Übersicht">
+      <app-admin-status></app-admin-status>
+    </mat-tab>
 
-</mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Feedback
+        <span class="count" *ngIf="openFeedback | async as count">{{count}}</span>
+      </ng-template>
+      <app-feedback-message-overview></app-feedback-message-overview>
+    </mat-tab>
 
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Einkaufsliste
+        <span class="count" *ngIf="openShoppingList | async as count">{{count}}</span>
+      </ng-template>
+      <app-food-categories></app-food-categories>
+    </mat-tab>
 
+    <mat-tab label="Hilfetexte">
+      <app-help-message-editor></app-help-message-editor>
+    </mat-tab>
+
+    <mat-tab label="Benutzer">
+      <app-user-lookup></app-user-lookup>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>

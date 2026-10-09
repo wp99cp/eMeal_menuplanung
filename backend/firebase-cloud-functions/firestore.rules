@@ -75,6 +75,12 @@ service cloud.firestore {
         allow read, list: if isAuth() && docID != 'feedback';
     }
 
+    // the decisions on the food categories and the spelling corrections of the shopping list are taken by an
+    // admin, the PDF export reads them
+    match /sharedData/foodCategories {
+        allow update: if isAdmin();
+    }
+
     // feedback messages can be created by every user but only an admin can read and resolve them
     match /sharedData/feedback/messages/{messageID} {
         function validMessage(){
@@ -106,9 +112,11 @@ service cloud.firestore {
     
     // Help messages can be read by all users
     match /sharedData/helpMessages/messages/{document=**} {
-    
+
         allow read, list;
-        
+        // they are edited in the admin dashboard
+        allow write: if isAdmin();
+
     }
     // camps collection
     match /camps/{campID} {

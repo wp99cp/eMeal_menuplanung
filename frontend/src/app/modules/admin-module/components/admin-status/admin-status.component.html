@@ -1,0 +1,63 @@
+<ng-container *ngIf="status | async as status; else loading">
+
+  <h3>Zu erledigen</h3>
+
+  <div class="tiles">
+
+    <a class="tile" [class.open]="status.openFeedback > 0" [routerLink]="[]" [queryParams]="{tab: 'feedback'}">
+      <span class="value">{{status.openFeedback}}</span>
+      <span class="name">offene Feedback-Nachrichten</span>
+    </a>
+
+    <a class="tile" [class.open]="status.uncategorised > 0" [routerLink]="[]" [queryParams]="{tab: 'shopping-list'}">
+      <span class="value">{{status.uncategorised}}</span>
+      <span class="name">Zutaten ohne Kategorie</span>
+    </a>
+
+    <a class="tile" [class.open]="status.corrections > 0" [routerLink]="[]" [queryParams]="{tab: 'shopping-list'}">
+      <span class="value">{{status.corrections}}</span>
+      <span class="name">ungeprüfte Rechtschreibkorrekturen</span>
+    </a>
+
+  </div>
+
+  <h3>Betrieb</h3>
+
+  <div class="tiles">
+
+    <div class="tile">
+      <span class="value">{{status.users}}</span>
+      <span class="name">Benutzerkonten</span>
+    </div>
+
+    <div class="tile" [class.warning]="status.backupOutdated">
+      <span class="value" *ngIf="status.lastBackup">{{status.lastBackup | date:'dd.MM.yyyy'}}</span>
+      <span class="value" *ngIf="!status.lastBackup">Nie</span>
+      <span class="name">letztes Backup der Datenbank</span>
+      <span class="note" *ngIf="status.backupOutdated">
+        <mat-icon>warning</mat-icon>
+        Das Backup läuft jeden Freitag, das letzte ist überfällig.
+      </span>
+    </div>
+
+    <div class="tile">
+      <span class="value">{{status.removedExports}}</span>
+      <span class="name">abgelaufene Exporte diese Woche gelöscht</span>
+      <span class="note">Letzte Woche: {{status.removedExportsLastWeek}}</span>
+    </div>
+
+  </div>
+
+  <h3>Monitoring</h3>
+
+  <p class="hint">
+    <a href="https://monitoring.emeal.ch/d/eMeal/emeal-deploy" target="_blank" rel="noopener">
+      <mat-icon>launch</mat-icon>
+      Grafana öffnen</a>
+  </p>
+
+</ng-container>
+
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>
