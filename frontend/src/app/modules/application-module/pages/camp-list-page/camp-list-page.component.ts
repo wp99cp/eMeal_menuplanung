@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {mergeMap, take} from 'rxjs/operators';
 import {Camp} from '../../classes/camp';
-import {CopyCampComponent} from '../../dialoges/copy-camp/copy-camp.component';
+import {CopyCampComponent, CopyCampResult} from '../../dialoges/copy-camp/copy-camp.component';
 import {CreateCampComponent} from '../../dialoges/create-camp/create-camp.component';
 import {DeleteCampComponent} from '../../dialoges/delete-camp/delete-camp.component';
 import {FirestoreCamp} from '../../interfaces/firestoreDatatypes';
@@ -69,17 +69,31 @@ export class CampListPageComponent extends TileListPage<Camp> implements OnInit 
 
   }
 
-  copy(event: any) {
+  copy(camp: Camp) {
 
     this.dialog.open(CopyCampComponent, {
       width: '530px',
-      height: '250px',
+      height: '430px',
+      data: camp
     }).afterClosed().pipe(take(1))
-      .subscribe(async () => {
+      .subscribe((copy: CopyCampResult | null) => {
 
+        if (!copy) {
+          return;
+        }
+
+        this.snackBar.open('Lager wird kopiert...');
+
+        // the cloud function copies the camp, it opens once its done
+        this.dbService.copyCamp(camp.documentId, copy.name, copy.days).subscribe({
+          next: res => {
+            this.snackBar.open('Lager wurde kopiert.', '', {duration: 2000});
+            this.router.navigateByUrl('/app/camps/' + res.campId);
+          },
+          error: () => this.snackBar.open('Das Lager konnte nicht kopiert werden.', 'Schliessen', {duration: 4000})
+        });
 
       });
-
 
   }
 
