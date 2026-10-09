@@ -47,8 +47,8 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="use-as-header" matTooltip="letzte Verwendung">
         Verwenden als
       </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-form-field matTooltip="wähle Verwendung" *ngIf="data.usage === undefined else useProvidedUsage">
+      <td mat-cell *matCellDef="let element" class="use-as-cell">
+        <mat-form-field matTooltip="wähle Verwendung" subscriptSizing="dynamic" *ngIf="data.usage === undefined else useProvidedUsage">
           <select matNativeControl #select (input)="selected(element, select.value)"
                   [value]="element.lastMeal !== undefined ? element.lastMeal : ''">
             <option value="Zmorgen">Zmorgen</option>
@@ -71,7 +71,7 @@
 
   </table>
 
-  <p *ngIf="mealTableSource.data.length == 0" class="info">
+  <p *ngIf="mealTableSource.data.length === 0" class="info">
     Du hast noch keine Mahlzeiten erstellt. Erstelle oder importiere zuerst eine Mahlzeit.
   </p>
 
