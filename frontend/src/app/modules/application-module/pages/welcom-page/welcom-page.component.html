@@ -5,63 +5,61 @@
     <!-- new users: the one next step is to create a camp -->
     <ng-container *ngIf="camps.length === 0; else recentCamps">
 
-      <span class="page-title">Willkommen bei eMeal</span>
-
       <h1 class="mat-h1">In drei Schritten zum Lagerhandbuch</h1>
 
       <ol class="steps">
         <li class="step current">
           <span class="step-number">1</span>
-          <span class="step-name">Lager anlegen</span>
+          <div class="step-body">
+            <span class="step-name">Lager anlegen</span>
+            <span class="step-text">Du hast noch kein Lager. Du brauchst nur den Namen, das Datum und die Anzahl
+              Teilnehmende.</span>
+            <div class="actions">
+              <button mat-raised-button color="save" class="primary-action" (click)="createCamp()">
+                Erstes Lager erstellen
+              </button>
+              <a (click)="help.openHelpPopup('was-ist-ein-lager')">Was ist ein Lager in eMeal?</a>
+            </div>
+          </div>
         </li>
         <li class="step">
           <span class="step-number">2</span>
-          <span class="step-name">Mahlzeiten einplanen</span>
+          <div class="step-body">
+            <span class="step-name">Mahlzeiten einplanen</span>
+            <span class="step-text">Füge eigene Rezepte oder Vorlagen in die Wochenübersicht ein. eMeal rechnet die
+              Mengen auf dein Lager um.</span>
+          </div>
         </li>
         <li class="step">
           <span class="step-number">3</span>
-          <span class="step-name">Lagerhandbuch exportieren</span>
+          <div class="step-body">
+            <span class="step-name">Lagerhandbuch exportieren</span>
+            <span class="step-text">Wochenplan, Rezepte und Einkaufsliste als PDF für die Küche.</span>
+          </div>
         </li>
       </ol>
-
-      <p>
-        Du hast noch kein Lager. Lege zuerst dein Lager mit Datum und Anzahl Teilnehmenden an, danach planst du die
-        Mahlzeiten in der Wochenübersicht ein.
-      </p>
-
-      <div class="actions">
-        <button mat-raised-button color="save" class="primary-action" (click)="createCamp()">
-          Erstes Lager erstellen
-        </button>
-        <a (click)="help.openHelpPopup('was-ist-ein-lager')">Was ist ein Lager in eMeal?</a>
-      </div>
 
     </ng-container>
 
     <!-- returning users: continue with one of the recently edited camps -->
     <ng-template #recentCamps>
 
-      <span class="page-title">Willkommen zurück</span>
-
-      <h1 class="mat-h1">An welchem Lager planst du weiter?</h1>
+      <h1 class="mat-h1">Weiter planen</h1>
 
       <ul class="camps">
         <li *ngFor="let camp of camps | slice:0:maxRecentCamps; first as mostRecent"
-            class="camp mat-elevation-z2" [class.most-recent]="mostRecent">
+            class="camp" [class.most-recent]="mostRecent">
           <a class="camp-link" routerLink="/app/camps/{{camp.documentId}}">
             <span class="camp-name">{{camp.name}}</span>
-            <span class="camp-info">
-              <ng-container *ngIf="camp.days.length > 0">
-                {{camp.days[0].dateAsTypeDate | date:'dd.MM.yyyy'}} bis
-                {{camp.days[camp.days.length - 1].dateAsTypeDate | date:'dd.MM.yyyy'}},
-              </ng-container>
-              {{camp.participants}} Teilnehmende
+            <span class="camp-info">{{camp.participants}} Teilnehmende, zuletzt bearbeitet am
+              {{camp.lastChange | date:'dd.MM.yyyy'}}</span>
+            <span class="camp-days">
+              <span class="camp-day" *ngFor="let day of camp.days">
+                <span class="camp-weekday">{{weekday(day.dateAsTypeDate)}}</span>
+                {{day.dateAsTypeDate | date:'d.M.'}}
+              </span>
             </span>
-            <span class="camp-changed">Zuletzt bearbeitet am {{camp.lastChange | date:'dd.MM.yyyy'}}</span>
-            <span class="camp-open">
-              {{mostRecent ? 'Weiter planen' : 'Öffnen'}}
-              <mat-icon>arrow_forward</mat-icon>
-            </span>
+            <span class="camp-open">{{mostRecent ? 'Weiter planen' : 'Öffnen'}}</span>
           </a>
         </li>
       </ul>

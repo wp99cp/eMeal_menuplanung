@@ -42,6 +42,10 @@ export class WelcomPageComponent implements OnInit {
 
   }
 
+  weekday(date: Date): string {
+    return ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'][date.getDay()];
+  }
+
   /** Opens the dialog to create a camp, the new camp gets opened afterwards */
   createCamp() {
 
