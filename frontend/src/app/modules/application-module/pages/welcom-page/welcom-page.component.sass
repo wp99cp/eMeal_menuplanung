@@ -1,43 +1,167 @@
+@use '../../../../../sass/colors' as *
 
-.cards
+$text: rgb(95, 99, 104)
+$text-strong: rgba(0, 0, 0, .87)
+$text-light: rgb(117, 117, 117)
+$line: rgb(218, 220, 224)
+
+h1.mat-h1
+  margin-bottom: 36px
+  color: $text-strong
+
+.actions
   display: flex
   align-items: center
+  flex-wrap: wrap
+  gap: 16px 28px
 
+.primary-action
+  height: 48px
+  padding: 0 28px
+  font-size: 16px
 
+.steps, .camps
+  margin: 0
+  padding: 0
+  list-style: none
 
+// the steps and the camps share the look of a card, the current one is highlighted
+.step, .camp
+  max-width: none
+  margin: 0 0 12px 0
+  border: 1px solid $line
+  border-radius: 6px
 
-.card
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)
-  transition: all 30ms cubic-bezier(.4, 0, 1, 1)
-  overflow: hidden
-  margin: 5px
-  max-width: 320px
-  cursor: pointer
-  width: 100%
+.step.current, .camp.most-recent
+  border-color: $prime-color
+  background: $prime-color-light
 
-  .cardDescription
-    padding: 12px 16px
-    font-weight: 400
+.step
+  display: grid
+  grid-template-columns: 32px 1fr
+  column-gap: 16px
+  padding: 18px 20px
 
-  img
-    width: 100%
-    height: auto
-    display: block
-    max-width: 760px
-    max-height: 760px
-    transition: transform .2s
+  .step-number
+    width: 32px
+    height: 32px
+    border-radius: 50%
+    background: rgb(241, 243, 244)
+    line-height: 32px
+    text-align: center
+    font-size: 15px
+    font-weight: 600
+    color: $text-light
 
-@media screen and (max-width: 560px)
-  .cards
+  .step-body
+    display: flex
     flex-direction: column
 
-  .card
-    img
-      height: 140px
-      object-fit: cover
+  .step-name
+    font-size: 20px
+    font-weight: 600
+    line-height: 32px
+    color: $text-light
 
-.card:hover
-  img
-    transform: scale(1.05)
+  .step-text
+    max-width: 560px
+    font-size: 15px
+    line-height: 24px
 
+  .actions
+    margin: 18px 0 6px 0
 
+.step.current
+  .step-number
+    background: $prime-color
+    color: $prime-text-color
+
+  .step-name
+    color: $text-strong
+
+.camp:hover
+  border-color: $text-light
+
+.camp.most-recent:hover
+  border-color: $prime-color-dark
+
+a.camp-link
+  display: grid
+  grid-template-columns: 1fr auto
+  grid-template-areas: "name open" "info open" "days days"
+  column-gap: 20px
+  padding: 18px 20px
+  font-weight: 400
+  color: $text
+
+.camp-name
+  grid-area: name
+  font-size: 20px
+  font-weight: 600
+  line-height: 28px
+  color: $text-strong
+
+.camp-info
+  grid-area: info
+  font-size: 14px
+  line-height: 22px
+
+.camp-open
+  grid-area: open
+  align-self: center
+  padding: 0 18px
+  border-radius: 4px
+  font-size: 16px
+  font-weight: 600
+  line-height: 40px
+  white-space: nowrap
+
+.camp.most-recent .camp-open
+  background: $prime-color
+  color: $prime-text-color
+
+.camp-days
+  grid-area: days
+  display: flex
+  flex-wrap: wrap
+  gap: 4px
+  margin-top: 14px
+
+.camp-day
+  width: 52px
+  padding: 5px 0
+  border-radius: 4px
+  background: rgb(241, 243, 244)
+  font-size: 12px
+  line-height: 16px
+  text-align: center
+  color: $text-light
+
+.camp.most-recent .camp-day
+  background: #fff
+
+.camp-weekday
+  display: block
+  font-size: 13px
+  font-weight: 600
+  color: $text-strong
+
+.camps + .actions
+  margin-top: 28px
+
+@media screen and (max-width: 700px)
+  .step
+    padding: 16px
+
+  a.camp-link
+    grid-template-columns: 1fr
+    grid-template-areas: "name" "info" "days" "open"
+    padding: 16px
+
+  .camp-open
+    justify-self: start
+    margin-top: 14px
+
+  // the other camps are opened with a tap on the card
+  .camp:not(.most-recent) .camp-open
+    display: none

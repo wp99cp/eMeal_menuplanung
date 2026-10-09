@@ -64,8 +64,8 @@ in the regular form. The password of all accounts is `emeal-dev`.
 | E-Mail                | UID          | Description                                                             |
 |-----------------------|--------------|-------------------------------------------------------------------------|
 | `leiterin@emeal.test` | `dev-leader` | Lea Lagerleiterin, owner of the example camp, its meals and recipes     |
-| `koch@emeal.test`     | `dev-cook`   | Kim Koch, editor of the example camp                                    |
-| `neu@emeal.test`      | `dev-new`    | Noah Neu, no data, sees the changelog on the first sign in              |
+| `koch@emeal.test`     | `dev-cook`   | Kim Koch, editor of the example camp, the menu shows the badge "Neu"    |
+| `neu@emeal.test`      | `dev-new`    | Noah Neu, no data, the start page asks to create the first camp         |
 | `admin@emeal.test`    | `dev-admin`  | Alex Admin, has the custom claim `isAdmin`, owner of the meal templates |
 
 "Anmelden mit Google" opens the fake account chooser of the auth emulator, where you can create further accounts.

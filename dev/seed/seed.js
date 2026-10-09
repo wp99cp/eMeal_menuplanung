@@ -199,9 +199,11 @@ async function seedAccounts() {
         await db.doc('users/' + uid).set(
             document({[uid]: 'owner'}, {email, displayName, visibility: 'visible'}));
 
-        // the new user sees the changelog on its first sign in, as a real new user does
+        // the new user has no settings yet, as a real new user. The cook has not seen the changelog of the
+        // current version, thus the menu shows the badge "Neu".
         if (uid !== 'dev-new') {
-            await db.doc('users/' + uid + '/private/settings').set({last_shown_changelog: version}, {merge: true});
+            await db.doc('users/' + uid + '/private/settings')
+                .set({last_shown_changelog: uid === 'dev-cook' ? '' : version}, {merge: true});
         }
 
     }

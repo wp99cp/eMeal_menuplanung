@@ -2,8 +2,9 @@ import {FirestoreSettings, UserGroups} from '../interfaces/firestoreDatatypes';
 import {AuthenticationService} from './authentication.service';
 import {filter, map, mergeMap, tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {merge, Observable, Subject} from 'rxjs';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
+import buildInfo from '../../../../build';
 
 /**
  * Settings Service
@@ -19,6 +20,11 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/f
 export class SettingsService {
 
   public globalSettings: Observable<FirestoreSettings>;
+
+  /** true as long as the user has not opened the changelog of the current version */
+  public unseenChangelog: Observable<boolean>;
+
+  private changelogSeen = new Subject<void>();
   private docRef: AngularFirestoreDocument<FirestoreSettings>;
 
   constructor(private db: AngularFirestore, authService: AuthenticationService) {
@@ -27,6 +33,10 @@ export class SettingsService {
       .pipe(tap(console.log))
       .pipe(filter(user => !!user?.uid))
       .pipe(mergeMap(user => this.loadUserSettings(user.uid)));
+
+    this.unseenChangelog = merge(
+      this.globalSettings.pipe(map(settings => settings.last_shown_changelog !== buildInfo.version)),
+      this.changelogSeen.pipe(map(() => false)));
 
   }
 
@@ -92,8 +102,9 @@ export class SettingsService {
 
         let modified = false;
 
+        // a new account, nothing in the current version is new to it
         if (!settings) {
-          settings = {};
+          settings = {last_shown_changelog: buildInfo.version};
           modified = true;
         }
 
@@ -128,9 +139,10 @@ export class SettingsService {
   }
 
 
-  setLastShownChangelog(version: string) {
+  markChangelogAsSeen() {
 
-    this.docRef.update({last_shown_changelog: version});
+    this.docRef.update({last_shown_changelog: buildInfo.version});
+    this.changelogSeen.next();
 
   }
 

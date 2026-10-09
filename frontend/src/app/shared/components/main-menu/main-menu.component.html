@@ -50,6 +50,14 @@
       <a matTooltip="Melde einen Fehler">Fehler melden</a>
     </li>
 
+    <li (click)="openChangeLog()">
+      <mat-icon class="nav-icon">new_releases</mat-icon>
+      <a matTooltip="Neues in dieser Version">
+        Neue Funktionen
+        <span class="badge-new" *ngIf="unseenChangelog | async">Neu</span>
+      </a>
+    </li>
+
     <li routerLink="/infos/eMeal">
       <mat-icon class="nav-icon">info</mat-icon>
       <a matTooltip="Informationen">Über eMeal - Menüplanung</a>

@@ -85,7 +85,6 @@ import {MatChipsModule} from "@angular/material/chips";
 import {SwissDateAdapter} from "../../shared/utils/format-datapicker";
 import {VersionHistoryModule} from "../change-log-module/version-history.module";
 import {DownloadModule} from "../download-module/download.module";
-import buildInfo from '../../../build';
 import {EditSingleRecipePageComponent} from "./pages/edit-single-recipe-page/edit-single-recipe-page.component";
 import {InjectionContextFirestore} from '../../shared/injection-context-firestore';
 
@@ -213,8 +212,7 @@ export class ApplicationModule {
   constructor(contextMenu: ContextMenuService,
               shortCut: ShortcutService,
               helpService: HelpService,
-              dialog: MatDialog,
-              settings: SettingsService) {
+              dialog: MatDialog) {
 
 
     // we want to use the contextMenuService in this module
@@ -222,21 +220,6 @@ export class ApplicationModule {
     shortCut.activate();
 
     helpService.addDialog(dialog);
-
-    settings.globalSettings.subscribe(s => {
-
-      if (s.last_shown_changelog !== buildInfo.version) {
-
-        dialog.open(ChangeLogComponent, {
-          height: '618px',
-          width: '1000px'
-        }).afterClosed()
-          .subscribe(() => settings.setLastShownChangelog(buildInfo.version));
-
-      }
-
-    });
-
 
   }
 
