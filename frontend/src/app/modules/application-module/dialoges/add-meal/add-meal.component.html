@@ -25,8 +25,8 @@
         <mat-checkbox (click)="$event.stopPropagation()"
                       (change)="selectedMeal.clear(); $event.checked ? selectedMeal.select(row) : null"
                       [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)"
-                      [disabled]="element.usedAs === undefined && element.lastMeal === undefined"
-                      matTooltip="{{element.useAs === undefined && element.lastMeal === undefined? 'wähle eine Verwendung' : 'auswählen'}}">
+                      [disabled]="needsUsage(element)"
+                      matTooltip="{{needsUsage(element) ? 'wähle eine Verwendung' : 'auswählen'}}">
         </mat-checkbox>
       </td>
     </ng-container>

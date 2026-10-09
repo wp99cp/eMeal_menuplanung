@@ -106,6 +106,14 @@ export class AddMealComponent implements AfterViewInit {
     return `${this.selectedMeal.isSelected(meal) ? 'deselect' : 'select'} row ${meal.name}`;
   }
 
+  /**
+   * A meal can only be selected once its usage is known. If the dialog was opened for a slot of the week view,
+   * the usage is given by the slot.
+   */
+  needsUsage(meal: Meal): boolean {
+    return this.data.usage === undefined && meal.usedAs === undefined && meal.lastMeal === undefined;
+  }
+
   /** Set usedAs parameter to firestoreMeal */
   selected(meal: Meal, usedAs: MealUsage) {
 
