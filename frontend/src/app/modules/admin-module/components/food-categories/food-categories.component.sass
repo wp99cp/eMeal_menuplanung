@@ -1,0 +1,40 @@
+@use '../../admin' as *
+
+h3
+  +section-title
+
+.hint
+  +hint
+
+.hint.warning
+  color: $warning
+
+.rows
+  +rows
+
+select
+  height: 36px
+  padding: 0 8px
+  border: 1px solid $line
+  border-radius: 4px
+  background: #fff
+  font: inherit
+  font-size: 14px
+  color: $text-strong
+
+.category
+  font-size: 14px
+  color: $text-light
+
+.arrow
+  width: 16px
+  height: 16px
+  font-size: 16px
+  vertical-align: middle
+  color: $text-light
+
+.mat-expansion-panel-header-description
+  justify-content: flex-end
+
+mat-expansion-panel .rows
+  margin-top: 4px

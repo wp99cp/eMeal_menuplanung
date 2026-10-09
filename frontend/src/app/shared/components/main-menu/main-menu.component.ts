@@ -13,6 +13,7 @@ import {
 import {ChangeLogComponent} from "../../../modules/application-module/dialoges/change-log/change-log.component";
 import {SettingsService} from "../../../modules/application-module/services/settings.service";
 import {Observable} from "rxjs";
+import {AdminService} from "../../../modules/admin-module/services/admin.service";
 
 @Component({
   standalone: false,
@@ -27,6 +28,8 @@ export class MainMenuComponent implements OnInit {
   public isAdmin = false;
   public isSignedIn = false;
   public unseenChangelog: Observable<boolean>;
+  // only loaded for admins
+  public openFeedback: Observable<number>;
 
   constructor(private router: Router,
               private auth: AuthenticationService,
@@ -34,6 +37,7 @@ export class MainMenuComponent implements OnInit {
               public helpService: HelpService,
               private dialog: MatDialog,
               private settings: SettingsService,
+              private admin: AdminService,
               public historyService: HistoryService) {
 
     this.helpService.addDialog(dialog);
@@ -53,7 +57,12 @@ export class MainMenuComponent implements OnInit {
       this.isSignedIn = res;
     });
 
-    this.auth.isAdmin().then(adminState => this.isAdmin = adminState);
+    this.auth.isAdmin().then(adminState => {
+      this.isAdmin = adminState;
+      if (adminState) {
+        this.openFeedback = this.admin.countOpenFeedbackMessages();
+      }
+    });
 
   }
 

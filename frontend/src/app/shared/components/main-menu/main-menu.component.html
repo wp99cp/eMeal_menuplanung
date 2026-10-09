@@ -74,7 +74,10 @@
 
     <li routerLink="/app/admin" routerLinkActive="active-link" *ngIf="isAdmin">
       <mat-icon class="nav-icon">dashboard</mat-icon>
-      <a>Admin Dashboard</a>
+      <a>
+        Admin Dashboard
+        <span class="badge-new" *ngIf="openFeedback | async as count" matTooltip="Offene Feedback-Nachrichten">{{count}}</span>
+      </a>
     </li>
 
     <li routerLink="/">

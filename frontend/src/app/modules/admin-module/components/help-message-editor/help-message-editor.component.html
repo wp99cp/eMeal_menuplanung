@@ -1,0 +1,101 @@
+<p class="hint">
+  Die Hilfetexte erscheinen auf der Seite «Hilfe» und im Hilfe-Fenster (F1) der Seiten, die beim Text
+  eingetragen sind.
+</p>
+
+<button mat-stroked-button (click)="create()" [disabled]="newMessage !== undefined">
+  <mat-icon>add</mat-icon>
+  Neuer Hilfetext
+</button>
+
+<div class="new-message" *ngIf="newMessage">
+  <h3>Neuer Hilfetext</h3>
+  <ng-container *ngTemplateOutlet="form; context: {$implicit: newMessage}"></ng-container>
+  <div class="action-panel">
+    <button mat-stroked-button (click)="newMessage = undefined">Abbrechen</button>
+    <button mat-raised-button color="save" [disabled]="!isValid(newMessage)" (click)="save(newMessage)">
+      Erstellen
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="helpMessages | async as messages; else loading">
+
+  <p class="hint" *ngIf="messages.length === 0">Noch keine Hilfetexte.</p>
+
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let message of messages; trackBy: trackById">
+
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{message.title}}</mat-panel-title>
+        <mat-panel-description>{{message.category || 'Allgemein'}}</mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-template matExpansionPanelContent>
+        <ng-container *ngIf="draft(message) as draft">
+          <ng-container *ngTemplateOutlet="form; context: {$implicit: draft}"></ng-container>
+          <div class="action-panel">
+            <button mat-button class="delete" (click)="delete(message)">Löschen</button>
+            <button mat-stroked-button (click)="reset(message.id)">Änderungen verwerfen</button>
+            <button mat-raised-button color="save" [disabled]="!isValid(draft)" (click)="save(draft, message.id)">
+              Speichern
+            </button>
+          </div>
+        </ng-container>
+      </ng-template>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</ng-container>
+
+<ng-template #form let-draft>
+  <div class="form">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Titel</mat-label>
+      <input matInput [(ngModel)]="draft.title" [ngModelOptions]="{standalone: true}" maxlength="200" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Kategorie</mat-label>
+      <input matInput [(ngModel)]="draft.category" [ngModelOptions]="{standalone: true}" maxlength="100"
+             placeholder="Allgemein">
+      <mat-hint>Gruppiert die Texte auf der Seite «Hilfe»</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="wide">
+      <mat-label>Kurzbeschreibung</mat-label>
+      <input matInput [(ngModel)]="draft.description" [ngModelOptions]="{standalone: true}" maxlength="200">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="wide">
+      <mat-label>Seiten</mat-label>
+      <textarea matInput [(ngModel)]="draft.urls" [ngModelOptions]="{standalone: true}" rows="3"
+                placeholder="app/camps/*"></textarea>
+      <mat-hint>Eine Seite pro Zeile, ohne Schrägstrich am Anfang, eine ID wird zu * (z. B. app/camps/*)</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="wide">
+      <mat-label>Referenz</mat-label>
+      <input matInput [(ngModel)]="draft.ref" [ngModelOptions]="{standalone: true}" maxlength="100">
+      <mat-hint>Über die Referenz öffnet die Anwendung gezielt diesen Text</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="wide">
+      <mat-label>Text (HTML)</mat-label>
+      <textarea matInput [(ngModel)]="draft.message" [ngModelOptions]="{standalone: true}" rows="8"
+                required></textarea>
+    </mat-form-field>
+
+    <div class="preview wide">
+      <span class="preview-label">Vorschau</span>
+      <div [innerHTML]="draft.message"></div>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

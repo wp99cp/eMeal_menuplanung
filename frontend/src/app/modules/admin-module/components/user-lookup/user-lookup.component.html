@@ -1,0 +1,73 @@
+<p class="hint">
+  Sucht ein Konto für eine Support-Anfrage: mit der User-Id, der Mailadresse oder dem Anfang der Mailadresse
+  oder des Namens (Gross- und Kleinschreibung beachten). Angezeigt wird, auf welche Lager das Konto Zugriff hat,
+  nicht aber deren Inhalt.
+</p>
+
+<form class="search" (ngSubmit)="search()">
+  <mat-form-field appearance="fill">
+    <mat-label>User-Id, Mailadresse oder Name</mat-label>
+    <input matInput [(ngModel)]="query" name="query" maxlength="200" autocomplete="off">
+  </mat-form-field>
+  <button mat-raised-button color="save" type="submit" [disabled]="!canSearch() || searching">Suchen</button>
+</form>
+
+<mat-progress-bar mode="indeterminate" *ngIf="searching"></mat-progress-bar>
+
+<p class="hint warning" *ngIf="failed">Die Suche ist fehlgeschlagen.</p>
+
+<ng-container *ngIf="users && !searching">
+
+  <p class="hint" *ngIf="users.length === 0">Kein Konto gefunden.</p>
+
+  <article class="user" *ngFor="let user of users">
+
+    <h3>{{user.displayName || 'Ohne Name'}}</h3>
+
+    <dl>
+      <dt>Mailadresse</dt>
+      <dd><a href="mailto:{{user.email}}">{{user.email}}</a></dd>
+      <dt>User-Id</dt>
+      <dd>{{user.uid}}</dd>
+      <dt>Sichtbarkeit</dt>
+      <dd>{{user.visibility === 'visible' ? 'sichtbar' : 'versteckt'}}</dd>
+      <ng-container *ngIf="user.created !== null; else noAccount">
+        <dt>Anmeldung mit</dt>
+        <dd>{{providers(user)}}</dd>
+        <dt>Konto erstellt</dt>
+        <dd>{{user.created | date:'dd.MM.yyyy'}}</dd>
+        <dt>Letzte Anmeldung</dt>
+        <dd>{{user.lastSignIn ? (user.lastSignIn | date:'dd.MM.yyyy, HH:mm') : 'nie'}}</dd>
+      </ng-container>
+      <ng-template #noAccount>
+        <dt>Konto</dt>
+        <dd>gelöscht, nur das Benutzerdokument existiert noch</dd>
+      </ng-template>
+      <dt>Zugriff auf</dt>
+      <dd>{{user.camps.length}} Lager, {{user.meals}} Mahlzeiten, {{user.recipes}} Rezepte</dd>
+    </dl>
+
+    <table *ngIf="user.camps.length > 0">
+      <thead>
+      <tr>
+        <th>Lager</th>
+        <th>Rolle</th>
+        <th>Beginn</th>
+        <th>Tage</th>
+        <th>Zuletzt bearbeitet</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let camp of user.camps">
+        <td>{{camp.name}}<span class="camp-id">{{camp.id}}</span></td>
+        <td>{{role(camp.role)}}</td>
+        <td>{{camp.firstDay ? (camp.firstDay | date:'dd.MM.yyyy') : ''}}</td>
+        <td>{{camp.days}}</td>
+        <td>{{camp.lastChange ? (camp.lastChange | date:'dd.MM.yyyy') : ''}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </article>
+
+</ng-container>

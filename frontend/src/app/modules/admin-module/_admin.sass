@@ -1,0 +1,65 @@
+@use '../../../sass/colors' as *
+
+// shared look of the tabs of the admin dashboard, same cards as on the start page
+
+$text: rgb(95, 99, 104)
+$text-strong: rgba(0, 0, 0, .87)
+$text-light: rgb(117, 117, 117)
+$line: rgb(218, 220, 224)
+$warning: rgb(179, 38, 30)
+$warning-light: rgb(252, 238, 237)
+
+=card
+  border: 1px solid $line
+  border-radius: 6px
+
+=section-title
+  margin: 28px 0 6px 0
+  font-size: 20px
+  font-weight: 600
+  line-height: 28px
+  color: $text-strong
+
+=hint
+  max-width: none
+  margin: 0 0 14px 0
+  font-size: 14px
+  line-height: 22px
+  color: $text-light
+
+// a list of entries with their actions on the right
+=rows
+  margin: 0 0 12px 0
+  padding: 0
+  list-style: none
+  +card
+
+  li
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: 6px 12px
+    max-width: none
+    margin: 0
+    padding: 8px 8px 8px 16px
+    font-size: 15px
+    line-height: 24px
+    color: $text-strong
+
+  li + li
+    border-top: 1px solid $line
+
+  .grow
+    flex: 1
+    min-width: 160px
+    overflow-wrap: anywhere
+
+=count
+  margin-left: 6px
+  padding: 2px 8px
+  border-radius: 10px
+  background: $prime-color
+  color: $prime-text-color
+  font-size: 12px
+  font-weight: 600
+  line-height: 16px

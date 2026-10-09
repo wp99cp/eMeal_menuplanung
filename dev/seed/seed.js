@@ -146,8 +146,18 @@ const MEALS = [
 ];
 
 const SHARED_DATA = {
-    statistics: {user_count: 0, removed_old_exports: 0},
-    foodCategories: {uncategorised: [], resentCorrections: []}
+    statistics: {
+        user_count: 0, removed_old_exports: 2, old_week: {removed_old_exports: 5}, last_backup_created: now
+    },
+    // the lists the PDF export fills and the decisions of the admins, see the admin dashboard
+    foodCategories: {
+        uncategorised: ['Planted Chicken', 'Tofuwürfel', 'asdf'],
+        resentCorrections: [{from: 'Spagetti', to: 'Spaghetti'}, {from: 'Reiss', to: 'Reis'}],
+        categories: [{food_item: 'Hafermilch', category_name: 'Getränke und Wein'}],
+        ignored: [],
+        acceptedCorrections: [],
+        rejectedCorrections: []
+    }
 };
 
 const HELP_MESSAGES = {

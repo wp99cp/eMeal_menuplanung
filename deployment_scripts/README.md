@@ -10,3 +10,6 @@ copying the help messages form the dev DB to the prod DB. Deployment scripts are
 # Copy help-page messages form dev to prod DB
 python copy_help_messages_to_production_DB.py
 ```
+
+The help messages are edited on the tab "Hilfetexte" of the admin dashboard. Since the script overwrites the messages
+of the prod DB with the ones of the dev DB on every release, edit them in the dev project.
