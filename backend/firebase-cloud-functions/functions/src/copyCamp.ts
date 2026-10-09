@@ -34,7 +34,11 @@ const MAX_DATE = Date.UTC(2100, 0, 1);
 // a batch can contain up to 500 writes
 const MAX_BATCH_SIZE = 400;
 
-type Write = (batch: FirebaseFirestore.WriteBatch) => void;
+/**
+ * A document the copy creates, or a meal that gets linked to the new camp.
+ */
+type Write = { ref: FirebaseFirestore.DocumentReference } &
+    ({ create: FirebaseFirestore.DocumentData } | { link: string });
 
 /**
  *
@@ -57,7 +61,7 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
     if (uid === undefined)
         throw new functions.https.HttpsError('unauthenticated', 'User not authenticated!');
 
-    if (typeof request?.campId !== 'string' || request.campId === '' || request.campId.includes('/'))
+    if (typeof request?.campId !== 'string' || !/^[A-Za-z0-9_-]{1,100}$/.test(request.campId))
         throw new functions.https.HttpsError('invalid-argument', 'Invalid camp!');
 
     const name = typeof request.name === 'string' ? request.name.trim() : '';
@@ -72,7 +76,7 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
         throw new functions.https.HttpsError('not-found', 'Camp not found!');
 
     // the days are sorted, the first new date belongs to the first day of the camp
-    const oldDays = [...camp.days].sort((a, b) => a.day_date.toMillis() - b.day_date.toMillis());
+    const oldDays = [...(camp.days ?? [])].sort((a, b) => a.day_date.toMillis() - b.day_date.toMillis());
 
     const newDates = request.days;
     if (!Array.isArray(newDates) || newDates.length !== oldDays.length ||
@@ -88,7 +92,7 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
     const dates = new Map<number, Timestamp>(
         oldDays.map((day, i) => [day.day_date.toMillis(), Timestamp.fromMillis(newDates[i])]));
     const offset = oldDays.length > 0 ? newDates[0] - oldDays[0].day_date.toMillis() : 0;
-    const shiftDate = (date: Timestamp | undefined | null) => date instanceof Timestamp ?
+    const shiftDate = (date: unknown) => date instanceof Timestamp ?
         (dates.get(date.toMillis()) ?? Timestamp.fromMillis(date.toMillis() + offset)) : date;
 
     const [specificMeals, specificRecipes] = await Promise.all([
@@ -108,8 +112,9 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
 
         const meal = mealSnapshot.data() as FirestoreMeal | undefined;
 
-        // the meal got deleted, its usages are not copied
-        if (meal === undefined)
+        // The meal got deleted or the user has no access to it, its usages are not copied. Every user can create
+        // a specific meal below any meal, hence a usage in the camp does not prove that the meal belongs to it.
+        if (meal === undefined || !canRead(meal.access, uid))
             return;
 
         const recipes = await db.collection('recipes').where('used_in_meals', 'array-contains', mealSnapshot.id).get();
@@ -120,30 +125,39 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
 
             newMealIds.set(mealSnapshot.id, mealSnapshot.id);
             recipes.docs.forEach(recipe => recipeIds.set(recipe.id, recipe.id));
-            writes.push(batch => batch.update(mealSnapshot.ref, {used_in_camps: FieldValue.arrayUnion(newCampRef.id)}));
+            writes.push({ref: mealSnapshot.ref, link: newCampRef.id});
 
         } else {
 
             const newMealRef = db.collection('meals').doc();
             newMealIds.set(mealSnapshot.id, newMealRef.id);
 
-            writes.push(batch => batch.set(newMealRef, {
-                ...meal,
-                ...copyOf(mealSnapshot.id, meal.access, access),
-                used_in_camps: [newCampRef.id]
-            }));
+            writes.push({
+                ref: newMealRef, create: {
+                    ...meal,
+                    ...copyOf(mealSnapshot.id, meal.access, access),
+                    used_in_camps: [newCampRef.id]
+                }
+            });
 
             recipes.docs.forEach(recipeSnapshot => {
 
                 const recipe = recipeSnapshot.data() as FirestoreRecipe;
+
+                // the recipes have an access of their own
+                if (!canRead(recipe.access, uid))
+                    return;
+
                 const newRecipeRef = db.collection('recipes').doc();
                 recipeIds.set(recipeSnapshot.id, newRecipeRef.id);
 
-                writes.push(batch => batch.set(newRecipeRef, {
-                    ...recipe,
-                    ...copyOf(recipeSnapshot.id, recipe.access, access),
-                    used_in_meals: [newMealRef.id]
-                }));
+                writes.push({
+                    ref: newRecipeRef, create: {
+                        ...recipe,
+                        ...copyOf(recipeSnapshot.id, recipe.access, access),
+                        used_in_meals: [newMealRef.id]
+                    }
+                });
 
             });
 
@@ -159,11 +173,12 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
     await Promise.all([...overwrites].map(async ([path, newPath]) => {
         const overwrite = (await db.doc(path).get()).data();
         if (overwrite !== undefined)
-            writes.push(batch => batch.set(db.doc(newPath), 'access' in overwrite ? {...overwrite, access} : overwrite));
+            writes.push({ref: db.doc(newPath), create: 'access' in overwrite ? {...overwrite, access} : overwrite});
     }));
 
     // maps the id of a specific meal to its id in the new camp, the specific recipes use the same id
     const newSpecificIds = new Map<string, string>();
+    const mealOfSpecificId = new Map<string, string>();
 
     specificMeals.docs.forEach(snapshot => {
 
@@ -176,15 +191,18 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
 
         const newRef = db.collection('meals/' + newMealId + '/specificMeals').doc();
         newSpecificIds.set(snapshot.id, newRef.id);
+        mealOfSpecificId.set(snapshot.id, mealId);
 
-        writes.push(batch => batch.set(newRef, {
-            ...specificMeal,
-            ...newDocument(access),
-            meal_date: shiftDate(specificMeal.meal_date),
-            meal_prepare_date: shiftDate(specificMeal.meal_prepare_date),
-            meal_id: newMealId,
-            used_in_camp: newCampRef.id
-        }));
+        writes.push({
+            ref: newRef, create: defined({
+                ...specificMeal,
+                ...newDocument(access),
+                meal_date: shiftDate(specificMeal.meal_date),
+                meal_prepare_date: shiftDate(specificMeal.meal_prepare_date),
+                meal_id: newMealId,
+                used_in_camp: newCampRef.id
+            })
+        });
 
     });
 
@@ -193,39 +211,83 @@ export async function copyCamp(request: CopyCampRequest, context: functions.http
         const specificRecipe = snapshot.data() as FirestoreSpecificRecipe;
         const recipeId = (snapshot.ref.parent.parent as FirebaseFirestore.DocumentReference).id;
         const newSpecificId = newSpecificIds.get(snapshot.id);
-        const newRecipeId = newRecipeIds.get(specificRecipe.used_in_meal)?.get(recipeId);
 
-        // the specific recipe belongs to a deleted meal or to a recipe which got removed from its meal
-        if (newSpecificId === undefined || newRecipeId === undefined)
+        // The specific recipe has the id of its specific meal, which belongs to the meal. Older specific recipes
+        // have no field 'used_in_meal'.
+        const mealId = mealOfSpecificId.get(snapshot.id);
+        const newMealId = mealId === undefined ? undefined : newMealIds.get(mealId);
+        const newRecipeId = mealId === undefined ? undefined : newRecipeIds.get(mealId)?.get(recipeId);
+
+        // the specific recipe belongs to a meal that is not copied or to a recipe which got removed from its meal
+        if (newSpecificId === undefined || newMealId === undefined || newRecipeId === undefined)
             return;
 
-        writes.push(batch => batch.set(db.doc('recipes/' + newRecipeId + '/specificRecipes/' + newSpecificId), {
-            ...specificRecipe,
-            ...newDocument(access),
-            recipe_specificId: newSpecificId,
-            used_in_meal: newMealIds.get(specificRecipe.used_in_meal),
-            used_in_camp: newCampRef.id
-        }));
+        writes.push({
+            ref: db.doc('recipes/' + newRecipeId + '/specificRecipes/' + newSpecificId), create: defined({
+                ...specificRecipe,
+                ...newDocument(access),
+                recipe_specificId: newSpecificId,
+                used_in_meal: newMealId,
+                used_in_camp: newCampRef.id
+            })
+        });
 
     });
 
-    // The camp is written last: if the copy fails, no camp with missing meals shows up.
-    writes.push(batch => batch.set(newCampRef, {
-        ...camp,
-        ...newDocument(access),
-        camp_name: name,
-        camp_year: newDates.length > 0 ? yearOf(newDates[0]) : camp.camp_year,
-        days: oldDays.map((day, i) => ({...day, day_date: Timestamp.fromMillis(newDates[i])}))
-    }));
+    // The camp is written last: as long as the copy is not complete, no camp with missing meals shows up.
+    writes.push({
+        ref: newCampRef, create: defined({
+            ...camp,
+            ...newDocument(access),
+            camp_name: name,
+            camp_year: newDates.length > 0 ? yearOf(newDates[0]) : camp.camp_year,
+            days: oldDays.map((day, i) => ({...day, day_date: Timestamp.fromMillis(newDates[i])}))
+        })
+    });
 
-    for (let i = 0; i < writes.length; i += MAX_BATCH_SIZE) {
-        const batch = db.batch();
-        writes.slice(i, i + MAX_BATCH_SIZE).forEach(write => write(batch));
-        await batch.commit();
+    const apply = (batch: FirebaseFirestore.WriteBatch, write: Write) => 'create' in write ?
+        batch.create(write.ref, write.create) :
+        batch.update(write.ref, {used_in_camps: FieldValue.arrayUnion(write.link)});
+
+    // a large camp needs more than one batch, which are not atomic together
+    let committed = 0;
+    try {
+        for (; committed < writes.length; committed += MAX_BATCH_SIZE) {
+            const batch = db.batch();
+            writes.slice(committed, committed + MAX_BATCH_SIZE).forEach(write => apply(batch, write));
+            await batch.commit();
+        }
+    } catch (error) {
+        console.error('Copy of camp ' + request.campId + ' failed.', error);
+        await revert(writes.slice(0, committed));
+        throw new functions.https.HttpsError('internal', 'The camp could not be copied!');
     }
 
     return {campId: newCampRef.id};
 
+}
+
+/**
+ * Removes the documents of a copy which failed after some of its batches got committed.
+ */
+async function revert(writes: Write[]) {
+
+    for (let i = 0; i < writes.length; i += MAX_BATCH_SIZE) {
+        const batch = db.batch();
+        writes.slice(i, i + MAX_BATCH_SIZE).forEach(write => 'create' in write ?
+            batch.delete(write.ref) :
+            // the meal exists, the batch which linked it got committed
+            batch.update(write.ref, {used_in_camps: FieldValue.arrayRemove(write.link)}));
+        await batch.commit().catch(error => console.error('Could not revert the failed copy.', error));
+    }
+
+}
+
+/**
+ * Removes the undefined fields, a document must not contain them. Older documents miss some fields.
+ */
+function defined<T extends object>(document: T) {
+    return Object.fromEntries(Object.entries(document).filter(([, value]) => value !== undefined));
 }
 
 function canRead(access: AccessData | undefined, uid: string) {
