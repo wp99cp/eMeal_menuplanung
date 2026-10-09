@@ -1,11 +1,35 @@
 <h3>Lager kopieren</h3>
 
 <div mat-dialog-content>
-  <p>Zur Zeit können Lager nicht kopiert werden. Erstelle ein neues Lager und füge die Rezepte deiner Wahl hinzu.</p>
+
+  <p>Die Kopie enthält dieselben Mahlzeiten an denselben Tagen und gehört nur dir. Mahlzeiten, die du bearbeiten
+    darfst, werden in beiden Lagern verwendet: Änderungen an ihren Rezepten gelten für beide Lager. Die übrigen
+    Mahlzeiten werden für dich kopiert.</p>
+
+  <form [formGroup]="copyCampForm">
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name des Lagers" required formControlName="name" #name maxlength="32"
+             autocomplete="off">
+      <mat-hint align="end">{{name.value?.length}} / 32</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput [matDatepicker]="picker" placeholder="Start-Datum" required formControlName="start"
+             autocomplete="off">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-hint align="start">Die Tage des Lagers werden auf dieses Datum verschoben.</mat-hint>
+    </mat-form-field>
+
+  </form>
+
 </div>
 
 <div mat-dialog-actions class="custom-mat-buttons">
   <p></p>
-  <button mat-stroked-button [mat-dialog-close]="'close'">Abbrechen</button>
-  <button mat-raised-button disabled [mat-dialog-close]="'copy'" color="save">Lager kopieren</button>
+  <button mat-stroked-button [mat-dialog-close]="null">Abbrechen</button>
+  <button mat-raised-button [mat-dialog-close]="copyCamp()" color="save" [disabled]="!copyCampForm.valid">
+    Lager kopieren
+  </button>
 </div>

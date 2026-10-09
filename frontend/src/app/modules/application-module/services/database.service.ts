@@ -129,6 +129,22 @@ export class DatabaseService {
   }
 
   /**
+   * Copies a camp with the cloud function 'copyCamp'. The current user becomes the owner of the copy.
+   *
+   * @param campId id of the camp to copy
+   * @param name name of the new camp
+   * @param days dates of the days of the new camp in milliseconds, one for each day of the copied camp
+   *
+   * @return the id of the new camp as an Observable. This observable completes after one push.
+   *
+   */
+  public copyCamp(campId: string, name: string, days: number[]): Observable<{ campId: string }> {
+
+    return this.functions.httpsCallable('copyCamp')({campId, name, days});
+
+  }
+
+  /**
    *
    * TODO: auto unsubscription
    * TODO: update documentation
