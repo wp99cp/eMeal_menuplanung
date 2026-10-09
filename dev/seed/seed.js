@@ -218,6 +218,16 @@ async function seedSharedData() {
         await db.doc('sharedData/helpMessages/messages/' + id).set(data);
     }
 
+    // one open and one resolved feedback message for the admin dashboard
+    const feedback = (title, message, fields = {}) => ({
+        uid: 'dev-cook', displayName: 'Kim Koch v/o Pfanne', email: 'koch@emeal.test',
+        title, message, currentURL: '/app/camps/' + CAMP, date_added: now, access: {'dev-cook': 'owner'}, ...fields
+    });
+    await db.doc('sharedData/feedback/messages/dev-feedback-open').set(
+        feedback('Einkaufsliste nach Tagen', 'Es wäre praktisch, die Einkaufsliste nach Tagen zu exportieren.'));
+    await db.doc('sharedData/feedback/messages/dev-feedback-resolved').set(
+        feedback('Tippfehler im Export', 'Im Export steht "Wochenübersciht".', {resolved: true, date_resolved: now}));
+
 }
 
 async function seedCamp() {

@@ -14,6 +14,9 @@ export class FeedbackMessageOverviewComponent implements OnInit {
 
   public feedbackMessages: Observable<any>;
 
+  // resolved messages are hidden by default
+  public showResolved = false;
+
   constructor(private db: DatabaseService,
               public swissDateAdapter: SwissDateAdapter) {
   }
@@ -33,5 +36,15 @@ export class FeedbackMessageOverviewComponent implements OnInit {
 
     this.db.resolve_issue(docID);
 
+  }
+
+  reopen_issue(docID: string) {
+
+    this.db.reopen_issue(docID);
+
+  }
+
+  visibleMessages<T extends { resolved?: boolean }>(messages: T[]): T[] {
+    return this.showResolved ? messages : messages.filter(message => !message.resolved);
   }
 }

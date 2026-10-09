@@ -8,6 +8,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from "@angular/material/icon";
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FoodCategoriesComponent } from './components/food-categories/food-categories.component';
 
 
@@ -23,7 +24,8 @@ import { FoodCategoriesComponent } from './components/food-categories/food-categ
     MatTabsModule,
     MatExpansionModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatSlideToggleModule
   ]
 })
 export class AdminPagesModule { }
