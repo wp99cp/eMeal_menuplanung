@@ -1,54 +1,83 @@
 <div class="centered">
-  <span class="page-title">Jetzt loslegen!</span>
 
-  <h1 class="mat-h1">{{title}}</h1>
+  <ng-container *ngIf="camps | async as camps; else loadingCamps">
 
-  <article>
-    <!-- fast actions: overview -->
-    <ng-container *ngIf="currentUser | async; let user; else loadingUserData">
+    <!-- new users: the one next step is to create a camp -->
+    <ng-container *ngIf="camps.length === 0; else recentCamps">
 
-      <div class="cards">
+      <span class="page-title">Willkommen bei eMeal</span>
 
-        <div class="card" >
-          <img src="/frontend/src/assets/img/camps_square_link.240w.jpg" routerLink="/app/camps"
-               srcset="/frontend/src/assets/img/camps_square_link.240w.jpg 240w, /assets/img/camps_square_link.300w.jpg 300w, /assets/img/camps_square_link.420w.jpg 420w"
-               alt="CampClass Link Image">
-          <div class="cardDescription">
-            <p><b>Meine Lager</b></p>
-            <a (click)="help.openHelpPopup('was-ist-ein-lager')">Hilfe: Was ist ein Lager in eMeal?</a>
-          </div>
-        </div>
+      <h1 class="mat-h1">In drei Schritten zum Lagerhandbuch</h1>
 
-        <div class="card" >
-          <img src="/frontend/src/assets/img/meal_square_link.240w.jpg" routerLink="/app/meals"
-               srcset="/frontend/src/assets/img/meal_square_link.240w.jpg 240w, /assets/img/meal_square_link.300w.jpg 300w, /assets/img/meal_square_link.420w.jpg 420w"
-               alt="Meal Link Image">
-          <div class="cardDescription"><p><b>Meine Mahlzeiten</b></p>
-            <a (click)="help.openHelpPopup('was-ist-eine-mahlzeit')">Hilfe: Was ist eine Mahlzeit in eMeal?</a>
-          </div>
-        </div>
+      <ol class="steps">
+        <li class="step current">
+          <span class="step-number">1</span>
+          <span class="step-name">Lager anlegen</span>
+        </li>
+        <li class="step">
+          <span class="step-number">2</span>
+          <span class="step-name">Mahlzeiten einplanen</span>
+        </li>
+        <li class="step">
+          <span class="step-number">3</span>
+          <span class="step-name">Lagerhandbuch exportieren</span>
+        </li>
+      </ol>
 
-        <div class="card">
-          <img src="/frontend/src/assets/img/recipes_square_link.240w.jpg" routerLink="/app/recipes"
-               srcset="//assets/img/recipes_square_link.240w.jpg 240w, /frontend/src/assets/img/recipes_square_link.300w.jpg 300w, /assets/img/recipes_square_link.420w.jpg 420w"
-               alt="Recipe Link Image">
-          <div class="cardDescription"><p><b>Meine Rezepte</b></p>
-            <a (click)="help.openHelpPopup('was-ist-ein-rezept')">Hilfe: Was ist ein Rezept in eMeal?</a>
-          </div>
-        </div>
+      <p>
+        Du hast noch kein Lager. Lege zuerst dein Lager mit Datum und Anzahl Teilnehmenden an, danach planst du die
+        Mahlzeiten in der Wochenübersicht ein.
+      </p>
 
+      <div class="actions">
+        <button mat-raised-button color="save" class="primary-action" (click)="createCamp()">
+          Erstes Lager erstellen
+        </button>
+        <a (click)="help.openHelpPopup('was-ist-ein-lager')">Was ist ein Lager in eMeal?</a>
       </div>
 
     </ng-container>
 
-    <!-- Loading Animation -->
-    <ng-template #loadingUserData>
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <!-- returning users: continue with one of the recently edited camps -->
+    <ng-template #recentCamps>
+
+      <span class="page-title">Willkommen zurück</span>
+
+      <h1 class="mat-h1">An welchem Lager planst du weiter?</h1>
+
+      <ul class="camps">
+        <li *ngFor="let camp of camps | slice:0:maxRecentCamps; first as mostRecent"
+            class="camp mat-elevation-z2" [class.most-recent]="mostRecent">
+          <a class="camp-link" routerLink="/app/camps/{{camp.documentId}}">
+            <span class="camp-name">{{camp.name}}</span>
+            <span class="camp-info">
+              <ng-container *ngIf="camp.days.length > 0">
+                {{camp.days[0].dateAsTypeDate | date:'dd.MM.yyyy'}} bis
+                {{camp.days[camp.days.length - 1].dateAsTypeDate | date:'dd.MM.yyyy'}},
+              </ng-container>
+              {{camp.participants}} Teilnehmende
+            </span>
+            <span class="camp-changed">Zuletzt bearbeitet am {{camp.lastChange | date:'dd.MM.yyyy'}}</span>
+            <span class="camp-open">
+              {{mostRecent ? 'Weiter planen' : 'Öffnen'}}
+              <mat-icon>arrow_forward</mat-icon>
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="actions">
+        <button mat-stroked-button (click)="createCamp()">Neues Lager erstellen</button>
+        <a routerLink="/app/camps">Alle Lager anzeigen ({{camps.length}})</a>
+      </div>
+
     </ng-template>
 
-  </article>
+  </ng-container>
 
-
-  <app-version-info></app-version-info>
+  <!-- Loading Animation -->
+  <ng-template #loadingCamps>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-template>
 
 </div>

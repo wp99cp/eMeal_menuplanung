@@ -10,6 +10,9 @@ import {Camp} from "../../../modules/application-module/classes/camp";
 import {
   FeedbackDialogComponent
 } from "../../../modules/application-module/dialoges/feedback-dialog/feedback-dialog.component";
+import {ChangeLogComponent} from "../../../modules/application-module/dialoges/change-log/change-log.component";
+import {SettingsService} from "../../../modules/application-module/services/settings.service";
+import {Observable} from "rxjs";
 
 @Component({
   standalone: false,
@@ -23,15 +26,18 @@ export class MainMenuComponent implements OnInit {
   public lastCamp: Camp;
   public isAdmin = false;
   public isSignedIn = false;
+  public unseenChangelog: Observable<boolean>;
 
   constructor(private router: Router,
               private auth: AuthenticationService,
               private location: Location,
               public helpService: HelpService,
               private dialog: MatDialog,
+              private settings: SettingsService,
               public historyService: HistoryService) {
 
     this.helpService.addDialog(dialog);
+    this.unseenChangelog = settings.unseenChangelog;
 
     historyService.lastUsedCamp.subscribe(camp => {
       this.lastCamp = camp;
@@ -74,6 +80,18 @@ export class MainMenuComponent implements OnInit {
       data: {}
     }).afterClosed().subscribe();
 
+
+  }
+
+  openChangeLog() {
+
+    this.dialog.open(ChangeLogComponent, {
+      height: '618px',
+      width: '1000px'
+    });
+
+    // the badge "Neu" disappears
+    this.settings.markChangelogAsSeen();
 
   }
 

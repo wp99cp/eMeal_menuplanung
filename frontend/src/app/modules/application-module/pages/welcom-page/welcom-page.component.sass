@@ -1,43 +1,133 @@
+@use '../../../../../sass/colors' as *
 
-.cards
+h1.mat-h1
+  margin-bottom: 40px
+
+.steps
   display: flex
   align-items: center
+  gap: 10px
+  margin: 0 0 40px 0
+  padding: 0
+  list-style: none
 
+.step
+  display: flex
+  align-items: center
+  gap: 10px
+  color: rgb(117, 117, 117)
+  font-weight: 500
+  white-space: nowrap
 
+  .step-number
+    flex: none
+    width: 30px
+    height: 30px
+    border: 2px solid rgb(189, 189, 189)
+    border-radius: 50%
+    line-height: 30px
+    text-align: center
+    font-size: 15px
 
+// the line to the next step
+.step:not(:last-child)::after
+  content: ''
+  width: 28px
+  height: 2px
+  background: rgb(218, 218, 218)
 
-.card
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)
-  transition: all 30ms cubic-bezier(.4, 0, 1, 1)
-  overflow: hidden
-  margin: 5px
-  max-width: 320px
-  cursor: pointer
-  width: 100%
+.step.current
+  color: rgba(0, 0, 0, .87)
 
-  .cardDescription
-    padding: 12px 16px
-    font-weight: 400
+  .step-number
+    border-color: $prime-color
+    background: $prime-color
+    color: $prime-text-color
 
-  img
-    width: 100%
-    height: auto
-    display: block
-    max-width: 760px
-    max-height: 760px
-    transition: transform .2s
+.actions
+  display: flex
+  align-items: center
+  flex-wrap: wrap
+  gap: 16px 28px
+  margin-top: 32px
 
-@media screen and (max-width: 560px)
-  .cards
+  .primary-action
+    height: 48px
+    padding: 0 28px
+    font-size: 16px
+
+.camps
+  margin: 0
+  padding: 0
+  list-style: none
+
+.camp
+  max-width: none
+  margin-bottom: 14px
+  border-left: 6px solid #7d8a9c
+  background: #fff
+
+.camp.most-recent
+  border-left-color: $prime-color
+
+.camp-link
+  display: grid
+  grid-template-columns: 1fr auto
+  grid-template-areas: "name open" "info open" "changed open"
+  align-items: center
+  column-gap: 20px
+  padding: 16px 20px
+  color: rgb(95, 99, 104)
+  font-weight: 400
+
+  .camp-name
+    grid-area: name
+    color: rgba(0, 0, 0, .87)
+    font-size: 19px
+    font-weight: 600
+    line-height: 30px
+
+  .camp-info
+    grid-area: info
+    font-size: 15px
+    line-height: 24px
+
+  .camp-changed
+    grid-area: changed
+    font-size: 13px
+    line-height: 22px
+    color: rgb(117, 117, 117)
+
+  .camp-open
+    grid-area: open
+    display: flex
+    align-items: center
+    gap: 6px
+    color: rgb(117, 117, 117)
+    font-weight: 600
+    white-space: nowrap
+
+.camp.most-recent .camp-open
+  padding: 6px 16px
+  border-radius: 4px
+  background: $prime-color
+  color: $prime-text-color
+
+.camp:hover
+  background: #f5f5f5
+
+@media screen and (max-width: 700px)
+  .steps
     flex-direction: column
+    align-items: flex-start
 
-  .card
-    img
-      height: 140px
-      object-fit: cover
+  .step:not(:last-child)::after
+    display: none
 
-.card:hover
-  img
-    transform: scale(1.05)
+  .camp-link
+    grid-template-columns: 1fr
+    grid-template-areas: "name" "info" "changed" "open"
 
-
+    .camp-open
+      margin-top: 10px
+      justify-self: start
