@@ -31,8 +31,8 @@ export class AddMealComponent implements AfterViewInit {
   // Datasource for the table
   public mealTableSource = new MatTableDataSource<Meal>();
 
-  // only use for the mat table
-  public readonly displayedColumns: string[] = ['select', 'name', 'description', 'useAs'];
+  // only use for the mat table, the usage can only be chosen if it is not given by the caller
+  public readonly displayedColumns: string[];
 
   // Selected Meals form the table
   public selectedMeal = new SelectionModel<Meal>(true, []);
@@ -44,7 +44,8 @@ export class AddMealComponent implements AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: { mealNames: string[], usage: MealUsage }) {
 
     this.mealTableSource = new MatTableDataSource();
-
+    this.displayedColumns = this.data.usage === undefined ?
+      ['select', 'name', 'description', 'useAs'] : ['select', 'name', 'description'];
 
   }
 
@@ -93,9 +94,11 @@ export class AddMealComponent implements AfterViewInit {
    *
    */
   masterToggle() {
-    this.isAllSelected() ?
-      this.selectedMeal.clear() :
+    if (this.isAllSelected()) {
+      this.selectedMeal.clear();
+    } else {
       this.mealTableSource.data.filter(meal => meal.usedAs != null).forEach(meal => this.selectedMeal.select(meal));
+    }
   }
 
   /** The label for the checkbox on the passed row */
@@ -106,18 +109,38 @@ export class AddMealComponent implements AfterViewInit {
     return `${this.selectedMeal.isSelected(meal) ? 'deselect' : 'select'} row ${meal.name}`;
   }
 
-  /**
-   * A meal can only be selected once its usage is known. If the dialog was opened for a slot of the week view,
-   * the usage is given by the slot.
-   */
-  needsUsage(meal: Meal): boolean {
-    return this.data.usage === undefined && meal.usedAs === undefined && meal.lastMeal === undefined;
+  /** A meal can only be added once its usage is known */
+  canSelect(meal: Meal): boolean {
+    return this.data.usage !== undefined || meal.usedAs != null;
   }
 
-  /** Set usedAs parameter to firestoreMeal */
+  /** Selects the meal, only one meal can be selected at a time */
+  select(meal: Meal) {
+
+    this.selectedMeal.clear();
+
+    if (this.canSelect(meal)) {
+      this.selectedMeal.select(meal);
+    }
+
+  }
+
+  /** Selects the meal or removes the selection if it is already selected */
+  toggle(meal: Meal) {
+
+    if (this.selectedMeal.isSelected(meal)) {
+      this.selectedMeal.clear();
+    } else {
+      this.select(meal);
+    }
+
+  }
+
+  /** Set usedAs parameter to firestoreMeal and selects it, the usage is chosen for the meal that gets added */
   selected(meal: Meal, usedAs: MealUsage) {
 
     meal.usedAs = usedAs;
+    this.select(meal);
 
   }
 

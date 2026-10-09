@@ -1,3 +1,5 @@
+@use '../../../../../sass/colors' as *
+
 \:host
   width: 100%
   height: 100%
@@ -18,34 +20,73 @@
   grid-area: paginator
 
 .mat-mdc-table
+  table-layout: fixed
+
   tr
     height: 45px
     user-select: none
+
+  .mat-mdc-row
     cursor: pointer
 
   .mat-mdc-row:hover
     background-color: whitesmoke
 
-  td
+  .mat-mdc-row.selected
+    background-color: $prime-color-light
+
+  .mat-mdc-row.not-selectable
+    cursor: default
+
+  .name-cell, .description-cell
     overflow: hidden
     white-space: nowrap
+    text-overflow: ellipsis
     padding-right: 20px
-    max-width: 100px
 
-  .mat-mdc-form-field
-    height: 45px
-    margin-top: -10px
-    overflow: hidden
-    width: 125px
+  .name-cell
+    font-weight: 500
+
+  .description-cell
+    color: #666
+
+  .use-as-cell
+    padding-right: 8px
 
   .selection-header
-    width: 40px
+    width: 72px
 
   .title-header
-    width: 250px
+    width: 30%
 
   .use-as-header
-    width: 125px
+    width: 158px
+    white-space: nowrap
+
+// a plain select, a form field does not fit into a row of the table
+.use-as-select
+  appearance: none
+  width: 100%
+  height: 32px
+  padding: 0 30px 0 10px
+  border: 1px solid #d0d0d0
+  border-radius: 4px
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='5'%3E%3Cpath d='M0 0l5 5 5-5z' fill='%234d4d4d'/%3E%3C/svg%3E") no-repeat right 10px center
+  font: inherit
+  color: inherit
+  cursor: pointer
+
+  &:hover
+    border-color: #8c8c8c
+
+  &:focus-visible
+    outline: 2px solid $prime-color
+    outline-offset: 1px
+
+  // no usage chosen yet
+  &.unset
+    color: #767676
+    border-style: dashed
 
 .mat-mdc-dialog-title
   grid-area: header
