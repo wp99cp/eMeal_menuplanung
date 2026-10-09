@@ -1,9 +1,12 @@
 <h3>Feedback Messages</h3>
-<mat-accordion>
+<mat-slide-toggle [checked]="showResolved" (change)="showResolved = $event.checked" color="primary">Show resolved messages</mat-slide-toggle>
+<mat-accordion *ngIf="(feedbackMessages | async) as messages">
 
-  <mat-expansion-panel hideToggle *ngFor="let feedback of (feedbackMessages | async)">
+  <p *ngIf="visibleMessages(messages).length === 0">No open feedback messages.</p>
+
+  <mat-expansion-panel hideToggle *ngFor="let feedback of visibleMessages(messages)">
     <mat-expansion-panel-header>
-      <mat-panel-title>
+      <mat-panel-title [class.resolved]="feedback.resolved">
         {{feedback.title}}
       </mat-panel-title>
       <mat-panel-description>
@@ -20,7 +23,8 @@
 
     <div class="action-panel">
       <button mat-stroked-button disabled>Link GitHub Issue</button>
-      <button mat-stroked-button (click)="resolve_issue(feedback.id)">Resolve Issue</button>
+      <button mat-stroked-button *ngIf="!feedback.resolved" (click)="resolve_issue(feedback.id)">Resolve Issue</button>
+      <button mat-stroked-button *ngIf="feedback.resolved" (click)="reopen_issue(feedback.id)">Reopen Issue</button>
     </div>
 
   </mat-expansion-panel>

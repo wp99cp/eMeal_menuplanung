@@ -1078,8 +1078,17 @@ export class DatabaseService {
       ref => ref.orderBy('date_added', 'desc')).snapshotChanges();
   }
 
+  /**
+   * Marks a feedback message as resolved. The message is kept, so it stays known what has been reported.
+   */
   resolve_issue(docID: string) {
-    return this.db.doc('/sharedData/feedback/messages/' + docID).delete();
+    return this.db.doc('/sharedData/feedback/messages/' + docID)
+      .update({resolved: true, date_resolved: FieldValue.serverTimestamp()});
+  }
+
+  reopen_issue(docID: string) {
+    return this.db.doc('/sharedData/feedback/messages/' + docID)
+      .update({resolved: false, date_resolved: FieldValue.delete()});
   }
 
   getUncategorizedFood() {
