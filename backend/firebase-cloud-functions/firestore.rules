@@ -43,12 +43,14 @@ service cloud.firestore {
                 // access data did not change
                 request.resource.data.access == resource.data.access &&
                 request.resource.data.displayName is string &&
+                request.resource.data.displayName.size() <= 200 &&
                 // can't change it's email
                 request.resource.data.email == resource.data.email &&
-                // can't change it's own uid
                 request.resource.data.visibility in ['visible', 'hidden'] &&
-                // only this 3 fields are allowed
-                request.resource.data.keys().hasAll(['displayName', 'email', 'visibility']);
+                request.resource.data.date_modified is timestamp &&
+                // only this 3 fields can be changed, in particular no fields can be added or removed
+                request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['displayName', 'visibility', 'date_modified']);
         }
         // A user only can edit it's own user document
         // He can only change it's displayed name and the visibility-properity
@@ -119,8 +121,10 @@ service cloud.firestore {
                 // has name
                 request.resource.data.camp_name.size() > 0;
         }
-        // every auth user can create camps on which he has access
-        allow create: if isAuth() && validChanges();
+        // every auth user can create camps, he has to be the owner and the only user with access
+        // (a camp is shared with the cloud function 'changeAccessData')
+        allow create: if isAuth() && isOwner(request.resource.data) &&
+            request.resource.data.access.keys().hasOnly([request.auth.uid]) && validChanges();
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow list, get: if hasAccess();
         allow delete: if isOwner(resource.data);

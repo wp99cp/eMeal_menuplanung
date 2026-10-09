@@ -122,6 +122,8 @@ export type UserGroups = 'all' | 'vegetarians' | 'non-vegetarians' | 'leaders';
 
 export interface FirestoreSpecificRecipe extends FirestoreDocument {
 
+  used_in_meal: string;
+
   recipe_participants: number;
   recipe_override_participants: boolean;
   recipe_used_for: UserGroups;
@@ -143,7 +145,7 @@ export interface FirestoreSpecificMeal extends FirestoreDocument {
   meal_date: admin.firestore.Timestamp;
 
   used_in_camp: string;
-
+  meal_id: string;
 
 }
 
