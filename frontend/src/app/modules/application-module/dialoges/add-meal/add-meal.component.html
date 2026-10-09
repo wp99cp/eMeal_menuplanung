@@ -1,4 +1,4 @@
-<h3 mat-dialog-title>Mahlzeiten hinzufügen.</h3>
+<h3 mat-dialog-title>Mahlzeiten {{data.usage === undefined ? '' : 'als ' + data.usage}} hinzufügen.</h3>
 
 <div class="meal-search-table">
 
@@ -21,12 +21,12 @@
          -->
       </th>
 
-      <td mat-cell *matCellDef="let row; let element">
+      <td mat-cell *matCellDef="let row">
         <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="selectedMeal.clear(); $event.checked ? selectedMeal.select(row) : null"
+                      (change)="$event.checked ? select(row) : selectedMeal.clear()"
                       [checked]="selectedMeal.isSelected(row)" [aria-label]="checkboxLabel(row)"
-                      [disabled]="element.usedAs === undefined && element.lastMeal === undefined"
-                      matTooltip="{{element.useAs === undefined && element.lastMeal === undefined? 'wähle eine Verwendung' : 'auswählen'}}">
+                      [disabled]="!canSelect(row)"
+                      matTooltip="{{canSelect(row) ? 'auswählen' : 'wähle eine Verwendung'}}">
         </mat-checkbox>
       </td>
     </ng-container>
@@ -34,44 +34,43 @@
     <!-- firstName Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="title-header"> Name</th>
-      <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.name}} </td>
+      <td mat-cell *matCellDef="let element" class="name-cell"> {{element.name}} </td>
     </ng-container>
 
     <!-- lastname Column -->
     <ng-container matColumnDef="description">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="description-header"> Beschreibung</th>
-      <td mat-cell *matCellDef="let row; let element" (click)="this.selectedMeal.clear(); selectedMeal.toggle(row)"> {{element.description}} </td>
+      <td mat-cell *matCellDef="let element" class="description-cell"> {{element.description}} </td>
     </ng-container>
 
     <ng-container matColumnDef="useAs">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="" class="use-as-header" matTooltip="letzte Verwendung">
         Verwenden als
       </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-form-field matTooltip="wähle Verwendung" *ngIf="data.usage === undefined else useProvidedUsage">
-          <select matNativeControl #select (input)="selected(element, select.value)"
-                  [value]="element.lastMeal !== undefined ? element.lastMeal : ''">
-            <option value="Zmorgen">Zmorgen</option>
-            <option value="Zmittag">Zmittag</option>
-            <option value="Znacht">Znacht</option>
-            <option value="Znüni">Znüni</option>
-            <option value="Zvieri">Zvieri</option>
-            <option value="Dessert">Dessert</option>
-            <option value="Leitersnack">Leitersnack</option>
-          </select>
-        </mat-form-field>
-        <ng-template #useProvidedUsage>
-          <span>{{data.usage}}</span>
-        </ng-template>
+      <td mat-cell *matCellDef="let element" class="use-as-cell">
+        <select #select class="use-as-select"
+                [class.unset]="!canSelect(element)" aria-label="Verwenden als"
+                (click)="$event.stopPropagation()" (input)="selected(element, select.value)"
+                [value]="element.usedAs !== undefined ? element.usedAs : ''">
+          <option value="" disabled hidden>wählen…</option>
+          <option value="Zmorgen">Zmorgen</option>
+          <option value="Zmittag">Zmittag</option>
+          <option value="Znacht">Znacht</option>
+          <option value="Znüni">Znüni</option>
+          <option value="Zvieri">Zvieri</option>
+          <option value="Dessert">Dessert</option>
+          <option value="Leitersnack">Leitersnack</option>
+        </select>
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="toggle(row)"
+        [class.selected]="selectedMeal.isSelected(row)" [class.not-selectable]="!canSelect(row)"></tr>
 
   </table>
 
-  <p *ngIf="mealTableSource.data.length == 0" class="info">
+  <p *ngIf="mealTableSource.data.length === 0" class="info">
     Du hast noch keine Mahlzeiten erstellt. Erstelle oder importiere zuerst eine Mahlzeit.
   </p>
 
