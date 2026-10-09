@@ -119,8 +119,10 @@ service cloud.firestore {
                 // has name
                 request.resource.data.camp_name.size() > 0;
         }
-        // every auth user can create camps on which he has access
-        allow create: if isAuth() && validChanges();
+        // every auth user can create camps, he has to be the owner and the only user with access
+        // (a camp is shared with the cloud function 'changeAccessData')
+        allow create: if isAuth() && isOwner(request.resource.data) &&
+            request.resource.data.access.keys().hasOnly([request.auth.uid]) && validChanges();
         allow update: if canWrite() && (request.resource.data.access == resource.data.access) && validChanges();
         allow list, get: if hasAccess();
         allow delete: if isOwner(resource.data);
